@@ -1,0 +1,225 @@
+# 12_MT_MSU_ReidHall_Renovation.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/12_MT_MSU_ReidHall_Renovation.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M0.1 (page 28) of the MSU Reid Hall renovation for the Center for Research on Rural Education (ACE Inc), every claimed keyed-family table of this dev document.
+#   12_MT_MSU_ReidHall_Renovation.pdf#28 | DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE | VAV | all 4 printed rows | render: page 28 crop 480,358,1250,195 at 3x in 4 tiles plus the PLAN CODE column crop 130,358,360,195 and the right end crop 1700,358,700,195 at 2.5x, notes crop 130,555,640,52 at 3x; second read at 4x (crops 700,400,100,155 and 1050,400,160,155) of VAV-1 cold design, VAV-3 cold inlet and VAV-4 hot design
+#   12_MT_MSU_ReidHall_Renovation.pdf#28 | FINNED PIPE RADIATION SCHEDULE | FIN_TUBE_RADIATION | all 4 printed rows | render: page 28 crop 129,848,1442,235 at 3x in 4 tiles (PLAN CODE column repeated), notes in the same tiles; second read at 4x (crop 1005,880,170,170) of FT-1 MBH, FT-2 GPM and FT-4 GPM
+#   12_MT_MSU_ReidHall_Renovation.pdf#28 | CABINET UNIT HEATER SCHEDULE | CABINET_UNIT_HEATER | all 2 printed rows | render: page 28 crop 129,1108,1436,168 at 3x in 4 tiles (PLAN CODE column repeated) and notes crop 129,1274,700,42 at 3x; second read at 4x (crop 975,1130,185,145) of CUH-1 MBH, CUH-1 GPM and CUH-2 MBH
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, sizes, enclosure, liner, sound power, inlet static pressure, style, rows and pressure drop, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 12_MT_MSU_ReidHall_Renovation: 3 table(s), 10 instance(s), 206 keyed attribute value(s) (52 printed, 154 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,terminal_type,dual_duct,,TABLE TITLE,title printed 'DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE'
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,inlet_size_in,6,in,INLET AIR SIZE / COLD INLET: the box's inlet size; the hot inlet prints the same,"printed '6""'; author's reading of the printed row"
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,cfm_max,200,cfm,DESIGN QUANTITIES / COLD: cooling maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,cfm_min,70,cfm,PRIMARY AIR MINIMUM / COLD: cooling minimum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,cfm_heat,130,cfm,DESIGN QUANTITIES / HOT: heating maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,heat_type,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_wpd_ft,,ft,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_rows,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,hw_glycol_pct,,%,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,eh_stages,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,ecm,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-1,VAV,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,terminal_type,dual_duct,,TABLE TITLE,title printed 'DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE'
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,inlet_size_in,6,in,INLET AIR SIZE / COLD INLET: the box's inlet size; the hot inlet prints the same,"printed '6""'; author's reading of the printed row"
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,cfm_max,540,cfm,DESIGN QUANTITIES / COLD: cooling maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,cfm_min,190,cfm,PRIMARY AIR MINIMUM / COLD: cooling minimum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,cfm_heat,315,cfm,DESIGN QUANTITIES / HOT: heating maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,heat_type,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_wpd_ft,,ft,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_rows,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,hw_glycol_pct,,%,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,eh_stages,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,ecm,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-2,VAV,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,terminal_type,dual_duct,,TABLE TITLE,title printed 'DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE'
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,inlet_size_in,12,in,INLET AIR SIZE / COLD INLET: the box's inlet size; the hot inlet prints the same,"printed '12""'; author's reading of the printed row"
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,cfm_max,1720,cfm,DESIGN QUANTITIES / COLD: cooling maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,cfm_min,600,cfm,PRIMARY AIR MINIMUM / COLD: cooling minimum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,cfm_heat,1120,cfm,DESIGN QUANTITIES / HOT: heating maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,heat_type,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_wpd_ft,,ft,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_rows,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,hw_glycol_pct,,%,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,eh_stages,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,ecm,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-3,VAV,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,terminal_type,dual_duct,,TABLE TITLE,title printed 'DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE'
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,inlet_size_in,10,in,INLET AIR SIZE / COLD INLET: the box's inlet size; the hot inlet prints the same,"printed '10""'; author's reading of the printed row"
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,cfm_max,300,cfm,DESIGN QUANTITIES / COLD: cooling maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,cfm_min,105,cfm,PRIMARY AIR MINIMUM / COLD: cooling minimum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,cfm_heat,195,cfm,DESIGN QUANTITIES / HOT: heating maximum,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,heat_type,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_wpd_ft,,ft,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_rows,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,hw_glycol_pct,,%,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,eh_stages,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,ecm,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE,VAV-4,VAV,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,qty,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,cfm,,cfm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,cooling_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,cooling_tons,,tons,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,heating_mbh,6.7,MBH,PERFORMANCE / MBH,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,hw_gpm,0.75,gpm,PERFORMANCE / GPM,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,hw_ewt_f,180,F,PERFORMANCE / EWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,hw_lwt_f,160,F,PERFORMANCE / LWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,chw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,chw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,chw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,bas_interface,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-1,FIN_TUBE_RADIATION,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,qty,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,cfm,,cfm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,cooling_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,cooling_tons,,tons,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,heating_mbh,6.7,MBH,PERFORMANCE / MBH,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,hw_gpm,0.75,gpm,PERFORMANCE / GPM,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,hw_ewt_f,180,F,PERFORMANCE / EWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,hw_lwt_f,160,F,PERFORMANCE / LWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,chw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,chw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,chw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,bas_interface,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-2,FIN_TUBE_RADIATION,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,qty,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,cfm,,cfm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,cooling_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,cooling_tons,,tons,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,heating_mbh,6.7,MBH,PERFORMANCE / MBH,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,hw_gpm,0.75,gpm,PERFORMANCE / GPM,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,hw_ewt_f,180,F,PERFORMANCE / EWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,hw_lwt_f,160,F,PERFORMANCE / LWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,chw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,chw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,chw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,bas_interface,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-3,FIN_TUBE_RADIATION,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,qty,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,cfm,,cfm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,cooling_mbh,,MBH,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,cooling_tons,,tons,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,heating_mbh,6.7,MBH,PERFORMANCE / MBH,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,hw_gpm,0.75,gpm,PERFORMANCE / GPM,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,hw_ewt_f,180,F,PERFORMANCE / EWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,hw_lwt_f,160,F,PERFORMANCE / LWT,
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,chw_gpm,,gpm,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,chw_ewt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,chw_lwt_f,,F,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,motor_hp,,hp,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,bas_interface,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,volts,,V,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,FINNED PIPE RADIATION SCHEDULE,FT-4,FIN_TUBE_RADIATION,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,qty,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,heating_medium,hw,,LIQUID SIDE (FRESH WATER),"the performance block prints a fresh-water liquid side (MBH, GPM)"
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,cfm,207,cfm,PERFORMANCE / AIR SIDE / CFM/HIGH SPEED,
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,heating_mbh,15.7,MBH,PERFORMANCE / LIQUID SIDE (FRESH WATER) / MBH,
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,hw_gpm,1.5,gpm,PERFORMANCE / LIQUID SIDE (FRESH WATER) / GPM,
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,hw_ewt_f,180,F,"PERFORMANCE / AIR SIDE / EAT °F: the coil's entering water, printed under AIR SIDE",author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,hw_lwt_f,160,F,"PERFORMANCE / AIR SIDE / LAT °F: the coil's leaving water, printed under AIR SIDE",author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,steam_psig,,psig,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,motor_hp,15,W,ELECTRICAL DATA / WATT: the unit's fan power,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,volts,24,V,ELECTRICAL DATA / VOLT,printed '24 VDC'
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-1,CABINET_UNIT_HEATER,phase,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,building,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,floor,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,area_served,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,qty,,,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,heating_medium,hw,,LIQUID SIDE (FRESH WATER),"the performance block prints a fresh-water liquid side (MBH, GPM)"
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,cfm,207,cfm,PERFORMANCE / AIR SIDE / CFM/HIGH SPEED,
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,heating_mbh,15.7,MBH,PERFORMANCE / LIQUID SIDE (FRESH WATER) / MBH,
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,hw_gpm,1.5,gpm,PERFORMANCE / LIQUID SIDE (FRESH WATER) / GPM,
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,hw_ewt_f,180,F,"PERFORMANCE / AIR SIDE / EAT °F: the coil's entering water, printed under AIR SIDE",author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,hw_lwt_f,160,F,"PERFORMANCE / AIR SIDE / LAT °F: the coil's leaving water, printed under AIR SIDE",author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,steam_psig,,psig,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,eh_kw,,kW,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,motor_hp,15,W,ELECTRICAL DATA / WATT: the unit's fan power,author's reading of the printed row
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,conn_in,,in,,not printed
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,volts,24,V,ELECTRICAL DATA / VOLT,printed '24 VDC'
+12_MT_MSU_ReidHall_Renovation.pdf#28,CABINET UNIT HEATER SCHEDULE,CUH-2,CABINET_UNIT_HEATER,phase,,,,not printed

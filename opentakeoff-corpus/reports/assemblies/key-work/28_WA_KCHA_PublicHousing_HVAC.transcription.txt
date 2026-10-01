@@ -1,0 +1,139 @@
+# 28_WA_KCHA_PublicHousing_HVAC — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheet M101 MECHANICAL SCHEDULES, ENLARGED PLAN AND DETAILS (PDF page 2) of
+# the Brittany Park HVAC Upgrades, King County Housing Authority, Normandy Park WA (Tres West
+# Engineers): an overview of the page at 40 dpi, then each table at 3x (216 dpi), rendered with
+# MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-27, with the PDF's own text layer
+# (pymupdf words, row by row) as a reading aid; second read of every row against the text layer.
+# Each drawn title was found with the text layer (pymupdf search_for). The pipeline's output for
+# these tables was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit found
+# no control packet in the document (4 units), and AS-28 read its column names and its heat pump's
+# AREA SERVED ("SEE PLAN") against the print. The fifth tier keys the tables its seed drew
+# (tier5/01-split.md): one per keyed family.
+SET 28_WA_KCHA_PublicHousing_HVAC
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheet M101 (page 2) of the Brittany Park HVAC Upgrades, King County Housing Authority (Tres West Engineers), the tables the fifth tier's seed drew for its HEAT_PUMP, PUMP and FAN strata.
+EXCLUDES Manufacturers, families, model numbers, dimensions and weights, the heat pump's type, vents, efficiencies, compressor currents, refrigerant, condensate drain, sound ratings and filters, the fans' type and sones, currents (MCA, MOCP, FLA), who furnishes the disconnects, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# HEAT PUMP AC UNIT SCHEDULE: one row, VHP (a vertical stack heat pump, QUANTITY 43). QUANTITY keys
+# qty. AREA SERVED prints "SEE PLAN", a pointer, not one area. CFM keys cfm. COOLING CAPACITY
+# (BTUH) MIN. - MAX. 95°F and HEATING CAPACITY (BTUH) MIN. - MAX. 47°F each print one number,
+# keyed cooling_mbh and heating_mbh in BTU/H. AUXILIARY HEAT (WATT) keys eh_kw in the watts it
+# prints. POWER CONNECTION W/ 1,800 HEAT STRIP / VOLT/PH keys volts and phase. COND. DRAIN PIPE is
+# a drain, not a connection. Notes 1-5 (thermostats, louvers, grilles, a cabinet, a gateway and
+# heat control kit for the thermostat) key nothing.
+TABLE
+sheet: 28_WA_KCHA_PublicHousing_HVAC.pdf#2
+title: HEAT PUMP AC UNIT SCHEDULE
+family: HEAT_PUMP
+render: page 2 overview at 40 dpi; crop 110,48,2280,125 at 3x in 5 tiles (UNIT NO column repeated), notes read in the text layer; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT NO => tag
+col: QUANTITY => qty
+col: MFR. => -
+col: FAMILY => -
+col: MODEL => -
+col: TYPE => -
+col: AREA SERVED => area_served
+col: CFM => cfm
+col: VENTS SIZE => -
+col: COOLING CAPACITY (BTUH) MIN. - MAX. 95°F => cooling_mbh [BTU/H]
+col: HEATING CAPACITY (BTUH) MIN. - MAX. 47°F => heating_mbh [BTU/H]
+col: COOLING EFFICIENCY SEER2 HEAT PUMP => -
+col: ENERGY EFFICIENCY @ 47°F HSPF2 => -
+col: COMPRESSOR / RLA => -
+col: COMPRESSOR / LRA => -
+col: AUXILIARY HEAT (WATT) => eh_kw [W]
+col: REFRIGERANT TYPE => -
+col: COND. DRAIN PIPE (IN) => -
+col: POWER CONNECTION W/ 1,800 HEAT STRIP / VOLT/PH => -
+col: [POWER CONNECTION W/ 1,800 HEAT STRIP / VOLT/PH: volts part] => volts
+col: [POWER CONNECTION W/ 1,800 HEAT STRIP / VOLT/PH: phase part] => phase
+col: POWER CONNECTION W/ 1,800 HEAT STRIP / MCA => -
+col: POWER CONNECTION W/ 1,800 HEAT STRIP / MOCP => -
+col: DIMENSION (WxHxD) => -
+col: SOUND INDOOR STC => -
+col: SOUND dB(A) / INDOOR => -
+col: SOUND dB(A) / OUTDOOR => -
+col: FILTER => -
+col: WEIGHT (POUNDS) => -
+col: NOTES => -
+grid:
+VHP | 43 | EPHOCA | AIO | AVK10N3H2-3 | VERTICAL STACK | ?SEE PLAN | 300 | 8" | 9,790 | 10,000 | 14.35 | 9.8 | 6 | 6 | 1800 | R32 | 3/4" | 230/1 | 230 | 1 | 20 | 25 | 28.7"x83.8"x12.4" | 40 | 27-43 | 28-55 | MERV8/13 | 170 | 1, 2, 3, 4, 5
+END
+
+# PUMP SCHEDULE: one row, CP-4. LOCATION prints "RECOVERY COILS" and AREA SERVED "ATTIC"; the
+# AREA SERVED column keys area_served as printed. MOTOR / HP keys motor_hp and RPM rpm; HEAD (FT)
+# keys head_ft and FLOW (GPM) gpm; ELECTRICAL / VOLT/PH keys volts and phase (FLA prints "3/4").
+# STARTER BY E.C. is checked: a motor starter, not a variable-frequency drive (vfd no, the
+# author's reading, as 03_FL's pump remarks). Notes 1-2 (an aquastat at 100 °F; a relay for the
+# controls interlock) key nothing in this vocabulary.
+TABLE
+sheet: 28_WA_KCHA_PublicHousing_HVAC.pdf#2
+title: PUMP SCHEDULE
+family: PUMP
+render: page 2 overview at 40 dpi; crop 1294,255,1092,170 at 3x in 2 tiles (UNIT NO column repeated), notes included; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT NO => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: LOCATION => -
+col: AREA SERVED => area_served
+col: MOTOR / HP => motor_hp
+col: MOTOR / RPM => rpm
+col: HEAD (FT) => head_ft
+col: FLOW (GPM) => gpm
+col: ELECTRICAL / FLA => -
+col: ELECTRICAL / VOLT/PH => -
+col: [ELECTRICAL / VOLT/PH: volts part] => volts
+col: [ELECTRICAL / VOLT/PH: phase part] => phase
+col: STARTER BY E.C. => -
+col: [STARTER BY E.C.: a checked motor starter, not a variable-frequency drive] => vfd
+col: DISCONNECT BY E.C. => -
+col: WEIGHT (POUNDS) => -
+col: NOTES => -
+grid:
+CP-4 | ARMSTRONG | 1205-000.7 | RECOVERY COILS | ATTIC | 3/4 | 2426 | 20 | 43.5 | 3/4 | 208/3 | 208 | 3 | ✓ | no (✓) | ✓ | 62 | 1,2
+END
+
+# EXHAUST FAN SCHEDULE: two rows, EF-5 and SF-6 (the title covers the building's supply fan too).
+# AREA SERVED keys area_served as printed (BUILDING EXHAUST, BUILDING SUPPLY). PERFORMANCE / CFM
+# keys cfm, TSP (IN) the fan's scheduled static pressure esp_in (as 044_NY's TSP), and RPM rpm.
+# POWER CONNECTION / HP keys motor_hp and VOLT/PH volts and phase. INTERLOCK WITH prints MOTORIZED
+# DAMPER: how the fan is controlled, control "INTERLOCK WITH MOTORIZED DAMPER" (as 03_FL's
+# "INTERLOCK WITH HOOD EXHAUST FAN"). STARTER BY E.C. is checked: a motor starter, not a
+# variable-frequency drive (vfd no, the author's reading). Note 1 (the motorized damper closes on
+# shutdown) keys nothing more.
+TABLE
+sheet: 28_WA_KCHA_PublicHousing_HVAC.pdf#2
+title: EXHAUST FAN SCHEDULE
+family: FAN
+render: page 2 overview at 40 dpi; crop 110,255,1175,180 at 3x in 2 tiles (UNIT NO column repeated), notes included; second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: UNIT NO => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: AREA SERVED => area_served
+col: TYPE => -
+col: PERFORMANCE / CFM => cfm
+col: PERFORMANCE / TSP (IN) => -
+col: [PERFORMANCE / TSP (IN): the fan's scheduled static pressure] => esp_in
+col: PERFORMANCE / RPM => rpm
+col: PERFORMANCE / SONES => -
+col: POWER CONNECTION / HP => motor_hp
+col: POWER CONNECTION / VOLT/PH => -
+col: [POWER CONNECTION / VOLT/PH: volts part] => volts
+col: [POWER CONNECTION / VOLT/PH: phase part] => phase
+col: POWER CONNECTION / FLA => -
+col: INTERLOCK WITH => -
+col: [INTERLOCK WITH: how the fan is controlled] => control
+col: STARTER BY E.C. => -
+col: [STARTER BY E.C.: a checked motor starter, not a variable-frequency drive] => vfd
+col: DISCONNECT BY E.C. => -
+col: WEIGHT (POUNDS) => -
+col: NOTES => -
+grid:
+EF-5 | COOK | 210SQN-HP | BUILDING EXHAUST | INLINE | 3705 | 1.5 | 1.5 | 1309 | 15.5 | 2 | 208/3 | 208 | 3 | 7.5 | MOTORIZED DAMPER | =INTERLOCK WITH MOTORIZED DAMPER (MOTORIZED DAMPER) | ✓ | no (✓) | ✓ | 339 | 1
+SF-6 | COOK | 210SQN-B | BUILDING SUPPLY | INLINE | 4495 | 1.5 | 1.5 | 1173 | 16.6 | 3 | 208/3 | 208 | 3 | 10.6 | MOTORIZED DAMPER | =INTERLOCK WITH MOTORIZED DAMPER (MOTORIZED DAMPER) | ✓ | no (✓) | ✓ | 339 | 1
+END

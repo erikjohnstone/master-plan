@@ -1,0 +1,180 @@
+# 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheets M-001 (PDF page 10), M-801 (page 21) and E-601 (page 27): an
+# overview of each page at 40 dpi, then each table at 3x (216 dpi) in tiles with the tag
+# column repeated, rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on
+# 2026-09-26; second read at 4x of every keyed row, every cell. Each drawn title was found
+# with the PDF's own text layer (pymupdf search_for). The pipeline's output for these
+# sheets was not consulted. The second tier keys the tables its seed drew
+# (tier2/01-split.md): one per keyed family.
+SET 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheets M-001, M-801 and E-601 (pages 10, 21 and 27) of the VAMC Durham chiller replacement for AHU 1 & 2 (Above Group), the tables the second tier's seed drew for its CONDENSING_UNIT, VRF_INDOOR, VRF_OUTDOOR, AIR_COOLED_CHILLER, HEAT_RECOVERY_CHILLER and PUMP strata.
+EXCLUDES Basis of design, weights and dimensions, MCA/MOP, efficiencies (SEER2, HSPF2, IPLV, EER), ambient and fluid temperatures, compressor and condenser-fan data, refrigerant, pressure drops, impeller and efficiency, discharge size, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# "-CONDENSING UNIT" (page 10, sheet M-001 MECHANICAL NOTES, LEGENDS & SYMBOLS): the census
+# claims a CONDENSING_UNIT table under this title. The title's only printed source on the
+# page is the HVAC ABBREVIATIONS legend, whose line "CU -CONDENSING UNIT" sits between
+# "CT -COOLING TOWER" and "D -DAMPER -AUTOMATIC" ("ACCU -AIR-COOLED CONDENSING UNIT" is the
+# other line naming one). The legend defines abbreviations: it prints no condensing unit.
+TABLE
+sheet: 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#10
+title: -CONDENSING UNIT
+family: CONDENSING_UNIT
+render: page 10 overview at 40 dpi; both text-layer hits for CONDENSING UNIT cropped at 3x (crops 1460,700,500,100 and 1460,190,500,60), each an abbreviations-legend line
+rows: none — the HVAC ABBREVIATIONS legend ("CU -CONDENSING UNIT"); no row is a condensing unit
+grid:
+END
+
+# VRF INDOOR UNIT SCHEDULE: two rows. CFM (MAX.) is the unit's airflow. ELECTRICAL DATA
+# prints V and PH as their own columns. Note 3 (a 7-day programmable thermostat; the units
+# cycle with loads) names no BAS interface.
+TABLE
+sheet: 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21
+title: VRF INDOOR UNIT SCHEDULE
+family: VRF_INDOOR
+render: page 21 crop 2212,1344,688,161 at 3x in 3 tiles (UNIT NO. column repeated), notes included; second read at 4x (crops 2212,1374,688,50 and 2212,1398,688,32) of both rows, every cell
+rows: all 2 printed rows
+col: UNIT NO. => tag
+col: ASSOCIATED OUTDOOR UNIT => -
+col: CFM (MAX.) => cfm
+col: TOTAL COOLING CAP. (MBH) => cooling_mbh
+col: SENSIBLE COOLING CAP. => -
+col: TOTAL HEATING CAP. (MBH) => heating_mbh
+col: ELECTRICAL DATA / V => volts
+col: ELECTRICAL DATA / PH => phase
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOP => -
+col: WEIGHT (LBS) => -
+col: BASIS OF DESIGN => -
+grid:
+IDU-1 | ODU-1 | 512 | 15.4 | 12.2 | 17.1 | 208 | 1 | 60 | 2.9 | 15 | 95.5 | LG : ZRNU153M2AA
+IDU-2 | ODU-1 | 512 | 15.4 | 12.2 | 17.1 | 208 | 1 | 60 | 2.9 | 15 | 95.5 | LG : ZRNU153M2AA
+END
+
+# VRF OUTDOOR UNIT SCHEDULE: one row. NOM. TONS keys cooling_tons. UNIT SIZE groups LENGTH,
+# WIDTH, HEIGHT and WEIGHT (LBS.). Notes 1-7 (single-point connection, disconnect, line
+# sizing, warranty, anti-recycle timer, coil guards, coating) key nothing.
+TABLE
+sheet: 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21
+title: VRF OUTDOOR UNIT SCHEDULE
+family: VRF_OUTDOOR
+render: page 21 crop 2275,1555,625,220 at 3x in 3 tiles (UNIT NO. column repeated), notes included; second read at 4x (crop 2275,1585,625,49) of the row, every cell
+rows: all 1 printed row
+col: UNIT NO. => tag
+col: NOM. TONS => cooling_tons
+col: AMBIENT TEMP. (°F) => -
+col: MIN. SEER2 => -
+col: MIN. HSPF2 => -
+col: ELECTRICAL DATA / V => volts
+col: ELECTRICAL DATA / PH => phase
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOP => -
+col: UNIT SIZE / LENGTH => -
+col: UNIT SIZE / WIDTH => -
+col: UNIT SIZE / HEIGHT => -
+col: UNIT SIZE / WEIGHT (LBS.) => -
+col: BASIS OF DESIGN => -
+grid:
+ODU-1 | 3.0 | 95 | 17.0 | 10.1 | 208 | 1 | 60 | 31 | 40 | 37-1/2" | 15-3/8" | 54-3/8" | 286 | LG : ZRUM036GSSO
+END
+
+# AIR COOLED WATER CHILLER SCHEDULE: two rows. WATER DATA is the evaporator's (chilled 40%
+# propylene glycol, EWT 44 / LWT 34), keyed as chw_*. COMPRESSOR / QTY. counts compressors,
+# not units, so qty stays not printed. V/PH/HZ prints "460/3/60" in one cell, keyed as its
+# volts part and its phase part. TOTAL POWER (KW) sits under ELECTRICAL DATA and keys
+# kw_input. The title prints the condenser type. The notes apply to the table (no row
+# cites them); note 7 keys bas_interface.
+TABLE
+sheet: 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21
+title: AIR COOLED WATER CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 21 crop 1488,148,1412,207 at 3x in 6 tiles (MARK column repeated), notes included; second read at 4x (crops 1488,178,1412,70 and 1488,226,1412,32) of both rows, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: FLUID TYPE => -
+col: NOMINAL CAPACITY (TONS) => tons
+col: AMBIENT TEMP. (°F) => -
+col: WATER DATA / FLOW (GPM) => chw_gpm
+col: WATER DATA / MAX. PD (FT OF HEAD) => -
+col: WATER DATA / EWT (F°) => chw_ewt_f
+col: WATER DATA / LWT (F°) => chw_lwt_f
+col: COMPRESSOR / QTY. => -
+col: COMPRESSOR / COMPRESSOR #1 RLA => -
+col: COMPRESSOR / COMPRESSOR #2 RLA => -
+col: COMPRESSOR / TYPE => -
+col: CONDENSER / FAN QTY. => -
+col: REFRIGERANT TYPE => -
+col: ELECTRICAL DATA / V/PH/HZ => -
+col: [ELECTRICAL DATA / V/PH/HZ: volts part] => volts
+col: [ELECTRICAL DATA / V/PH/HZ: phase part] => phase
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOP => -
+col: ELECTRICAL DATA / TOTAL POWER (KW) => kw_input
+col: IPLV => -
+col: EER => -
+col: DIMENSIONS (LxWxH) => -
+col: WEIGHT (LBS) => -
+col: BASIS OF DESIGN => -
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'AIR COOLED WATER CHILLER SCHEDULE'
+derive: bas_interface = BUILDING AUTOMATION SYSTEM ; header=NOTE 7 ; note=note 7: 'CONTROLLER SHALL INTERFACE WITH BUILDING AUTOMATION SYSTEM.'
+grid:
+CH-1 | 40% PROPYLENE GLYCOL | 117 | 95 | 342.4 | 30.5 | 44 | 34 | 2 | 119 | 110 | SCREW | 10 | R-513A | 460/3/60 | 460 | 3 | 294 | 400 | 162.9 | 19.11 | 8.6 | 18'-1" x 7'-4" x 8'-4" | 12,010 | DAIKIN : AWV010B
+CH-2 | 40% PROPYLENE GLYCOL | 117 | 95 | 342.4 | 30.5 | 44 | 34 | 2 | 119 | 110 | SCREW | 10 | R-513A | 460/3/60 | 460 | 3 | 294 | 400 | 162.9 | 19.11 | 8.6 | 18'-1" x 7'-4" x 8'-4" | 12,010 | DAIKIN : AWV010B
+END
+
+# EQUIPMENT SCHEDULE (page 27, electrical sheet E-601): the census claims it as
+# HEAT_RECOVERY_CHILLER. It is the electrical equipment connection list (HP, FLA, MCA,
+# VOLT / PH / LOAD (VA), MOCP, CB AMPS, PANEL, CKT #, FEEDER SIZE, CONDUIT, MOTOR STARTING,
+# DISC MEANS, COMMENTS). Its nine rows are CH-1 and CH-2 ("AIR COOLED WATER CHILLER 1" and
+# "2", the air-cooled chillers of M-801), GMU-1 (glycol makeup system), IDU-1, IDU-2, ODU-1
+# and pumps P-1 to P-3. None is a heat recovery chiller.
+TABLE
+sheet: 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#27
+title: EQUIPMENT SCHEDULE
+family: HEAT_RECOVERY_CHILLER
+render: page 27 overview at 40 dpi; crop 268,95,1088,215 at 3x in 4 tiles (IDENTIFICATION column repeated), every row's EQUIPMENT NAME read
+rows: none — an electrical equipment connection schedule; its chillers CH-1 and CH-2 are air-cooled water chillers, and no row is a heat recovery chiller
+grid:
+END
+
+# PUMP SCHEDULE: three rows. SYSTEM keys service. FLUID DATA / FLUID TYPE prints "40%
+# PROPYLENE GLYCOL": its percentage keys glycol_pct. PUMP DATA / TYPE ("INLINE
+# SPLIT-COUPLED") is a pump type, not an arrangement, so pump_arrangement stays not
+# printed. PIPING DATA prints suction and discharge sizes; the suction size keys conn_in,
+# as federal-mech's PIPE CONNECTIONS / SUCTION does. VFD YES/NO and V/PH/HZ sit under
+# ELECTRICAL DATA; V/PH/HZ is keyed as its volts part and its phase part. Notes 1-3
+# (construction, suction diffuser, the VFD's supply) key nothing beyond the VFD column.
+TABLE
+sheet: 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21
+title: PUMP SCHEDULE
+family: PUMP
+render: page 21 crop 1595,412,1305,194 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 1595,455,1305,87) of all 3 rows, every cell
+rows: all 3 printed rows
+col: MARK => tag
+col: SYSTEM => service
+col: FLUID DATA / FLOW (GPM) => gpm
+col: FLUID DATA / HEAD FT => head_ft
+col: FLUID DATA / FLUID TYPE => -
+col: [FLUID DATA / FLUID TYPE: the glycol percentage it prints] => glycol_pct
+col: FLUID DATA / FLUID TEMP. (°F) => -
+col: PUMP DATA / TYPE => -
+col: PUMP DATA / IMPELLER SIZE => -
+col: PUMP DATA / % EFF. => -
+col: PIPING DATA / SUCT. SIZE (IN.) => conn_in
+col: PIPING DATA / DISCH. SIZE (IN.) => -
+col: ELECTRICAL DATA / VFD YES/NO => vfd
+col: ELECTRICAL DATA / MOTOR HP => motor_hp
+col: ELECTRICAL DATA / MOTOR RPM => rpm
+col: ELECTRICAL DATA / V/PH/HZ => -
+col: [ELECTRICAL DATA / V/PH/HZ: volts part] => volts
+col: [ELECTRICAL DATA / V/PH/HZ: phase part] => phase
+col: WEIGHT (LBS) => -
+col: BASIS OF DESIGN => -
+grid:
+P-1 | CHILLED WATER | 275 | 116 | 40% PROPYLENE GLYCOL | 40 | 34 | INLINE SPLIT-COUPLED | 12 | 61.8 | 4 | 4 | yes (YES) | 25 | 1800 | 460/3/60 | 460 | 3 | 650 | BELL & GOSSETT : E-80SC 4x4x13.5
+P-2 | CHILLED WATER | 275 | 116 | 40% PROPYLENE GLYCOL | 40 | 34 | INLINE SPLIT-COUPLED | 12 | 61.8 | 4 | 4 | yes (YES) | 25 | 1800 | 460/3/60 | 460 | 3 | 650 | BELL & GOSSETT : E-80SC 4x4x13.5
+P-3 | CHILLED WATER | 275 | 116 | 40% PROPYLENE GLYCOL | 40 | 34 | INLINE SPLIT-COUPLED | 12 | 61.8 | 4 | 4 | yes (YES) | 25 | 1800 | 460/3/60 | 460 | 3 | 650 | BELL & GOSSETT : E-80SC 4x4x13.5
+END

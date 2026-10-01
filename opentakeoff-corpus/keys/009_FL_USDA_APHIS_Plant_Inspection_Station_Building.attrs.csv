@@ -1,0 +1,320 @@
+# 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M-601 SCHEDULES (page 18) of the Building 63 Envelope and HVAC Modifications, USDA APHIS, Coral Gables FL (Clark Nexsen), the tables the fifth tier's seed drew for its AHU, AIR_COOLED_CHILLER, PUMP, FAN and UNIT_HEATER strata.
+#   009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18 | AIR HANDLING UNIT SCHEDULE | AHU | all 2 printed rows (one empty ruled row below them) | render: page 18 overview at 40 dpi; crop 1887,936,833,332 at 3x in 2 tiles (MARK column repeated), notes included; second read at 4x (crop 1887,1122,833,30 in 2 tiles) of both rows, every cell
+#   009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18 | AIR COOLED CHILLER SCHEDULE | AIR_COOLED_CHILLER | all 1 printed row (two empty ruled rows below it) | render: page 18 overview at 40 dpi; crop 864,505,775,335 at 3x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every cell, against the text layer
+#   009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18 | FAN SCHEDULE | FAN | all 5 printed rows (an empty ruled row between EF-3 and EF-5, two below EF-6) | render: page 18 overview at 40 dpi; crop 1663,508,1057,385 at 3x in 2 tiles (MARK column repeated), notes included; second read at 4x (crop 1663,700,1057,90 in 2 tiles) of every row, every cell, and the text layer row by row
+#   009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18 | CHILLED WATER PUMP | PUMP | all 2 printed rows (one empty ruled row below them) | render: page 18 overview at 40 dpi; crop 1848,1586,430,230 at 3x, notes included; second read at 3x of both rows, every cell, against the text layer
+#   009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18 | ELECTRIC DUCT HEATER | UNIT_HEATER | all 5 printed rows (two empty ruled rows below them) | render: page 18 overview at 40 dpi; crop 2294,1586,426,290 at 3x, notes included; second read at 3x of the first, middle and last rows, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and model numbers, efficiencies (EER, IPLV), fouling factors and pressure drops, the air handlers' unoccupied minimum airflow, external static pressure and fan speed, coil sensible capacities and air temperatures, the fans' weights, sones and accessories other than the EC motor, the duct heaters' preheat/reheat type and the air handling system they sit in, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 009_FL_USDA_APHIS_Plant_Inspection_Station_Building: 5 table(s), 15 instance(s), 299 keyed attribute value(s) (64 printed, 235 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_cfm,2565,cfm,SUPPLY FAN / MAX CFM,"printed '2,565'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,oa_cfm_min,640,cfm,SUPPLY FAN / MIN OA CFM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_hp,5,hp,MOTOR / MAX MOTOR HP,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,return_fan_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,exhaust_fan_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,economizer,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,outdoor_air_pct,,%,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_type,chw,,COOLING COIL / GPM,the cooling coil prints a water flow (GPM) and the project's plant is air-cooled chiller CH-1 with chilled water pumps CWP-1/2: a chilled water coil (the author's reading)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_mbh,106.2,MBH,COOLING COIL / TOTAL MBH CLG,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_tons,,tons,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,dx_stages,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_gpm,19,gpm,COOLING COIL / GPM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_wpd_ft,,ft,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_rows,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_glycol_pct,,%,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_type,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_gpm,,gpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_wpd_ft,,ft,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_rows,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_glycol_pct,,%,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_psig,,psig,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_lb_hr,,lb/hr,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,gas_input_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,eh_kw,,kW,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,humidifier,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,energy_recovery,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,filter_merv,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,bas_interface,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,supply_cfm,4930,cfm,SUPPLY FAN / MAX CFM,"printed '4,930'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,oa_cfm_min,4930,cfm,SUPPLY FAN / MIN OA CFM,"printed '4,930'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,supply_fan_hp,15,hp,MOTOR / MAX MOTOR HP,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,supply_fan_qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,return_fan_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,exhaust_fan_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,economizer,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,outdoor_air_pct,,%,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,cooling_type,chw,,COOLING COIL / GPM,the cooling coil prints a water flow (GPM) and the project's plant is air-cooled chiller CH-1 with chilled water pumps CWP-1/2: a chilled water coil (the author's reading)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,cooling_mbh,461.4,MBH,COOLING COIL / TOTAL MBH CLG,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,cooling_tons,,tons,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,dx_stages,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_gpm,80,gpm,COOLING COIL / GPM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_wpd_ft,,ft,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_rows,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_glycol_pct,,%,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,heating_type,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,heating_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_gpm,,gpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_wpd_ft,,ft,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_rows,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_glycol_pct,,%,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,steam_psig,,psig,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,steam_lb_hr,,lb/hr,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,gas_input_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,eh_kw,,kW,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,humidifier,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,energy_recovery,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,filter_merv,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,bas_interface,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,condenser,air,,TABLE TITLE,title printed 'AIR COOLED CHILLER SCHEDULE'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,tons,60,tons,CAPACITY / TONS,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_gpm,99,gpm,CHILLED WATER / GPM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,44,F,CHILLED WATER / EWT (F),
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,45,F,CHILLED WATER / LWT (F),
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,bas_interface,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,cfm,2200,cfm,CFM,"printed '2,200'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,esp_in,2,in. w.c.,ESP IN WG,printed '2.00'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,motor_hp,2,hp,MOTOR / MAX. HP.,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,rpm,2000,rpm,MAX FAN SPEED (RPM),"printed '2,000'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,drive,direct,,DRIVE: the column marked X,printed 'DIRECT: X'; author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,ecm,no,,ACCESSORIES / EC MOTOR: left blank on a new fan whose other accessories are marked,printed 'EC MOTOR: blank'; author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,control,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-1,FAN,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,service,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,cfm,1400,cfm,CFM,"printed '1,400'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,esp_in,1,in. w.c.,ESP IN WG,printed '1.00'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,motor_hp,1,hp,MOTOR / MAX. HP.,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,rpm,2200,rpm,MAX FAN SPEED (RPM),"printed '2,200'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,drive,direct,,DRIVE: the column marked X,printed 'DIRECT: X'; author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,ecm,no,,ACCESSORIES / EC MOTOR: left blank on a new fan whose other accessories are marked,printed 'EC MOTOR: blank'; author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,control,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-2,FAN,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,service,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,cfm,1400,cfm,CFM,"printed '1,400'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,esp_in,1,in. w.c.,ESP IN WG,printed '1.00'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,motor_hp,1,hp,MOTOR / MAX. HP.,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,motor_watts,,W,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,rpm,2200,rpm,MAX FAN SPEED (RPM),"printed '2,200'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,drive,direct,,DRIVE: the column marked X,printed 'DIRECT: X'; author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,ecm,no,,ACCESSORIES / EC MOTOR: left blank on a new fan whose other accessories are marked,printed 'EC MOTOR: blank'; author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,control,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-3,FAN,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,service,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,cfm,150,cfm,CFM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,esp_in,0.125,in. w.c.,ESP IN WG,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,motor_hp,0.25,hp,MOTOR / MAX. HP.,printed '1/4'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,motor_watts,,W,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,rpm,,rpm,MAX FAN SPEED (RPM),printed '-'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,drive,,,DRIVE: the column marked X,blank cell
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,ecm,,,ACCESSORIES / EC MOTOR: left blank on a new fan whose other accessories are marked,blank cell
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,control,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-5,FAN,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,service,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,cfm,200,cfm,CFM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,esp_in,0.125,in. w.c.,ESP IN WG,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,motor_hp,0.25,hp,MOTOR / MAX. HP.,printed '1/4'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,motor_watts,,W,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,rpm,,rpm,MAX FAN SPEED (RPM),blank cell
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,drive,,,DRIVE: the column marked X,blank cell
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,ecm,,,ACCESSORIES / EC MOTOR: left blank on a new fan whose other accessories are marked,blank cell
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,control,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,FAN SCHEDULE,EF-6,FAN,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,service,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,gpm,99,gpm,GPM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,head_ft,35,ft,HEAD (ft WG),
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,motor_hp,2,hp,MOTOR HP,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,rpm,,rpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,pump_arrangement,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,glycol_pct,0,%,"FLUID: WATER, so no glycol",author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-1,PUMP,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,service,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,gpm,99,gpm,GPM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,head_ft,35,ft,HEAD (ft WG),
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,motor_hp,2,hp,MOTOR HP,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,rpm,,rpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,vfd,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,pump_arrangement,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,glycol_pct,0,%,"FLUID: WATER, so no glycol",author's reading of the printed row
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CHILLED WATER PUMP,CWP-2,PUMP,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC DUCT HEATER'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,cfm,1750,cfm,CFM,"printed '1,750'"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,eh_kw,10,kW,kW,printed '10.0'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,motor_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-1,UNIT_HEATER,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC DUCT HEATER'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,cfm,690,cfm,CFM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,heating_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,eh_kw,8,kW,kW,printed '8.0'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,motor_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-2,UNIT_HEATER,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC DUCT HEATER'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,cfm,900,cfm,CFM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,heating_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,hw_gpm,,gpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,hw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,hw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,steam_psig,,psig,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,eh_kw,8,kW,kW,printed '8.0'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,motor_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-3,UNIT_HEATER,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC DUCT HEATER'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,cfm,690,cfm,CFM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,heating_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,hw_gpm,,gpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,hw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,hw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,steam_psig,,psig,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,eh_kw,10,kW,kW,printed '10.0'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,motor_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-4,UNIT_HEATER,phase,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,building,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,floor,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,area_served,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,qty,,,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC DUCT HEATER'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,cfm,900,cfm,CFM,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,heating_mbh,,MBH,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,hw_gpm,,gpm,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,hw_ewt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,hw_lwt_f,,F,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,steam_psig,,psig,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,eh_kw,8,kW,kW,printed '8.0'
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,motor_hp,,hp,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,conn_in,,in,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,volts,,V,,not printed
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,ELECTRIC DUCT HEATER,EDH-5,UNIT_HEATER,phase,,,,not printed

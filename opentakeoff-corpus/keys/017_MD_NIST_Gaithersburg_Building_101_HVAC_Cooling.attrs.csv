@@ -1,0 +1,244 @@
+# 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets 101-1273 and 101-1274 (pages 12 and 13) of the NIST Building 101 HVAC equipment refresh, Gaithersburg MD (CFR Engineering), the tables the third tier's seed drew for its FAN, DUCT_MOUNTED_COIL and HUMIDIFIER strata.
+#   017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12 | SUPPLY FAN SCHEDULE | FAN | all 6 printed rows | render: page 12 overview at 40 dpi; crop 776,778,2022,312 at 3x in 4 tiles (MARK column repeated), notes cropped at 3x (crop 776,1125,1300,130); second read at 4x (crops 776,861,784,38 and 1560,861,784,38; 776,973,784,38 and 1560,973,784,38; 776,1047,784,38 and 1560,1047,784,38) of S-A-1, S-A-4 and S-A-6 through RPM and the first sound bands
+#   017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12 | HEATING COIL SCHEDULE | DUCT_MOUNTED_COIL | all 6 printed rows | render: page 12 overview at 40 dpi; crop 776,1305,2022,313 at 3x in 4 tiles (MARK column repeated), notes cropped at 3x (crop 776,1650,1300,100); second read at 4x (crops 776,1388,784,38 and 1560,1388,784,38; 776,1500,784,38 and 1560,1500,784,38; 776,1574,784,38 and 1560,1574,784,38) of HC-A-1, HC-A-4 and HC-A-6, every cell
+#   017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13 | HUMIDIFIER SCHEDULE | HUMIDIFIER | all 1 printed row | render: page 13 overview at 40 dpi; crop 979,1685,1819,105 at 3x in 4 tiles (TAG column repeated), notes cropped at 3x (crop 979,1810,1200,210); second read at 4x (crops 979,1734,784,38 and 1760,1734,784,38) of H-A-3, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Outside air flows, total static, wheel diameters, fan arrangement and class, brake horsepower, frequency, FLA, octave-band sound power, face velocities, air temperatures and pressure drops, steam pressures and loads (no steam attribute in the coil's vocabulary), coil dimensions, fins and rows, duct sizes, humidifier maximum capacity, absorption distance and control power, MCA, MOCP, weights, basis of design, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling: 3 table(s), 13 instance(s), 225 keyed attribute value(s) (82 printed, 143 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,qty,1,,SUPPLY FAN / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,service,ACU-A-1,,SERVICE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,cfm,15795,cfm,SUPPLY FAN / AIR FLOW (CFM),"printed '15,795'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,esp_in,2.24,in. w.c.,SUPPLY FAN / ESP (IN.W.G.),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,motor_hp,20,hp,MOTOR / MOTOR NAMEPLATE HORSE POWER (MHP),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,motor_watts,,W,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,rpm,1170,rpm,MOTOR / RPM,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,drive,direct,,SUPPLY FAN / DRIVE,printed 'DIRECT'
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,vfd,yes,,NOTE 1,"note 1, every row's NOTES printing ALL: 'PROVIDE THE SUPPLY FAN WITH THE FOLLOWING: ... b. INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING RING'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,ecm,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,control,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,volts,460,V,MOTOR / VOLTAGE (V),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-1,FAN,phase,3,,MOTOR / PHASE (Ø),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,qty,1,,SUPPLY FAN / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,service,ACU-A-2,,SERVICE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,cfm,19490,cfm,SUPPLY FAN / AIR FLOW (CFM),"printed '19,490'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,esp_in,1.53,in. w.c.,SUPPLY FAN / ESP (IN.W.G.),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,motor_hp,20,hp,MOTOR / MOTOR NAMEPLATE HORSE POWER (MHP),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,motor_watts,,W,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,rpm,1170,rpm,MOTOR / RPM,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,drive,direct,,SUPPLY FAN / DRIVE,printed 'DIRECT'
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,vfd,yes,,NOTE 1,"note 1, every row's NOTES printing ALL: 'PROVIDE THE SUPPLY FAN WITH THE FOLLOWING: ... b. INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING RING'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,ecm,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,control,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,volts,460,V,MOTOR / VOLTAGE (V),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-2,FAN,phase,3,,MOTOR / PHASE (Ø),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,qty,1,,SUPPLY FAN / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,service,ACU-A-3,,SERVICE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,cfm,28030,cfm,SUPPLY FAN / AIR FLOW (CFM),"printed '28,030'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,esp_in,2.48,in. w.c.,SUPPLY FAN / ESP (IN.W.G.),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,motor_hp,40,hp,MOTOR / MOTOR NAMEPLATE HORSE POWER (MHP),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,motor_watts,,W,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,rpm,1170,rpm,MOTOR / RPM,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,drive,direct,,SUPPLY FAN / DRIVE,printed 'DIRECT'
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,vfd,yes,,NOTE 1,"note 1, every row's NOTES printing ALL: 'PROVIDE THE SUPPLY FAN WITH THE FOLLOWING: ... b. INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING RING'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,ecm,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,control,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,volts,460,V,MOTOR / VOLTAGE (V),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-3,FAN,phase,3,,MOTOR / PHASE (Ø),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,qty,1,,SUPPLY FAN / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,service,ACU-A-4,,SERVICE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,cfm,25600,cfm,SUPPLY FAN / AIR FLOW (CFM),"printed '25,600'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,esp_in,2.54,in. w.c.,SUPPLY FAN / ESP (IN.W.G.),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,motor_hp,30,hp,MOTOR / MOTOR NAMEPLATE HORSE POWER (MHP),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,motor_watts,,W,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,rpm,1170,rpm,MOTOR / RPM,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,drive,direct,,SUPPLY FAN / DRIVE,printed 'DIRECT'
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,vfd,yes,,NOTE 1,"note 1, every row's NOTES printing ALL: 'PROVIDE THE SUPPLY FAN WITH THE FOLLOWING: ... b. INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING RING'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,ecm,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,control,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,volts,460,V,MOTOR / VOLTAGE (V),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-4,FAN,phase,3,,MOTOR / PHASE (Ø),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,qty,1,,SUPPLY FAN / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,service,ACU-A-5,,SERVICE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,cfm,29880,cfm,SUPPLY FAN / AIR FLOW (CFM),"printed '29,880'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,esp_in,3.03,in. w.c.,SUPPLY FAN / ESP (IN.W.G.),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,motor_hp,40,hp,MOTOR / MOTOR NAMEPLATE HORSE POWER (MHP),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,motor_watts,,W,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,rpm,1170,rpm,MOTOR / RPM,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,drive,direct,,SUPPLY FAN / DRIVE,printed 'DIRECT'
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,vfd,yes,,NOTE 1,"note 1, every row's NOTES printing ALL: 'PROVIDE THE SUPPLY FAN WITH THE FOLLOWING: ... b. INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING RING'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,ecm,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,control,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,volts,460,V,MOTOR / VOLTAGE (V),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-5,FAN,phase,3,,MOTOR / PHASE (Ø),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,qty,1,,SUPPLY FAN / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,service,ACU-A-6,,SERVICE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,cfm,22770,cfm,SUPPLY FAN / AIR FLOW (CFM),"printed '22,770'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,esp_in,1.94,in. w.c.,SUPPLY FAN / ESP (IN.W.G.),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,motor_hp,25,hp,MOTOR / MOTOR NAMEPLATE HORSE POWER (MHP),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,motor_watts,,W,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,rpm,1170,rpm,MOTOR / RPM,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,drive,direct,,SUPPLY FAN / DRIVE,printed 'DIRECT'
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,vfd,yes,,NOTE 1,"note 1, every row's NOTES printing ALL: 'PROVIDE THE SUPPLY FAN WITH THE FOLLOWING: ... b. INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING RING'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,ecm,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,control,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,volts,460,V,MOTOR / VOLTAGE (V),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,SUPPLY FAN SCHEDULE,S-A-6,FAN,phase,3,,MOTOR / PHASE (Ø),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,qty,2,,COIL DATA / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,cfm,15795,cfm,AIR SIDE DATA / AIR FLOW (CFM),"printed '15,795'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,heating_mbh,912,MBH,AIR SIDE DATA / HEATING CAPACITY (MBH),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,volts,,V,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-1,DUCT_MOUNTED_COIL,phase,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,qty,2,,COIL DATA / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,cfm,19490,cfm,AIR SIDE DATA / AIR FLOW (CFM),"printed '19,490'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,heating_mbh,1119,MBH,AIR SIDE DATA / HEATING CAPACITY (MBH),"printed '1,119'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,volts,,V,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-2,DUCT_MOUNTED_COIL,phase,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,qty,2,,COIL DATA / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,cfm,28030,cfm,AIR SIDE DATA / AIR FLOW (CFM),"printed '28,030'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,heating_mbh,1649,MBH,AIR SIDE DATA / HEATING CAPACITY (MBH),"printed '1,649'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,volts,,V,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-3,DUCT_MOUNTED_COIL,phase,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,qty,2,,COIL DATA / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,cfm,25600,cfm,AIR SIDE DATA / AIR FLOW (CFM),"printed '25,600'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,heating_mbh,1509,MBH,AIR SIDE DATA / HEATING CAPACITY (MBH),"printed '1,509'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,volts,,V,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-4,DUCT_MOUNTED_COIL,phase,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,qty,2,,COIL DATA / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,cfm,29880,cfm,AIR SIDE DATA / AIR FLOW (CFM),"printed '29,880'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,heating_mbh,1690,MBH,AIR SIDE DATA / HEATING CAPACITY (MBH),"printed '1,690'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,volts,,V,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-5,DUCT_MOUNTED_COIL,phase,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,qty,2,,COIL DATA / QUANTITY,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,cfm,22770,cfm,AIR SIDE DATA / AIR FLOW (CFM),"printed '22,770'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,heating_mbh,1361,MBH,AIR SIDE DATA / HEATING CAPACITY (MBH),"printed '1,361'"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,volts,,V,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12,HEATING COIL SCHEDULE,HC-A-6,DUCT_MOUNTED_COIL,phase,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,building,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,floor,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,area_served,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,qty,,,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,humidifier_type,steam_to_steam,,TYPE,printed 'STEAM-TO-STEAM'
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,capacity_lb_hr,262,lb/hr,CAPACITY (LB/HR),
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,eh_kw,,kW,,not printed
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,volts,115,V,VOLT / PHASE / HZ: volts part,author's reading of the printed row
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13,HUMIDIFIER SCHEDULE,H-A-3,HUMIDIFIER,phase,1,,VOLT / PHASE / HZ: phase part,author's reading of the printed row

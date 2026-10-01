@@ -151,6 +151,27 @@ export function spanAnswersFor(have: string, want: string, vocab: readonly strin
   return false;
 }
 
+/** Is the drawn text `have` a bare prefix of scheduled mark `want` — letters
+ * only, shorter than the mark, the mark beginning with them ("E" or "EF" for
+ * EF-1)? It is the one kind of span spanAnswersFor lets answer for a mark
+ * other than the mark itself (or its compound run), and only while no other
+ * vocab mark shares it; a caller whose vocab is not every mark the drawings
+ * could carry, or that needs the mark itself, can hold such a span to more. */
+export function isBarePrefix(have: string, want: string): boolean {
+  const h = markKey(have);
+  const w = markKey(want);
+  return h.length > 0 && h !== w && isBare(h) && w.startsWith(h);
+}
+
+/** The letters a mark's family is written with, up to its first digit or
+ * separator: "ET" for ET-1, "AHU" for AHU-A, "WHSE" for WHSE-AHU-1, none for
+ * 1-VAV-1. A drafter's shorthand for the one unit of a family is these
+ * letters whole ("ET" for the only ET-1); a part of them ("E" for EF-1, "DO"
+ * for DOAS-1) is no mark's shorthand. */
+export function markLetters(want: string): string {
+  return /^[A-Z]+/.exec((want || "").trim().toUpperCase())?.[0] ?? "";
+}
+
 /** Every drawn occurrence of `want` on the sheet, after alias clustering.
  * Twin spellings of the same mark sitting on one device collapse to one
  * hit (the longer original text wins). Far-apart alias spellings stay

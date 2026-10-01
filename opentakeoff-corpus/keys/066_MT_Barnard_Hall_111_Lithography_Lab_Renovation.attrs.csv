@@ -1,0 +1,47 @@
+# 066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M001 (page 8) of the Montana State University Barnard Hall room 111 lithography lab renovation (Cushing Terrell), the tables the second tier's seed drew for its HEAT_PUMP and HUMIDIFIER strata.
+#   066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8 | HUMIDIFIER SCHEDULE | HUMIDIFIER | all 1 printed row | render: page 8 crop 105,60,847,195 at 3x in 2 tiles (PLAN CODE column repeated), notes included; second read at 4x (crop 105,93,847,72) of the row, every cell
+#   066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8 | WATER SOURCE HEAT PUMP SCHEDULE | HEAT_PUMP | all 1 printed row | render: page 8 crop 105,890,1540,295 at 3x in 3 tiles (PLAN CODE column repeated), notes included; second read at 4x (crop 105,920,1540,84) of the row, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, fill and drain rates, humidity range, MCA/MOCP/max fuse, external static pressure, source-water flow, temperatures and pressure drop, sensible capacity, weight, drain size, efficiencies (EER, COP), and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 066_MT_Barnard_Hall_111_Lithography_Lab_Renovation: 2 table(s), 2 instance(s), 29 keyed attribute value(s) (13 printed, 16 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,building,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,floor,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,area_served,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,qty,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,humidifier_type,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,capacity_lb_hr,8,lb/hr,HUMIDITY OUTPUT (LBS/HR),
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,eh_kw,3,kW,POWER / KW,
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,volts,120,V,POWER / V/PH/HZ: volts part,author's reading of the printed row
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,HUMIDIFIER SCHEDULE,H-1,HUMIDIFIER,phase,1,,POWER / V/PH/HZ: phase part,author's reading of the printed row
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,building,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,floor,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,area_served,"111, 111A",,AREA SERVED,"printed '111, 111A'"
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,qty,,,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cfm,745,cfm,AIRFLOW (CFM),
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cooling_mbh,22.2,MBH,COOLING (3) / CAPACITY (MBH),
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cooling_tons,2,tons,NOM SIZE (TON),
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,heating_mbh,15.21,MBH,HEATING (3) / CAPACITY (MBH),
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_gpm,,gpm,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_ewt_f,,F,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_lwt_f,,F,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_gpm,,gpm,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_ewt_f,,F,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_lwt_f,,F,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,motor_hp,,hp,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,eh_kw,,kW,,not printed
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,conn_in,0.75,in,PIPING RUNOUT SIZE / SUPPLY / RETURN: the unit's water hook-up pipe size,"printed '3/4""'; author's reading of the printed row"
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,bas_interface,BACNET,,"NOTE 7, where the row's NOTES cite it: HEAT PUMP SHALL BE CONTROLLED THROUGH BACNET SYSTEM",printed 'CONTROLLED THROUGH BACNET SYSTEM'; author's reading of the printed row
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,volts,208,V,POWER (1) / V/HZ/PH: volts part,author's reading of the printed row
+066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8,WATER SOURCE HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,phase,1,,"POWER (1) / V/HZ/PH: phase part, printed last",author's reading of the printed row

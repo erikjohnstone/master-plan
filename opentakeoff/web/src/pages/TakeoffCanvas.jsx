@@ -39,6 +39,8 @@ import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import { sanitizeAssembliesState } from "../lib/assemblies/projectState";
+import { loadStarterLibrary } from "../lib/assemblies/starterLibrary";
 import { takeoffNavigationBadge } from "../lib/completeBasPresentation.js";
 import { renderPdfCitationPreview } from "../lib/citationComparison.js";
 import { assertBasAssignmentUpdate } from "../lib/basAssignmentDemandContract.ts";
@@ -153,13 +155,12 @@ import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../l
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText, linearRunRows } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
-import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
+import { takeoffWorkbookSheets, rowsToCsv } from "../lib/corpusTakeoff.mjs";
 import { buildValveSizeExport } from "../lib/valveSizeExport.ts";
-import { fillValveSizeTemplate, VALVE_SIZE_TEMPLATE_PUBLIC_PATH, VALVE_SIZE_TEMPLATE_FILENAME } from "../lib/valveSizeTemplate.ts";
+import { valveSizeTemplateFiles, VALVE_SIZE_TEMPLATE_PUBLIC_PATH } from "../lib/valveSizeTemplate.ts";
 import {
-  reconcileScheduleFamilyWithSweeps,
+  reconcileFamilyInChunks,
   reconcileRowsToCsv,
-  familyNeedleFromSpecs,
 } from "../lib/schedulePlanReconcile.mjs";
 import { queryTable } from "../lib/queryTable.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
@@ -252,7 +253,7 @@ import {
   MEASURE_TOOLS, CUT_TOOLS, MARKUP_TOOLS, MARKUP_IDS, HL_INKS, HL_SIZES,
   MARKUP_IMG_MAX, MAX_IMAGE_MARKUP_BYTES, MARKUP_UPLOAD_MAX_BYTES, MARKUP_DECODE_MAX_AREA,
 } from "../lib/canvasConstants.js";
-import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond } from "../lib/canvasUtil.js";
+import { uid, clamp, citeFocusScale, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond } from "../lib/canvasUtil.js";
 // Tile-pyramid rendering (#86) — pure math in lib/tiles.ts (tested), worker
 // pool in lib/tilePool.ts, DOM/Worker orchestration glue here via one
 // long-lived compositor instance. Replaces the old single-raster base +
@@ -450,6 +451,19 @@ export default function TakeoffCanvas() {
   // Stitches (#161): persisted match-line composites (lib/stitches.ts) — a
   // stitch opens as ONE panel; its members are a render-time concern only.
   const [stitches, setStitches] = useState([]);
+  // ASSEMBLIES (WP5.2/5.4): the project's assemblies block (pins, settings,
+  // overrides; lib/assemblies/projectState.ts) rides the project file. The
+  // compiled project the apply path reads is re-read from the plans through
+  // /__ot/assemblies-project and never saved. The partner's library is the
+  // profile's (store), beside the read-only starter.
+  const [assembliesState, setAssembliesState] = useState(null);
+  const [assembliesProject, setAssembliesProject] = useState(null);
+  // The drawing set the project was read from (files, revisions, epoch): the
+  // panel names what changed since (AS-58).
+  const [assembliesSource, setAssembliesSource] = useState(null);
+  const [assembliesStatus, setAssembliesStatus] = useState({});
+  const [starterAssemblies, setStarterAssemblies] = useState([]);
+  const [partnerAssemblies, setPartnerAssemblies] = useState([]);
   const [alignPt, setAlignPt] = useState(null);       // stitch-align first click (stage px) — ephemeral, never persisted
   const [zoneCheck, setZoneCheck] = useState(null);   // ephemeral zone-check region {key, pts (norm)} — never persisted (buildPayload doesn't read it)
   const [zoneExpand, setZoneExpand] = useState(null); // zone panel: condition id with materials expanded
@@ -695,6 +709,16 @@ export default function TakeoffCanvas() {
   // Takeoff tab = finished compiled takeoff; Workflow data = raw aggregate.
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
+  // ASSEMBLIES (WP5.4): the libraries load when the Takeoff panel opens — the
+  // read-only starter once (on demand; it stays out of the main bundle), the
+  // partner's own records from the profile store each time.
+  useEffect(() => {
+    if (!showTakeoffData) return undefined;
+    let live = true;
+    if (!starterAssemblies.length) loadStarterLibrary().then((defs) => { if (live) setStarterAssemblies(defs); }).catch((e) => setAssembliesStatus({ error: String(e?.message || e) }));
+    store.loadEquipmentAssemblies().then((defs) => { if (live) setPartnerAssemblies(defs); }).catch(() => {});
+    return () => { live = false; };
+  }, [showTakeoffData]); // eslint-disable-line react-hooks/exhaustive-deps
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
   // The full compile_corpus_takeoff result (kind control_valves) behind the
   // "Export to HIT" button — lastCorpusTakeoffMeta above is trimmed for the
@@ -893,6 +917,7 @@ export default function TakeoffCanvas() {
   // selection at a time (bidirectional mutual exclusivity). Passing null clears both.
   const selectShape = (id) => { setSelectedId(id); setSelectedMarkupId(null); };
   const selectMarkup = (id) => { setSelectedMarkupId(id); setSelectedId(null); };
+  const pendingFlyOptsRef = useRef({});   // the pending fly-to's options (focus: zoom to a cite's box)
   const pendingFlyRef = useRef(null);   // fly-to target whose sheet is opening this tick (two-phase center once its bitmap loads)
   // Source-trace (◎) equivalent of pendingFlyRef: { sheet_id, rect, token, attempts }
   // for a trace whose SOURCE sheet is opening this tick. Unlike pendingFlyRef it
@@ -1416,6 +1441,7 @@ export default function TakeoffCanvas() {
   // the merged snap/mask geometry and member placement.
   const [docEpoch, setDocEpoch] = useState(0);
   basSourceSignatureRef.current = JSON.stringify([docEpoch, sheets.map(s => s.name).sort()]);
+  const assembliesDrawingSet = useMemo(() => ({ epoch: docEpoch, files: sheets.map((s) => ({ name: s.name, rev: s.rev ?? null })) }), [docEpoch, sheets]);
   const groupSig = JSON.stringify(groupKeys) + "@" + docEpoch + "|" + stitchLayoutSig(groupKeys, stitches);
   let _px = 0;
   const panels = groupKeys.map((key) => {
@@ -1997,6 +2023,14 @@ export default function TakeoffCanvas() {
     // legitimate group of one while its stitch actually exists.
     const loadedStitches = sanitizeStitches(a.stitches, MAX_GROUP);
     setStitches(loadedStitches);
+    // additive `assemblies` (WP5.2) — sanitize-gated; else-clear. Anything the
+    // gate drops is named, never lost silently.
+    const loadedAssemblies = sanitizeAssembliesState(a.assemblies);
+    setAssembliesState(loadedAssemblies.state);
+    setAssembliesProject(null);
+    setAssembliesSource(null);
+    setAssembliesStatus({});
+    if (loadedAssemblies.dropped.length) setCommitMsg(`Assemblies: ${loadedAssemblies.dropped.length} saved item(s) could not be read — ${loadedAssemblies.dropped[0]}`);
     setAlignPt(null);
     // else-clear matters at runtime (snapshot load): a payload without groups/
     // tabs must not inherit the pre-load ones — autosave would persist a hybrid.
@@ -2787,7 +2821,7 @@ export default function TakeoffCanvas() {
     const sp = panels.find((p) => p.key === m.sheet_id);
     // once the panel bitmap exists, center (or give up if the markup has no anchor)
     // and clear the ref regardless, so an unanchored markup can't get stuck pending.
-    if (sp && sp.img.w) { centerOnMarkup(m); pendingFlyRef.current = null; }
+    if (sp && sp.img.w) { centerOnMarkup(m, pendingFlyOptsRef.current); pendingFlyRef.current = null; }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [panelImgs, groupSig, status]);
 
@@ -2848,7 +2882,7 @@ export default function TakeoffCanvas() {
     // units is additive and diff-only (the sheet_levels convention): imperial —
     // the default — omits the key, so an old imperial project's payload is
     // byte-identical on round-trip; only a metric project carries the field.
-    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(linearSettings).length ? { linear_settings: linearSettings } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
+    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(assembliesState ? { assemblies: assembliesState } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(linearSettings).length ? { linear_settings: linearSettings } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
   };
   // Runtime restore of a saved payload — the Revisions panel's Restore lands
   // here. A runtime load (unlike mount) can interrupt work in
@@ -3091,7 +3125,7 @@ export default function TakeoffCanvas() {
     // state it serializes, so listing buildPayload (a new identity each render)
     // would fire a save on every render instead of only on a real change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, linearSettings, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units, basWorkflow]);
+  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, linearSettings, layerOverrides, lastGroup, openTabs, stitches, assembliesState, projectName, clientInfo, units, basWorkflow]);
   useEffect(() => { saveStateRef.current = saveState; }, [saveState]);
 
   // Flush a pending debounced save on navigate-away (unmount), and warn before a
@@ -6609,7 +6643,9 @@ export default function TakeoffCanvas() {
   // fires state setters and a sheet's bitmap dims load async: if the target sheet
   // isn't open, stash it in pendingFlyRef + openSheets, and the effect below
   // centers once the panel has non-zero img.w. If already open, center inline.
-  function centerOnMarkup(m) {
+  // opts.focus (a user opening a cite): also zoom in until the cited box reads
+  // (citeFocusScale) — never out. Register clicks keep the user's zoom.
+  function centerOnMarkup(m, opts = {}) {
     const sp = panelByKey(m.sheet_id);
     if (!sp || !sp.img.w) return false;
     let anchor;
@@ -6622,13 +6658,22 @@ export default function TakeoffCanvas() {
     const el = containerRef.current;
     if (!el) return false;
     const r = el.getBoundingClientRect();
-    const scale = tfRef.current.scale;
-    const sx = anchor[0] * sp.img.w + sp.xOffset, sy = anchor[1] * sp.img.h;
+    let scale = tfRef.current.scale;
+    let sx = anchor[0] * sp.img.w + sp.xOffset;
+    const sy = anchor[1] * sp.img.h;
+    if (opts.focus && (m.type === "cloud" || m.type === "highlight") && m.rect) {
+      const x0 = Math.min(m.rect[0][0], m.rect[1][0]) * sp.img.w + sp.xOffset;
+      const bw = Math.abs(m.rect[1][0] - m.rect[0][0]) * sp.img.w, bh = Math.abs(m.rect[1][1] - m.rect[0][1]) * sp.img.h;
+      scale = citeFocusScale(scale, bw, bh, r.width, r.height);
+      // wider than the view at that scale (a schedule row): show its start —
+      // the row's tag — a little in from the left, not its middle columns
+      if (bw * scale > 0.9 * r.width) sx = x0 + (0.45 * r.width) / scale;
+    }
     setTfNow({ x: r.width / 2 - sx * scale, y: r.height / 2 - sy * scale, scale });
     selectMarkup(m.id);
     return true;
   }
-  function flyToMarkup(m) {
+  function flyToMarkup(m, opts = {}) {
     if (!m) return;
     // a fly-to and a source-trace both end in setTfNow off the same deps
     // ([panelImgs, groupSig, status]) — starting one must cancel a competing
@@ -6636,10 +6681,11 @@ export default function TakeoffCanvas() {
     // the user already stopped looking at.
     pendingSourceRef.current = null;
     setShowMarkups(true);   // flying to a markup reveals the layer, so you never land on an invisible selection
+    pendingFlyOptsRef.current = opts;
     if (!panelKeySet.has(m.sheet_id)) { pendingFlyRef.current = m; openSheets([m.sheet_id], false); return; }
     // open already, but its bitmap may still be mid-render (img.w === 0) — if the
     // inline center can't run yet, hand off to the phase-2 effect below.
-    if (!centerOnMarkup(m)) pendingFlyRef.current = m;
+    if (!centerOnMarkup(m, opts)) pendingFlyRef.current = m;
   }
   // Reposition an image markup — the row's Place button. Two cases, branched on
   // whether the image's CURRENT sheet is already open (panelKeySet.has):
@@ -7846,7 +7892,9 @@ export default function TakeoffCanvas() {
   async function fetchProductionReconcileSchedulePlan(opts = {}) {
     const fields = {};
     if (opts.family) fields.family = String(opts.family).trim();
-    if (opts.familySweepAll) fields.familySweepAll = "1";
+    // MCP sweeps every row of a family unless the caller opts out; carry the
+    // choice only when one was made (AS-117).
+    if (typeof opts.familySweepAll === "boolean") fields.familySweepAll = opts.familySweepAll ? "1" : "0";
     if (opts.tags?.length) fields.tags = opts.tags.join(",");
     if (opts.categories?.length) fields.categories = opts.categories.join(",");
     if (opts.evaluationFast) fields.evaluationFast = "1";
@@ -7893,6 +7941,45 @@ export default function TakeoffCanvas() {
     } catch (error) {
       return { error: `Production reconciliation failed: ${error?.message || error}` };
     }
+  }
+
+  /** ASSEMBLIES (WP5.4): the project the apply path reads, from the same
+   * Session+ODL path MCP's apply_assemblies uses (production-graph-cli
+   * --mode assemblies_project); applied in the browser by the same
+   * applyAssemblies. Sheet keys come back as the canvas's real names. */
+  async function fetchProductionAssembliesProject() {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) throw new Error("No PDF loaded");
+    const fd = new FormData();
+    const shaToName = new Map();
+    for (const name of names) {
+      const bytes = await loadPdfDataOrExplain(name);
+      try { shaToName.set(await sha256Hex(bytes), name); } catch { /* keep the upload's own name */ }
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    const res = await fetch("/__ot/assemblies-project", { method: "POST", body: fd });
+    const result = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(result.error || `assemblies-project HTTP ${res.status}`);
+    return remapGraphSheetKeys(result, shaToName);
+  }
+
+  async function loadAssembliesProject() {
+    // The set this request reads (the same sheets it sends): a change while
+    // it is read, or after, shows as a change since (AS-58).
+    const source = assembliesDrawingSet;
+    setAssembliesStatus({ loading: true });
+    try {
+      setAssembliesProject(await fetchProductionAssembliesProject());
+      setAssembliesSource(source);
+      setAssembliesStatus({});
+    } catch (e) {
+      setAssembliesStatus({ error: `Couldn't read the schedules for assemblies: ${e?.message || e}` });
+    }
+  }
+
+  async function savePartnerAssemblies(defs) {
+    await store.saveEquipmentAssemblies(defs);
+    setPartnerAssemblies(await store.loadEquipmentAssemblies());
   }
 
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
@@ -8666,12 +8753,27 @@ export default function TakeoffCanvas() {
   // Siemens HIT sizing tool.
   async function exportControlValveTakeoffToHit() {
     if (!lastControlValveTakeoff) return;
-    const valveExport = buildValveSizeExport(lastControlValveTakeoff);
+    // Coil-derived valves (ASSEMBLIES WP7.3): the embedded-coil compile on the
+    // same production path, read-only. A failure stops the export rather than
+    // leave those valves out silently.
+    let coilGaps;
+    try {
+      coilGaps = await fetchProductionCorpusTakeoff("embedded_coil_gaps");
+    } catch (e) {
+      throw new Error(`Couldn't read the coils embedded in the equipment schedules, so the coil-derived valves can't be included: ${e?.message || e}`);
+    }
+    const valveExport = buildValveSizeExport(lastControlValveTakeoff, { coilGaps });
     const templateRes = await fetch(VALVE_SIZE_TEMPLATE_PUBLIC_PATH);
     if (!templateRes.ok) throw new Error(`template fetch ${templateRes.status}`);
     const templateBytes = new Uint8Array(await templateRes.arrayBuffer());
-    const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
-    downloadBytes(VALVE_SIZE_TEMPLATE_FILENAME, filled, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    // One workbook per 195 valves, so every row keeps its dropdowns.
+    const files = await valveSizeTemplateFiles(templateBytes, valveExport.rows);
+    if (files.length === 1) {
+      downloadBytes(files[0].filename, files[0].bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    } else {
+      const { zipSync } = await import("fflate");
+      downloadBytes("Valve_Size_Template_US_Global.zip", zipSync(Object.fromEntries(files.map((f) => [f.filename, f.bytes])), { level: 0 }), "application/zip");
+    }
   }
 
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
@@ -8936,7 +9038,7 @@ export default function TakeoffCanvas() {
       ...(opts.categories?.length ? { categories: opts.categories } : {}),
       ...(opts.tags?.length ? { tags: opts.tags } : {}),
       evaluation_fast: opts.evaluationFast === true,
-      family_sweep_all: opts.familySweepAll === true,
+      ...(typeof opts.familySweepAll === "boolean" ? { family_sweep_all: opts.familySweepAll } : {}),
     });
     if (remote && !remote.error) {
       reportProgress({ message: `Reconciliation complete — ${remote.rows?.length || 0} schedule rows reviewed.` });
@@ -8955,46 +9057,40 @@ export default function TakeoffCanvas() {
       return { ...prod, csv, path: "production_session" };
     }
     if (prod?.error && !family) return prod;
-
-    const g = await ensureAgentGraph();
-    if (!g.available) {
-      return { error: "This set has no text layer (a scan) — reconcile needs schedule tables and plan sweeps." };
-    }
     if (!family) {
       return {
         error: "Pass family to scope reconcile (e.g. VAV, FCU, AHU). Whole-set reconcile requires the MCP or production Session path.",
       };
     }
-    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
-    if (!needle) {
-      return { rows: [], summary: { total: 0, match: 0, schedule_only: 0, plan_only: 0, refused_no_scale: 0, refused_no_text: 0, ambiguous: 0 }, family_filter: family };
-    }
-    const sessionAdapter = {
-      sweepScheduleRow: async (rowTag, sweepOpts) => {
-        const r = await agentSweepScheduleRow(rowTag, sweepOpts);
-        if (r?.error) throw new Error(r.error);
-        if (r.found != null) return r;
-        return {
-          found: r.total_found ?? 0,
-          sheets: (r.per_sheet || r.sheets || []).map((ps) => ({
-            sheet: ps.sheet,
-            matches: ps.matches || [],
-          })),
-        };
-      },
+    // Past the production run's post-index limit, the same family reconcile
+    // runs again in tag chunks, each one call of MCP's reconcile_schedule_plan
+    // on the shared Session (the remote bridge, else the production path), so
+    // every row is the row MCP returns, never a canvas-side sweep with its own
+    // options and defaults (AS-117).
+    const familyChunk = async ({ tags, familySweepAll }) => {
+      const remoteChunk = await agentMcpTool("reconcile_schedule_plan", {
+        family,
+        ...(tags?.length ? { tags } : {}),
+        evaluation_fast: opts.evaluationFast === true,
+        ...(typeof familySweepAll === "boolean" ? { family_sweep_all: familySweepAll } : {}),
+      });
+      if (remoteChunk && !remoteChunk.error) return remoteChunk;
+      return fetchProductionReconcileSchedulePlan({ family, tags, familySweepAll, evaluationFast: opts.evaluationFast === true });
     };
-    const result = await reconcileScheduleFamilyWithSweeps(sessionAdapter, g, needle, {
+    reportProgress({ message: "Reconciling the family in parts on the shared Session…" });
+    const result = await reconcileFamilyInChunks(familyChunk, {
       tags: opts.tags,
-      evaluationFast: opts.evaluationFast !== false,
-      sweepAll: !!opts.familySweepAll && !opts.tags?.length,
+      familySweepAll: opts.familySweepAll,
+      onChunk: ({ done, total }) => reportProgress({ message: `Reconciled ${done} of ${total} schedule tags…`, processed: done, total }),
     });
+    if (result.error) return result;
     const csv = reconcileRowsToCsv(result.rows);
     if (opts.download !== false && result.rows.length) {
-      const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
+      const base = `${exportBaseName()}.reconcile-${family.toLowerCase()}`;
       downloadText(`${base}.csv`, csv, "text/csv");
     }
     pushReconcileToTakeoffPanel(result, family);
-    return { ...result, csv, path: "shared_session_sweep" };
+    return { ...result, csv, path: "production_session_chunked" };
   }
 
   // Playwright / primary-agent UI demos call the same compile path the Agent
@@ -9064,6 +9160,12 @@ export default function TakeoffCanvas() {
         shapes: () => shapes,
         markups: () => markups,
         graphTables: () => graphTables,
+        // The Assemblies view's inputs as the canvas holds them (the project
+        // read through /__ot/assemblies-project and the project file's
+        // assemblies block): playwright-assemblies applies them in-page with
+        // the shared modules and compares the bytes with apply_assemblies.
+        assembliesProject: () => assembliesProject,
+        assembliesState: () => assembliesState,
         scheduleTables: () => currentGraphTables,
         openSchedules: () => setSchedulesOpen(true),
         // Put an answer in the thread without a model call, so the answer's
@@ -9712,7 +9814,7 @@ export default function TakeoffCanvas() {
     const markup = agentStateRef.current.markups.find((m) => m.id === citation.markupId)
       || markups.find((m) => m.id === citation.markupId);
     if (markup) {
-      flyToMarkup(markup);
+      flyToMarkup(markup, { focus: true });
       return;
     }
     // Markup not found yet — open the sheet; user can retry from the card.
@@ -14083,7 +14185,7 @@ export default function TakeoffCanvas() {
               });
               if (result?.error) { setCommitMsg(`Could not show that: ${result.error}`, "refusal"); return; }
               const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
-              if (markup) flyToMarkup(markup);
+              if (markup) flyToMarkup(markup, { focus: true });
             }}
           /></WorkspaceDock>
         )}
@@ -14217,6 +14319,12 @@ export default function TakeoffCanvas() {
 
       {showTakeoffData && (
         <TakeoffDataPanel
+          assemblies={{
+            project: assembliesProject, status: assembliesStatus, onLoad: loadAssembliesProject,
+            source: assembliesSource, drawingSet: assembliesDrawingSet,
+            starter: starterAssemblies, partner: partnerAssemblies, onSavePartner: savePartnerAssemblies,
+            state: assembliesState, onStateChange: setAssembliesState,
+          }}
           rows={agentTakeoffRows}
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}
@@ -14460,8 +14568,8 @@ export default function TakeoffCanvas() {
             if (markups[0] && focus && dims?.w && dims?.h) {
               // Center the group using a temporary display extent. The canvas
               // still paints only the individual immutable source boxes.
-              flyToMarkup({ ...markups[0], rect: [[focus[0] / dims.w, focus[1] / dims.h], [focus[2] / dims.w, focus[3] / dims.h]] });
-            } else if (markups[0]) flyToMarkup(markups[0]);
+              flyToMarkup({ ...markups[0], rect: [[focus[0] / dims.w, focus[1] / dims.h], [focus[2] / dims.w, focus[3] / dims.h]] }, { focus: true });
+            } else if (markups[0]) flyToMarkup(markups[0], { focus: true });
             return { ...results[0], citation_count: results.length };
           }}
         />

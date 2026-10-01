@@ -13,11 +13,19 @@
  *
  * "Refuse rather than guess" (this codebase's standing rule, see
  * corpusTakeoff.mjs's own valveEstimatorStatus): every field below is either
- * read straight off a schedule cell, derived by an explicit physical formula
- * from two schedule cells, or a documented project-wide default the caller
- * opted into. Never a silent invention. PN class and Branch Δp have NO
+ * read straight off a schedule cell or a documented project-wide choice the
+ * caller opted into. Never a silent invention. PN class and Branch Δp have NO
  * source anywhere in the current extraction (they're spec-book fields, not
  * schedule columns) and are always left null — see coverage.notes.
+ *
+ * Column H ("Consumer Δp") is ALSO always left null. The template's defined
+ * name for that header cell is `CoilDP` (ValveTable!$H$4): the consumer's —
+ * the coil's — own pressure drop, which the compiled valve rows do not carry.
+ * The valve's own drop, (GPM / Cv)^2, is a different quantity; it is
+ * reported on each row's `_derived.valveDpPsi` and counted in the notes as
+ * "valve Δp (derived)", and is never written to the workbook. Column H stays
+ * blank until the HIT owners confirm what CoilDP expects (ASSEMBLIES goal
+ * D11, opentakeoff-corpus/goals/ASSEMBLIES.md).
  */
 import type { ValveSizeRow } from "./valveSizeTemplate.ts";
 
@@ -35,6 +43,15 @@ export const EXCLUDED_NON_HYDRONIC_CONTROL_FAMILIES = [
   "CONTROL_DAMPER", "FUME_HOOD_DAMPER", "LAB_AIR_VALVE",
 ];
 
+/** The only Tolerance (%) values the template accepts: ValveTable!J6:J1048576
+ * is list-validated against Constants!$F$2:$F$6 (defined name
+ * ToleranceValues) = 10 / 20 / 30 / 40 / 50 in the shipped workbook. */
+export const HIT_TOLERANCE_PCT_VALUES: readonly number[] = [10, 20, 30, 40, 50];
+
+/** The template's two Positioning Signal options (DomainValues
+ * PositioningSignalValues) — nothing else is representable. */
+export type HitPositioningSignal = "0...10 Vdc" | "Floating control";
+
 export interface ValveSizeExportOptions {
   /** Which compile categories to include. Default HYDRONIC_CONTROL_VALVE_FAMILIES. */
   families?: string[];
@@ -46,26 +63,60 @@ export interface ValveSizeExportOptions {
    * genuinely on the primary loop. Never per-row evidence — always disclose
    * which was used (coverage.notes says so). */
   hydronicTier?: "primary" | "secondary";
-  /** Derive Consumer Δp from a schedule's own printed GPM and Cv via the
-   * standard valve-sizing relation Δp(psi) = (GPM / Cv)^2 — real physics
-   * from two printed numbers, not a guess. Default true. */
-  deriveConsumerDpFromCv?: boolean;
   /** Project-wide sizing tolerance (%) — this template's Tolerance column is
    * a project design parameter, never printed per-valve on a schedule. Left
-   * null (blank cell) unless the caller explicitly sets one. */
+   * null (blank cell) unless the caller explicitly sets one, and then it must
+   * be one of HIT_TOLERANCE_PCT_VALUES: any other value throws rather than
+   * write a cell the template's own validation rejects. */
   toleranceOverridePct?: number | null;
   /** Fill Operating Voltage = "24 VAC" (the template's only defined value,
    * and the near-universal standard for HVAC control-valve actuators) on any
    * row where a Positioning Signal was also resolved — i.e., only where
    * there's independent evidence the valve is BAS-actuated. Default true. */
   fillOperatingVoltageDefault?: boolean;
+  /** An embedded_coil_valve_gaps compile (compileTakeoff(…,
+   * "embedded_coil_gaps"), read-only): each hydronic coil found inside an
+   * equipment schedule with no matching scheduled valve adds one row,
+   * flagged coil-derived (ASSEMBLIES goal WP7.3). Omitted: none. */
+  coilGaps?: any;
+}
+
+/** Why Positioning Signal is blank on a row. */
+export type PositioningSignalBlankReason =
+  /** Neither a Control signal nor an Actuator cell was printed. */
+  | "no_signal_printed"
+  /** A signal was printed, but it is neither of the template's two options
+   * (2–10 V, 4–20 mA, 3–15 psi, two-position, …). */
+  | "not_representable"
+  /** The printed text names more than one signal type. */
+  | "multiple_signals_printed"
+  /** Only an Actuator cell was printed and it names no signal type
+   * ("MODULATING", "ELECTRIC", …). */
+  | "actuator_names_no_signal";
+
+export interface PositioningSignalResolution {
+  value: HitPositioningSignal | null;
+  /** The normalized control-valve cell the evidence came from. */
+  header: "Control signal" | "Actuator" | null;
+  /** That cell's printed text, verbatim. */
+  printed: string | null;
+  /** Set exactly when value is null. */
+  blankReason: PositioningSignalBlankReason | null;
 }
 
 export interface ValveSizeExportRow extends ValveSizeRow {
   /** Provenance, dropped before writing to the template — kept on the
    * in-memory row for reporting/testing, never fed to fillValveSizeTemplate
    * (which only reads the ValveSizeRow fields it knows). */
-  _source: { family: string; tag: string | null; sheetId: string | null; tableTitle: string | null };
+  _source: { family: string; tag: string | null; sheetId: string | null; tableTitle: string | null; coilDerived?: true };
+  /** Computed or withheld values, for reporting only — never written to the
+   * workbook either. */
+  _derived: {
+    /** The scheduled VALVE's own pressure drop, (GPM / Cv)^2 psi, from the
+     * row's printed GPM and Cv. NOT column H: see the file header. */
+    valveDpPsi: number | null;
+    positioningSignal: PositioningSignalResolution;
+  };
 }
 
 const COLUMN_KEYS: Array<keyof ValveSizeRow> = [
@@ -77,6 +128,8 @@ const COLUMN_KEYS: Array<keyof ValveSizeRow> = [
 export interface ValveSizeExportResult {
   rows: ValveSizeExportRow[];
   sourceItemCount: number;
+  /** Rows from coilGaps: coils with no scheduled valve, one valve each. */
+  coilDerivedCount: number;
   excludedFamilies: Array<{ family: string; count: number; reason: string }>;
   coverage: Record<string, { filled: number; total: number }>;
   notes: string[];
@@ -150,42 +203,72 @@ export function mapSystem(serviceOrTitleText: string | null, tier: "primary" | "
   return null;
 }
 
-/** Control signal / actuator text -> the template's exact Positioning
- * Signal vocabulary (its only two options: an analog 0-10V-family
- * modulating signal, or floating/tri-state control). 4-20mA, 3-15psi,
- * two-position/on-off, and anything unrecognized are left blank — none of
- * them are either of the two template options, and picking the "closer"
- * one would misrepresent the actuator. */
-export function mapPositioningSignal(controlSignalText: string | null, actuatorText: string | null): string | null {
-  const signal = (controlSignalText || "").toUpperCase();
-  if (/\d{1,2}\s*[-–]\s*\d{1,2}\s*V(DC)?\b/.test(signal)) return "0...10 Vdc";
-  if (/FLOAT/.test(signal)) return "Floating control";
-  const actuator = (actuatorText || "").toUpperCase();
-  if (/MODULAT/.test(actuator)) return "0...10 Vdc";
-  if (/FLOAT/.test(actuator)) return "Floating control";
-  return null;
+type PrintedSignalType = HitPositioningSignal | "other";
+
+/** Every signal type a printed cell NAMES. A printed range with a unit
+ * ("0-10VDC", "2-10 V", "4-20mA", "3-15 PSI", "0...10 Vdc") is analog and
+ * only 0–10 V is representable; floating is also printed as tri-state or
+ * 3-point; two-position / on-off / open-close is a signal type the template
+ * cannot represent. "MODULATING" alone names no signal type at all (it may
+ * be 0–10 V, 2–10 V, 4–20 mA or floating), so it contributes nothing. */
+function printedSignalTypes(text: string): Set<PrintedSignalType> {
+  const t = text.toUpperCase();
+  const types = new Set<PrintedSignalType>();
+  const range = /(?<![\d.])(\d+(?:\.\d+)?)\s*(?:-|–|—|TO|\.{2,3}|\/)\s*(\d+(?:\.\d+)?)\s*(VDC|VOLTS?|V|MA|PSIG?)(?![A-Z])/g;
+  for (const m of t.matchAll(range)) {
+    const isZeroToTenVolt = Number(m[1]) === 0 && Number(m[2]) === 10 && m[3].startsWith("V");
+    types.add(isZeroToTenVolt ? "0...10 Vdc" : "other");
+  }
+  if (/\bFLOAT(?:ING)?\b|\bTRI[\s-]?STATE\b|\b(?:3|THREE)[\s-]?POINT\b/.test(t)) types.add("Floating control");
+  if (/\b(?:2|TWO)[\s-]?POSITION\b|\bON[\s/-]?OFF\b|\bOPEN[\s/-]?CLOSED?\b/.test(t)) types.add("other");
+  return types;
 }
 
-/** Δp(psi) = (GPM / Cv)^2 — the standard water-valve sizing relation
- * (Cv := GPM / sqrt(ΔP)), applied only when both printed numbers parsed
- * cleanly and Cv > 0. This is arithmetic on two schedule cells, not an
- * estimate — but it IS a computed value, not a printed one; callers that
- * need to distinguish should treat consumerDpPsi as derived whenever the
- * source schedule had no explicit Δp column (none of the compiled families
- * here do — this is the only source for that column today). */
-export function computeConsumerDpPsi(gpm: number | null, cv: number | null): number | null {
+/** Printed signal text -> the template's Positioning Signal, or a disclosed
+ * blank. Only PRINTED evidence counts: the Control signal cell decides
+ * alone when it is printed; otherwise an Actuator cell counts only when it
+ * spells out the signal type ("0-10VDC", "FLOATING"). A cell naming exactly
+ * one representable type maps to it; any other printed signal (2–10 V,
+ * 4–20 mA, two-position), or more than one type, is left blank — picking
+ * the "closer" template option would misrepresent the actuator. */
+export function resolvePositioningSignal(controlSignalText: string | null, actuatorText: string | null): PositioningSignalResolution {
+  const signal = controlSignalText?.trim() || null;
+  const actuator = actuatorText?.trim() || null;
+  const judge = (header: "Control signal" | "Actuator", printed: string, noneReason: PositioningSignalBlankReason): PositioningSignalResolution => {
+    const types = printedSignalTypes(printed);
+    if (types.size > 1) return { value: null, header, printed, blankReason: "multiple_signals_printed" };
+    const [only] = types;
+    if (only === "0...10 Vdc" || only === "Floating control") return { value: only, header, printed, blankReason: null };
+    return { value: null, header, printed, blankReason: only === "other" ? "not_representable" : noneReason };
+  };
+  if (signal) return judge("Control signal", signal, "not_representable");
+  if (actuator) return judge("Actuator", actuator, "actuator_names_no_signal");
+  return { value: null, header: null, printed: null, blankReason: "no_signal_printed" };
+}
+
+/** The template's Positioning Signal for a row, or null — see
+ * resolvePositioningSignal for the evidence rule and the blank reasons. */
+export function mapPositioningSignal(controlSignalText: string | null, actuatorText: string | null): HitPositioningSignal | null {
+  return resolvePositioningSignal(controlSignalText, actuatorText).value;
+}
+
+/** The valve's own pressure drop, Δp(psi) = (GPM / Cv)^2 — the standard
+ * water-valve sizing relation (Cv := GPM / sqrt(ΔP)), applied only when both
+ * printed numbers parsed cleanly and Cv > 0. Reported, never written to the
+ * template: its column H asks for the coil's drop (CoilDP), not this. */
+export function computeValveDpPsi(gpm: number | null, cv: number | null): number | null {
   if (gpm === null || cv === null || cv <= 0 || gpm < 0) return null;
   return Math.round((gpm / cv) ** 2 * 100) / 100;
 }
 
 function mapRow(item: any, family: string, opts: Required<Pick<ValveSizeExportOptions,
-  "hydronicTier" | "deriveConsumerDpFromCv" | "toleranceOverridePct" | "fillOperatingVoltageDefault">>): ValveSizeExportRow {
+  "hydronicTier" | "toleranceOverridePct" | "fillOperatingVoltageDefault">>): ValveSizeExportRow {
   const cells = item?.cells || {};
   const unitNo = cellText(cells, "Unit Mark") || cellText(cells, "Served equipment") || item?.tag || null;
   const service = cellText(cells, "Service") || item?.table_title || null;
   const gpm = parseCleanNumber(cellText(cells, "GPM"));
   const cv = parseCleanNumber(cellText(cells, "Cv"));
-  const positioningSignal = mapPositioningSignal(cellText(cells, "Control signal"), cellText(cells, "Actuator"));
+  const signal = resolvePositioningSignal(cellText(cells, "Control signal"), cellText(cells, "Actuator"));
   return {
     unitNo,
     location: item?.building || null,
@@ -194,13 +277,51 @@ function mapRow(item: any, family: string, opts: Required<Pick<ValveSizeExportOp
     pnClass: null, // never present on a plan schedule — spec-book field (see coverage.notes)
     lineSizeIn: parseLineSizeInches(cellText(cells, "Size")),
     designFlowRateGpm: gpm,
-    consumerDpPsi: opts.deriveConsumerDpFromCv ? computeConsumerDpPsi(gpm, cv) : null,
+    consumerDpPsi: null, // CoilDP — the coil's drop, not carried by a valve row (see file header)
     branchDpPsi: null, // never present on a plan schedule — spec-book field (see coverage.notes)
     tolerancePct: opts.toleranceOverridePct ?? null,
-    positioningSignal,
-    operatingVoltage: (opts.fillOperatingVoltageDefault && positioningSignal) ? "24 VAC" : null,
+    positioningSignal: signal.value,
+    operatingVoltage: (opts.fillOperatingVoltageDefault && signal.value) ? "24 VAC" : null,
     _source: { family, tag: item?.tag ?? null, sheetId: item?.sheet_id ?? null, tableTitle: item?.table_title ?? null },
+    _derived: { valveDpPsi: computeValveDpPsi(gpm, cv), positioningSignal: signal },
   };
+}
+
+/** One coil-derived row: a hydronic coil printed inside an equipment
+ * schedule that no scheduled valve serves. Its flow is the coil's printed
+ * GPM. Its System comes only from printed service text (the coil's label,
+ * then its table's title), never from the entering water temperature.
+ * CoilDP stays blank like every row's (see the file header), and so does
+ * everything a valve schedule would have printed. */
+function mapCoilRow(item: any, opts: Required<Pick<ValveSizeExportOptions,
+  "hydronicTier" | "toleranceOverridePct" | "fillOperatingVoltageDefault">>): ValveSizeExportRow {
+  const cells = item?.cells || {};
+  const label = cellText(cells, "COIL LABEL");
+  return {
+    unitNo: item?.tag || cellText(cells, "SERVED") || null,
+    location: item?.building || null,
+    system: mapSystem(label, opts.hydronicTier) ?? mapSystem(item?.table_title ?? null, opts.hydronicTier),
+    ports: null,
+    pnClass: null,
+    lineSizeIn: null,
+    designFlowRateGpm: parseCleanNumber(cellText(cells, "GPM")),
+    consumerDpPsi: null,
+    branchDpPsi: null,
+    tolerancePct: opts.toleranceOverridePct ?? null,
+    positioningSignal: null,
+    operatingVoltage: null,
+    _source: { family: "EMBEDDED_COIL", tag: item?.tag ?? null, sheetId: item?.sheet_id ?? null, tableTitle: item?.table_title ?? null, coilDerived: true },
+    _derived: { valveDpPsi: null, positioningSignal: { value: null, header: null, printed: null, blankReason: "no_signal_printed" } },
+  };
+}
+
+/** "a ×3, b ×1" for the most frequent printed values, then "+N more". */
+function tally(values: string[], limit = 6): string {
+  const counts = new Map<string, number>();
+  for (const v of values) counts.set(v, (counts.get(v) || 0) + 1);
+  const sorted = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const shown = sorted.slice(0, limit).map(([v, n]) => `"${v}" ×${n}`).join(", ");
+  return sorted.length > limit ? `${shown}, +${sorted.length - limit} more` : shown;
 }
 
 /**
@@ -209,11 +330,14 @@ function mapRow(item: any, family: string, opts: Required<Pick<ValveSizeExportOp
  *   never a hand-built object)
  */
 export function buildValveSizeExport(compiled: any, opts: ValveSizeExportOptions = {}): ValveSizeExportResult {
+  const tolerance = opts.toleranceOverridePct ?? null;
+  if (tolerance !== null && !HIT_TOLERANCE_PCT_VALUES.includes(tolerance)) {
+    throw new RangeError(`Tolerance must be one of ${HIT_TOLERANCE_PCT_VALUES.join(", ")} (%) — the template validates column J against that list (Constants!F2:F6); got ${JSON.stringify(opts.toleranceOverridePct)}.`);
+  }
   const families = opts.families || HYDRONIC_CONTROL_VALVE_FAMILIES;
   const resolvedOpts = {
     hydronicTier: opts.hydronicTier || "secondary",
-    deriveConsumerDpFromCv: opts.deriveConsumerDpFromCv ?? true,
-    toleranceOverridePct: opts.toleranceOverridePct ?? null,
+    toleranceOverridePct: tolerance,
     fillOperatingVoltageDefault: opts.fillOperatingVoltageDefault ?? true,
   };
   const categories = compiled?.categories || {};
@@ -227,6 +351,9 @@ export function buildValveSizeExport(compiled: any, opts: ValveSizeExportOptions
     }
   }
   rows.sort((a, b) => (a.unitNo || "").localeCompare(b.unitNo || "") || 0);
+  // Coil-derived rows follow the scheduled valves, in the detector's order.
+  const coilItems = opts.coilGaps?.categories?.embedded_coil_gaps?.items || [];
+  for (const item of coilItems) rows.push(mapCoilRow(item, resolvedOpts));
 
   const excludedFamilies = Object.entries(categories)
     .filter(([name, cat]: [string, any]) => !families.includes(name) && (cat?.items?.length || 0) > 0)
@@ -243,19 +370,40 @@ export function buildValveSizeExport(compiled: any, opts: ValveSizeExportOptions
   const coverage: Record<string, { filled: number; total: number }> = {};
   for (const key of COLUMN_KEYS) coverage[key] = { filled: rows.filter((r) => r[key] !== null && r[key] !== undefined).length, total: rows.length };
 
+  const withValveDp = rows.filter((r) => r._derived.valveDpPsi !== null).length;
+  const signals = rows.map((r) => r._derived.positioningSignal);
+  const written = (header: string) => signals.filter((s) => s.value && s.header === header).length;
+  const blank = (reason: PositioningSignalBlankReason) => signals.filter((s) => s.blankReason === reason);
+  const signalParts = [
+    `${written("Control signal")} from a Control signal cell`,
+    `${written("Actuator")} from an Actuator cell that names the signal type`,
+  ];
+  const notRepresentable = blank("not_representable");
+  if (notRepresentable.length) signalParts.push(`${notRepresentable.length} blank because the printed signal is not one of the template's two options (${tally(notRepresentable.map((s) => s.printed || ""))})`);
+  const multiple = blank("multiple_signals_printed");
+  if (multiple.length) signalParts.push(`${multiple.length} blank because the printed text names more than one signal type (${tally(multiple.map((s) => s.printed || ""))})`);
+  const actuatorOnly = blank("actuator_names_no_signal");
+  if (actuatorOnly.length) signalParts.push(`${actuatorOnly.length} blank because the Actuator cell names no signal type (${tally(actuatorOnly.map((s) => s.printed || ""))})`);
+  signalParts.push(`${blank("no_signal_printed").length} blank with no signal printed`);
+
   const notes: string[] = [
     `System uses the "${resolvedOpts.hydronicTier}" hydronic tier for every row (P/S is never distinguishable from a valve schedule alone) — pass hydronicTier to change it.`,
     "PN class and Branch Δp have no source in any compiled valve/equipment schedule — always blank here; only a project spec section carries them (spec ingestion, not yet built).",
-    "Tolerance is a project design parameter, never printed per-valve — blank unless toleranceOverridePct was passed.",
-    resolvedOpts.deriveConsumerDpFromCv
-      ? "Consumer Δp is COMPUTED as (GPM / Cv)^2 from the schedule's own printed flow and Cv, not read off a Δp column — no such column exists in the scheduled data."
-      : "Consumer Δp left blank (deriveConsumerDpFromCv:false) — pass true to compute it from printed GPM/Cv.",
+    "Consumer Δp (column H) is always blank. The template names that column CoilDP — the coil's own pressure drop, which the compiled valve rows do not carry. It stays blank until the HIT owners confirm what CoilDP expects.",
+    `Valve Δp (derived) = (GPM / Cv)^2 from the schedule's own printed flow and Cv: computed for ${withValveDp} of ${rows.length} row(s) and reported only (each row's _derived.valveDpPsi) — it is the valve's drop, not the coil's, so it is never written to column H.`,
+    resolvedOpts.toleranceOverridePct === null
+      ? "Tolerance is a project design parameter, never printed per-valve — blank unless toleranceOverridePct was passed (10, 20, 30, 40 or 50, the template's own list)."
+      : `Tolerance ${resolvedOpts.toleranceOverridePct}% on every row, from toleranceOverridePct (a project design parameter, never printed per-valve).`,
+    `Positioning Signal comes only from printed signal text: 0–10 V → "0...10 Vdc"; floating, tri-state or 3-point → "Floating control". "Modulating" alone names no signal type (it may be 0–10 V, 2–10 V, 4–20 mA or floating) and is never defaulted. This run: ${signalParts.join("; ")}.`,
     "Operating Voltage defaults to the template's only defined value (24 VAC) on rows where a Positioning Signal was also resolved — set fillOperatingVoltageDefault:false to leave it blank instead.",
     "Ports needs BOTH a 2-way/3-way Configuration cell and (for 2-way only) a Fail position cell to resolve Normally Open vs Closed — printed schedules without a Fail position column leave 2-way rows blank rather than guess.",
   ];
+  if (coilItems.length) {
+    notes.push(`${coilItems.length} coil-derived row(s) follow the scheduled valves: hydronic coils printed inside equipment schedules (GPM with EWT/LWT) that no scheduled valve serves, one valve each. Flow is the coil's printed GPM; System comes only from the coil's printed label or its table's title (blank for ${rows.filter((r) => r._source.coilDerived && !r.system).length}); every other column is blank for the estimator.`);
+  }
   if (excludedFamilies.length) {
     notes.push(`${excludedFamilies.reduce((n, f) => n + f.count, 0)} schedule row(s) excluded as out of this template's scope: ${excludedFamilies.map((f) => `${f.family} (${f.count}) — ${f.reason}`).join("; ")}.`);
   }
 
-  return { rows, sourceItemCount, excludedFamilies, coverage, notes };
+  return { rows, sourceItemCount, coilDerivedCount: coilItems.length, excludedFamilies, coverage, notes };
 }

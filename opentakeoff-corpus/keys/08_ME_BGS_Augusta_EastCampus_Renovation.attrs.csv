@@ -1,0 +1,19 @@
+# 08_ME_BGS_Augusta_EastCampus_Renovation.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/08_ME_BGS_Augusta_EastCampus_Renovation.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Page 1 (the cover sheet) of the Center Building Improvements, East Campus, Augusta ME (State of Maine Bureau of General Services; Winton Scott Architects), the table the fourth tier's seed drew for its PUMP stratum.
+#   08_ME_BGS_Augusta_EastCampus_Renovation.pdf | (untitled) | PUMP | none — the cover sheet's DRAWING LIST; its P 101, P 102 and P 103 rows are plumbing drawing numbers, and no page of the document schedules a pump | render: page 1 overview at 40 dpi; the drawing list read in the text layer (words 1660,560,780,1060); crop 1660,1380,790,170 at 2.5x of the P 101 to M 102 rows; overviews at 40 dpi of pages 28-32 (no text layer)
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Nothing: the drawn table prints no instance of its claimed family.
+# 08_ME_BGS_Augusta_EastCampus_Renovation: 1 table(s), 0 instance(s), 0 keyed attribute value(s) (0 printed, 0 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,,,PUMP,,,,,"no PUMP instance printed: none — the cover sheet's DRAWING LIST; its P 101, P 102 and P 103 rows are plumbing drawing numbers, and no page of the document schedules a pump"

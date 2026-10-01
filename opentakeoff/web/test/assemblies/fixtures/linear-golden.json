@@ -1,0 +1,3950 @@
+{
+ "seed": [
+  {
+   "id": "asm-duct-rect-default",
+   "family": "duct_rect",
+   "name": "Rect duct, simplified gauge schedule, R-6 wrap, trapeze",
+   "provenance": "plan §5.5 (plans/03-linear-takeoff-hvac-bas-plan.md); rates ductGauge.json/ductWeight.json/ductHangerSpacing.json (#linear-takeoff WP2.1)",
+   "per_ft": [
+    {
+     "item": "duct_lb"
+    },
+    {
+     "item": "insulation_sf",
+     "thickness_in": 1.5,
+     "lap_factor": 1.1
+    }
+   ],
+   "per_vertex": [
+    {
+     "item": "elbow",
+     "kind": "elbow",
+     "labor_factor": 1.4
+    }
+   ],
+   "per_run": [],
+   "allowances": {
+    "fitting_weight_factor": 1.4,
+    "scrap_pct": 10,
+    "offset_pct": 5
+   },
+   "deduct_fittings": false
+  },
+  {
+   "id": "asm-duct-round-default",
+   "family": "duct_round",
+   "name": "Round duct, simplified gauge schedule, R-6 wrap, trapeze",
+   "provenance": "plan §5.5 (plans/03-linear-takeoff-hvac-bas-plan.md); rates ductGauge.json/ductWeight.json/ductHangerSpacing.json (#linear-takeoff WP2.1)",
+   "per_ft": [
+    {
+     "item": "duct_lb"
+    },
+    {
+     "item": "insulation_sf",
+     "thickness_in": 1.5,
+     "lap_factor": 1.1
+    }
+   ],
+   "per_vertex": [
+    {
+     "item": "elbow",
+     "kind": "elbow",
+     "labor_factor": 1.4
+    }
+   ],
+   "per_run": [],
+   "allowances": {
+    "fitting_weight_factor": 1.4,
+    "scrap_pct": 10,
+    "offset_pct": 5
+   },
+   "deduct_fittings": false
+  },
+  {
+   "id": "asm-pipe-default",
+   "family": "pipe",
+   "name": "Pipe, MSS SP-58 hangers, 90.1 insulation",
+   "provenance": "plan §5.5 (plans/03-linear-takeoff-hvac-bas-plan.md); rates pipeHangerSpacing.json/pipeInsulation.json/pipeLabor.json (#linear-takeoff WP2.1) — per_ft/per_vertex/per_run intentionally empty, see this file's own header comment",
+   "per_ft": [],
+   "per_vertex": [],
+   "per_run": [],
+   "deduct_fittings": false
+  }
+ ],
+ "mixed": [
+  {
+   "id": "asm-duct-rect-default",
+   "family": "duct_rect",
+   "name": "Rect duct, simplified gauge schedule, R-6 wrap, trapeze",
+   "provenance": "plan §5.5 (plans/03-linear-takeoff-hvac-bas-plan.md); rates ductGauge.json/ductWeight.json/ductHangerSpacing.json (#linear-takeoff WP2.1)",
+   "per_ft": [
+    {
+     "item": "duct_lb"
+    },
+    {
+     "item": "insulation_sf",
+     "thickness_in": 1.5,
+     "lap_factor": 1.1
+    }
+   ],
+   "per_vertex": [
+    {
+     "item": "elbow",
+     "kind": "elbow",
+     "labor_factor": 1.4
+    }
+   ],
+   "per_run": [],
+   "allowances": {
+    "fitting_weight_factor": 1.4,
+    "scrap_pct": 10,
+    "offset_pct": 5
+   },
+   "deduct_fittings": false
+  },
+  {
+   "id": "asm-duct-round-default",
+   "family": "duct_round",
+   "name": "Round duct, simplified gauge schedule, R-6 wrap, trapeze",
+   "provenance": "plan §5.5 (plans/03-linear-takeoff-hvac-bas-plan.md); rates ductGauge.json/ductWeight.json/ductHangerSpacing.json (#linear-takeoff WP2.1)",
+   "per_ft": [
+    {
+     "item": "duct_lb"
+    },
+    {
+     "item": "insulation_sf",
+     "thickness_in": 1.5,
+     "lap_factor": 1.1
+    }
+   ],
+   "per_vertex": [
+    {
+     "item": "elbow",
+     "kind": "elbow",
+     "labor_factor": 1.4
+    }
+   ],
+   "per_run": [],
+   "allowances": {
+    "fitting_weight_factor": 1.4,
+    "scrap_pct": 10,
+    "offset_pct": 5
+   },
+   "deduct_fittings": false
+  },
+  {
+   "id": "asm-pipe-default",
+   "family": "pipe",
+   "name": "Pipe, MSS SP-58 hangers, 90.1 insulation",
+   "provenance": "plan §5.5 (plans/03-linear-takeoff-hvac-bas-plan.md); rates pipeHangerSpacing.json/pipeInsulation.json/pipeLabor.json (#linear-takeoff WP2.1) — per_ft/per_vertex/per_run intentionally empty, see this file's own header comment",
+   "per_ft": [],
+   "per_vertex": [],
+   "per_run": [],
+   "deduct_fittings": false
+  },
+  {
+   "id": "partner-duct",
+   "family": "duct_rect",
+   "name": "Partner duct",
+   "provenance": "plan §5.5 (plans/03-linear-takeoff-hvac-bas-plan.md); rates ductGauge.json/ductWeight.json/ductHangerSpacing.json (#linear-takeoff WP2.1)",
+   "per_ft": [
+    {
+     "item": "duct_lb"
+    },
+    {
+     "item": "insulation_sf",
+     "thickness_in": 1.5,
+     "lap_factor": 1.1
+    }
+   ],
+   "per_vertex": [
+    {
+     "item": "elbow",
+     "kind": "elbow",
+     "labor_factor": 1.4
+    }
+   ],
+   "per_run": [],
+   "allowances": {
+    "fitting_weight_factor": 1.4,
+    "scrap_pct": 10,
+    "offset_pct": 5
+   },
+   "deduct_fittings": true
+  },
+  {
+   "id": "bare",
+   "family": "duct_round",
+   "name": "bare",
+   "per_ft": [],
+   "per_vertex": [],
+   "per_run": []
+  },
+  {
+   "id": "odd-types",
+   "family": "pipe",
+   "name": "odd-types",
+   "per_ft": [],
+   "per_vertex": [],
+   "per_run": []
+  }
+ ],
+ "resolved": {
+  "asm-duct-rect-default|duct_rect|none": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-rect-default|duct_rect|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-rect-default|duct_round|none": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-rect-default|duct_round|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-rect-default|pipe|none": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "asm-duct-rect-default|pipe|class2": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "asm-duct-rect-default|duct_rect_x2|none": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-rect-default|duct_rect_x2|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-round-default|duct_rect|none": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-round-default|duct_rect|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-round-default|duct_round|none": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-round-default|duct_round|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-round-default|pipe|none": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "asm-duct-round-default|pipe|class2": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "asm-duct-round-default|duct_rect_x2|none": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-duct-round-default|duct_rect_x2|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-pipe-default|duct_rect|none": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-pipe-default|duct_rect|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-pipe-default|duct_round|none": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-pipe-default|duct_round|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-pipe-default|pipe|none": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "asm-pipe-default|pipe|class2": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "asm-pipe-default|duct_rect_x2|none": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "asm-pipe-default|duct_rect_x2|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "partner-duct|duct_rect|none": [
+   {
+    "item": "duct_lb",
+    "qty": 52.7,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 74.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.76,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "206.9 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(16.87 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "partner-duct|duct_rect|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 52.7,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 74.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.76,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "206.9 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(16.87 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "partner-duct|duct_round|none": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "partner-duct|duct_round|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "partner-duct|pipe|none": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "partner-duct|pipe|class2": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "partner-duct|duct_rect_x2|none": [
+   {
+    "item": "duct_lb",
+    "qty": 105.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 148.4,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.52,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "206.9 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(16.87 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "partner-duct|duct_rect_x2|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 105.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 148.4,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "16.87 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.52,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "206.9 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(16.87 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "bare|duct_rect|none": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "bare|duct_rect|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "bare|duct_round|none": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "bare|duct_round|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "bare|pipe|none": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "bare|pipe|class2": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "bare|duct_rect_x2|none": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "bare|duct_rect_x2|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "odd-types|duct_rect|none": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "odd-types|duct_rect|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 56.9,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 80.1,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 154.2,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 159.5,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 4.86,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 14,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 3,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 4,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "odd-types|duct_round|none": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "odd-types|duct_round|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 109.1,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø)=2.618 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 149.7,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "40 LF x girth(10\"ø + 2x1.5\") x 1.1 lap",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 2.51,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "109.1 lb x 0.023 hr/lb",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     0
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "joint",
+    "qty": 10,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (2)",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 5,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "round:10",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(40 / 10 ft) + 1, min 2",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "odd-types|pipe|none": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "odd-types|pipe|class2": [
+   {
+    "item": "elbow",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 1,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "2\"ø → 1.5\"ø, developed length 4 x 0.5in = 0.17 ft",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   }
+  ],
+  "odd-types|duct_rect_x2|none": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ],
+  "odd-types|duct_rect_x2|class2": [
+   {
+    "item": "duct_lb",
+    "qty": 113.8,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6)=3.000 ft x 0.906 lb/sf (26 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 160.2,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "18.2 LF x girth(12x6 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "duct_lb",
+    "qty": 308.4,
+    "unit": "lb",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8)=4.000 ft x 1.156 lb/sf (24 ga, pressure class 2\" w.g.) x 1.15 seam x 2 multiplier",
+    "provenance": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf"
+   },
+   {
+    "item": "insulation_sf",
+    "qty": 319,
+    "unit": "SF",
+    "basis": "per_ft",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "29 LF x girth(16x8 + 2x1.5\") x 1.1 lap x 2 multiplier",
+    "provenance": "ASHRAE 90.1 Table 6.8.2 / IECC 2021 C403.12.1 — public adopted code text. https://up.codes/s/duct-insulation-tables ; https://up.codes/s/duct-and-plenum-insulation-and-sealing"
+   },
+   {
+    "item": "labor_hr",
+    "qty": 9.72,
+    "unit": "hr",
+    "basis": "per_ft",
+    "formula": "211.1 lb x 0.023 hr/lb x 2 multiplier",
+    "provenance": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/"
+   },
+   {
+    "item": "elbow",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "angle 90° (square), labor factor 1.4 x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "transition",
+    "qty": 2,
+    "unit": "ea",
+    "basis": "per_vertex",
+    "source_vertices": [
+     1
+    ],
+    "formula": "12x6 → 16x8, developed length 4 x 4in = 1.33 ft x 2 multiplier",
+    "provenance": "plan §8.2 (plans/03-linear-takeoff-hvac-bas-plan.md); A5 taper rule of thumb, [M]"
+   },
+   {
+    "item": "joint",
+    "qty": 28,
+    "unit": "ea",
+    "basis": "per_run",
+    "formula": "Σ ceil(LF_size / 5 ft) + Σ vertex joints (4) x 2 multiplier",
+    "provenance": "plan §8.2/§8.4 (plans/03-linear-takeoff-hvac-bas-plan.md)"
+   },
+   {
+    "item": "hanger",
+    "qty": 6,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:12x6",
+    "source_segments": [
+     0
+    ],
+    "formula": "ceil(18.2 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   },
+   {
+    "item": "hanger",
+    "qty": 8,
+    "unit": "ea",
+    "basis": "per_run",
+    "size_key": "rect:16x8",
+    "source_segments": [
+     1
+    ],
+    "formula": "ceil(29 / 10 ft) + 1, min 2 x 2 multiplier",
+    "provenance": "IMC 2021 §603.10 (code floor) + plan §8.3"
+   }
+  ]
+ }
+}

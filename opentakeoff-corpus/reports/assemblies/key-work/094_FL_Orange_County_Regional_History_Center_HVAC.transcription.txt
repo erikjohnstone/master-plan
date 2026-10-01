@@ -1,0 +1,138 @@
+# 094_FL_Orange_County_Regional_History_Center_HVAC — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M-401 (PDF page 8, printed rotated 90; crops in the
+# displayed orientation) at 4x, read by eye on 2026-09-23. The pipeline's output for
+# this sheet was not consulted. Tables are the ones the WP0.2 draw (seed 20260923)
+# named for this document.
+SET 094_FL_Orange_County_Regional_History_Center_HVAC
+SEED 20260923
+SCOPE Sheet M-401 (page 8) of the Orange County Regional History Center HVAC drawings (Atkins), the tables drawn for this document.
+EXCLUDES Model numbers, weights, head, ambient wet bulb, drive type, fan RPM, duct size, cylinder count, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# Cooling Tower Schedule has no NOTES column; its notes list sits directly below
+# the one-row table and reads, note 4: "PROVIDE WITH PREMIUM EFFICIENCY MOTOR AND
+# VARIABLE FREQUENCY DRIVE."
+TABLE
+sheet: 094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8
+title: Cooling Tower Schedule
+family: COOLING_TOWER
+render: page 8 crop 1865,866,785,110 at 4x in 2 tiles (Mark column repeated) and notes crop 1880,988,760,150 at 3.2x; second read of cells, flow and fan HP
+rows: all 1 printed row
+col: Mark => tag
+col: Model No. => -
+col: Tower Type => -
+col: # Of Cells => cells
+col: Operating Weight (lbs) => -
+col: Flow GPM => gpm
+col: Max. Head (ft) => -
+col: Water Temp. / Ent. => ewt_f
+col: Water Temp. / Lvg. => lwt_f
+col: Ambient WB => -
+col: Drive Type => -
+col: Fan Motor Data / HP => fan_hp
+col: Fan Motor Data / RPM => -
+col: [Volt/ Phase: volts part] => volts
+col: [Volt/ Phase: phase part] => phase
+derive: vfd = yes ; header=NOTE 4 ; note=note 4 of the table: 'PROVIDE WITH PREMIUM EFFICIENCY MOTOR AND VARIABLE FREQUENCY DRIVE'
+grid:
+CT-1 | MD5016 | COUNTERFLOW | 1 | 13150 | 900 | 9.6 | 95 | 85 | 80 | DIRECT | 20 | 1800 | 460 | 3
+END
+
+
+# Air Handling Unit Schedule CHW: the "Unit Components In Direction Of Air Flow"
+# column is decoded with the sheet's Components Legend (HF = ELECTRIC HUMIDIFIER
+# SECTION, HCS = ELEC. HEATING COIL SECTION, OAI = OUTSIDE AIR INTAKE SECTION, CC =
+# COOLING COIL). Note 9: "VAV UNITS CONTROLLED BY VFD'S SHALL BE AHU-4, 5, & 8 ...
+# MODULATED TO MAINTAIN CONSTANT OA AIRFLOW" (not an economizer; economizer stays not
+# printed). Note 8: cooling coils reconnect to existing 3-way control valves (outside
+# this key's vocabulary). Final filter MERV is keyed as filter_merv (the train's
+# highest rating); the 2" MERV 8 prefilter is typed for audit only.
+TABLE
+sheet: 094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8
+title: Air Handling Unit Schedule CHW
+family: AHU
+render: page 8 crop 152,72,2495,200 at 4x in 7 tiles (Mark column repeated), notes crops 655,282,580,190 and 1225,282,560,160 and legend crop 150,282,500,140 at 3x; second read of AHU-04 total CFM, AHU-06 heating kW and AHU-08 chilled-water GPM
+rows: all 5 printed rows
+col: Mark => tag
+col: Uint Model => -
+col: Unit Type => -
+col: Unit Components In Direction Of Air Flow See Legend Below => -
+col: Air Flows / Total Max. CFM => supply_cfm
+col: [Air Flows / Occupied Mode OA CFM: design minimum outdoor air] => oa_cfm_min
+col: Air Flows / Un-Occupied Mode OA CFM => -
+col: Air Flows / Smoke Mode SA & OA CFM => -
+col: Fan Data / Ext. SP IN W.G. => -
+col: Fan Data / Total SP IN W.G. => -
+col: Fan Data / Fan Size and Type => -
+col: Fan Data / RPM => -
+col: Fan Data / Motor HP => supply_fan_hp
+col: Fan Data / Var. Freq. Drive => vfd
+col: Cooling Coil / Capacity / Sen. MBH => -
+col: Cooling Coil / Capacity / Total MBH => cooling_mbh
+col: Cooling Coil / Air Data / Ent. Temp. DB/WB => -
+col: Cooling Coil / Air Data / Lvg. Temp. DB/WB => -
+col: Cooling Coil / Air Data / Vel. FPM => -
+col: Cooling Coil / Air Data / Row/Fin. Per Ft. => -
+col: [Cooling Coil / Air Data / Row/Fin. Per Ft.: rows part] => chw_rows
+col: Cooling Coil / Air Data / P.D. IN W.G. => -
+col: Cooling Coil / Water Data / Temp. F / Ent. => chw_ewt_f
+col: Cooling Coil / Water Data / Temp. F / Lvg. => chw_lwt_f
+col: Cooling Coil / Water Data / Flow GPM => chw_gpm
+col: Cooling Coil / Water Data / P.D. FT W.G. => chw_wpd_ft
+col: Heating Coil / Ent. => -
+col: Heating Coil / Lvg. => -
+col: Heating Coil / P.D. IN W.G. => -
+col: Heating Coil / KW => eh_kw
+col: Filters / Prefilter Air PD IN. W.G. => -
+col: Filters / Prefilter Type => -
+col: Filters / Final Filter Air PD IN. W.G. => -
+col: Filters / Final Filter Type => -
+col: [Filters / Final Filter Type: MERV] => filter_merv
+col: Electrical Data / Volt/ Phase/Hz => -
+col: [Electrical Data / Volt/ Phase/Hz: volts part] => volts
+col: [Electrical Data / Volt/ Phase/Hz: phase part] => phase
+col: Electrical Data / MCA => -
+col: [Unit Components: HF (ELECTRIC HUMIDIFIER SECTION) present] => humidifier
+col: [Unit Components: HCS (ELEC. HEATING COIL SECTION) and Heating Coil KW] => heating_type
+derive: cooling_type = chw ; header=Cooling Coil / Water Data ; note=every row prints a chilled-water cooling coil (CC, water data 45/57 F; title 'CHW')
+grid:
+AHU-04 | CSAA012UB | OUTDOOR HORIZ. DRAW-THRU | MXTD3-PF-FF-CC-HF-FAN | 5400 | 1000 | 0 | 3000 | 1.25 | 4.19 | 20in. direct-drive plenum, full width | 1960 | 7.5 | yes (YES) | 121 | 136 | 74/62 | 53.6/53.2 | 439 | 8/82 | 8 | 0.56 | 45 | 57 | 23 | 1.9 | - | - | - | - | 0.625 | 2" Pleated - MERV 8 | 0.747 | 12in. cartridge - 95% eff - MERV 15 | 15 | 460/3/60 | 460 | 3 | 11.75 | yes (MXTD3-PF-FF-CC-HF-FAN) | none (no HCS; heating coil columns print '-')
+AHU-05 | CSAA014UB | OUTDOOR HORIZ. DRAW-THRU | MXTD3-PF-FF-CC-HF-FAN | 7400 | 965 | 0 | 5400 | 1.50 | 5.20 | 20in. direct-drive plenum, 120% width | 2342 | 10 | yes (YES) | 163 | 180 | 74/62 | 53.9/53.6 | 542 | 6/134 | 6 | 0.67 | 45 | 57 | 30 | 2.8 | - | - | - | - | 0.67 | 2" Pleated - MERV 8 | 0.795 | 12in. cartridge - 95% eff - MERV 15 | 15 | 460/3/60 | 460 | 3 | 15.63 | yes (MXTD3-PF-FF-CC-HF-FAN) | none (no HCS; heating coil columns print '-')
+AHU-06 | CSAA008UB | OUTDOOR HORIZ. DRAW-THRU | MXB2-PF-FF-CC-HCS-HF-FAN | 3100 | 675 | 0 | 3200 | 1.50 | 4.88 | 14in. belt-drive plenum, M press | 3033 | 5 | no (NO) | 72 | 84 | 74/62 | 52.9/52.5 | 388 | 6/108 | 6 | 0.39 | 45 | 57 | 14 | 1.7 | 72 | 90 | 0.11 | 18 | 0.606 | 2" Pleated - MERV 8 | 0.726 | 12in. cartridge - 95% eff - MERV 15 | 15 | 460/3/60 | 460 | 3 | 8.38 | yes (MXB2-PF-FF-CC-HCS-HF-FAN) | electric (HCS; 18 KW)
+AHU-07 | CSAA021UB | OUTDOOR HORIZ. DRAW-THRU | OAI-PF-FF-CC-HCS-FAN | 9770 | 9770 | 0 | 0 | 1.50 | 4.46 | 22in. diameter Housed AF, M press | 1580 | 15 | no (NO) | 511 | 898 | 100/79 | 53/52.9 | 469 | 8/122 | 8 | 0.88 | 45 | 57 | 149 | 18.4 | 35 | 70 | 0.15 | 108 | 0.631 | 2" Pleated - MERV 8 | 0.795 | 4in. cartridge - MERV 14 - premium | 14 | 460/3/60 | 460 | 3 | 23.13 | no (OAI-PF-FF-CC-HCS-FAN, no HF) | electric (HCS; 108 KW)
+AHU-08 | CSAA014UB | OUTDOOR HORIZ. DRAW-THRU | MXTD3-PF-FF-CC-HF-FAN | 6700 | 690 | 0 | 4800 | 1.50 | 4.67 | 22.25in. direct-drive plenum, full width | 1821 | 7.5 | yes (YES) | 148 | 163 | 74/62 | 53.9/53.6 | 491 | 6/127 | 6 | 0.58 | 45 | 57 | 27 | 2.3 | - | - | - | - | 0.649 | 2" Pleated - MERV 8 | 0.773 | 12in. cartridge - 95% eff - MERV 15 | 15 | 460/3/60 | 460 | 3 | 11.75 | yes (MXTD3-PF-FF-CC-HF-FAN) | none (no HCS; heating coil columns print '-')
+END
+
+# Packaged Air Cooled Water Chiller Schedule: two tonnages print, "Nominal Tons" 30
+# and "Capacity Tons" 23; tons keys the scheduled capacity. Note 4: "PROVIDE FACTORY
+# FURNISHED CONTROLLER AND CONNECT TO EXISTING BMS."
+TABLE
+sheet: 094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8
+title: Packaged Air Cooled Water Chiller Schedule
+family: AIR_COOLED_CHILLER
+render: page 8 crop 1620,632,1025,112 at 4x in 3 tiles (Mark column repeated) and notes crop 1640,750,600,70 at 3.2x; second read of capacity tons, GPM and LWT
+rows: all 1 printed row
+col: Mark => tag
+col: Model No. => -
+col: Energy Efficiency Rating => -
+col: Integrated Part Load Value => -
+col: Cooling Capacity / Nominal Tons => -
+col: Cooling Capacity / Capacity Tons => tons
+col: Cooling Capacity / Amb. Temp. => -
+col: Chilled Water Data / Flow GPM => chw_gpm
+col: Chilled Water Data / Max PD FT => -
+col: Chilled Water Data / EWT => chw_ewt_f
+col: Chilled Water Data / LWT => chw_lwt_f
+col: Condenser Fan / No. => -
+col: Condenser Fan / FLA Each => -
+col: Compressors / No. => -
+col: Compressors / RLA Each => -
+col: Compressors / LRA Each => -
+col: Electrical Data / MCA => -
+col: Electrical Data / Max. Fuse Size => -
+col: [Electrical Data / Volt/Phase: volts part] => volts
+col: [Electrical Data / Volt/Phase: phase part] => phase
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'Packaged Air Cooled Water Chiller Schedule'
+derive: bas_interface = EXISTING BMS ; header=NOTE 4 ; note=note 4: 'PROVIDE FACTORY FURNISHED CONTROLLER AND CONNECT TO EXISTING BMS'
+grid:
+CH-2 | CGAM-030 | 9.1 | 14.4 | 30 | 23 | 105 | 55 | 15.1 | 55 | 45 | 3 | 3.2 | 2 | 24.2 | 197 | 66.3 | 90 | 460 | 3
+END

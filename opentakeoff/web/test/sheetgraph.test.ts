@@ -10,7 +10,7 @@
 import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, stripBasPointSectionHeadingRows, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, classifySheetRoleBySignals, sheetPlanViewTitle, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, stripBasPointSectionHeadingRows, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -224,6 +224,137 @@ test("sheet roles: an ENLARGED/PARTIAL qualifier between the level number and PL
   // real, legitimate plan title unrelated to this fix.)
   const other = classifySheetRole({ key: "h", sheet_number: "M401", spans: [sp("MECHANICAL - LEVEL 1 PRELIMINARY PLAN", 100, 700)] });
   assert.notEqual(other.role, "plan", "an unrelated qualifier word must not classify as plan via this widened pattern");
+});
+
+// A span with its own text height (h) — titles print larger than notes.
+const tsp = (str: string, x: number, y: number, h: number, rot?: number): GraphSpan =>
+  rot === 90 || rot === 270
+    ? { str, x, y, w: h, h: str.length * h * 0.6, rot }
+    : { str, x, y, w: str.length * h * 0.6, h };
+const notes = (n: number): GraphSpan[] => Array.from({ length: n }, (_, i) => tsp(`NOTE ${i + 1}. PROVIDE ACCESS PANELS AS REQUIRED.`, 4000, 300 + 30 * i, 20));
+
+test("sheet roles: a plan title with qualifiers, stacked or without PLAN, decides a sheet the signals left unknown or incidental (AS-91)", () => {
+  // "MECHANICAL LEVEL" over "34 PLAN" in the title block: neither span alone is a title
+  const stacked = classifySheetRole({ key: "p24", sheet_number: "M2.34", spans: [
+    ...notes(12), tsp("C. REFER TO DETAILS ON M3.05 FOR INTAKE CONNECTIONS.", 4000, 700, 20),
+    tsp("MECHANICAL LEVEL", 5477, 3946, 51), tsp("34 PLAN", 5627, 4003, 51), tsp("M2.34", 5789, 4223, 51),
+  ] });
+  assert.deepEqual([stacked.role, stacked.confidence, stacked.evidence?.text], ["plan", 0.85, "MECHANICAL LEVEL 34 PLAN"]);
+  // a DETAILS note no longer decides a sheet whose own title is a level plan
+  const withDetail = classifySheetRole({ key: "p15", sheet_number: "M2.04", spans: [
+    ...notes(12), tsp("SEE STRUCTURAL DRAWINGS FOR DETAILS.", 4000, 800, 20), tsp("MECHANICAL LEVEL 4 PLAN", 5400, 3950, 51),
+  ] });
+  assert.deepEqual([withDetail.role, withDetail.evidence?.text], ["plan", "MECHANICAL LEVEL 4 PLAN"]);
+  // a floor's discipline sheet with no PLAN word
+  for (const title of ["FIRST FLOOR - SECTOR A - HVAC", "MECHANICAL MEZZANINE - SECTOR B", "BASEMENT – VENTILATION – PHASE 4 - BID ALTERNATE 3", "PIPE BASEMENT - PIPING - PHASE 2", "SECOND FLOOR MECHANICAL"]) {
+    const r = classifySheetRole({ key: "t", sheet_number: "M211", spans: [...notes(12), tsp(title, 2568, 2950, 57)] });
+    assert.deepEqual([r.role, r.evidence?.text], ["plan", title], title);
+  }
+  // a quarter-turned title block reads in its own frame (run upward, next line to the right)
+  const turned = classifySheetRole({ key: "r", sheet_number: "M2.02", spans: [
+    ...notes(12), tsp("MECHANICAL LEVEL", 5400, 3000, 51, 270), tsp("2 PLAN", 5460, 3100, 51, 270),
+  ] });
+  assert.deepEqual([turned.role, turned.evidence?.text], ["plan", "MECHANICAL LEVEL 2 PLAN"]);
+});
+
+test("sheet roles: the plan-title pass never touches a schedule, demolition, plan or index sheet, and small or listed titles never decide (AS-91)", () => {
+  // schedule role (it gates table extraction) and its confidence are untouched
+  const sched = classifySheetRole({ key: "s", sheet_number: "M601", spans: [...notes(12), tsp("AIR HANDLING UNIT SCHEDULE", 100, 100, 30), tsp("FIRST FLOOR - HVAC", 2500, 2900, 57)] });
+  assert.deepEqual([sched.role, sched.confidence], ["schedule", 0.85]);
+  // a demolition title with a floor and discipline is not a plan title
+  const demo = classifySheetRole({ key: "d", sheet_number: "MD101", spans: [...notes(12), tsp("BASEMENT DEMOLITION - VENTILATION - PHASE 1", 2500, 2900, 57)] });
+  assert.notEqual(demo.role, "plan");
+  // a note's second line printed small never decides ("GIRT SEE CAB" over "ROOF LEVEL PLAN")
+  const note = classifySheetRole({ key: "e", sheet_number: "S220", spans: [
+    ...notes(12), tsp("TYPICAL CAB FRAME ELEVATION", 140, 630, 50), tsp("GIRT SEE CAB", 300, 170, 19), tsp("ROOF LEVEL PLAN", 300, 185, 19),
+  ] });
+  assert.equal(note.role, "elevation");
+  // nor a panel schedule's circuit description printed at body size
+  const panel = classifySheetRole({ key: "q", sheet_number: "E804", spans: [
+    ...Array.from({ length: 20 }, (_, i) => tsp(`SPARE ${i}`, 300, 150 + 12 * i, 26)), tsp("PENTHOUSE LIGHTING", 330, 400, 26), tsp("SECTIONS: 1", 460, 100, 26),
+  ] });
+  assert.notEqual(panel.role, "plan");
+  // a sheet list prints other sheets' titles
+  const legend = classifySheetRole({ key: "l", sheet_number: "M001", spans: [
+    ...notes(12), tsp("MECHANICAL SHEET KEY", 3221, 1830, 57), tsp("M211", 3054, 2059, 57), tsp("FIRST FLOOR - SECTOR A - HVAC", 3140, 2059, 57),
+  ] });
+  assert.notEqual(legend.role, "plan");
+  // a sentence, a key plan and a detail title are never plan titles
+  for (const text of ["PROVIDE NEW MECHANICAL LEVEL 2 PLAN", "KEY PLAN - LEVEL 2", "ROOF CURB - MECHANICAL UNIT", "HVAC RISER - LEVEL 2", "FRAMING PER PLAN"]) {
+    const r = classifySheetRole({ key: "n", sheet_number: "M999", spans: [...notes(12), tsp(text, 2500, 2900, 57)] });
+    assert.notEqual(r.role, "plan", text);
+  }
+});
+
+test("sheetPlanViewTitle: a schedule sheet that also draws a plan keeps its schedule role and names its plan view (AS-94)", () => {
+  const sheet = { key: "p16", sheet_number: "MH-101", spans: [
+    ...notes(12), tsp("EXISTING HEAT PUMP SCHEDULE", 300, 200, 30), tsp("LEVEL 2 - MECHANICAL HVAC DUCT PLAN", 5000, 4100, 51), tsp("PLAN AND SCHEDULES", 5000, 4170, 51),
+  ] };
+  const role = classifySheetRole(sheet);
+  assert.deepEqual([role.role, role.confidence], ["schedule", 0.85], "the schedule role (and its table extraction) stands");
+  assert.deepEqual(classifySheetRoleBySignals(sheet), role);
+  assert.equal(sheetPlanViewTitle(sheet)?.text, "LEVEL 2 - MECHANICAL HVAC DUCT PLAN");
+  // a schedule sheet with no plan title of its own draws no plan view
+  assert.equal(sheetPlanViewTitle({ key: "p18", sheet_number: "M601", spans: [...notes(12), tsp("AIR HANDLING UNIT SCHEDULE", 300, 200, 51)] }), null);
+  // the extraction role is the signals' role wherever the plan-title pass decides
+  const unknownPlan = { key: "p24", sheet_number: "M2.34", spans: [...notes(12), tsp("MECHANICAL LEVEL", 5477, 3946, 51), tsp("34 PLAN", 5627, 4003, 51)] };
+  assert.deepEqual([classifySheetRole(unknownPlan).role, classifySheetRoleBySignals(unknownPlan).role], ["plan", "unknown"]);
+});
+
+// AS-101: a demolition plan's title needs no PLAN word. 040_IL's five phase
+// demolition plans ("BASEMENT DEMOLITION - VENTILATION - PHASE 3") scored no
+// role, so the tags drawn there never linked to their rows.
+test("sheet roles: a demolition plan's title with no PLAN word decides a sheet the signals left unknown as demolition, never a plan; schedule roles stand (AS-101)", () => {
+  for (const title of ["BASEMENT DEMOLITION - VENTILATION - PHASE 3", "SECOND FLOOR DEMOLITION \u2013 VENTILATION \u2013 PHASE 4", "LEVEL 2 HVAC DEMOLITION", "FIRST FLOOR HVAC REMOVALS"]) {
+    const sheet = { key: "d", sheet_number: "MD100", spans: [...notes(12), tsp(title, 2500, 2900, 57)] };
+    const r = classifySheetRole(sheet);
+    assert.deepEqual([r.role, r.evidence?.text], ["demolition", title], title);
+    // what every extractor reads is unchanged
+    assert.equal(classifySheetRoleBySignals(sheet).role, "unknown", title);
+  }
+  // notes, details, keynotes and a title with no discipline are none
+  for (const title of ["DEMOLITION NOTES", "HVAC DEMOLITION DETAILS", "DEMO KEYNOTES - FIRST FLOOR HVAC", "ROOF DEMOLITION", "BASEMENT DEMOLITION - VENTILATION - DETAIL 3"]) {
+    const r = classifySheetRole({ key: "n", sheet_number: "MD100", spans: [...notes(12), tsp(title, 2500, 2900, 57)] });
+    assert.notEqual(r.role, "demolition", title);
+  }
+  // a schedule sheet keeps its role (it gates table extraction); a plan title wins
+  const sched = classifySheetRole({ key: "s", sheet_number: "M601", spans: [...notes(12), tsp("AIR HANDLING UNIT SCHEDULE", 100, 100, 30), tsp("BASEMENT DEMOLITION - VENTILATION - PHASE 3", 2500, 2900, 57)] });
+  assert.equal(sched.role, "schedule");
+  const both = classifySheetRole({ key: "b", sheet_number: "M101", spans: [...notes(12), tsp("FIRST FLOOR - HVAC", 2500, 2900, 57), tsp("BASEMENT DEMOLITION - VENTILATION", 500, 2900, 57)] });
+  assert.equal(both.role, "plan");
+});
+
+// AS-108: 26_CA's schedules sheet M0.09 titles each table with the
+// specification section of its equipment and prints SCHEDULES only in its
+// title block; the reference read as a section drawing (detail, 0.6) over the
+// title block (0.5), so no table on the sheet was extracted.
+test("sheet roles: a specification section reference is not a section drawing (AS-108)", () => {
+  const titled = (...titles: string[]) => ({ key: "s", sheet_number: "M0.09", spans: [
+    ...notes(12), ...titles.map((t, i) => tsp(t, 300 + 1500 * i, 200, 30)), tsp("MECHANICAL", 5000, 4100, 51), tsp("SCHEDULES", 5000, 4170, 51),
+  ] });
+  const m009 = titled("(SPECIFICATION SECTION 23 73 63)", "(SPECIFICATION SECTION 23 64 16)", "(SPECIFICATION SECTION 23 21 23)");
+  assert.deepEqual([classifySheetRoleBySignals(m009).role, classifySheetRole(m009).role], ["schedule", "schedule"]);
+  // a schedule title citing its section reads by its title
+  assert.equal(classifySheetRoleBySignals(titled("FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)")).role, "schedule");
+  // the reference however it is spelled is no section drawing
+  for (const ref of ["SPECIFICATIONS SECTION 23 05 13", "SPEC SECTION 230513", "SPEC. SECTION 23 09 23", "LISTED IN SPEC SECTION 012300-ALTERNATES:",
+    "SECTION 15950", "SECTION 23 73 63.13", "(SECTION 23 36 00)",
+    // with no number (013_MO's I-100)
+    "REFER TO THE ALLOWANCES SPECIFICATION SECTION FOR ALL", "PER SPECIFICATIONS SECTIONS", "SEE SPEC SECTION", "SEE SPEC. SECTION"]) {
+    const sheet = { key: "r", sheet_number: "M001", spans: [...notes(12), tsp(ref, 300, 200, 30)] };
+    assert.equal(classifySheetRoleBySignals(sheet).role, "unknown", ref);
+  }
+  // a schedule's column printing each unit's specification section is no section drawing
+  for (const header of ["SPEC SECTION", "SPEC. SECTION", "SPECIFICATION SECTION", "SPECIFICATIONS SECTIONS"]) {
+    const sheet = { key: "h", sheet_number: "M601", spans: [...notes(12), tsp(header, 300, 260, 12), tsp("MECHANICAL", 5000, 4100, 51), tsp("SCHEDULES", 5000, 4170, 51)] };
+    assert.equal(classifySheetRoleBySignals(sheet).role, "schedule", header);
+  }
+  // a drawn section is a section as before; a code section stays excluded
+  for (const title of ["SECTION A-A", "BUILDING SECTION", "SECTION 3", "WALL SECTIONS", "SECTION 1/M-501", "SECTIONS AND DETAILS"]) {
+    const sheet = { key: "d", sheet_number: "M501", spans: [...notes(12), tsp(title, 300, 200, 30)] };
+    assert.equal(classifySheetRoleBySignals(sheet).role, "detail", title);
+  }
+  assert.equal(classifySheetRoleBySignals({ key: "c", sheet_number: "E601", spans: [...notes(12), tsp("VARIES (SEE CODE SECTION)", 300, 200, 30)] }).role, "unknown");
 });
 
 test("sheet roles: a control/DDC schematic classifies role \"schematic\", never \"legend\" via its own cross-reference note (plan §3.2 WP1)", () => {

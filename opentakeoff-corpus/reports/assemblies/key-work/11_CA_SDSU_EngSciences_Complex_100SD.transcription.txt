@@ -1,0 +1,435 @@
+# 11_CA_SDSU_EngSciences_Complex_100SD — attribute-key transcription (ASSEMBLIES AS-17, held-out 2)
+# Typed from renders of sheets M-001 (PDF page 81), M-003 (page 83) and M-004 (page 84) of the
+# SDSU Engineering & Interdisciplinary Science Building schematic design set (Glumac): an overview
+# of each page at 40 dpi, then each table at 3x (216 dpi) in tiles with the TAG column repeated,
+# rendered with MuPDF (pymupdf get_pixmap(clip), displayed orientation) and read by eye on
+# 2026-09-26; second read at 4x (288 dpi) of the first, a middle and the last keyed row of every
+# table. Each drawn title was found with the PDF's own text layer (pymupdf search_for). Keyed
+# after the dev-2 normalizer was frozen (6e1a626); the pipeline's output for this document was
+# never consulted. The second tier keys the tables its seed drew (tier2/01-split.md): one per
+# keyed family.
+#
+# The set is at schematic design: the first row of most tables prints "-" in every cell not yet
+# sized, and the rows under it leave the same cells blank. Both are typed as printed (a dash as
+# "-", a blank as nothing); neither keys a value.
+SET 11_CA_SDSU_EngSciences_Complex_100SD
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheets M-001, M-003 and M-004 (pages 81, 83 and 84) of the SDSU Engineering & Interdisciplinary Science Building, schematic design (Glumac), the tables the second tier's seed drew for its AHU, VAV, FAN, FCU, PUMP, HUMIDIFIER, HEAT_EXCHANGER and DUCT_MOUNTED_COIL strata.
+EXCLUDES Manufacturers and model numbers, static and total pressures, BHP, motor and minimum efficiencies, NPSH, air and water pressure drops, air-side temperatures, sensible capacities, filter types and prefilter ratings, control valve ports and Cv, sizes, weights, emergency power, single point of connection, MCA, plate counts and areas, passes, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE (page 81): three rows. LOCATION prints NORTH ROOF / SOUTH ROOF, a
+# level (ROOF). SUPPLY FANS / No./HP prints a fan array's count and each motor's HP ("4@7.5 HP"):
+# keyed as its No. part (supply_fan_qty) and its HP part (supply_fan_hp). The RETURN/EXHAUST/
+# RELIEF FANS group is the unit's return fans (the author's reading): its HP part keys
+# return_fan_hp; its count has no attribute. ELECTRICAL / V/PH prints "460/3", keyed as its volts
+# part and its phase part. FINAL FILTER / MERV keys filter_merv (13); the MERV 8 pre-filter is
+# typed for audit only. Only AHU-1's NOTES cell cites notes (2 through 15); AHU-2 and AHU-3 print
+# a blank NOTES cell, so no note speaks for them. Note 3 ("PROVIDE VARIABLE FREQUENCY DRIVE (VFD)
+# FOR EACH FAN MOTOR BY MECHANICAL AND WIRED BY ELECTRICAL.") keys AHU-1's vfd: its supply fans'
+# VFD cell prints "-" like every other cell the design has not sized in that row (ESP, TSP, BHP),
+# while its return fans' VFD cell prints Y; the dash is no value (the author's reading). Notes 7
+# and 8 (factory-installed chilled water and heating water manifolds for a single point of
+# connection) key AHU-1's cooling_type chw and heating_type hw; note 9 ("PROVIDE 100% MODULATING
+# (TEMPERATURE) ECONOMIZER.") keys its economizer airside. The CHILLED WATER and HEATING WATER
+# COIL TAG columns print "-" (AHU-1) or nothing: the coils are not scheduled here.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#81
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 81 crop 441,97,2271,171 at 3x in 5 tiles (TAG column repeated) and notes crop 441,262,1300,310 at 2x; second read at 4x (crops 441,190,1000,78 and 1400,190,1000,78) of all 3 rows, every cell
+rows: all 3 printed rows
+col: TAG => tag
+col: CHILLED WATER COIL TAG => -
+col: HEATING WATER COIL TAG => -
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: SUPPLY FANS / AIR FLOW (CFM) => supply_cfm
+col: SUPPLY FANS / MIN OSA (CFM) => oa_cfm_min
+col: SUPPLY FANS / ESP (IN.WG.) => -
+col: SUPPLY FANS / TSP (IN.WG.) => -
+col: SUPPLY FANS / DRIVE => -
+col: SUPPLY FANS / BHP => -
+col: SUPPLY FANS / No./HP => -
+col: [SUPPLY FANS / No./HP: No. part] => supply_fan_qty
+col: [SUPPLY FANS / No./HP: HP part] => supply_fan_hp
+col: SUPPLY FANS / VFD (Y/N) => -
+col: RETURN/EXHAUST/RELIEF FANS / AIR FLOW (CFM) => -
+col: RETURN/EXHAUST/RELIEF FANS / MIN OSA (CFM) => -
+col: RETURN/EXHAUST/RELIEF FANS / ESP (IN.WG.) => -
+col: RETURN/EXHAUST/RELIEF FANS / TSP (IN.WG.) => -
+col: RETURN/EXHAUST/RELIEF FANS / DRIVE => -
+col: RETURN/EXHAUST/RELIEF FANS / BHP => -
+col: RETURN/EXHAUST/RELIEF FANS / No./HP => -
+col: [RETURN/EXHAUST/RELIEF FANS / No./HP: HP part, the return fans'] => return_fan_hp
+col: RETURN/EXHAUST/RELIEF FANS / VFD (Y/N) => -
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: ELECTRICAL / SINGLE POC (Y/N) => -
+col: ELECTRICAL / EMERG POWER (Y/N) => -
+col: PRE-FILTER / TYPE => -
+col: PRE-FILTER / MERV => -
+col: FINAL FILTER / TYPE => -
+col: FINAL FILTER / MERV => filter_merv
+col: UNIT SIZE (L"xW"xH") => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+col: [NOTE 3, where the row's NOTES cite it: PROVIDE VARIABLE FREQUENCY DRIVE (VFD) FOR EACH FAN MOTOR] => vfd
+col: [NOTE 7, where the row's NOTES cite it: CHILLED WATER MANIFOLD FOR SINGLE POINT OF CHILLED WATER CONNECTION] => cooling_type
+col: [NOTE 8, where the row's NOTES cite it: HEATING WATER MANIFOLD FOR SINGLE POINT OF HEATING WATER CONNECTION] => heating_type
+col: [NOTE 9, where the row's NOTES cite it: PROVIDE 100% MODULATING (TEMPERATURE) ECONOMIZER] => economizer
+grid:
+AHU-1 | - | - | ENERGY LABS INC. | C-104-119-FCH-L | NORTH ROOF | =ROOF (NORTH ROOF) | 27,600 | 19,500 | - | - |  | - | 4@7.5 HP | 4 | 7.5 HP | - | 6,300 | - | - | - |  |  | 2@3 HP | 3 HP | Y | 460/3 | 460 | 3 | Y | Y | - | 8 | - | 13 | - | - | 2,3,4,5,6,7,8,9,10,11,12,13,14,15 | yes (PROVIDE VARIABLE FREQUENCY DRIVE (VFD) FOR EACH FAN MOTOR BY MECHANICAL AND WIRED BY ELECTRICAL.) | chw (PROVIDE FACTORY-INSTALLED CHILLED WATER MANIFOLD AS NECESSARY FOR SINGLE POINT OF CHILLED WATER CONNECTION.) | hw (PROVIDE FACTORY-INSTALLED HEATING WATER MANIFOLD AS NECESSARY FOR SINGLE POINT OF HEATING WATER CONNECTION.) | airside (PROVIDE 100% MODULATING (TEMPERATURE) ECONOMIZER.)
+AHU-2 |  |  | ENERGY LABS INC. | C-128-131-FCH-L | SOUTH ROOF | =ROOF (SOUTH ROOF) | 38,600 | 27,700 |  |  |  |  | 4@10 HP | 4 | 10 HP |  | 7,500 |  |  |  |  |  | 2@3 HP | 3 HP | Y | 460/3 | 460 | 3 | Y | Y |  | 8 |  | 13 |  |  |  |  |  |  |
+AHU-3 |  |  | ENERGY LABS INC. | C-104-128-FCH-L | SOUTH ROOF | =ROOF (SOUTH ROOF) | 30,150 | 21,200 |  |  |  |  | 4@7.5 HP | 4 | 7.5 HP |  | 7,750 |  |  |  |  |  | 2@5 HP | 5 HP | Y | 460/3 | 460 | 3 | Y | Y |  | 8 |  | 13 |  |  |  |  |  |  |
+END
+
+# VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE-HOT WATER REHEAT (page 81): 41 printed rows, 40
+# boxes and one row printing N/A and NOT USED between VAV-S2-12 and VAV-S3-1. The first 30
+# boxes in printed order are keyed (the draw's cap). SPACE SERVED keys area_served. The title
+# names hot-water reheat and every row has the HW REHEAT COIL block: heat_type hw. The block's
+# cells print "-" in VAV-NB-1 and nothing in the rest, so no coil value is keyed. The title
+# names no terminal type (note 1's "PRESSURE INDEPENDENT" is none of the schema's types), so
+# terminal_type stays not printed. Notes 1-12 (pressure independence, pressure-drop and airflow
+# limits, controls enclosure, BAS coordination, transformer, plenum, lining, sound, occupancy
+# sensors) key nothing in this family's vocabulary.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#81
+title: VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE-HOT WATER REHEAT
+family: VAV
+render: page 81 header crop 1390,610,1320,120 at 2x; crops 1390,700,520,290 and 1390,985,520,290 at 3x (TAG through COOL MAX); crop 1880,640,830,640 at 2x (COOL MIN through NOTES); notes crop 1390,1470,1320,240 at 2x; second read at 4x (crops 1390,717,510,22 and 1390,1095,510,22 and 1390,1257,510,22) of VAV-NB-1, VAV-S2-6 and VAV-S3-2
+rows: the first 30 printed boxes (VAV-NB-1 through VAV-S2-12, VAV-S3-1 and VAV-S3-2), the draw's cap; the N/A row (NOT USED) is no box, and VAV-S3-3 on are not keyed
+col: TAG => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: SPACE SERVED => area_served
+col: INLET SIZE (IN) => inlet_size_in
+col: AIRFLOW / COOL MAX (CFM) => cfm_max
+col: AIRFLOW / COOL MIN (CFM) => cfm_min
+col: AIRFLOW / HEAT MAX (CFM) => cfm_heat
+col: AIR PD (IN. WG.) => -
+col: HW REHEAT COIL / CAP (MBH) => hw_mbh
+col: HW REHEAT COIL / LAT (°F) => -
+col: HW REHEAT COIL / EAT (°F) => -
+col: HW REHEAT COIL / EWT (°F) => hw_ewt_f
+col: HW REHEAT COIL / LWT (°F) => hw_lwt_f
+col: HW REHEAT COIL / FLOW (GPM) => hw_gpm
+col: HW REHEAT COIL / WPD (FT. WG.) => hw_wpd_ft
+col: HW REHEAT COIL / ROWS => hw_rows
+col: HW REHEAT COIL / CONN (IN.) => hw_conn_in
+col: CONTROL VALVE / PORTS => -
+col: CONTROL VALVE / CV => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+derive: heat_type = hw ; header=TABLE TITLE ; note=title printed 'VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE-HOT WATER REHEAT'; every row has the HW REHEAT COIL block (unsized at schematic design)
+grid:
+VAV-NB-1 | - | - | NB CORRIDOR | - | 1,255 | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-NB-2 |  |  | NB MEETING ROOM 1 |  | 125 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-NB-3 |  |  | NB MEETING ROOM 2 |  | 235 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-N1-1 |  |  | MEETING |  | 1,740 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-N1-2 |  |  | N1 CONFERENCE ROOM |  | 845 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-N2-1 |  |  | N2 CORRIDOR |  | 1,615 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-N2-2 |  |  | MEETING |  | 310 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-SB-1 |  |  | MRI EQUIP RM |  | 1,000 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-SB-2 |  |  | MRI WAITING |  | 260 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-SB-3 |  |  | MRI MANAGER |  | 200 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-SB-4 |  |  | SB CORRIDOR |  | 1,080 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-SB-5 |  |  | MEETING |  | 155 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-SB-6 |  |  | OFFICE |  | 170 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S1-1 |  |  | CAFÉ |  | 3,110 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S1-2 |  |  | S1 MEETING ROOM 2 |  | 255 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S1-3 |  |  | S1 CORRIDOR |  | 340 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-1 |  |  | PI OFFICE |  | 345 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-2 |  |  | PI OFFICE |  | 140 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-3 |  |  | PI OFFICE |  | 115 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-4 |  |  | POST DOC OFFICE |  | 600 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-5 |  |  | POST DOC OFFICE |  | 600 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-6 |  |  | COLLABORATION AREA |  | 1,190 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-7 |  |  | CORRIDOR |  | 350 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-8 |  |  | PI OFFICE |  | 110 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-9 |  |  | PI OFFICE |  | 110 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-10 |  |  | PI OFFICE |  | 110 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-11 |  |  | S2 OFFICE 9 |  | 465 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S2-12 |  |  | S2 MEETING ROOM 2 |  | 650 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S3-1 |  |  | PI OFFICE |  | 235 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+VAV-S3-2 |  |  | PI OFFICE |  | 140 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1,2,3,4,5,6,7,8,9,10,11,12
+END
+
+# LABORATORY EXHAUST FAN SCHEDULE (page 81): two rows, each a multi-fan exhaust system whose TAG
+# prints its fans' letters ("EF-1 - A,B,C"; typed as printed). ELECTRICAL / No./HP prints the
+# fan count and each motor's HP ("3@7.5 HP"): the No. part keys qty (the system's fans A, B, C;
+# the author's reading) and the HP part motor_hp. AIR FLOW (CFM) is the system's airflow. SP
+# (IN.WG.) keys esp_in and FAN RPM rpm (the fan's speed; MTR RPM keys nothing); both print "-"
+# in EF-1 and nothing in EF-2. AREA SERVED keys area_served as printed. ELECTRICAL / V/PH is
+# keyed as its volts part and its phase part; ELECTRICAL / VFD (Y/N) prints Y (note 2, "VARIABLE
+# FREQUENCY DRIVE (VFD) PROVIDED BY MECHANICAL. WIRED BY ELECTRICAL.", agrees). Notes 1-7 key
+# nothing else.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#81
+title: LABORATORY EXHAUST FAN SCHEDULE
+family: FAN
+render: page 81 crop 1257,1725,1455,160 at 3x in 3 tiles (TAG column repeated) and notes crop 1257,1880,1000,180 at 2x; second read at 4x (crop 1860,1818,860,40) of EF-1 and EF-2 from TYPE through NOTES
+rows: all 2 printed rows
+col: TAG => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: AREA SERVED => area_served
+col: DISCH => -
+col: TYPE => -
+col: DRIVE => drive
+col: AIR FLOW (CFM) => cfm
+col: SP (IN.WG.) => esp_in
+col: MIN. EFF. (%) => -
+col: FAN RPM => rpm
+col: MTR RPM => -
+col: ELECTRICAL / BHP => -
+col: ELECTRICAL / No./HP => -
+col: [ELECTRICAL / No./HP: No. part, the system's fans] => qty
+col: [ELECTRICAL / No./HP: HP part] => motor_hp
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: ELECTRICAL / VFD (Y/N) => vfd
+col: ELECTRICAL / EMERG POWER (Y/N) => -
+col: UNIT SIZE (L"xW"xH") => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+grid:
+EF-1 - A,B,C | STROBIC | TS2L075A12 | ROOF | =ROOF (ROOF) | HOOD EXHAUST/LAB EXHAUST |  | STROBIC 3 FAN | belt (BELT) | 21,000 | - | - | - | - | - | 3@7.5 HP | 3 | 7.5 HP | 460/3 | 460 | 3 | yes (Y) | Y | - | - | 1,2,3,4,5,6,7
+EF-2 - A,B,C,D | STROBIC | TS3S150D9 | ROOF | =ROOF (ROOF) | HOOD EXHAUST/LAB EXHAUST |  | STROBIC 4 FAN | belt (BELT) | 48,000 |  |  |  |  |  | 4@15 HP | 4 | 15 HP | 460/3 | 460 | 3 | yes (Y) | Y |  |  | 1,2,3,4,5,6,7
+END
+
+# TWO PIPE COOLING FAN COIL UNIT SCHEDULE (page 83): eighteen rows. The title prints the two
+# pipes (pipes 2). The COOLING COIL block has a water side (EWT, LWT, FLOW (GPM), WPD), a
+# chilled-water coil (cooling_type chw, the author's reading). No heating block prints, and the
+# title does not say cooling only, so heating_type stays not printed (as 088_AZ's chilled-water
+# fan coils). The block's cells print "-" in FCU-NB-1 and
+# nothing in the rest, so no coil value is keyed. LOCATION names a level in 17 rows: BASE (the
+# north and south basement, as the tags' NB and SB), 1ST FL, 2ND FL and 3RD FL; FCU-NB-4's
+# MECHANICAL ROOM names none. ELECTRICAL / MOTOR prints ECM in every row (ecm yes). V/PH prints
+# "120/1", keyed as its volts part and its phase part. Every row cites notes 1, 3, 5 and 7
+# (coordination, vibration isolation, premium motor, condensate pump): they key nothing. Note 10
+# (chilled water glycol "xx%") is cited by no row and prints no value.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#83
+title: TWO PIPE COOLING FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 83 crop 1060,140,1660,420 at 3x in 4 tiles (TAG column repeated) and notes crop 1060,575,1000,225 at 2x; second read at 4x (crop 1060,140,720,110) of FCU-NB-1 and FCU-NB-2 from TAG through CAP SENS; every row's V/PH, MOTOR and EMERG POWER re-read in the 3x tile
+rows: all 18 printed rows
+col: TAG => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: SUPPLY AIR (CFM) => cfm
+col: OSA (CFM) => -
+col: ESP (IN.WG.) => -
+col: COOLING COIL / CAP TOTAL (MBH) => chw_mbh
+col: COOLING COIL / CAP SENS (MBH) => -
+col: COOLING COIL / EAT DB/WB (°F) => -
+col: COOLING COIL / LAT DB/WB (°F) => -
+col: COOLING COIL / EWT (°F) => chw_ewt_f
+col: COOLING COIL / LWT (°F) => chw_lwt_f
+col: COOLING COIL / FLOW (GPM) => chw_gpm
+col: COOLING COIL / WPD (FT.WG.) => chw_wpd_ft
+col: COOLING COIL / ROWS/FPI => -
+col: AIR FILTER / TYPE => -
+col: AIR FILTER / MERV => -
+col: ELECTRICAL / BHP => -
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: ELECTRICAL / MOTOR => ecm
+col: ELECTRICAL / EMERG POWER (Y/N) => -
+col: UNIT SIZE (L"xW"xH") => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+derive: pipes = 2 ; header=TABLE TITLE ; note=title printed 'TWO PIPE COOLING FAN COIL UNIT SCHEDULE'
+derive: cooling_type = chw ; header=TABLE TITLE ; note=title printed 'TWO PIPE COOLING FAN COIL UNIT SCHEDULE' over a COOLING COIL block with a water side (EWT, LWT, FLOW (GPM), WPD): a chilled-water coil (the author's reading)
+grid:
+FCU-NB-1 | IEC | CPY | NORTH BASE MACH RM | =BASE (NORTH BASE MACH RM) | 625 |  | - | - | - | - | - | - | - | - | - | - | - | - | - | - | 120/1 | 120 | 1 | yes (ECM) | - | - | - | 1,3,5,7
+FCU-NB-2 | IEC | CPY | NORTH BASE ELEC. RM | =BASE (NORTH BASE ELEC. RM) | 575 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) | Y |  |  | 1,3,5,7
+FCU-NB-3 | IEC | CPY | NORTH BASE DATA RM | =BASE (NORTH BASE DATA RM) | 500 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) | Y |  |  | 1,3,5,7
+FCU-NB-4 | IEC | CPY | MECHANICAL ROOM |  | 1000 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-SB-1 | IEC | CPY | SOUTH BASE DATA RM. | =BASE (SOUTH BASE DATA RM.) | 455 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-SB-2 | IEC | CPY | SOUTH BASE MACH RM | =BASE (SOUTH BASE MACH RM) | 560 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-SB-3 | IEC | CPY | SOUTH BASE ELEC. RM | =BASE (SOUTH BASE ELEC. RM) | 595 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-SB-4 | IEC | CPY | SOUTH BASE ELEC. RM | =BASE (SOUTH BASE ELEC. RM) | 675 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-N1-1 | IEC | CPY | NORTH 1ST FL DATA RM | =1ST FL (NORTH 1ST FL DATA RM) | 650 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) | Y |  |  | 1,3,5,7
+FCU-N1-2 | IEC | CPY | NORTH 1ST FL ELEC RM | =1ST FL (NORTH 1ST FL ELEC RM) | 575 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-S1-1 | IEC | CPY | SOUTH 1ST FL ELEC RM | =1ST FL (SOUTH 1ST FL ELEC RM) | 675 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-S1-2 | IEC | CPY | SOUTH 1ST FL DATA RM | =1ST FL (SOUTH 1ST FL DATA RM) | 500 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) | Y |  |  | 1,3,5,7
+FCU-N2-1 | IEC | CPY | NORTH 2ND FL DATA RM | =2ND FL (NORTH 2ND FL DATA RM) | 625 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) | Y |  |  | 1,3,5,7
+FCU-N2-2 | IEC | CPY | NORTH 2ND FL ELEC RM | =2ND FL (NORTH 2ND FL ELEC RM) | 575 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-S2-1 | IEC | CPY | SOUTH 2ND FL ELEC RM | =2ND FL (SOUTH 2ND FL ELEC RM) | 575 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-S2-2 | IEC | CPY | SOUTH 2ND FL DATA RM | =2ND FL (SOUTH 2ND FL DATA RM) | 535 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) | Y |  |  | 1,3,5,7
+FCU-S3-1 | IEC | CPY | SOUTH 3RD FL ELEC RM | =3RD FL (SOUTH 3RD FL ELEC RM) | 575 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) |  |  |  | 1,3,5,7
+FCU-S3-2 | IEC | CPY | SOUTH 3RD FL DATA RM | =3RD FL (SOUTH 3RD FL DATA RM) | 550 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 120/1 | 120 | 1 | yes (ECM) | Y |  |  | 1,3,5,7
+END
+
+# PUMP SCHEDULE (page 84): six rows. SYSTEM SERVED (TAG) keys service as printed. ELECTRICAL /
+# V/PH is keyed as its volts part and its phase part; ELECTRICAL / VFD keys vfd. Every row cites
+# note 4 ("PROVIDE VARIABLE FREQUENCY DRIVE (VFD) BY MECHANICAL AND WIRED BY ELECTRICAL."): the
+# chilled-water pumps print VFD Y and agree, but HWP-1 and HWP-2 print N, so those rows disagree
+# with themselves and their vfd is not one value ("?"), as 14_OR's snowmelt pumps. Note 8
+# ("PUMPS TO RUN LEAD/LAG.", cited by CHWP-1/2 and HWP-1/2) keys pump_arrangement lead_lag; note
+# 9 ("PROCESS CHW PUMP RUN/STANDBY", cited by SCHWP-1/2) keys duty_standby. Note 10 (a 100 GPM
+# allowance at schematic design) keys nothing: the printed FLOW is keyed as printed.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#84
+title: PUMP SCHEDULE
+family: PUMP
+render: page 84 crop 1506,735,1210,205 at 3x in 3 tiles (TAG column repeated), NOTES column crop 2500,770,216,170 at 4x and notes crop 1506,975,1000,240 at 2x; second read at 3x (crops 1506,824,1210,20 and 1506,860,1210,20 and 1506,914,1210,20) of CHWP-1, SCHWP-1 and HWP-2, every cell
+rows: all 6 printed rows
+col: TAG => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: SYSTEM SERVED (TAG) => service
+col: TYPE => -
+col: FLOW (GPM) => gpm
+col: HEAD (FT. WG.) => head_ft
+col: MIN. EFF. (%) => -
+col: NPSH (FT.) => -
+col: RPM => rpm
+col: ELECTRICAL / BHP => -
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: ELECTRICAL / VFD => vfd
+col: EMERG POWER (Y/N) => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+col: [NOTE 8 or NOTE 9, where the row's NOTES cite it: PUMPS TO RUN LEAD/LAG / PROCESS CHW PUMP RUN/STANDBY] => pump_arrangement
+grid:
+CHWP-1 | BELL & GOSSETT | - | CHW LOOP | BASE-MOUNTED | 330 | - | - | - | - | - | 7.5 | 460/3 | 460 | 3 | yes (Y) | Y | - | 1,2,3,4,5,6,7,8 | lead_lag (PUMPS TO RUN LEAD/LAG.)
+CHWP-2 | BELL & GOSSETT | - | CHW LOOP | BASE-MOUNTED | 330 | - | - | - | - | - | 7.5 | 460/3 | 460 | 3 | yes (Y) | N | - | 1,2,3,4,5,6,7,8 | lead_lag (PUMPS TO RUN LEAD/LAG.)
+SCHWP-1 | BELL & GOSSETT | - | SCHW | BASE-MOUNTED | 100 | - | - | - | - | - | 3 | 460/3 | 460 | 3 | yes (Y) | Y | - | 1,2,3,4,5,6,7,9,10 | duty_standby (PROCESS CHW PUMP RUN/STANDBY)
+SCHWP-2 | BELL & GOSSETT |  | SCHW | BASE-MOUNTED | 100 |  |  |  |  |  | 3 | 460/3 | 460 | 3 | yes (Y) | Y |  | 1,2,3,4,5,6,7,9,10 | duty_standby (PROCESS CHW PUMP RUN/STANDBY)
+HWP-1 | BELL & GOSSETT |  | HW LOOP | BASE-MOUNTED | 300 |  |  |  |  |  | 7.5 | 460/3 | 460 | 3 | ?N, while the row also cites note 4 (PROVIDE VARIABLE FREQUENCY DRIVE (VFD) BY MECHANICAL AND WIRED BY ELECTRICAL.) | N |  | 1,2,3,4,5,6,7,8 | lead_lag (PUMPS TO RUN LEAD/LAG.)
+HWP-2 | BELL & GOSSETT |  | HW LOOP | BASE-MOUNTED | 300 |  |  |  |  |  | 7.5 | 460/3 | 460 | 3 | ?N, while the row also cites note 4 (PROVIDE VARIABLE FREQUENCY DRIVE (VFD) BY MECHANICAL AND WIRED BY ELECTRICAL.) | N |  | 1,2,3,4,5,6,7,8 | lead_lag (PUMPS TO RUN LEAD/LAG.)
+END
+
+# ELECTRIC HUMIDIFIER SCHEDULE (page 84): one row. STEAM CAPACITY (LBS/HR) keys capacity_lb_hr
+# and ELECTRICAL / KW eh_kw; V/PH prints "480/3", keyed as its volts part and its phase part. The
+# title names an electric humidifier but not its kind (electrode or resistive element), so
+# humidifier_type stays not printed. LOCATION (CLEAN ROOM SUPPLY DUCT) names no level. Notes 1-4
+# (coordination, humidistat control and stainless construction, drain cooler, dispersion tube
+# placement) key nothing.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#84
+title: ELECTRIC HUMIDIFIER SCHEDULE
+family: HUMIDIFIER
+render: page 84 crop 1510,1565,1206,140 at 3x in 2 tiles (TAG column repeated) and notes crop 1510,1700,1000,130 at 2x; second read at 3x (crop 1510,1650,1206,30) of the row, every cell
+rows: all 1 printed row
+col: TAG => tag
+col: MANUFACTURER => -
+col: HUMIDIFIER MODEL NUMBER => -
+col: DISPERSION TUBE MODEL NUMBER => -
+col: LOCATION => -
+col: STEAM CAPACITY (LBS/HR) => capacity_lb_hr
+col: DUCT AIRFLOW (CFM) => -
+col: ELECTRICAL / KW => eh_kw
+col: ELECTRICAL / MCA (A) => -
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: UNIT SIZE (L"xW"xH") => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+grid:
+EH-1 | Dri-Steam | VLC-21-1 | - | CLEAN ROOM SUPPLY DUCT | 50 | 2000 | 21 | - | 480/3 | 480 | 3 | - | - | 1,2,3,4
+END
+
+# WATER-TO-WATER HEAT EXCHANGER SCHEDULE (page 84): two rows, PHX-1 and PHX-2, each serving the
+# PROCESS COOLING LOOP. The exchanger cools the loop: its HOT SIDE (75 °F entering, 65 °F
+# leaving) is the load it serves, the secondary side, and its COLD SIDE (42 °F entering) the
+# chilled-water source, the primary side (the author's reading; the schema's primary is the
+# source side). Note 9 calls it a "PROCESS CHW HX", so the process loop is process chilled water:
+# both media are chw (the author's reading). CAPACITY and the cold side's LWT print TBD, not a
+# value ("?"). TYPE prints PLATE&FRAME (hx_type plate). LOCATION prints BASEMENT, a level.
+# QUANTITY (PLATES) and AREA print nothing. Note 10 (a 100 GPM allowance at schematic design)
+# keys nothing: the printed FLOW is keyed as printed. SYSTEM SERVED names a system; this
+# family's vocabulary has no service attribute.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#84
+title: WATER-TO-WATER HEAT EXCHANGER SCHEDULE
+family: HEAT_EXCHANGER
+render: page 84 crop 1088,72,1628,143 at 3x in 3 tiles (TAG column repeated) and notes crop 1088,212,1000,240 at 2x; second read at 4x (crop 1680,165,1036,40) of both rows from TYPE through NOTES
+rows: all 2 printed rows
+col: TAG => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: SYSTEM SERVED => -
+col: TYPE (PLATE&FRAME) => hx_type
+col: QUANTITY (PLATES) => -
+col: AREA (SQ.FT.) => -
+col: CAPACITY (MBH) => capacity_mbh
+col: HOT SIDE / FLOW (GPM) => secondary_gpm
+col: HOT SIDE / P.D. (FT.WG.) => -
+col: HOT SIDE / EWT (°F) => secondary_ewt_f
+col: HOT SIDE / LWT (°F) => secondary_lwt_f
+col: HOT SIDE / PASSES => -
+col: COLD SIDE / FLOW (GPM) => primary_gpm
+col: COLD SIDE / P.D. (FT.WG.) => -
+col: COLD SIDE / EWT (°F) => primary_ewt_f
+col: COLD SIDE / LWT (°F) => primary_lwt_f
+col: COLD SIDE / PASSES => -
+col: UNIT SIZE (L"xW"xH") => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+derive: primary_medium = chw ; header=COLD SIDE ; note=the COLD SIDE enters at 42 °F: the chilled water that cools the process loop, the exchanger's source (the author's reading)
+derive: secondary_medium = chw ; header=SYSTEM SERVED ; note=the HOT SIDE is the PROCESS COOLING LOOP the row serves (75 °F in, 65 °F out), which note 9 calls process chilled water ('PROCESS CHW HX RUN/STANDBY'): the load side (the author's reading)
+grid:
+PHX-1 | BELL & GOSSETT |  | BASEMENT | =BASEMENT (BASEMENT) | PROCESS COOLING LOOP | plate (PLATE&FRAME) |  |  | ?TBD | 100 |  | 75 | 65 |  |  |  | 42 | ?TBD |  |  |  | 1,5,6,7,9,10
+PHX-2 | BELL & GOSSETT |  | BASEMENT | =BASEMENT (BASEMENT) | PROCESS COOLING LOOP | plate (PLATE&FRAME) |  |  | ?TBD | 100 |  | 75 | 65 |  |  |  | 42 | ?TBD |  |  |  | 1,5,6,7,9,10
+END
+
+# DUCT MOUNTED COIL SCHEDULE (page 84): two rows, a cooling coil (CC-1) and a heating coil
+# (HC-1) in the clean room. AIR / FLOW (CFM) keys cfm. The capacity and water cells print "-"
+# (CC-1) or nothing (HC-1): no capacity or water value is printed for either coil (so CC-1's
+# cooling and HC-1's heating capacity, and their water sides, stay not printed). LOCATION (CLEAN
+# ROOM) names no level. CONTROL VALVE (2-W/3-W) prints 2-W (not keyed). Note 1 (copper tubes,
+# aluminum fins) keys nothing; note 2 (chilled water glycol "xx%") is cited by no row and prints
+# no value.
+TABLE
+sheet: 11_CA_SDSU_EngSciences_Complex_100SD.pdf#84
+title: DUCT MOUNTED COIL SCHEDULE
+family: DUCT_MOUNTED_COIL
+render: page 84 crop 1280,474,1436,138 at 3x in 3 tiles (TAG column repeated) and notes crop 1280,610,900,100 at 2x; second read at 3x (crop 1280,565,1436,40) of both rows, every cell
+rows: all 2 printed rows
+col: TAG => tag
+col: AIR HANDLER TAG => -
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: LOCATION => -
+col: CAPACITY / TOTAL (MBH) => -
+col: CAPACITY / SENSIBLE (MBH) => -
+col: AIR / FLOW (CFM) => cfm
+col: AIR / VEL. (FPM) => -
+col: AIR / APD (IN.WG.) => -
+col: AIR / EAT (DB °F) => -
+col: AIR / EAT (WB °F) => -
+col: AIR / LAT (DB °F) => -
+col: AIR / LAT (WB °F) => -
+col: WATER / EWT (°F) => -
+col: WATER / LWT (°F) => -
+col: WATER / FLOW (GPM) => -
+col: WATER / WPD (FT.WG.) => -
+col: WATER / ROWS/FPI => -
+col: CONTROL VALVE (2-W/3-W) => -
+col: SIZE (L"xH") => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+grid:
+CC-1 | - | - | - | CLEAN ROOM | - | - | 2000 | - | - | - | - | - | - | - | - | - | - | - | 2-W | - | - | 1
+HC-1 |  |  |  | CLEAN ROOM |  |  | 2000 |  |  |  |  |  |  |  |  |  |  |  | 2-W |  |  |
+END

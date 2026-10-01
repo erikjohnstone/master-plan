@@ -1,0 +1,29 @@
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's controls sheets (PDF text layer and renders), never pipeline output.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/069_ID_ITD_District_2_Laboratory_Heating_Upgrades.typicals.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-1,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-1,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-2,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-2,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-1,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-1,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-2,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-2,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-1,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,EXISTING CHILLED WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-1,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,EXISTING CHILLED WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-2,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,EXISTING CHILLED WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-2,PUMP,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,EXISTING CHILLED WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-1(E),BOILER,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-1(E),BOILER,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-2(E),BOILER,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-2(E),BOILER,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,AHU-1(E),AHU,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,EXISTING CHILLED WATER SYSTEM CONTROL SCHEMATIC,tag,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,AHU-1(E),AHU,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,EXISTING CHILLED WATER SYSTEM SEQUENCE OF OPERATION,tag,

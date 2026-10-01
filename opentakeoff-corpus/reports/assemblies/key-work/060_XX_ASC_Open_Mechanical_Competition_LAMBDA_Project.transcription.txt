@@ -1,0 +1,104 @@
+# 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheets M-602 (PDF page 24), M-601 (page 23) and S-513 (page 52)
+# at 2.2-3x, read by eye on 2026-09-23. The pipeline's output for these sheets was not
+# consulted. Tables are the ones the WP0.2 draw (seed 20260923) named for this held-out
+# document.
+SET 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project
+SEED 20260923
+SCOPE Sheets M-602 (page 24), M-601 (page 23) and S-513 (page 52) of the LAMBDA project mechanical drawings (Burns & McDonnell), the tables drawn for this document.
+EXCLUDES Interlocks, staging, compressor, efficiency, refrigerant, fluid temperatures, discharge/impeller sizes, BHP, motor type, starter responsibility, MCA, weights, sizes and basis of design, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# CONDENSING UNIT SCHEDULE (RCUA): capacities print in BTU/H and are keyed in that unit.
+# Notes (NOTES: ALL) 1 "PROVIDE UNIT WITH MFR'S LOCKABLE DISCONNECT AND SINGLE POINT
+# POWER CONNECTION IN ACCORDANCE WITH DIVISION 26 SPECIFICATIONS.", 2 (housekeeping pad,
+# S-402), 3 (aluminum jacketing), 4 "HEAT PUMP UNIT SHALL BE CAPABLE OF OPERATION TO
+# 30°F.", 5 "PROVIDE UNIT WITH ELECTRIC RESISTIVE DEFROST CYCLE CAPABILITY."
+TABLE
+sheet: 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24
+title: CONDENSING UNIT SCHEDULE (RCUA)
+family: CONDENSING_UNIT
+render: page 24 crop 540,898,1530,205 at 3x in 3 tiles (TAG NO. column repeated), notes in the same tiles; second read at 4x (crops 805,925,245,72 and 1500,925,60,72) of both rows' cooling and heating capacity and volts
+rows: all 2 printed rows
+col: TAG NO. => tag
+col: INTERLOCK WITH => -
+col: COOLING CAPACITY (BTU/H) => cooling_mbh [BTU/H]
+col: HEATING CAPACITY (BTU/H) => heating_mbh [BTU/H]
+col: STAGE => -
+col: COMPRESSOR TYPE => -
+col: MIN. EFFICIENCY (EER) => -
+col: RATED OUTDOOR DB (°F) => -
+col: REFRIGERANT TYPE => -
+col: UNIT ELECTRICAL / VOLT => volts
+col: UNIT ELECTRICAL / PH. => phase
+col: UNIT ELECTRICAL / MCA => -
+col: WEIGHT (LBS) => -
+col: SIZE (H X W X D) (IN) => -
+col: BASIS OF DESIGN / MFR => -
+col: BASIS OF DESIGN / MODEL => -
+col: NOTES => -
+grid:
+432RCUA01-2H | 432ACU08-2H | 24000 | 24000 | SINGLE | SCROLL | 12.5 | 95 | R-410A | 208 | 1 | 19 | 150 | 38x38x14 | TRANE/MITSUBISHI | TPEAD/TRUZ | ALL
+432RCUA02-3H | 432ACU09-3H | 12000 | 12000 | SINGLE | SCROLL | 12.5 | 95 | R-410A | 208 | 1 | 11 | 140 | 32x12x24 | TRANE/MITSUBISHI | TPEAD/TRUZ | ALL
+END
+
+# VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE: every row's NOTES cell says ALL. Note 1 "PUMPS
+# ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE." (two pumps, each 100%: a
+# redundant pair, keyed duty_standby as the author's reading, as for 30_WA's
+# "REDUNDANT" pumps); note 2 "OPERATING FLUID IS WATER." (glycol_pct 0); note 3
+# "DISCONNECT AND VFD SHALL BE FURNISHED AND INSTALLED BY DIVISION 26. ..."; notes 4-7
+# (mounting, NPSHR, installation, insulation). SPEED CONTROL TYPE prints VFD. LOCATION
+# prints CHILLER YARD (not a level). SUCTION SIZE keys conn_in, as INLET SIZE does in 040.
+TABLE
+sheet: 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23
+title: VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE
+family: PUMP
+render: page 23 crop 135,310,1948,212 at 3x in 4 tiles (TAG NO. column repeated), tag crop 100,340,140,80 at 4x and notes crop 100,418,800,105 at 3x; second read at 4x (crops 868,340,210,85 and 1405,340,55,85) of both rows' GPM, head and HP
+rows: all 2 printed rows
+col: TAG NO. => tag
+col: TYPE => -
+col: LOCATION => -
+col: SERVICE => service
+col: MAXIMUM FLUID TEMP. (°F) => -
+col: MINIMUM FLUID TEMP. (°F) => -
+col: CAPACITY (GPM) => gpm
+col: SPEED CONTROL TYPE => vfd
+col: HEAD (FT. W.C.) => head_ft
+col: SUCTION SIZE (IN.) => conn_in
+col: DISCHARGE SIZE (IN.) => -
+col: IMPELLER SIZE (IN.) => -
+col: PUMP EFFICIENCY (%) => -
+col: MOTOR / RPM => rpm
+col: MOTOR / HP => motor_hp
+col: MOTOR / BHP => -
+col: MOTOR / TYPE => -
+col: STARTER / DISCONNECT PROVIDED BY => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: APPROX WEIGHT (LBS) => -
+col: BASIS OF DESIGN / MFR => -
+col: BASIS OF DESIGN / MODEL => -
+col: NOTES => -
+col: [NOTE 1: PUMPS ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE] => pump_arrangement
+derive: glycol_pct = 0 ; header=NOTE 2 ; note=note 2, every row's NOTES cell says ALL: 'OPERATING FLUID IS WATER'
+grid:
+432PCHW01-1 | SPLIT CASE VERTICAL INLINE CENTRIFUGAL | CHILLER YARD | CHILLED WATER | 105 | 43 | 220 | yes (VFD) | 130 | 2.5 | 2.5 | 6.25 | 73.6 | 3600 | 15 | 9.64 | TEFC | DIV 26 | 460 | 3 | 425 | BELL & GOSSETT | 2.5x2.5x7 | ALL | duty_standby (PUMPS ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE)
+432PCHW02-1 | SPLIT CASE VERTICAL INLINE CENTRIFUGAL | CHILLER YARD | CHILLED WATER | 105 | 43 | 220 | yes (VFD) | 130 | 2.5 | 2.5 | 6.25 | 73.6 | 3600 | 15 | 9.64 | TEFC | DIV 26 | 460 | 3 | 425 | BELL & GOSSETT | 2.5x2.5x7 | ALL | duty_standby (PUMPS ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE)
+END
+
+# The drawn DUCT_MOUNTED_COIL table on page 52 is claimed under no title. The page is
+# the structural sheet S-513 (EQUIPMENT SUPPORT DETAILS), and the table is its EQUIPMENT
+# ANCHORAGE SCHEDULE (detail B1, title below the table): EQUIP. ID, name, weight,
+# W/L/H, anchors, reference detail. Its 15 rows are TCHW01-1 BUFFER TANK, PCHW01-1 and
+# PCHW02-1 CHILLED WATER PUMP, SDE01-1 AIR SEPERATOR, TCHWX01-1 BLADDER EXPANSION TANK,
+# TCH01-1 CHEMICAL POT FEEDER, RCHS01-1 CHILLER, DDCP01 DDC CONTROL PANEL, ACHPS01-4 and
+# ACHPS02-5 AIR CONDITIONING HEAT PUMP, ACU01-A1, ACU08-2H and ACU09-3H AIR CONDITIONING
+# UNIT, RCUA01-2H and RCUA02-3H EXTERIOR CONDENSING UNIT. None is a duct-mounted coil, so
+# the table is keyed with no instance (catalogue: family mismatch).
+TABLE
+sheet: 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#52
+title: (untitled)
+family: DUCT_MOUNTED_COIL
+render: page 52 (S-513) crop 108,42,1480,400 at 2.2x in 2 tiles and a 0.45x page overview
+rows: none — the table is S-513's structural EQUIPMENT ANCHORAGE SCHEDULE; none of its 15 rows is a duct-mounted coil
+grid:
+END

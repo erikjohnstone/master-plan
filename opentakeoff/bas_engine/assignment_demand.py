@@ -11,9 +11,9 @@ from typing import Annotated, Literal
 
 from pydantic import Field, model_validator
 
-from .adapters import indexed_columns, normalized_header, printed_count
+from .adapters import POINT_RULE_V1, PointRule
 from .models import Contract, Count, Identifier, IOVector
-from .point_lists import ATTRIBUTES, PointListResult, PointMatrix, PointNote, PointObservation, digest
+from .point_lists import PointListResult, PointMatrix, PointNote, PointObservation, digest, read_matrix, read_row
 
 Sha = Annotated[str, Field(strict=True, pattern=r"^[a-f0-9]{64}$")]
 Ids = Annotated[list[Identifier], Field(max_length=100000)]
@@ -148,7 +148,7 @@ class AssignmentDemandResult(Contract):
     engine: Literal["bas_math_v1"] = "bas_math_v1"
     capture_id: Sha
     equipment_head: Sha
-    point_rule_version: Literal["point_observations_1"] = "point_observations_1"
+    point_rule_version: PointRule = POINT_RULE_V1
     scope: Literal["explicit_assignments_discovered_matrices_only"] = "explicit_assignments_discovered_matrices_only"
     assignments: list[AssignmentDemand]
     issues: list[str]
@@ -157,16 +157,16 @@ class AssignmentDemandResult(Contract):
     project_complete: Literal[False] = False
 
 
-def validate_observations(matrix: PointMatrix) -> dict[str, tuple[Literal["physical", "soft"], str]]:
-    """Defensive source identity/value checks; use the existing header/count rules."""
-    typed, _headers, start = indexed_columns(matrix.raw)
-    effective = {h: matrix.raw.rows[0].cells[h].text if start and h in matrix.raw.rows[0].cells else h for h in matrix.raw.headers}
-    source_columns = set(matrix.raw.headers).union(*(row.cells for row in matrix.raw.rows))
-    attributes = {h: normalized_header(effective.get(h, h)) for h in source_columns
-                  if normalized_header(effective.get(h, h)) in ATTRIBUTES and h not in typed}
-    if start != matrix.header_rows:
+def validate_observations(matrix: PointMatrix, rule: PointRule,
+                          ) -> dict[str, tuple[Literal["physical", "soft"], str]]:
+    """Defensive source identity/value checks. Every row is read again through
+    the shared reader under the rule that produced the matrix, so a saved
+    result is never judged by a later rule, and a per-row point type or a
+    printed point mark is checked exactly as a typed column is."""
+    reading = read_matrix(matrix.raw, rule)
+    if reading.start != matrix.header_rows:
         raise ValueError("Point matrix header interpretation changed")
-    raw_rows = Counter(digest(r.model_dump()) for r in matrix.raw.rows[start:])
+    raw_rows = Counter(digest(r.model_dump()) for r in matrix.raw.rows[reading.start:])
     if raw_rows != Counter(digest(r.raw.model_dump()) for r in matrix.rows):
         raise ValueError("Point source rows were omitted or changed")
     if len({r.row_id for r in matrix.rows}) != len(matrix.rows):
@@ -188,28 +188,30 @@ def validate_observations(matrix: PointMatrix) -> dict[str, tuple[Literal["physi
                     or source.sheet_key != matrix.raw.sheet):
                 raise ValueError("Point observation differs from original source cell")
             columns.add(column)
-            if (observation.value != printed_count(cell.text)
-                    or (observation.status == "ambiguous") != (observation.value is None)):
+            if (observation.status == "ambiguous") != (observation.value is None):
                 raise ValueError("Point observation value differs from source interpretation")
-            if observation.kind == "attribute":
-                if attributes.get(column) != observation.channel:
-                    raise ValueError("Point attribute differs from original header interpretation")
-            else:
-                expected = ("physical" if observation.kind == "declared_io" else "soft", observation.channel)
-                if typed.get(column) != expected:
-                    raise ValueError("Point channel differs from original header interpretation")
-        if any(h in row.raw.cells and h not in columns for h in {*typed, *attributes}):
+        expected = {c.column: c for c in read_row(reading, row.raw, rule).cells}
+        for observation in row.observations:
+            reread = expected.get(observation.source.column or "")
+            if reread is None:
+                raise ValueError("Point observation is not a source interpretation")
+            if observation.value != reread.value:
+                raise ValueError("Point observation value differs from source interpretation")
+            if observation.kind != reread.kind or observation.channel != reread.channel:
+                raise ValueError("Point channel differs from original header interpretation")
+        if set(expected) - columns:
             raise ValueError("Source observation was omitted")
         if any(note not in matrix.notes for note in row.qualifiers):
             raise ValueError("Point qualifier is not a retained matrix note")
-    return typed
+    return reading.typed
 
 
 def calculate_assignment_demand(payload: AssignmentDemandInput,
                                 rule_version: AssignmentRule = "assigned_listed_observations_2") -> AssignmentDemandResult:
     payload = AssignmentDemandInput.model_validate(payload.model_dump())
     matrices = {m.matrix_id: m for m in payload.points.matrices}
-    classifications = {key: validate_observations(matrices[key]) for key in {a.matrix_id for a in payload.assignments}}
+    classifications = {key: validate_observations(matrices[key], payload.points.rule_version)
+                       for key in {a.matrix_id for a in payload.assignments}}
     included_by_assignment = {a.assignment_id: a.included() for a in payload.assignments}
     scope_assignments: Counter[str] = Counter()
     global_scopes: set[str] = set()
@@ -289,7 +291,8 @@ def calculate_assignment_demand(payload: AssignmentDemandInput,
     if rule_version == "assigned_listed_observations_1":
         for assignment in result:
             assignment.issues = sorted(set([*assignment.issues, "UNIQUE_POINT_IDENTITIES_NOT_ESTABLISHED"]))
-        return AssignmentDemandResult(rule_version=rule_version, capture_id=payload.capture_id,
+        return AssignmentDemandResult(rule_version=rule_version, point_rule_version=payload.points.rule_version,
+            capture_id=payload.capture_id,
             equipment_head=payload.equipment_head, assignments=result, unique_requirement_total=None,
             issues=sorted(set([*payload.points.issues, "SOURCE_DISCOVERY_COVERAGE_UNVERIFIED",
                 "PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES"])))
@@ -331,5 +334,6 @@ def calculate_assignment_demand(payload: AssignmentDemandInput,
     project_issues = [*payload.points.issues, "SOURCE_DISCOVERY_COVERAGE_UNVERIFIED"]
     if unique_total is None:
         project_issues.append("PROJECT_TOTAL_WITHHELD_UNRESOLVED_POINT_IDENTITIES")
-    return AssignmentDemandResult(rule_version=rule_version, capture_id=payload.capture_id, equipment_head=payload.equipment_head,
+    return AssignmentDemandResult(rule_version=rule_version, point_rule_version=payload.points.rule_version,
+        capture_id=payload.capture_id, equipment_head=payload.equipment_head,
         assignments=result, unique_requirement_total=unique_total, issues=sorted(set(project_issues)))

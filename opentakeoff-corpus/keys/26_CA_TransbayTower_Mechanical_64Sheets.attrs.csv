@@ -1,0 +1,181 @@
+# 26_CA_TransbayTower_Mechanical_64Sheets.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/26_CA_TransbayTower_Mechanical_64Sheets.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M0.11 MECHANICAL SCHEDULES (page 11) and M4.05 MECHANICAL WATER RISER DIAGRAM (page 57) of the Transbay Tower (Salesforce Tower), San Francisco CA (WSP, MEP/FP engineer), the tables the fourth tier's seed drew for its AHU and VAV strata.
+#   26_CA_TransbayTower_Mechanical_64Sheets.pdf#57 | (untitled) | AHU | none — a water riser diagram (M4.05): air handler symbols per level on the risers, with pipe sizes; no table on the page schedules an air handler | render: page 57 overview at 40 dpi; the page's text layer read for its AHU marks (22-1 to 46-1, 22-2 to 46-2), levels (LEVEL 22 to LEVEL 47) and typical notes; the page's schedules searched for in the text layer of all 64 pages (SCHEDULE, AIR HANDLING)
+#   26_CA_TransbayTower_Mechanical_64Sheets.pdf#11 | SINGLE DUCT CAV EXHAUST TERMINAL | VAV | all 7 printed rows (a first ruled row prints only #REF!, a last one is empty) | render: page 11 overview at 40 dpi; crop 2165,606,540,232 at 3.5x, the note included; second read at 4.5x (crop 2165,705,470,100) of all 7 rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: The exhaust terminals' model, static pressure loss (printed #REF! on every row) and remarks, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 26_CA_TransbayTower_Mechanical_64Sheets: 2 table(s), 7 instance(s), 161 keyed attribute value(s) (32 printed, 129 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#57,,,AHU,,,,,"no AHU instance printed: none — a water riser diagram (M4.05): air handler symbols per level on the risers, with pipe sizes; no table on the page schedules an air handler"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,building,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,floor,LEVEL 2,,TYPICAL FLOORS: names one level,printed '2'; author's reading of the printed row
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,area_served,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,terminal_type,exhaust,,TABLE TITLE,title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,inlet_size_in,10,in,INLET DUCT SIZE (INCHES),
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,cfm_max,450,cfm,CFM SETTING / MAXIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,cfm_min,450,cfm,CFM SETTING / MINIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,cfm_heat,,cfm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,heat_type,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_gpm,,gpm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_ewt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_lwt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_wpd_ft,,ft,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_mbh,,MBH,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_rows,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_conn_in,,in,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,hw_glycol_pct,,%,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,eh_kw,,kW,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,eh_stages,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,motor_hp,,hp,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,ecm,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,volts,,V,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-1,VAV,phase,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,building,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,floor,LEVEL 2,,TYPICAL FLOORS: names one level,printed '2'; author's reading of the printed row
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,area_served,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,terminal_type,exhaust,,TABLE TITLE,title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,inlet_size_in,10,in,INLET DUCT SIZE (INCHES),
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,cfm_max,450,cfm,CFM SETTING / MAXIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,cfm_min,450,cfm,CFM SETTING / MINIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,cfm_heat,,cfm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,heat_type,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_gpm,,gpm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_ewt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_lwt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_wpd_ft,,ft,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_mbh,,MBH,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_rows,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_conn_in,,in,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,hw_glycol_pct,,%,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,eh_kw,,kW,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,eh_stages,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,motor_hp,,hp,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,ecm,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,volts,,V,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-2,VAV,phase,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,building,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,floor,LEVEL 2,,TYPICAL FLOORS: names one level,printed '2'; author's reading of the printed row
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,area_served,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,terminal_type,exhaust,,TABLE TITLE,title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,inlet_size_in,12,in,INLET DUCT SIZE (INCHES),
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,cfm_max,1070,cfm,CFM SETTING / MAXIMUM,"printed '1,070'"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,cfm_min,1070,cfm,CFM SETTING / MINIMUM,"printed '1,070'"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,cfm_heat,,cfm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,heat_type,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_gpm,,gpm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_ewt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_lwt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_wpd_ft,,ft,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_mbh,,MBH,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_rows,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_conn_in,,in,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,hw_glycol_pct,,%,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,eh_kw,,kW,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,eh_stages,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,motor_hp,,hp,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,ecm,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,volts,,V,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-2-3,VAV,phase,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,building,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,floor,LEVEL 5,,TYPICAL FLOORS: names one level,printed '5'; author's reading of the printed row
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,area_served,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,terminal_type,exhaust,,TABLE TITLE,title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,inlet_size_in,12,in,INLET DUCT SIZE (INCHES),
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,cfm_max,1450,cfm,CFM SETTING / MAXIMUM,"printed '1,450'"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,cfm_min,1450,cfm,CFM SETTING / MINIMUM,"printed '1,450'"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,cfm_heat,,cfm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,heat_type,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_gpm,,gpm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_ewt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_lwt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_wpd_ft,,ft,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_mbh,,MBH,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_rows,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_conn_in,,in,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,hw_glycol_pct,,%,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,eh_kw,,kW,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,eh_stages,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,motor_hp,,hp,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,ecm,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,volts,,V,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-5-1,VAV,phase,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,building,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,floor,,,TYPICAL FLOORS: names one level,"printed '3-4, 6-34' — not a single value for this attribute"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,area_served,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,terminal_type,exhaust,,TABLE TITLE,title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,inlet_size_in,10,in,INLET DUCT SIZE (INCHES),
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,cfm_max,450,cfm,CFM SETTING / MAXIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,cfm_min,450,cfm,CFM SETTING / MINIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,cfm_heat,,cfm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,heat_type,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_gpm,,gpm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_ewt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_lwt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_wpd_ft,,ft,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_mbh,,MBH,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_rows,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_conn_in,,in,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,hw_glycol_pct,,%,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,eh_kw,,kW,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,eh_stages,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,motor_hp,,hp,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,ecm,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,volts,,V,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-1,VAV,phase,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,building,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,floor,,,TYPICAL FLOORS: names one level,"printed '3-4, 6-34' — not a single value for this attribute"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,area_served,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,terminal_type,exhaust,,TABLE TITLE,title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,inlet_size_in,10,in,INLET DUCT SIZE (INCHES),
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,cfm_max,450,cfm,CFM SETTING / MAXIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,cfm_min,450,cfm,CFM SETTING / MINIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,cfm_heat,,cfm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,heat_type,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_gpm,,gpm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_ewt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_lwt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_wpd_ft,,ft,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_mbh,,MBH,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_rows,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_conn_in,,in,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,hw_glycol_pct,,%,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,eh_kw,,kW,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,eh_stages,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,motor_hp,,hp,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,ecm,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,volts,,V,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-2,VAV,phase,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,building,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,floor,,,TYPICAL FLOORS: names one level,printed '35-61' — not a single value for this attribute
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,area_served,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,terminal_type,exhaust,,TABLE TITLE,title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,inlet_size_in,12,in,INLET DUCT SIZE (INCHES),
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,cfm_max,900,cfm,CFM SETTING / MAXIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,cfm_min,900,cfm,CFM SETTING / MINIMUM,
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,cfm_heat,,cfm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,heat_type,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_gpm,,gpm,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_ewt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_lwt_f,,F,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_wpd_ft,,ft,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_mbh,,MBH,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_rows,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_conn_in,,in,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,hw_glycol_pct,,%,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,eh_kw,,kW,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,eh_stages,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,motor_hp,,hp,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,ecm,,,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,volts,,V,,not printed
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#11,SINGLE DUCT CAV EXHAUST TERMINAL,CAV-X-3,VAV,phase,,,,not printed

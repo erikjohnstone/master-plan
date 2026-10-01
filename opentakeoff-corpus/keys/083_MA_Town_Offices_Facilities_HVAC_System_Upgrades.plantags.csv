@@ -1,0 +1,52 @@
+# 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, check).
+# Authored 2026-09-30 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,RF-21,unscheduled,1,no,demolition,"existing roof fan to be removed (E.T.B.R. under the tag); no schedule row; p8 duct label TO RF-21"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,RF-8,unscheduled,1,no,demolition,"existing roof fan to be removed (E.T.B.R. under the tag); no schedule row; p8 duct label UP TO RF-8"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,RF-11,unscheduled,1,no,demolition,"existing roof fan to be removed (E.T.B.R. under the tag); no schedule row; p8 duct label UP TO RF-11"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,EX RF-6,unscheduled,1,no,demolition,existing roof fan to remain shown on the demolition roof plan; counted on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,EX RF-7,unscheduled,1,no,demolition,existing roof fan to remain shown on the demolition roof plan; counted on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,EX RF-9,unscheduled,1,no,demolition,existing roof fan to remain shown on the demolition roof plan; counted on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,EX RF-10,unscheduled,1,no,demolition,existing roof fan to remain shown on the demolition roof plan; counted on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#10,FCU-1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-1,5,yes,new,"one ceiling cassette each in Office 1174, Office/Waiting 1169, Exam 1173, Isolation Room 1175 and Girls Rest 1170; tag under each unit"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#10,FCU-2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-2,1,yes,new,"Speech Room 1180; the second FCU-2 text on this sheet sits beside the Office 1174 thermostat (T) and is not a placement: that room's only unit is tagged FCU-1 below it and H3.0 p12 shows FCU-1 there (uncertain: may be a stale tag from the older numbering E1.0 shows)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#10,FCU-3,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-3,2,yes,new,two ceiling cassettes in Classroom 1185
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#10,FCU-4,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-4,7,yes,new,six in I.A.C. Reading Room 1179 and one in Classroom 1187
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#10,ERV-1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|ERV-1,1,yes,new,tag beside the unit above the nurse's suite ceiling (Office/Waiting 1169)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#10,ECH-1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|EHC-1,1,yes,new,"misprint of EHC-1: electric duct heater at ERV-1's supply outlet; the ELECTRIC HEATING COIL SCHEDULE row EHC-1 serves ERV-1 and the H0.5 p7 diagram reads ERV-1 / EHC-1; no ECH row exists"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,ERV-2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|ERV-2,1,yes,new,tag inside the roof unit outline
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,HP-1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-1,1,yes,new,two-module unit drawn as one split outline on an equipment stand; one tag
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,HP-2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-2,1,yes,new,tag under the roof unit
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,HP-3,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-3,1,yes,new,tag under the roof unit
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,EX RF-6,unscheduled,1,yes,existing,existing roof exhaust fan to remain; no schedule row
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,EX RF-7,unscheduled,1,yes,existing,existing roof exhaust fan to remain; no schedule row
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,EX RF-9,unscheduled,1,yes,existing,existing roof exhaust fan to remain; no schedule row
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,EX RF-10,unscheduled,1,yes,existing,existing roof exhaust fan to remain; no schedule row
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#12,FCU-1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-1,5,no,view-repeat,piping plan of the five nurse's suite units counted on H2.0 p10
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#12,FCU-2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-2,1,no,view-repeat,same Speech Room 1180 unit as on p10
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#12,FCU-3,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-3,2,no,view-repeat,same two Classroom 1185 units as on p10
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#12,FCU-4,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-4,7,no,view-repeat,same seven units as on p10
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,ERV-2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|ERV-2,1,no,view-repeat,roof piping plan; same unit as on H2.1 p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,HP-1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-1,1,no,view-repeat,same unit as on p11 (HP-1 and HP-2 positions swapped relative to p11 and E1.0)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,HP-2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-2,1,no,view-repeat,same unit as on p11 (HP-1 and HP-2 positions swapped relative to p11 and E1.0)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,HP-3,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-3,1,no,view-repeat,same unit as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,EX RF-6,unscheduled,1,no,view-repeat,same existing fan as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,EX RF-7,unscheduled,1,no,view-repeat,same existing fan as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,EX RF-9,unscheduled,1,no,view-repeat,same existing fan as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,EX RF-10,unscheduled,1,no,view-repeat,same existing fan as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,FCU 1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-1,1,no,discipline-repeat,stacked FCU over 1 hexagon at the Office/Waiting 1169 unit (view 1)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,FCU 2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-1,4,no,discipline-repeat,"stacked FCU over 2 at wall units in Office 1174, Exam 1173, Isolation Room 1175 and Girls Rest 1170: E1.0 uses an older FCU numbering; by room these are the FCU-1 units of H2.0/H3.0 (the FCU-2 row's unit is in the Speech Room)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,FCU 3,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-2,1,no,discipline-repeat,"stacked FCU over 3 at the Speech Room 1180 unit, which H2.0/H3.0 tag FCU-2 (older E numbering; the FCU-3 units are in Classroom 1185)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,FCU 4,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-3,2,no,discipline-repeat,"stacked FCU over 4 at the two Classroom 1185 units, which H2.0/H3.0 tag FCU-3 (older E numbering; the FCU-4 units are in the Reading Room and Classroom 1187)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,FCU 6,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|FCU-4,7,no,discipline-repeat,"stacked FCU over 6 at the six Reading Room 1179 units and the Classroom 1187 unit, which H2.0/H3.0 tag FCU-4; no FCU-6 row exists"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,ERV 1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|ERV-1,1,no,discipline-repeat,stacked ERV over 1 (view 1)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,ECH 1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|EHC-1,1,no,discipline-repeat,"stacked ECH over 1 at ERV-1's duct heater; misprint of EHC-1, as on p10"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,ERV 2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|ERV-2,1,no,discipline-repeat,stacked ERV over 2 inside the unit (view 2 Roof Plan)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,HP 1,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-1,1,no,discipline-repeat,stacked HP over 1 (view 2 Roof Plan)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,HP 2,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-2,1,no,discipline-repeat,stacked HP over 2 (view 2 Roof Plan)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,HP 3,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|HP-3,1,no,discipline-repeat,stacked HP over 3 (view 2 Roof Plan)
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,EX RF-6,unscheduled,1,no,discipline-repeat,roof plan view 2; same existing fan as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,EX RF-7,unscheduled,1,no,discipline-repeat,roof plan view 2; same existing fan as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,EX RF-9,unscheduled,1,no,discipline-repeat,roof plan view 2; same existing fan as on p11
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,EX RF-10,unscheduled,1,no,discipline-repeat,roof plan view 2; same existing fan as on p11
+,,083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4|CP,0,no,not_drawn,"row CP (CONDENSATE PUMP, Little Giant VCC-20ULS) of the HVAC POWER EQUIPMENT SCHEDULE, serving ALL GAS FURNACE'S (none in this project); drawn on no plan; the tag appears elsewhere only in the H0.1 abbreviation list p3 (uncertain: kept in scope as a pump)"

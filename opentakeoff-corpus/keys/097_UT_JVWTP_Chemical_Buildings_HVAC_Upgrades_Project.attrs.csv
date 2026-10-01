@@ -1,0 +1,51 @@
+# 097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet H-001 (page 2) of the JVWTP Chemical Buildings HVAC Upgrades, Jordan Valley Water Conservancy District (Heath Engineering Company), the table the fifth tier's seed drew for its UNIT_HEATER stratum.
+#   097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2 | ELECTRIC UNIT HEATER SCHEDULE | UNIT_HEATER | all 2 printed rows | render: page 2 overview at 40 dpi; crop 580,1195,1000,150 at 3x, the REMARKS column read in the text layer; second read of both rows, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Model numbers, frequency and current, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project: 1 table(s), 2 instance(s), 34 keyed attribute value(s) (14 printed, 20 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,building,,,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,floor,,,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,area_served,PRIMARY COAGULANT,,DUTY: the chemical room the heater serves,author's reading of the printed row
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,qty,,,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,cfm,700,cfm,NOMINAL CFM,
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,heating_mbh,34130,BTU/H,BTUH OUTPUT,"printed '34,130'"
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,eh_kw,10,kW,ELECTRICAL DATA / KW,
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,motor_hp,,hp,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,conn_in,,in,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,volts,480,V,ELECTRICAL DATA / VOLTS,
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,phase,3,,ELECTRICAL DATA / PHASE,
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,building,,,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,floor,,,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,area_served,PRIMARY COAGULANT,,DUTY: the chemical room the heater serves,author's reading of the printed row
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,qty,,,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,cfm,700,cfm,NOMINAL CFM,
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,heating_mbh,34130,BTU/H,BTUH OUTPUT,"printed '34,130'"
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,eh_kw,10,kW,ELECTRICAL DATA / KW,
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,motor_hp,,hp,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,conn_in,,in,,not printed
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,volts,480,V,ELECTRICAL DATA / VOLTS,
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2,ELECTRIC UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,phase,3,,ELECTRICAL DATA / PHASE,

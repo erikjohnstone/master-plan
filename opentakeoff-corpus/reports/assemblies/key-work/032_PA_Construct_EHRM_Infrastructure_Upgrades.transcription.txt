@@ -1,0 +1,59 @@
+# 032_PA_Construct_EHRM_Infrastructure_Upgrades — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheet M0.02 MECHANICAL SCHEDULES (PDF page 3) of the EHRM Infrastructure
+# Upgrades, CMCVAMC Philadelphia PA, VA project 642-22-700 (Introba, with HFS Company): an overview
+# of the page at 40 dpi, then the table at 3x (216 dpi), rendered with MuPDF (pymupdf
+# get_pixmap(clip)) and read by eye on 2026-09-26, with the PDF's own text layer (pymupdf words,
+# row by row) as a reading aid; second read of both rows against the text layer. The drawn title
+# was found with the text layer (pymupdf search_for), and the pumps' plan tags on page 43 (BLDG. 2
+# - MECHANICAL ENLARGED FLOOR PLAN) were rendered at 4x. The pipeline's output for this table was
+# not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (2 units, 4 packets, nothing applied), and AS-28 read its column names. The fifth
+# tier keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 032_PA_Construct_EHRM_Infrastructure_Upgrades
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheet M0.02 MECHANICAL SCHEDULES (page 3) of the EHRM Infrastructure Upgrades, CMCVAMC Philadelphia PA (Introba), the table the fifth tier's seed drew for its PUMP stratum.
+EXCLUDES Manufacturers and model numbers, the pump type, impeller diameters, efficiencies, brake horsepower, frequency and weights, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# MECHANICAL - PUMP SCHEDULE: two rows. Each unit's mark prints in two cells, TYPE "(N)P" and
+# EQUIPMENT NUMBER "A" / "B"; the plans tag the pumps with an octagon printing "(N) P" over "A" and
+# over "B" (page 43), where (N) marks the unit new: keyed as P-A and P-B (the author's reading of
+# the two-part mark). SERVICE prints the units each pump serves ("AC-A1, AC-A2", the computer room
+# air conditioners), keyed as service as printed (as 03_FL's pump SERVICE "BOILER #1"). PUMP TYPE
+# (CLOSE-COUPLED HORIZONTAL END-SUCTION) is a pump type, not an arrangement. PUMP / FLOW (GPM) keys
+# gpm, HEAD (FT.WC) head_ft and SPEED (RPM) rpm; ELECTRICAL / HP keys motor_hp, VOLT (V) volts and
+# PHASE phase. Note 4 ("SYSTEM INCLUDES 40% PROPYLENE GLYCOL BY VOLUME"), cited by both rows' NOTES
+# ("ALL"), keys glycol_pct. Note 1 ("EACH PUMP SIZED FOR 100% OF PEAK LOAD.") sizes each pump for
+# its own units' load (A and B serve different units); it names no arrangement. Notes 2-3 (an
+# inertia base; vibration isolation) state no key attribute.
+TABLE
+sheet: 032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3
+title: MECHANICAL - PUMP SCHEDULE
+family: PUMP
+render: page 3 overview at 40 dpi; crop 215,960,1300,215 at 3x in 2 tiles (TYPE and EQUIPMENT NUMBER columns repeated), notes included; second read of both rows, every cell, against the text layer; page 43 crop 600,640,110,100 at 4x (the plan tags)
+rows: all 2 printed rows
+col: [TYPE and EQUIPMENT NUMBER: the unit's two-part mark, as the plans' tags print it] => tag
+col: TYPE => -
+col: EQUIPMENT NUMBER => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: SERVICE => service
+col: PUMP TYPE => -
+col: PUMP / FLOW (GPM) => gpm
+col: PUMP / HEAD (FT.WC) => head_ft
+col: PUMP / SPEED (RPM) => rpm
+col: PUMP / MIN. IMP. DIA. (IN) => -
+col: PUMP / MIN. STATIC EFF. (%) => -
+col: ELECTRICAL / BHP => -
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / VOLT (V) => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / FREQUENCY (HZ) => -
+col: OPERATING WEIGHT (LB) => -
+col: NOTES => -
+derive: glycol_pct = 40 ; header=NOTE 4 ; note=note 4, the rows' NOTES say ALL: 'SYSTEM INCLUDES 40% PROPYLENE GLYCOL BY VOLUME'
+grid:
+P-A | (N)P | A | BELL & GOSSETT | E-1532 | AC-A1, AC-A2 | CLOSE-COUPLED HORIZONTAL END-SUCTION | 143.0 | 142.0 | 3600 | 6 | 68 | 7.88 | 10 | 460 | 3 | 60 | 308 | ALL
+P-B | (N)P | B | BELL & GOSSETT | E-1532 | AC-B1, AC-B2 | CLOSE-COUPLED HORIZONTAL END-SUCTION | 143.0 | 142.0 | 3600 | 6 | 68 | 7.88 | 10 | 460 | 3 | 60 | 308 | ALL
+END

@@ -1,0 +1,40 @@
+# 26_CA_TransbayTower_Mechanical_64Sheets.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#12,MECHANICAL LEVEL 1 PLAN,M,new,yes,floor plan plus gas meter room section at right
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,MECHANICAL LEVEL 2 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,MECHANICAL LEVEL 3 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,MECHANICAL LEVEL 4 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,MECHANICAL LEVEL 5 PLAN,M,new,yes,floor plan plus L4-L6 section at right
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#17,MECHANICAL TYPICAL PLAN - LEVELS 6-16,M,new,yes,typical floor plan for levels 6-16
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#18,MECHANICAL LEVEL 17 PLAN,M,new,yes,floor plan plus elevator control room sections at right
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#19,MECHANICAL LEVEL 18 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#20,MECHANICAL TYPICAL PLAN - LEVELS 19-30,M,new,yes,typical floor plan for levels 19-30
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#21,MECHANICAL LEVEL 31 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#22,MECHANICAL LEVEL 32 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#23,MECHANICAL LEVEL 33 PLAN,M,new,yes,floor plan plus elevator control room sections at right
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,MECHANICAL LEVEL 34 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#25,MECHANICAL LEVEL 35 PLAN,M,new,yes,floor plan plus SX-1 smoke exhaust connection section at right
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,MECHANICAL LEVEL 36 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#27,MECHANICAL TYPICAL PLAN - LEVELS 37-48,M,new,yes,typical floor plan for levels 37-48
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#28,MECHANICAL LEVEL 49 PLAN,M,new,yes,floor plan plus elevator control room sections at right
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#29,MECHANICAL LEVEL 50 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#30,MECHANICAL LEVEL 51 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#31,MECHANICAL TYPICAL PLAN - LEVELS 52-54,M,new,yes,typical floor plan for levels 52-54
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#32,MECHANICAL TYPICAL PLAN - LEVELS 55-58,M,new,yes,typical floor plan for levels 55-58
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#33,MECHANICAL TYPICAL PLAN - LEVELS 59-60,M,new,yes,typical floor plan for levels 59-60
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#34,MECHANICAL LEVEL 61 PLAN,M,new,yes,floor plan (tri-path AHU base design) plus EP riser transition section
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,MECHANICAL LEVEL 61 ALTERNATE PLAN,M,new,yes,bid-alternate (overhead-only FPB) floor plan of level 61; same floor as p34
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,MECHANICAL LEVEL 62 PLAN,M,new,yes,view titled MECHANICAL ROOF LEVEL PLAN (L62 mechanical level) plus sections 2-5 at right
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,MECHANICAL LEVEL 63 PLAN,M,new,yes,floor plan (cooling tower level) plus SX-1 riser transition section
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#38,MECHANICAL LEVEL 64 ROOF PLAN,M,roof,yes,roof plan plus STP-2 riser transition section
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,MECHANICAL PARKING LEVEL 1 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,MECHANICAL PARKING LEVEL 2 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,MECHANICAL PARKING LEVEL 3 PLAN,M,new,yes,floor plan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,MECHANICAL BOILER PLANT ENLARGED PLAN,M,enlarged,yes,enlarged plan of level 2 boiler plant plus TX/SX-1 riser connection section at top
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,MECHANICAL CHILLER PLANT ENLARGED PLAN,M,enlarged,yes,enlarged plan of level 2 chiller plant plus ventilation calculations
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#44,MECHANICAL GENERATOR PLAN & LOUVER SUMMARY,M,mixed,yes,enlarged plan of level 3 generator area; also louver elevation and west/east facade louver sections
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#48,MECHANICAL RADIANT FLOOR LAYOUT,M,enlarged,yes,enlarged plan of level 1 lobby radiant floor
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#49,MECHANICAL RESTROOM DETAILS,M,enlarged,yes,enlarged typical toilet room layouts and RCPs (levels 6-34 and 35-61) plus restroom sections
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#51,"MECHANICAL MULTI-TENANT CORRIDOR - LEVELS 4, 6-14",M,enlarged,yes,enlarged core corridor plan; no unit tags
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#52,MECHANICAL MULTI-TENANT CORRIDOR PLAN - LEVELS 50-61,M,enlarged,yes,enlarged core corridor plan; no unit tags

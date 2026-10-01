@@ -1,0 +1,127 @@
+# 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation — attribute-key transcription (ASSEMBLIES AS-17, held-out 2)
+# Typed from renders of sheet M3.01 (PDF page 11) of the Guaranteed Rate Field HVAC / AHU
+# renovation, phase IX (Elara Engineering): an overview of the page at 40 dpi, then each table
+# at 3x (216 dpi) in tiles with the TAG column repeated, rendered with MuPDF (pymupdf
+# get_pixmap(clip), displayed orientation) and read by eye on 2026-09-26; second read at 3x-4x
+# of every row, every cell. Each drawn title was found with the PDF's own text layer (pymupdf
+# search_for). Keyed after the dev-2 normalizer was frozen (6e1a626); the pipeline's output for
+# this document was never consulted. The second tier keys the tables its seed drew
+# (tier2/01-split.md): one per keyed family.
+#
+# Each row's TAG cell draws a hexagon symbol with the family's letters over the unit's number
+# (FCU over 1, CU over 2). The sheet's own notes compose them with a dash ("FCU-1 AND FCU-2"),
+# and so does this key. The condensing unit table's title is drawn letter-spaced; its title
+# line is typed as the census names it.
+SET 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheet M3.01 (page 11) of the Guaranteed Rate Field HVAC / AHU renovation, phase IX, Chicago IL (Elara Engineering), the tables the second tier's seed drew for its FCU and CONDENSING_UNIT strata.
+EXCLUDES Manufacturers and models, orientation, weights and dimensions, fan speed, external static pressure, coil working pressure, air-side temperatures, sensible capacities, circuits, compressor and refrigerant, EER, refrigerant line sizes, FLA, MCA, MOCP, hertz, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU) (page 11): five rows. QTY. keys qty (FCU-5
+# prints 11). SERVICE names the area each unit serves (area_served, the author's reading);
+# LOCATION prints the same text and names a level in FCU-1 and FCU-2 (LEVEL 200). The title
+# prints two pipes and chilled water (pipes 2, cooling_type chw). UNIT DATA's WATER FLOW, WATER
+# PRESSURE DROP and COIL ROWS and COOLING DATA's E.W.T. and TOTAL CAP. key the chilled-water
+# coil (chw_*). Every row's NOTES reads SEE BELOW, so the table's notes speak for every unit
+# they do not limit: note 7 ("ALL UNITS SHALL BE SIZED FOR 30% ETHYLENE GLYCOL CONCENTRATION
+# IN CHILLED WATER.") keys chw_glycol_pct 30; note 3 ("EXISTING ELECTRIC HEATING COILS IN SUITES
+# SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)") keys FCU-1's heating_type electric. No other row
+# prints a heating coil (heating_type stays blank). Notes 1, 2, 4-6 and 8-10 (high-speed
+# ratings, coil hand, controls coordination, plenum, filters, disconnects, quantities,
+# sole-sourcing) key nothing.
+TABLE
+sheet: 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11
+title: FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)
+family: FCU
+render: page 11 crop 115,670,1651,285 at 3x in 4 tiles (TAG and QTY. columns repeated) and notes crop 115,950,1000,200 at 2x; second read at 3x (crop 215,760,1100,190) and 4x (crop 1180,760,586,190) of all 5 rows, every cell
+rows: all 5 printed rows
+col: [TAG: the hexagon symbol's FCU over its number, composed with a dash as the notes print it] => tag
+col: QTY. => qty
+col: [GENERAL DATA / SERVICE: the area the unit serves] => area_served
+col: GENERAL DATA / LOCATION => -
+col: [LOCATION names a level] => floor
+col: GENERAL DATA / MFR => -
+col: GENERAL DATA / MODEL => -
+col: GENERAL DATA / ORIENTATION => -
+col: GENERAL DATA / APPROX. WEIGHT (LBS) => -
+col: DIMENSIONAL DATA (INCHES) / L => -
+col: DIMENSIONAL DATA (INCHES) / W => -
+col: DIMENSIONAL DATA (INCHES) / H => -
+col: UNIT DATA / FAN SPEED => -
+col: UNIT DATA / NOMINAL AIRFLOW (CFM) => cfm
+col: UNIT DATA / WATER FLOW (GPM) => chw_gpm
+col: UNIT DATA / ESP (IN. WG) => -
+col: UNIT DATA / WATER PRESSURE DROP (FT. HD.) => chw_wpd_ft
+col: UNIT DATA / COIL ROWS => chw_rows
+col: UNIT DATA / MIN. COIL WORKING PRESSURE (PSIG) => -
+col: COOLING DATA / E.A.T. DB (°F) => -
+col: COOLING DATA / E.A.T. WB (°F) => -
+col: COOLING DATA / L.A.T. DB (°F) => -
+col: COOLING DATA / L.A.T. WB (°F) => -
+col: COOLING DATA / E.W.T. (°F) => chw_ewt_f
+col: COOLING DATA / TOTAL CAP. (MBH) => chw_mbh
+col: COOLING DATA / SENS. CAP. (MBH) => -
+col: ELECTRICAL DATA / FLA => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / PHASE => phase
+col: NOTES => -
+col: [NOTE 3, for the unit it names: EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)] => heating_type
+derive: pipes = 2 ; header=TABLE TITLE ; note=title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'
+derive: cooling_type = chw ; header=TABLE TITLE ; note=title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'; every row prints the chilled-water coil's water side (WATER FLOW, E.W.T. 44.0)
+derive: chw_glycol_pct = 30 ; header=NOTE 7 ; note=note 7 (every row's NOTES reads SEE BELOW): 'ALL UNITS SHALL BE SIZED FOR 30% ETHYLENE GLYCOL CONCENTRATION IN CHILLED WATER.'
+grid:
+FCU-1 | 1 | LEVEL 200 SECTION 7 | LEVEL 200 SECTION 7 | =LEVEL 200 (LEVEL 200 SECTION 7) | CARRIER | 42CAA03BLFY6YYAR | HORIZONTAL DUCTED | 39 | 17.5 | 25.25 | 8.75 | HIGH | 300 | 1.4 | 0.4 | 8.6 | 4 | 175.0 | 75.0 | 67.0 | 54.7 | 54.1 | 44.0 | 6.3 | 3.5 | 0.35 | 277 | 60 | 1 | SEE BELOW | electric (EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY))
+FCU-2 | 1 | LEVEL 200 SECTION 7 | LEVEL 200 SECTION 7 | =LEVEL 200 (LEVEL 200 SECTION 7) | CARRIER | 42DAA08LLFY6YYBR | HORIZONTAL DUCTED | 79 | 27.5 | 28.0 | 16.4 | HIGH | 800 | 3.4 | 0.5 | 1.79 | 7 | 175.0 | 75.0 | 67.0 | 61.6 | 60.5 | 44.0 | 20.4 | 19.4 | 1.35 | 277 | 60 | 1 | SEE BELOW |
+FCU-3 | 1 | VISITORS CLUBHOUSE | VISITORS CLUBHOUSE |  | CARRIER | 42DAA10BLFY6YYAR | HORIZONTAL DUCTED | 90 | 27.5 | 32.0 | 16.4 | HIGH | 1000 | 5.3 | 0.5 | 4.23 | 4 | 175.0 | 75.0 | 67.0 | 59.4 | 58.4 | 44.0 | 24.4 | 15.1 | 1.85 | 277 | 60 | 1 | SEE BELOW |
+FCU-4 | 1 | ISFA CONF. ROOM | ISFA CONF. ROOM |  | CARRIER | 42DAA12BLFY6YYAR | HORIZONTAL DUCTED | 108 | 27.5 | 37.0 | 16.4 | HIGH | 1200 | 7.6 | 0.5 | 10.35 | 4 | 175.0 | 75.0 | 67.0 | 59.3 | 58.2 | 44.0 | 34.6 | 21.3 | 2.7 | 277 | 60 | 1 | SEE BELOW |
+FCU-5 | 11 | PRESSBOX | PRESSBOX |  | CARRIER | 42DAA16BLFY6YYAR | HORIZONTAL DUCTED | 124 | 27.5 | 47.0 | 16.4 | HIGH | 1600 | 10.9 | 0.5 | 7.84 | 4 | 175.0 | 75.0 | 67.0 | 60.3 | 59.1 | 44.0 | 50.1 | 31.8 | 3.7 | 277 | 60 | 1 | SEE BELOW |
+END
+
+# CONDENSING UNIT SCHEDULE (CU) (page 11, the title drawn letter-spaced): three rows. SERVICE
+# names what each unit serves, the patio AHU or the score board control room (area_served, the
+# author's reading); LOCATION names a level in every row (200 LEVEL). PERFORMANCE DATA / TOTAL
+# CAPACITY (MBH) keys cooling_mbh. VOLTS and PHASE print as their own columns. Every row's NOTES
+# reads SEE BELOW; notes 1-10 (warranty, line sizing, discharge, listing, hail guards, low
+# ambient, low sound, single point power, digital scroll, manufacturers) key nothing in this
+# family's vocabulary.
+TABLE
+sheet: 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11
+title: C O N D E N S I N G U N I T S C H E D U L E ( C U )
+family: CONDENSING_UNIT
+render: page 11 crop 115,1195,1597,215 at 3x in 4 tiles (TAG column repeated) and notes crop 115,1405,1000,200 at 2x; second read at 3x (crop 115,1300,1600,110) of all 3 rows, every cell
+rows: all 3 printed rows
+col: [TAG: the hexagon symbol's CU over its number, composed with a dash] => tag
+col: [GENERAL DATA / SERVICE: what the unit serves] => area_served
+col: GENERAL DATA / LOCATION => -
+col: [LOCATION names a level] => floor
+col: GENERAL DATA / MFR => -
+col: GENERAL DATA / MODEL => -
+col: GENERAL DATA / SHIPPING WEIGHT (LBS) => -
+col: GENERAL DATA / OPERATING WEIGHT (LBS) => -
+col: DIMENSIONAL DATA (INCHES) / L => -
+col: DIMENSIONAL DATA (INCHES) / W => -
+col: DIMENSIONAL DATA (INCHES) / H => -
+col: PERFORMANCE DATA / # OF CIRCUITS => -
+col: PERFORMANCE DATA / COMP. TYPE => -
+col: PERFORMANCE DATA / TOTAL CAPACITY (MBH) => cooling_mbh
+col: PERFORMANCE DATA / SENSIBLE CAPACITY (MBH) => -
+col: PERFORMANCE DATA / EER => -
+col: PERFORMANCE DATA / REFRIG. TYPE => -
+col: PERFORMANCE DATA / SUCTION LINE SIZE (IN) => -
+col: PERFORMANCE DATA / LIQUID LINE SIZE (IN) => -
+col: PERFORMANCE DATA / HOT GAS LINE SIZE (IN) => -
+col: PERFORMANCE DATA / EAT (°F) => -
+col: ELECTRICAL DATA / FLA => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / PHASE => phase
+col: NOTES => -
+grid:
+CU-1 | PATIO AHU | 200 LEVEL SECTION 2 | =200 LEVEL (200 LEVEL SECTION 2) | CARRIER | 38APS030 | 1282 | 1282 | 88.4 | 40.3 | 78.6 | 2 | SCROLL | 373.5 |  | 10.8 | PURON |  |  |  | 95.0 |  | 66.3 | 90 | 460 | 60 | 3 | SEE BELOW
+CU-2 | SCORE BOARD CONTROL | 200 LEVEL SECTION 5 | =200 LEVEL (200 LEVEL SECTION 5) | CARRIER | 38AUDC16A0A6-0A0A0 | 731 | 731 | 86.4 | 43.4 | 50.4 | 1 | SCROLL | 185.7 |  | 13.4 | PURON |  |  |  | 95.0 |  | 29.9 | 40 | 460 | 60 | 3 | SEE BELOW
+CU-3 | SCORE BOARD CONTROL | 200 LEVEL SECTION 5 | =200 LEVEL (200 LEVEL SECTION 5) | CARRIER | 38AUDC16A0A6-0A0A0 | 731 | 731 | 86.4 | 43.4 | 50.4 | 1 | SCROLL | 185.7 |  | 13.4 | PURON |  |  |  | 95.0 |  | 29.9 | 40 | 460 | 60 | 3 | SEE BELOW
+END

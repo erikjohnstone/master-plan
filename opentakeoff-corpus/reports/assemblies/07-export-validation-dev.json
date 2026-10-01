@@ -1,0 +1,407 @@
+{
+  "generated_at": "2026-09-24T07:04:10.472Z",
+  "side": "dev",
+  "documents": [
+    {
+      "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+      "graph": "built",
+      "units": 26,
+      "records": 41,
+      "lines": 624,
+      "csv_rows": {
+        "equipment.csv": 41,
+        "lines.csv": 624,
+        "lines_rollup.csv": 160,
+        "points.csv": 244,
+        "valves.csv": 12,
+        "damper_actuators.csv": 18,
+        "sensors.csv": 78,
+        "desigo_select_worksheet.csv": 12
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 1,
+        "coil_derived_rows": 0,
+        "coil_derived_with_gpm": 0,
+        "coil_derived_with_system": 0,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 1,
+            "read_back": 1,
+            "last_row": 6
+          }
+        ],
+        "rows_read_back": 1,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 0
+    },
+    {
+      "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+      "graph": "built",
+      "units": 94,
+      "records": 107,
+      "lines": 189,
+      "csv_rows": {
+        "equipment.csv": 107,
+        "lines.csv": 189,
+        "lines_rollup.csv": 113,
+        "points.csv": 37,
+        "valves.csv": 3,
+        "damper_actuators.csv": 0,
+        "sensors.csv": 15,
+        "desigo_select_worksheet.csv": 9
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 30,
+        "coil_derived_with_gpm": 30,
+        "coil_derived_with_system": 30,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 30,
+            "read_back": 30,
+            "last_row": 35
+          }
+        ],
+        "rows_read_back": 30,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 30
+    },
+    {
+      "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+      "graph": "built",
+      "units": 29,
+      "records": 41,
+      "lines": 165,
+      "csv_rows": {
+        "equipment.csv": 41,
+        "lines.csv": 165,
+        "lines_rollup.csv": 54,
+        "points.csv": 54,
+        "valves.csv": 6,
+        "damper_actuators.csv": 0,
+        "sensors.csv": 15,
+        "desigo_select_worksheet.csv": 11
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 32,
+        "coil_derived_with_gpm": 32,
+        "coil_derived_with_system": 6,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 32,
+            "read_back": 32,
+            "last_row": 37
+          }
+        ],
+        "rows_read_back": 32,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 32
+    },
+    {
+      "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+      "graph": "built",
+      "units": 11,
+      "records": 24,
+      "lines": 127,
+      "csv_rows": {
+        "equipment.csv": 24,
+        "lines.csv": 127,
+        "lines_rollup.csv": 68,
+        "points.csv": 24,
+        "valves.csv": 0,
+        "damper_actuators.csv": 0,
+        "sensors.csv": 5,
+        "desigo_select_worksheet.csv": 6
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 4,
+        "coil_derived_with_gpm": 4,
+        "coil_derived_with_system": 3,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 4,
+            "read_back": 4,
+            "last_row": 9
+          }
+        ],
+        "rows_read_back": 4,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 4
+    },
+    {
+      "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+      "graph": "built",
+      "units": 24,
+      "records": 28,
+      "lines": 34,
+      "csv_rows": {
+        "equipment.csv": 28,
+        "lines.csv": 34,
+        "lines_rollup.csv": 31,
+        "points.csv": 18,
+        "valves.csv": 1,
+        "damper_actuators.csv": 1,
+        "sensors.csv": 8,
+        "desigo_select_worksheet.csv": 3
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 22,
+        "coil_derived_rows": 0,
+        "coil_derived_with_gpm": 0,
+        "coil_derived_with_system": 0,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 22,
+            "read_back": 22,
+            "last_row": 27
+          }
+        ],
+        "rows_read_back": 22,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 0
+    },
+    {
+      "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+      "graph": "built",
+      "units": 7,
+      "records": 18,
+      "lines": 319,
+      "csv_rows": {
+        "equipment.csv": 18,
+        "lines.csv": 319,
+        "lines_rollup.csv": 171,
+        "points.csv": 127,
+        "valves.csv": 6,
+        "damper_actuators.csv": 11,
+        "sensors.csv": 47,
+        "desigo_select_worksheet.csv": 9
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 6,
+        "coil_derived_with_gpm": 6,
+        "coil_derived_with_system": 5,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 6,
+            "read_back": 6,
+            "last_row": 11
+          }
+        ],
+        "rows_read_back": 6,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 6
+    },
+    {
+      "id": "12_MT_MSU_ReidHall_Renovation",
+      "graph": "built",
+      "units": 12,
+      "records": 22,
+      "lines": 215,
+      "csv_rows": {
+        "equipment.csv": 22,
+        "lines.csv": 215,
+        "lines_rollup.csv": 68,
+        "points.csv": 86,
+        "valves.csv": 2,
+        "damper_actuators.csv": 8,
+        "sensors.csv": 19,
+        "desigo_select_worksheet.csv": 6
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 6,
+        "coil_derived_with_gpm": 6,
+        "coil_derived_with_system": 0,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 6,
+            "read_back": 6,
+            "last_row": 11
+          }
+        ],
+        "rows_read_back": 6,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 6
+    },
+    {
+      "id": "baker-county-eoc",
+      "graph": "built",
+      "units": 13,
+      "records": 21,
+      "lines": 184,
+      "csv_rows": {
+        "equipment.csv": 21,
+        "lines.csv": 184,
+        "lines_rollup.csv": 108,
+        "points.csv": 70,
+        "valves.csv": 3,
+        "damper_actuators.csv": 3,
+        "sensors.csv": 29,
+        "desigo_select_worksheet.csv": 7
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 0,
+        "coil_derived_with_gpm": 0,
+        "coil_derived_with_system": 0,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 0,
+            "read_back": 0,
+            "last_row": null
+          }
+        ],
+        "rows_read_back": 0,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 0
+    },
+    {
+      "id": "bldg5406-hvac-demo",
+      "graph": "built",
+      "units": 30,
+      "records": 47,
+      "lines": 425,
+      "csv_rows": {
+        "equipment.csv": 47,
+        "lines.csv": 425,
+        "lines_rollup.csv": 188,
+        "points.csv": 206,
+        "valves.csv": 5,
+        "damper_actuators.csv": 12,
+        "sensors.csv": 43,
+        "desigo_select_worksheet.csv": 6
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 2,
+        "coil_derived_with_gpm": 2,
+        "coil_derived_with_system": 0,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 2,
+            "read_back": 2,
+            "last_row": 7
+          }
+        ],
+        "rows_read_back": 2,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 2
+    },
+    {
+      "id": "federal-mech",
+      "graph": "built",
+      "units": 128,
+      "records": 214,
+      "lines": 3220,
+      "csv_rows": {
+        "equipment.csv": 214,
+        "lines.csv": 3220,
+        "lines_rollup.csv": 313,
+        "points.csv": 1379,
+        "valves.csv": 71,
+        "damper_actuators.csv": 61,
+        "sensors.csv": 210,
+        "desigo_select_worksheet.csv": 14
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 0,
+        "coil_derived_rows": 70,
+        "coil_derived_with_gpm": 70,
+        "coil_derived_with_system": 5,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 70,
+            "read_back": 70,
+            "last_row": 75
+          }
+        ],
+        "rows_read_back": 70,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 70
+    },
+    {
+      "id": "itd-d1-lab",
+      "graph": "built",
+      "units": 97,
+      "records": 118,
+      "lines": 232,
+      "csv_rows": {
+        "equipment.csv": 118,
+        "lines.csv": 232,
+        "lines_rollup.csv": 104,
+        "points.csv": 81,
+        "valves.csv": 0,
+        "damper_actuators.csv": 0,
+        "sensors.csv": 21,
+        "desigo_select_worksheet.csv": 12
+      },
+      "csv_problems": [],
+      "hit": {
+        "scheduled_rows": 10,
+        "coil_derived_rows": 11,
+        "coil_derived_with_gpm": 11,
+        "coil_derived_with_system": 11,
+        "workbooks": [
+          {
+            "filename": "Valve_Size_Template_US_Global.xlsx",
+            "rows": 21,
+            "read_back": 21,
+            "last_row": 26
+          }
+        ],
+        "rows_read_back": 21,
+        "problems": []
+      },
+      "wp0_coils_without_valve": 11
+    }
+  ],
+  "totals": {
+    "documents": 11,
+    "errored": 0,
+    "documents_with_problems": 0,
+    "csv_problems": 0,
+    "hit_problems": 0,
+    "units": 471,
+    "lines": 5734,
+    "hit_scheduled_rows": 33,
+    "coil_derived_rows": 161,
+    "coil_derived_with_gpm": 161,
+    "coil_derived_with_system": 60,
+    "wp0_coils_without_valve": 161,
+    "documents_whose_coil_rows_differ_from_wp0": 0,
+    "workbooks": 11
+  }
+}

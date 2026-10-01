@@ -1,0 +1,14 @@
+# 16_NV_CarsonValleyMS_HVAC_Replacement.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-30 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output, with the set's typicals key (typicals tier 2) and before any typical or reading eval ran
+# on the set. What an estimator would answer for this project.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#27,CONTROLS CONTRACTOR SHALL CONNECT CONTROLLERS TO THE CONTROL NETWORK AND ADD NEW GRAPHICS,M6.x MECHANICAL CONTROL DIAGRAMS AND SEQUENCE OF OPERATION
+PQ2,other,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#1,DOUGLAS COUNTY SCHOOL DISTRICT,a school district
+PQ3,keep,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,(FOR REFERENCE ONLY) EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT,"the schedule titled EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY): the existing rooftop units 2 to 5, which the new units replace; no controls work is drawn for them"
+PQ4,n/a,,,no keyed fan or pump
+PQ5,n/a,,,no keyed pump

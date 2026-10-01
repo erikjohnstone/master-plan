@@ -1,0 +1,105 @@
+# 093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheet M-601 MECHANICAL SCHEDULES (PDF page 8) of the Maine IF&W heat
+# pump and electrical upgrades, Jonesboro ME, BGS project 3845 (Haley Ward): an overview of the
+# page at 40 dpi, then each table at 3x (216 dpi) in tiles with the TAG column repeated,
+# rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second read at
+# 4x of the first, a middle and the last indoor unit and every outdoor unit, every cell. Each
+# drawn title was found with the PDF's own text layer (pymupdf search_for). The pipeline's
+# output for this sheet was not consulted while keying (AS-28, before the draw, read the
+# column names the normalizer left unread across the unseen corpus, this document's among
+# them). The third tier keys the tables its seed drew (tier3/01-split.md): one per keyed family.
+SET 093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheet M-601 (page 8) of the Maine IF&W heat pump and electrical upgrades, Jonesboro ME (Haley Ward), the tables the third tier's seed drew for its VRF_INDOOR and VRF_OUTDOOR strata.
+EXCLUDES Space numbers, outdoor units served, manufacturers and models, corrected capacities and design outdoor temperatures, efficiencies (SEER, COP), FLA, RLA, input watts, MCA and MOCP, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# HEAT PUMP/VRF INDOOR UNIT SCHEDULE (page 8): twenty wall-mounted indoor units. Space: Name
+# names the room each unit sits in and serves, keyed area_served as the author's reading (the
+# header is a room parameter, not SERVES). HEATING CAPACITY and COOLING CAPACITY print their
+# unit in every cell ("13500.0 Btu/h"): heating_mbh and cooling_mbh in BTU/H. SUPPLY CFM keys
+# cfm and ELECTRICAL / VOLTAGE volts ("208 V"); no phase prints. Every row's NOTES prints
+# "ALL". Note 5 "PROVIDE AND CONNECT ALL INDOOR UNITS TO A CENTRAL AE-200A CONTROLLER." names
+# the controls network the units join: bas_interface, the controller as printed (as 094_FL's
+# "CONNECT TO EXISTING BMS"). Notes 1-4, 6 and 7 (rating conditions, thermostats, condensate
+# pumps, leak detection) key nothing.
+TABLE
+sheet: 093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#8
+title: HEAT PUMP/VRF INDOOR UNIT SCHEDULE
+family: VRF_INDOOR
+render: page 8 overview at 40 dpi; crops 1128,365,1040,275 and 1128,636,1040,289 at 3x in 2 tiles each (TAG column repeated), notes cropped at 3x (crop 1128,920,1040,95); second read at 4x (crops 1128,421,522,23 and 1650,421,518,23; 1128,657,522,23 and 1650,657,518,23; 1128,895,522,24 and 1650,895,518,24) of IU-1, IU-10 and IU-20, every cell
+rows: all 20 printed rows
+col: TAG => tag
+col: Space: Number => -
+col: [Space: Name: the room the unit serves] => area_served
+col: OUTDOOR UNIT => -
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: HEATING CAPACITY => heating_mbh [BTU/H]
+col: COOLING CAPACITY => cooling_mbh [BTU/H]
+col: SUPPLY CFM => cfm
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / FLA => -
+col: ELECTRICAL / POWER => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: NOTES: => -
+derive: bas_interface = CENTRAL AE-200A CONTROLLER ; header=NOTE 5 ; note=note 5, every row's NOTES printing ALL: 'PROVIDE AND CONNECT ALL INDOOR UNITS TO A CENTRAL AE-200A CONTROLLER.'
+grid:
+IU-1 | 116 | OPEN OFF | OU-1 | Mitsubishi Electric Corporation | PKFY-L12NLMU-A | 13500.0 Btu/h | 12000.0 Btu/h | 297 CFM | 208 V | 0.20 A | 40.0 W | 0.24 A | 15 A | ALL
+IU-2 | 117 | DMR OFF | OU-1 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-3 | 118 | DMR OFF | OU-1 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-4 | 119 | DMR MP OFF | OU-1 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-5 | 122 | FISHERIES FILES & SEASONAL | OU-1 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-6 | 123 | FISHERIES OFF | OU-1 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-7 | 121 | FISHERIES OFF | OU-1 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-8 | 125 | FISHERIES OFF | OU-1 | Mitsubishi Electric Corporation | PKFY-L06NLMU-A | 6700.0 Btu/h | 6000.0 Btu/h | 191 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-9 | 120 | DMR SHELLFISH & SEASONAL | OU-2 | Mitsubishi Electric Corporation | PKFY-L08NLMU-A | 9000.0 Btu/h | 8000.0 Btu/h | 237 CFM | 208 V | 0.10 A | 30.0 W | 0.24 A | 15 A | ALL
+IU-10 | 015 | WET BAY | OU-2 | Mitsubishi Electric Corporation | PKFY-L12NLMU-A | 13500.0 Btu/h | 12000.0 Btu/h | 297 CFM | 208 V | 0.20 A | 40.0 W | 0.24 A | 15 A | ALL
+IU-11 | 011 | BREAK | OU-2 | Mitsubishi Electric Corporation | PKFY-L06NLMU-A | 6700.0 Btu/h | 6000.0 Btu/h | 191 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-12 | 014 | HALL | OU-2 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-13 | 101 | WILDLIFE OFF | OU-3 | Mitsubishi Electric Corporation | PKFY-L06NLMU-A | 6700.0 Btu/h | 6000.0 Btu/h | 191 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-14 | 102 | WILDLIFE OFF | OU-3 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-15 | 109 | WARDEN SERVICE | OU-3 | Mitsubishi Electric Corporation | PKFY-L04NLMU-A | 4500.0 Btu/h | 4000.0 Btu/h | 148 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-16 | 103 | WILDLIFE OFF | OU-3 | Mitsubishi Electric Corporation | PKFY-L06NLMU-A | 6700.0 Btu/h | 6000.0 Btu/h | 191 CFM | 208 V | 0.10 A | 20.0 W | 0.24 A | 15 A | ALL
+IU-17 | 105 | CONFERENCE RM | OU-3 | Mitsubishi Electric Corporation | PKFY-L12NLMU-A | 13500.0 Btu/h | 12000.0 Btu/h | 297 CFM | 208 V | 0.20 A | 40.0 W | 0.24 A | 15 A | ALL
+IU-18 | 106 | CORRIDOR | OU-3 | Mitsubishi Electric Corporation | PKFY-L12NLMU-A | 13500.0 Btu/h | 12000.0 Btu/h | 297 CFM | 208 V | 0.20 A | 40.0 W | 0.24 A | 15 A | ALL
+IU-19 | 001 | DRY BAY | OU-2 | Mitsubishi Electric Corporation | PKFY-L18NLMU-A | 20000.0 Btu/h | 18000.0 Btu/h | 438 CFM | 208 V | 0.20 A | 50.0 W | 0.24 A | 15 A | ALL
+IU-20 | 017 | BUNKS | OU-2 | Mitsubishi Electric Corporation | PKFY-L08NLMU-A | 9000.0 Btu/h | 8000.0 Btu/h | 237 CFM | 208 V | 0.10 A | 30.0 W | 0.24 A | 15 A | ALL
+END
+
+# HEAT PUMP/VRF OUTDOOR UNIT SCHEDULE (page 8): three outdoor units. COOLING CAPACITY and
+# HEATING CAPACITY (the nominal ratings; the CORRECTED columns are at the design outdoor
+# temperature, note 4) key cooling_mbh and heating_mbh in the BTU/H their cells print.
+# ELECTRICAL / VOLTS keys volts ("208 V"); no phase prints. Every row's NOTES prints "ALL".
+# Note 5 "PROVIDE AND CONNECT ALL OUTDOOR UNITS TO A SINGLE CENTRAL AE-200A CONTROLLER." keys
+# bas_interface as the indoor units' note 5 does. The other notes (rating conditions, piping,
+# stands, hoods, pads, leak detection) key nothing.
+TABLE
+sheet: 093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#8
+title: HEAT PUMP/VRF OUTDOOR UNIT SCHEDULE
+family: VRF_OUTDOOR
+render: page 8 overview at 40 dpi; crop 1002,76,1166,139 at 3x in 2 tiles (TAG column repeated), notes cropped at 3x (crop 1002,212,1166,118); second read at 4x (crops 1002,140,588,72 and 1590,140,578,72) of OU-1, OU-2 and OU-3, every cell
+rows: all 3 printed rows
+col: TAG => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: COOLING CAPACITY => cooling_mbh [BTU/H]
+col: CORRECTED COOLING CAPACITY => -
+col: DESIGN COOLING OUTDOOR DB => -
+col: HEATING CAPACITY => heating_mbh [BTU/H]
+col: CORRECTED HEATING CAPACITY => -
+col: DESIGN HEATING OUTDOOR DB => -
+col: COOLING EFFICIENCY (SEER) => -
+col: HEATING EFFICIENCY (COP) => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / RLA => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: NOTES: => -
+derive: bas_interface = CENTRAL AE-200A CONTROLLER ; header=NOTE 5 ; note=note 5, every row's NOTES printing ALL: 'PROVIDE AND CONNECT ALL OUTDOOR UNITS TO A SINGLE CENTRAL AE-200A CONTROLLER.'
+grid:
+OU-1 | Mitsubishi Electric Corporation | MXZ-SM42NLHZ | 42000.0 Btu/h | 39768.4 Btu/h | 86 °F | 48000.0 Btu/h | 44620.5 Btu/h | -11 °F | 19.75 | 3.7 | 208 V | 30 A | 45 A | 80 A | ALL
+OU-2 | Mitsubishi Electric Corporation | MXZ-SM48NLHZ | 48000.0 Btu/h | 46272.8 Btu/h | 86 °F | 54000.0 Btu/h | 51073.1 Btu/h | -11 °F | 19.5 | 3.6 | 208 V | 30 A | 45 A | 80 A | ALL
+OU-3 | Mitsubishi Electric Corporation | MXZ-SM42NLHZ | 42000.0 Btu/h | 40872.0 Btu/h | 86 °F | 48000.0 Btu/h | 45087.0 Btu/h | -11 °F | 19.75 | 3.7 | 208 V | 30 A | 45 A | 80 A | ALL
+END

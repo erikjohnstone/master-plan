@@ -1,0 +1,580 @@
+# 03_FL_HurlburtField_ChildDevCenter.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/03_FL_HurlburtField_ChildDevCenter.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M1 and M2 (pages 64 and 65) of the Hurlburt Field AFSOC child development center building 90353 (Schmidt Consulting Group), the tables the second tier's seed drew for its AHU, VAV, BOILER, PUMP and FAN strata.
+#   03_FL_HurlburtField_ChildDevCenter.pdf#64 | VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE | AHU | all 2 printed rows | render: page 64 crop 214,510,2256,415 at 3x in 8 tiles (MARK column repeated), notes read at 2.25x and 1.8x (crops 214,700,876,225 and 1060,700,1410,235); second read at 4x (crop 214,598,2256,88) of both rows, every cell
+#   03_FL_HurlburtField_ChildDevCenter.pdf#64 | AIR TERMINAL UNIT SCHEDULE (AHU 2) | VAV | all 15 printed rows | render: page 64 crop 214,945,1014,600 at 3x in 4 tiles (MARK column repeated) and the right edge (crop 1100,945,200,455) at 3x, notes included; second read at 4x (crop 214,1040,1048,326) of all 15 rows, every cell
+#   03_FL_HurlburtField_ChildDevCenter.pdf#64 | CONDENSING BOILER SCHEDULE | BOILER | all 1 printed row | render: page 64 crop 1393,945,1077,345 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 1393,1010,897,96) of the row, every cell
+#   03_FL_HurlburtField_ChildDevCenter.pdf#64 | PUMP SCHEDULE | PUMP | all 3 printed rows | render: page 64 crop 1393,1305,1077,300 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 1393,1350,937,122) of all 3 rows, every cell
+#   03_FL_HurlburtField_ChildDevCenter.pdf#65 | FAN SCHEDULE | FAN | all 4 printed rows | render: page 65 crop 1092,665,1298,455 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 1092,710,1298,116) of all 4 rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Unit and pump types, minimum and heating airflows of the air handlers, external static pressure of the air handlers, total fan power, face velocities, coil air temperatures, sensible and latent capacities, valve types, efficiencies, design pressure, firing rate, burner, pressure drops of the boiler, pump speed columns' efficiency, sones, Hz, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 03_FL_HurlburtField_ChildDevCenter: 5 table(s), 25 instance(s), 559 keyed attribute value(s) (250 printed, 309 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_cfm,7100,cfm,FAN DATA / MAX. AIRFLOW (CFM),"printed '7,100'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,oa_cfm_min,1800,cfm,FAN DATA / OA AIRFLOW (CFM): design minimum outdoor air,"printed '1,800'; author's reading of the printed row"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_hp,4,hp,FAN DATA / FAN MOTOR / FAN POWER HP,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_qty,2,,FAN DATA / FAN MOTOR / NO. OF FAN(S),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,return_fan_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,exhaust_fan_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,vfd,yes,,NOTE 13,note 13: 'PROVIDE SINGLE POINT POWER CONNECTION WITH VFD.' (note 14 also calls for a VFD on variable air volume units)
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,economizer,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,outdoor_air_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_type,chw,,CHILLED WATER COIL DATA,"every row prints the CHILLED WATER COIL DATA block (water side EWT 44, GPM)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_mbh,336.4,MBH,CHILLED WATER COIL DATA / COOLING TOTAL CAPACITY (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_tons,,tons,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,dx_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_gpm,61.2,gpm,CHILLED WATER COIL DATA / WATER SIDE / FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_ewt_f,44,F,CHILLED WATER COIL DATA / WATER SIDE / EWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_lwt_f,55,F,CHILLED WATER COIL DATA / WATER SIDE / LWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_wpd_ft,10,ft,CHILLED WATER COIL DATA / WATER SIDE / MAX. WATER PD (FT),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_mbh,,MBH,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_rows,8,,NOTE 11,note 11: 'PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS.'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_type,hw,,PREHEAT COIL HOT WATER DATA,every row prints the PREHEAT COIL HOT WATER DATA block (water side EWT 180 / LWT 160)
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_mbh,80.9,MBH,PREHEAT COIL HOT WATER DATA / PREHEAT TOTAL CAPACITY (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_gpm,8.1,gpm,PREHEAT COIL HOT WATER DATA / WATER SIDE / FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_ewt_f,180,F,PREHEAT COIL HOT WATER DATA / WATER SIDE / EWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_lwt_f,160,F,PREHEAT COIL HOT WATER DATA / WATER SIDE / LWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_wpd_ft,5,ft,PREHEAT COIL HOT WATER DATA / WATER SIDE / MAX. WATER PD (FT),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_mbh,,MBH,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_rows,1,,NOTE 11,note 11: 'PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS.'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_psig,,psig,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_lb_hr,,lb/hr,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,gas_input_mbh,,MBH,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,humidifier,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,energy_recovery,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,filter_merv,13,,NOTE 6,"note 6: 'PROVIDE MERV 8 PRE FILTERS, AND MERV 13 FINAL FILTERS.' (the final filter keys; the MERV 8 prefilter does not)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,bas_interface,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,volts,208,V,FAN DATA / FAN MOTOR / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,phase,3,,FAN DATA / FAN MOTOR / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,supply_cfm,10725,cfm,FAN DATA / MAX. AIRFLOW (CFM),"printed '10,725'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,oa_cfm_min,2495,cfm,FAN DATA / OA AIRFLOW (CFM): design minimum outdoor air,"printed '2,495'; author's reading of the printed row"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,supply_fan_hp,6.5,hp,FAN DATA / FAN MOTOR / FAN POWER HP,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,supply_fan_qty,2,,FAN DATA / FAN MOTOR / NO. OF FAN(S),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,return_fan_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,exhaust_fan_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,vfd,yes,,NOTE 13,note 13: 'PROVIDE SINGLE POINT POWER CONNECTION WITH VFD.' (note 14 also calls for a VFD on variable air volume units)
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,economizer,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,outdoor_air_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,cooling_type,chw,,CHILLED WATER COIL DATA,"every row prints the CHILLED WATER COIL DATA block (water side EWT 44, GPM)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,cooling_mbh,440.2,MBH,CHILLED WATER COIL DATA / COOLING TOTAL CAPACITY (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,cooling_tons,,tons,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,dx_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_gpm,73.4,gpm,CHILLED WATER COIL DATA / WATER SIDE / FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_ewt_f,44,F,CHILLED WATER COIL DATA / WATER SIDE / EWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_lwt_f,56,F,CHILLED WATER COIL DATA / WATER SIDE / LWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_wpd_ft,10,ft,CHILLED WATER COIL DATA / WATER SIDE / MAX. WATER PD (FT),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_mbh,,MBH,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_rows,8,,NOTE 11,note 11: 'PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS.'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,chw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,heating_type,hw,,PREHEAT COIL HOT WATER DATA,every row prints the PREHEAT COIL HOT WATER DATA block (water side EWT 180 / LWT 160)
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,heating_mbh,113.1,MBH,PREHEAT COIL HOT WATER DATA / PREHEAT TOTAL CAPACITY (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_gpm,11.3,gpm,PREHEAT COIL HOT WATER DATA / WATER SIDE / FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_ewt_f,180,F,PREHEAT COIL HOT WATER DATA / WATER SIDE / EWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_lwt_f,160,F,PREHEAT COIL HOT WATER DATA / WATER SIDE / LWT (DEG. F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_wpd_ft,5,ft,PREHEAT COIL HOT WATER DATA / WATER SIDE / MAX. WATER PD (FT),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_mbh,,MBH,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_rows,1,,NOTE 11,note 11: 'PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS.'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,steam_psig,,psig,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,steam_lb_hr,,lb/hr,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,gas_input_mbh,,MBH,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,humidifier,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,energy_recovery,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,filter_merv,13,,NOTE 6,"note 6: 'PROVIDE MERV 8 PRE FILTERS, AND MERV 13 FINAL FILTERS.' (the final filter keys; the MERV 8 prefilter does not)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,bas_interface,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,volts,208,V,FAN DATA / FAN MOTOR / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE,AHU-2,AHU,phase,3,,FAN DATA / FAN MOTOR / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,cfm_max,550,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,cfm_min,165,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,cfm_heat,220,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_gpm,0.3,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_mbh,3.3,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU A,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,cfm_max,500,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,cfm_min,150,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,cfm_heat,200,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_gpm,0.3,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_mbh,3,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),printed '3.0'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU B,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,cfm_max,550,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,cfm_min,165,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,cfm_heat,220,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_gpm,0.3,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_mbh,3.3,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU C,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,cfm_max,600,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,cfm_min,180,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,cfm_heat,240,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_gpm,0.4,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_mbh,3.7,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU D,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,cfm_max,800,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,cfm_min,240,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,cfm_heat,240,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_gpm,0.4,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_mbh,3.7,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU E,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,cfm_max,800,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,cfm_min,240,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,cfm_heat,320,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_gpm,0.5,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_mbh,4.9,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU F,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,cfm_max,450,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,cfm_min,135,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,cfm_heat,170,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_gpm,0.3,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_mbh,2.6,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU G,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,inlet_size_in,,in,ROUND INLET SIZE,printed '(E)' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,cfm_max,820,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,cfm_min,250,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,cfm_heat,490,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_gpm,0.7,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_mbh,7.4,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,volts,,V,ELECTRICAL / VOLTS,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(E)ATU H,VAV,phase,,,ELECTRICAL / PHASE,printed '( E )' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,inlet_size_in,8,in,ROUND INLET SIZE,"printed '8""'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,cfm_max,530,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,cfm_min,160,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,cfm_heat,220,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_gpm,0.3,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_mbh,3.3,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,volts,120,V,ELECTRICAL / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU I,VAV,phase,1,,ELECTRICAL / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,inlet_size_in,6,in,ROUND INLET SIZE,"printed '6""'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,cfm_max,250,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,cfm_min,75,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,cfm_heat,100,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_gpm,0.2,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_mbh,1.5,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,volts,120,V,ELECTRICAL / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU J,VAV,phase,1,,ELECTRICAL / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,inlet_size_in,10,in,ROUND INLET SIZE,"printed '10""'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,cfm_max,1190,cfm,MAXIMUM AIRFLOW (CFM),"printed '1,190'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,cfm_min,360,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,cfm_heat,380,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_gpm,0.6,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_mbh,5.8,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,volts,120,V,ELECTRICAL / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K1,VAV,phase,1,,ELECTRICAL / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,inlet_size_in,10,in,ROUND INLET SIZE,"printed '10""'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,cfm_max,1190,cfm,MAXIMUM AIRFLOW (CFM),"printed '1,190'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,cfm_min,360,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,cfm_heat,425,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_gpm,0.6,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_mbh,6.5,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,volts,120,V,ELECTRICAL / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU K2,VAV,phase,1,,ELECTRICAL / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,inlet_size_in,10,in,ROUND INLET SIZE,"printed '10""'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,cfm_max,970,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,cfm_min,295,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,cfm_heat,570,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_gpm,0.9,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_mbh,8.7,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,volts,120,V,ELECTRICAL / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU L,VAV,phase,1,,ELECTRICAL / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,inlet_size_in,8,in,ROUND INLET SIZE,"printed '8""'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,cfm_max,625,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,cfm_min,190,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,cfm_heat,575,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_gpm,0.9,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_mbh,8.7,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,volts,120,V,ELECTRICAL / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU M,VAV,phase,1,,ELECTRICAL / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,terminal_type,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,inlet_size_in,8,in,ROUND INLET SIZE,"printed '8""'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,cfm_max,900,cfm,MAXIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,cfm_min,270,cfm,MINIMUM AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,cfm_heat,570,cfm,HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,heat_type,hw,,HEATING COIL REQUIREMENTS,"every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_gpm,0.9,gpm,HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_ewt_f,180,F,HEATING COIL REQUIREMENTS / EWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_lwt_f,160,F,HEATING COIL REQUIREMENTS / LWT (DEG F),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_wpd_ft,,ft,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_mbh,8.7,MBH,HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_rows,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,hw_glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,eh_stages,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,motor_hp,,hp,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,volts,120,V,ELECTRICAL / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AIR TERMINAL UNIT SCHEDULE (AHU 2),(N)ATU N,VAV,phase,1,,ELECTRICAL / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,fuel,gas,,NOTE 2,note 2: 'NATURAL GAS TRAIN TO BE CSD-1 BY BOILER MANUFACTURER.' (the FIRING RATE (CFH) column prints the gas flow)
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,input_mbh,390,MBH,BOILER RATINGS / MIN. INPUT (MBH),printed '390.0'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,output_mbh,358.8,MBH,"BOILER RATINGS / MIN, GROSS OUTPUT (MBH)",
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,gpm,35.9,gpm,HYDRONIC DATA / GPM,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,ewt_f,160,F,HYDRONIC DATA / EWT DEG. F,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,lwt_f,180,F,HYDRONIC DATA / LWT DEG. F,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,eh_kw,,kW,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,bas_interface,BMS GATEWAY,,NOTE 6,note 6: 'PROVIDE BMS GATEWAY INTERFACE AND CONNECT TO DDC SYSTEM.'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,volts,120,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CONDENSING BOILER SCHEDULE,B-1,BOILER,phase,1,,ELECTRICAL DATA / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,service,CHILLED,,SERVICE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,gpm,73.4,gpm,PERFORMANCE DATA / FLOW (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,head_ft,35,ft,PERFORMANCE DATA / HEAD (FT. W.C),printed '35.0'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,motor_hp,1.5,hp,ELECTRICAL DATA / MIN. POWER HP,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,rpm,1760,rpm,PERFORMANCE DATA / MAX. SPEED (RPM),"printed '1,760'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,vfd,no,,"REMARKS: a motor starter, not a variable-frequency drive",printed 'PROVIDE WITH MOTOR STARTER'; author's reading of the printed row
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,pump_arrangement,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,volts,208,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,CHWP-1,PUMP,phase,3,,ELECTRICAL DATA / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,service,HOT WATER,,SERVICE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,gpm,35.9,gpm,PERFORMANCE DATA / FLOW (GPM),
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,head_ft,40,ft,PERFORMANCE DATA / HEAD (FT. W.C),printed '40.0'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,motor_hp,1,hp,ELECTRICAL DATA / MIN. POWER HP,printed '1.0'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,rpm,1760,rpm,PERFORMANCE DATA / MAX. SPEED (RPM),"printed '1,760'"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,vfd,no,,"REMARKS: a motor starter, not a variable-frequency drive",printed 'PROVIDE WITH MOTOR STARTER'; author's reading of the printed row
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,pump_arrangement,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,volts,208,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,HWP-1,PUMP,phase,3,,ELECTRICAL DATA / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,area_served,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,service,BOILER #1,,SERVICE,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,gpm,,gpm,PERFORMANCE DATA / FLOW (GPM),printed 'SEE NOTE 4' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,head_ft,,ft,PERFORMANCE DATA / HEAD (FT. W.C),printed 'SEE NOTE 4' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,motor_hp,1,hp,ELECTRICAL DATA / MIN. POWER HP,printed '1.0'
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,rpm,,rpm,PERFORMANCE DATA / MAX. SPEED (RPM),printed 'SEE NOTE 4' — not a single value for this attribute
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,vfd,,,"REMARKS: a motor starter, not a variable-frequency drive",blank cell
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,pump_arrangement,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,glycol_pct,,%,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,conn_in,,in,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,volts,115,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#64,PUMP SCHEDULE,BP-1,PUMP,phase,1,,ELECTRICAL DATA / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,area_served,KH-1,,SERVING,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,cfm,3000,cfm,PERFORMANCE DATA / CFM,"printed '3,000'"
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,esp_in,1,in. w.c.,PERFORMANCE DATA / E.S.P. (IN. W.C.),printed '1.00'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,motor_hp,1.5,hp,PERFORMANCE DATA / MIN. HP,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,rpm,1725,rpm,PERFORMANCE DATA / MAX. RPM,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,drive,belt,,DRIVE,printed 'BD'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,control,SPEED CONTROLLER; HOOD CONTROL SWITCH,,"NOTES 3, 7, 8 as the row's NOTES cite them: how the fan is controlled",printed 'PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING. OPERATE WITH HOOD CONTROL SWITCH.'; author's reading of the printed row
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,volts,208,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-1,FAN,phase,3,,ELECTRICAL DATA / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,area_served,DWH-1,,SERVING,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,service,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,cfm,615,cfm,PERFORMANCE DATA / CFM,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,esp_in,1,in. w.c.,PERFORMANCE DATA / E.S.P. (IN. W.C.),printed '1.00'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,motor_hp,0.5,hp,PERFORMANCE DATA / MIN. HP,printed '1/2'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,rpm,1725,rpm,PERFORMANCE DATA / MAX. RPM,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,drive,direct,,DRIVE,printed 'DD'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,vfd,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,control,SPEED CONTROLLER; HOOD CONTROL SWITCH,,"NOTES 3, 7, 8 as the row's NOTES cite them: how the fan is controlled",printed 'PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING. OPERATE WITH HOOD CONTROL SWITCH.'; author's reading of the printed row
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,volts,115,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-2,FAN,phase,1,,ELECTRICAL DATA / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,area_served,RESTROOMS,,SERVING,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,service,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,cfm,750,cfm,PERFORMANCE DATA / CFM,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,esp_in,0.5,in. w.c.,PERFORMANCE DATA / E.S.P. (IN. W.C.),printed '0.50'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,motor_hp,0.25,hp,PERFORMANCE DATA / MIN. HP,printed '1/4'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,motor_watts,,W,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,rpm,1725,rpm,PERFORMANCE DATA / MAX. RPM,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,drive,direct,,DRIVE,printed 'DD'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,vfd,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,control,SPEED CONTROLLER,,"NOTES 3, 7, 8 as the row's NOTES cite them: how the fan is controlled",printed 'PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING.'; author's reading of the printed row
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,volts,115,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,EF-3,FAN,phase,1,,ELECTRICAL DATA / PHASE,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,building,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,floor,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,area_served,KH-1,,SERVING,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,qty,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,service,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,cfm,2700,cfm,PERFORMANCE DATA / CFM,"printed '2,700'"
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,esp_in,1,in. w.c.,PERFORMANCE DATA / E.S.P. (IN. W.C.),printed '1.00'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,motor_hp,1,hp,PERFORMANCE DATA / MIN. HP,printed '1.0'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,motor_watts,,W,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,rpm,1725,rpm,PERFORMANCE DATA / MAX. RPM,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,drive,belt,,DRIVE,printed 'BD'
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,vfd,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,ecm,,,,not printed
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,control,SPEED CONTROLLER; INTERLOCK WITH HOOD EXHAUST FAN,,"NOTES 3, 7, 8 as the row's NOTES cite them: how the fan is controlled",printed 'PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING. INTERLOCK WITH HOOD EXHAUST FAN.'; author's reading of the printed row
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,volts,208,V,ELECTRICAL DATA / VOLTS,
+03_FL_HurlburtField_ChildDevCenter.pdf#65,FAN SCHEDULE,SF-1,FAN,phase,3,,ELECTRICAL DATA / PHASE,

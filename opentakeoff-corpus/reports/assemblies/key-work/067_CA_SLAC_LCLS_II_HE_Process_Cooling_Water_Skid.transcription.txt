@@ -1,0 +1,101 @@
+# 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheet M7.0 MECHANICAL SCHEDULES (PDF page 8, unrotated) of the SLAC
+# LCLS-II-HE process cooling water skid replacement, Menlo Park CA (Gordon Prill): an overview of the
+# page at 40 dpi, then each table at 2.6x-2.8x (187-202 dpi) in 2 tiles with the MARK column
+# repeated, rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26, with the
+# PDF's own text layer (pymupdf words, row by row) as a reading aid; every keyed cell was checked on
+# the render. Each drawn title was found with the text layer (pymupdf search_for). The pipeline's
+# output for these tables was not consulted while keying (AS-28, before the draw, read the column
+# names the normalizer left unread across the unseen corpus, this document's among them). The
+# fourth tier keys the tables its seed drew (tier4/01-split.md): one per keyed family.
+SET 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheet M7.0 MECHANICAL SCHEDULES (page 8) of the SLAC LCLS-II-HE process cooling water skid, Menlo Park CA (Gordon Prill), the tables the fourth tier's seed drew for its PUMP and HEAT_EXCHANGER strata.
+EXCLUDES Manufacturers and models, locations, selection and maximum flows and heads, brake horsepower, weights, maximum capacities, pressure drops, plate counts beyond the exchanger's type, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# (N) PUMP SCHEDULE (page 8): two rows, the process cooling water pumps B950A-PCWP-1001 and -1002.
+# SERVICE (NEH/XPP) keys service as printed. DESIGN FLOW (GPM) keys gpm. DESIGN HEAD (FT WG/PSI)
+# prints "277/120", the head in feet of water and in psi: its feet part keys head_ft. MOTOR / HP
+# keys motor_hp, MOTOR / RPM rpm, ELECTRICAL V/PH/HZ ("480/3/60") its volts and phase parts.
+# REMARKS cites notes (1)-(9) for both rows: note 1 ("N+1 PUMPS.") makes the two a duty/standby pair,
+# pump_arrangement duty_standby (the author's reading, as 031_MO's DUTY/STANDBY); note 2 ("VFD'S
+# SUPPORTING PUMPS SHALL BE NEW. SEE ADJACENT VFD SCHEDULE.") keys vfd yes. The other notes
+# (control panel, motor grounding, construction, procurement, listing) key nothing.
+TABLE
+sheet: 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8
+title: (N) PUMP SCHEDULE
+family: PUMP
+render: page 8 overview at 40 dpi; crop 180,128,1050,250 at 2.8x in 2 tiles (MARK column repeated), notes included; second read at 3x of both rows, every keyed cell
+rows: all 2 printed rows
+col: MARK => tag
+col: MANUFACTURER AND MODEL NUMBER => -
+col: LOCATION => -
+col: SERVICE => service
+col: TYPE => -
+col: DESIGN FLOW (GPM) => gpm
+col: SELECTION FLOW (GPM) => -
+col: DESIGN HEAD (FT WG/PSI) => -
+col: [DESIGN HEAD (FT WG/PSI): its feet of water part] => head_ft
+col: MAX FLOW (GPM) => -
+col: MAX HEAD (FT WG/PSI) => -
+col: MOTOR / BHP => -
+col: MOTOR / HP => motor_hp
+col: MOTOR / RPM => rpm
+col: ELECTRICAL V/PH/HZ => -
+col: [ELECTRICAL V/PH/HZ: volts part] => volts
+col: [ELECTRICAL V/PH/HZ: phase part] => phase
+col: TOTAL OPERATING WEIGHT => -
+col: REMARKS => -
+derive: pump_arrangement = duty_standby ; header=NOTE 1 ; note=note 1: 'N+1 PUMPS.', cited by both rows' REMARKS (1)-(9): the pair is one duty pump and one standby (the author's reading)
+derive: vfd = yes ; header=NOTE 2 ; note=note 2: 'VFD'S SUPPORTING PUMPS SHALL BE NEW. SEE ADJACENT VFD SCHEDULE.', cited by both rows' REMARKS (1)-(9)
+grid:
+B950A-PCWP-1001 | GOULDS 125SV-55BGT-4C60 | MECH ROOM 4 60B24 | NEH/XPP | INLINE | 581.9 | 650 | 277/120 | 277 | 677 | 300/130 | 73.9 | 75 | 3500 | 480/3/60 | 480 | 3 | 1386 | (1)-(9)
+B950A-PCWP-1002 | GOULDS 125SV-55BGT-4C60 | MECH ROOM 4 60B24 | NEH/XPP | INLINE | 581.9 | 650 | 277/120 | 277 | 677 | 300/130 | 73.9 | 75 | 3500 | 480/3/60 | 480 | 3 | 1386 | (1)-(9)
+END
+
+# (N) HEAT EXCHANGER SCHEDULE (page 8): one row, B950A-HX-PCWP-1001 (printed on two lines). It
+# cools the process cooling water (the HIGH TEMP WATER SIDE, FLUID PCW, 74 to 62 F) with chilled
+# water (the LOW TEMP WATER SIDE, FLUID CHW, 45 to 65 F). The chilled water is the source side
+# (primary, the schema's source) and the process water the load (secondary): primary_medium chw,
+# primary_gpm from the low side's DESIGN GPM, primary_ewt_f and primary_lwt_f from its EWT and LWT;
+# secondary_medium other (process cooling water has no name of its own in the vocabulary),
+# secondary_gpm from the high side's DESIGN GPM, secondary_ewt_f and secondary_lwt_f from its EWT
+# and LWT (the author's reading of which side is which). DESIGN CAPACITY (MBH) keys capacity_mbh.
+# DESIGN PLATES and MAX PLATES (QTY) count plates: hx_type plate. SERVICE (B950A) names the building
+# the exchanger serves, keyed area_served as printed. The notes (double wall construction,
+# procurement, listing) key nothing.
+TABLE
+sheet: 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8
+title: (N) HEAT EXCHANGER SCHEDULE
+family: HEAT_EXCHANGER
+render: page 8 overview at 40 dpi; crop 1310,665,1560,150 at 2.6x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER AND MODEL NUMBER => -
+col: LOCATION => -
+col: [SERVICE: the building the exchanger serves] => area_served
+col: DESIGN CAPACITY (MBH) => capacity_mbh
+col: MAX CAPACITY (MBH) => -
+col: [HIGH TEMP WATER SIDE / DESIGN GPM: the load side] => secondary_gpm
+col: HIGH TEMP WATER SIDE / MAX GPM => -
+col: [HIGH TEMP WATER SIDE / EWT(F): the load side] => secondary_ewt_f
+col: [HIGH TEMP WATER SIDE / LWT(F): the load side] => secondary_lwt_f
+col: HIGH TEMP WATER SIDE / PD(PSI) => -
+col: HIGH TEMP WATER SIDE / FLUID => -
+col: [HIGH TEMP WATER SIDE / FLUID: the load side's medium] => secondary_medium
+col: [LOW TEMP WATER SIDE / DESIGN GPM: the source side] => primary_gpm
+col: LOW TEMP WATER SIDE / MAX GPM => -
+col: [LOW TEMP WATER SIDE / EWT(F): the source side] => primary_ewt_f
+col: [LOW TEMP WATER SIDE / LWT(F): the source side] => primary_lwt_f
+col: LOW TEMP WATER SIDE / PD(PSI) => -
+col: LOW TEMP WATER SIDE / FLUID => -
+col: [LOW TEMP WATER SIDE / FLUID: the source side's medium] => primary_medium
+col: DESIGN PLATES (QTY) => -
+col: [DESIGN PLATES (QTY): a plate exchanger] => hx_type
+col: MAX PLATES (QTY) => -
+col: TOTAL OPERATING WEIGHT => -
+col: REMARKS => -
+grid:
+B950A-HX-PCWP-1001 | BELL & GOSSETT AP47 | B950A MECHANICAL ROOM | B950A | 3462 | 3905 | 581.9 | 650 | 74° | 62° | 4.97 | PCW | other (PCW) | 349.12 | 389.16 | 45 | 65 | 1.92 | CHW | chw (CHW) | 186 | plate (DESIGN PLATES 186) | 228 | 1648 LBS | (1)-(3)
+END

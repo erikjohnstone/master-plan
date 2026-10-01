@@ -1,0 +1,50 @@
+# 23_GA_MaconBibb_RecreationCenter.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/23_GA_MaconBibb_RecreationCenter.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets A1-2 and M601 (pages 15 and 35) of the North Macon Park Recreation Center renovation and addition (W/2A Architects, with Andrews, Hammock & Powell), the tables the fifth tier's seed drew for its FCU and ERV strata.
+#   23_GA_MaconBibb_RecreationCenter.pdf#35 | FAN COIL UNITS | FCU | all 1 printed row | render: page 35 overview at 40 dpi; crop 365,45,970,90 at 3x in 2 tiles (TAG column repeated), and the notes read in the text layer (crop 365,45,970,320); second read of the row, every cell, against the text layer
+#   23_GA_MaconBibb_RecreationCenter.pdf#15 | SPECIALTY EQUIPMENT SCHEDULE | ERV | none — A1-2's architectural SPECIALTY EQUIPMENT SCHEDULE of athletic, general and toilet accessory items; no row is an energy recovery ventilator | render: page 15 overview at 40 dpi; crop 530,70,600,460 at 2x, every row's type mark and description read, and the text layer row by row
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Model numbers, DX and heat pump capacities (outside the fan coil vocabulary), outdoor airflow, external static pressure and entering air temperatures, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 23_GA_MaconBibb_RecreationCenter: 2 table(s), 1 instance(s), 30 keyed attribute value(s) (7 printed, 23 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,building,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,floor,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,area_served,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,qty,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,pipes,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,cfm,1400,cfm,TOTAL SUPPLY CFM,
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,motor_hp,0.75,hp,BLOWER MOTOR HP,printed '3/4'
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,fan_speeds,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,ecm,yes,,NOTE 10,"note 10, cited by the row: 'PROVIDE VARIABLE SPEED ECM SUPPLY FAN MOTOR.'"
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,cooling_type,dx,,NOTE 4,"note 4, cited by the row: 'PROVIDE DX COOLING COIL WITH FACTORY INSTALLED THERMOSTATIC EXPANSION VALVE FOR REFRIGERANT CONTROL.'"
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_gpm,,gpm,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_ewt_f,,F,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_lwt_f,,F,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_wpd_ft,,ft,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_mbh,,MBH,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_rows,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_conn_in,,in,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,chw_glycol_pct,,%,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,heating_type,heat_pump,,NOTE 3,"note 3, cited by the row: 'HEATING CAPACITY BASED ON 70°F RETURN AIR AND OUTDOOR AIR AT 17°F, AND MATCHED WITH INDICATED HEAT PUMP UNIT.' (the strip heat of note 7 is auxiliary)"
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_gpm,,gpm,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_ewt_f,,F,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_lwt_f,,F,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_wpd_ft,,ft,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_mbh,,MBH,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_rows,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_conn_in,,in,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,hw_glycol_pct,,%,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,eh_kw,7.5,kW,AUX. HTG. KW @208,
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,volts,208,V,AUX. HTG. KW @208,the unit's electric heat is rated at 208 V and note 7 gives the unit a single point power connection at the connected voltage (the author's reading)
+23_GA_MaconBibb_RecreationCenter.pdf#35,FAN COIL UNITS,FCU-1,FCU,phase,,,,not printed
+23_GA_MaconBibb_RecreationCenter.pdf#15,SPECIALTY EQUIPMENT SCHEDULE,,ERV,,,,,"no ERV instance printed: none — A1-2's architectural SPECIALTY EQUIPMENT SCHEDULE of athletic, general and toilet accessory items; no row is an energy recovery ventilator"

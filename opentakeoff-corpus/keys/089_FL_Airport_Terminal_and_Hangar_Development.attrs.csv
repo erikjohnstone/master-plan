@@ -1,0 +1,526 @@
+# 089_FL_Airport_Terminal_and_Hangar_Development.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/089_FL_Airport_Terminal_and_Hangar_Development.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-601 MECHANICAL SCHEDULES (page 136) and P-001 SYMBOLS LEGEND AND SCHEDULES - PLUMBING (page 163) of the Airport Terminal and Hangar Development, DeFuniak Springs Municipal Airport FL (AVCON), the tables the fourth tier's seed drew for its DOAS, CONDENSING_UNIT, HEAT_PUMP, VRF_INDOOR, PUMP, FAN and UNIT_HEATER strata.
+#   089_FL_Airport_Terminal_and_Hangar_Development.pdf#136 | INDOOR DX DOAS FAN COIL UNIT SCHEDULE | DOAS | all 1 printed row (one empty ruled row below it) | render: page 136 overview at 40 dpi; header and row crops at 3x in 2 tiles (PLAN MARK column repeated), notes read in the text layer and on the render; second read at 3x (crop 115,760,1085,210 in 2 tiles, PLAN MARK column repeated) of the row and notes 1-3, every keyed cell
+#   089_FL_Airport_Terminal_and_Hangar_Development.pdf#136 | OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE | HEAT_PUMP | all 1 printed row (one empty ruled row below it) | render: page 136 overview at 40 dpi; header and row crops at 3x in 2 tiles (PLAN MARK column repeated), notes read in the text layer; second read at 3x (crop 115,1030,1085,150 in 2 tiles, PLAN MARK column repeated) of the row, every keyed cell
+#   089_FL_Airport_Terminal_and_Hangar_Development.pdf#136 | VRF SYSTEM SCHEDULE | VRF_INDOOR | all 12 printed rows | render: page 136 overview at 40 dpi; crops at 3x in 3 tiles (PLAN MARK column repeated); notes crop 112,95,900,85 at 2.4x; second read at 2.6x (crop 112,180,1935,225 in 3 tiles, PLAN MARK column repeated) of all 12 rows, every keyed cell
+#   089_FL_Airport_Terminal_and_Hangar_Development.pdf#163 | HOT WATER CIRCULATING PUMP SCHEDULE | PUMP | all 1 printed row | render: page 163 overview at 40 dpi; crop 1640,1395,570,90 at 3x, the note included; the text layer read row by row (words 1640,1365,570,125); every keyed cell checked on the render
+#   089_FL_Airport_Terminal_and_Hangar_Development.pdf#136 | FAN SCHEDULE | FAN | all 3 printed rows (one empty ruled row below them) | render: page 136 overview at 40 dpi; crops at 3x in 2 tiles (PLAN MARK column repeated); second read at 3x (crop 115,430,940,250 in 2 tiles, PLAN MARK column repeated) of all 3 rows, the note and the accessory legend, every keyed cell
+#   089_FL_Airport_Terminal_and_Hangar_Development.pdf#136 | ELECTRIC UNIT HEATER SCHEDULE | UNIT_HEATER | all 8 printed rows | render: page 136 overview at 40 dpi; crops at 3x in 2 tiles (TAG column repeated); remarks crop 1150,660,660,60 at 2.5x; second read at 3x (crop 1135,430,640,300 in 2 tiles, TAG column repeated) of all 8 rows and the remarks, every keyed cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and model numbers, the DOAS's condensing unit mark, external static pressures of the DOAS and the VRF indoor units, sensible capacities, entering and leaving air temperatures, the auxiliary heater's steps, entering air and temperature rise, the hot gas reheat coil, FLA, RLA, MCA and MOCP, weights, the heat pump's ambient temperatures, refrigerant type, charge, circuits and line sizes, EER, SEER and COP, compressor and fan counts, the VRF indoor units' mounting (LOCATION), unit type and pre-treated outside air, the VRF outdoor units' own columns (HEAT PUMP UNIT) printed on two indoor units' rows, fan types, sones, locations and accessory lists, the unit heaters' temperature rise, hertz, amps, motor speed and throw, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 089_FL_Airport_Terminal_and_Hangar_Development: 6 table(s), 26 instance(s), 504 keyed attribute value(s) (161 printed, 343 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,supply_cfm,1010,cfm,"TOTAL OUTSIDE AIR (CFM): a dedicated outdoor air unit's supply airflow, all outside air","printed '1,010'; author's reading of the printed row"
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,oa_cfm_min,,cfm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,supply_fan_hp,1.5,hp,ELECTRICAL DATA / FAN HP,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,supply_fan_qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,return_fan_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,exhaust_fan_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,vfd,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,economizer,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,outdoor_air_pct,,%,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,cooling_type,dx,,TABLE TITLE,title printed 'INDOOR DX DOAS FAN COIL UNIT SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,cooling_mbh,92.3,MBH,COOLING CAPACITY / TOT. MBH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,dx_stages,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_wpd_ft,,ft,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_rows,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,chw_glycol_pct,,%,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,heating_type,heat_pump,,HEATING CAPACITY / MAX MBH AT 47°F,"the DX coil heats, rated at 47 °F outdoor; COND. UNIT PLAN MARK prints HP-2, whose heat pump row prints the same 78.6 MBH HTNG CAP. and a HTNG COP (the author's reading)"
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,heating_mbh,78.6,MBH,HEATING CAPACITY / MAX MBH AT 47°F,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_wpd_ft,,ft,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_rows,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,hw_glycol_pct,,%,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,gas_input_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,eh_kw,13,kW,HEATING CAPACITY / AUX ELEC. HTNG COIL / KW / STEPS: kW part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,humidifier,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,energy_recovery,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,filter_merv,13,,NOTE 3,"note 3: 'PROVIDE WITH 2"" PLEATED THROWAWAY MERV 13 85% EFFICIENCY FILTER IN COMPLIANCE WITH ASHRAE STANDARD 52.2 - 2012.' (the table prints no NOTES column; its notes are the one row's)"
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,volts,208,V,ELECTRICAL DATA / VOLT/ PHASE: volts part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,INDOOR DX DOAS FAN COIL UNIT SCHEDULE,DOAS-1,DOAS,phase,1,,ELECTRICAL DATA / VOLT/ PHASE: phase part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,cfm,,cfm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,cooling_mbh,90,MBH,CLNG CAP. MBH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,heating_mbh,78.6,MBH,HTNG CAP. MBH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,volts,208,V,ELECTRICAL DATA / VOLT/ PHASE: volts part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE,HP-2,HEAT_PUMP,phase,3,,ELECTRICAL DATA / VOLT/ PHASE: phase part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,area_served,FLIGHT CREW,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,cfm,300,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,cooling_mbh,7.2,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,heating_mbh,6.4,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-1,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,area_served,"RESTROOMS, UTILITY",,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,cfm,685,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,cooling_mbh,21.6,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,heating_mbh,19.3,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-2,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,area_served,OFFICE 119,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,cfm,307,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,cooling_mbh,5.4,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,heating_mbh,4.8,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-3,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,area_served,FLIGHT INSTRUCTOR,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,cfm,307,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,cooling_mbh,5.4,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,heating_mbh,4.8,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-4,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,area_served,STUDENT FLIGHT,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,cfm,307,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,cooling_mbh,5.4,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,heating_mbh,4.8,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-5,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,area_served,MEETING ROOM,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,cfm,875,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,cooling_mbh,27,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),printed '27.0'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,heating_mbh,24.3,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-6,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,area_served,LOBBY,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,cfm,2966,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,cooling_mbh,86.5,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,heating_mbh,77.2,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-7,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,area_served,"OFFICE 110A, STORAGE",,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,cfm,300,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,cooling_mbh,7.2,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,heating_mbh,6.4,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-8,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,area_served,FBO LINE CREW,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,cfm,883,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,cooling_mbh,21.6,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,heating_mbh,19.3,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-9,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,area_served,OFFICE 104,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,cfm,307,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,cooling_mbh,5.4,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,heating_mbh,4.8,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-10,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,area_served,OFFICE 105,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,cfm,307,cfm,AIR HANDLER / TOTAL (CFM),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,cooling_mbh,5.4,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,heating_mbh,4.8,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-11,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,area_served,SERVER ROOM,,AIR HANDLER / SERVES,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,cfm,,cfm,AIR HANDLER / TOTAL (CFM),blank cell
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,cooling_mbh,30,MBH,AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH),printed '30.0'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,cooling_tons,,tons,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,heating_mbh,22.8,MBH,AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,chw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,chw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,chw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,motor_hp,,hp,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,eh_kw,,kW,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,bas_interface,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,volts,208,V,AIR HANDLER / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,VRF SYSTEM SCHEDULE,AC-12,VRF_INDOOR,phase,1,,AIR HANDLER / PH,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,service,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,gpm,1,gpm,FLUID DATA / FLOW (GPM),printed '1 GPM'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,head_ft,5,ft,FLUID DATA / HEAD (FT),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,motor_hp,0.04,hp,ELECTRICAL DATA / MOTOR HP,printed '1/25'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,rpm,,rpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,vfd,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,pump_arrangement,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,glycol_pct,,%,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,volts,120,V,ELECTRICAL DATA / VOLT/PHASE: volts part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,HOT WATER CIRCULATING PUMP SCHEDULE,RCP-1,PUMP,phase,1,,ELECTRICAL DATA / VOLT/PHASE: phase part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,cfm,740,cfm,CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,esp_in,0.75,in. w.c.,ESP (IN.WG),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,motor_hp,0.75,hp,MOTOR / HP,printed '3/4'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,rpm,1035,rpm,FAN RPM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,vfd,,,CONTROLS: a VFD controller,blank cell
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,control,INTERLOCK WITH DOAS-1,,CONTROLS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,volts,115,V,VOLT/ PHASE: volts part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-1,FAN,phase,1,,VOLT/ PHASE: phase part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,service,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,cfm,20000,cfm,CFM,"printed '20,000'"
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,esp_in,0.4,in. w.c.,ESP (IN.WG),
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,motor_hp,5,hp,MOTOR / HP,printed '5.0'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,rpm,1056,rpm,FAN RPM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,drive,,,DRIVE TYPE,"printed 'DIRECT, while the row's TYPE prints PROPELLER BELT DRIVEN' — not a single value for this attribute"
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,vfd,,,CONTROLS: a VFD controller,blank cell
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,ecm,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,control,THERMOSTAT,,CONTROLS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,volts,208,V,VOLT/ PHASE: volts part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,EF-2,FAN,phase,3,,VOLT/ PHASE: phase part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,service,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,cfm,197667,cfm,CFM,"printed '197,667'"
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,esp_in,,in. w.c.,ESP (IN.WG),printed '-'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,motor_hp,2,hp,MOTOR / HP,printed '2.0'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,motor_watts,,W,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,rpm,51,rpm,FAN RPM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,vfd,yes,,CONTROLS: a VFD controller,printed 'MFR VFD CONTROLLER'; author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,ecm,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,control,MFR VFD CONTROLLER,,CONTROLS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,volts,208,V,VOLT/ PHASE: volts part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,FAN SCHEDULE,IF-1,FAN,phase,3,,VOLT/ PHASE: phase part,author's reading of the printed row
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-1,UNIT_HEATER,phase,3,,ELECTRICAL DATA / ∅,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-2,UNIT_HEATER,phase,3,,ELECTRICAL DATA / ∅,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-3,UNIT_HEATER,phase,3,,ELECTRICAL DATA / ∅,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-4,UNIT_HEATER,phase,3,,ELECTRICAL DATA / ∅,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-5,UNIT_HEATER,phase,3,,ELECTRICAL DATA / ∅,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-6,UNIT_HEATER,phase,3,,ELECTRICAL DATA / ∅,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-7,UNIT_HEATER,phase,1,,ELECTRICAL DATA / ∅,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,building,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,floor,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,area_served,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,qty,,,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,cfm,500,cfm,AIRFLOW / CFM,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,heating_mbh,,MBH,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,hw_gpm,,gpm,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,hw_ewt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,hw_lwt_f,,F,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,steam_psig,,psig,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,eh_kw,10,kW,CAP. KW,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,conn_in,,in,,not printed
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,volts,208,V,ELECTRICAL DATA / VOLTS,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,ELECTRIC UNIT HEATER SCHEDULE,EUH-8,UNIT_HEATER,phase,1,,ELECTRICAL DATA / ∅,

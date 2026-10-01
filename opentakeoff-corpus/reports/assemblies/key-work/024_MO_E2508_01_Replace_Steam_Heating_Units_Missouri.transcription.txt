@@ -1,0 +1,63 @@
+# 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M600 (PDF page 11) at 3x, read by eye on 2026-09-23.
+# The pipeline's output for this sheet was not consulted. Tables are the ones the
+# WP0.2 draw (seed 20260923) named for this document.
+SET 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri
+SEED 20260923
+SCOPE Sheet M600 (page 11) of the Missouri School for the Deaf steam heating unit replacement (Timberlake Engineering, a Crockett company), the tables drawn for this document.
+EXCLUDES Manufacturer, model, dimensions, weight, MCA/MOCP, refrigerant, air temperatures, EER, ambient, outdoor-air design airflow, and every other printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# Every row's NOTES cell cites notes 1-9 (RTU-101/102 also 10): note 1 "PROVIDE
+# WITH BACNET IP CARD AND CAPABILITIES", note 4 "ECONOMIZER WITH SINGLE DRY BULB
+# CONTROL, SET TO ENABLE ECONOMIZER AT 65 DEG OAT, AND BAROMETRIC RELIEF SIZED AT
+# 100% OF SUPPLY FLOW". RTU-103/104 print VOLTAGE / PHASE "120/3" (as printed).
+TABLE
+sheet: 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11
+title: PACKAGED EQUIPMENT SCHEDULE (RTU)
+family: RTU
+render: page 11 crop 387,162,1852,158 at 3x in 4 tiles (MARK column repeated) and notes crop 387,318,640,125 at 3x; second read of RTU-101 airflow, RTU-103 tons and RTU-104 gas input
+rows: all 4 printed rows
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: AREA SERVED => area_served
+col: SUPPLY / AIRFLOW (CFM) => supply_cfm
+col: SUPPLY / EXT. S.P. (IN-WG) => -
+col: SUPPLY / MOTOR (HP) => supply_fan_hp
+col: SUPPLY / MOTOR QUANTITY => supply_fan_qty
+col: DX COOLING / NOMINAL TONS => cooling_tons
+col: DX COOLING / TOTAL (MBH) => cooling_mbh
+col: DX COOLING / SENSIBLE (MBH) => -
+col: DX COOLING / AIR TEMP. (°F DB/WB) / ENT. => -
+col: DX COOLING / AIR TEMP. (°F DB/WB) / LVG. => -
+col: DX COOLING / EFFICIENCY EER => -
+col: DX COOLING / COMPRESSOR / STAGES => dx_stages
+col: DX COOLING / COMPRESSOR / QTY => -
+col: DX COOLING / COMPRESSOR / REFRIGERANT => -
+col: DX COOLING / AMBIENT (°F) => -
+col: NATURAL GAS HEATING / INPUT (MBH) => gas_input_mbh
+col: NATURAL GAS HEATING / OUTPUT (MBH) => heating_mbh
+col: NATURAL GAS HEATING / STAGES => -
+col: NATURAL GAS HEATING / AIR TEMP. (°F DB/WB) / ENT. => -
+col: NATURAL GAS HEATING / AIR TEMP. (°F DB/WB) / LVG. => -
+col: NATURAL GAS HEATING / AMBIENT TEMP. (°F) => -
+col: [FILTER: MERV rating] => filter_merv
+col: OUTDOOR AIR / DESIGN AIRFLOW (CFM) => -
+col: OUTDOOR AIR / MIN. AIRFLOW (CFM) => oa_cfm_min
+col: [ELECTRICAL / VOLTAGE / PHASE: volts part] => volts
+col: [ELECTRICAL / VOLTAGE / PHASE: phase part] => phase
+col: ELECTRICAL / MCA (AMPS) => -
+col: ELECTRICAL / MOCP (AMPS) => -
+col: DIMENSIONS (FT) => -
+col: OPERATING WEIGHT (LBS.) => -
+col: NOTES => -
+derive: cooling_type = dx ; header=DX COOLING ; note=every row prints the DX COOLING block
+derive: heating_type = gas ; header=NATURAL GAS HEATING ; note=every row prints the NATURAL GAS HEATING block
+derive: economizer = airside ; header=NOTE 4 ; note=note 4, cited by every row: 'ECONOMIZER WITH SINGLE DRY BULB CONTROL'
+derive: bas_interface = BACNET IP ; header=NOTE 1 ; note=note 1, cited by every row: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'
+grid:
+RTU-101 | TRANE | YSK090A3S0H | WOMENS LOCKER | 3000 | 1.00 | 3 | 1 | 7.5 | 92.69 | 71.75 | 79 | 58.43 | 11.00 | 3 | 2 | R-454B | 95 | 200 | 162 | 2 | 56 | 105.45 | 0 | 8 | 530 | 10.6 | 208 | 3 | 49 | 60 | 4.24 X 4.44 X 7.34 | 1240 | 1,2,3,4,5,6,7,8,9, 10
+RTU-102 | TRANE | YSK090A3S0H | MENS LOCKER | 2625 | 1.00 | 3 | 1 | 7.5 | 91.63 | 67.07 | 79.6 | 57.56 | 11.00 | 3 | 2 | R-454B | 95 | 200 | 162 | 2 | 53.9 | 110.3 | 0 | 8 | 600 | 33.5 | 208 | 3 | 49 | 60 | 4.24 X 4.44 X 7.34 | 1240 | 1,2,3,4,5,6,7,8,9, 10
+RTU-103 | TRANE | YSK240A3S0M | GYM | 6000 | 1.00 | 3 | 2 | 20 | 236.77 | 165.89 | 80.4 | 56.71 | 9.80 | 4 | 2 | R-454B | 95 | 400 | 324 | 2 | 51.1 | 100.29 | 0 | 8 | 1317 | 741 | 120 | 3 | 114 | 150 | 4.92 X 7.25 X 10.25 | 2759 | 1,2,3,4,5,6,7,8,9
+RTU-104 | TRANE | YSK240A3S0M | GYM | 6000 | 1.00 | 3 | 2 | 20 | 236.77 | 165.89 | 80.4 | 56.71 | 9.80 | 4 | 2 | R-454B | 95 | 400 | 324 | 2 | 51.1 | 100.29 | 0 | 8 | 1317 | 741 | 120 | 3 | 114 | 150 | 4.92 X 7.25 X 10.25 | 2759 | 1,2,3,4,5,6,7,8,9
+END

@@ -2984,6 +2984,57 @@ export function splitHyphenTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   return out;
 }
 
+/** What an index built for a spans array checks before it is reused. The
+ * arrays these readers take are a sheet's text, read-only once built; its
+ * length and its first, middle and last runs stand for it. */
+function spansStamp(spans: FlatSpan[]): string {
+  const at = (i: number) => { const sp = spans[i]; return sp ? `${sp.str}\u0000${sp.x0},${sp.y0}` : ""; };
+  return `${spans.length}\u0001${at(0)}\u0001${at(spans.length >> 1)}\u0001${at(spans.length - 1)}`;
+}
+
+/** The spans ordered by their top (y0), for a lookup of every span whose top
+ * lies in a band, built once per spans array. */
+interface SpanTopIndex { stamp: string; order: number[]; tops: number[] }
+const spanTopIndexCache = new WeakMap<FlatSpan[], SpanTopIndex>();
+function spanTopIndex(spans: FlatSpan[]): SpanTopIndex {
+  const cached = spanTopIndexCache.get(spans);
+  const stamp = spansStamp(spans);
+  if (cached?.stamp === stamp) return cached;
+  // A span with no finite top passes no band test; it is left out of the order.
+  const order = spans.map((_, i) => i).filter((i) => Number.isFinite(spans[i].y0)).sort((a, b) => spans[a].y0 - spans[b].y0 || a - b);
+  const index: SpanTopIndex = { stamp, order, tops: order.map((i) => spans[i].y0) };
+  spanTopIndexCache.set(spans, index);
+  return index;
+}
+/** The indexes of the spans whose y0 is strictly between lo and hi. */
+function spansWithTopBetween(index: SpanTopIndex, lo: number, hi: number): number[] {
+  const { order, tops } = index;
+  let a = 0, b = tops.length;
+  while (a < b) { const m = (a + b) >> 1; if (tops[m] <= lo) a = m + 1; else b = m; }
+  const out: number[] = [];
+  for (let k = a; k < tops.length && tops[k] < hi; k++) out.push(order[k]);
+  return out;
+}
+
+/** Each span's text as fragmentedTagOcc reads it (trimmed, upper case, a
+ * leading gang count "(6) " dropped) and without its hyphens, and the spans
+ * by that hyphen-free text, built once per spans array. */
+interface CalloutTextIndex { stamp: string; ups: string[]; byStrip: Map<string, number[]> }
+const calloutTextIndexCache = new WeakMap<FlatSpan[], CalloutTextIndex>();
+function calloutTextIndex(spans: FlatSpan[]): CalloutTextIndex {
+  const cached = calloutTextIndexCache.get(spans);
+  const stamp = spansStamp(spans);
+  if (cached?.stamp === stamp) return cached;
+  // Parenthesized gang counts belong to the placement callout, not the
+  // schedule mark itself: "(6) LD" + "-" + "1" is one LD-1 occurrence.
+  const ups = spans.map((sp) => sp.str.trim().toUpperCase().replace(/^\(\d+\)\s*/, ""));
+  const byStrip = new Map<string, number[]>();
+  ups.forEach((t, i) => { const k = t.replace(/-/g, ""); const bucket = byStrip.get(k); if (bucket) bucket.push(i); else byStrip.set(k, [i]); });
+  const index: CalloutTextIndex = { stamp, ups, byStrip };
+  calloutTextIndexCache.set(spans, index);
+  return index;
+}
+
 /** sweep_schedule_row's own tag-occurrence match (`occOf` in both
  * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
  * ONE literal span — but a real drawn tag is routinely split across
@@ -3010,29 +3061,47 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const stripHy = (s: string) => s.replace(/-/g, "");
   const targetStripped = stripHy(key);
   if (!targetStripped) return [];
-  // Parenthesized gang counts belong to the placement callout, not the
-  // schedule mark itself: "(6) LD" + "-" + "1" is one LD-1 occurrence.
-  const upper = (s: string) => s.trim().toUpperCase().replace(/^\(\d+\)\s*/, "");
+  const { ups, byStrip } = calloutTextIndex(spans);
   const out: TagOcc[] = [];
-  const starts = spans.filter((sp) => {
-    const t = upper(sp.str);
-    return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
-  });
-  for (const start of starts) {
-    let text = upper(start.str);
+  // A start: a non-empty run, shorter than the key, whose hyphen-free text
+  // begins the key's (a lone "-" included), in array order.
+  const startIndexes: number[] = [];
+  for (let k = 0; k <= targetStripped.length; k++) {
+    for (const i of byStrip.get(targetStripped.slice(0, k)) ?? []) if (ups[i].length > 0 && ups[i].length < key.length) startIndexes.push(i);
+  }
+  if (!startIndexes.length) return out;
+  startIndexes.sort((a, b) => a - b);
+  const tops = spanTopIndex(spans);
+  // The first span, in array order, on the same row or the next line: only a
+  // span whose top lies within the two bands those tests allow can pass them.
+  const following = (cur: FlatSpan, h: number): number => {
+    let first = -1;
+    const consider = (i: number) => {
+      if (first >= 0 && i >= first) return;
+      const sp = spans[i];
+      if (sp === cur) return;
+      const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
+      const nextLine = Math.abs(sp.y0 - cur.y1) < h * 0.6 && Math.abs((sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2) < h * 1.5;
+      if (sameRow || nextLine) first = i;
+    };
+    // The bands are a shade wider than the tests (which `consider` applies
+    // exactly), so no rounding at their edges leaves a span out.
+    for (const i of spansWithTopBetween(tops, cur.y0 - h * 0.4 - 1e-3, cur.y0 + h * 0.4 + 1e-3)) consider(i);
+    for (const i of spansWithTopBetween(tops, cur.y1 - h * 0.6 - 1e-3, cur.y1 + h * 0.6 + 1e-3)) consider(i);
+    return first;
+  };
+  for (const si of startIndexes) {
+    const start = spans[si];
+    let text = ups[si];
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
     let ok = stripHy(text) === targetStripped;
     for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < 4; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
-      const next = spans.find((sp) => {
-        if (sp === cur) return false;
-        const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
-        const nextLine = Math.abs(sp.y0 - cur.y1) < h * 0.6 && Math.abs((sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2) < h * 1.5;
-        return sameRow || nextLine;
-      });
-      if (!next) break;
-      const candidate = text + upper(next.str);
+      const ni = following(cur, h);
+      if (ni < 0) break;
+      const next = spans[ni];
+      const candidate = text + ups[ni];
       if (!targetStripped.startsWith(stripHy(candidate))) break;
       text = candidate;
       x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
@@ -3094,6 +3163,27 @@ export function familyQuorumFragmentedTagOcc(spans: FlatSpan[], key: string): Ta
     }
   }
   return merged;
+}
+
+/** Each span's text as the chain readers compare it (trimmed, upper case)
+ * and without its hyphens, and the spans by that hyphen-free text, built
+ * once per spans array. A sheet's spans are read for hundreds of marks
+ * (every schedule key's landmarks, every row's views); comparing them by
+ * lookup, not by re-reading every span at every hop, returns the same
+ * occurrences. */
+interface SpanTextIndex { stamp: string; ups: string[]; strips: string[]; byStrip: Map<string, number[]> }
+const spanTextIndexCache = new WeakMap<FlatSpan[], SpanTextIndex>();
+function spanTextIndex(spans: FlatSpan[]): SpanTextIndex {
+  const cached = spanTextIndexCache.get(spans);
+  const stamp = spansStamp(spans);
+  if (cached?.stamp === stamp) return cached;
+  const ups = spans.map((sp) => sp.str.trim().toUpperCase());
+  const strips = ups.map((t) => t.replace(/-/g, ""));
+  const byStrip = new Map<string, number[]>();
+  strips.forEach((t, i) => { const bucket = byStrip.get(t); if (bucket) bucket.push(i); else byStrip.set(t, [i]); });
+  const index: SpanTextIndex = { stamp, ups, strips, byStrip };
+  spanTextIndexCache.set(spans, index);
+  return index;
 }
 
 /** A SEPARATE, DEEPER same-row fragment chain for a real shape
@@ -3163,25 +3253,43 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
   const stripHy = (s: string) => s.replace(/-/g, "");
   const targetStripped = stripHy(key);
   if (!targetStripped) return [];
-  const upper = (s: string) => s.trim().toUpperCase();
+  const { ups, strips, byStrip } = spanTextIndex(spans);
+  // The spans whose hyphen-free text continues the chain's: a prefix of what
+  // is left of the key's (the empty text of a "-" or blank run included), in
+  // array order, as a scan of every span would meet them.
+  const continuations = new Map<number, number[]>();
+  const continuing = (have: number): number[] => {
+    let found = continuations.get(have);
+    if (found) return found;
+    const rest = targetStripped.slice(have);
+    found = [];
+    for (let k = 0; k <= rest.length; k++) {
+      const bucket = byStrip.get(rest.slice(0, k));
+      if (bucket) found.push(...bucket);
+    }
+    found.sort((a, b) => a - b);
+    continuations.set(have, found);
+    return found;
+  };
+  const starts: number[] = [];
+  for (let k = 1; k <= targetStripped.length; k++) {
+    for (const i of byStrip.get(targetStripped.slice(0, k)) ?? []) if (ups[i].length < key.length) starts.push(i);
+  }
+  starts.sort((a, b) => a - b);
   const out: TagOcc[] = [];
-  const starts = spans.filter((sp) => {
-    const t = upper(sp.str);
-    return stripHy(t).length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
-  });
-  for (const start of starts) {
-    let text = upper(start.str);
+  for (const si of starts) {
+    const start = spans[si];
+    let have = strips[si];
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
     const used = new Set<FlatSpan>([start]);
-    let ok = stripHy(text) === targetStripped;
-    for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < HOP_BUDGET; guard++) {
+    let ok = have === targetStripped;
+    for (let guard = 0; !ok && have.length < targetStripped.length && guard < HOP_BUDGET; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
-      let next: FlatSpan | null = null, bestD = Infinity;
-      for (const sp of spans) {
+      let next: FlatSpan | null = null, nextIndex = -1, bestD = Infinity;
+      for (const i of continuing(have.length)) {
+        const sp = spans[i];
         if (used.has(sp)) continue;
-        const candidate = text + upper(sp.str);
-        if (!targetStripped.startsWith(stripHy(candidate))) continue;
         const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
         const sameColumn = Math.abs(sp.x0 - cur.x0) < h * 0.4
           && ((sp.y1 <= cur.y1 + 1 && cur.y0 - sp.y1 < h * 1.5)
@@ -3190,15 +3298,14 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
         const dx = (sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2;
         const dy = (sp.y0 + sp.y1) / 2 - (cur.y0 + cur.y1) / 2;
         const d = dx * dx + dy * dy;
-        if (d < bestD) { bestD = d; next = sp; }
+        if (d < bestD) { bestD = d; next = sp; nextIndex = i; }
       }
       if (!next) break;
-      const candidate = text + upper(next.str);
-      text = candidate;
+      have += strips[nextIndex];
       x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
       cur = next;
       used.add(next);
-      ok = stripHy(text) === targetStripped;
+      ok = have === targetStripped;
     }
     if (ok) out.push({
       cx: (x0 + x1) / 2,
@@ -3664,6 +3771,12 @@ export interface RoomSweepInstance<Id> {
    *  attribution never guessed, so the instance never enters the dedup. */
   discipline: string | null;
   at: Point;
+  /** The centre of the occurrence's own tag text, when known. Overlays of
+   * one floor print a unit's tag where it was (040_IL's piping plans and
+   * ventilation plan print SS-1 within 4 px of each other) while the matched
+   * symbol geometry may be anchored at another point of the unit, up to
+   * 120 px away; either position registers the redraw (AS-100). */
+  tagAt?: Point;
   /** This occurrence's own sheet's rooms (sheetgraph.ts's roomTags output)
    *  and its full page size, so "nearest room" can be bounded to a plausible
    *  fraction of the sheet rather than ever crediting a room that merely
@@ -3672,6 +3785,12 @@ export interface RoomSweepInstance<Id> {
   rooms: RoomCandidate[];
   sheetWidthPx: number;
   sheetHeightPx: number;
+  /** The sheet's place in the set: the earlier sheet keeps a redraw that
+   * trade and count leave tied (AS-104). */
+  ord?: number;
+  /** Read only under the row's printed spelling (AS-107): a sheet whose
+   * instances are all so read keeps a redraw only where no other can. */
+  printed?: boolean;
 }
 export interface RedundantRoomView<Id> {
   id: Id;
@@ -3848,8 +3967,8 @@ const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
  * not see. `keptDiscipline` is still reported (read off the kept sheet's own
  * instances) so callers/tests that care which TRADE view survived keep
  * working unchanged. */
-function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id }>(
-  group: A[], describeRoom: (kept: A) => string,
+function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id; ord?: number; printed?: boolean }>(
+  group: A[], describeRoom: (kept: A) => string, ownTrade: string | null = null,
 ): RedundantRoomView<Id>[] {
   const levels = new Set(group.flatMap((entry) => {
     const level = (entry as A & { level?: string | null }).level;
@@ -3862,10 +3981,16 @@ function collapseGroup<Id, A extends { discipline: string | null; sheet: string;
     if (arr) arr.push(a); else bySheet.set(a.sheet, [a]);
   }
   if (bySheet.size < 2) return [];
-  let keptSheet = "", keptGroup: A[] = [];
-  for (const [sheet, arr] of [...bySheet.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-    if (arr.length > keptGroup.length) { keptSheet = sheet; keptGroup = arr; }
-  }
+  // The unit's own trade's view keeps the redraw (AS-104), then a view read
+  // under the sweep's own key (AS-107), then the view drawing it most, then
+  // the earlier sheet; a sheet's key string (where "#24" sorted before "#6")
+  // decides only what page order cannot.
+  const otherTrade = (arr: A[]): number => ownTrade && arr[0].discipline?.[0] !== ownTrade ? 1 : 0;
+  const printedOnly = (arr: A[]): number => arr.every((a) => a.printed) ? 1 : 0;
+  const ordOf = (arr: A[]): number => arr[0].ord ?? Number.MAX_SAFE_INTEGER;
+  const [keptSheet, keptGroup] = [...bySheet.entries()].sort(([sa, a], [sb, b]) =>
+    otherTrade(a) - otherTrade(b) || printedOnly(a) - printedOnly(b) || b.length - a.length
+    || ordOf(a) - ordOf(b) || sa.localeCompare(sb))[0];
   const keptDisc = keptGroup[0].discipline!;
   const out: RedundantRoomView<Id>[] = [];
   for (const [sheet, arr] of bySheet) {
@@ -3900,7 +4025,34 @@ export function planLevelOfTitle(title: string): string | null {
   return null;
 }
 
-export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
+/** How far apart two cross-sheet occurrences sit: their matched geometry, or
+ * their own tag text where both are known (AS-100), whichever is nearer. */
+function redrawDistance<Id>(a: RoomSweepInstance<Id>, b: RoomSweepInstance<Id>): number {
+  const byGeometry = Math.hypot(a.at[0] - b.at[0], a.at[1] - b.at[1]);
+  return a.tagAt && b.tagAt ? Math.min(byGeometry, Math.hypot(a.tagAt[0] - b.tagAt[0], a.tagAt[1] - b.tagAt[1])) : byGeometry;
+}
+
+/** One view of an individually marked unit the sweep verified: its sheet's
+ * trade (the discipline letter of its sheet number), whether its mark there
+ * touches a room sensor's ring (AS-105), its geometry score, its page order. */
+export interface IndividualView { trade: string | null; sensorLabel?: boolean; printed?: boolean; score: number; ord: number }
+
+/** The view an individually marked unit counts on, of the views the sweep
+ * verified: its own trade's sheet (AS-104), then a view whose mark does not
+ * touch a room sensor's ring (AS-105: a thermostat lettered with the unit it
+ * serves stands where the sensor is, as 004_MO's floor plans letter each
+ * rooftop unit at its thermostat), then the best geometry, then the earlier
+ * page. It only chooses among the unit's verified views, so it never changes
+ * how many units a row counts. */
+export function keptIndividualView<V extends IndividualView>(views: V[], ownTrade: string | null): V | undefined {
+  const otherTrade = (view: V): number => ownTrade && view.trade !== ownTrade ? 1 : 0;
+  return views.slice().sort((a, b) => otherTrade(a) - otherTrade(b)
+    || (a.sensorLabel ? 1 : 0) - (b.sensorLabel ? 1 : 0)
+    || (a.printed ? 1 : 0) - (b.printed ? 1 : 0)
+    || b.score - a.score || a.ord - b.ord)[0];
+}
+
+export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[], ownTrade: string | null = null): RedundantRoomView<Id>[] {
   type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
   const attributed: Attributed[] = [];
   const unattributed: RoomSweepInstance<Id>[] = [];
@@ -3912,7 +4064,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
     for (let j = i + 1; j < instances.length; j++) {
       if (instances[i].sheet === instances[j].sheet
         || differentKnownLevels(instances[i], instances[j])
-        || Math.hypot(instances[i].at[0] - instances[j].at[0], instances[i].at[1] - instances[j].at[1]) > 30) continue;
+        || redrawDistance(instances[i], instances[j]) > 30) continue;
       const key = sheetPair(instances[i].sheet, instances[j].sheet);
       tightPairCounts.set(key, (tightPairCounts.get(key) || 0) + 1);
     }
@@ -3946,7 +4098,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   }
   const out: RedundantRoomView<Id>[] = [];
   for (const group of byRoom.values()) {
-    out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()));
+    out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim(), ownTrade));
   }
 
   // Asymmetric attribution fallback: one drawing can carry a readable room
@@ -3964,7 +4116,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   const attributedIds = new Set(attributed.map((entry) => entry.id));
   for (let i = 0; i < mixed.length; i++) {
     for (let j = i + 1; j < mixed.length; j++) {
-      const distance = Math.hypot(mixed[i].at[0] - mixed[j].at[0], mixed[i].at[1] - mixed[j].at[1]);
+      const distance = redrawDistance(mixed[i], mixed[j]);
       const asymmetric = attributedIds.has(mixed[i].id) !== attributedIds.has(mixed[j].id);
       // Extremely tight registration overrides contradictory nearest-room
       // reads only when another pair independently registers the same two
@@ -3988,7 +4140,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   for (const cluster of mixedClusters.values()) {
     if (cluster.length < 2) continue;
     cluster.forEach((entry) => mixedHandled.add(entry.id));
-    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(one view has no readable room — same-location redraw)"));
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(one view has no readable room — same-location redraw)", ownTrade));
   }
 
   // Coordinate-proximity fallback — ONLY for instances no room could be
@@ -4005,7 +4157,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       if (!differentKnownLevels(proximityCandidates[i], proximityCandidates[j])
-        && Math.hypot(proximityCandidates[i].at[0] - proximityCandidates[j].at[0], proximityCandidates[i].at[1] - proximityCandidates[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+        && redrawDistance(proximityCandidates[i], proximityCandidates[j]) <= COORD_ATTRIBUTION_MAX_PX) {
         const ri = find(i), rj = find(j);
         if (ri !== rj) parent[ri] = rj;
       }
@@ -4018,7 +4170,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
     if (arr) arr.push(proximityCandidates[i]); else clusters.set(r, [proximityCandidates[i]]);
   }
   for (const cluster of clusters.values()) {
-    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)", ownTrade));
   }
 
   // Paired discipline-overlay fallback. AIA sheet series commonly preserve
@@ -4062,7 +4214,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
       if (arr) arr.push(group[i]); else registered.set(r, [group[i]]);
     }
     for (const cluster of registered.values()) {
-      const collapsed = collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(paired discipline-overlay sheets)");
+      const collapsed = collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(paired discipline-overlay sheets)", ownTrade);
       for (const entry of collapsed) {
         if (!alreadyRedundant.has(entry.id)) {
           alreadyRedundant.add(entry.id);

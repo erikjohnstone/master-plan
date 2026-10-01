@@ -1,0 +1,45 @@
+# 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's controls sheets (PDF text layer and renders), never pipeline output.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.typicals.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-AHU-1,AHU,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR,family_detail,the set's one air handler
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-AHU-1,AHU,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,POINTS LIST FOR VAV AIR HANDLING UNIT,family_detail,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-SF1,FAN,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-SF1,FAN,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,POINTS LIST FOR VAV AIR HANDLING UNIT,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-RF1,FAN,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-RF1,FAN,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,POINTS LIST FOR VAV AIR HANDLING UNIT,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-EF1,FAN,,none,,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-EF2,FAN,,none,,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-SH1,HUMIDIFIER,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,STEAM HUMIDIFIER CONTROLS,family_detail,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-HX1,HEAT_EXCHANGER,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM),family_detail,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-HX2,HEAT_EXCHANGER,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM),family_detail,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-P1,PUMP,,none,,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-P2,PUMP,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM),semantic,the reheat water pumps of the heating system detail
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-P3,PUMP,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM),semantic,the reheat water pumps of the heating system detail
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,WHSE-P4,PUMP,,none,,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-EUH-1,UNIT_HEATER,,none,,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-EUH-2,UNIT_HEATER,,none,,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-CC-1,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-CC-1,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,POINTS LIST FOR VAV AIR HANDLING UNIT,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-PHC1,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,SEQUENCE OF OPERATION FOR VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-PHC1,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69,POINTS LIST FOR VAV AIR HANDLING UNIT,semantic,a component of WHSE-AHU-1 (schedule service)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC1,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC2,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC3,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC4,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC5,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC6,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC7,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC8,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC9,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC10,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC11,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC12,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,WHSE-RHC13,DUCT_MOUNTED_COIL,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM,semantic,the reheat coil of a terminal unit

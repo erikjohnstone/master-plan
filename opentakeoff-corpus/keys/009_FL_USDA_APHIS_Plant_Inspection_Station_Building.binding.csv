@@ -1,0 +1,56 @@
+# 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2, dev (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AHU-1,AHU,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,AHU-1 CONTROLS,tag,detail C1
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AHU-1,AHU,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,AHU - 1 (VAV SYSTEM) SEQUENCE OF OPERATIONS,tag,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AHU-1,AHU,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,AHU-1 DDC POINTS LIST,tag,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AHU-2,AHU,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,AHU-2 CONTROLS,tag,detail A2
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AHU-2,AHU,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,AHU - 2 (CONSTANT VOLUME LAB SYSTEM) RECOMMENDED SEQUENCE OF OPERATIONS,tag,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,AHU-2,AHU,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,AHU-2 DDC POINTS LIST,tag,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CH-1,AIR_COOLED_CHILLER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CONSTANT VOLUME AIR-COOLED CHILLER PLANT CONTROLS,family_detail,detail A1
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CH-1,AIR_COOLED_CHILLER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CHILLED WATER PLANT: SEQUENCE OF OPERATION,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CH-1,AIR_COOLED_CHILLER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CHILLER PLANT DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CWP-1,PUMP,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CONSTANT VOLUME AIR-COOLED CHILLER PLANT CONTROLS,family_detail,detail A1
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CWP-1,PUMP,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CHILLED WATER PLANT: SEQUENCE OF OPERATION,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CWP-1,PUMP,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CHILLER PLANT DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CWP-2,PUMP,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CONSTANT VOLUME AIR-COOLED CHILLER PLANT CONTROLS,family_detail,detail A1
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CWP-2,PUMP,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CHILLED WATER PLANT: SEQUENCE OF OPERATION,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,CWP-2,PUMP,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20,CHILLER PLANT DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-1,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,"LAB EXHAUST FAN CONTROLS (EF-1, 2, & 3)",list_range,detail D1
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-1,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,LABORATORY EXHAUST FANS SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-1,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,LAB EXHAUST FANS DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-2,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,"LAB EXHAUST FAN CONTROLS (EF-1, 2, & 3)",list_range,detail D1
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-2,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,LABORATORY EXHAUST FANS SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-2,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,LAB EXHAUST FANS DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-3,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,"LAB EXHAUST FAN CONTROLS (EF-1, 2, & 3)",list_range,detail D1
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-3,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,LABORATORY EXHAUST FANS SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-3,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,LAB EXHAUST FANS DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-5,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,SCHEDULED EXHAUST FAN CONTROLS (EF-5 &6),list_range,detail C4
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-5,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,SEQUENCE OF OPERATIONS,family_detail,detail C4's sequence (the scheduled exhaust fans)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-5,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,SCHEDULED EXHAUST FAN DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-6,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,SCHEDULED EXHAUST FAN CONTROLS (EF-5 &6),list_range,detail C4
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-6,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,SEQUENCE OF OPERATIONS,family_detail,detail C4's sequence (the scheduled exhaust fans)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EF-6,FAN,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21,SCHEDULED EXHAUST FAN DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-1,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER CONTROLS,family_detail,"detail D3: titled for electric unit heaters, its sequence controls THE ELECTRIC DUCT HEATER to the zone setpoint"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-1,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-1,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-2,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER CONTROLS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-2,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-2,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-3,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER CONTROLS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-3,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-3,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-4,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER CONTROLS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-4,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-4,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER DDC POINTS LIST,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-5,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER CONTROLS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-5,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,SEQUENCE OF OPERATIONS,family_detail,
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18,EDH-5,UNIT_HEATER,009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22,ELECTRIC UNIT HEATER DDC POINTS LIST,family_detail,

@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-09-24T07:05:31.750Z",
+  "side": "dev",
+  "documents": [
+    "federal-mech"
+  ],
+  "errors": [],
+  "census": "reports/assemblies/00-baseline.json per_set[].points_lists.rows (WP0.1)",
+  "total": {
+    "units": 0,
+    "agree": 0,
+    "diffs": 0,
+    "by_class": {
+      "typical_gap": 0,
+      "project_specific": 0,
+      "extraction_error": 0,
+      "typical_unresolved": 0
+    },
+    "unclassified": 0
+  },
+  "verdict": "no_evidence",
+  "by_family": {},
+  "documents_detail": [
+    {
+      "id": "federal-mech",
+      "units": [],
+      "printed_rows": 0,
+      "unmatched": []
+    }
+  ]
+}

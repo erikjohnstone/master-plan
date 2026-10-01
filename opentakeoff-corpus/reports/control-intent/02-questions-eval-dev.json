@@ -1,0 +1,567 @@
+{
+ "side": "dev",
+ "total": {
+  "projects": 11,
+  "shown": 27,
+  "max_shown": 4,
+  "zero_shown": 0,
+  "over_cap": 0,
+  "prefills": 9,
+  "right": 8,
+  "wrong": 0,
+  "moot": 1,
+  "fixed": 41,
+  "broken": 0,
+  "prefill_right": 1
+ },
+ "results": [
+  {
+   "setId": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+   "ms": 1075,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 407,
+     "records": 14,
+     "prefill": null
+    },
+    {
+     "id": "PQ2",
+     "lines": 118,
+     "records": 8,
+     "prefill": null
+    },
+    {
+     "id": "PQ4",
+     "lines": 18,
+     "records": 3,
+     "prefill": null
+    },
+    {
+     "id": "PQ5",
+     "lines": 0,
+     "records": 1,
+     "prefill": "not_in_scope"
+    }
+   ],
+   "zero_effect": [
+    "PQ3"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [
+    {
+     "question": "PQ5",
+     "value": "not_in_scope",
+     "key": "n/a",
+     "outcome": "moot",
+     "evidence": [
+      "no control drawing names SP - 1"
+     ]
+    }
+   ],
+   "oracle": {
+    "answers": {
+     "PQ1": "no",
+     "PQ2": "other"
+    },
+    "fixed": [
+     "RTU -1",
+     "RTU - 2",
+     "RTU -3",
+     "RTU -4",
+     "RTU -6",
+     "RTU -7",
+     "RTU -5",
+     "DOAS - 1",
+     "EF - 1",
+     "GEF - 1",
+     "EF - 2",
+     "GUH - 1",
+     "SP - 1",
+     "HWRP - 1"
+    ],
+    "broken": []
+   }
+  },
+  {
+   "setId": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+   "ms": 1931,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 78,
+     "records": 12,
+     "prefill": null
+    },
+    {
+     "id": "PQ3",
+     "lines": 20,
+     "records": 2,
+     "prefill": "keep"
+    },
+    {
+     "id": "PQ2",
+     "lines": 6,
+     "records": 2,
+     "prefill": "va"
+    },
+    {
+     "id": "PQ4",
+     "lines": 6,
+     "records": 1,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [
+    {
+     "question": "PQ3",
+     "value": "keep",
+     "key": "keep",
+     "outcome": "right",
+     "evidence": [
+      "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68 1. EXISTING ECC, ASSOCIATED COMMUNICATION NETWORK AND CONTROLLERS TO REMAIN."
+     ]
+    },
+    {
+     "question": "PQ2",
+     "value": "va",
+     "key": "va",
+     "outcome": "right",
+     "evidence": [
+      "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#7 VA FORM 08 - 6231",
+      "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33 VA FORM 08 - 6231"
+     ]
+    }
+   ],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "va",
+     "PQ3": "keep"
+    },
+    "fixed": [
+     "WHSE-EUH-1",
+     "WHSE-EUH-2"
+    ],
+    "broken": []
+   }
+  },
+  {
+   "setId": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+   "ms": 2458,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 130,
+     "records": 14,
+     "prefill": "yes"
+    }
+   ],
+   "zero_effect": [
+    "PQ2",
+    "PQ3",
+    "PQ4",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [
+    {
+     "question": "PQ1",
+     "value": "yes",
+     "key": "yes",
+     "outcome": "right",
+     "evidence": [
+      "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#43 FM CS SHALL M O DULATE SIGNAL TO SUPPLY FANS VFD AS REQUIRED TO M AINTAIN DUCT STATIC PRESSURE AS M EASURED BY STATIC PRESSURE TRA NSM ITTER. FM CS SHALL RESET SUPPLY",
+      "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#43 DUCT STATIC PRESSURE SETPOINT AS REQUIRED TO M AINTAIN AT LEAST ONE SUPPLY TAB DAM PER 95% (ADJ.) O PEN. FM CS SHALL UTILIZE CO M M AND TO ALL SUPPLY TERM INAL AIR BOX"
+     ]
+    }
+   ],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "va"
+    },
+    "fixed": [],
+    "broken": []
+   }
+  },
+  {
+   "setId": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+   "ms": 479,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 24,
+     "records": 9,
+     "prefill": "yes"
+    },
+    {
+     "id": "PQ4",
+     "lines": 24,
+     "records": 4,
+     "prefill": null
+    },
+    {
+     "id": "PQ3",
+     "lines": 10,
+     "records": 3,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ2",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [
+    {
+     "question": "PQ1",
+     "value": "yes",
+     "key": "yes",
+     "outcome": "right",
+     "evidence": [
+      "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6 WHEN THE CAPACITY OF THE LAG PUMP IS REDUCED TO 35%, THE DDC CONTROLLER SHALL STAGE BACK DOWN TO THE",
+      "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6 c. THE DDC CONTROLLER SHALL MODULATE THE VFD BASED ON A DIFFERENTIAL PRESSURE SETPOINT (ADJUSTABLE)"
+     ]
+    }
+   ],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "other",
+     "PQ3": "keep",
+     "PQ4": "constant"
+    },
+    "fixed": [
+     "CWP-1",
+     "CWP-2",
+     "B-1(E)",
+     "B-2(E)",
+     "AHU-1(E)"
+    ],
+    "broken": []
+   }
+  },
+  {
+   "setId": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+   "ms": 959,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 19,
+     "records": 1,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ2",
+    "PQ3",
+    "PQ4",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "other"
+    },
+    "fixed": [],
+    "broken": []
+   }
+  },
+  {
+   "setId": "094_FL_Orange_County_Regional_History_Center_HVAC",
+   "ms": 227,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 213,
+     "records": 7,
+     "prefill": null
+    },
+    {
+     "id": "PQ2",
+     "lines": 78,
+     "records": 6,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ3",
+    "PQ4",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "other"
+    },
+    "fixed": [],
+    "broken": []
+   }
+  },
+  {
+   "setId": "12_MT_MSU_ReidHall_Renovation",
+   "ms": 195,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 132,
+     "records": 6,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ2",
+    "PQ3",
+    "PQ4",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "other"
+    },
+    "fixed": [],
+    "broken": []
+   }
+  },
+  {
+   "setId": "baker-county-eoc",
+   "ms": 688,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 131,
+     "records": 6,
+     "prefill": null
+    },
+    {
+     "id": "PQ2",
+     "lines": 26,
+     "records": 2,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ3",
+    "PQ4",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [],
+   "oracle": {
+    "answers": {
+     "PQ1": "no",
+     "PQ2": "other"
+    },
+    "fixed": [
+     "RTU-1",
+     "RTU-2",
+     "ERV-01",
+     "EF-1",
+     "FCU-1",
+     "FCU-2"
+    ],
+    "broken": []
+   }
+  },
+  {
+   "setId": "bldg5406-hvac-demo",
+   "ms": 1370,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 332,
+     "records": 18,
+     "prefill": null
+    },
+    {
+     "id": "PQ4",
+     "lines": 36,
+     "records": 6,
+     "prefill": null
+    },
+    {
+     "id": "PQ2",
+     "lines": 23,
+     "records": 2,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ3",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "dod",
+     "PQ4": "constant",
+     "PQ5": "as_drawn"
+    },
+    "fixed": [
+     "EF-5",
+     "CP-1"
+    ],
+    "broken": []
+   }
+  },
+  {
+   "setId": "federal-mech",
+   "ms": 15398,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 2105,
+     "records": 86,
+     "prefill": "yes"
+    },
+    {
+     "id": "PQ4",
+     "lines": 42,
+     "records": 7,
+     "prefill": null
+    },
+    {
+     "id": "PQ2",
+     "lines": 32,
+     "records": 6,
+     "prefill": "dod"
+    },
+    {
+     "id": "PQ5",
+     "lines": 0,
+     "records": 6,
+     "prefill": "not_in_scope"
+    }
+   ],
+   "zero_effect": [
+    "PQ3"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [
+    {
+     "question": "PQ1",
+     "value": "yes",
+     "key": "yes",
+     "outcome": "right",
+     "evidence": [
+      "federal-attachment4-mechanical.pdf#19 THE BMS SHALL INDEX THE CHILLER CONTROL PANEL ON UPON VERIFICATION AND CONFIRMATION OF PUMP OPERATION FROM THE PUMP DDC CONTR OLLER AND WATER",
+      "federal-attachment4-mechanical.pdf#19 WATER FLOW METER, THE BMS SHALL MODULATE OPEN THE CHILLED WATER BYPASS VALVE UNTIL SUFFIENT FLOW IS RESUMED. A DEADBAND PID C ONTROL SHALL"
+     ]
+    },
+    {
+     "question": "PQ2",
+     "value": "dod",
+     "key": "dod",
+     "outcome": "right",
+     "evidence": [
+      "federal-attachment4-mechanical.pdf#14 EGLIN AIR FORCE BASE",
+      "federal-attachment4-mechanical.pdf#14 ASH DR, EGLIN AIR FORCE BASE"
+     ]
+    },
+    {
+     "question": "PQ5",
+     "value": "not_in_scope",
+     "key": "not_in_scope",
+     "outcome": "right",
+     "evidence": [
+      "no control drawing names CP-1, CP-2, CP-3, CP-4, CP-5, CP-6"
+     ]
+    }
+   ],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "dod",
+     "PQ4": "constant",
+     "PQ5": "not_in_scope"
+    },
+    "fixed": [
+     "CP-1",
+     "CP-2",
+     "CP-3",
+     "CP-4",
+     "CP-5",
+     "CP-6",
+     "CWP-1",
+     "CWP-2",
+     "HWP-1",
+     "HWP-2",
+     "HWRP-1"
+    ],
+    "broken": []
+   }
+  },
+  {
+   "setId": "itd-d1-lab",
+   "ms": 4389,
+   "shown": [
+    {
+     "id": "PQ1",
+     "lines": 138,
+     "records": 23,
+     "prefill": "yes"
+    },
+    {
+     "id": "PQ4",
+     "lines": 48,
+     "records": 8,
+     "prefill": null
+    }
+   ],
+   "zero_effect": [
+    "PQ2",
+    "PQ3",
+    "PQ5"
+   ],
+   "over_cap": [],
+   "zero_shown": [],
+   "prefills": [
+    {
+     "question": "PQ1",
+     "value": "yes",
+     "key": "yes",
+     "outcome": "right",
+     "evidence": [
+      "itd-d1-lab-mechanical.pdf#18 THE DDC CONTROLLER SHALL MODULATE THE VFD TO MAINTAIN ALL THE DIFFERENTIAL PRESSURE",
+      "itd-d1-lab-mechanical.pdf#18 ADJUSTING THEIR OWN RAMPING AND LOADING RATES. THE DDC CONTROLLER SHALL SEND THE UNIT CONTROL"
+     ]
+    }
+   ],
+   "oracle": {
+    "answers": {
+     "PQ1": "yes",
+     "PQ2": "other",
+     "PQ4": "constant"
+    },
+    "fixed": [
+     "EF-4"
+    ],
+    "broken": []
+   }
+  }
+ ]
+}

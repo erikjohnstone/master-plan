@@ -1,0 +1,58 @@
+# itd-d1-lab.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, dev).
+# Authored 2026-09-29 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+itd-d1-lab-mechanical.pdf#3,EH 1,itd-d1-lab-mechanical.pdf#14|EH-1,1,yes,new,stacked EH over 1 in hexagon; leader to wall heater in Nuclear Gauge Storage 128; sensor label (EH-1/EF-7) not a placement
+itd-d1-lab-mechanical.pdf#3,EH 2,itd-d1-lab-mechanical.pdf#14|EH-2,1,yes,new,stacked EH over 2; leader to wall heater in Enclosed Material Storage 127; sensor label (EH-2/EH-3) not a placement
+itd-d1-lab-mechanical.pdf#3,EH 3,itd-d1-lab-mechanical.pdf#14|EH-3,1,yes,new,stacked EH over 3; leader to wall heater in Enclosed Material Storage 127
+itd-d1-lab-mechanical.pdf#3,EH 4,itd-d1-lab-mechanical.pdf#14|EH-4,1,yes,new,stacked EH over 4; leader to heater in Fire Riser 121; sensor label (EH-4) not a placement
+itd-d1-lab-mechanical.pdf#3,EH 6,itd-d1-lab-mechanical.pdf#14|EH-6,1,yes,new,stacked EH over 6; leader to recessed heater at Electrical 116
+itd-d1-lab-mechanical.pdf#3,EH 7,itd-d1-lab-mechanical.pdf#14|EH-7,1,yes,new,stacked EH over 7; leader to recessed heater on Lobby 101 wall
+itd-d1-lab-mechanical.pdf#3,EH 8,itd-d1-lab-mechanical.pdf#14|EH-8,1,yes,new,stacked EH over 8; leader to recessed heater on Open Office 110 wall near Office 114
+itd-d1-lab-mechanical.pdf#3,EH 9,itd-d1-lab-mechanical.pdf#14|EH-9,1,yes,new,stacked EH over 9; leader to recessed heater in Rest. 102
+itd-d1-lab-mechanical.pdf#3,HC 1,itd-d1-lab-mechanical.pdf#13|HC-1,1,yes,new,stacked HC over 1; leader to duct reheat coil at SAV-1 (Residency Lab 131)
+itd-d1-lab-mechanical.pdf#3,HC 2,itd-d1-lab-mechanical.pdf#13|HC-2,1,yes,new,stacked HC over 2; leader to duct reheat coil at SAV-2 (Soil/Aggregate 126)
+itd-d1-lab-mechanical.pdf#3,HC 3,itd-d1-lab-mechanical.pdf#13|HC-3,1,yes,new,stacked HC over 3; leader to duct reheat coil at SAV-3 (Asphalt Lab 124)
+itd-d1-lab-mechanical.pdf#3,HC 4,itd-d1-lab-mechanical.pdf#13|HC-4,1,yes,new,stacked HC over 4; leader to duct reheat coil at SAV-4 (D-1 Lab 123)
+itd-d1-lab-mechanical.pdf#3,HC 5,itd-d1-lab-mechanical.pdf#13|HC-5,1,yes,new,stacked HC over 5; leader to duct reheat coil at SAV-5 (Concrete 119)
+itd-d1-lab-mechanical.pdf#3,HC 6,itd-d1-lab-mechanical.pdf#13|HC-6,1,yes,new,stacked HC over 6; leader to duct reheat coil at SAV-6 (Material Lab 118)
+itd-d1-lab-mechanical.pdf#3,HC 7,itd-d1-lab-mechanical.pdf#13|HC-7,1,yes,new,stacked HC over 7; leader to duct reheat coil at SAV-7 (Asphalt Lab 117)
+itd-d1-lab-mechanical.pdf#3,HC 8,itd-d1-lab-mechanical.pdf#13|HC-8,1,yes,new,stacked HC over 8; leader to duct reheat coil at SAV-8 (Residency Noise Room 130)
+itd-d1-lab-mechanical.pdf#3,HC 9,itd-d1-lab-mechanical.pdf#13|HC-9,1,yes,new,stacked HC over 9; leader to duct reheat coil at SAV-9 (General Lab 125)
+itd-d1-lab-mechanical.pdf#3,F 1,itd-d1-lab-mechanical.pdf#14|F-1,1,yes,new,stacked F over 1 with keynote 2; leader to furnace in Office Mechanical 113; sensor label (F-1) not a placement
+itd-d1-lab-mechanical.pdf#3,DFC 1,itd-d1-lab-mechanical.pdf#14|DFC-1,1,yes,new,stacked DFC over 1; leader to high-wall fan coil in IT 115; sensor label (DFC-1) not a placement
+itd-d1-lab-mechanical.pdf#4,EF 1,itd-d1-lab-mechanical.pdf#12|EF-1,1,yes,new,stacked EF over 1; leader to ceiling cabinet fan in Rest. 102
+itd-d1-lab-mechanical.pdf#4,EF 2,itd-d1-lab-mechanical.pdf#12|EF-2,1,yes,new,stacked EF over 2; leader to ceiling cabinet fan in Rest. 103
+itd-d1-lab-mechanical.pdf#4,EF 3,itd-d1-lab-mechanical.pdf#12|EF-3,1,yes,new,stacked EF over 3; leader to ceiling cabinet fan in Janitor 105
+itd-d1-lab-mechanical.pdf#5,HC 1,itd-d1-lab-mechanical.pdf#13|HC-1,1,no,view-repeat,stacked HC over 1 paired with CV-1; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 2,itd-d1-lab-mechanical.pdf#13|HC-2,1,no,view-repeat,stacked HC over 2 paired with CV-2; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 3,itd-d1-lab-mechanical.pdf#13|HC-3,1,no,view-repeat,stacked HC over 3 paired with CV-3; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 4,itd-d1-lab-mechanical.pdf#13|HC-4,1,no,view-repeat,stacked HC over 4 paired with CV-4; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 5,itd-d1-lab-mechanical.pdf#13|HC-5,1,no,view-repeat,stacked HC over 5 paired with CV-5; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 6,itd-d1-lab-mechanical.pdf#13|HC-6,1,no,view-repeat,stacked HC over 6 paired with CV-6; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 7,itd-d1-lab-mechanical.pdf#13|HC-7,1,no,view-repeat,stacked HC over 7 paired with CV-7; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 8,itd-d1-lab-mechanical.pdf#13|HC-8,1,no,view-repeat,stacked HC over 8 paired with CV-8; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#5,HC 9,itd-d1-lab-mechanical.pdf#13|HC-9,1,no,view-repeat,stacked HC over 9 paired with CV-9; same coil as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#6,AHU 1,itd-d1-lab-mechanical.pdf#15|AHU-1,1,yes,new,stacked AHU over 1 with keynote 7; leader to AHU on roof curb
+itd-d1-lab-mechanical.pdf#6,CU 1,itd-d1-lab-mechanical.pdf#14|CU-1,1,yes,new,stacked CU over 1 with keynote 3; leader to condensing unit on roof stand (pairs with F-1)
+itd-d1-lab-mechanical.pdf#6,DCU 1,itd-d1-lab-mechanical.pdf#14|DCU-1,1,yes,new,stacked DCU over 1 with keynote 3; leader to ductless condensing unit on roof (pairs with DFC-1)
+itd-d1-lab-mechanical.pdf#6,LEF 1,itd-d1-lab-mechanical.pdf#13|LEF-1,1,yes,new,stacked LEF over 1; one tag for the two-fan lab exhaust assembly on its shared plenum
+itd-d1-lab-mechanical.pdf#6,EF 5,itd-d1-lab-mechanical.pdf#12|EF-4,1,yes,new,tag reads EF 5 but marks the roof fan over Electrical 116; EF schedule lists that fan as EF-4 (ELECTRICAL 116 ROOF); the schedule numbers the three heat relief fans one lower than the plans and controls M6.0 (EF-5 / EF-6 / EF-7); sensor (EF-5) in Electrical 116 on M1.1
+itd-d1-lab-mechanical.pdf#6,EF 6,itd-d1-lab-mechanical.pdf#12|EF-5,1,yes,new,tag reads EF 6 but marks the roof fan over Lab Mechanical 120; EF schedule lists that fan as EF-5 (LAB MECHANICAL 120 at 250 cfm); louver schedule L-1 and controls M6.0 call it EF-6; sensor (EH-5/EF-6) in Lab Mechanical 120
+itd-d1-lab-mechanical.pdf#6,EF 7,itd-d1-lab-mechanical.pdf#12|EF-6,1,yes,new,tag reads EF 7 (no EF-7 row) and marks the roof fan over Nuclear Gauge Storage 128; EF schedule lists that fan as EF-6 (NUCLEAR GAUGE STORAGE 128); louver schedule L-2 and controls M6.0 call it EF-7; sensor (EH-1/EF-7) in room 128
+itd-d1-lab-mechanical.pdf#7,B 1,itd-d1-lab-mechanical.pdf#13|B-1,1,yes,new,stacked B over 1; leader to lower boiler in enlarged plan 2/M3.0 (M1.0 shows the room untagged)
+itd-d1-lab-mechanical.pdf#7,B 2,itd-d1-lab-mechanical.pdf#13|B-2,1,yes,new,stacked B over 2; leader to upper boiler in enlarged plan 2/M3.0
+itd-d1-lab-mechanical.pdf#7,BP 2,itd-d1-lab-mechanical.pdf#12|BP-2,1,yes,new,stacked BP over 2 with keynote 11; leader to inline pump at boiler B-2
+itd-d1-lab-mechanical.pdf#7,BP 2,itd-d1-lab-mechanical.pdf#12|BP-1,1,yes,new,second BP 2 tag (drafting slip): its leader goes to the inline pump at boiler B-1; pump schedule BP-1 = BOILER PUMP (B-1) and schematic 1/M3.0 tags this pump BP-1; no BP 1 tag on any plan
+itd-d1-lab-mechanical.pdf#7,HWP 1,itd-d1-lab-mechanical.pdf#12|HWP-1,1,yes,new,adjoining HWP 1 and HWP 2 hexagons share one leader to the wall-mounted pump location (keynote 10)
+itd-d1-lab-mechanical.pdf#7,HWP 2,itd-d1-lab-mechanical.pdf#12|HWP-2,1,yes,new,adjoining HWP 1 and HWP 2 hexagons share one leader to the wall-mounted pump location (keynote 10)
+itd-d1-lab-mechanical.pdf#7,HUM 1,itd-d1-lab-mechanical.pdf#13|HUM-1,1,yes,new,stacked HUM over 1 with keynote 2; leader to humidifier on north wall of Lab Mechanical 120
+itd-d1-lab-mechanical.pdf#7,EH 5,itd-d1-lab-mechanical.pdf#14|EH-5,1,yes,new,stacked EH over 5 with keynote 4; leader to wall unit heater; only tagged view of EH-5 (not tagged on M1.0)
+itd-d1-lab-mechanical.pdf#23,F 1,itd-d1-lab-mechanical.pdf#14|F-1,1,no,discipline-repeat,plumbing plan callout with keynote 14 (condensate drain); same furnace as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#23,DFC 1,itd-d1-lab-mechanical.pdf#14|DFC-1,1,no,discipline-repeat,plumbing plan callout with keynote 14 (condensate drain); same unit as counted on M1.0 p3
+itd-d1-lab-mechanical.pdf#24,AHU 1,itd-d1-lab-mechanical.pdf#15|AHU-1,1,no,discipline-repeat,plumbing roof plan background tag; same unit as counted on M2.0 p6
+itd-d1-lab-mechanical.pdf#24,CU 1,itd-d1-lab-mechanical.pdf#14|CU-1,1,no,discipline-repeat,plumbing roof plan background tag; same unit as counted on M2.0 p6
+itd-d1-lab-mechanical.pdf#24,DCU 1,itd-d1-lab-mechanical.pdf#14|DCU-1,1,no,discipline-repeat,plumbing roof plan background tag; same unit as counted on M2.0 p6
+itd-d1-lab-mechanical.pdf#24,LEF 1,itd-d1-lab-mechanical.pdf#13|LEF-1,1,no,discipline-repeat,plumbing roof plan background tag; same unit as counted on M2.0 p6
+itd-d1-lab-mechanical.pdf#25,B 1,itd-d1-lab-mechanical.pdf#13|B-1,1,no,discipline-repeat,enlarged plumbing plan callout with keynote 9 (gas to boiler); same boiler as counted on M3.0 p7
+itd-d1-lab-mechanical.pdf#25,B 2,itd-d1-lab-mechanical.pdf#13|B-2,1,no,discipline-repeat,enlarged plumbing plan callout with keynote 9 (gas to boiler); same boiler as counted on M3.0 p7
+itd-d1-lab-mechanical.pdf#25,HUM 1,itd-d1-lab-mechanical.pdf#13|HUM-1,1,no,discipline-repeat,enlarged plumbing plan callout (water to humidifier); same unit as counted on M3.0 p7

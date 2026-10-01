@@ -1,0 +1,92 @@
+# 066_MT_Barnard_Hall_111_Lithography_Lab_Renovation — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheet M001 (PDF page 8): an overview at 40 dpi, then each table at
+# 3x (216 dpi) in tiles with the PLAN CODE column repeated, rendered with MuPDF
+# (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second read at 4x of every
+# row, every cell. The pipeline's output for this sheet was not consulted. The second tier
+# keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+SET 066_MT_Barnard_Hall_111_Lithography_Lab_Renovation
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheet M001 (page 8) of the Montana State University Barnard Hall room 111 lithography lab renovation (Cushing Terrell), the tables the second tier's seed drew for its HEAT_PUMP and HUMIDIFIER strata.
+EXCLUDES Manufacturer/model, fill and drain rates, humidity range, MCA/MOCP/max fuse, external static pressure, source-water flow, temperatures and pressure drop, sensible capacity, weight, drain size, efficiencies (EER, COP), and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# HUMIDIFIER SCHEDULE: one row. The manufacturer header prints "MANUFACURER" (typed as
+# printed). POWER / V/PH/HZ prints "120/1/60" in one cell, keyed as its volts part and its
+# phase part. POWER / KW is the unit's electric rating, keyed as eh_kw (the family's
+# electric-humidifier rating). No column prints the humidifier's type, so humidifier_type
+# stays not printed. The three table notes (condensate cooler, sump pump, water filter) key
+# nothing; no row cites them.
+TABLE
+sheet: 066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8
+title: HUMIDIFIER SCHEDULE
+family: HUMIDIFIER
+render: page 8 crop 105,60,847,195 at 3x in 2 tiles (PLAN CODE column repeated), notes included; second read at 4x (crop 105,93,847,72) of the row, every cell
+rows: all 1 printed row
+col: PLAN CODE => tag
+col: MANUFACURER => -
+col: MODEL => -
+col: HUMIDITY OUTPUT (LBS/HR) => capacity_lb_hr
+col: FILL RATE (GPM) => -
+col: DRAIN RATE (GPM) => -
+col: MIN HUMIDITY RANGE => -
+col: MAX HUMIDITY RANGE => -
+col: POWER / V/PH/HZ => -
+col: [POWER / V/PH/HZ: volts part] => volts
+col: [POWER / V/PH/HZ: phase part] => phase
+col: POWER / KW => eh_kw
+col: POWER / MCA => -
+col: POWER / MOCP => -
+grid:
+H-1 | CONDAIR | RH2 | 8 | 0.13 | 1.6 | 20% | 100% | 120/1/60 | 120 | 1 | 3 | 12.7 A | 20A
+END
+
+# WATER SOURCE HEAT PUMP SCHEDULE: one row, then one empty ruled row (no instance). AREA
+# SERVED prints the rooms. NOM SIZE (TON) keys cooling_tons. POWER (1) / V/HZ/PH prints
+# "208/60/1" in volts/hertz/phase order: its volts part is 208 and its phase part (printed
+# last) is 1. WATER FLOW (GPM), the EWT columns and WPD are the source-water loop's (note 3:
+# "SOURCE WATER IS A MIXTURE OF 35% PROPYLENE GLYCOL."), neither hot nor chilled water, so
+# they key nothing. PIPING RUNOUT SIZE / SUPPLY / RETURN is the unit's water hook-up pipe
+# size and keys conn_in (the author's reading, as for itd-d1-lab's coil runouts); DRAIN is
+# the condensate drain. The row's NOTES cite notes 4, 5, 6 and 7; note 7 ("HEAT PUMP SHALL
+# BE CONTROLLED THROUGH BACNET SYSTEM.") keys bas_interface. Notes 4 (advanced
+# controller), 5 (2-way valve) and 6 (sensors) key nothing in this vocabulary.
+TABLE
+sheet: 066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8
+title: WATER SOURCE HEAT PUMP SCHEDULE
+family: HEAT_PUMP
+render: page 8 crop 105,890,1540,295 at 3x in 3 tiles (PLAN CODE column repeated), notes included; second read at 4x (crop 105,920,1540,84) of the row, every cell
+rows: all 1 printed row
+col: PLAN CODE => tag
+col: MANF. => -
+col: MODEL => -
+col: AREA SERVED => area_served
+col: NOM SIZE (TON) => cooling_tons
+col: AIRFLOW (CFM) => cfm
+col: ESP (IN H2O) => -
+col: WATER FLOW (GPM) => -
+col: WPD (FT) => -
+col: COOLING (3) / EDB (F) => -
+col: COOLING (3) / EWB (F) => -
+col: COOLING (3) / EWT (F) => -
+col: COOLING (3) / LAT (F) => -
+col: COOLING (3) / CAPACITY (MBH) => cooling_mbh
+col: COOLING (3) / SENSIBLE (MBH) => -
+col: HEATING (3) / EDB (F) => -
+col: HEATING (3) / EWT (F) => -
+col: HEATING (3) / LAT (F) => -
+col: HEATING (3) / CAPACITY (MBH) => heating_mbh
+col: WEIGHT => -
+col: POWER (1) / V/HZ/PH => -
+col: [POWER (1) / V/HZ/PH: volts part] => volts
+col: [POWER (1) / V/HZ/PH: phase part, printed last] => phase
+col: POWER (1) / MCA => -
+col: POWER (1) / MAX FUSE => -
+col: [PIPING RUNOUT SIZE / SUPPLY / RETURN: the unit's water hook-up pipe size] => conn_in
+col: PIPING RUNOUT SIZE / DRAIN => -
+col: MIN EFF (2) / EER => -
+col: MIN EFF (2) / COP => -
+col: NOTES => -
+col: [NOTE 7, where the row's NOTES cite it: HEAT PUMP SHALL BE CONTROLLED THROUGH BACNET SYSTEM] => bas_interface
+grid:
+HP-2 | WATER FURNACE | VERSATEC 024 | =111, 111A (111, 111A) | 2 | 745 | 0.5 | 4 | 1.2 | 80 | 67 | 80 | 54.8 | 22.2 | 16.7 | 70 | 30 | 92.9 | 15.21 | 176 | 208/60/1 | 208 | 1 | 15.4 | 20 | 3/4" | 3/4" | 18.2 | 3.2 | 4, 5, 6, 7 | =BACNET (CONTROLLED THROUGH BACNET SYSTEM)
+END

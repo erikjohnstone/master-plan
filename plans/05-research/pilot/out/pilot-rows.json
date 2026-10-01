@@ -1,0 +1,169 @@
+{
+ "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile": {
+  "UH-1": {
+   "sheet": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47",
+   "title": "UNIT HEATER SCHEDULE - HOT WATER",
+   "cells": {
+    "TAG NAME": "UH-1",
+    "AREA SERVED": "MECHANICAL ROOM",
+    "CONFIGURATION": "HORIZONTAL",
+    "CFM": "550",
+    "MBH": "13.5",
+    "GPM": "1.6",
+    "EWT °F": "150",
+    "LWT °F": "120",
+    "W.P.D. FT. HEAD": "0.1",
+    "ELECTRICAL HP": "0.25",
+    "ELECTRICAL RPM": "1550",
+    "ELECTRICAL VOLTAGE": "120",
+    "ELECTRICAL PHASES": "1",
+    "ELECTRICAL DISCONNECT BY (NOTE A)": "MFR",
+    "ELECTRICAL DISCONNECT TYPE (NOTE B)": "NF",
+    "ELECTRICAL CONTROLLER / STARTER BY (NOTE A)": "MFR",
+    "CONTROL": "T-STAT",
+    "MANUFACTURER": "TRANE",
+    "MODEL": "S"
+   }
+  },
+  "EF-1A": {
+   "sheet": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47",
+   "title": "FAN SCHEDULE",
+   "cells": {
+    "TAG NAME": "EF-1A",
+    "AREA SERVED": "GENERAL EXHAUST",
+    "CFM": "24000",
+    "CONNECTED CFM": "21500",
+    "S.P. IN. W.C.": "1.50",
+    "WHEEL DIA. INCHES": "36.5",
+    "FAN RPM (NOTE F)": "874",
+    "DRIVE TYPE": "DIRECT",
+    "MAX. AMCA SONES": "80dBA",
+    "BACKDRAFT DAMPER TYPE": "MOTORIZED",
+    "CURB TYPE (NOTE G)": "G.C.",
+    "ELECTRICAL (NOTE 1) BHP (NOTE E)": "12.9",
+    "ELECTRICAL (NOTE 1) MHP (NOTE E)": "15",
+    "ELECTRICAL (NOTE 1) VOLTAGE": "480",
+    "ELECTRICAL (NOTE 1) PHASES": "3",
+    "ELECTRICAL (NOTE 1) DISCONNECT BY (NOTE A)": "EC",
+    "ELECTRICAL (NOTE 1) DISCONNECT TYPE (NOTE B)": "NF",
+    "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER BY (NOTE A)": "EC",
+    "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER TYPE (NOTE C)": "VFD",
+    "CONTROL TYPE": "FAN-A",
+    "MANUFACTURER": "COOK",
+    "MODEL": "CPS",
+    "REMARKS": "NOTES 1, 2, 3, 5"
+   }
+  },
+  "EF-2A": {
+   "sheet": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47",
+   "title": "FAN SCHEDULE",
+   "cells": {
+    "TAG NAME": "EF-2A",
+    "AREA SERVED": "CARTWASHER EXHAUST",
+    "CFM": "2000",
+    "CONNECTED CFM": "2000",
+    "S.P. IN. W.C.": "1.00",
+    "WHEEL DIA. INCHES": "16.5",
+    "FAN RPM (NOTE F)": "1467",
+    "DRIVE TYPE": "DIRECT",
+    "MAX. AMCA SONES": "13.7",
+    "BACKDRAFT DAMPER TYPE": "MOTORIZED",
+    "CURB TYPE (NOTE G)": "G.C.",
+    "ELECTRICAL (NOTE 1) BHP (NOTE E)": "0.62",
+    "ELECTRICAL (NOTE 1) MHP (NOTE E)": "1",
+    "ELECTRICAL (NOTE 1) VOLTAGE": "480",
+    "ELECTRICAL (NOTE 1) PHASES": "3",
+    "ELECTRICAL (NOTE 1) DISCONNECT BY (NOTE A)": "EC",
+    "ELECTRICAL (NOTE 1) DISCONNECT TYPE (NOTE B)": "NF",
+    "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER BY (NOTE A)": "EC",
+    "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER TYPE (NOTE C)": "FV",
+    "CONTROL TYPE": "FAN-B",
+    "MANUFACTURER": "COOK",
+    "MODEL": "ACRUD",
+    "REMARKS": "NOTES 1, 2, 3, 4"
+   }
+  }
+ },
+ "094_FL_Orange_County_Regional_History_Center_HVAC": {
+  "AHU-04": {
+   "sheet": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8",
+   "title": "Air Handling Unit Schedule CHW",
+   "cells": {
+    "MARK": "AHU-04",
+    "UINT MODEL": "CSAA012UB",
+    "UNIT TYPE": "OUTDOOR HORIZ. DRAW-THRU",
+    "UNIT COMPONENTS IN DIRECTION OF AIR FLOW SEE LEGEND BELOW": "MXTD3-PF-FF-CC-HF-FAN",
+    "AIR FLOWS TOTAL MAX. CFM": "5400",
+    "AIR FLOWS OCCUPIED MODE OA CFM": "1000",
+    "AIR FLOWS UN-OCCUPIED MODE OA CFM": "0",
+    "AIR FLOWS SMOKE MODE SA & OA CFM": "3000",
+    "FAN DATA EXT. SP IN W.G.": "1.25",
+    "FAN DATA TOTAL SP IN W.G.": "4.19",
+    "FAN DATA FAN SIZE AND TYPE": "20in. direct-drive plenum, full width",
+    "FAN DATA RPM": "1960",
+    "FAN DATA MOTOR HP": "7.5",
+    "FAN DATA VAR. FREQ. DRIVE": "YES",
+    "COOLING COIL CAPACITY SEN. MBH": "121",
+    "COOLING COIL CAPACITY TOTAL MBH": "136",
+    "COOLING COIL AIR DATA ENT. TEMP. DB/WB": "74/62",
+    "COOLING COIL AIR DATA LVG. TEMP. DB/WB": "53.6/53.2",
+    "COOLING COIL AIR DATA VEL. FPM": "439",
+    "COOLING COIL AIR DATA ROW/FIN. PER FT.": "8/82",
+    "COOLING COIL AIR DATA P.D. IN W.G.": "0.56",
+    "COOLING COIL WATER DATA TEMP. F ENT.": "45",
+    "COOLING COIL WATER DATA TEMP. F LVG.": "57",
+    "COOLING COIL WATER DATA FLOW GPM": "23",
+    "COOLING COIL WATER DATA P.D. FT W.G.": "1.9",
+    "HEATING COIL ENT.": "-",
+    "HEATING COIL LVG.": "-",
+    "HEATING COIL P.D. IN W.G.": "-",
+    "HEATING COIL KW": "-",
+    "FILTERS PREFILTER AIR PD IN. W.G.": "0.625",
+    "FILTERS PREFILTER TYPE": "2\" Pleated - MERV 8",
+    "FILTERS FINAL FILTER AIR PD IN. W.G.": "0.747",
+    "FILTERS FINAL FILTER TYPE": "12in. cartridge - 95% eff - MERV 15",
+    "ELECTRICAL DATA VOLT/ PHASE/HZ": "460/3/60",
+    "ELECTRICAL DATA MCA": "11.75"
+   }
+  }
+ },
+ "itd-d1-lab": {
+  "EH-1": {
+   "sheet": "itd-d1-lab-mechanical.pdf#14",
+   "title": "ELECTRIC HEATER SCHEDULE",
+   "cells": {
+    "SYMBOL": "EH-1",
+    "AREA SERVED": "NUCLEAR GAUGE STORAGE 128",
+    "UNIT TYPE": "SURFACE MOUNTED",
+    "FAN CFM": "245",
+    "FAN RPM": "1,400",
+    "FAN HP": "1/8",
+    "ELECTRICAL KW": "3.0",
+    "ELECTRICAL STEPS": "1",
+    "ELECTRICAL V/Ø": "208 / 1",
+    "ELECTRICAL AMPS": "14.4",
+    "MANUFACTURER AND MODEL": "MARKEL MODEL 3420 SERIES",
+    "REMARKS": "1 , 3 , 5"
+   }
+  },
+  "EF-1": {
+   "sheet": "itd-d1-lab-mechanical.pdf#12",
+   "title": "EXHAUST FAN SCHEDULE",
+   "cells": {
+    "SYMBOL": "EF-1",
+    "AREA SERVED": "RESTROOM 102",
+    "UNIT TYPE": "CEILING CABINET",
+    "BLOWER CFM": "100",
+    "BLOWER ESP": "0.375",
+    "BLOWER MAXIMUM RPM": "1,075",
+    "BLOWER DRIVE": "DIRECT",
+    "ELECTRICAL HP/W": "46.5 W",
+    "ELECTRICAL V/Ø": "115/1",
+    "MAXIMUM SONES": "2.5",
+    "OPERATING WEIGHT (LBS)": "15",
+    "COL12": "COOK MODEL GC-148",
+    "REMARKS": "1 , 2 , 4"
+   }
+  }
+ }
+}

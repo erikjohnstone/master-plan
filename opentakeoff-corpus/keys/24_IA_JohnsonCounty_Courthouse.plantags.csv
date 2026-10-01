@@ -1,0 +1,12 @@
+# 24_IA_JohnsonCounty_Courthouse.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, dev).
+# Authored 2026-09-29 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+24_IA_JohnsonCounty_Courthouse.pdf#21,FCU-00-022D,24_IA_JohnsonCounty_Courthouse.pdf#23|FCU-00,1,yes,new,"level 2 mechanical plan: tag with room suffix, leader to FCU in Office 022D"
+24_IA_JohnsonCounty_Courthouse.pdf#21,FCU-00-022C,24_IA_JohnsonCounty_Courthouse.pdf#23|FCU-00,1,yes,new,"level 2 mechanical plan: tag with room suffix, FCU in Office 022C"
+24_IA_JohnsonCounty_Courthouse.pdf#21,FCU-04-021E,24_IA_JohnsonCounty_Courthouse.pdf#23|FCU-04,1,yes,new,"level 2 mechanical plan: tag with room suffix, ducted FCU serving Multi-use/Conference 021E (by Vestibule 02E)"
+24_IA_JohnsonCounty_Courthouse.pdf#21,ECP-1,24_IA_JohnsonCounty_Courthouse.pdf#23|ECP-1,2,yes,new,"level 2 mechanical plan: one panel in Women's RR 02F and one in Men's RR 02G, each labelled"
+24_IA_JohnsonCounty_Courthouse.pdf#21,ERV-2,24_IA_JohnsonCounty_Courthouse.pdf#23|ERV-2,1,yes,new,"attic HVAC plan; a second ERV-2 label is in Section 31 (not a plan view)"
+24_IA_JohnsonCounty_Courthouse.pdf#21,CP-1,24_IA_JohnsonCounty_Courthouse.pdf#23|CP-1,1,yes,new,"attic HVAC plan, inline pump at ERV-2 coil piping"
+24_IA_JohnsonCounty_Courthouse.pdf#25,ERV-2,24_IA_JohnsonCounty_Courthouse.pdf#23|ERV-2,1,no,discipline-repeat,"attic electrical plan: 3 labels on the one unit (unit label + 2 power callouts at J-boxes); same unit as p21"
+24_IA_JohnsonCounty_Courthouse.pdf#25,CP-1,24_IA_JohnsonCounty_Courthouse.pdf#23|CP-1,1,no,discipline-repeat,"attic electrical plan: power callout from motor starter; same unit as p21"
+24_IA_JohnsonCounty_Courthouse.pdf#25,ECP-1,24_IA_JohnsonCounty_Courthouse.pdf#23|ECP-1,1,no,discipline-repeat,"level 2 electrical plan: one circuit callout for both panels (J-boxes chained 02F-02G); same units as p21"

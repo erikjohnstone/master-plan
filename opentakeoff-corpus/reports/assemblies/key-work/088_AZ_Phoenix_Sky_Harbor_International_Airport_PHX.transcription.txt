@@ -1,0 +1,311 @@
+# 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheets B04-RBME0801 (PDF page 30), B04-RBME0802 (page 31) and
+# B04-ACME0801 (page 246): an overview of each page at 40 dpi, then each table at 4x (288
+# dpi) in tiles with the MARK column repeated, rendered with MuPDF (pymupdf
+# get_pixmap(clip)) and read by eye on 2026-09-26; second read at 6x (432 dpi) of every
+# keyed row, every cell. These are 17x11 sheets, so the first read is at 4x and the second
+# at 6x (not the usual 3x and 4x). Each drawn title was found with the PDF's own text layer
+# (pymupdf search_for). The pipeline's output for these sheets was not consulted. The second
+# tier keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+SET 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheets B04-RBME0801 and B04-RBME0802 (pages 30 and 31, the RCC station) and B04-ACME0801 (page 246, the central plant building) of the City of Phoenix PHX Sky Train stage 2 design, the tables the second tier's seed drew for its AHU, FCU, FAN, UNIT_HEATER, CONDENSING_UNIT, PUMP, AIR_COOLED_CHILLER and COOLING_TOWER strata.
+EXCLUDES Manufacturer/model, weight, maximum/demand-controlled outdoor air, static pressures, sensible capacity and coil air temperatures, fan type, NPSH, pump type, MOP/MCA/MOCP, refrigerant type and charge, efficiencies (kW/ton, IPLV), condenser-water data, evaporator pressure drop and passes, ambient wet bulb, lift, tower airflow and fan count, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE (page 30): one row, AHU-1. AIRFLOW (CFM) keys supply_cfm and
+# MIN. OA (CFM) keys oa_cfm_min; MAX. OA (DCV) is the demand-controlled maximum, keyed
+# nothing. The SUPPLY FAN and RETURN FAN blocks each print FAN HP, FAN QTY. and ESP: supply
+# FAN HP keys supply_fan_hp and FAN QTY. supply_fan_qty; return FAN HP keys return_fan_hp,
+# and return FAN QTY. keys nothing (no return-fan count is in this family's key vocabulary,
+# AS-14). The CHILLED WATER COIL block's TOTAL MBH keys cooling_mbh (the unit's cooling, as
+# 069_ID and 03_FL key an AHU's chilled-water coil); its water-side EWT/LWT/GPM/MAX WPD key
+# chw_*. REMARKS is blank, so the thirteen table notes apply to the table's one unit: note 5
+# ("AIRSIDE ECONOMIZER. ...") keys economizer, note 6 ("PROVIDE FACTORY INSTALLED ABB VFD ON
+# THE UNIT. PROVIDE ONE VFD FOR EACH FAN MOTOR.") keys vfd, and note 9's final (secondary)
+# MERV 13 filter keys filter_merv (the MERV 8 primary filter does not). Note 10 connects the
+# factory-installed GPS air purification system to the BAS for its status and alarm: that is
+# the purifier's connection, not a network interface of the unit, so bas_interface stays not
+# printed (the author's reading). No heating coil prints, so heating_type stays not printed.
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 30 crop 127,43,873,57 at 4x in 5 tiles (MARK column repeated) and notes crop 127,98,573,82 at 250 dpi; second read at 6x (crop 127,72,873,28) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: AIRFLOW (CFM) => supply_cfm
+col: MIN. OA (CFM) => oa_cfm_min
+col: MAX. OA (DCV) (CFM) => -
+col: SUPPLY FAN / FAN HP => supply_fan_hp
+col: SUPPLY FAN / FAN QTY. => supply_fan_qty
+col: SUPPLY FAN / ESP (IN WC) => -
+col: RETURN FAN / FAN HP => return_fan_hp
+col: RETURN FAN / FAN QTY. => -
+col: RETURN FAN / ESP (IN WC) => -
+col: CHILLED WATER COIL / TOTAL MBH => cooling_mbh
+col: CHILLED WATER COIL / SENSIBLE MBH => -
+col: CHILLED WATER COIL / EA DB (F) => -
+col: CHILLED WATER COIL / EA WB (F) => -
+col: CHILLED WATER COIL / LA DB (F) => -
+col: CHILLED WATER COIL / LA WB (F) => -
+col: CHILLED WATER COIL / EWT (F) => chw_ewt_f
+col: CHILLED WATER COIL / LWT (F) => chw_lwt_f
+col: CHILLED WATER COIL / GPM => chw_gpm
+col: CHILLED WATER COIL / MAX WPD (FT H20) => chw_wpd_ft
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: cooling_type = chw ; header=CHILLED WATER COIL ; note=the row prints the CHILLED WATER COIL block (water side EWT 42 / LWT 56, 147.0 GPM)
+derive: economizer = airside ; header=NOTE 5 ; note=note 5 (REMARKS cite no note; the table's notes apply to its one unit): 'AIRSIDE ECONOMIZER. FACTORY INSTALLED EBTRON AIR FLOW MEASUREMENT STATIONS FOR OUTSIDE AIR & EXHAUST AIR; AND SUPPLY & RETURN FANS AIR FLOW MONITORS.'
+derive: vfd = yes ; header=NOTE 6 ; note=note 6: 'PROVIDE FACTORY INSTALLED ABB VFD ON THE UNIT. PROVIDE ONE VFD FOR EACH FAN MOTOR.'
+derive: filter_merv = 13 ; header=NOTE 9 ; note=note 9: 'STANDARD SIZE FILTERS, 2" THICK CLASS 2 MERV 8 PRIMARY FILTERS, 12" THICK CLASS 2 MERV 13 SECONDARY FILTERS.' (the final, secondary filter keys; the MERV 8 primary filter does not)
+grid:
+AHU-1 | 26250 | 2000 | 4500 | 10.0 | 6 | 4.50 | 5 | 4 | 1.15 | 1027.30 | 689.40 | 80.00 | 67.00 | 54.30 | 53.90 | 42 | 56 | 147.0 | 12.10 | 460 | 3 | 60 | ENERGY LABS INC | C104113-FC-L | 22900 |
+END
+
+# CHILLED WATER FAN COIL UNIT SCHEDULE (page 30): two rows. AREA SERVED prints each room.
+# The CHILLED WATER COIL block's TOTAL BTU/H is the coil's capacity, keyed chw_mbh in the
+# unit its header prints (BTU/H); its water-side EWT/LWT/GPM/WPD key chw_*. No heating coil
+# prints (heating_type stays not printed). The three table notes (horizontal configuration,
+# MERV 11 filters with a clogged-filter switch, installation) key nothing in this vocabulary.
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30
+title: CHILLED WATER FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 30 crop 287,557,713,91 at 4x in 4 tiles (MARK column repeated), notes included; second read at 6x (crop 287,588,713,30) of both rows, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: AREA SERVED => area_served
+col: AIRFLOW (CFM) => cfm
+col: E.S.P. (IN WG) => -
+col: CHILLED WATER COIL / TOTAL BTU/H => chw_mbh [BTU/H]
+col: CHILLED WATER COIL / SENS. BTU/H => -
+col: CHILLED WATER COIL / EA DB (F) => -
+col: CHILLED WATER COIL / EA WB (F) => -
+col: CHILLED WATER COIL / EWT (F) => chw_ewt_f
+col: CHILLED WATER COIL / LWT (F) => chw_lwt_f
+col: CHILLED WATER COIL / GPM => chw_gpm
+col: CHILLED WATER COIL / WPD (FT H2O) => chw_wpd_ft
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: cooling_type = chw ; header=CHILLED WATER COIL ; note=title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the CHILLED WATER COIL block (water side EWT 42 / LWT 56)
+grid:
+FCU-1 | MECHANICAL ROOM RBST 142 | 800 | 0.31 | 24197.00 | 18759.00 | 80.0 | 67.0 | 42 | 56 | 3.4 | 1.80 | 230 | 1 | 60 | IEC | HXY10 | 84 |
+FCU-2 | PUMP RM RBST 147 | 300 | 0.30 | 11816.00 | 8293.00 | 80.0 | 67.0 | 42 | 56 | 1.7 | 2.40 | 230 | 1 | 60 | IEC | CXB06 | 84 |
+END
+
+# SMOKE EXHAUST FAN SCHEDULE (page 30): four identical rows. FAN HP keys motor_hp and FAN RPM
+# rpm; DRIVE TYPE prints "Belt". The title names the fans' duty but no SERVICE column
+# prints, so service stays not printed (as for every EXHAUST FAN SCHEDULE in the dev keys).
+# Every row's REMARKS cite note 1 (roof curb) only; notes 2-6 are cited by no row, so they
+# are the table's own notes and apply to every fan. Note 5 ("INTERLOCK FAN WITH SMOKE CONTROL
+# PANEL LOCATED IN XXX ROOM.") is how the fans are controlled, keyed as control with the
+# clause's control phrase (as 03_FL keys "INTERLOCK WITH HOOD EXHAUST FAN"; the room is an
+# unfilled placeholder). Notes 2 (UL power vents), 3 (premium motor), 4 (dual drives) and 6
+# (installation) key nothing.
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30
+title: SMOKE EXHAUST FAN SCHEDULE
+family: FAN
+render: page 30 crop 400,187,600,115 at 4x in 3 tiles (MARK column repeated), notes included; second read at 6x (crop 400,232,600,30) of all 4 rows, every cell
+rows: all 4 printed rows
+col: MARK => tag
+col: AIRFLOW (CFM) => cfm
+col: ESP (IN WC) => esp_in
+col: FAN HP => motor_hp
+col: FAN RPM => rpm
+col: DRIVE TYPE => drive
+col: FAN TYPE => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: control = INTERLOCK WITH SMOKE CONTROL PANEL ; header=NOTE 5 ; note=note 5, a table note no row's REMARKS cite (they cite note 1 only), so it applies to every fan: 'INTERLOCK FAN WITH SMOKE CONTROL PANEL LOCATED IN XXX ROOM.'
+grid:
+SEF-1 | 13750 | 1.20 | 7.5 | 556 | belt (Belt) | Upblast Centrifugal | 460 | 3 | 60 | Greenheck | CUBE-420-75 | 488 | 1
+SEF-2 | 13750 | 1.20 | 7.5 | 556 | belt (Belt) | Upblast Centrifugal | 460 | 3 | 60 | Greenheck | CUBE-420-75 | 488 | 1
+SEF-3 | 13750 | 1.20 | 7.5 | 556 | belt (Belt) | Upblast Centrifugal | 460 | 3 | 60 | Greenheck | CUBE-420-75 | 488 | 1
+SEF-4 | 13750 | 1.20 | 7.5 | 556 | belt (Belt) | Upblast Centrifugal | 460 | 3 | 60 | Greenheck | CUBE-420-75 | 488 | 1
+END
+
+# ELECTRIC DUCT HEATER SCHEDULE (page 30): one row, EDH-1, keyed as the UNIT_HEATER instance
+# the second tier drew it for (the compile's own UNIT_HEATER spec takes ELECTRIC DUCT HEATER
+# titles and EDH marks). KW keys eh_kw; the title prints the heating medium. The weight
+# prints "N.A.". The notes (finned tubular element, UL listing, SCR controls, accessories,
+# installation) key nothing in this vocabulary.
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30
+title: ELECTRIC DUCT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 30 crop 655,444,345,101 at 4x, notes included; second read at 6x (crop 655,486,345,12) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: KW => eh_kw
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC DUCT HEATER SCHEDULE'; note 1: 'FINNED TUBULAR ELECTRIC DUCT HEATER.'
+grid:
+EDH-1 | 200 | 480 | 3 | 60 | INDEECO | QUZ SERIES | N.A. |
+END
+
+# AIR COOLED CONDENSING UNIT SCHEDULE (page 31): five rows. RATED COOLING CAPACITY prints
+# BTU/H, keyed cooling_mbh in that unit. ELECTRICAL DATA ends with MOP. CU-3 and CU-5 print
+# the same model with different capacities (18200.00 and 22000.00), typed as printed. The six
+# table notes (refrigerant, ambient design, compressor protection, piping, efficiency,
+# installation) key nothing in this vocabulary.
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31
+title: AIR COOLED CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 31 crop 542,400,446,130 at 4x in 3 tiles (MARK column repeated), notes included; second read at 6x (crop 542,444,446,37) of all 5 rows, every cell
+rows: all 5 printed rows
+col: MARK => tag
+col: RATED COOLING CAPACITY BTU/H => cooling_mbh [BTU/H]
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: ELECTRICAL DATA / MOP => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+grid:
+CU-1 | 60000.00 | 208 | 1 | 60 | 40 | LG | ARUN060GSS4 | 260 |
+CU-2 | 48000.00 | 208 | 1 | 60 | 50 | LG | ARUN048GSS4 | 207 |
+CU-3 | 18200.00 | 208 | 1 | 60 | 25 | LG | LSU180HSV4 | 121 |
+CU-4 | 24000.00 | 208 | 1 | 60 | 30 | LG | ARUN024GSS4 | 159 |
+CU-5 | 22000.00 | 208 | 1 | 60 | 25 | LG | LSU180HSV4 | 125 |
+END
+
+# PUMP SCHEDULE (page 31): two identical rows, CHWP-1 and CHWP-2. FT HEAD keys head_ft and
+# PUMP HP motor_hp. No column or note prints the pumps' service (the marks abbreviate it;
+# service stays not printed, as for 040_IL's and itd-d1-lab's pump schedules), their
+# arrangement, a VFD or a connection size. The notes (valves, strainer and suction diffuser,
+# installation) key nothing.
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31
+title: PUMP SCHEDULE
+family: PUMP
+render: page 31 crop 447,138,541,98 at 4x in 3 tiles (Mark column repeated), notes included; second read at 6x (crop 447,182,541,26) of both rows, every cell
+rows: all 2 printed rows
+col: Mark => tag
+col: GPM => gpm
+col: FT HEAD => head_ft
+col: NPSH => -
+col: RPM => rpm
+col: PUMP HP => motor_hp
+col: PUMP TYPE => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS.) => -
+col: REMARKS => -
+grid:
+CHWP-1 | 155 | 46 | 3.7 | 1200 | 5 | In-Line Centrifugal | 460 | 3 | 60 | Bell & Gossett | e-80 3x3x11B | 355 |
+CHWP-2 | 155 | 46 | 3.7 | 1200 | 5 | In-Line Centrifugal | 460 | 3 | 60 | Bell & Gossett | e-80 3x3x11B | 355 |
+END
+
+# WATER COOLED CENTRIFUGAL CHILLER SCHEDULE (page 246): three rows, two new (CH-1, CH-2) and
+# one existing "(E) CH-3" (marks typed as printed). It is keyed as the AIR_COOLED_CHILLER
+# instance the second tier drew it for: that family's condenser enum is air/water, and the
+# title prints the condenser type. The EVAPORATOR block is the chilled-water side (EWT 58 /
+# LWT 44), keyed chw_*; the CONDENSER block (the condenser-water loop), refrigerant, kW/ton
+# and IPLV key nothing. CH-2's REFRIG CHARG prints "331/311" where CH-1 prints "331/331",
+# typed as printed. REMARKS is blank, so the notes apply to every chiller: note 3 ("PROVIDE
+# WITH ABB INTERFACE FOR INTEGRATION.") is the chiller's printed integration interface,
+# keyed bas_interface by its printed name (as federal-mech's "HARDWIRE INTERFACE" keys
+# HARDWIRE and 03_FL's "BMS GATEWAY INTERFACE" keys BMS GATEWAY; the author's reading).
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246
+title: WATER COOLED CENTRIFUGAL CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 246 crop 98,181,939,102 at 4x in 5 tiles (MARK column repeated), notes included; second read at 6x (crop 98,214,939,36) of all 3 rows, every cell
+rows: all 3 printed rows
+col: MARK => tag
+col: TONS => tons
+col: EVAPORATOR / EWT (F) => chw_ewt_f
+col: EVAPORATOR / LWT (F) => chw_lwt_f
+col: EVAPORATOR / GPM => chw_gpm
+col: EVAPORATOR / WPD (FT H20) => -
+col: EVAPORATOR / NO. OF PASSES => -
+col: CONDENSER / EWT (F) => -
+col: CONDENSER / LWT (F) => -
+col: CONDENSER / GPM => -
+col: CONDENSER / WPD (FT H20) => -
+col: CONDENSER / NO. OF PASSES => -
+col: REFRIG TYPE => -
+col: REFRIG CHARG (LBS) => -
+col: MAX (KW/TON) => -
+col: IPLV => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: condenser = water ; header=TABLE TITLE ; note=title printed 'WATER COOLED CENTRIFUGAL CHILLER SCHEDULE'; every row prints a CONDENSER water block (EWT 85)
+derive: bas_interface = ABB ; header=NOTE 3 ; note=note 3 (REMARKS cite no note; the table's notes apply to every chiller): 'PROVIDE WITH ABB INTERFACE FOR INTEGRATION.' (the interface's printed name; the author's reading)
+grid:
+CH-1 | 300 | 58 | 44 | 513 | 16.30 | 2 | 85 | 94 | 900 | 19.80 | 2 | R134A | 331/331 | 0.630 | 0.3760 | 460 | 3 | 60 | 285 | 400 | YORK | YMC2-S1055AA | 14797 |
+CH-2 | 300 | 58 | 44 | 513 | 16.30 | 2 | 85 | 94 | 900 | 19.80 | 2 | R134A | 331/311 | 0.630 | 0.3760 | 460 | 3 | 60 | 285 | 400 | YORK | YMC2-S1055AA | 14797 |
+(E) CH-3 | 200 | 58 | 44 | 345 | 6.00 | 2 | 85 | 95 | 600 | 9.60 | 2 | R134A | 276/276 | 0.642 | 0.429 | 460 | 3 | 60 | 195 | 225 | YORK | YVWAM2MEEEAE0200SA | 13400 |
+END
+
+# COOLING TOWER SCHEDULE (page 246): three rows, the existing "(E) CT-1" and new CT-2 and
+# CT-3 (marks typed as printed). HEAT REJECTION TONNAGE keys tons, FAN HP fan_hp, EWT/LWT
+# ewt_f/lwt_f and FLOW RATE (GPM) gpm. # OF FANS counts fans, not cells (cells stays not
+# printed). REMARKS is blank, so the notes apply to every tower: note 3 ("PROVIDE WITH ABB
+# VFD.") keys vfd. Notes 1 (stainless construction), 2 (vibration cut-out switch), 4-5
+# (ladders and platform), 6 (sump sweeper) and 7 (installation) key nothing.
+TABLE
+sheet: 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246
+title: COOLING TOWER SCHEDULE
+family: COOLING_TOWER
+render: page 246 crop 381,38,656,119 at 4x in 4 tiles (MARK column repeated), notes included; second read at 6x (crop 381,68,656,38) of all 3 rows, every cell
+rows: all 3 printed rows
+col: MARK => tag
+col: HEAT REJECTION TONNAGE => tons
+col: FAN HP => fan_hp
+col: EWT (F) => ewt_f
+col: LWT (F) => lwt_f
+col: AMBIENT TEMP WB (F) => -
+col: FLOW RATE (GPM) => gpm
+col: MAX LIFT (FT) => -
+col: CFM => -
+col: # OF FANS => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HERTZ => -
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: APPROX. OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: vfd = yes ; header=NOTE 3 ; note=note 3 (REMARKS cite no note; the table's notes apply to every tower): 'PROVIDE WITH ABB VFD.'
+grid:
+(E) CT-1 | 260 | 10 | 95 | 85 | 73 | 790 | 10.2 | 43960 | 1 | 460 | 3 | 60 | MARLEY | MD5008NAF2L | 7140 |
+CT-2 | 300 | 20 | 95 | 85 | 73 | 900 | 10.2 | 53420 | 1 | 460 | 3 | 60 | MARLEY | MD5008QAF2L | 7280 |
+CT-3 | 300 | 20 | 95 | 85 | 73 | 900 | 10.2 | 53420 | 1 | 460 | 3 | 60 | MARLEY | MD5008QAF2L | 7280 |
+END

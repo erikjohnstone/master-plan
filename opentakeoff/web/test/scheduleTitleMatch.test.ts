@@ -6,6 +6,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   compactScheduleTitle,
+  compactScheduleTitleRe,
+  familyRuleTitle,
   queryTitleMatchesNeedle,
   scheduleTitleMatches,
 } from "../src/lib/scheduleTitleMatch.mjs";
@@ -1590,4 +1592,84 @@ test("HVAC page accounting follows contributed equipment rather than unrelated t
     "has_hvac_equipment_schedule",
   ]);
   assert.deepEqual(hvac.page_accounting.pages[2].titles, ["COMPUTER ROOM AIR HANDLER SCHEDULE"]);
+});
+
+test("every family's title rules keep their meaning in the soft form: a wildcard and a quantifier are the rule's (AS-68)", () => {
+  // The soft form drops spacing and light punctuation. It dropped a rule's
+  // "." wildcard and a quantifier's comma too, so /\bRAH\b.*SCHEDULE/ became
+  // an invalid rule (the family's soft match never ran) and .{0,40} exactly
+  // forty characters.
+  for (const [family, spec] of Object.entries(HVAC_FAMILY_SPECS) as Array<[string, any]>) {
+    for (const re of [spec.titleRe, spec.altTitleRe, spec.exclude, spec.host?.titleRe, spec.host?.exclude]) {
+      if (re) assert.doesNotThrow(() => compactScheduleTitleRe(re), `${family} ${re}`);
+    }
+  }
+  assert.equal(compactScheduleTitleRe(/\bRAH\b.*SCHEDULE/i).source, "\\bRAH\\b.*SCHEDULE");
+  assert.equal(compactScheduleTitleRe(/CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i).source, "CONTROLVALVE.{0,40}(?:CHW|CHILLEDWATER)");
+  // Punctuation and spacing still go.
+  assert.equal(compactScheduleTitleRe(/GRILLE,\s*REGISTER\/DIFFUSER\.?/i).source, "GRILLEREGISTERDIFFUSER?");
+  const { RAH, CHW_CONTROL_VALVE } = HVAC_FAMILY_SPECS as Record<string, any>;
+  assert.equal(scheduleTitleMatches("RETURNAIRHANDLERSCHEDULE", RAH.titleRe, RAH.exclude), true);
+  assert.equal(scheduleTitleMatches("CONTROLVALVESCHEDULE(CHILLEDWATER)", CHW_CONTROL_VALVE.titleRe, CHW_CONTROL_VALVE.exclude), true);
+});
+
+test("a title naming a family in words matches it, run together or spaced, and a list only ending in the name does not (AS-68)", () => {
+  const { FAN, VAV, PUMP, AIR_SEPARATOR } = HVAC_FAMILY_SPECS as Record<string, any>;
+  const is = (title: string, spec: any) => scheduleTitleMatches(title, spec.titleRe, spec.exclude);
+  for (const t of ["EXHAUST FANS", "SUPPLY FANS", "VENTILATION FANS", "EXHAUSTFANS", "FANS (SPECIFICATION SECTION 23 34 00)", "TOILET EXHAUST FANS"]) assert.equal(is(t, FAN), true, t);
+  for (const t of ["EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS", "EQUIPMENTCONNECTIONSCHEDULE-EXHAUSTFANS", "CEILING FANS", "AIR HANDLING UNIT FANS", "EXHAUST FAN POINTS", "FAN POWERED TERMINAL UNIT SCHEDULE"]) assert.equal(is(t, FAN), false, t);
+  for (const t of ["VAV TERMINAL SCHEDULE", "VAV BOX WITH HOT WATER REHEAT SCHEDULE", "VAV BOX SCHEDULE", "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE"]) assert.equal(is(t, VAV), true, t);
+  for (const t of ["VAV BOX CONNECTION SCHEDULE", "VAVBOXCONNECTIONSCHEDULE", "VAV BOX CONTROL DIAGRAM", "BMS POINT FUNCTION SCHEDULE - VAV"]) assert.equal(is(t, VAV), false, t);
+  assert.equal(is("CONDENSATE PUMP", PUMP), true);
+  assert.equal(is("CONDENSATE PUMP TRAP PACKAGED SCHEDULE", PUMP), false);
+  assert.equal(is("AIR/DIRT SEPARATOR SCHEDULE", AIR_SEPARATOR), true);
+});
+
+test("a title as the family rules read it: no status, discipline, continuation or sheet count; SCHEDULES as SCHEDULE; a hyphen joining two words as a space (AS-83)", () => {
+  const read: Array<[string, string]> = [
+    ["(N) EXHAUST FANS", "EXHAUST FANS"],
+    ["(E) AIR HANDLING UNIT SCHEDULE", "AIR HANDLING UNIT SCHEDULE"],
+    ["(EXIST.) PUMP SCHEDULE", "PUMP SCHEDULE"],
+    ["NEW CONDENSATE PUMP", "CONDENSATE PUMP"],
+    ["EXISTING LOU ER SCHEDULE", "LOU ER SCHEDULE"],
+    ["MECHANICAL VALVE SCHEDULE", "VALVE SCHEDULE"],
+    ["HVAC EQUIPMENT SCHEDULE", "EQUIPMENT SCHEDULE"],
+    // …nor the specification section the title cites (AS-141).
+    ["FANS (SPECIFICATION SECTION 23 34 00) (CONT.)", "FANS"],
+    ["EXHAUST FANS (CONTINUED)", "EXHAUST FANS"],
+    ["EXHAUST FANS - CONT'D", "EXHAUST FANS"],
+    ["SUPPLY FANS CONTINUED", "SUPPLY FANS"],
+    ["VENTILATION FANS - 2 OF 3", "VENTILATION FANS"],
+    ["EXHAUST FANS (SHEET 2 OF 3)", "EXHAUST FANS"],
+    ["(N)  MECHANICAL EXHAUST FANS (CONT.) - 2 OF 3", "EXHAUST FANS"],
+    ["LOUVER SCHEDULES", "LOUVER SCHEDULE"],
+    ["AIR-HANDLING UNIT SCHEDULE", "AIR HANDLING UNIT SCHEDULE"],
+    ["VAV-BOX WITH HOT WATER REHEAT SCHEDULE", "VAV BOX WITH HOT WATER REHEAT SCHEDULE"],
+    ["WATER-TO-WATER HEAT PUMP SCHEDULE", "WATER TO WATER HEAT PUMP SCHEDULE"],
+  ];
+  for (const [title, rule] of read) assert.equal(familyRuleTitle(title), rule, title);
+  // What is no decoration stays: a word that only begins with one, a mark, a
+  // hyphen beside a number or a lone letter, a number that is no sheet count.
+  for (const title of ["NEWPORT PUMP SCHEDULE", "AHU-1 POINTS LIST", "RTU-G SCHEDULE", "3-WAY VALVE SCHEDULE", "FAN SCHEDULE 2", "CONTROL VALVE SCHEDULE", "MECHANICAL"]) {
+    assert.equal(familyRuleTitle(title), title, title);
+  }
+  // The titles the family rules then read, decorated as drafters print them.
+  const { FAN, PUMP, LOUVER, HHW_CONTROL_VALVE, AHU, VAV } = HVAC_FAMILY_SPECS as Record<string, any>;
+  const is = (title: string, spec: any, re = spec.titleRe) => scheduleTitleMatches(familyRuleTitle(title), re, spec.exclude);
+  for (const t of ["(N) EXHAUST FANS", "EXISTING SUPPLY FANS - 2 OF 3", "FANS (SPECIFICATION SECTION 23 34 00) (CONT.)", "MECHANICAL VENTILATION FANS CONTINUED"]) {
+    assert.equal(scheduleTitleMatches(t, FAN.titleRe, FAN.exclude), false, `${t}: its own rule alone`);
+    assert.equal(is(t, FAN), true, t);
+  }
+  assert.equal(is("(N) CONDENSATE PUMP (CONT.)", PUMP), true);
+  assert.equal(is("LOUVER SCHEDULES", LOUVER), true);
+  assert.equal(is("EXISTING LOU ER SCHEDULE", LOUVER), true);
+  assert.equal(is("MECHANICAL VALVE SCHEDULE", HHW_CONTROL_VALVE, HHW_CONTROL_VALVE.altTitleRe), true);
+  assert.equal(is("VALVE SCHEDULES", HHW_CONTROL_VALVE, HHW_CONTROL_VALVE.altTitleRe), true);
+  assert.equal(is("VAV-BOX WITH HOT WATER REHEAT SCHEDULE", VAV), true);
+  assert.equal(is("AIR-HANDLING UNIT SCHEDULE", AHU), true);
+  // A decoration never makes a title a family's: what the rule refuses as
+  // printed it refuses decorated.
+  for (const t of ["(N) EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS", "EXISTING AIR HANDLING UNIT FANS", "(N) EXHAUST FAN POINTS", "MECHANICAL ROOM EXHAUST FANS"]) assert.equal(is(t, FAN), false, t);
+  for (const t of ["(N) VAV BOX CONNECTION SCHEDULE", "VAV-BOX CONTROL DIAGRAM", "EXISTING VAV BOX WIRING DIAGRAM - 2 OF 3"]) assert.equal(is(t, VAV), false, t);
+  assert.equal(is("(N) CONDENSATE PUMP TRAP PACKAGED SCHEDULE", PUMP), false);
 });

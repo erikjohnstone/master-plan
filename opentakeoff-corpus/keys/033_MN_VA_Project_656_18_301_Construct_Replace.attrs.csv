@@ -1,0 +1,142 @@
+# 033_MN_VA_Project_656_18_301_Construct_Replace.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/033_MN_VA_Project_656_18_301_Construct_Replace.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M501 and M502 MECHANICAL - SCHEDULES (pages 68 and 69) of the Building 51 MEP systems project, St. Cloud VAHCS MN (Bancroft Architects + Engineers), the tables the fourth tier's seed drew for its AHU, FAN and PUMP strata.
+#   033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68 | AIR HANDLING UNIT SCHEDULE | AHU | all 1 printed row | render: page 68 overview at 40 dpi; crop 175,1555,2760,200 at 2.4x in 5 tiles (EQUIPMENT TAG column repeated), notes read in the text layer and on the overview; second read at 3x of the row, every keyed cell
+#   033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68 | EXHAUST FAN SCHEDULE | FAN | all 3 printed rows | render: page 68 overview at 40 dpi; crop 1655,340,1230,285 at 2.4x in 2 tiles (EQUIPMENT TAG column repeated), notes included; second read at 3x of EF-2, EF-2A and EF-19, every keyed cell
+#   033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69 | PUMP SCHEDULE | PUMP | all 2 printed rows | render: page 69 overview at 40 dpi; crop 960,1655,805,265 at 2.6x, notes included; second read at 3x of both rows, every keyed cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and models, room locations, dimensions and weights, static pressures of the air handler's fans, fan types and speeds, brake horsepower, coil rows, fins, velocities and air pressure drops, air temperatures, the heat pump's source-water side, the humidifier's performance, MCA and MOCP, pump NPSH, impeller and efficiency, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 033_MN_VA_Project_656_18_301_Construct_Replace: 3 table(s), 6 instance(s), 123 keyed attribute value(s) (56 printed, 67 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,building,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,floor,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,area_served,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,qty,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,supply_cfm,6200,cfm,SUPPLY FAN / SUPPLY CFM,"printed '6,200'"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,oa_cfm_min,2100,cfm,MIN. O.A.,"printed '2,100'"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,supply_fan_hp,10,hp,"SUPPLY FAN / MOTOR / HP: each motor (""(2) @ 10"": two motors at 10 hp)",author's reading of the printed row
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,supply_fan_qty,2,,SUPPLY FAN / NUMBER OF FANS,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,return_fan_hp,5,hp,RETURN FAN / MOTOR / HP,printed '5.0'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,exhaust_fan_hp,,hp,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,vfd,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,economizer,airside,,NOTE 10,"note 10: 'UNIT SHALL HAVE THE FOLLOWING CONFIGURATION: ... INLET PLENUM, RETURN FAN, ECONOMIZER SECTION, ...' (NOTES 1-11)"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,outdoor_air_pct,,%,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,cooling_type,dx,,DX COIL (GEOTHERMAL HEAT PUMP),the row prints a DX coil block served by the unit's integral water source heat pump (note 7)
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,cooling_mbh,254,MBH,DX COIL (GEOTHERMAL HEAT PUMP) / TOTAL COOLING (MBH),printed '254.0'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,cooling_tons,,tons,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,dx_stages,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_gpm,,gpm,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_ewt_f,,F,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_lwt_f,,F,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_wpd_ft,,ft,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_mbh,,MBH,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_rows,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_conn_in,,in,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,chw_glycol_pct,,%,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,heating_type,heat_pump,,DX COIL (GEOTHERMAL HEAT PUMP),the DX coil heats as the water source heat pump's condenser (TOTAL HEATING; note 7: 'INTEGRAL WATER SOURCE HEAT PUMP REFRIGERATION SYSTEM')
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,heating_mbh,161.8,MBH,DX COIL (GEOTHERMAL HEAT PUMP) / TOTAL HEATING (MBH),
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_gpm,,gpm,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_ewt_f,,F,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_lwt_f,,F,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_wpd_ft,,ft,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_mbh,,MBH,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_rows,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_conn_in,,in,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,hw_glycol_pct,,%,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,steam_psig,,psig,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,steam_lb_hr,,lb/hr,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,gas_input_mbh,,MBH,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,eh_kw,,kW,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,humidifier,yes,,STEAM HUMIDIFIER: the unit's humidifier section,printed 'PURE HUMIDIFIER CO. IP03'; author's reading of the printed row
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,energy_recovery,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,filter_merv,15,,FINAL FILTER TYPE: its MERV,author's reading of the printed row
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,bas_interface,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,volts,208,V,ELECTRICAL / VOLTAGE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AIR HANDLING UNIT SCHEDULE,AHU-6,AHU,phase,3,,ELECTRICAL / PHASE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,floor,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,area_served,2 FEMALE LOCKER,,AREA SERVED,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,service,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,cfm,740,cfm,CFM,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,esp_in,0.5,in. w.c.,SP (IN.),
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,motor_hp,0.25,hp,MOTOR / HP,printed '1/4'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,rpm,1312,rpm,FAN RPM,"printed '1,312'"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,vfd,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,ecm,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,control,BAS,,CONTROL TYPE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,volts,115,V,MOTOR / VOLT,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2,FAN,phase,1,,MOTOR / PHASE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,building,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,floor,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,area_served,2A BATH,,AREA SERVED,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,qty,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,service,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,cfm,265,cfm,CFM,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,esp_in,0.5,in. w.c.,SP (IN.),
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,motor_watts,,W,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,rpm,1676,rpm,FAN RPM,"printed '1,676'"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,vfd,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,ecm,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,control,BAS,,CONTROL TYPE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,volts,115,V,MOTOR / VOLT,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-2A,FAN,phase,1,,MOTOR / PHASE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,building,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,floor,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,area_served,19 MALE BATH AND 20 FEMALE BATH,,AREA SERVED,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,qty,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,service,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,cfm,325,cfm,CFM,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,esp_in,0.5,in. w.c.,SP (IN.),
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,motor_hp,0.1,hp,MOTOR / HP,printed '1/10'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,motor_watts,,W,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,rpm,1556,rpm,FAN RPM,"printed '1,556'"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,vfd,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,ecm,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,control,BAS,,CONTROL TYPE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,volts,115,V,MOTOR / VOLT,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EXHAUST FAN SCHEDULE,EF-19,FAN,phase,1,,MOTOR / PHASE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,building,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,floor,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,area_served,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,qty,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,service,HEAT PUMP WATER TO AHU-6,,SERVICE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,gpm,49.9,gpm,GPM,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,head_ft,30,ft,HEAD (FT.),printed '30.0'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,motor_hp,1,hp,MOTOR / HP,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,rpm,1618,rpm,RPM,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,vfd,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,pump_arrangement,,,"NOTE 2, where the row's NOTES cite it: STANDBY PUMP",blank cell
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,glycol_pct,,%,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,conn_in,,in,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,volts,208,V,MOTOR / VOLT,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-12,PUMP,phase,3,,MOTOR / PHASE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,building,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,floor,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,area_served,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,qty,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,service,HEAT PUMP WATER TO AHU-6,,SERVICE,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,gpm,49.9,gpm,GPM,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,head_ft,30,ft,HEAD (FT.),printed '30.0'
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,motor_hp,1,hp,MOTOR / HP,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,rpm,1618,rpm,RPM,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,vfd,,,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,pump_arrangement,standby,,"NOTE 2, where the row's NOTES cite it: STANDBY PUMP",printed 'STANDBY PUMP'; author's reading of the printed row
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,glycol_pct,,%,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,conn_in,,in,,not printed
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,volts,208,V,MOTOR / VOLT,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,PUMP SCHEDULE,P-13,PUMP,phase,3,,MOTOR / PHASE,

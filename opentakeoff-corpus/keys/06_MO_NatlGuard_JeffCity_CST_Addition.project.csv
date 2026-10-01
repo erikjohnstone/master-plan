@@ -1,0 +1,14 @@
+# 06_MO_NatlGuard_JeffCity_CST_Addition.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-30 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output, with the set's typicals key (typicals tier 2) and before any typical or reading eval ran
+# on the set. What an estimator would answer for this project.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76,CENTRAL BAS SYSTEM CONTROL 1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES.,"sequences of operation and control summaries for the VAV boxes, the VRF heat pump system and EF-1 (pdf#76 and pdf#77)"
+PQ2,other,06_MO_NatlGuard_JeffCity_CST_Addition.pdf#1,DEPARTMENT OF MISSOURI NATION GUARD,a Missouri Office of Administration project for the Missouri National Guard; the set cites no controls UFC
+PQ3,n/a,,,no keyed unit is flagged existing
+PQ4,constant,,,"the exhaust fan schedule prints no speed or VFD column for EF-1, a sidewall fan on a motor starter"
+PQ5,not_in_scope,06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,"SP-1 is a packaged sink drain pump system with its own controls; no control drawing, sequence or BAS point names it"

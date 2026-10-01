@@ -1,0 +1,133 @@
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M600 (PDF page 47) at 3x, read by eye on 2026-09-23.
+# The pipeline's output for this sheet was not consulted. This dev document's key
+# covers every claimed keyed-family table (01-split.md, key-authoring scope).
+SET 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile
+SEED 20260923
+SCOPE Sheet M600 (page 47) of the Lovell FHCC sterile processing service expansion (IMEG), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, configuration, wheel and impeller sizes, efficiency, sones, damper and curb types, BHP, disconnect and starter responsibility, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# The sheet's SCHEDULE GENERAL NOTES decode the lettered header notes: NOTE C,
+# CONTROLLER STARTER TYPE: "FV = FULL VOLTAGE", "VFD = VARIABLE FREQUENCY DRIVE" (ECM
+# is not listed there and is read as printed).
+#
+# UNIT HEATER SCHEDULE - HOT WATER: NOTES prints only "1." with no text. The title
+# names the medium (heating_medium = hw). CONTROL prints T-STAT (no UNIT_HEATER
+# attribute for it).
+TABLE
+sheet: 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47
+title: UNIT HEATER SCHEDULE - HOT WATER
+family: UNIT_HEATER
+render: page 47 crop 1750,555,1160,210 at 3x in 3 tiles (TAG NAME column repeated); second read at 4x (crop 1750,615,380,145) of UH-1 MBH, UH-4 GPM and UH-6 CFM
+rows: all 6 printed rows
+col: TAG NAME => tag
+col: AREA SERVED => area_served
+col: CONFIGURATION => -
+col: CFM => cfm
+col: MBH => heating_mbh
+col: GPM => hw_gpm
+col: EWT °F => hw_ewt_f
+col: LWT °F => hw_lwt_f
+col: W.P.D. FT. HEAD => -
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / RPM => -
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASES => phase
+col: ELECTRICAL / DISCONNECT / BY (NOTE A) => -
+col: ELECTRICAL / DISCONNECT / TYPE (NOTE B) => -
+col: ELECTRICAL / CONTROLLER / STARTER / BY (NOTE A) => -
+col: CONTROL => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+derive: heating_medium = hw ; header=TABLE TITLE ; note=title printed 'UNIT HEATER SCHEDULE - HOT WATER'
+grid:
+UH-1 | MECHANICAL ROOM | HORIZONTAL | 550 | 13.5 | 1.6 | 150 | 120 | 0.1 | 0.25 | 1550 | 120 | 1 | MFR | NF | MFR | T-STAT | TRANE | S |
+UH-2 | MECHANICAL ROOM | HORIZONTAL | 550 | 13.5 | 1.6 | 150 | 120 | 0.1 | 0.25 | 1550 | 120 | 1 | MFR | NF | MFR | T-STAT | TRANE | S |
+UH-3 | MECHANICAL ROOM | HORIZONTAL | 550 | 13.5 | 1.6 | 150 | 120 | 0.1 | 0.25 | 1550 | 120 | 1 | MFR | NF | MFR | T-STAT | TRANE | S |
+UH-4 | CRAWL SPACE | HORIZONTAL | 450 | 9 | 1.1 | 150 | 120 | 0.1 | 0.25 | 1550 | 120 | 1 | MFR | NF | MFR | T-STAT | TRANE | S |
+UH-5 | CRAWL SPACE | HORIZONTAL | 450 | 9 | 1.1 | 150 | 120 | 0.1 | 0.25 | 1550 | 120 | 1 | MFR | NF | MFR | T-STAT | TRANE | S |
+UH-6 | CRAWL SPACE | HORIZONTAL | 450 | 9 | 1.1 | 150 | 120 | 0.1 | 0.25 | 1550 | 120 | 1 | MFR | NF | MFR | T-STAT | TRANE | S |
+END
+
+# FAN SCHEDULE: table notes 1 "PROVIDE SHAFT GROUNDING AS REQUIRED IN THE MOTOR
+# SPECIFICATION 23 05 12.", 2 "PROVIDE EXHAUST FAN WITH ALL ALUMINUM WHEEL AND STAINLESS
+# STEEL SHAFT CONSTRUCTION.", 3 "FAN TO BE INSTALLED PER MANUFACTURERS RECOMMENDATIONS.
+# PROVIDE VIBRATION ISOLATORS AS REQUIRED.", 4 "REFER TO CONTROL DIAGRAMS FOR
+# DESCRIPTION OF CONTROL TYPE.", 5 "REFER TO SPECIFICATION DIVISION 26 FOR DETAILS OF
+# VFD." AREA SERVED prints the fan's duty ("GENERAL EXHAUST") and keys area_served as
+# printed. CONTROLLER/ STARTER TYPE (NOTE C) keys vfd (VFD yes; FV and ECM no), and the
+# same cell keys ecm as the author's reading (ECM yes; a VFD or full-voltage starter
+# means a non-EC motor, no). CONTROL TYPE prints the control diagram name (FAN-A,
+# FAN-B; note 4) and keys control as printed.
+TABLE
+sheet: 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47
+title: FAN SCHEDULE
+family: FAN
+render: page 47 crop 1480,1005,1425,190 at 3x in 4 tiles (TAG NAME column repeated), notes in the same tiles and SCHEDULE GENERAL NOTES crop 2595,115,330,420 at 2.5x; second read at 4x (crops 1480,1060,245,127 and 2165,1060,70,127 and 2520,1060,100,127) of EF-1A CFM, EF-2B MHP and EF-3B starter type
+rows: all 6 printed rows
+col: TAG NAME => tag
+col: AREA SERVED => area_served
+col: CFM => cfm
+col: CONNECTED CFM => -
+col: S.P. IN. W.C. => esp_in
+col: WHEEL DIA. INCHES => -
+col: FAN RPM (NOTE F) => rpm
+col: DRIVE TYPE => drive
+col: MAX. AMCA SONES => -
+col: BACKDRAFT DAMPER TYPE => -
+col: CURB TYPE (NOTE G) => -
+col: ELECTRICAL (NOTE 1) / BHP (NOTE E) => -
+col: ELECTRICAL (NOTE 1) / MHP (NOTE E) => motor_hp
+col: ELECTRICAL (NOTE 1) / VOLTAGE => volts
+col: ELECTRICAL (NOTE 1) / PHASES => phase
+col: ELECTRICAL (NOTE 1) / DISCONNECT / BY (NOTE A) => -
+col: ELECTRICAL (NOTE 1) / DISCONNECT / TYPE (NOTE B) => -
+col: ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / BY (NOTE A) => -
+col: ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C) => vfd
+col: [ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C): EC motor] => ecm
+col: CONTROL TYPE => control
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+grid:
+EF-1A | GENERAL EXHAUST | 24000 | 21500 | 1.50 | 36.5 | 874 | direct (DIRECT) | 80dBA | MOTORIZED | G.C. | 12.9 | 15 | 480 | 3 | EC | NF | EC | yes (VFD) | no (VFD) | FAN-A | COOK | CPS | NOTES 1, 2, 3, 5
+EF-1B | GENERAL EXHAUST | 24000 | 21500 | 1.50 | 36.5 | 874 | direct (DIRECT) | 80dBA | MOTORIZED | G.C. | 12.9 | 15 | 480 | 3 | EC | NF | EC | yes (VFD) | no (VFD) | FAN-A | COOK | CPS | NOTES 1, 2, 3, 5
+EF-2A | CARTWASHER EXHAUST | 2000 | 2000 | 1.00 | 16.5 | 1467 | direct (DIRECT) | 13.7 | MOTORIZED | G.C. | 0.62 | 1 | 480 | 3 | EC | NF | EC | no (FV) | no (FV) | FAN-B | COOK | ACRUD | NOTES 1, 2, 3, 4
+EF-2B | CARTWASHER EXHAUST | 2000 | 2000 | 1.00 | 16.5 | 1467 | direct (DIRECT) | 13.7 | MOTORIZED | G.C. | 0.62 | 1 | 480 | 3 | EC | NF | EC | no (FV) | no (FV) | FAN-B | COOK | ACRUD | NOTES 1, 2, 3, 4
+EF-3A | WASHER/ DISINFECTOR | 240 | 240 | 0.75 | 10 | 1405 | direct (DIRECT) | 7.6 | MOTORIZED | G.C. | 0.06 | 0.13 | 120 | 1 | MFR | NF | MFR | no (ECM) | yes (ECM) | FAN-B | COOK | ACRUD | NOTES 1, 2, 3, 4
+EF-3B | WASHER/ DISINFECTOR | 240 | 240 | 0.75 | 10 | 1405 | direct (DIRECT) | 7.6 | MOTORIZED | G.C. | 0.06 | 0.13 | 120 | 1 | MFR | NF | MFR | no (ECM) | yes (ECM) | FAN-B | COOK | ACRUD | NOTES 1, 2, 3, 4
+END
+
+# PUMP SCHEDULE: table notes 1 "PROVIDE SHAFT GROUNDING AS REQUIRED IN THE MOTOR
+# SPECIFICATION 23 05 13." and 2 "REFER TO SPECIFICATION DIVISION 26 FOR DETAILS OF
+# VFD." (both rows cite NOTE 2). CONTROLLER/ STARTER TYPE prints VFD (vfd = yes).
+# INLET SIZE is the pump's suction connection and keys conn_in.
+TABLE
+sheet: 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47
+title: PUMP SCHEDULE
+family: PUMP
+render: page 47 crop 1550,1240,1355,105 at 3x in 4 tiles (TAG NAME column repeated), notes in the same tiles; second read at 4x (crops 1550,1280,245,68 and 2090,1280,85,68 and 2595,1280,85,68) of CWP-1 GPM, CWP-2 HP and CWP-2 starter type
+rows: all 2 printed rows
+col: TAG NAME => tag
+col: AREA SERVED => area_served
+col: GPM => gpm
+col: PUMP FT. HEAD AT DESIGN => head_ft
+col: MINIMUM PUMP EFFICIENCY => -
+col: INLET SIZE => conn_in
+col: IMPELLER SIZE => -
+col: ELECTRICAL (NOTE 1) / HP (NOTE E) => motor_hp
+col: ELECTRICAL (NOTE 1) / RPM => rpm
+col: ELECTRICAL (NOTE 1) / VOLTAGE => volts
+col: ELECTRICAL (NOTE 1) / PHASES => phase
+col: ELECTRICAL (NOTE 1) / DISCONNECT / BY => -
+col: ELECTRICAL (NOTE 1) / DISCONNECT / TYPE => -
+col: ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / BY => -
+col: ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE => vfd
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+grid:
+CWP-1 | SPD CHILLED WATER | 325 | 50 | 69.5% | 2.5" | 8.75" | 7.5 | 1750 | 480 | 3 | EC | NF | EC | yes (VFD) | B&G | E-1510 | NOTE 2
+CWP-2 | SPD CHILLED WATER | 325 | 50 | 69.5% | 2.5" | 8.75" | 7.5 | 1750 | 480 | 3 | EC | NF | EC | yes (VFD) | B&G | E-1510 | NOTE 2
+END

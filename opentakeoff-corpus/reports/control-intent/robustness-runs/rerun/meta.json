@@ -1,0 +1,16 @@
+{
+  "walls": {
+    "004_MO_T2504_03_Interior_and_Exterior_Renovation": 1,
+    "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for": 33,
+    "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile": 27,
+    "069_ID_ITD_District_2_Laboratory_Heating_Upgrades": 72,
+    "074_CA_West_Valley_College_STEM_Classroom_HVAC": 7,
+    "094_FL_Orange_County_Regional_History_Center_HVAC": 26,
+    "12_MT_MSU_ReidHall_Renovation": 1,
+    "baker-county-eoc": 1,
+    "bldg5406-hvac-demo": 175,
+    "federal-mech": 106,
+    "itd-d1-lab": 96
+  },
+  "recorded_at": "2026-10-01T04:26:51.543Z"
+}

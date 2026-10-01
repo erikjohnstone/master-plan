@@ -1,0 +1,13 @@
+# 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-25 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output. What an estimator would answer for this project.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68,INSTALL NEW BACNET COMMUNICATION NETWORK TO AREA OF NEW WORK,M-400 control system configuration; M-401 AHU sequence
+PQ2,va,031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#6,U.S. DEPARTMENT OF VETERANS AFFAIRS,VA project 589A4-20-158
+PQ3,keep,,,existing electric unit heaters remain with their own controls (schedule remark EXISTING; M-101 TO REMAIN); no new controls shown for them
+PQ4,n/a,,,the fan schedule prints SPEED CONTROL; no keyed fan or pump waits on an unprinted speed
+PQ5,n/a,,,no packaged or plumbing-service pump keyed

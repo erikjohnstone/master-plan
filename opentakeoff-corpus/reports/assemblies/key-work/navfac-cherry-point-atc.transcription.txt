@@ -1,0 +1,736 @@
+# navfac-cherry-point-atc — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheets M-601 (PDF page 42), M-602 (page 43), M-603 (page 44),
+# M-611 (page 45), M-621 (page 48) and M-622 (page 49) at 3x
+# (mcp/scripts/render-page-crop.mjs), read by eye on 2026-09-23; second reads at 4x with
+# MuPDF (pymupdf get_pixmap) on chosen columns. The pipeline's output for these sheets
+# was not consulted. Tables are the ones the WP0.2 draw (seed 20260923) named for this
+# held-out document; every drawn table prints at most 30 rows, so every row is keyed.
+SET navfac-cherry-point-atc
+SEED 20260923
+SCOPE Sheets M-601 (page 42), M-602 (page 43), M-603 (page 44), M-611 (page 45), M-621 (page 48) and M-622 (page 49) of the FY20 P-228 ATC Tower and Air Operations facility, MCAS Cherry Point (NAVFAC Mid-Atlantic; Burns & McDonnell), the tables drawn for this document.
+EXCLUDES Electrical FLA/MCA/MOCP, air-side temperatures, face velocities, sensible capacities, efficiencies, sound data, weights, starter/disconnect responsibility, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE (M-601): two units. FAN (QTY) H.P. prints "(2) @ 10.0", the
+# fan count and each fan's HP (supply_fan_qty, supply_fan_hp). The COOLING COIL DATA
+# block (EWT 45 °F, GPM, water pressure drop) is a chilled-water coil: its TOTAL keys the
+# unit's cooling_mbh, and its # OF ROWS, GPM, EWT and water pressure drop the chw_* coil
+# attributes. No heating prints, so heating_type stays not printed (as in bldg5406). OA
+# CFM keys oa_cfm_min as the design outdoor air (as 004 and 094 read theirs). LOCATION
+# prints a room. Notes, cited by both rows (1,2,3,5 and 1,2,4,5): 1 "PROVIDE MERV 8 AND
+# MERV 13 FLAT FILTERS UPSTREAM OF COILS." (filter_merv 13, the higher); 2 "PROVIDE WITH
+# VFDs. ONE VFD PER FAN. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION." (vfd); 3, 4
+# (maximum unit dimensions); 5 "ESP INCLUDES 0.5 IN WG FOR MERV 8 & 0.7 IN WG FOR MERV 13
+# LOADING."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#42
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 42 crop 145,65,1470,125 at 3x in 4 tiles (MARK column repeated) and notes crop 145,190,800,85 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 2 printed rows
+col: MARK => tag
+col: LOCATION => -
+col: FAN DATA / S.A. CFM / (MAX) => supply_cfm
+col: FAN DATA / S.A. CFM / (MIN) => -
+col: [FAN DATA / OA CFM: design minimum outdoor air] => oa_cfm_min
+col: FAN DATA / E.S.P. (IN WG) => -
+col: FAN DATA / FAN (QTY) H.P. => -
+col: [FAN DATA / FAN (QTY) H.P.: QTY part] => supply_fan_qty
+col: [FAN DATA / FAN (QTY) H.P.: HP part] => supply_fan_hp
+col: ELECTRICAL DATA / VOLTS/PH/Hz => -
+col: [ELECTRICAL DATA / VOLTS/PH/Hz: volts part] => volts
+col: [ELECTRICAL DATA / VOLTS/PH/Hz: phase part] => phase
+col: ELECTRICAL DATA / FLA => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: COOLING COIL DATA / TOTAL (MBH) => cooling_mbh
+col: COOLING COIL DATA / SENSIBLE (MBH) => -
+col: COOLING COIL DATA / EWT °F => chw_ewt_f
+col: COOLING COIL DATA / EAT °FDB => -
+col: COOLING COIL DATA / EAT °FWB => -
+col: COOLING COIL DATA / LAT °FDB => -
+col: COOLING COIL DATA / LAT °FWB => -
+col: COOLING COIL DATA / MAX. COIL FV (FPM) => -
+col: COOLING COIL DATA / # OF ROWS => chw_rows
+col: COOLING COIL DATA / GPM => chw_gpm
+col: COOLING COIL DATA / MAX WATER PRESSURE DROP (FT WC) => chw_wpd_ft
+col: NOTES => -
+derive: cooling_type = chw ; header=COOLING COIL DATA ; note=the block prints a water coil at 45 °F EWT with GPM and a water pressure drop (the author's reading)
+derive: vfd = yes ; header=NOTE 2 ; note=note 2, cited by both rows: 'PROVIDE WITH VFDs. ONE VFD PER FAN. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION.'
+derive: filter_merv = 13 ; header=NOTE 1 ; note=note 1, cited by both rows: 'PROVIDE MERV 8 AND MERV 13 FLAT FILTERS UPSTREAM OF COILS.' (the higher MERV keys)
+grid:
+AHU-A1 | 152 MECH | 10,260 | 4,250 | 2,200 | 4.6 | (2) @ 10.0 | 2 | 10.0 | 460/3/60 | 460 | 3 | 28.65 | 32.15 | 45 A | 307.3 | 269.7 | 45 | 75.0 | 61.7 | 51.1 | 51.1 | 500 | 8 | 61.5 | 10 | 1,2,3,5
+AHU-A2 | 151 MECH | 2,640 | 1,530 | 1,530 | 3.0 | (1) @ 5.0 | 1 | 5.0 | 460/3/60 | 460 | 3 | 8.85 | 10.90 | 20 A | 54.4 | 44.1 | 45 | 67.2 | 59.3 | 52.0 | 52.0 | 500 | 8 | 10.9 | 10 | 1,2,4,5
+END
+
+# DEDICATED OUTDOOR AIR UNIT SCHEDULE (M-601), printed in two parts titled "... SCHEDULE 1
+# OF 1" (sic) and "... SCHEDULE 2 OF 2", one above the other, with the same two marks.
+# Both strip to the census title, so both TABLE blocks carry it (key-work README rule 8).
+# Part 1 prints the fans and coils: MOTOR (QTY) HP "(1) 5" splits into supply_fan_qty
+# and supply_fan_hp; the exhaust fan's MIN. MOTOR HP keys exhaust_fan_hp; the cooling
+# coil (45/55 °F water) and heating coil (130/110 °F water) keep the AIR_HANDLER
+# convention (block TOTAL / MBH as cooling_mbh / heating_mbh, water data as chw_* /
+# hw_*). Part 2 prints the ENERGY WHEEL DATA (energy_recovery wheel, the author's
+# reading), the unit electrical data (V / HZ / PH "460/60/3": volts 460, phase 3) and
+# the NOTES column; the wheel's OUTSIDE AIR CFM keys oa_cfm_min as the unit's design
+# outdoor air (the author's reading). Notes, printed below part 2 and cited by both rows
+# (1,2,3,5 and 1,2,4,5): 1 "PROVIDE MERV 8 AND MERV 13 FLAT FILTERS UPSTREAM OF WHEEL FOR
+# SUPPLY, AND MERV 8 UPSTREAM OF WHEEL FOR EXHAUST." (filter_merv 13); 2 "PROVIDE SUPPLY
+# AND EXHAUST FANS WITH VFDS. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION FOR ENTIRE
+# UNIT." (vfd; part 2's VFD PROVIDED BY prints DIVISION 23); 3, 4 (maximum dimensions); 5
+# (ESP includes filter loading); 6 "DOAH COOLING COIL SHALL BE SIZED AT 50% SENSIBLE AND
+# TOTAL EFFECTIVENESS. ENERGY WHEEL SHALL PERFORM AS SCHEDULED."; 7 "ENERGY WHEEL SHALL
+# BE 460V, 3-PHASE." (6 and 7 are cited by no row).
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#42
+title: DEDICATED OUTDOOR AIR UNIT SCHEDULE
+family: DOAH_UNIT
+render: part 1, printed as "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 1", page 42 crop 145,312,1980,120 at 3x in 5 tiles (MARK column repeated); whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: both printed rows
+col: MARK => tag
+col: SUPPLY FAN / CFM => supply_cfm
+col: SUPPLY FAN / EXTERNAL SP (IN WG) => -
+col: SUPPLY FAN / MOTOR (QTY) HP => -
+col: [SUPPLY FAN / MOTOR (QTY) HP: QTY part] => supply_fan_qty
+col: [SUPPLY FAN / MOTOR (QTY) HP: HP part] => supply_fan_hp
+col: EXHAUST FAN / CFM => -
+col: EXHAUST FAN / EXTERNAL SP (IN WG) => -
+col: EXHAUST FAN / MIN. MOTOR HP => exhaust_fan_hp
+col: COOLING COIL DATA / TOTAL (MBH) => cooling_mbh
+col: COOLING COIL DATA / SENSIBLE (MBH) => -
+col: COOLING COIL DATA / EAT °FDB => -
+col: COOLING COIL DATA / EAT °FWB => -
+col: COOLING COIL DATA / LAT °FDB => -
+col: COOLING COIL DATA / LAT °FWB => -
+col: COOLING COIL DATA / EWT °F => chw_ewt_f
+col: COOLING COIL DATA / LWT °F => chw_lwt_f
+col: COOLING COIL DATA / GPM => chw_gpm
+col: COOLING COIL DATA / WTR P.D. FT. H20 => chw_wpd_ft
+col: COOLING COIL DATA / MAX. COIL FV (FPM) => -
+col: HEATING COIL DATA / MBH => heating_mbh
+col: HEATING COIL DATA / EAT °FDB => -
+col: HEATING COIL DATA / LAT °FDB => -
+col: HEATING COIL DATA / EWT °F => hw_ewt_f
+col: HEATING COIL DATA / LWT °F => hw_lwt_f
+col: HEATING COIL DATA / GPM => hw_gpm
+col: HEATING COIL DATA / WTR P.D. FT. H20 => hw_wpd_ft
+col: HEATING COIL DATA / MAX. COIL FV (FPM) => -
+derive: cooling_type = chw ; header=COOLING COIL DATA ; note=the block prints a water coil at 45 °F EWT / 55 °F LWT (the author's reading)
+derive: heating_type = hw ; header=HEATING COIL DATA ; note=the block prints a water coil at 130 °F EWT / 110 °F LWT (the author's reading)
+grid:
+DOAH-A1 | 2,200 | 2.0 | (1) 5 | 1 | 5 | 1,280 | 1.2 | 3 | 127.5 | 62.9 | 81.0 | 72.4 | 55.0 | 55.0 | 45 | 55 | 25.5 | 10 | 500 | 66.5 | 27.0 | 55.0 | 130 | 110 | 6.7 | 5.0 | 500
+DOAH-A2 | 1,530 | 1.9 | (1) 5 | 1 | 5 | 1,380 | 1.2 | 3 | 88.7 | 43.8 | 81.0 | 72.4 | 55.0 | 55.0 | 45 | 55 | 17.7 | 10 | 500 | 46.3 | 27.0 | 55.0 | 130 | 110 | 4.6 | 5.0 | 500
+END
+
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#42
+title: DEDICATED OUTDOOR AIR UNIT SCHEDULE
+family: DOAH_UNIT
+render: part 2, printed as "DEDICATED OUTDOOR AIR UNIT SCHEDULE 2 OF 2", page 42 crop 145,458,1830,155 at 3x in 5 tiles (MARK column repeated) and notes crop 145,612,900,120 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: both printed rows
+col: MARK => tag
+col: [ENERGY WHEEL DATA / SUMMER CONDITIONS / OUTSIDE AIR CFM: the unit's design outdoor air] => oa_cfm_min
+col: ENERGY WHEEL DATA / SUMMER CONDITIONS / OUTSIDE AIR EAT (DB/WB) => -
+col: ENERGY WHEEL DATA / SUMMER CONDITIONS / OUTSIDE AIR LAT (DB/WB) => -
+col: ENERGY WHEEL DATA / SUMMER CONDITIONS / OUTSIDE AIR PRESSURE DROP (IN WG) => -
+col: ENERGY WHEEL DATA / SUMMER CONDITIONS / ENTERING EXHAUST CFM => -
+col: ENERGY WHEEL DATA / SUMMER CONDITIONS / EXHAUST EAT (DB / WB) => -
+col: ENERGY WHEEL DATA / SUMMER CONDITIONS / EXHAUST LAT (DB / WB) => -
+col: ENERGY WHEEL DATA / SUMMER CONDITIONS / EXHAUST AIR PRESSURE DROP (IN WG) => -
+col: ENERGY WHEEL DATA / WINTER CONDITIONS / OUTSIDE AIR EAT (DB / WB) => -
+col: ENERGY WHEEL DATA / WINTER CONDITIONS / OUTSIDE AIR LAT (DB/WB) => -
+col: ENERGY WHEEL DATA / WINTER CONDITIONS / OUTSIDE AIR PRESSURE DROP (IN WG) => -
+col: ENERGY WHEEL DATA / WINTER CONDITIONS / ENTERING EXHAUST CFM => -
+col: ENERGY WHEEL DATA / WINTER CONDITIONS / EXHAUST EAT (DB / WB) => -
+col: ENERGY WHEEL DATA / WINTER CONDITIONS / EXHAUST LAT (DB / WB) => -
+col: ENERGY WHEEL DATA / WINTER CONDITIONS / EXHAUST AIR PRESSURE DROP (IN WG) => -
+col: UNIT ELECTRICAL DATA / V / HZ / PH => -
+col: [UNIT ELECTRICAL DATA / V / HZ / PH: volts part] => volts
+col: [UNIT ELECTRICAL DATA / V / HZ / PH: phase part, printed last] => phase
+col: UNIT ELECTRICAL DATA / VFD PROVIDED BY => -
+col: UNIT ELECTRICAL DATA / FLA => -
+col: UNIT ELECTRICAL DATA / MOCP => -
+col: NOTES => -
+derive: energy_recovery = wheel ; header=ENERGY WHEEL DATA ; note=part 2 prints an ENERGY WHEEL DATA block (the author's reading)
+derive: vfd = yes ; header=NOTE 2 ; note=note 2, cited by both rows: 'PROVIDE SUPPLY AND EXHAUST FANS WITH VFDS. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION FOR ENTIRE UNIT.'
+derive: filter_merv = 13 ; header=NOTE 1 ; note=note 1, cited by both rows: 'PROVIDE MERV 8 AND MERV 13 FLAT FILTERS UPSTREAM OF WHEEL FOR SUPPLY, AND MERV 8 UPSTREAM OF WHEEL FOR EXHAUST.' (the higher supply MERV keys)
+grid:
+DOAH-A1 | 2,200 | 84.0 / 78.7 | 80.5 / 71.8 | 0.5 | 1,280 | 78.0 / 65.0 | 82.9 / 75.9 | 0.5 | 27.0 / 25.0 | 50.7 / 41.4 | 0.5 | 1,280 | 68.0 / 51.5 | 34.0 / 30.4 | 0.5 | 460/60/3 | 460 | 3 | DIVISION 23 | 15 A | 20 A | 1,2,3,5
+DOAH-A2 | 1,530 | 84.0 / 78.7 | 79.7/ 70.1 | 0.5 | 1,380 | 78.0 / 65.0 | 82.8 / 75.6 | 0.5 | 27.0 / 25.0 | 56.1 / 45.8 | 0.5 | 1,380 | 68.0 / 53 | 35.2 / 31.8 | 0.5 | 460/60/3 | 460 | 3 | DIVISION 23 | 15 A | 20 A | 1,2,4,5
+END
+
+# VARIABLE AIR VOLUME TERMINAL BOX (M-602): 27 series fan-powered boxes (the census title;
+# no "SCHEDULE" prints). SERVED BY names the upstream air handler, not an area. MAX and
+# MIN PRIMARY AIRFLOW key cfm_max and cfm_min; FAN AIRFLOW, the series fan's own
+# airflow, has no attribute in this vocabulary (catalogue AS-13). The HOT WATER HEATING
+# COIL DATA block keys heat_type hw and the coil's hw_* attributes (CAPACITY as hw_mbh, as
+# federal-mech's VAV key does; HHW INLET SIZE as hw_conn_in). Every row cites notes 1-5:
+# 1 "PROVIDE WITH 120V/60HZ/1PH CONTROL VOLTAGE TRANSFORMER."; 2 "PROVIDE WITH UNIT MOUNTED
+# DISCONNECT."; 3 "PROVIDE EC TYPE MOTOR. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO
+# PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO
+# PREVENT EC MOTOR OVERSPEED." (ecm); 4 "NUMBER OF OCCUPANTS SHOWN FOR INFORMATION ONLY.";
+# 5 "PROVIDE WITH ATTENUATOR IF REQUIRED TO ACHIEVE DESIRED NC LEVELS."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#43
+title: VARIABLE AIR VOLUME TERMINAL BOX
+family: VAV
+render: page 43 crop 145,852,1845,566 at 3x in 6 tiles (MARK column repeated) and notes crop 145,1418,1000,90 at 3x; second read at 4x with MuPDF (bands 145-262, 731-1001, 1161-1255, 1441-1540 and 1685-1756) of every row's maximum and minimum primary airflow, coil capacity and GPM, inlet diameter and motor HP
+rows: all 27 printed rows
+col: MARK => tag
+col: UNIT TYPE => terminal_type
+col: SERVED BY => -
+col: # OF PEOPLE => -
+col: DESIGN OA (CFM) => -
+col: FAN AIRFLOW (CFM) => -
+col: MAX PRIMARY AIRFLOW (CFM) => cfm_max
+col: MIN PRIMARY AIRFLOW (CFM) => cfm_min
+col: HOT WATER HEATING COIL DATA / CAPACITY (MBH) => hw_mbh
+col: HOT WATER HEATING COIL DATA / EAT (°F) => -
+col: HOT WATER HEATING COIL DATA / LAT (°F) => -
+col: HOT WATER HEATING COIL DATA / EWT (°F) => hw_ewt_f
+col: HOT WATER HEATING COIL DATA / FLOWRATE (GPM) => hw_gpm
+col: HOT WATER HEATING COIL DATA / MAX WATER PRESSURE DROP (FT WC) => hw_wpd_ft
+col: HOT WATER HEATING COIL DATA / HHW INLET SIZE (IN) => hw_conn_in
+col: VAV BOX INLET DIAMETER (IN) => inlet_size_in
+col: MIN INLET PRESS (IN WC) => -
+col: SOUND LEVEL (MAX NC) => -
+col: ELECTRICAL / MOTOR HP => motor_hp
+col: ELECTRICAL / VOLTS/PH/HZ => -
+col: [ELECTRICAL / VOLTS/PH/HZ: volts part] => volts
+col: [ELECTRICAL / VOLTS/PH/HZ: phase part] => phase
+col: ELECTRICAL / FLA => -
+col: NOTES => -
+derive: heat_type = hw ; header=HOT WATER HEATING COIL DATA ; note=every row prints a hot water heating coil block (EWT 130 °F)
+derive: ecm = yes ; header=NOTE 3 ; note=note 3, cited by every row: 'PROVIDE EC TYPE MOTOR. ...'
+grid:
+VAV-A101 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 4 | 90 | 660 | 440 | 260 | 15.8 | 62.9 | 85 | 130 | 1.6 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A102 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 13 | 125 | 350 | 290 | 240 | 9.8 | 59.1 | 85 | 130 | 1.0 | 10 | 3/4 | 6 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A103 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 3 | 50 | 420 | 410 | 140 | 9.0 | 65.2 | 85 | 130 | 0.9 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A104 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 4 | 50 | 280 | 180 | 130 | 7.0 | 62.0 | 85 | 130 | 0.7 | 10 | 3/4 | 6 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A105 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 2 | 25 | 160 | 120 | 40 | 3.5 | 64.8 | 85 | 130 | 0.5 | 10 | 3/4 | 5 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A106A | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 6 | 50 | 1020 | 1020 | 310 | 23.1 | 64.0 | 85 | 130 | 2.4 | 10 | 3/4 | 10 | 0.5 | 30 | 1/2 | 120/1/60 | 120 | 1 | 7.1 | 1,2,3,4,5
+VAV-A106B | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 6 | 80 | 670 | 550 | 170 | 14.7 | 64.7 | 85 | 130 | 1.5 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A107 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 0 | 95 | 1290 | 440 | 200 | 27.1 | 65.6 | 85 | 130 | 2.8 | 10 | 3/4 | 12 | 0.5 | 30 | 1/2 | 120/1/60 | 120 | 1 | 7.1 | 1,2,3,4,5
+VAV-A108A | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 4 | 40 | 760 | 760 | 230 | 16.6 | 64.8 | 85 | 130 | 1.7 | 10 | 3/4 | 10 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A108B | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 4 | 70 | 660 | 420 | 130 | 13.9 | 65.4 | 85 | 130 | 1.4 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A109 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 4 | 55 | 450 | 400 | 140 | 10.2 | 64.0 | 85 | 130 | 1.1 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A110 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 4 | 55 | 310 | 210 | 80 | 6.8 | 64.6 | 85 | 130 | 0.7 | 10 | 3/4 | 6 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A111 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 9 | 75 | 380 | 280 | 170 | 9.4 | 62.2 | 85 | 130 | 1.0 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A112 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 8 | 70 | 740 | 740 | 230 | 16.8 | 64.0 | 85 | 130 | 1.7 | 10 | 3/4 | 10 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A113 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 11 | 105 | 460 | 380 | 120 | 11.0 | 62.9 | 85 | 130 | 1.1 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A114 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 1 | 10 | 170 | 170 | 170 | 5.5 | 55 | 85 | 130 | 0.6 | 10 | 3/4 | 5 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A115 | fan_powered_series (SERIES FAN POWERED) | AHU-A2 | 53 | 470 | 910 | 910 | 560 | 24.6 | 62.4 | 85 | 130 | 2.5 | 10 | 3/4 | 10 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A116 | fan_powered_series (SERIES FAN POWERED) | AHU-A2 | 8 | 105 | 440 | 400 | 190 | 10.7 | 64.1 | 85 | 130 | 1.1 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A117 | fan_powered_series (SERIES FAN POWERED) | AHU-A2 | 3 | 35 | 300 | 270 | 90 | 6.8 | 59.5 | 85 | 130 | 0.7 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A118 | fan_powered_series (SERIES FAN POWERED) | AHU-A2 | 65 | 565 | 1060 | 1060 | 690 | 29.1 | 64.8 | 85 | 130 | 3.0 | 10 | 3/4 | 10 | 0.5 | 30 | 1/2 | 120/1/60 | 120 | 1 | 7.1 | 1,2,3,4,5
+VAV-A201 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 2 | 45 | 380 | 340 | 220 | 11.5 | 57.1 | 85 | 130 | 1.2 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A202 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 2 | 35 | 440 | 390 | 120 | 9.8 | 64.5 | 85 | 130 | 1.0 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A203A | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 25 | 165 | 560 | 560 | 310 | 14.2 | 61.5 | 85 | 130 | 1.5 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A203B | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 14 | 110 | 1160 | 1160 | 580 | 25.4 | 64.8 | 85 | 130 | 2.6 | 10 | 3/4 | 10 | 0.5 | 30 | 1/2 | 120/1/60 | 120 | 1 | 7.1 | 1,2,3,4,5
+VAV-A204 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 7 | 75 | 530 | 500 | 150 | 11.6 | 64.8 | 85 | 130 | 1.2 | 10 | 3/4 | 8 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A205 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 2 | 20 | 240 | 240 | 80 | 7.6 | 55.5 | 85 | 130 | 0.8 | 10 | 3/4 | 5 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+VAV-A206 | fan_powered_series (SERIES FAN POWERED) | AHU-A1 | 1 | 15 | 270 | 210 | 120 | 6.6 | 62.2 | 85 | 130 | 0.7 | 10 | 3/4 | 6 | 0.5 | 30 | 1/3 | 120/1/60 | 120 | 1 | 4.6 | 1,2,3,4,5
+END
+
+# HUMIDIFIER SCHEDULE (M-602): one unit. The capacity header prints "LB/HR" with "(MBH)"
+# beneath it; the value 1.0 is read as lb/hr (the author's reading: the same engineer's
+# HUMIDIFIER SCHEDULE on M-621 prints plain "LB/HR" for the same 1.9 kW wall-mount
+# electrode units at 1.0, so "(MBH)" is a template remnant). TYPE names an electrode
+# steam humidifier. Notes 1 "PROVIDE UNIT MOUNTED DRAIN PACK AND DRAIN COOLER."; 2 "MOUNT
+# HUMIDIFIER WITH BOTTOM AT 4'-0" ABOVE FINISHED FLOOR."; 3 "PROVIDE UNIT WITH HIGH
+# TEMPERATURE CONDENSATE PUMP SUITABLE FOR WORKING TEMPERATURE UP TO 212°F. PUMP SHALL BE
+# RATED FOR 50 GPH AT 20 FT WC."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#43
+title: HUMIDIFIER SCHEDULE
+family: HUMIDIFIER
+render: page 43 crop 1280,438,870,100 at 3x in 2 tiles (MARK column repeated) and notes crop 1280,535,870,75 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 1 printed row
+col: MARK => tag
+col: TYPE => humidifier_type
+col: [LB/HR (MBH): the steam capacity in lb/hr; "(MBH)" read as a template remnant] => capacity_lb_hr
+col: ELECTRIC INPUT (kW) => eh_kw
+col: VOLT/PHASE/HZ => -
+col: [VOLT/PHASE/HZ: volts part] => volts
+col: [VOLT/PHASE/HZ: phase part] => phase
+col: DISCONNECT PROVIDED BY => -
+col: NOTES => -
+grid:
+H-A1 | electrode (WALL MOUNT ELECTRODE STEAM HUMIDIFIER) | 1.0 | 1.9 | 120/1/60 | 120 | 1 | DIVISION 23 | 1,2,3
+END
+
+# AIR COOLED CHILLER SCHEDULE (M-603): two chillers (condenser air, from the title). The
+# chilled water enters at 55.4 °F and leaves at 45 °F. No input kW prints (MCA and MOCP
+# only). Both rows cite notes 1-4: 1 "PROVIDE SINGLE POINT OF CONNECTION FOR CHILLER.
+# PROVIDE DISCONNECT SWITCH, NEMA-4X STAINLESS STEEL."; 2 (coil corrosion protection
+# coating); 3 "UNIT SHALL HAVE FULL CAPACITY AT 98°F AMBIENT AND SHALL PROVIDE FULL
+# COOLING DOWN TO 24°F."; 4 (quick restart) — none prints a covered value.
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#44
+title: AIR COOLED CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 44 crop 212,85,1360,105 at 3x in 4 tiles (MARK column repeated) and notes crop 212,190,900,80 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 2 printed rows
+col: MARK => tag
+col: CAPACITY (TONS) => tons
+col: EWT (°F) => chw_ewt_f
+col: LWT (°F) => chw_lwt_f
+col: GPM => chw_gpm
+col: MAX ALLOWABLE PRESSURE DROP (FT WC) => -
+col: FOULING FACTOR (HR-FT^2-F/BTU) => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PH => phase
+col: ELECTRICAL / Hz => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: MINIMUM EER => -
+col: MINIMUM IPLV => -
+col: DISCONNECT PROVIDED BY => -
+col: NOTES => -
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'AIR COOLED CHILLER SCHEDULE'
+grid:
+CH-A1 | 56.0 | 55.4 | 45 | 128.5 | 12 | 0.0001 | 460 | 3 | 60 | 147 | 175 | 10.0 | 14.3 | DIVISION 23 | 1,2,3,4
+CH-A2 | 56.0 | 55.4 | 45 | 128.5 | 12 | 0.0001 | 460 | 3 | 60 | 147 | 175 | 10.0 | 14.3 | DIVISION 23 | 1,2,3,4
+END
+
+# FAN SCHEDULE (M-603): three fans. TYPE names each fan's drive ("DIRECT DRIVE ...",
+# "BELT DRIVE ..."), keyed drive. EF-A1 cites no note; EF-A2 and EF-A3 cite notes 1-4: 1
+# "PROVIDE FAN WITH AMCA 99-0401 TYPE B SPARK RESISTANT CONSTRUCTION."; 2 "UPBLAST FAN
+# SHALL BE DESIGNED TO WITHSTAND WIND LOADS INDICATED ON STRUCTURAL DRAWINGS."; 3 "FAN
+# SHALL BE ANCHORED TO RESIST UPLIFT LOADS INDICATED ON STRUCTURAL DRAWINGS."; 4 "PROVIDE
+# FAN WITH AUTOMATIC BELT TENSIONER."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#44
+title: FAN SCHEDULE
+family: FAN
+render: page 44 crop 212,285,860,125 at 3x in 2 tiles (MARK column repeated) and notes crop 212,408,800,80 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 3 printed rows
+col: MARK => tag
+col: SERVICE => service
+col: TYPE => -
+col: [TYPE: the drive it names] => drive
+col: CFM => cfm
+col: RPM => rpm
+col: ESP (IN WG) => esp_in
+col: MAX SONES => -
+col: HP => motor_hp
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PH => phase
+col: ELECTRICAL DATA / FLA => -
+col: NOTES => -
+grid:
+EF-A1 | STORAGE BAY VENTILATION | DIRECT DRIVE CENTRIFUGAL INLINE | direct (DIRECT DRIVE CENTRIFUGAL INLINE) | 600 | 1685 | 0.50 | 9.2 | 0.12 | 120 | 1 | 3.4 | 
+EF-A2 | UPS ROOM EXHAUST | BELT DRIVE CENTRIFUGAL UPBLAST | belt (BELT DRIVE CENTRIFUGAL UPBLAST) | 150 | 1579 | 0.40 | 4.1 | 0.07 | 120 | 1 | 1.3 | 1,2,3,4
+EF-A3 | BASE NODE EXHAUST | BELT DRIVE CENTRIFUGAL UPBLAST | belt (BELT DRIVE CENTRIFUGAL UPBLAST) | 150 | 1579 | 0.40 | 4.1 | 0.07 | 120 | 1 | 1.3 | 1,2,3,4
+END
+
+# DEHUMIDIFIER SCHEDULE (M-603): six plug-in dehumidifiers. CAPACITY PINTS/HR (moisture
+# removal) has no attribute in this family's vocabulary (catalogue). Notes 1 "PROVIDE
+# WITH INTERNAL CONDENSATE PUMP. PUMP SHALL BE CAPABLE OF LIFTING SCHEDULED CONDENSATE
+# CAPACITY BY 17 FT WC." and 2 "UNITS SHALL BE PLUG IN. PROVIDE WITH CORD AND PLUG."
+# print nothing else in the vocabulary.
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#44
+title: DEHUMIDIFIER SCHEDULE
+family: DEHUMIDIFIER
+render: page 44 crop 1725,915,500,175 at 3x in 1 tile and notes crop 1725,1088,520,65 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 6 printed rows
+col: MARK => tag
+col: °F DB => -
+col: % RH => -
+col: CAPACITY PINTS/HR => -
+col: FLA => -
+col: V/PH/HZ => -
+col: [V/PH/HZ: volts part] => volts
+col: [V/PH/HZ: phase part] => phase
+col: NOTES => -
+grid:
+DH-A1 | 90 | 38 | 5.3 | 13.1 | 120/1/60 | 120 | 1 | 1, 2
+DH-A2 | 90 | 38 | 5.3 | 13.1 | 120/1/60 | 120 | 1 | 2
+DH-A3 | 80 | 50 | 6.5 | 13.1 | 120/1/60 | 120 | 1 | 1,2
+DH-A4 | 90 | 38 | 5.3 | 13.1 | 120/1/60 | 120 | 1 | 1, 2
+DH-A5 | 90 | 38 | 5.3 | 13.1 | 120/1/60 | 120 | 1 | 1,2
+DH-A6 | 75 | 60 | 5.7 | 13.1 | 120/1/60 | 120 | 1 | 2
+END
+
+# FAN COIL UNIT SCHEDULE (M-611): ten units, all with a chilled-water cooling coil (45 °F
+# in); M3, M5, M6 and M7 also print a hot water heating coil (130 °F in), and the other six
+# print "-" in every heating cell (heating_type none, the author's reading). CFM (CLG /
+# HTG) prints the cooling and heating airflows in one cell ("310 / 190", "600 / -"); the
+# cooling part, the unit's rated airflow, keys cfm (as HIGH SPEED CFM keys cfm in the
+# federal-mech and 12_MT keys). NOMINAL H.P. mixes units: HP on eight rows and watts on
+# two ("85 W", "225 W"). A column carries one unit and a value is never converted, so
+# those two cells are typed "?". A coil's TOTAL / MBH keys its chw_mbh / hw_mbh (FCU keeps coil
+# capacities on the coils); PIPING RUNOUT SIZE keys the coil's connection size; WTR TEMP
+# ΔT is not a leaving temperature and is typed "-". Every row cites note 4, "MOTORS SHALL
+# BE EC TYPE. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO
+# ELECTRICAL SYSTEM (INDUCTOR, ETC) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR
+# OVERSPEED." (ecm). Notes 1 (unit-mounted disconnect and control transformer), 2 and 5
+# (filter racks, MERV 8, and MERV 8 + MERV 11 final) and 3 (seismic) print nothing else in
+# this vocabulary.
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#45
+title: FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 45 crop 150,253,1930,272 at 3x in 5 tiles (MARK column repeated) and notes crop 150,523,1000,90 at 3x; second read at 4x with MuPDF (bands 150-207, 400-572, 627-679, 1033-1084, 1229-1344, 1614-1659 and 1826-1879) of every row's airflow, ESP, HP, cooling total and GPM, runout, heating MBH and GPM, and V/PH/HZ
+rows: all 10 printed rows
+col: MARK => tag
+col: TYPE => -
+col: FAN DATA / CFM (CLG / HTG) => -
+col: [FAN DATA / CFM (CLG / HTG): cooling part, the unit's rated airflow] => cfm
+col: FAN DATA / ESP (IN. W.G.) => -
+col: FAN DATA / NOMINAL H.P. => motor_hp
+col: COOLING COIL DATA / SENSIBLE MBH => -
+col: COOLING COIL DATA / TOTAL MBH => chw_mbh
+col: COOLING COIL DATA / ENT. AIR / (°F) DB => -
+col: COOLING COIL DATA / ENT. AIR / (°F) WB => -
+col: COOLING COIL DATA / LVG AIR / (°F) DB => -
+col: COOLING COIL DATA / LVG AIR / (°F) WB => -
+col: COOLING COIL DATA / ENT. WTR TEMP (°F) => chw_ewt_f
+col: COOLING COIL DATA / EXT. WTR TEMP (°F) => chw_lwt_f
+col: COOLING COIL DATA / GPM => chw_gpm
+col: COOLING COIL DATA / MAX. COIL FV (FPM) => -
+col: COOLING COIL DATA / W. P.D. FT. HD. => chw_wpd_ft
+col: COOLING COIL DATA / PIPING RUNOUT SIZE (IN) => chw_conn_in
+col: HEATING COIL DATA / MBH => hw_mbh
+col: HEATING COIL DATA / ENT. AIR (°F) DB => -
+col: HEATING COIL DATA / LVG. AIR (°F) DB => -
+col: HEATING COIL DATA / ENT. WTR TEMP (°F) => hw_ewt_f
+col: HEATING COIL DATA / WTR TEMP ΔT (°F) => -
+col: HEATING COIL DATA / GPM => hw_gpm
+col: HEATING COIL DATA / MAX. COIL FV (FPM) => -
+col: HEATING COIL DATA / W. P.D. FT. HD. => hw_wpd_ft
+col: HEATING COIL DATA / PIPING RUNOUT SIZE => hw_conn_in
+col: [HEATING COIL DATA: a hot water coil, or "-" in every cell] => heating_type
+col: ELECTRICAL / V/PH/HZ => -
+col: [ELECTRICAL / V/PH/HZ: volts part] => volts
+col: [ELECTRICAL / V/PH/HZ: phase part] => phase
+col: ELECTRICAL / MAX ECM FLA => -
+col: VFD/STARTER/ DISCONNECT PROVIDED BY => -
+col: NOTES => -
+derive: cooling_type = chw ; header=COOLING COIL DATA ; note=every row prints a water cooling coil at 45 °F entering water (the author's reading)
+derive: ecm = yes ; header=NOTE 4 ; note=note 4, cited by every row: 'MOTORS SHALL BE EC TYPE. ...'
+grid:
+FCU-M1A | SUSPENDED HORIZONTAL DUCTED | 600 / - | 600 | 0.30 | 1/2 | 11.5 | 15.6 | 75.0 | 65.0 | 57.6 | 56.5 | 45 | 55 | 3.1 | 500 | 5.0 | 0.75 | - | - | - | - | - | - | - | - | - | none (-) | 120/1/60 | 120 | 1 | 6.4 | DIVISION 23 | 1,3,4,5
+FCU-M1B | SUSPENDED HORIZONTAL DUCTED | 600 / - | 600 | 0.30 | 1/2 | 11.5 | 15.6 | 75.0 | 65.0 | 57.6 | 56.5 | 45 | 55 | 3.1 | 500 | 5.0 | 0.75 | - | - | - | - | - | - | - | - | - | none (-) | 120/1/60 | 120 | 1 | 6.4 | DIVISION 23 | 1,3,4,5
+FCU-M2A | SUSPENDED HORIZONTAL CABINET | 1160 / - | 1160 | - | 1/2 | 21.8 | 30.5 | 75.0 | 65.0 | 57.9 | 56.5 | 45 | 55 | 6.0 | 500 | 5.0 | 1.0 | - | - | - | - | - | - | - | - | - | none (-) | 120/1/60 | 120 | 1 | 6.4 | DIVISION 23 | 1,3,4,5
+FCU-M2B | SUSPENDED HORIZONTAL CABINET | 1160 / - | 1160 | - | 1/2 | 21.8 | 30.5 | 75.0 | 65.0 | 57.9 | 56.5 | 45 | 55 | 6.0 | 500 | 5.0 | 1.0 | - | - | - | - | - | - | - | - | - | none (-) | 120/1/60 | 120 | 1 | 6.4 | DIVISION 23 | 1,3,4,5
+FCU-M3 | SUSPENDED HORIZONTAL CABINET | 310 / 190 | 310 | - | ?85 W | 9.4 | 11.7 | 90.0 | 70.5 | 62.9 | 59.4 | 45 | 55 | 2.3 | 500 | 12.0 | 0.75 | 5.5 | 50 | 77.6 | 130 | 20 | 0.6 | 500 | 2.0 | 0.75 | hw (ENT. WTR TEMP 130) | 120/1/60 | 120 | 1 | 1.5 | DIVISION 23 | 1,2,3,4
+FCU-M4A | SUSPENDED HORIZONTAL CABINET | 2600 / - | 2600 | - | 1.5 | 57.2 | 70.1 | 80.0 | 67.0 | 60.0 | 58.6 | 45 | 56 | 13.3 | 500 | 5.0 | 1.5 | - | - | - | - | - | - | - | - | - | none (-) | 460/3/60 | 460 | 3 | 3.3 | DIVISION 23 | 1,3,4,5
+FCU-M4B | SUSPENDED HORIZONTAL CABINET | 2600 / - | 2600 | - | 1.5 | 57.2 | 70.1 | 80.0 | 67.0 | 60.0 | 58.6 | 45 | 56 | 13.3 | 500 | 5.0 | 1.5 | - | - | - | - | - | - | - | - | - | none (-) | 460/3/60 | 460 | 3 | 3.3 | DIVISION 23 | 1,3,4,5
+FCU-M5 | SUSPENDED HORIZONTAL CABINET | 360 / 360 | 360 | - | ?225 W | 12.9 | 17.4 | 90.0 | 70.5 | 57.6 | 55.7 | 45 | 55 | 3.4 | 500 | 10.0 | 0.75 | 11.1 | 50 | 78.6 | 130 | 20 | 1.1 | 500 | 2.0 | 0.75 | hw (ENT. WTR TEMP 130) | 120/1/60 | 120 | 1 | 1.9 | DIVISION 23 | 1,2,3,4
+FCU-M6 | SUSPENDED HORIZONTAL DUCTED | 640 / 500 | 640 | 0.30 | 1/2 | 12.8 | 13.5 | 72.0 | 60.0 | 53.8 | 52.4 | 45 | 55 | 2.7 | 500 | 5.0 | 0.75 | 10.4 | 70 | 89.3 | 130 | 20 | 1.0 | 500 | 2.0 | 0.75 | hw (ENT. WTR TEMP 130) | 120/1/60 | 120 | 1 | 6.4 | DIVISION 23 | 1,3,4,5
+FCU-M7 | SUSPENDED HORIZONTAL DUCTED | 2250 / 1600 | 2250 | 0.30 | 1.5 | 54.7 | 85.5 | 75.0 | 65.0 | 52.9 | 52.2 | 45 | 54 | 19.3 | 500 | 15.0 | 1.5 | 27.7 | 70 | 86.0 | 130 | 20 | 2.8 | 500 | 5.0 | 0.75 | hw (ENT. WTR TEMP 130) | 460/1/60 | 460 | 1 | 3.3 | DIVISION 23 | 1,3,4,5
+END
+
+# PUMP SCHEDULE (M-611): eleven pumps. SERVICE keys service as printed. SPEED CONTROL
+# prints VFD or ECM: an electronically commutated circulator carries no VFD, so ECM keys
+# vfd no (the author's reading); notes 3 "PROVIDE PUMP WITH VFD." and 7 "PROVIDE PUMP
+# WITH VFD, NEMA-4X STAINLESS STEEL." are cited only by rows whose SPEED CONTROL prints
+# VFD. MIN. MOTOR POWER (HP) keys motor_hp. No duty/standby arrangement prints. Notes 1
+# "PROVIDE WITH BOILER. COORDINATE PRESSURE DROP WITH BOILER. SELECTED PRESSURE DROP SHALL
+# BE BOILER WPD + 8 FT WC."; 2 "PUMP SHALL BE PROVIDED WITH ELECTRONICALLY COMMUTATED
+# MOTOR (ECM)."; 4 "PROVIDE INTEGRAL TO CHILLER ENCLOSURE."; 5 (EC motor harmonics and
+# overspeed); 6 (seismic).
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#45
+title: PUMP SCHEDULE
+family: PUMP
+render: page 45 crop 145,617,1162,275 at 3x in 3 tiles (MARK column repeated) and notes crop 145,890,1000,125 at 3x; second read at 4x with MuPDF (bands 145-237, 719-1016 and 1016-1160) of every row's flow, head, HP, speed control, volts and phase
+rows: all 11 printed rows
+col: MARK => tag
+col: SERVICE => service
+col: TYPE => -
+col: FLOW (GPM) => gpm
+col: TDH (FT WC) => head_ft
+col: ELECTRICAL / MIN. MOTOR POWER (HP) => motor_hp
+col: [ELECTRICAL / SPEED CONTROL: VFD, or an ECM motor with no VFD] => vfd
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / Hz => -
+col: REMARKS => -
+grid:
+HHWP-DOAH-M1 | DOAH CIRCULATOR | INLINE CIRCULATOR | 12 | 20 | 1/3 | no (ECM) | 120 | 1 | 60 | 1,2,5,6
+HRHWP-MT1 | PRIMARY HEAT RECOVERY HEATING HOT WATER PUMP | CHILLER MOUNTED END SUCTION | 40 | 33 | 0.75 | yes (VFD) | 460 | 3 | 60 | 4,6,7
+HRHWP-MT2 | PRIMARY HEAT RECOVERY HEATING HOT WATER PUMP | CHILLER MOUNTED END SUCTION | 40 | 33 | 0.75 | yes (VFD) | 460 | 3 | 60 | 4,6,7
+PCHWP-MT1 | PRIMARY CHILLED WATER PUMP | CLOSE COUPLED END SUCTION | 215 | 30 | 3 | yes (VFD) | 460 | 3 | 60 | 4,6,7
+PCHWP-MT2 | PRIMARY CHILLED WATER PUMP | CLOSE COUPLED END SUCTION | 215 | 30 | 3 | yes (VFD) | 460 | 3 | 60 | 4,6,7
+PHHWP-M1 | HEATING HOT WATER PRIMARY | INLINE CIRCULATOR | 25 | 12 | 1/6 | no (ECM) | 120 | 1 | 60 | 1,2,5,6
+PHHWP-M2 | HEATING HOT WATER PRIMARY | INLINE CIRCULATOR | 25 | 12 | 1/6 | no (ECM) | 120 | 1 | 60 | 1,2,5,6
+SCHWP-M1 | CHILLED WATER SECONDARY | VERTICAL INLINE - CLOSE COUPLED | 170 | 48 | 5 | yes (VFD) | 460 | 3 | 60 | 3,6
+SCHWP-M2 | CHILLED WATER SECONDARY | VERTICAL INLINE - CLOSE COUPLED | 170 | 48 | 5 | yes (VFD) | 460 | 3 | 60 | 3,6
+SHHWP-M1 | HEATING HOT WATER SECONDARY | CLOSE COUPLED END SUCTION | 38 | 46 | 1 | yes (VFD) | 460 | 3 | 60 | 3,6
+SHHWP-M2 | HEATING HOT WATER SECONDARY | CLOSE COUPLED END SUCTION | 38 | 46 | 1 | yes (VFD) | 460 | 3 | 60 | 3,6
+END
+
+# BOILER SCHEDULE (M-611): two condensing boilers. The leaving water temperature prints
+# before the entering one (130 / 110). The input column is headed NATURAL GAS INPUT (fuel
+# gas). ROOM prints a room. Both rows cite notes 1 "BOILER AHRI CERTIFIED EFFICIENCY SHALL
+# BE MINIMUM OF 95%." and 2 "PROVIDE BOILER WITH PHHWP, SEE HVAC PUMP SCHEDULE FOR PUMP
+# INFORMATION."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#45
+title: BOILER SCHEDULE
+family: BOILER
+render: page 45 crop 1318,617,930,102 at 3x in 3 tiles (MARK column repeated) and notes crop 1318,716,700,55 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 2 printed rows
+col: MARK => tag
+col: ROOM => -
+col: TYPE => -
+col: LVG. WATER TEMP (°F) => lwt_f
+col: ENT. WATER TEMP (°F) => ewt_f
+col: WATER FLOW (GPM) => gpm
+col: NATURAL GAS INPUT (MBH) => input_mbh
+col: MINIMUM GROSS OUTPUT (MBH) => output_mbh
+col: V/PH/Hz => -
+col: [V/PH/Hz: volts part] => volts
+col: [V/PH/Hz: phase part] => phase
+col: FLA => -
+col: STARTER/DISCONNECT PROVIDED BY => -
+col: NOTES => -
+derive: fuel = gas ; header=NATURAL GAS INPUT (MBH) ; note=the input column is headed NATURAL GAS
+grid:
+B-M1 | 171 MECH | FLOOR MOUNTED CONDENSING | 130 | 110 | 25 | 263 | 250 | 120/1/60 | 120 | 1 | 12 | DIVISION 23 | 1,2
+B-M2 | 171 MECH | FLOOR MOUNTED CONDENSING | 130 | 110 | 25 | 263 | 250 | 120/1/60 | 120 | 1 | 12 | DIVISION 23 | 1,2
+END
+
+# UNIT HEATER SCHEDULE (M-611): one hot water unit heater (heating_medium hw, read from
+# the 130/110 °F water columns and the HHW runout). EWT (°F) / LWT(°F) prints both
+# temperatures in one cell and is split. MOTOR (HP) prints "16 W", so the column keys
+# motor_hp in the watts it prints (as the 12_MT and federal-mech keys do; values are never
+# converted). HHW ROUNTOUT SIZE (sic) keys conn_in. MAX PRESSURE
+# DROP prints "(IN WC)" and has no attribute here. Note 1 "MOUNTING HEIGHT SHALL BE 9'-0"
+# ABOVE FINISH FLOOR."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#45
+title: UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 45 crop 1318,793,858,87 at 3x in 2 tiles (MARK column repeated) and notes crop 1318,877,500,35 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 1 printed row
+col: MARK => tag
+col: TYPE => -
+col: CFM => cfm
+col: TOTAL CAPACITY (MBH) => heating_mbh
+col: WATER FLOW (GPM) => hw_gpm
+col: EWT (°F) / LWT(°F) => -
+col: [EWT (°F) / LWT(°F): EWT part] => hw_ewt_f
+col: [EWT (°F) / LWT(°F): LWT part] => hw_lwt_f
+col: MAX PRESSURE DROP (IN WC) => -
+col: HHW ROUNTOUT SIZE (IN) => conn_in
+col: MOTOR (HP) => motor_hp [W]
+col: V/P/Hz => -
+col: [V/P/Hz: volts part] => volts
+col: [V/P/Hz: phase part] => phase
+col: NOTES => -
+derive: heating_medium = hw ; header=EWT (°F) / LWT(°F) ; note=the unit prints 130/110 °F water, a water flow and an HHW runout (the author's reading)
+grid:
+UH-M1 | HORIZONTAL DISCHARGE | 140 | 5.0 | 0.5 | 130 / 110 | 130 | 110 | 5.0 | 3/4 | 16 W | 120/1/60 | 120 | 1 | 1
+END
+
+# AIR COOLED HEAT RECOVERY CHILLER SCHEDULE (M-611): two chillers (condenser air, from
+# the title). The EVAPORATOR block keys the chw_* attributes and the HEAT RECOVERY
+# CONDENSER BUNDLE block the hw_* attributes. The bundle prints EWT 130 and LWT 110, the
+# reverse of a condenser that heats water (the boilers on this sheet print ENT 110 / LVG
+# 130); the cells are unambiguously the bundle's entering and leaving temperatures, so
+# they are keyed as printed and the likely drafting swap is catalogued (unlike 12_MT,
+# whose header groups, not values, were misassigned). ELECTRICAL / UNIT POWER (kW) keys
+# kw_input; the COMPRESSOR kW (111) is the compressors' share and is typed "-". Both rows
+# cite notes 1-8: 1 (seismic, louvered panels, discharge plenum, isolators); 2 (coil
+# coating); 3 "UNIT SHALL HAVE FULL CAPACITY AT 98°F AMBIENT AND SHALL PROVIDE FULL
+# COOLING DOWN TO 24°F."; 4 "PROVIDE FLEXIBLE PIPE CONNECTORS."; 5 (evaporator piping
+# components); 6 "PROVIDE CHILLER WITH PCWHPs AND HRHWPs. SEE PUMP SCHEDULE ON THIS
+# SHEET." (the pump schedule prints PCHWP-MT1/2 and HRHWP-MT1/2); 7 (quick restart); 8
+# "PROVIDE SINGLE POINT OF CONNECTION FOR CHILLER. PROVIDE DISCONNECT SWITCH, NEMA-4X
+# STAINLESS STEEL. REFER TO THE PUMP SCHEDULE FOR PCWHPs AND HRWPs (FOUR (4) ADDITIONAL
+# POWER CONNECTIONS)."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#45
+title: AIR COOLED HEAT RECOVERY CHILLER SCHEDULE
+family: HEAT_RECOVERY_CHILLER
+render: page 45 crop 145,1017,1405,132 at 3x in 4 tiles (MARK column repeated) and notes crop 145,1147,1450,135 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 2 printed rows
+col: MARK => tag
+col: CAPACITY (TONS) => tons
+col: CONDENSER / OAT (°F) => -
+col: CONDENSER / FAN DATA / NO. => -
+col: EVAPORATOR / EWT (°F) => chw_ewt_f
+col: EVAPORATOR / LWT (°F) => chw_lwt_f
+col: EVAPORATOR / GPM => chw_gpm
+col: EVAPORATOR / PD (FT WC) => -
+col: COMPRESSOR / kW => -
+col: COMPRESSOR / KW/TON => -
+col: COMPRESSOR / STEPS => -
+col: COMPRESSOR / NO. => -
+col: HEAT RECOVERY CONDENSER BUNDLE / HEAT RECOVERY EWT (°F) => hw_ewt_f
+col: HEAT RECOVERY CONDENSER BUNDLE / HEAT RECOVERY LWT (°F) => hw_lwt_f
+col: HEAT RECOVERY CONDENSER BUNDLE / GPM => hw_gpm
+col: HEAT RECOVERY CONDENSER BUNDLE / PD (FT WC) => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PH => phase
+col: ELECTRICAL / Hz => -
+col: ELECTRICAL / UNIT POWER (kW) => kw_input
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'AIR COOLED HEAT RECOVERY CHILLER SCHEDULE'
+grid:
+CH-MT1 | 91.0 | 98 °F | 8 | 55.0 | 45.0 | 215 | 16.20 | 111 | - | 4 |  | 130 | 110 | 40 | 10.0 | 460 | 3 | 60 | 121 | 207 | 225 | 7060 | 1 - 8
+CH-MT2 | 91.0 | 98 °F | 8 | 55.0 | 45.0 | 215 | 16.20 | 111 | - | 4 |  | 130 | 110 | 40 | 10.0 | 460 | 3 | 60 | 121 | 207 | 225 | 7060 | 1 - 8
+END
+
+# COMPUTER ROOM AIR HANDLER TYPE SCHEDULE (M-621): two chilled-water CRAHs. FAN MOTOR
+# (QTY) HP prints "1 (5.0)", the reverse of its header's order; a count of 5.0 is not a
+# count, so 5.0 keys motor_hp (the author's reading) and the 1 is typed "-" (this family
+# has no fan-count attribute). V/HZ/PH "460/60/3" prints phase last. The coil's TOTAL
+# CAPACITY (MBTUH = MBH) keys cooling_mbh and its water data the chw_* attributes;
+# PIPING RUNOUT SIZE keys conn_in (as in itd-d1-lab's reheat coils). MIN. ROWS / MAX.
+# FPI prints one number (4) and is typed "-". Both rows cite notes 1-4: 1 (seismic); 2
+# "MOTOR SHALL BE EC TYPE OF INVERTER RATED WITH VFD. EC MOTORS SHALL BE PROVIDED WITH
+# EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC) AND SHALL BE
+# PROGRAMMED TO PREVENT EC MOTOR OVERSPEED." (this family's vocabulary has no motor
+# attribute beyond HP); 3 "COOLING CAPACITIES ARE NET (CAPACITY IS DE-RATED FOR FAN
+# HEAT)."; 4 "PROVIDE UNITS WITH FILTER RACK ON THE UNIT INTAKE AND 2" MERV 8 PRE FILTER
+# AND 2" MERV 11 FILTER."
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#48
+title: COMPUTER ROOM AIR HANDLER TYPE SCHEDULE
+family: CRAH
+render: page 48 crop 110,855,1285,135 at 3x in 3 tiles (MARK column repeated) and notes crop 110,987,1300,90 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 2 printed rows
+col: MARK => tag
+col: TYPE => -
+col: FAN / TOTAL AIRFLOW (CFM) => cfm
+col: FAN / EXT. STATIC PRESSURE (IN. W.C.) => -
+col: FAN / FAN MOTOR (QTY) HP => -
+col: [FAN / FAN MOTOR (QTY) HP: the decimal HP, printed in parentheses] => motor_hp
+col: FAN / V/HZ/PH => -
+col: [FAN / V/HZ/PH: volts part] => volts
+col: [FAN / V/HZ/PH: phase part, printed last] => phase
+col: COOLING COIL / MAX. COIL FACE VELOCITY (FPM) => -
+col: COOLING COIL / SENSIBLE CAPACITY (MBTUH) => -
+col: COOLING COIL / TOTAL CAPACITY (MBTUH) => cooling_mbh
+col: COOLING COIL / EAT DB (°F) => -
+col: COOLING COIL / EAT WB (°F) => -
+col: COOLING COIL / LAT DB (°F) => -
+col: COOLING COIL / LAT WB (°F) => -
+col: COOLING COIL / EWT (°F) => chw_ewt_f
+col: COOLING COIL / LWT (°F) => chw_lwt_f
+col: COOLING COIL / CHILLED WATER FLOW (GPM) => chw_gpm
+col: COOLING COIL / MAX. WATER PRESSURE DROP (FT. W.C.) => -
+col: COOLING COIL / MIN. ROWS / MAX. FPI => -
+col: [COOLING COIL / PIPING RUNOUT SIZE: the coil hook-up's pipe size] => conn_in
+col: VFD/STARTER/ DISCONNECT PROVIDED BY => -
+col: NOTES => -
+grid:
+CRAH-T1A | HORIZONTAL | 5000 | 0.5 | 1 (5.0) | 5.0 | 460/60/3 | 460 | 3 | 500 | 113.2 | 143.0 | 75 | 62.5 | 54.0 | 52.5 | 45 | 56.5 | 27 | 25 | 4 | 2 | DIVISION 23 | 1,2,3,4
+CRAH-T1B | HORIZONTAL | 5000 | 0.5 | 1 (5.0) | 5.0 | 460/60/3 | 460 | 3 | 500 | 113.2 | 143.0 | 75 | 62.5 | 54.0 | 52.5 | 45 | 56.5 | 27 | 25 | 4 | 2 | DIVISION 23 | 1,2,3,4
+END
+
+# CABINET UNIT HEATER SCHEDULE (M-621): two hot water cabinet heaters (heating_medium hw,
+# read from the HEATING COIL DATA block's 130/110 °F water and HHW runout). MOTOR (HP)
+# prints "25 W" on both rows, so the column keys motor_hp in the watts it prints. EWT (°F)
+# / LWT(°F) prints both temperatures in one cell and is split; HHW ROUNTOUT SIZE (sic)
+# keys conn_in. Note 1 "IF PROVIDED, EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT
+# ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC) AND SHALL BE PROGRAMMED TO PREVENT
+# EC MOTOR OVERSPEED." prints nothing in this vocabulary.
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#48
+title: CABINET UNIT HEATER SCHEDULE
+family: CABINET_UNIT_HEATER
+render: page 48 crop 1358,1028,850,135 at 3x in 2 tiles (MARK column repeated) and notes crop 1358,1160,880,45 at 3x; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 2 printed rows
+col: MARK => tag
+col: TYPE => -
+col: MOUNTING STYLE => -
+col: FAN DATA / CFM => cfm
+col: FAN DATA / ESP (IN WG) => -
+col: FAN DATA / MOTOR (HP) => motor_hp [W]
+col: HEATING COIL DATA / TOTAL CAPACITY (MBH) => heating_mbh
+col: HEATING COIL DATA / EWT (°F) / LWT(°F) => -
+col: [HEATING COIL DATA / EWT (°F) / LWT(°F): EWT part] => hw_ewt_f
+col: [HEATING COIL DATA / EWT (°F) / LWT(°F): LWT part] => hw_lwt_f
+col: HEATING COIL DATA / WATER FLOW (GPM) => hw_gpm
+col: HEATING COIL DATA / MAX PRESSURE DROP (FT WC) => -
+col: HEATING COIL DATA / HHW ROUNTOUT SIZE (IN) => conn_in
+col: V/P/Hz => -
+col: [V/P/Hz: volts part] => volts
+col: [V/P/Hz: phase part] => phase
+col: VFD/STARTER / DISCONNECT BY => -
+col: NOTES => -
+derive: heating_medium = hw ; header=HEATING COIL DATA ; note=the heating coil block prints 130/110 °F water, a water flow and an HHW runout (the author's reading)
+grid:
+CUH-T1 | CABINET | VERTICAL FLOOR MOUNTED | 140 | 0.1 | 25 W | 5.0 | 130/110 | 130 | 110 | 0.5 | 10 | 3/4 | 115/1/60 | 115 | 1 | DIVISION 23 | 1
+CUH-T2 | CABINET | VERTICAL FLOOR MOUNTED | 140 | 0.1 | 25 W | 5.0 | 130/110 | 130 | 110 | 0.5 | 10 | 3/4 | 115/1/60 | 115 | 1 | DIVISION 23 | 1
+END
+
+# DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE (M-622): one unit, DOAH-T1, keyed with the
+# AIR_HANDLER convention. Its only airflow is OA CFM (oa_cfm_min; supply_cfm stays not
+# printed). FAN (QTY) H.P. prints "1 (1.5)", the reverse of its header's order: 1 fan at
+# 1.5 HP (the author's reading; 1.5 is not a count). VOLTS/PH/Hz prints "460/60/30" (the
+# text layer agrees): 460 V is plain, but no reading of "60" or "30" is a phase, so phase
+# is typed "?". The row prints three coil blocks. The COOLING COIL (45/55 °F water) keys
+# cooling_mbh and the chw_* attributes. The PREHEAT COIL (130/110 °F water) is the unit's
+# own heating coil and keys heating_mbh and the hw_* attributes: M-622's HHW CONTROL VALVE
+# SCHEDULE gives DOAH-T1's own valve (DOAH-T1-HHW) 2.6 GPM, the preheat coil's flow. The
+# DUCT MOUNTED HEATING COIL is a separately tagged coil, HHWC-DOAH-T1 (note 2 "DUCT MOUNTED
+# HEATING COIL (HHWC-DOAH-T1) SHALL BE SHIPPED SEPERATELY."; the valve schedule lists it
+# under its own unit mark at 1.2 GPM, this block's flow), so its cells are typed "-" here
+# (the author's reading). The FINAL FILTER MERV keys filter_merv. Note 1 gives the maximum
+# unit dimensions.
+TABLE
+sheet: navfac-cherry-point-atc-mechanical.pdf#49
+title: DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE
+family: DOAH_HANDLING
+render: page 49 crop 126,566,2100,132 at 3x in 5 tiles (MARK column repeated) and notes crop 126,698,900,62 at 3x; the VOLTS/PH/Hz cell also read from the PDF text layer; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 1 printed row
+col: MARK => tag
+col: LOCATION => -
+col: [OA CFM: design outdoor air] => oa_cfm_min
+col: FAN DATA / E.S.P. (IN WG) => -
+col: FAN DATA / FAN (QTY) H.P. => -
+col: [FAN DATA / FAN (QTY) H.P.: the count, printed first] => supply_fan_qty
+col: [FAN DATA / FAN (QTY) H.P.: the HP, printed in parentheses] => supply_fan_hp
+col: FAN DATA / VOLTS/PH/Hz => -
+col: [FAN DATA / VOLTS/PH/Hz: volts part] => volts
+col: [FAN DATA / VOLTS/PH/Hz: phase part] => phase
+col: FAN DATA / FLA => -
+col: COOLING COIL / TOTAL (MBH) => cooling_mbh
+col: COOLING COIL / SENSIBLE (MBH) => -
+col: COOLING COIL / EWT °F => chw_ewt_f
+col: COOLING COIL / LWT °F => chw_lwt_f
+col: COOLING COIL / EAT °FDB => -
+col: COOLING COIL / EAT °FWB => -
+col: COOLING COIL / LAT °FDB => -
+col: COOLING COIL / LAT °FWB => -
+col: COOLING COIL / MAX. COIL FV (FPM) => -
+col: COOLING COIL / # OF ROWS => chw_rows
+col: COOLING COIL / GPM => chw_gpm
+col: COOLING COIL / MAX WATER PRESSURE DROP (FT WC) => chw_wpd_ft
+col: PREHEAT COIL / CAPACITY (MBH) => heating_mbh
+col: PREHEAT COIL / EWT °F => hw_ewt_f
+col: PREHEAT COIL / LWT °F => hw_lwt_f
+col: PREHEAT COIL / EAT °FDB => -
+col: PREHEAT COIL / LAT °FDB => -
+col: PREHEAT COIL / MAX. COIL FV (FPM) => -
+col: PREHEAT COIL / # OF ROWS => hw_rows
+col: PREHEAT COIL / GPM => hw_gpm
+col: PREHEAT COIL / MAX WATER PRESSURE DROP (FT WC) => hw_wpd_ft
+col: DUCT MOUNTED HEATING COIL / CAPACITY (MBH) => -
+col: DUCT MOUNTED HEATING COIL / GPM => -
+col: DUCT MOUNTED HEATING COIL / EWT °F => -
+col: DUCT MOUNTED HEATING COIL / LWT °F => -
+col: DUCT MOUNTED HEATING COIL / EAT °FDB => -
+col: DUCT MOUNTED HEATING COIL / LAT °FDB => -
+col: DUCT MOUNTED HEATING COIL / MAX WATER PRESSURE DROP (FT WC) => -
+col: DUCT MOUNTED HEATING COIL / MAX AIR PRESSURE DROP (IN WG) => -
+col: DUCT MOUNTED HEATING COIL / DUCT HEIGHT (IN) => -
+col: DUCT MOUNTED HEATING COIL / DUCT WIDTH (IN) => -
+col: FILTER DATA / TYPE => -
+col: FILTER DATA / PREFILTER MERV => -
+col: FILTER DATA / FINAL FILTER MERV => filter_merv
+col: NOTES => -
+derive: cooling_type = chw ; header=COOLING COIL ; note=the block prints a water coil at 45 °F EWT / 55 °F LWT (the author's reading)
+derive: heating_type = hw ; header=PREHEAT COIL ; note=the unit's own heating block prints a water coil at 130 °F EWT / 110 °F LWT (the author's reading)
+grid:
+DOAH-T1 | 2102 MECHANICAL | 860 | 2.1 | 1 (1.5) | 1 | 1.5 | 460/60/30 | 460 | ?460/60/30 | 3.62 | 73.8 | 27.4 | 45 | 55 | 84.0 | 78.7 | 55.0 | 55.0 | 500 | 1 | 14.8 | 5.0 | 26.0 | 130.0 | 110.0 | 27.0 | 55.0 | 500 | 1 | 2.6 | 1.0 | 12.1 | 1.2 | 130 | 110 | 55 | 68 | 5.0 | 0.1 | 15 | 15 | PLEATED | 8 | 13 | 1, 2
+END

@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-09-24T07:15:05.759Z",
+  "side": "heldout",
+  "documents": [
+    "navfac-cherry-point-atc"
+  ],
+  "errors": [],
+  "census": "reports/assemblies/00-baseline.json per_set[].points_lists.rows (WP0.1)",
+  "total": {
+    "units": 40,
+    "agree": 0,
+    "diffs": 40,
+    "by_class": {
+      "typical_gap": 0,
+      "project_specific": 0,
+      "extraction_error": 0,
+      "typical_unresolved": 0
+    },
+    "unclassified": 40
+  },
+  "verdict": "fail",
+  "by_family": {
+    "AHU": {
+      "units": 2,
+      "decided": 2,
+      "agree": 0
+    },
+    "DOAH_HANDLING": {
+      "units": 1,
+      "decided": 0,
+      "agree": 0
+    },
+    "AIR_COOLED_CHILLER": {
+      "units": 2,
+      "decided": 2,
+      "agree": 0
+    },
+    "HEAT_RECOVERY_CHILLER": {
+      "units": 2,
+      "decided": 2,
+      "agree": 0
+    },
+    "BOILER": {
+      "units": 6,
+      "decided": 6,
+      "agree": 0
+    },
+    "PUMP": {
+      "units": 22,
+      "decided": 18,
+      "agree": 0
+    },
+    "FAN": {
+      "units": 3,
+      "decided": 2,
+      "agree": 0
+    },
+    "UNIT_HEATER": {
+      "units": 2,
+      "decided": 2,
+      "agree": 0
+    }
+  }
+}

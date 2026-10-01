@@ -1,5 +1,1975 @@
 # Changelog
 
+- **A row naming two units as "X N-M" counts both when the set draws them so.** 043_FL schedules its pumps as "HWP 1-2"
+  and "CWP 9-10"; the takeoff counted two units, HWP1-2 and CWP9-10. Where the set's own drawings tag every one of X-N
+  to X-M and never X-N-M, and no two of the table's ranges overlap, the row names each: HWP-1, HWP-2, CWP-9, CWP-10.
+  By its shape alone the mark stays one unit (26_CA's AHU 2-1 is level 2's unit 1), and so do type codes (019_FL's
+  diffusers S1-2, S1-3). The takeoff and the reconcile read it alike. (ASSEMBLIES_BUG_CATALOGUE AS-116.)
+- **A schedule pasted into a sheet as a picture is read, and says so.**
+  - vectorgrid found pictured tables and could only report them as raster regions with no cells: 07_MO's M-601 (29
+    VAV boxes, tanks, air devices) and 029_ME's ME601 (two boilers, six pumps) gave the takeoff nothing. Now a
+    picture's rules are read from its pixels and its text by OCR (RapidOCR, ONNX), and the same table builder reads
+    them: the VAV schedule reads all 28 marks (VAV 1 to VAV 29) with every row's values. Over the
+    corpus the takeoff counts 126 more units on 6 documents from pictures (07_MO's VAV boxes, pumps and fans, 082_OR's
+    whole mechanical schedule sheets, 029_ME's boilers and pumps), and none is lost.
+  - Marks drawn in hexagons, light hairline type, bold titles and sheets stored turned (/Rotate 270) are read; a
+    picture that is no ruled table is left alone. Each picture is read in a process of its own with a time limit, so a
+    crash there never costs the sheet's drawn tables. Without the OCR engine a picture stays unread, as before.
+  - Every table, unit and cite read from a picture carries `read_from_picture`, and the Assemblies panel marks the
+    unit "read from a picture": check its values on the sheet.
+  - A picture is read once per drawing set: the reading is kept under `~/.cache/opentakeoff-picture`
+    (`OPENTAKEOFF_PICTURE_CACHE` names another folder, `0` keeps nothing).
+  - Both sidecar clients let an exiting process fail the next process's first request; fixed.
+  (`bakeoff/rastergrid.py`, `sidecar/vectorgrid_rpc.py` `read_picture`, `vectorGridAdapter.ts`; ASSEMBLIES_BUG_CATALOGUE
+  AS-153.)
+- **A unit whose mark is printed "(E)" is flagged existing.** The takeoff names "(E) EF- 4" EF- 4, and the existing-units
+  question never saw the "(E)": an existing fan in a schedule not titled EXISTING was asked about as new. The takeoff
+  item now carries the mark as printed (`printed_mark`), and the flag reads it, a tag printed "(E)FC-1", and a cell
+  printing the unit's own mark with "(E)". 063_MT's EF-4 is flagged; no other open unit changes. (ASSEMBLIES_BUG_CATALOGUE
+  AS-137.)
+- **Pictures cut into tiles, small schedule pictures, and ruling under real text are read too.** A schedule placed as a
+  grid of small images (23_GA's E-series power schedule, 082_OR's whole M002 schedule sheet) is joined into one picture
+  before the size floor; a small picture that is the sheet's own (07_MO's chemical pot feeder schedule, 029_ME's
+  expansion tank) is read, while a logo placed on every sheet is not; and a picture holding only rules under the page's
+  own words is read from those words, without OCR. (ASSEMBLIES_BUG_CATALOGUE AS-154.)
+- **A schedule's numbered notes printed inside its own grid are not units.** 07_MO's pictured pump schedule prints "NOTE"
+  and then "1 BOLTED FLANGE" … "6 ECM MOTOR" in its grid, and each note was a pump keyed "1" to "6" (likewise RTU 1 to 4
+  and air devices 1 to 7). Rows below a NOTES label that each hold a note number and one line of text, to the table's
+  end, are no longer table rows. 17 phantom units go, and no real unit is lost. A relief fan's RLF is a fan mark under a
+  fan schedule's title (07_MO's RLF 1). (`vectorGridAdapter.ts` `dropNumberedNotes`; ASSEMBLIES_BUG_CATALOGUE AS-155.)
+- **A sheet whose drawn lines close no cell says its size.** vectorgrid answered such a sheet (often all picture, with a
+  border's corner) without a page size, so its picture was read on a 0 x 0 page and the browser refused the whole sheet.
+  082_OR's M002 and M003, whole mechanical schedule sheets placed as pictures, now read 15 tables and 46 units. A totals
+  row ("TOTAL", "DOAS-3TOTAL:") is never a unit. (`bakeoff/vectorgrid.py`; ASSEMBLIES_BUG_CATALOGUE AS-156.)
+- **An equipment table captioned as the units it lists is read as a schedule.** 23_GA's M601 prints HEAT PUMP UNITS and
+  FAN COIL UNITS over TAG columns with no SCHEDULE in either caption, on a sheet a detail label calls an elevation; its
+  heat pump (HP-1) is now read. Plans keep the stricter SCHEDULE caption rule. (`scheduleLanguageScan.ts`
+  `sheetHasEquipmentTableCaption`, `vectorTakeoffPipeline.ts` `isScheduleTarget`; AS-149.)
+- **A schedule whose mark column a heavy rule cuts off keeps its marks.** A one-column strip whose every row line is
+  its neighbour table's is that table's column: 23_GA's fan coil schedule reads FCU-1 under TAG (with AS-149), and
+  02_UT's floor loading schedule reads whole. (`bakeoff/vectorgrid.py` `_sheared_mark_column`; AS-150.)
+- **A schedule boxed by a double border keeps its text, and a sheet whose lines are drawn thousands of times over is read.**
+  - The gap between a schedule's outer border and its inner frame closed into one band-shaped face around the whole
+    table; every word then sat in two faces and the table came back empty. 04_NV's cooling tower schedule was lost
+    that way: its four cooling towers (CT-1 to CT-4) are now read. A face with a hole thinner than a cell is a sliver.
+  - 041_IL's sheet 11 re-plots one rule 6,834 times; noding every overlap ran the table sidecar out of memory (13.5 GB,
+    killed). Strokes on one line are merged before noding when a line carries 256 or more: the sheet reads in 15 s.
+  - Re-extracting all 970 captured schedule sheets: +4 units, none removed or re-cited, no walled document changed.
+  (`bakeoff/vectorgrid.py` `find_tables`, `_merge_collinear`; ASSEMBLIES_BUG_CATALOGUE AS-147, AS-151.)
+- **A schedule drawn edge to edge, and a unit's row printed on two or more lines, are read as schedules and rows.**
+  - vectorgrid dropped any region wider than 92% of its sheet as a title block strip; 014_MT M0.2's CUSTOM and COMFORT
+    AIR HANDLING UNIT SCHEDULEs are 93.7% and 92.7%. A region that wide is now kept when it has a schedule's columns
+    (20 or more; title blocks run 3 to 15).
+  - A unit whose row prints a second line (AHU-A1's coils; 017_MD's ACU-A-1 sound power readings) spans its mark cell
+    down; the table builder took that row for a header tier, or its second line for another row with the same mark.
+    A row spanning rows only and opening with a mark is a unit's row; a line under a spanning mark that prints no mark
+    of its own is that unit's second line.
+  - 014_MT's air handlers cite their own schedules; 017_MD's six supply fans are read (+6); two plumbing fixture
+    schedules (004_MO, 03_FL) read their rows. Replayed over 969 captured sheets, nothing is lost.
+  (`bakeoff/vectorgrid.py` `MIN_WIDE_TABLE_COLS`; `web/src/lib/sheetgraph.ts` `printsAMark`, `isSecondLine`;
+  ASSEMBLIES_BUG_CATALOGUE AS-146.)
+- **A schedule title whose family word lost its glyphs is read as an untitled schedule.** bldg5406's text layer has no
+  M, so its PUMP SCHEDULE reads "P SCHEDULE" and its chilled water pumps CWP-1 and CWP-2 were never units. A title of
+  only one- or two-letter fragments and SCHEDULE now names no family, and each family's own marks decide its rows; a
+  bare "SCHEDULE" title is unchanged. Over every cached graph only bldg5406 changes (+2 pumps); WP1 40 → 41.
+  (`web/src/lib/corpusTakeoff.mjs`; ASSEMBLIES_BUG_CATALOGUE AS-148.)
+- **A schedule row standing for one unit on each typical level it lists is that many units, and the plans' level
+  marks are its tags.**
+  - 26_CA's tri-path air handler schedule prints twelve rows such as AHU-(6-33)-1 (TYPICAL LEVELS 6-33): 112 air
+    handlers that the takeoff, the reconcile and the assemblies counted as 12, and whose plan tags (AHU 6-1, AHU 17-1)
+    the review list called unscheduled. Such a row now schedules one unit a level (basis `one_per_typical_level`,
+    the column cited); the sweep reads each level's own mark; a typical plan stands for the levels its title draws,
+    and levels no plan draws are named.
+  - 26_CA: placement recall 71.5% → 84.1% (precision 95.0%), exact unit counts 154 → 166 of 190, drawn tags linked
+    220 → 255 of 280. No other cached document has such a row.
+  (`web/src/lib/schedulePlanReconcile.mjs` `typicalLevelsOfRow`, `typicalLevelMarks`, `planTitleLevels`,
+  `typicalLevelInstalled`; `mcp/src/session.ts` `sweepTypicalLevelMarks`; ASSEMBLIES_BUG_CATALOGUE AS-139.)
+- **A split system's outdoor heat pump and indoor air conditioning unit, and a VRF system's terminal units, are
+  read under their titles.**
+  - Under a split, ductless (multi-)split or mini-split title, an outdoor HP-* is the heat pump (098_ID's "FC-1 ,
+    HP-1": the heat pumps were never counted) and an indoor ACU-* the fan coil (21_VA's "ACU-1 / ACCU-3"); the fan
+    coil and condensing unit families read the ductless multi-split and mini-split titles too. A VRF TERMINAL
+    title is the VRF indoor family's, with VRFC-* marks under it (22_GA's thirteen cassettes).
+  - Across the cached corpus: 098_ID +2, 21_VA +1, 22_GA +13; nothing else changes.
+  (`web/src/lib/corpusTakeoff.mjs` family specs; ASSEMBLIES_BUG_CATALOGUE AS-145.)
+- **A split system's schedule whose title names no family is read by its header shape.**
+  - 26_CA's AIR CONDITIONING UNITS - AIR COOLED SYSTEMS prints each evaporator's mark (AC-P3-1) under
+    EVAPORATOR DESIGNATION beside its condenser's (ACCU-P3-1) under CONDENSER DESIGNATION. No family's title
+    names it, so neither half was counted. A titled table (not a general schedule) whose title names no family
+    and whose header prints an indoor half's and an outdoor half's mark columns is now read as a split system:
+    its indoor marks as fan coils, its outdoor CU-*/ACCU-* as condensing units and HP-* as heat pumps, after
+    any schedule titled as the unit's own family.
+  - 26_CA: seven fan coils and six condensing units (takeoff 278 → 291); reconcile units with no row 9 → 3, drawn
+    tags linked 215 → 220 of 280; ACCU-32-2 now flags the plan's "ACCU 32-1".
+  (`web/src/lib/corpusTakeoff.mjs` `isSplitPairHeaderShape`, `familyTableGate`; ASSEMBLIES_BUG_CATALOGUE AS-144.)
+- **A schedule title the drawing's rules cut into cells is still its title, and a one-row schedule naming its
+  units by range is read.**
+  - 26_CA's HOT WATER BOILER and PLATE AND FRAME HEAT EXCHANGER schedules were refused whole: rules crossing
+    the title band cut it into cells, so no title was read, and the boiler's one row, "B-2-1 THRU 4", is no tag
+    shape (no keyed rows) while the heat exchanger table took its cut title for a header (no header above the
+    data). A row-0 band whose cells' text runs one printed line across the cuts is the table's title; so is a
+    row-0 cell that is the row's only text across all but two columns. A row of a table whose header names its
+    key column (DESIGNATION, MARK...) that prints a tag then THRU, TO, AND, "&" or "," and more tags or the
+    number continuing it is a row. The FAN COIL, PUMPS, COOLING TOWER and WATER FILTRATION UNIT tables, read
+    untitled before, read their titles (a water filtration unit's title is the WFU family's). Both title rules
+    hold only for an equipment schedule; any other grid is read without them, as before.
+  - 26_CA: four boilers, six heat exchangers, seven blower coils and nine pumps are counted (takeoff 252 → 278,
+    nothing removed); reconcile units with no row 16 → 9, drawn tags linked to their row 207 → 215 of 280.
+    Replayed across 90 documents, only 26_CA changes on the open corpus.
+  (`web/src/lib/sheetgraph.ts` `scheduleTableFromODL`, `titleBandCutByRules`, `marksRangeOrList`;
+  `web/src/lib/corpusTakeoff.mjs` WFU; ASSEMBLIES_BUG_CATALOGUE AS-142.)
+- **A schedule titled with its specification section, or by its family's
+  noun alone, is read as its family's.**
+  - "CHILLER (SPECIFICATION SECTION 23 64 16)" named no family: no rule
+    reads a chiller schedule titled CHILLER alone, and the section number
+    stayed part of the title. 26_CA's four water-cooled chillers (WCU-2-1
+    to WCU-2-4) were never counted. A family's title rules now read a
+    title without the section it cites, CHILLER, PUMPS and COOLING TOWER
+    alone are their families' titles, and under those titles a
+    water-cooled chiller's WCU-* and a fan coil schedule's blower coils
+    (BCU-*) are read.
+  - Across the cached corpus: 26_CA +4 chillers, 01_NY +1 pump (an inline
+    circulator under PUMPS); nothing else changes.
+  (`web/src/lib/scheduleTitleMatch.mjs` `familyRuleTitle`,
+  `web/src/lib/corpusTakeoff.mjs` family specs; ASSEMBLIES_BUG_CATALOGUE
+  AS-141.)
+- **Schedules titled with their specification section are read.**
+  - A sheet whose tables are titled "CHILLER (SPECIFICATION SECTION
+    23 64 16)" or "PUMPS (SPECIFICATION SECTION 23 21 23)", with SCHEDULES
+    only in its title block, read as a section drawing, so none of its tables
+    was extracted: 26_CA's schedule sheet M0.09, ten tables (seven are now
+    read; AS-142 lists the other three). SECTION after
+    SPECIFICATION or SPEC, or before a MasterFormat number, now reads as a
+    reference to the specification; a drawn section ("SECTION A-A") reads
+    as before. 26_CA's takeoff: 189 → 248 units; its reconcile: units with
+    no row 71 → 16, drawn tags linked to their row 155 → 207 of 280.
+  - A mark's separator inside parentheses no longer splits it:
+    "AHU-(34,35)-1", the air handler of typical levels 34 and 35, was read
+    as "AHU-(34", one unit for two rows.
+  (`web/src/lib/sheetgraph.ts` `ROLE_SIGNALS`, `web/src/lib/corpusTakeoff.mjs`
+  `rowMarkPieces`; ASSEMBLIES_BUG_CATALOGUE AS-108, AS-138.)
+- **Schedule ↔ plan reconcile: a row the call did not search reads "Not
+  searched", never SCHEDULE_ONLY.**
+  - A family reconcile scoped to some tags, or told not to sweep, still
+    returns every row of the family. The rows it never searched read
+    SCHEDULE_ONLY ("scheduled, not drawn"), and the summary, the agent's
+    takeoff lines and the estimator document's discrepancy list counted
+    them as findings: 26_CA's fans scoped to two tags reported 45 of 47 as
+    not drawn.
+  - They now read AMBIGUOUS, "Not searched: this reconcile did not search the
+    plans for <tag>, so whether it is drawn is unknown.", with no installed
+    quantity. Searched rows and full-family reconciles are unchanged.
+  (`web/src/lib/schedulePlanReconcile.mjs`
+  `reconcileScheduleFamilyWithSweeps`, `mcp/src/tools.ts` parameter
+  descriptions; ASSEMBLIES_BUG_CATALOGUE AS-136.)
+- **Takeoff canvas: a family's schedule ↔ plan reconcile sweeps the plans as
+  MCP's tool does, also past the canvas's time limit.**
+  - Asked to reconcile one family, the in-app agent got no row swept: the
+    canvas asked for none, so every unit read SCHEDULE_ONLY (scheduled, not
+    drawn) with nothing searched, where MCP's tool, called the same way,
+    sweeps every row (011_IL's 15 heat pumps: 15 SCHEDULE_ONLY in the canvas,
+    15 MATCH over MCP). The caller's choice now passes through; unset is
+    MCP's default.
+  - Past the production run's three-minute post-index limit, the canvas
+    swept the rows itself, with its own defaults (the tag-only reading,
+    without the reconcile's geometry check): a unit drawn with its symbol
+    read AMBIGUOUS. It now runs the same family reconcile in parts, each part
+    MCP's reconcile on the shared Session, so every row is MCP's row; a part
+    that fails is split and run again, and a tag that still fails is shown
+    as a plan search that did not finish, never a quantity.
+  (`web/src/lib/schedulePlanReconcile.mjs` `reconcileFamilyInChunks`,
+  `web/src/pages/TakeoffCanvas.jsx`, `web/vite.corpusTakeoffApi.js`,
+  `mcp/scripts/production-graph-cli.mjs` `--no-family-sweep-all`;
+  ASSEMBLIES_BUG_CATALOGUE AS-117.)
+- **BAS points: a list whose first row the extraction folded into its
+  headings is read, with that row.**
+  - 05_MO's AHU POINTS LIST (sheet 54) had its first row folded into the
+    column headings ("EQUIPMENT DESCRIPTION COOLING VALVE V-1", "... VALVE
+    POSITION ●"), so no name column was found and all 30 rows waited for
+    review, and the cooling valve's output was lost. The headings are now read
+    without the folded values and the row from the drawing's line above the
+    first row, only where that line reads exactly those values (point rule
+    version 2): 31 rows, 29 interpreted (one note and the recovered row wait),
+    each checked against the drawing; the BAS math gains the valve's AO
+    (05_MO AO 23 → 24). Over the 11 open sets: interpreted 695 → 723 of 880
+    rows; waiting for review 102 → 74.
+  (`bas_engine/point_lists.py`, `web/src/lib/basProjectIssueCatalog.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-135.)
+- **BAS points: a point function schedule read from the drawing's text gets
+  all of its columns.**
+  - federal-mech's (and 019_FL's) AHU-1 schedule, missed by the table
+    extraction and read from the text with its name, tag and point type only,
+    waited for review on all 69 rows. Its fail mode, software function and
+    alarm limit columns are now read under their rotated headers and group
+    labels (point rule version 2), every mark at its column's centre: 69 rows
+    interpreted on each set, each row's marks checked against the drawing.
+    Over the 11 open sets with point lists: interpreted 557 → 695 of 879
+    rows; waiting for review 240 → 102. Counted I/O is unchanged.
+  - A limit or set point column printing values ("55") is read as the
+    point's programmed value, never counted.
+  (`bas_engine/point_lists.py`; ASSEMBLIES_BUG_CATALOGUE AS-134.)
+- **BAS points: rows a points list prints past a section band are read, and
+  the BAS math counts what the point lists read.**
+  - A full-width band ("DDC CONTROLLER", "CROSS-TIE LOOP") ended the table
+    extraction while the list went on; those rows, and a row that fell out
+    between two rows, are now read from the drawing's text in the list's own
+    columns (point rule version 2), each flagged for review and citing its
+    own text. Over the 11 open sets with point lists: 38 rows recovered
+    (077_MT's three heat pump lists 12 + 8 + 6, 013_MO's cross-tie list 10,
+    039_TX's LOW/HIGH ZONE TEMP 2), every one checked against the drawings;
+    039_TX's printed TOTALS now equal its rows. Paragraphs, headings, notes,
+    another list, its caption or header, a row repeating one the list already
+    printed, and gaps stop the reading; no extracted row reads differently.
+  - The BAS math reads each matrix's name, per-row point type and printed
+    totals with the point lists' reader: 013_MO's cross-tie list (its header
+    printed twice by the extraction) was 0 points in the math and is now
+    AI 6, AO 1, DI 3, DO 2, as the point lists and the drawing read it;
+    077_MT's math goes from 3/0/3/3 to 11/0/9/10 (AI/AO/DI/DO) with 5 software
+    values. A printed SUBTOTAL row is never counted. Over all 109 cached
+    corpus sets nothing else changes.
+  - A header cell the extraction merged over several columns ("AV BV ADJ
+    SCH") reads each column by its own header.
+  (`bas_engine/point_lists.py`, `adapters.py`; `web/src/lib/basProjectIssueCatalog.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-132, AS-133.)
+- **BAS points: the columns standard point lists print around their I/O are
+  read (point rule version 2).**
+  - The production point lists (Takeoff's BAS workspace and MCP, one Python
+    reader) read "■" marks; I/O columns printed as a direction and a signal
+    ("SYSTEM INPUTS ANALOG TEMPERATURE", the VA points list); software
+    function, fail mode and alarm columns as each point's attributes; a row's
+    number, tags and programmed limits and set points; EQUIPMENT DESCRIPTION
+    as a point's name; a header the extraction printed twice; a name printed
+    beside its empty name column.
+  - An ALARM column under binary inputs is an analog sensor's own alarm on
+    its row, and a binary alarm input on a row of its own; beside an output
+    it is left for review, never counted.
+  - Notes, network and calculated point flags, and columns naming who
+    furnishes or reuses a point still wait for review.
+  - Over the 11 open sets with point lists (841 rows): interpreted 201 → 557;
+    waiting for review 563 → 203. Counted I/O changes only where the reader
+    now reads it (05_MO: AI 52, AO 23, DI 23, DO 9, checked row by row on the
+    drawings; 013_MO: 3 AI), and the BAS math agrees.
+  - A printed TOTALS row is no longer counted as points: it checks the rows
+    above it and is flagged where they disagree (087_US's counts were doubled;
+    039_TX's totals reveal two rows the extraction dropped).
+  - Assigning a point list read from a per-row POINT TYPE or from printed
+    point marks ("BI1") to equipment, or comparing revisions holding one, was
+    refused; it now works. A saved result is checked under the rule that read
+    it, so earlier projects stay valid.
+  (`bas_engine/adapters.py`, `point_lists.py`, `assignment_demand.py`,
+  `revision_quantities.py`; `web/src/lib/basPointLists.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-129 to AS-131.)
+
+- **Takeoff: a dual duct box scheduled as its two air valves is one box.**
+  - 039_TX schedules each box as two rows, TU-101C and TU-101H: one room, one
+    airflow, a note saying the two valves "OPERATE AS A SINGLE DUAL DUCT BOX".
+    The cold valve now takes the dual duct typical. The hot valve is out of
+    scope, cited to that note ("the hot duct valve's points are the box's,
+    counted on TU-101C").
+  - 039_TX: 189 units waiting for the estimator → 93 boxes on the dual duct
+    typical, 93 hot valves out of scope, 3 still waiting.
+  - No other set changes, over 55 cached open sets.
+  (`web/src/lib/controlIntent/rowReader.ts`; ASSEMBLIES_BUG_CATALOGUE AS-128.)
+
+- **Control drawings: a diagram's own labels and notes no longer cut it
+  short, and a title wrapped onto two lines keeps both.**
+  - Point labels ("AO - COLD DUCT DAMPER") and notes ("NOTE: OPERATE …") set
+    at a title's size were read as titles, so 039_TX's dual duct diagram was
+    read as its title alone. It is now read whole.
+  - A note's sentence ("AS HARDWIRED CONTROLS.") is no longer a drawing of
+    its own.
+  - 040_IL's "TAB CONTROL W/HOT WATER" / "REHEAT AND CFM OFFSET - TAB-A"
+    titles keep their second line. Its 16 terminal air boxes now take their
+    own TAB-A or TAB-B detail, by their CONTROL TYPE column.
+  - The finder changes 7 packets and 1 region over 2,615 sheets of 81 open
+    sets, each intended.
+  - Every binding tier is unchanged; GATE C is unchanged (227/244 dev, 62/91
+    held-out).
+  - Unseen audit: 672 applied, 672 right. GATE D passes every item (the live
+    re-run changes 1.9% of decisions; the limit is 2%).
+  (`web/src/lib/controlIntent/evidence.ts`; CONTROL_INTENT_BUG_CATALOGUE
+  CI-74.)
+
+- **Control drawings: units their set's own words tie to a drawing are bound
+  to it.**
+  - A split system's sequence ("SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS
+    INTERFACE") reaches its units. Its fan coils no longer take the hydronic
+    fan coils' sequence.
+  - A pump whose service is "SNOWMELT" takes the "SNOW MELT" sequence.
+  - A system's sequence that names a kind of unit by its designator ("HEAT
+    EXCHANGER (HX)", "MAKEUP AIR UNIT (MAU)") binds the set's one such unit.
+  - A supply fan or coil printed in its air conditioning unit's sequence also
+    takes that unit's control diagram.
+  - A heat exchanger scheduled under "DOAS HEAT EXCHANGER SCHEDULE" takes the
+    set's one DOAS's drawings.
+  - A terminal unit named in words ("DUAL DUCT TERMINAL UNIT CONTROL
+    DIAGRAM", its points list and its sequence) is a terminal unit's drawing:
+    039_TX's 186 dual duct units take all three.
+  - Binding tier 3: pair recall 53.5% → 58.7%, precision 94.8% → 96.3%. Every
+    other tier, held-out included, is unchanged.
+  - Unseen audit: 1,230 applied, 1,230 right (1,116 new, on 039_TX's terminal
+    units, each checked against the drawings). GATE D passes every item (the
+    live re-run changes 1.5% of decisions; the limit is 2%).
+  (`web/src/lib/controlIntent/binding.ts`, `evidence.ts`, `readers/r0.ts`;
+  CONTROL_INTENT_BUG_CATALOGUE CI-72, CI-73.)
+
+- **Control drawings: a device no drawing of a unit shows is read as absent
+  once the unit's whole bound text has been read, and never from a sequence
+  whose own detail beside it went unread.** Before, "not drawn" was read only
+  through a drawing whose title names the unit, so units described by a
+  shared system drawing or their family's typical detail kept the library's
+  default. Now it applies when no drawing bound to the unit has a term for the
+  device, the text model finds it in no paragraph, and both vision runs find
+  none, or the unit is bound to sequences only. A unit bound to sequences
+  only must also be silent beside them: a points list there that no unit is
+  bound to is read for the device's words, and any other unbound drawing
+  holds the absence (077_MT's heat pumps had read "no setpoint adjustment"
+  beside the points list that prints their thermostats). A mode of a part
+  the drawings could print without naming it (SCR or staged heat, a
+  2-position valve) is never read from silence.
+  - Held-out units whose typical and every option are right: 35 → 62 of 91
+    (GATE C asks for 55); readings applied 5 → 128, 0 wrong, 0 invented.
+    Dev (227/244) and dev 2 (147/202) keep every unit's outcome; 316 and 133
+    applied, 0 wrong.
+  - Unseen audit: 114 applied, 114 right; GATE D passes every item, the live
+    re-run included (1.9% of decisions change; the limit is 2%).
+  (`web/src/lib/controlIntent/combine.ts`, `readers/r0.ts`, `record.ts`;
+  CONTROL_INTENT_BUG_CATALOGUE CI-69 to CI-71.)
+
+- **Schedule ↔ plan reconcile: six times faster on a 64-sheet set, the same
+  answers.** The plan sweep's fallback readers for a mark lettered in pieces
+  ("SR" "-" "1", "CV" "-" "CHW" "-" "BP-M") re-read every run of text on a
+  sheet for every mark; they now look runs up by their text, and the later
+  fallbacks run only when the earlier ones find nothing. 26_CA's whole-set
+  reconcile (323 rows) 798 s → 130 s; the twelve keyed dev documents 945 s →
+  271 s; every output byte-identical (12 of 12), and the old and new
+  readers agree on every sheet and schedule mark of six documents.
+  (`web/src/lib/symbolsweep.ts`, `mcp/src/session.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-127.)
+
+- **Schedule ↔ plan reconcile: a unit's mark on a zone plan, a detail or a
+  diagram links to its row, and the review lists stop calling scheduled
+  units unscheduled.** Measured on the twelve keyed dev documents (8d46f5c →
+  this commit):
+  - Drawn tags linked to their row: 80.9% → 86.7% (983 → 1053 of 1215).
+    Units with no reconcile row 72 → 71; unit counts exact 439/462 →
+    440/463. Check side (eight documents never tuned on, aggregates only):
+    links 77.4% → 78.1%, nothing else changes but one unit more with a row.
+  - A row's mark on the set's other drawing sheets (a zone plan titled by
+    its legend, a detail, a diagram, an elevation) links to the row as a
+    reference view, never as installed quantity. Only the unit's whole,
+    legible mark is read there: never a drawing shrunk into a sheet, a
+    legend's abbreviation, a column grid's label, a title block, or a
+    one-letter mark on another trade's sheet.
+  - A tag a row names in a pair or list ("F-1 , CU-1", "FCU-17-1&2"), or a
+    mark drawn with its zero dropped or added (EF-01 for EF-1), is a
+    scheduled unit's, on the review lists and in the demolition and
+    reference views alike. Likely-units list precision 54.8% → 85.2%.
+  - The whole-set takeoff (`project_takeoff`, and the whole-set reconcile
+    built on it) reads a family schedule printed on its side one row per
+    unit, and cites it before a table that only names the unit. The
+    schedule-mark takeoff (`compile_corpus_takeoff`, assemblies) is
+    unchanged.
+  - Nothing a schedule is read from changes: table extraction and sheet
+    roles are untouched.
+  (`mcp/src/session.ts`, `takeoff.ts`, `outputs.ts`;
+  `web/src/lib/schedulePlanReconcile.mjs`; ASSEMBLIES_BUG_CATALOGUE AS-109,
+  AS-111 to AS-114, AS-119, AS-120 and AS-126;
+  `opentakeoff-corpus/reports/reconcile/`.)
+
+- **Assemblies on eight new documents: typicals tier 2 keyed, measured, and
+  their general misses fixed.** Typicals and project-question keys for the
+  binding tier 2's dev documents (202 units). With the model readers, units
+  whose typical and every option are right: 60.9% → 72.8% (123 → 147 of
+  202); readings applied 128, 0 wrong (was 1 wrong). Dev (227/244), held-out
+  (35/91, aggregates) and the unseen audit (59 of 59 right) unchanged.
+  - An electric duct heater no longer takes the fan-forced unit heater
+    typical: no typical fits it, and its record says why.
+  - Fans a schedule describes as an air handler's supply or return fan
+    ("AHU SUPPLY FAN") are that air handler's parts, not priced twice.
+  - A VAV box's note "PROVIDE WITH SCR CONTROLLER" gives it SCR heat; a sink
+    drain pump is a plumbing pump under the packaged-pumps answer; a relief
+    damper holding the return fan plenum is not the building-pressure one.
+  - The reading eval's live runs render PDFs kept under bulk/ too.
+  (`web/src/lib/controlIntent/rowReader.ts`, `intent.ts`, `catalogue.ts`,
+  `termlist/v1.json`, `web/src/lib/assemblies/select.ts`, `apply.ts`,
+  `mcp/scripts/assemblies-typical-eval.mjs`; ASSEMBLIES_BUG_CATALOGUE
+  AS-121 to AS-125, CONTROL_INTENT_BUG_CATALOGUE CI-66 to CI-68.)
+
+- **Control drawings: each unit is linked to far more of its own sequences,
+  diagrams and points lists, on documents no rule was drawn from.**
+  Measured with the binding eval on every tier (8d46f5c → this commit, the
+  same runner on both):
+  - The first tier's held-out (aggregates only): pair recall 26.7% →
+    68.1%, precision 93.5% → 94.7%; units with a governing drawing linked
+    44.7% → 88.2%. Held-out 2: 23.1%, precision 76.6% → 76.8% (its misses
+    are drawings the finder never finds, next).
+  - Dev 2: 80.1% → 95.7%, precision 95.3% → 96.9%. Dev 3 (keyed after
+    the first rules): 40.0% → 53.5%, precision 79.9% → 94.8%. Dev:
+    96.9%, precision 91.4% → 91.7%.
+  - The finder reads points lists that name no subject ("INPUT/OUTPUT
+    SUMMARY"), a table's title set inside the table, P&IDs, a unit's
+    controller detail, side-by-side titles run to two lines and captions
+    under sparse diagrams; another trade's controls are left out.
+  - A family's one detail of a kind is its units' own when every unit
+    took it and nothing in a row or the set speaks against its qualifier;
+    a pump or fan detail naming another service than the unit's schedule
+    is not its; a part takes the drawings of a host the set does not
+    schedule, or of its own designation where the set names parts that
+    way; a points table listing one diagram's devices is that diagram's.
+  - A mark with a building's number before it ("1-AC-15", "40-AHU-2") is
+    read as the unit's mark in titles, labels and rows, so those units
+    find their own drawings. A points list's function columns ("ENTHALPY
+    ECONOMIZER") are not read as the unit's options.
+  - A drawing whose title leads with the letters the set marks another
+    kind of unit by ("TAB CONTROL …" over boxes marked TAB-102) is not
+    trusted as an air handler's own: GATE D's adversarial swap passes
+    again (0 of 510 questions decided through a swapped drawing).
+  - Readings: dev 296 applied, 0 wrong; held-out 5 applied, 0 wrong, 20
+    proposals right, 0 wrong; the unseen audit 59 applied, 59 right.
+  - Nothing a schedule is read from changes: table extraction, sheet
+    roles, tag reading and the reconcile are untouched.
+  (`web/src/lib/controlIntent/evidence.ts`, `binding.ts`,
+  `readers/r0.ts`, `termlist/v1.json`; CONTROL_INTENT_BUG_CATALOGUE CI-26,
+  CI-55 to CI-65; goal C5 amended; `opentakeoff-corpus/reports/
+  control-intent/03-binding-eval-*`, `04-reading-eval-*`,
+  `05-robustness-dev`, `06-unseen-audit`.)
+- **Schedule ↔ plan reconcile: a unit found by its tag is verified against
+  its drawn body far more often, and counts on its own view.** Measured on
+  the twelve keyed dev documents (4d16d7e → this commit):
+  - Drawn units found: 278 → 407 of 427. Unit counts exact: 67.1% → 95.0%
+    (under-counts 151 → 22, over-counts 1 → 1). Placements recall 54.6% →
+    84.6%, precision 86.6% → 91.1%. Drawn tags linked to their row: 78.9%
+    → 80.9%.
+  - A mark printed with a word space ("HP 12-1") or stacked over its
+    number ("FPB" over "3-11", "SF" over "P1-4") is checked against its
+    leader and its body as a single-run tag is, where the row names one
+    unit per mark. A shorthand, a type mark's label and a mark printed
+    without its hyphen never are.
+  - A row naming several units by a range or list of one family's marks
+    ("SF-P1-4 THRU 11", "EF-P1-1 & 2") names each unit once.
+  - A mark a row prints with a word space is also found where a plan
+    letters it in runs ("HP 12", "-", "1"), and links to its row there;
+    the unit still counts on the view that reads its mark whole.
+  - A unit drawn on several sheets counts on its own trade's sheet (a
+    plumbing plan's gas piping to a rooftop unit is the plumbing trade's
+    reference to it), and a view where its mark is lettered at a
+    thermostat ranks after its other views.
+  - Nothing a schedule is read from changes: table extraction and sheet
+    roles are untouched.
+  (`web/src/lib/taggedVectorGrounding.ts`, `symbollabels.ts`,
+  `symbolsweep.ts`, `schedulePlanReconcile.mjs`; `mcp/src/session.ts`;
+  `mcp/scripts/reconcile-eval.mjs`; ASSEMBLIES_BUG_CATALOGUE AS-102 to
+  AS-107; `opentakeoff-corpus/reports/reconcile/`.)
+- **Schedule ↔ plan reconcile: a scheduled unit is found where it is drawn,
+  and a drawn tag traced to its row, far more often, in both directions.**
+  Measured on twelve dev documents keyed from their drawings (new reconcile
+  keys, adjudicated, and a reconcile eval): 534 scheduled units, 1,215 tags
+  drawn on plans.
+  - Units found on the plans by their tag: 198 of 414 → 414 of 427; with
+    their symbol geometry verified: 198 → 278. Unit counts exact: 43.2% →
+    67.1%, and over-counts 37 → 1. Placements on the unit's own view: 80.6%
+    → 99.0% precise.
+  - Drawn tags linked to their schedule row: 18.6% → 78.9%. A new
+    likely-units list names 23 of the 47 drawn units no schedule lists, at
+    55% precision (the full review list: 1%).
+  - Plan sheets the role signals missed get their role from their own
+    title: a level between the discipline and PLAN, no PLAN word, a zoning
+    plan, an enlarged room plan, a demolition plan. A unit tagged but not
+    verified by its symbol is reported as tag text, never as drawn nowhere.
+  - A schedule sheet's own plan view is swept, and a schedule's text is
+    never a placement. Every drawn repeat of a unit (another view, bare tag
+    text, a demolition plan) links to its row without counting.
+  - The whole-set reconcile holds a row for each unit a row names or the
+    takeoff counts from it: ranges ("SF-P1-4 THRU 11"), pairs, and split
+    systems' indoor units.
+  - A unit family's mark drawn on several plan views is one unit. Overlaid
+    views register by the tag's own position. Marks under a group heading
+    ("OUTDOOR UNIT DATA PLAN CODE") and a zero-padded mark drawn without
+    its zero are read.
+  - Nothing a schedule is read from changes: every extracted table is
+    byte-identical (the guard: 34 documents). The assemblies' takeoff gains
+    42 units on 3 documents (terminal air boxes; split systems' heat pumps
+    and fan coils) and loses none. Attribute, typical and binding evals are
+    unchanged (one more control packet found on one document).
+  (`web/src/lib/sheetgraph.ts`, `schedulePlanReconcile.mjs`,
+  `corpusTakeoff.mjs`, `symbolsweep.ts`; `mcp/src/session.ts`, `takeoff.ts`,
+  `outputs.ts`; `mcp/scripts/reconcile-eval.mjs`; ASSEMBLIES_BUG_CATALOGUE
+  AS-91 to AS-101; `opentakeoff-corpus/reports/reconcile/`.)
+
+- **Control intent: terminal units, air handlers and their parts find more
+  of their own control drawings.** The binder's first-tier dev documents go
+  from 93.8% to 96.9% of the drawings their keys give each unit, and the
+  second tier from 79.7% to 80.1% (precision 95.3%).
+  - "Variable volume" names a VAV box's detail, as "variable air volume"
+    and "VAV" do. A dual duct box scheduled apart from the single duct boxes
+    takes a plain terminal unit detail only as a proposal; "DUAL MAXIMUM" is
+    no dual duct.
+  - A schedule's CONTROL SEQUENCE column that prints a phrase ("CONSTANT
+    VOLUME") picks, for that row only, the one detail of the unit's kind
+    whose title prints it.
+  - An air handler's "with minimum outside air" drawing is its own where
+    its row fills a minimum outdoor airflow column. A "VAV" air handler
+    drawing is its own where VAV boxes name it as their system, or where it
+    is the set's one air handler and the set schedules VAV boxes (never where
+    its row prints constant volume).
+  - A part whose location names its air handler without the dash
+    ("WHSE-AHU1") takes the air handler's drawings. A pump whose system is a
+    water or other fluid system is no part of the unit its row serves.
+  - Readings: a duct smoke detector the unit's own points list omits is not
+    applied as a BAS point; with the models reading it yes, it is left for
+    the user (R0 v8). Dev readings: 296 applied, 0 wrong.
+  - Held-out, in aggregate: unchanged (26.7% and 23.1%).
+  - A third binding tier (nine more dev documents, keyed from renders and
+    re-checked by a second reader) measures the binder on documents no rule
+    came from: 40.0% of their drawings, precision 79.9% (38.7% and 78.3%
+    before this batch).
+  (`web/src/lib/controlIntent/binding.ts`, `readers/r0.ts`;
+  CONTROL_INTENT_BUG_CATALOGUE CI-46 to CI-54.)
+
+- **Control intent: the binder finds more of each unit's control drawings.**
+  On a second tier of ten dev documents from new drafters, the binder bound
+  61% of the drawings their keys give each unit. It now binds 80%, with
+  precision 94.3% → 95.3%. The first tier's dev documents go from 92.9% to
+  93.8%.
+  - A tag printed with a kind before a group and a number ("GWP-A-1",
+    "HX - A - 1", "WHSE-P2") is read in a drawing's text. A qualified mark
+    names only the unit its designator fits, and a schedule that prints the
+    designator over its mark column ("OAU ~", "F ~") decides whose it is.
+  - A schedule's CONTROL SEQUENCE column ("B") binds the one sequence that
+    prints "CONTROL SEQUENCE B (…)". Every VAV box on one set now reaches
+    its AHU sequence's section.
+  - A controls power-supply or wiring drawing stands beside the control
+    diagram instead of losing to it. A union such as "VAV/CAV/AFCV" names
+    its family.
+  - A split system's outdoor unit whose row names its indoor unit ("SERVICE:
+    F-C1") adds that unit's drawings of the kinds it lacks. A title joining
+    two subjects is no longer a condensing unit's that serves another kind.
+  - Siblings are compared without their tag lists. A label list ("FCU-1&2")
+    in a detail about that kind prints each unit it lists.
+  - A chiller plant's drawing that describes its condenser water loop binds
+    the towers and condenser pumps. A row's service that prints a drawing's
+    whole subject ("HEAT RECOVERY CHILLER …") binds it as the system it
+    serves.
+  - A fan described as part of the set's one air handler takes that unit's
+    drawings of the kinds it lacks.
+  - No inherited drawing ever replaces a unit's own proposals. A first cut
+    that let one did, and cut the held-out precision to 59%; it was
+    narrowed before commit and is disclosed.
+  - Held-out, in aggregate: the first tier 11.0% → 26.7% (precision 100%
+    over 18 bindings → 93.5% over 46); held-out 2 unchanged at 23.1%.
+  - The unseen audit's 17 new model calls were recorded, and its 56
+    decisions audited, all right.
+  (`web/src/lib/controlIntent/binding.ts`; CONTROL_INTENT_BUG_CATALOGUE
+  CI-36 to CI-45.)
+
+- **Plan sweep: a unit is looked for as its tag is drawn, and a bare letter
+  stands for it only as its shorthand.** A drawn span that is only the
+  first letters of a mark ("E" for EF-1, "D" for DAC-1) answered for the
+  mark wherever no other mark of the mark's own table began with them. On
+  the 97 dev documents 8,590 such spans answered for 172 of the reconcile's
+  units though another scheduled mark shares the letters, and 979 more for
+  65 units where none does: mostly a part of a family's letters ("E" for
+  the grille type EG, "DO" for DOAS-1), or letters of a stamp's lettering.
+  They counted as the unit's plan tags, and where they did, the sweep never
+  looked for the tag drawn in pieces: 03_FL's boiler B-1, tagged "B" over
+  "1", was refused behind nine bare "B"s. The sweep now looks for a tag as
+  drawn first (its text, a compound run, an authored count, split, stacked
+  or chained runs). A bare prefix answers only on a sheet that draws the tag
+  no other way, as the family's letters whole ("ET" for the only ET-1,
+  never "E"), two or more, that no mark the set schedules shares. The
+  same-sheet check for a second view of one area read every bare letter as
+  a landmark (98% of its landmarks), and a plan's grid letters as a second
+  view: a landmark is a mark drawn as itself now. Over the reconcile's
+  2,655 rows 134 change, on 44 documents, none for the worse. Three units
+  drawn once now match (03_FL's B-1, 063_MT's EF-4, 088_AZ's ET-1).
+  031_MO's RG-24 counts the sixth grille a false second view had dropped.
+  18 matches cite their whole stacked tag, and 112 refusals count and cite
+  only the unit's own tags (`session.ts`, `markid.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-90).
+
+- **Plan sweep: a unit whose schedule row answers by neither its key nor its
+  printed identity is swept on the row the reconcile reads it from, by its
+  own mark alone.** The reconcile reads units the sweep's row lookup could
+  not find: a schedule printed on its side, a row naming a range or pair
+  (EF-1 - EF-3, FOP-8A & B), an outdoor unit printed beside its indoor
+  unit's mark (DCU-1 on the row keyed DAC-1), and a grille symbol the
+  extraction ran its size into (R-1 8"Ø). On the 97 dev documents, 129 of
+  the reconcile's 2,635 rows, on 11 documents, were refused "No schedule
+  row" before the sweep looked at a plan. Each is now swept on its own row:
+  35 match their plan tags (21_VA's 24 transposed units among them), and
+  the other 94 are refused for what the plans show. Such a row can name
+  other units. So the sweep never counts the row's other marks (an outdoor
+  unit drawn nowhere is refused, never counted as its indoor unit), and
+  never lets another family's tag corroborate the unit. Any mark the
+  set's schedules name is kept apart from it: a bare "D" is no DCU-1 where
+  DAC-1 is scheduled. A unit two buildings' schedules name is swept on its
+  own building's plans. A row found by its key or identity is swept as
+  before, and the takeoff and the reconcile read all 97 documents
+  byte-identically (`schedulePlanReconcile.mjs`, `session.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-89).
+
+- **Takeoff, reconcile and plan sweep: a mark printed with a footnote mark
+  or another dash glyph reads as its plain mark.** A schedule that marks a
+  unit for a note (AHU-1*, *AHU-1, EF-2†, P-1¹, AHU-1.) named the unit with
+  the symbol, and one whose writer printed the mark's hyphen as another
+  glyph (a Unicode hyphen, figure, en or em dash, minus or fullwidth
+  hyphen: AHU‐1, EF–1) lost the unit or named it with the glyph. The
+  extraction keys such rows by their letters and digits, but the takeoff,
+  the reconcile and `project_takeoff` read the mark cell, so a plan's AHU-1
+  matched no schedule row, and the plan sweep found no row for AHU‐1.
+  Printing such marks on the 97 dev documents' family rows, keyed as the
+  extraction keys them, changed 2,684 family readings for footnote marks
+  and 2,667 for dash glyphs (404 units lost on 25 documents under each
+  glyph); now none. A status or number in parentheses (AHU-1(E), P-1(1))
+  stays as printed: it can tell two units of one mark apart. No dev
+  document prints either, and the takeoff, the reconcile and every row's
+  identity read all 97 as before; a synthetic set printing them reads its
+  nine units by their plain marks in the Takeoff canvas, the assemblies
+  panel, the plan sweep and over MCP alike (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-85).
+
+- **Takeoff and reconcile: a row listing one family's units names each,
+  however the list is spelled.** "P-1, 2" under a pump schedule was one pump
+  tagged "P-1, 2", "EF-1, 2" under a fan schedule EF-1 twice, "EF-1/2" EF-1
+  alone, and a key the extraction ran together from the list ("EF-1, EF-2"
+  keyed EF-1EF-2) one unit, so a plan's EF-2 matched no schedule row.
+  Merging two rows into one listing both, in seven spellings keyed as the
+  extraction keys each, changed 800 family readings on the 97 dev documents.
+  A comma, "&" or AND list of one family's marks, a bare number or letter
+  after a mark (EF-1/2, FOP-8A & B), and a key run together from two of one
+  family's marks (CH-1CH-2) now name each unit, in the takeoff and the
+  reconcile alike; the key as printed (AS-84) is read from any column that
+  prints it. Two families' marks in one row (AHU-1, HP-1) stay as they were.
+  On the dev corpus only 044_NY changes: its duplex fuel oil pumps FOP-8A &
+  B, one pump FOP-8AB, are two (the reconcile 2,654 -> 2,655 rows), and the
+  check's 800 differences fall to 4 (`corpusTakeoff.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-86).
+
+- **Takeoff and reconcile: a row's mark column is read under any name
+  drafters give it.** A row was named by its mark column only under MARK,
+  SYMBOL, DESIGNATION and a few other names spelled exactly so; under TAG,
+  EQUIPMENT TAG, UNIT NO., ID or PLAN MARK the extraction's key named it,
+  and that key runs a printed status or pair into the mark ((E) CT-1 is
+  keyed ECT-1, UH-1 & UH-2 UH-1UH-2) or is another column. Renaming the MARK
+  column of the 97 dev documents' tables so changed 196 family readings on 9
+  documents: units lost, counted under the key's mark rather than the
+  printed one, or two counted as one; and a valve table naming no water was
+  no valve table under SYMBOL, DESIGNATION, UNIT NO. or ID. Such a column
+  now names the row where the family reads no mark in the key, or where it
+  prints the key's letters and digits and the family reads other marks
+  there; the family's own reading decides, in the takeoff and the reconcile
+  alike, and the valve and damper gates read the column under any of its
+  names. A split system's OUTDOOR UNIT MARK so names its condensing unit: on
+  the dev corpus 35 come in (036_LA 33, 03_FL 1, 22_GA 1; the reconcile
+  2,619 -> 2,654 rows), every other unit and row unchanged, and the check's
+  196 differences fall to 0 (`corpusTakeoff.mjs`, ASSEMBLIES_BUG_CATALOGUE
+  AS-84).
+
+- **Takeoff and reconcile: a schedule's title is read without what a
+  drafter adds to any title.** A status ((N), EXISTING), a discipline
+  (MECHANICAL), a continuation ((CONT.), CONTINUED), a sheet count (- 2 OF
+  3), SCHEDULES for SCHEDULE or a hyphen joining two words hid a family
+  whose title rule is the whole title or wants the singular: EXHAUST FANS,
+  CONDENSATE PUMP, FAN POWERED TERMINAL UNIT SCHEDULE, VALVE SCHEDULE and
+  every LOUVER SCHEDULE lost their units, and a transposed schedule under
+  AIR-HANDLING UNIT SCHEDULE read its attribute names as units. Retitling
+  the 97 dev documents' 522 family schedules so changed 158 family readings
+  on 24 documents. The takeoff and the reconcile's shared gate, the
+  transposed view and the left-out notice now read a title without those
+  marks (`familyRuleTitle`), and cite it as printed; an (R), removed or
+  relocated, stays. The dev corpus prints no such title, so its takeoff and
+  reconcile are byte-identical; the check's 158 differences fall to 0
+  (`scheduleTitleMatch.mjs`, `corpusTakeoff.mjs`, `leftOut.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-83).
+
+- **Takeoff and reconcile: a mark is read however the separator after its
+  letters is printed.** Drafters print one mark as AHU-1, AHU 1 and AHU1,
+  but most families' mark rules want one spelling: under its own AIR
+  HANDLING UNIT SCHEDULE a glued AHU1 was no air handler, B1 under the
+  BOILER SCHEDULE no boiler. Respelling the marks of the 97 dev documents
+  changed 196 family readings, on 40 documents losing 1 to 21 units a
+  family without a word. Under a title that vouches for the family, and in
+  a general schedule, a mark its rules read in another spelling is now its
+  own; an untitled table's marks are read as printed. A control valve table
+  that names no water splits its valves by the table's water whatever
+  their marks' shape (009_FL's CV 1 was counted as chilled and as hot
+  water's), and the takeoff keys a unit across its tables by one spelling
+  (26_CA's ET-35-1 and ET 35-1 were two tanks). On the dev corpus only
+  26_CA's expansion tanks change (−1); the check's 196 differences fall to
+  3, each an untitled table (`corpusTakeoff.mjs`, ASSEMBLIES_BUG_CATALOGUE
+  AS-82).
+
+- **Takeoff and reconcile: a schedule row named by the room it serves is
+  one line.** 028_TX's NOISE CONTROL DUCT SILENCER SCHEDULE names its rows
+  by the room and the air they serve ("GROUP REHEARSAL 112/111 -
+  SUPPLY/RETURN", QTY 2). Split on "/" as a list of marks, its 16 rows (23
+  silencers) became 22 fragments ("111 - SUPPLY", "RETURN 535"), each with
+  the whole row's QTY, one of them depending on the row order, and
+  `apply_assemblies` listed 22 silencers with no assembly. Where no mark
+  rule picks the family's marks, a row named by words, or among rows mostly
+  named so, is now one line. A slash beside a mark printed as one token
+  (GENERAL EXHAUST/EF-1), or between bare marks, still lists marks, so a
+  printed mark keeps its own tag. On the dev corpus only 028_TX's silencers
+  change: 16 lines, 23 silencers, in the takeoff and the reconcile alike
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-81).
+
+- **Takeoff and reconcile: a table titled for two families counts each
+  unit once.** A family that reads its schedule by the title alone
+  (CONDENSING_UNIT's primary title) took every row of a title that names
+  another family too: 089_FL's OUTDOOR AIR-COOLED HEAT PUMP OR
+  CONDENSING UNIT SCHEDULE counted its heat pump HP-2 as a condensing
+  unit as well, and `apply_assemblies` listed it twice, the second time
+  with no assembly. Such a family now yields a mark to the other family
+  the title names where that family's own mark rule reads it (in any of
+  the mark's forms, never a mark it reads only under its own title), and
+  keeps every mark its own rules read. On the dev corpus only 089_FL's
+  HP-2 changes: a heat pump alone, in the takeoff and the reconcile alike
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-80).
+
+- **Takeoff and reconcile: one rule names a schedule row's unit.** The
+  takeoff named a row's unit by whichever mark column the drafter printed
+  first; the schedule-to-plan reconcile preferred a VALVE MARK always. So
+  a row printing both a UNIT MARK and a VALVE MARK was read by column
+  order. A fan coil schedule led by its valves' marks counted them as fan
+  coils (FCU-1 lost), and a valve grid led by UNIT MARK gave a phantom fan
+  coil or unit heater wherever a family read it by its marks. An isolation
+  valve schedule led by UNIT MARK was read as the chiller it isolates.
+  With the valve checks reading the first column, a valve grid led by
+  UNIT MARK had no valve shape, and its hot-water valves were counted as
+  chilled water's too. The takeoff and the reconcile now share one rule:
+  such a row is its UNIT MARK's unit to a family of units under its own
+  title (or another family's schedule that lists its units), and the
+  valve its VALVE MARK names to a valve's family and anywhere else. The
+  valve checks read a row's VALVE MARK as the valve's own mark. On the dev
+  corpus the takeoff and the reconcile are byte-identical: no dev document
+  prints that layout (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-79).
+
+- **Takeoff: a valve's water from its own row.** A valve schedule whose
+  title names no water ("CONTROL VALVES", "EQUIPMENT CONTROL VALVES", or
+  none) was read as one water for the whole table, its headers' or its
+  marks', else chilled. 072_CA's and 074_CA's print SERVICE "CHW, …" and
+  "HHW, …" row by row, and all 22 valves each were chilled water's, so the
+  valve takeoff's Service column said CHW for ten heating valves each;
+  013_MO's boiler valves were chilled too. A row's own service, system,
+  fluid or served cell now names its water (CHW, CHWS/R, HHW, HHWS/R,
+  HW, hot, heating or chilled water, reheat, steam; a pump's mark names
+  none): where the rows name one water it is the table's, where they name
+  both each row is its own, and otherwise the headers and marks decide as
+  before. On the dev corpus 26 valves on three documents move to hot
+  water, in the takeoff and the reconcile alike (`corpusTakeoff.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-78).
+
+- **Reconcile: the schedule↔plan reconcile reads tables by the takeoff's
+  own gate.** The reconcile scaffold kept its own copy of the takeoff's
+  table gate, and the copy had drifted: it held no row for a CONTROL
+  VALVES table that names no water (013_MO's, 072_CA's and 074_CA's
+  valves, which the takeoff counts), read a points list as a schedule,
+  read a family's alternate marks in a general schedule (25_WA's electric
+  heaters as humidifiers) and kept "FOP-1, 2" as one row. The takeoff and
+  the reconcile now share one gate (`familyTableGate`), one mark reading
+  (`familyMarkRead`) and one split of a row's marks, so the reconcile holds
+  a row for every unit the takeoff counts and for none it does not (56
+  units without a row and 5 rows without a unit on the dev corpus, now
+  none); the takeoff's output is byte-identical (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-77).
+
+- **Assemblies: a variable speed column asked yes or no.** 26_CA prints
+  each fan's drive under "VAR. SPEED (Y/N)", and the normalizer read a
+  variable speed column only when headed exactly "VARIABLE SPEED", so its
+  47 fans waited between the constant and the variable speed typical on a
+  VFD answer the schedule prints. An abbreviated, yes-or-no or DRIVE
+  variable speed header now reads as the drive column it is: its cell
+  decides. Only 26_CA changes: 34 fans apply fan-variable and 13
+  fan-constant, as printed (`normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-76).
+
+- **Takeoff: a row scheduling several units by a range or a qualified
+  pair.** A schedule row that names its units as a range ("EF-1 THRU
+  EF-4", 26_CA's "SF-P1-4 THRU 11", 013_MO's "CV-7-CV-10") or as a
+  qualified mark's pair ("SF-P2-1 & 2") was counted as one unit, tagged
+  with the whole text or with its first mark, so the count was short and
+  the other marks' plan tags had no schedule row. The compile and the
+  reconcile now read each mark of such a row as a unit, alike; a dash is a
+  range only where both ends print the whole mark ("AHU-1-2" is one mark).
+  A QTY printed on such a row counts all its marks of one kind: equal to
+  their number, each is one unit (`printed_schedule_quantity_per_mark`);
+  otherwise it is refused, never divided (`printed_quantity_for_several_marks`),
+  and the assemblies read the same, so no unit is multiplied by the row's
+  count. On the dev corpus only 26_CA (18 fans where 6 were counted, 36
+  sound traps where 3) and 013_MO (four valves where one) change
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`, `normalize.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-75).
+
+- **Assemblies: a fan coil's two coil blocks printed under no coil name.**
+  14_OR's FAN COIL UNITS schedule prints a cooling coil block and a heating
+  coil block with blank cells above both, headed "TC (MBH)" and "TH
+  (MBH)", so its 18 fan coils read neither coil: no cooling or heating type,
+  flow, temperature, capacity, pressure drop or rows, and their water
+  valves, coil commands and hook-ups waited. TC, SC and TH before a
+  capacity unit now read as total cooling, sensible cooling and total
+  heating, and where a row prints its coil headers twice, each block's own
+  entering and leaving water temperatures say which water it is (entering
+  above leaving: heating hot water), as they already did for a row's only
+  coil. Only 14_OR changes: its fan coils read their coils as printed, and
+  their valves and coil commands are decided (`normalize.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-74).
+- **Assemblies: another drafter's word for a column the schedule already
+  prints.** A sweep that put each header and cell the corpus reads as an
+  attribute in place of another document's column for the same attribute
+  found rules that read one drafter's words and not another's. A terminal
+  unit's one plain airflow ("AIRFLOW (CFM)") beside its minimum and heating
+  airflows is now its maximum, as it was when the table printed no other; a
+  REHEAT airflow is the box's heating airflow, as a HEATING one was; and a
+  VFD, speed control or controller column reads a motor's drive in one
+  vocabulary under whichever of those headers prints it: NONE, an EC motor
+  or a starter is no drive, and "VSD" or "VFD WITH INTEGRAL DISCONNECT" is
+  one (a fan's speed control stays its control as printed). As printed, only
+  053_VA changes: its 21 terminal units read the heating airflows they print
+  under AIRFLOW REHEAT (`normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-73).
+- **Assemblies: a schedule's values read the same however another drafter
+  spells them.** A sweep that respelled every cached schedule's headers,
+  titles and cells without changing their meaning found values lost, and on
+  one document leaked, under spellings other drafters print. A header's one
+  spelling now reads MBTUH, MBTU/HR, KBTU/H and "BTUH X 1000" as MBH (read as
+  BTU/H, a capacity was a thousand times small), "ºF" and "˚F" as °F, CLG. and
+  HTG. as COOLING and HEATING, SUP. (before an airstream, a fan or a valve),
+  RET., EXH. and MTR. as the words, and ELECTRICAL HEAT as ELECTRIC HEAT. A
+  cell's and a note's text reads every dash glyph as a hyphen ("460–3–60",
+  "1–1/2", NOTES "1–14"), "º" as "°", letters with periods as one word
+  ("V.F.D.", "N.A."), and a cite still quotes the print; "N.A." and "0 GPM"
+  are a coil's none, "NAT. GAS" a fuel, an "ELEC." heater title electric
+  heat, OA an air-to-air exchanger's outdoor side, ".95" a brake HP, and a
+  humidifier's kind comes from whichever TYPE column names it. Two
+  readings as printed change: 22_GA's heat pumps, each scheduled on one row
+  with its fan coil ("FCU-1 / HP-1"), no longer take the fan coil's
+  AUXILIARY ELECTRICAL HEAT, as they never took an ELECTRIC HEAT; and 14_OR's
+  kitchen exhaust fan KEF-1, printing "1.5" under MOTOR WATTS/HP, is 1.5 HP
+  and no longer also 1.5 W, as under HP/W (`normalize.ts`,
+  `scheduleNotes.ts`, ASSEMBLIES_BUG_CATALOGUE AS-72).
+- **Assemblies: a reheat coil printed "N/A" with a zero flow is no reheat.**
+  A heating block printed "-" or "N/A" throughout was already read as no
+  heat. 061_IA's cooling-only terminal units VAV-J and VAV-K print "N/A" in
+  every reheat coil column but "0" under FLOW RATE (GPM), so each waited among
+  the cooling-only, electric and hot-water reheat typicals. A zero in the
+  block now counts as none where the row prints at least one explicit none
+  there; zeros alone say nothing more, and a zero beside a printed coil value
+  leaves the coil printed. On the 98 eligible documents only those two boxes
+  change, each now taking vav-cooling-only (`normalize.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-71).
+- **Takeoff and assemblies: a fan-powered terminal unit is read, and waits
+  for series or parallel.** A FAN POWERED TERMINAL UNIT SCHEDULE was no
+  family's, so 26_CA's 73 fan-powered boxes (FPB-3-11 …) were missing without
+  a word. VAV now reads a title that begins with a fan-powered terminal, box
+  or unit (never its controls, wiring, points or sequence, nor a list that
+  only ends in the boxes' name), and under that title a fan-powered box's mark.
+  Such a table prints its fan's airflows beside its primary air valve's, and
+  its zone's loads beside its coil's capacity: the primary airflows are the
+  box's maximum and minimum, the fan's maximum is the fan's, a zone's load is
+  never a unit's capacity, and the primary air valve's size is the box's
+  inlet. A box whose row prints a fan but not whether it is series or parallel
+  no longer takes a single-duct typical, which counts no fan: it waits between
+  the two fan-powered typicals for the estimator's choice (the starter's VAV
+  selectors, corrected in v1, which has not shipped). On the 97 eligible dev
+  documents only 26_CA changes (`corpusTakeoff.mjs`, `normalize.ts`,
+  `web/scripts/assemblies-starter/terminals.mts`, ASSEMBLIES_BUG_CATALOGUE
+  AS-69).
+- **Takeoff: a table titled with its family's name in words is that family's
+  schedule.** A family's title rule read "… FAN SCHEDULE", "VARIABLE AIR
+  VOLUME …" or "PUMP SCHEDULE", so tables titled EXHAUST FANS, SUPPLY FANS,
+  VENTILATION FANS, "FANS (SPECIFICATION SECTION 23 34 00)", VAV TERMINAL
+  SCHEDULE, VAV BOX WITH HOT WATER REHEAT SCHEDULE, VARIABLE VOLUME SUPPLY
+  TERMINAL UNIT SCHEDULE, CONDENSATE PUMP or AIR/DIRT SEPARATOR SCHEDULE were
+  no family's, and their units were missing without a word (the notice names
+  rows left out of a family's own schedule, and these were no family's). They
+  are read now: a fan title must name the fans from its first word to its
+  last, so an electrical list ending "- EXHAUST FANS" stays unread; a VAV box
+  or terminal title never names its connections, wiring, controls or points;
+  EXF-n and transfer fans TF-n are fans under a fan title, and a separator
+  lettered for its system (AS-A) under a separator title. The soft title
+  match, which also reads titles printed without spaces, dropped a rule's "."
+  wildcard and a quantifier's comma as punctuation: three families' rules
+  (RAH, WFU, GLYCOL_MAKEUP) became invalid and their soft match never ran,
+  and the valve titles' "up to forty characters" became exactly forty; both
+  now keep their meaning. On all 97 eligible dev documents with a cached
+  sheet graph (held-out excluded) 107 units on 11 documents are added and
+  none removed or changed, and 01_NY gains its return fans RF-1 and RF-2
+  (`corpusTakeoff.mjs`, `scheduleTitleMatch.mjs`, ASSEMBLIES_BUG_CATALOGUE
+  AS-68).
+- **Assemblies: a unit's heat, heating capacity, electric heat, filter
+  rating and phase are read where its schedule prints them by section.**
+  071_ME's rooftop units, read one unit per column (AS-65), print PRIMARY
+  HEAT TYPE HEAT PUMP beside SECONDARY HEAT TYPE ELECTRIC, a heating
+  capacity at 47 °F and 17 °F as "105.7 / 60.0", SECONDARY HEAT KW,
+  FILTERS (SUPPLY) TYPE "MERV8" and ELECTRICAL VOLTAGE "208/230-3-60", and
+  none was read. The normalizer now reads a secondary (supplemental,
+  auxiliary, backup or emergency) heat's kind below the primary's, a
+  heating capacity rated at 47 °F and a colder point as its 47 °F rating
+  (the larger, printed first), a heat section's KW as electric heat where the
+  section's TYPE prints ELECTRIC (a heat pump section's KW is its input), a
+  FILTER TYPE column naming one MERV rating (below a MERV or final filter
+  column), and the phase, and the voltage where it prints one, of the unit's
+  own VOLTAGE column's whole V/PH/HZ cell (a fan motor's cell is not the
+  unit's, and a cell printing no phase, such as a wye system's "120/208", is
+  none). Over every cached dev document, 15 values change, all on 071_ME's
+  three rooftop units, each the value its key records; dev 3 reads 1,294 of
+  its 1,377 keyed values exactly (1,284 before), and every other tier is
+  unchanged (`normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-67).
+- **Takeoff: a table no title vouches for gives a unit only for a mark that
+  names one.** In an untitled table, or a general EQUIPMENT, SPECIALTY
+  EQUIPMENT, MISCELLANEOUS or HYDRONIC ACCESSORIES schedule, only its marks
+  say what a row is, and each family read every row its mark rule reads:
+  061_IA's steel framing and special inspection notes (SF1 to SF10, SP1 to
+  SP5) were fans and pumps, 08_ME's drawing index (P101 to P103) pumps,
+  23_GA's architectural specialty list (toilet accessories T1 to T24) ERVs,
+  abbreviation lists' SPF and SFD fans, 096_IN's exhaust grilles EG2 and EG3
+  fans, and 016_NY's fans and 047_NC's air-cooled chillers were counted a
+  second time, as fan coils and heat recovery chillers, from a panel schedule
+  and an electrical equipment list. Such a table is now read only when the
+  sheet graph classes it as an equipment table, not as notes, an index or a
+  list; a mark of letters alone is a word there; and FAN's EG-n, FCU's bare
+  F-n, the heat recovery chiller's CH-n and ERV's letter and number are read
+  under the family's own title only. A legend's heading ("PIPING LEGEND") is
+  no mark. The takeoff and the schedule↔plan reconciliation read them alike.
+  On all 97 eligible dev documents (held-out excluded) 46 phantom units on 10
+  documents are gone, and no unit is added or changed; dev 3's two invented
+  values, the phantom grilles' airflows, go with them (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-66).
+- **Takeoff: a schedule printed on its side, its units across the columns,
+  is read one unit per column.** 21_VA prints eight family schedules so
+  (DESIGNATION | AHU-1 | AHU-2; "EF-2, EF-5, EF-7, EF-9"; "CHWP-1 AND
+  CHWP-2"; "UH-1 THRU UH-3"), 071_ME its rooftop units (UNIT NO. | RTU-G |
+  RTU-1 (ALT#2) | RTU-2) and ductless split, 040_IL its air handler (SYMBOL
+  | AHU-15). Read row by row, their attribute names were units (071_ME's 42
+  "rooftop units" such as "24%" and "COIL FACE VELOCITY FPM", 21_VA's 26
+  pumps, fans and condensing units such as "MODEL NUMBER") and none of their
+  32 real units was read. The takeoff, the schedule↔plan reconciliation, the
+  scheduled-tag check, the plan-paint schedule hint and the notice of rows
+  read as no unit now read such a table through one view
+  (`scheduleTableView`): one row per unit, a column naming several units
+  (a list, an AND or & pair, a range) read as each, and each attribute named
+  by its row's label, with its section when the section is printed on its
+  first row (071_ME's SUPPLY FAN, ELECTRICAL). Where the drawing does not
+  say which section a row is in (a section drawn down a merged cell, a
+  heading printed across the unit columns) or prints a label twice, the
+  attribute is left unread, never guessed. The assemblies normalizer reads
+  a PEAK outdoor airflow (071_ME's SUPPLY FAN PEAK OUTSIDE AIRFLOW) as no
+  minimum outdoor air, as it reads a MAXIMUM. On all 97 eligible dev
+  documents (held-out excluded) three change: 68 phantom units are gone and
+  31 real ones read (21_VA 26, 071_ME 4, 040_IL 1); every other unit and
+  document is unchanged (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  `leftOut.ts`, `normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-65).
+- **Takeoff: a mark behind a building and its floor or wing, and fan coils,
+  chillers and humidifiers their own schedule's title vouches for, are
+  read.** A family's mark rule read a mark behind one building token
+  (1-VAV-1), so 036_LA's DUCTLESS SPLIT SYSTEM SCHEDULE, which prints each of
+  its 34 units behind a building and a floor or wing (01-1-DAC-1,
+  05-B-DAC-1), gave no unit at all, and the notice of rows read as no unit
+  named only the five with a wing letter. The rule now also reads a mark
+  behind a numbered or coded building followed by its floor (a number of at
+  most two digits) or wing (one letter), when what follows is a short
+  equipment mark; a lettered first token is a unit's own mark, never a
+  building (AHU-1-SF-1 keeps its reading). Under the family's own title only,
+  FCC-n is a fan coil (028_TX's FCC1-1 beside FCU1-3), ACCH-n an air-cooled
+  chiller (087_US's only chiller) and HUM with one letter a humidifier
+  (061_IA's HUM-A). The notice reads a mark behind up to three location
+  tokens, or with a floor number printed against its letters (FCC1-1), so a
+  mark the rule cannot read is named, not dropped. On all 97 eligible dev
+  documents (held-out excluded) the takeoff counts 48 more units on 4 of them
+  (036_LA 34, 028_TX 12, 087_US 1, 061_IA 1) and every unit it counted before
+  is unchanged; the schedule↔plan reconciliation gains one row per unit
+  (`corpusTakeoff.mjs`, `leftOut.ts`, ASSEMBLIES_BUG_CATALOGUE AS-64).
+- **Takeoff: marks a schedule's own title vouches for, and a family's units
+  in another family's schedule, are read.** A family's mark rule reads the
+  same in every table, so letters another family owns elsewhere could not
+  join it, and a family schedule read only its own family's marks. 017_MD's
+  nine return fans (E-A-1 under a RETURN FAN SCHEDULE), 094_FL's four
+  humidifiers (HF-4 under a humidifier schedule), 096_IN's DOAS-1 to DOAS-3
+  (in its air handler index) and 22_GA's split system fan coils and heat
+  pumps (FCU-1/HP-1 rows) read as no unit. Each family now also reads the
+  marks its own schedule's title vouches for, and only under that title
+  (FAN: E-A-n, F-n, BF-n; UNIT_HEATER: EWH-n, SUH-n; HUMIDIFIER: HF-n; FCU:
+  DAC-n, SS-n; AIR_COOLED_CHILLER: ACC-n; DUCT_MOUNTED_COIL: RH-n, SHC-n,
+  DXC-n); a table titled as the family reads what its untitled rule reads (a
+  CONTROL DAMPER SCHEDULE's CD-n); DOAS, FCU, HEAT_PUMP and
+  HEAT_RECOVERY_CHILLER read their own marks in another family's schedule
+  that lists them; CONDENSING_UNIT reads SSCU-n; and a mark may end in a room
+  code of up to six letters and digits (030_NY's 001-FCU-01-CG06A). A mark
+  read as printed ranks above every widened reading, in the takeoff and the
+  schedule↔plan reconciliation alike: a widened reading adds a unit only
+  where no printed listing holds it, so each unit keeps its listing and its
+  single reconcile row, whatever the table order. On all 97 eligible dev
+  documents (held-out excluded) the takeoff counts 87 more units on 12 of
+  them and every unit it counted before is unchanged; the rows AS-61 names
+  fall from 53 in 21 schedules to 16 in 8. The embedded-coil check no longer
+  takes a damper that serves a unit for its coil's valve: 016_NY's newly read
+  dampers serve AHU-1, whose heating coil still has no scheduled valve
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-63).
+
+- **Takeoff: marks under a building number, code or letter, and more fan and
+  terminal marks, are read.** The takeoff reads a family's schedule rows by
+  their marks and drops a mark its rule for the family does not read, so
+  05_MO's report held one of its five air handlers, none of its 11 fans and
+  12 of its 36 terminal units (AS-61 named them). Each family's mark rule now
+  also reads a mark after one building number or code (05_MO's 1-AC-15 and
+  1-VAV-1, 041_IL's 40-AHU-2, 031_MO's W05-TU-01, 067_CA's B950-AHU-3001, as
+  it read WHSE-ET-1) and a building letter between the family's letters and
+  the number (074_CA's FC-A-2); FAN reads an exhaust fan named by one or two
+  letters before EF (096_IN's PEF-1 and JEF-1); VAV reads TU-n terminal
+  units. What is left must still be a short equipment mark, so a size, a
+  voltage, a temporary unit's 1-AC-36TEMP or a steam trap's ST-H-3 reads as
+  no unit. On the 58 cached dev documents (held-out excluded) the takeoff
+  counts 93 more units on 6 of them, and every unit it counted before is
+  unchanged; the rows AS-61 names fall from 119 in 24 schedules to 40 in 15.
+  The schedule↔plan reconciliation reads marks by the same rule
+  (`markMatchesKeyRe`), so every unit the takeoff counts has its row (031_MO's
+  25 WHSE- units had none); a mark only this reading admits adds no second
+  row for a unit already reconciled (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-62).
+
+- **Assemblies: scheduled rows the takeoff reads as no unit are named.** The
+  takeoff reads a family's schedule rows by their marks, and a mark its rule
+  for the family does not know gives no unit at all: a building prefix
+  (05_MO's 1-AC-15, 1-VAV-1 and 1-SF-15; 041_IL's 40-AHU-2 and 40-VAV-01) or
+  letters the rule lacks (031_MO's W05-TU-01, 096_IN's PEF-1 and JEF-1,
+  017_MD's E-A-1, 074_CA's FC-A-2). Those units never reached the assemblies,
+  and the panel and `apply_assemblies` priced fewer units without a word:
+  05_MO's report held one of its five air handlers, none of its 11 fans and
+  12 of its 36 terminal units. The report now carries `schedules_left_out`:
+  each schedule titled as a family the library prices whose rows no compiled
+  row carries (none sits in the row, and none has its mark), with its sheet,
+  title, family, every mark left out, and why. A key that does not read as a
+  tag is never named (an abbreviations list or a transposed schedule's
+  attribute names read under a family's title). The panel names them in red
+  above its settings, the PDF section lists every mark after the totals, and
+  `apply_assemblies` returns them in `report`. Nothing is counted from them,
+  and the takeoff's mark rules are unchanged (`web/src/lib/assemblies/leftOut.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-61).
+
+- **Assemblies: the library CSV survives a spreadsheet.** The Library view's
+  Export CSV is meant to be edited in a spreadsheet and imported back, and the
+  starter cites its standards with "§" in every record. Excel on Windows opens
+  a UTF-8 CSV without a byte-order mark as Windows-1252, writes its plain CSV
+  in Windows-1252, and writes every true or false cell as TRUE or FALSE. So an
+  export edited in Excel came back with every starter record refused as
+  changed (107 to 126 errors), and the partner's own record refused or its "°"
+  read as "�" or "Â°". The export now carries a byte-order mark; the import
+  (the panel's, and MCP's `library_path`) reads UTF-8 or, where the bytes are
+  not UTF-8, Windows-1252, and says so; a whole-cell TRUE or FALSE in a value
+  or expression column reads as true or false; a semicolon-separated file is
+  named as such. Through both of Excel's saves the library now reads back
+  whole: 0 errors, the 47 starter records unchanged, the partner's record as
+  exported (`decodeCsvBytes`, `libraryCsv.ts`, ASSEMBLIES_BUG_CATALOGUE AS-60).
+
+- **Assemblies: a group decision is one row under Your overrides.** "Use …
+  for all N", "Exclude all N", an option for all N and "…for all N like it"
+  write an override on each unit, and "Your overrides" listed each with its
+  own Remove: taking back "Exclude all 42" (071_ME's transposed rooftop
+  schedule) took 42 clicks, in a list 42 lines long. The overrides one such
+  decision wrote (its reason, "…decided together", and the same layer and
+  exclusion or typical) are now one row with **Remove all N**, over the list
+  of its units, each still with its own Remove and its own marks; a row with a
+  marked unit opens. Nothing an override is or does changes (`overrideRows`,
+  `OverridesView` in `AssembliesPanel.jsx`, ASSEMBLIES_BUG_CATALOGUE AS-59).
+
+- **Assemblies: the panel names a drawing set changed since its schedules
+  were read.** The assemblies project is read from the PDFs open when
+  **Apply assemblies** is pressed, and nothing cleared or flagged it after:
+  adding the controls drawings, removing a PDF, or re-dropping a revised
+  mechanical set left units and lines, and their exports, from the earlier set
+  without a word. The canvas now keeps the set each read came from (files,
+  revisions, epoch), and the panel names what changed since in red (files
+  added, removed or revised), with **Re-read schedules**; a change while the
+  schedules are being read shows the same way. The notice is the panel's; MCP's
+  `apply_assemblies` reads the Session's current plans on every call
+  (`drawingSetChange`, `StaleProjectView` in `AssembliesPanel.jsx`,
+  ASSEMBLIES_BUG_CATALOGUE AS-58).
+
+- **Production reads: the same PDF opened twice is read once.** The production
+  routes spool each upload by its sha256, so a plan set opened under two names
+  ("set.pdf" and "set (1).pdf") reached the CLI as one path twice, and a
+  Session cannot load a path twice: the sheet graph, the compiles, the sweeps
+  and Takeoff → Assemblies all failed with a stack trace naming a hash. Identical
+  bytes are now one document (`onePathPerDocument`, `web/vite.corpusTakeoffApi.js`),
+  under the last name sent (the browser's sha → name map), or for a symbol sweep
+  the name of the file swept. A set that comes as several PDFs is read as one
+  project on both surfaces: nine corpus documents split into two or three PDFs
+  apply to the same records, lines, control readings, project questions and
+  export set as the whole file, and the UI proof now takes several PDFs
+  (`OT_UI_PDF`, separated as PATH is). A picture schedule sheet's label names
+  its file as well as its page, since each PDF of a set has its own page 3
+  (ASSEMBLIES_BUG_CATALOGUE AS-57).
+
+- **Assemblies: a unit's details offer another typical.** The Takeoff panel
+  offered a typical only for a unit that waits, among the exceptions: a
+  unit's details held its options and Exclude alone. So a rule's pick could
+  not be changed there, `lab-airflow` (which the starter applies only by
+  override) was reachable from no control, and a unit whose family no typical
+  lists (26_CA's constant-volume exhaust terminals; the ITD District 1 lab's
+  21 lab air valves) could take none. `apply_assemblies` overrides could do all three.
+  The details now carry **Use another typical…**: the other typicals of the
+  unit's family, or, for a family no typical lists, the layer's others. It
+  asks why and writes the override `apply_assemblies` takes; **…for all N like
+  it** makes the same choice for every row of the unit's schedule with the same
+  typical, one reason and an override each (`unitsLike`, `report.ts`). The list is
+  `typicalChoices` (`web/src/lib/assemblies/select.ts`), the same list the
+  rules choose among; no record changes without a choice. `apply_assemblies`
+  lists the same choices with `detail` `units` or `lines` (`typical_choices`:
+  each family's own per layer, and each layer's whole list), so an agent can
+  offer them too (ASSEMBLIES_BUG_CATALOGUE AS-55).
+
+- **Assemblies: a schedule sheet whose tables are pictures is named.** A
+  schedule sheet whose tables are pasted images or a scan gives the compile no
+  table, so any unit it schedules never reached the assemblies, and the panel
+  and `apply_assemblies` gave only a count of units: 0 on a set whose
+  schedules are all pictures. The report now carries `schedules_unread`: each
+  such sheet (a schedule-role sheet that read no table while its embedded
+  images pass the raster policy, the case `sheet_graph`'s notes already
+  named), its printed sheet number, the share of it the pictures cover, and
+  why. The panel names them above its settings, and the PDF section lists them
+  after the totals. Nothing is read from the pictures, and a sheet that reads
+  some tables while pasting others as pictures is not named yet
+  (`mcp/src/session.ts` `pictureScheduleSheets`,
+  `web/src/lib/assemblies/report.ts`, ASSEMBLIES_BUG_CATALOGUE AS-54).
+
+- **Assemblies: the lines that cannot be counted are listed.** A line whose
+  quantity cannot stand (AS-52's negative or fractional counts, or an
+  expression that fails) had no quantity, and no total counted it. The
+  panel's totals left error lines out, and the report listed only the
+  records that wait: an estimate could miss its fan commands without a
+  word. The report now carries `line_errors`, each with its unit, rule and
+  why. The panel shows them under **Lines that cannot be counted** and
+  counts them in its totals, and the PDF section lists them after the
+  exceptions. No document in the corpus has one today
+  (`web/src/lib/assemblies/report.ts`, ASSEMBLIES_BUG_CATALOGUE AS-53).
+
+- **Assemblies: a quantity is never negative, and a point or device is
+  counted whole.** A count the schedule reading got wrong (a cooling
+  tower's -1 cells, 1.5 electric heat stages, a unit's QTY misread) went
+  straight into its lines, which were `ok` with -20 fan commands or half a
+  fan start. Such a line is now an `error` naming its quantity ("qty -2 is
+  negative", "qty 1.5 is not a whole count of points"); a line with a
+  `round` rule may still compute a fraction for its rounding. The library
+  gate checks a quantity that reads nothing the same way, so a partner's
+  library that fixes one (a quantity of "2 - 3", or half a device) is
+  refused, with its reason, when it is loaded or edited. Over the 98 cached
+  documents no line changes: none has such a quantity today
+  (`web/src/lib/assemblies/expand.ts`, `schema.ts`, ASSEMBLIES_BUG_CATALOGUE
+  AS-52).
+
+- **Assemblies: a narrowed reply names the families that leave units out.**
+  `apply_assemblies` narrows its reply to the families units apply as.
+  A family no unit applies as (a typo such as `AHUS`) returned an empty
+  reply, and units scheduled as one family that apply as another were
+  left out without a word: over the 98 cached documents, 12 units on 8
+  documents (split heat pumps apply as condensing units, 100% outdoor-air
+  air handlers and a rooftop unit as DOAS, gas-fired fan coils as
+  furnaces). Such families now come back under `families_left_out`, each
+  with why and the units it leaves out (`web/src/lib/assemblies/report.ts`
+  `familiesLeftOut`, ASSEMBLIES_BUG_CATALOGUE AS-51).
+
+- **Assemblies: a setting no part of the library reads is named.** Settings are
+  read by id: a project variable by the typicals that take it from the
+  project, a partner default by an option or variable of that id, a hook-up
+  switch by the lines that name it, a responsibility edit by the lines of its
+  role. Any other key changed nothing, and nothing said so: an agent's
+  `partnerDefaults: { economiser: true }`, a partner default of "yes" for an
+  option (true or false only), a switch or role the project's library does
+  not have, an activity or party the responsibility matrix does not know.
+  `apply_assemblies` now lists such keys under `settings_unread`, each with
+  why, and Project settings lists them at its top. The starter library reads
+  every switch, variable and preset the panel offers; no record or line
+  changes (`web/src/lib/assemblies/expand.ts` `unreadSettings`,
+  ASSEMBLIES_BUG_CATALOGUE AS-50).
+
+- **Assemblies: what an override sets that no record takes is named.** An
+  override that fits a unit could still set what its record never reads: an
+  option or variable the unit's typical has not (an agent's `economiser` for
+  `economizer`; a typical adopted or chosen without it), any while the unit
+  has no typical (none chosen yet, or out of scope), or all of it where
+  another override for the same unit and layer decides (a project file from
+  before AS-43). It was dropped without a word: `apply_assemblies` said
+  nothing, and "Your overrides" listed it as applied. `apply_assemblies` now
+  lists such parts under `overrides_ignored`, each with its ids and why, and
+  "Your overrides" marks them *not applied*. The rest of each override
+  applies as before; no record or line changes
+  (`web/src/lib/assemblies/expand.ts` `ignoredOverrideParts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-49).
+
+- **Assemblies: rows whose typical's options wait resolve together.** The
+  exceptions grouped a schedule's rows only while they waited for a typical.
+  Rows under one typical whose same options wait (59 fan coils in 16 of the
+  98 cached documents print no motor type for fcu's variable-speed fan; air
+  handlers wait for the economizer of the typical you chose) were each their
+  own row. They are now one group, with a yes and a no for all N for each
+  option; each unit still gets its own override, keeping the typical you
+  chose for it (`web/src/lib/assemblies/report.ts` `exceptionGroups`,
+  ASSEMBLIES_BUG_CATALOGUE AS-48).
+
+- **Assemblies: a typical you chose that still waits stays an exception.**
+  Choosing a typical for a unit ("Use …", or "Use … for all N" for a
+  schedule's rows) marked its record overridden and took it off the
+  exceptions list, even when the typical's own options read values the
+  schedule does not print (an air handler's economizer, cooling type or DX
+  stages). Over the 98 cached documents, 15 of the 93 group choices left 197
+  such records, with 3,439 unresolved lines, out of sight. A chosen typical
+  now stays unresolved, and among the exceptions with what it waits for,
+  until an override or setting gives it; nothing changes where no override is
+  made (`web/src/lib/assemblies/select.ts`, ASSEMBLIES_BUG_CATALOGUE AS-47).
+
+- **Assemblies: a line's quantity basis names a starter default.**
+  `lines.csv`'s `qty_basis` said `evidence` for a quantity that rests on a
+  default of the starter library, such as the wall-module zone sensor and
+  setpoint adjustment a reheat VAV box's typical adds by default: 1,618 of
+  31,769 lines over the 98 cached documents. It now says `starter_default`
+  there, as it says `partner_default` where a partner default stands in. No
+  quantity, record or project question changes
+  (`web/src/lib/assemblies/expand.ts`, ASSEMBLIES_BUG_CATALOGUE AS-46).
+
+- **Assemblies: an override that applies to nothing is named.** The project's
+  own rows (building meters, a plant's controls) offered "Use …", option and
+  Exclude buttons whose overrides the engine never reads: they follow the
+  project settings. An override for a tag no unit has (a typo, a unit a later
+  read no longer finds) was kept silently too. `apply_assemblies` now lists
+  such overrides under `overrides_unmatched`, each with why. "Your overrides"
+  marks them, and a project row's button opens the Project settings that
+  resolve it (`web/src/lib/assemblies/expand.ts` `unmatchedOverrides`,
+  ASSEMBLIES_BUG_CATALOGUE AS-45).
+
+- **Assemblies: an override is its own unit's, and an exclusion is final.**
+  Two fixes to how a unit finds its override
+  (`web/src/lib/assemblies/expand.ts`), on the shared path the panel and
+  `apply_assemblies` both run:
+  - **Shared tags.** On a set where units of two families share a tag (as
+    the compile reads 16_NV's furnace, condensing unit and outdoor air unit,
+    all "B1"), overriding or excluding one changed the others, since an
+    override was found by tag alone. An override may now name its unit's
+    family, the panel names it on every override it makes, and MCP's
+    overrides take it. An override naming no family covers every unit with
+    the tag, as before. 4 of the 98 cached documents have such tags
+    (ASSEMBLIES_BUG_CATALOGUE AS-43).
+  - **Exclusion.** Excluding a unit whose layer already carried a choice
+    (an option or a typical) left that layer in the estimate, because the
+    earlier choice was found first. An exclusion now wins wherever it sits,
+    and removing it gives the choice back (AS-44).
+
+- **Takeoff panel: an override, setting or answer no longer freezes the page
+  while the panel recomputes.** After each change the Assemblies view applies
+  the library again and re-counts which project questions still change
+  anything, applying the library once per answer choice. Every one of those
+  applies rebuilt the control-evidence map, binding each control drawing to
+  the units, although the map depends on the project alone. On federal-mech
+  (128 units) that came to about 20 s of frozen page per change, and 34 s
+  from clicking "Use … for all 7" to the overrides on screen. A project now
+  keeps its normalization, its control map and the questions' text lines
+  (`web/src/lib/assemblies/apply.ts` `projectNormalization`,
+  `web/src/lib/controlIntent/questions.ts`). The panel also counts the
+  questions one apply at a time, so the page answers while it counts, and a
+  newer change stops a stale count. Across the 98 cached documents, the
+  records, lines, readings and questions are byte-identical. After a change,
+  the worst document's apply fell from 2.5 s to 0.17 s, and its questions
+  from 26.7 s to 1.1 s. MCP's apply_assemblies runs the same caches
+  (ASSEMBLIES_BUG_CATALOGUE AS-42).
+
+- **Assemblies: one choice resolves a schedule's waiting units together.** The
+  exceptions list in Takeoff → Assemblies names what each unresolved unit
+  waits for, and resolving meant choosing a typical row by row. Rows of one
+  schedule that wait for the same things with the same candidates (the nine
+  exhaust fans of a fan schedule waiting on a VFD answer) now appear together
+  under one header, with "Use fan-variable for all 9", and "Exclude all 9" for
+  rows that are no units at all. The choice asks for one reason and records an
+  override on each unit, each noting the group, so every record still says who
+  chose what and why. A table that prints no title is named "an untitled
+  schedule". On a schedule the compile reads transposed (071_ME's 42
+  rooftop-unit attribute rows), Exclude all takes them out in one step. The
+  grouping is the shared report's (`web/src/lib/assemblies/report.ts`
+  `exceptionGroups`).
+
+- **Takeoff panel: a zone plan's cites name the file, not the upload's hash.**
+  A VAV box whose CO2 sensor the zone-plan reader found cited its plan as
+  "(control packet <64-character hash>.pdf#2#zones)" in the panel, where
+  `apply_assemblies` cites "(control packet federal-attachment4-mechanical.pdf#2#zones)".
+  The browser's key remap (`web/src/lib/graphKeys.js`) knew a control packet's
+  id but not a zone plan's. The panel and MCP are byte-identical again on
+  federal-mech (ASSEMBLIES_BUG_CATALOGUE AS-40).
+
+- **Assemblies: a partner's copy of a hook-up is kept when saved.** Copying
+  the VAV, fan coil, air handler, unit heater, pump or heat exchanger hook-up
+  into the partner library, and saving it, validated and then vanished: the
+  browser store checked its reference to a coil or pump hook-up among the
+  partner's own records, where the starter's are not. The same happened on a
+  library CSV or profile import. The store now keeps each valid record, and
+  the whole library (starter and partner) resolves the references, naming any
+  it refuses in the Library view. Over MCP a profile given as library_path is
+  still the whole library, and a reference it cannot resolve fails the call
+  with the reason (`web/src/lib/assemblies/library.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-41).
+
+- **Control intent: a pump is named on a shared control drawing by what its own
+  schedule row calls it.** A model's answer drawn from a drawing that several
+  units share counts for a unit only where its evidence names that unit. A
+  boiler pump scheduled "AREA SERVED: BOILER PUMP (B-1)" was not named by its
+  own schematic's "BOILER PUMP INTERLOCK", because only the tag, the family's
+  noun and the tag's letters counted. The readers now also accept the words a
+  pump's own service cell uses for its kind
+  (`web/src/lib/controlIntent/readers/r0.ts` `rowKindWords`). On one dev set,
+  a boiler pump's role is now a cited "monitors only" proposal and its twin's
+  is shown as unresolved, instead of "not shown". Nothing else changes on the
+  dev documents or the 36 unseen sets with recorded readings, and no decision
+  applies that did not before (CONTROL_INTENT_BUG_CATALOGUE CI-34).
+
+- **Process note: the counts behind the last four assemblies fixes are
+  recounted without the held-out drafters' documents.** The censuses and A/Bs
+  of AS-35 to AS-38 read a scratch snapshot cache that also holds the seven
+  documents corpus hygiene withholds because a held-out firm drew them, and
+  they counted a copy of one unseen set twice. They printed a few lines from
+  three of those documents (tags, typicals, table titles). No rule, test or
+  key came from them, and one example taken from one is struck. Recounted on
+  98 documents and 3,163 records, the same 12 and 4 records change. Every
+  census now filters those documents
+  (ASSEMBLIES_BUG_CATALOGUE AS-39).
+
+- **An air handler's own fans, scheduled in a fan schedule, no longer take a
+  fan typical of their own.** A schedule of an air handler's supply and
+  return fans whose LOCATION column names the air handler ("SF-4A, LOCATION:
+  AHU-4") gave each fan the variable-speed fan typical beside the air
+  handler's own fan points. The control-intent row reader
+  (`web/src/lib/controlIntent/rowReader.ts`) already took a fan whose
+  SERVICE or SYSTEM names a scheduled air handler as part of it; it now reads
+  the fan's location the same way, as the binder already did. A fan whose
+  location is a room, or equipment the set does not schedule, keeps its
+  typical. Across the 98 cached documents, 4 of 3,163 records change (096_IN's
+  SF-4A/B and RF-4A/B), and the control-intent replays are unchanged
+  (ASSEMBLIES_BUG_CATALOGUE AS-38).
+
+- **A split system's outdoor heat pump no longer double-counts its indoor
+  unit's control points.** A heat pump that is a split system's outdoor
+  half, scheduled on one row with its air handler ("AHU-1, HP-1") or listed
+  on its own row in a split-system table beside the fan coils whose airflow
+  it does not print, took the heat-pump typical: a second unit controller,
+  zone sensor, fan command and programming labor beside the indoor unit's
+  own. The shared apply path (`web/src/lib/assemblies/apply.ts`) now applies
+  it as the system's outdoor unit (`CONDENSING_UNIT`, derived from
+  `HEAT_PUMP`, rule `derive.family.split_outdoor`), which carries no typical
+  of its own, as the answer keys read every condensing unit. A packaged heat
+  pump keeps its typical. Across the 98 cached documents, 12 of 3,163 records
+  change: 14_OR's HP-01 and HP-02 and 18_OR's HP-1 to HP-4 each drop the
+  heat-pump typical and the heat-pump hook-up, whose hose kit needs a
+  source-water flow an air-to-air unit does not have (it held one note line).
+  Every dev tier scores as before (ASSEMBLIES_BUG_CATALOGUE AS-37).
+
+- **A heat pump scheduled on one row with its air handler keeps only its own
+  columns.** A schedule that prints "AHU-1, HP-1" on one row, with columns
+  grouped AIR HANDLER INDOOR UNIT and HEAT PUMP OUTDOOR UNIT, compiles to an
+  air handler and a heat pump. The heat pump read the air handler's supply
+  airflow and electric heat, and an energy recovery unit's supply fan
+  horsepower, as its own. The shared normalizer
+  (`web/src/lib/assemblies/normalize.ts`) now treats a heat pump whose row
+  partner moves the air (an air handler, ERU, fan coil or furnace) as that
+  unit's outdoor half, as it already did for a condensing unit: the fans, the
+  airflow and the electric heat are the indoor unit's, and the heat pump's
+  capacities and power cite its own column group. A packaged heat pump on a
+  row of its own keeps its fan. Found by a column census of documents no
+  census had read. Five values change across every cached document, all
+  removals verified against the printed sheet, and every dev tier scores as
+  before (ASSEMBLIES_BUG_CATALOGUE AS-35).
+
+- **Units that share a tag get distinct Details buttons.** When a project
+  schedules a condensing unit, a furnace and an outdoor air unit all as "B1",
+  the Assemblies panel gave all three the same accessible name ("B1 controls
+  details"), so a screen reader could not tell them apart. The name now
+  includes the family ("B1 FURNACE controls details") (ASSEMBLIES_BUG_CATALOGUE
+  AS-36).
+
+- **Assemblies read a schedule's abbreviations as the words they stand for.**
+  The shared normalizer (`web/src/lib/assemblies/normalize.ts`) now reads
+  "CAP." as CAPACITY, "ENT." and "LVG." as ENTERING and LEAVING, "(DEG F)" as
+  "(°F)", HORSEPOWER as HP, and a US unit in square brackets ("[IN]", "[MBH]")
+  as in parentheses (brackets around an SI unit still mark an SI twin).
+  Before, a drafter who abbreviated lost capacities, water temperatures and
+  pipe sizes, and "TRAP CAP." slipped past the rule that a trap's capacity is
+  never the unit's steam flow. Found by a second metamorphic sweep that
+  respells every cached row the ways drafters vary them; every dev tier
+  scores as before (ASSEMBLIES_BUG_CATALOGUE AS-34 addendum).
+
+- **The Takeoff panel names control packets by the file, and never quotes a
+  model's garbled glyph.** A PDF opened in the browser is spooled under its
+  content hash; the panel restored the file's name on every sheet key but not
+  on a control packet's id, so a control drawing reading cited "(control
+  packet 72da836a…pdf#36#p8)". The browser boundary
+  (`web/src/lib/graphKeys.js`) now restores packet ids too. And a vision
+  reply that copied "55° OAT" as "55\u0000 OAT" had its control characters
+  quoted into the cite, the panel and the CSV set; the vision reader
+  (`web/src/lib/controlIntent/readers/r2.ts`) now cites the printed text such a
+  label was verified against. Found by running the assemblies UI proof on two
+  more documents; with the drawings read by printed phrases, the panel and
+  apply_assemblies agree byte for byte (ASSEMBLIES_BUG_CATALOGUE AS-34).
+
+- **A fan whose control column prints "VFD" runs on a VFD.** A schedule
+  that prints the drive under a control heading ("VARIABLE CONTROL TYPE:
+  VFD") gave the fan's control text but not its VFD, so the shared
+  normalizer (`web/src/lib/assemblies/normalize.ts`) left the fan's
+  controls typical waiting on a VFD answer. The cell now also reads as a
+  VFD; "VARIABLE" or "CONSTANT" alone still names no drive. Found by a
+  census of the 247 fans and pumps waiting on a VFD answer across the
+  cached corpus, which also records the ones only the compile or the
+  estimator can settle (ASSEMBLIES_BUG_CATALOGUE AS-33).
+
+- **Assemblies read a header the same however its slash or parentheses are
+  spaced.** A text layer that prints "SYSTEM AND / OR SERVICE" or "FAN COIL(
+  S ) SERVED" printed the same words as "SYSTEM AND/OR SERVICE" and "FAN
+  COIL(S) SERVED", but the shared normalizer
+  (`web/src/lib/assemblies/normalize.ts`) read the spaced spellings as no
+  column. Its one spelling of a header now closes the space around a slash
+  and just inside parentheses. Found by a metamorphic sweep that respells
+  every cached row's headers without changing a word; no value on any
+  cached document changes (ASSEMBLIES_BUG_CATALOGUE AS-32 addendum).
+
+- **A water flow group's pressure drop is no second flow.** In a schedule
+  whose water columns sit under a group named for the flow ("WATER FLOW DATA
+  / FLOW (GPM)" beside "WPD (FT)"), the pressure drop column was also read as
+  a flow, so the two disagreed and the unit's flow stayed unknown. The shared
+  normalizer (`web/src/lib/assemblies/normalize.ts`) now reads FLOW in a
+  group's name as no flow where the header names a pressure drop, head,
+  temperature or size. Found by a census of the unseen corpus's unread
+  columns; the eight changed values are water-to-air heat pumps' source
+  flows, each checked against the print (ASSEMBLIES_BUG_CATALOGUE AS-32
+  addendum).
+
+- **Assemblies read a schedule continued in a second table.** When a
+  schedule runs on in a second table titled as its continuation ("CUSTOM AIR
+  HANDLING UNIT SCHEDULE (CONT.)" under "CUSTOM OUTDOOR AIR HANDLING UNIT
+  SCHEDULE"), the shared apply path (`web/src/lib/assemblies/apply.ts`) now
+  keeps it for the units it continues, and the normalizer reads a unit's row
+  there as the rest of its columns, each value citing the table it is printed
+  in. The continuation is kept only when its title, less the mark, shares its
+  words with exactly one claimed table on the sheet whose rows hold every row
+  it prints; extraction is unchanged. On the fifth dev tier, an air handler's
+  supply fans, final filter and service voltage are now read (89.7% of
+  printed values exact, from 88.9%, and 0 wrong) (ASSEMBLIES_BUG_CATALOGUE
+  AS-32).
+
+- **Assemblies read a fifth tier of drafters' schedules.** Eleven more
+  documents, drawn by seed and keyed from renders before the pipeline ran,
+  taught the shared normalizer and notes reader
+  (`web/src/lib/assemblies/normalize.ts`, `scheduleNotes.ts`) these
+  readings, each with a test on the document's own shape. Notes numbered
+  "(1)", "(2)" with no label are read, and the table's last row above them
+  no longer ends the list; a note the row cites that only provides the
+  unit's starter means no VFD; notes state a humidifier's dispersion tubes
+  and a coil's entering water. A power connection's MCA is no pipe, and a
+  blender section's QUANTITY counts no units (both were invented values); a
+  louver's airflow is the louver's; OUTDOOR AIRFLOW, HEATING TYPE, a
+  packaged rooftop unit's DX cooling, a cooling coil's lone GPM, a kW or W
+  capacity in an electric heater's table, a single-duct box's DESCRIPTION,
+  size number, one airflow, 24 V controls and "N/A" electric heat, breaker
+  POLES, a shell and tube exchanger's steam side and the hot water it heats,
+  "PSC" under MOTOR (HP) and "MODULATING ECM", a DISCONNECT that is the VFD,
+  INTERLOCK WITH, "WATER @ 120°F", a water's SUPPLY/RETURN pipe size, a heat
+  recovery coil, and an EC MOTOR box left blank among checked accessories
+  are read. On the fifth tier, 88.9% of printed values are now exact (from
+  73.4%) with 0.2% wrong and none invented; every remaining miss is a
+  compile or extraction issue, or a reading the row does not print, which
+  the catalogue records. Dev through dev 4 read exactly as before, the 12
+  changes elsewhere on the corpus were checked against the printed cell,
+  and the control-intent readings are unchanged (ASSEMBLIES_BUG_CATALOGUE
+  AS-31).
+
+- **Assemblies read a fourth tier of drafters' schedules, and schedule
+  notes stay with their own table.** Ten more documents, drawn by seed and
+  keyed from renders before the pipeline ran, taught the shared normalizer
+  and notes reader (`web/src/lib/assemblies/normalize.ts`,
+  `scheduleNotes.ts`) these readings, each with a test on the document's own
+  shape. A notes block now stops at the next table on the sheet (the sheet
+  graph's regions), at a table's NOTES column header, and at an accessories
+  legend; another table's notes beside it narrow the block instead of being
+  read as its continuation, and "NOTES FOR AIR HANDLING UNIT:" is a label.
+  Notes now state a fan coil's "4-PIPE", a pump's "STANDBY" or "N+1" role, an
+  air handler's humidifier and its supply fan count, and "PROVIDE UNIT AT
+  460V/3PH". CLNG, HTNG and TMBH spell out; a hot gas reheat coil is no gas
+  heat and marks DX cooling; a dedicated outdoor air unit's TOTAL OUTSIDE AIR
+  is its supply; heat rated at 47 °F is a heat pump's and an auxiliary
+  electric coil is not the unit's heat; a VRF schedule's HEAT PUMP UNIT
+  columns are the outdoor unit's; a humidifier section's steam is never the
+  unit's; "HP (BHP)" and "2x2" motors, AFTER FILTER, firing-range MIN. ends,
+  DESIGN over SELECTION and MAX flows, GAS TYPE columns, heads printed in
+  feet and psi, HIGH / LOW TEMP exchanger sides with their FLUID and plate
+  count, a PHASE column printing "115/1", voltage ranges' phase, a SPEED
+  CONTROL's stages, TWO-PIPE titles, outdoor-only condensing unit airflow,
+  exhaust terminals and TYPICAL FLOORS are read. On the fourth tier, 71.8% of
+  printed values are now exact (from 65.7%) with 0.1% wrong and none
+  invented; every remaining miss is a compile or extraction issue the
+  catalogue records (368 of the 400 are rows the compile does not produce).
+  Dev, dev 2 and dev 3 read exactly as before, the 12 changes elsewhere on
+  the corpus were checked against the printed cell, and the control-intent
+  readings are unchanged (ASSEMBLIES_BUG_CATALOGUE AS-30).
+- **Assemblies read a third tier of drafters' schedules and notes.** Nine
+  more documents, drawn by seed and keyed from renders before the pipeline
+  ran, taught the shared normalizer and notes reader
+  (`web/src/lib/assemblies/normalize.ts`, `scheduleNotes.ts`) these readings,
+  each with a test on the document's own shape. A numbered notes list printed
+  with no NOTES label is read when it sits at the table's edge, and it stops
+  at the next table. A motor rated for a drive ("VFD RATED", "INVERTER DUTY")
+  is no VFD unless the fan is called variable speed. A note offering EC
+  motors or VFDs lets each row's own remark decide. A central controller the
+  units connect to is their interface. "3-SPEED" names the fan's speeds. A
+  chiller's or tower's unitless capacity is tons when its water flow and
+  range carry that many. A coil schedule counts coils. "HEATC FM" is HEAT
+  CFM. MOTOR TYPE "ECM" is an EC motor. A zone unit's SPACE / ROOM NAME is
+  the area it serves, and "OA %" is the outdoor air share. An exchanger's
+  title names its type, and air on both sides is "other". A boiler's
+  unlabeled capacity beside its INPUT is its output. "WATER 30%PG" is 30%
+  glycol. "(2) 1/4" HP is two 1/4 hp motors, and BRAKE HP ranks below the
+  motor's rating. An airflow printed under CAPACITY is the unit's. An
+  electric heater's TYPE and WATTS are its medium and heat. A bare CONTROL
+  column is read unless it cites notes. A DX fan coil that prints heating
+  and no other heat source heats as a heat pump. On the third tier, 92.2% of
+  printed values are now exact (from 83.5%) with 0.2% wrong; every remaining
+  miss is an extraction or keying issue the catalogue records. Dev and
+  dev 2 read exactly as before, and all 17 changes on the unseen corpus
+  were checked against the printed cell (ASSEMBLIES_BUG_CATALOGUE AS-29).
+- **Assemblies read more column names from drafters they were not built
+  on.** A census of the columns left unread on 65 unseen corpus documents
+  found printed attributes under spellings the rules did not know. The
+  shared normalizer now reads a water side's PRESS. DROP; a coil's PIPE DIA;
+  a bare ELEC column ("208/3") and VOLTS PHASE HERTZ ("460/3/60"); REHEAT
+  HW / ELEC / NONE columns marked YES; the place a unit serves under "…
+  SERVES" or "LOCATION / SPACES / UNIT / FAN COIL(S) SERVED" (never "SERVED
+  BY"); SYSTEM SERVED and FAN SERVICE as the service; MOTOR VSC and VARIABLE
+  SPEED as the drive; an evaporator's or circulating fluid's ENTERING /
+  LEAVING temperature; a BACnet accessory marked YES; a capacity printed in
+  "BTU"; the DESIGN head over a shut-off head; a DIRECT or BELT DRIVE column
+  marked YES. A cell that points elsewhere ("SEE PLANS") is no longer read
+  as the area served. On the unseen documents 189 of 872 units gain or
+  correct values, each read against its printed cell; the dev documents'
+  readings are unchanged (ASSEMBLIES_BUG_CATALOGUE AS-28).
+- **Assemblies read more of the ways schedules are drawn.** The attribute
+  normalizer (`web/src/lib/assemblies/normalize.ts`, shared by the Takeoff
+  panel and the MCP tools) was grown on ten more documents from ten more
+  drafting firms, each rule from a measured miss with a test on its own
+  shape. It now reads an electrical cell whatever order its header names
+  (V/HZ/PH, V/H/P, VOLTAGE-PHASE, "208V 3ph", unlabeled ELECTRICAL DATA
+  sub-columns); US units printed in brackets ("INPUT [MBH]"), while SI twins
+  stay unread; one value per labeled part of a cell ("COOL MIN / HEATING" =
+  "80 / 125"; a two-stage furnace's full capacity); unitary COOL/HEAT MBH
+  columns, a fired heater's input and output, and a fan coil's chilled-water
+  coil; the unit's own speed over its motor's; each fan motor's HP over a
+  TOTAL; a package's TOTAL flow; flow in GPH. A MAX and MIN flow pair is a
+  range, not the design flow; a fan count is not a unit count; KW/TON is an
+  efficiency. SERVICE names a unit's duty and SERVING what it serves (a room,
+  an area or another unit is the area served). A heating block printed "-"
+  or "N/A" throughout is no heat; a SEER or EER rating is DX cooling; a heat
+  pump schedule's indoor unit heats by heat pump; a gas and an oil rating
+  make a dual-fuel boiler, rated by its first fuel. A heat exchanger's HOT
+  and COLD SIDE map to its source and load by duty. Notes: BACnet's variant
+  (MS/TP, IP), a named interface or gateway, the system a controller
+  interfaces with; a glycol sentence scoped to its water system; 100% outside
+  air; the energy recovery type; coil rows; interlocks; a second notes list
+  under the first; notes no row cites speak for every row; a cited note that
+  contradicts the row's own cell leaves the value unknown. A drive schedule's
+  VFD now cites the drive schedule's row. Second-tier dev documents: 64.6% →
+  86.8% of printed values exact, 0 wrong, 0 invented; the first tier is
+  unchanged but for the two drive-schedule values, now cited where they are
+  printed. `mcp/scripts/assemblies-status-mark-diagnostic.mjs` shows the
+  status-marked tags ("(E)ATU A") the frozen scorer cannot pair
+  (ASSEMBLIES_BUG_CATALOGUE AS-27).
+
+- **Assemblies read the control drawings, the zone plans and the project's
+  answers (MCP 0.9.85).** Each scheduled unit's controls typical now takes
+  what its own control drawings say, not only what its schedule row prints.
+  `web/src/lib/controlIntent/` binds each unit to its sequence of operation,
+  control schematic and points list (by tag, tag list or range, schedule
+  cross-reference, or a family-level typical detail), and reads them three
+  ways. A deterministic reader matches sourced phrases and the drawn I/O. A
+  text model (`gpt-oss-120b`) quotes the clause it rests on. A vision model
+  (`qwen-3.8-27b`, two runs) must cite printed labels that resolve inside the
+  bound drawing. A reading applies only where two structurally different
+  readers agree, or on a whitelisted exact phrase (a unit printed
+  standalone). An option is read as not drawn only when the text reader and
+  both vision runs agree. One reader alone is a proposal, and readers that
+  disagree leave the option unresolved. Every applied reading carries its
+  rule and cites into the record. The drawings are read once per project,
+  before its settings and answers, the same way on both surfaces, so answering
+  a question never calls a model again. A zone plan (a sheet whose title names
+  zones) is read from its geometry. A unit's tag labels the smallest region
+  around it: a filled or clipping path many times the label's box and
+  several text heights across, so the box behind a label and a legend's cell
+  never count. A sensor symbol drawn inside that zone (a CO2 sensor) applies
+  its option alone, cited to the symbol and the label. Tags drawn in pieces,
+  turned sheets, nested zones and subscripts drawn apart ("CO" "2") read the
+  same way.
+
+  **Project questions.** A few facts only the estimator knows decide many
+  records at once. They are: whether the project has a BAS scope, the owner's
+  criteria (DoD, VA), what happens to existing units' controls, whether fans
+  and pumps with no speed column are constant speed, and whether packaged
+  pumps are in scope. **Takeoff → Assemblies → Project questions** shows only
+  the ones whose answer changes something on the set. Each choice is applied
+  and compared with no answer, so every choice shows the lines and records it
+  changes. At most six are shown, ranked by that. A pre-fill quotes printed
+  text outside the schedule tables that proposes an answer, and it applies
+  nothing until the estimator chooses. Answers are events in an append-only,
+  fingerprinted journal saved with the project
+  (`controlIntent/journal.ts`). MCP adds `project_questions` and
+  `answer_project_question`, which appends to the same journal as an
+  `agent_proposal`: an agent's record of the estimator's answer, never a human
+  act. Every record an answer decides says who recorded it. `export_takeoff`
+  and `import_takeoff` carry the journal, and `apply_assemblies` applies it.
+  The same journal gives byte-identical records and lines on both surfaces. A
+  journal whose chain does not check out is reported, and none of its answers
+  applies. 64 tools.
+
+  **Checked on documents it was never tuned on.** A blind audit reads unseen
+  corpus sets with the live models, and every applied reading is checked
+  against its cites and the drawing. What it found is fixed on the shared
+  path:
+  - A tag keeps the letters before its mark, so "EF-B1" is an exhaust fan's,
+    not the furnace "B1"'s.
+  - A mark several kinds of unit share binds through a title only when the
+    title names the unit's family.
+  - A point label such as "BO-1" is never a tag.
+  - Two sequences printed one under the other are two packets.
+  - In a packet titled for other units of a unit's family, only a clause
+    that prints the unit's tag speaks for it.
+  - A reading found in only one of several packets bound equally is a
+    proposal.
+  Across 14 unseen sets, 127 readings apply, and all 127 are right. (A first
+  count of 15 sets and 157 readings included a byte-identical copy of a
+  held-out document, filed under another corpus id. A hygiene scan of the
+  input PDFs, `mcp/scripts/corpus-hygiene.py`, now lists such copies, and
+  the robustness work skips them.)
+
+  **A second round on 12 more unseen sets** found one wrong reading: a detail
+  labelled "EXHAUST FAN (EF-1, 2, 3, 4, & 5)" gave its intake damper to a
+  gatehouse toilet fan. Fixed on the shared path, with the recall work it led
+  to:
+  - A detail's own label list ("EXHAUST FAN (EF-1, 2, 3, 4, & 5)", or a list
+    that runs on over two lines) binds the units it lists, and no other unit
+    of the family by family.
+  - "VAV BOX WITH HEATING COIL" is about the box.
+  - A title's variant ("WITH HEATING COIL", "COOLING ONLY") is checked against
+    the schedule columns the unit's row fills: a cooling-only box never takes
+    the reheat box's diagram.
+  - Of two same-titled sequences on a sheet, the one printed under the unit's
+    own diagram is its.
+  - A section headed for particular units ("MULTI-PURPOSE ROOM (VAV-1-26 AND
+    VAV-1-29)") is read for those units only.
+  - A label the vision model reads across one row of a points table ("BO-2
+    INTAKE DAMPER OPEN/CLOSE") counts as printed; one joined across two rows
+    does not.
+  Across 25 unseen sets, 200 readings apply, and all 200 are right (146 with
+  145 right before). Dev and extraction are unchanged.
+
+  **A third round covers every unseen set that has both scheduled units and
+  control drawings (53).** Two more fixes on the shared path:
+  - Title words that say nothing about which unit a detail is for no longer
+    leave a family's typical detail as a proposal. A title naming two kinds
+    of unit ("FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION") is each
+    one's. "VAV/CAV", "ROOF TOP" beside "ROOFTOP", a title's own "(HP)", a
+    terminal unit's "ATU", bid alternates and "ON OFF" are no qualifiers. A
+    detail for the plain kind of a family is not the special kind's that the
+    project schedules apart ("SMOKE EXHAUST FAN SCHEDULE").
+  - An agreement needs two readers that read it in the unit's own drawings.
+    A reader that read it only in a detail bound as a proposal (another
+    chiller's schematic) casts no vote that applies.
+  Across the 53 unseen sets, 338 readings apply, and all 338 are right. The
+  binding eval now counts its missed pairs by why. Dev and extraction are
+  unchanged.
+
+  **The readers check each binding against the drawing.** A robustness
+  test rebound every dev control drawing to a unit of another kind, as a
+  binder mistake would: 104 of the 217 readings made through them applied
+  (a VAV box took an exhaust fan diagram's "no CO2 sensor" as its own). Now
+  a drawing whose title names other units and not this one, or another kind
+  of equipment (other than a part the unit's row prints, such as its VFD),
+  is not the unit's own, however it was bound. It speaks for the unit only
+  where it prints the unit's tag, and nothing is read as absent through it.
+  The same test now applies 0 readings, for another kind of unit and for
+  another unit of the same kind. No real binding is affected: 1,969
+  bindings over 86 corpus sets, and the dev and unseen readings are
+  byte-identical.
+
+  **A unit's mark printed with a space is its tag** ("DOAS 3 P&ID", "DOAS
+  1&2 P&ID"), when the letters and number make a scheduled unit's mark. A
+  number left in a title is confirmed only by the unit's own mark, never by
+  a digit its row prints elsewhere (a voltage's "460/3/60"), and "P&ID" is a
+  kind of drawing, not a qualifier. One unseen set's DOAS units and fan coils
+  now read their own P&IDs: 25 more readings apply, all right (363 of 363
+  across the 53 unseen sets). Nothing else changes.
+
+  **A hydronic plant's drawings bind its equipment.** A drawing about a
+  chilled water, heating water or condenser water plant ("CHILLED WATER
+  SYSTEM SEQUENCE OF OPERATION", "HEATING HOT WATER PLANT POINTS LIST",
+  "HOT WATER DDC CONTROL DIAGRAM") names no unit, so it bound nothing and
+  the plant's chillers, boilers and pumps went unread. It now binds the
+  plant's own equipment: its chillers, boilers or cooling towers, and the
+  pumps and exchangers whose row says they serve that plant ("SERVICE:
+  PRIMARY - CHILLED WATER", "FLUID: CHS"), where no drawing of that kind is
+  bound to the unit already. A domestic water pump, a unit's coil pump, a
+  steam boiler, a terminal unit and a schedule row with no tag never take
+  it. The drawing stays the plant's: only its clauses that name the unit
+  speak for it, and nothing is read as absent through it. 39 bindings are
+  added over 7 unseen sets and none changes; the dev bindings are
+  byte-identical. Read live, 7 more readings apply, all right (three
+  chillers' role and chilled water isolation valve, a chilled water pump's
+  role): 370 of 370 across the 53 unseen sets.
+
+  **Words that say what a drawing is, and a unit's own variant, are no
+  qualifiers.** "BAS INTERFACE" in "FAN COIL UNITS - SEQUENCE OF OPERATION &
+  BAS INTERFACE" says what the drawing is, as "P&ID" does. "(HEATING AND
+  COOLING)" is read from the row's coil columns, as "COOLING ONLY" is. A
+  unit heater never cools, so "(HEATING ONLY)" is its own variant with no
+  column to say so, and "2-PIPE" is "TWO-PIPE". Each had left a unit's own
+  detail a proposal. Over the unseen sets, 38 bindings change in 3 sets and
+  none elsewhere; the dev bindings are byte-identical. Read live, 42 more
+  readings apply, all right: DOAS units' smoke detectors, exhaust fans,
+  variable speed wheels and role; fan coils' role; cabinet unit heaters'
+  modulating valve. 412 of 412 across the 53 unseen sets.
+
+  **A mark right after SEQUENCE names the sequence.** "SEQUENCE B1:" and
+  'SEQUENCE "B1"' on one unseen set are construction phasing notes
+  ("…RENOVATION EFFORTS IN BOTH AREAS "B1" AND "B2""), and the binder read
+  "B1" as boiler B-1's tag. A bare mark after SEQUENCE (or SEQ., NO., #, a
+  quote) now names the sequence, a construction phase or a sequence the
+  schedule refers to, never a unit; a hyphenated tag ("SEQUENCE AHU-1")
+  still does. The boiler now binds to the heating water sequence and
+  schematic that print its tag. Nothing applied changes (412 of 412), and
+  the dev bindings are byte-identical.
+
+  **The unseen-document audit is a replayable instrument.**
+  `mcp/scripts/control-intent-unseen-audit.mjs` reads every corpus set that
+  was never keyed or tuned on: not dev, not held-out, not a held-out twin
+  or drafter's set, not a copy of a dev document. The model calls are
+  recorded under `reports/control-intent/unseen-runs/`, so the audit
+  replays with no model; `--live` calls the models for anything not
+  recorded. Its record, `06-unseen-audit.json`, holds every applied
+  decision with a person's verdict against its cites and the drawing. A run
+  lists every decision that is new since the record (to be checked before
+  it counts), every one that is gone, and any the record calls wrong. A
+  run over some of the sets compares and rewrites only their part. At
+  this commit it reads 90 sets, 53 with both scheduled units and control
+  drawings, and replays 520 calls: 412 decisions apply, the same 412 the
+  audit checked, all right. Two sets have no snapshot: the kernel's memory
+  limit killed their compile while an orphaned scorer (AS-15) held about
+  6 GB.
+
+  **A vision reply cut off by its token limit is asked again.** The vision
+  model reasons before it answers, and on some drawings it spent the whole
+  16,000-token budget reasoning and returned nothing: 37 of the unseen
+  audit's 358 vision calls and 7 of dev's 126. That run's answers vanished,
+  so neither an absence (which needs both vision runs) nor an agreement
+  through it could apply. A reply cut off before it holds any answer is now
+  asked again with 32,000 tokens, and if still cut off, with low reasoning
+  effort as well. The first request and every reply that finished are
+  unchanged, so every recorded run still replays.
+  - Dev: 294 applied, 0 wrong (was 291), 48 absences (was 43).
+  - The unseen audit: 425 applied, all checked by hand, all right (was 412).
+    01_NY now snapshots, with the orphaned scorer gone.
+  - Two dev boiler roles and one unseen pump role are now held open: a
+    recovered run says otherwise on evidence that does not verify.
+  - GATE D's live re-run changes 2.8% of dev decisions (the limit is 2%), none
+    to a wrong value.
+
+  **The hygiene scan also finds a held-out drafter by its web address.**
+  038_NC prints the Coffman Engineers logo as an image, so its text layer
+  names the firm only as "www.coffman.com", on all 54 sheets. Coffman
+  drafted a held-out document, and the scan, which matched the firm's
+  printed name only, let 038_NC through as unseen. It now matches the
+  address too; 038_NC is a held-out drafter's document. The audit had read
+  it (4 units, 3 control drawings) and applied nothing there. A set that
+  stops being unseen now leaves the audit's record, decisions and all, and
+  the record keeps naming it.
+  A by-eye check of every eligible document's title block found three more
+  that no text scan could: 015_VA prints a Burns & McDonnell joint venture's
+  logo as an image, and 021_XX and 023_US are USDA ARS in-house designs, as
+  held-out 018_GA is. `drafters.json` now names every eligible document's
+  drafter, with its evidence, and the scan withholds any document it places
+  with a held-out drafter. 010_US, a byte-identical copy of another unseen
+  set, is counted once. The audit's record drops to 85 sets and 412
+  decisions, all right (CONTROL_INTENT_BUG_CATALOGUE CI-32).
+
+- **Eval harness: the assemblies census reads the cached sheet graph.**
+  `assemblies-baseline.mjs` rebuilt every document's graph through a fresh
+  Session, taking minutes a set, where the attribute and typical evals read
+  the content-addressed graph cache. It now reads the same cache and
+  compiles from the graph alone, as they do. Re-run on the 23 committed
+  sets, the census is identical to the committed one (timing aside), at
+  about a second a set. The seeded draws moved to `assembliesSplit.mjs`,
+  pure functions a test reproduces.
+
+- **Eval harness: the assemblies goal's second tier is drawn** (AS-17). With
+  the bulk corpus staged, the attribute rules can be tested on drafting they
+  were not grown on. A written seed (20260926, `assembliesSplit.mjs`
+  `drawTier2`, reproduced by a test) shuffled the drafter groups of the 53
+  unseen documents that compile a keyed family, one document per group.
+  Held-out 2 took 5 documents (13 tables). It skipped every group with a
+  document examined before the draw, and each held-out-2 group's other
+  documents are withheld from every tier. Dev 2 took 10 documents (48
+  tables). Dev 2 is keyed from renders before the pipeline runs on any of its
+  sheets. Held-out 2 is keyed only after dev 2's normalizer work is frozen,
+  and is scored at gates, as aggregates. `assemblies-attr-eval.mjs` scores
+  `--dev2` and `--heldout2`, and `--detail` refuses a held-out side. The
+  unseen audit no longer counts either tier: its replay withdrew 24 sets,
+  leaving 66 sets and 181 applied decisions, every one reproduced and right.
+
+- **Eval harness: a scorer's per-set child no longer re-scores its set
+  forever** (AS-15). Each corpus-eval scorer (`takeoff-eval`, `graph-eval`,
+  `tag-eval`, `table-recall-eval`), and `reference-eval` and
+  `table-box-eval`, runs each set in a `--single-json` child. That child
+  wrote its result with the exit in the write's callback, so it fell
+  through into the orchestrator below and spawned a child for the same set
+  before it exited. The orphan did the same, forever: up to 6 GB each, and
+  the container's memory limit then killed other runs' work. The child now
+  awaits its write and exits. Scores are unchanged.
+
+- **Eval harness: a character split across two pipe reads no longer
+  corrupts a snapshot.** The assemblies evals read each document's JSON from
+  a child process, decoded per read, so a "°" falling on a 64 KiB boundary
+  came back as "��". `mcp/scripts/childText.mjs` decodes the whole stream.
+
+- **The platform vision model is `qwen-3.8-27b`.** The earlier default,
+  `gemma-4-31b`, is no longer served: the endpoint's `/v1/models` lists only
+  `gpt-oss-120b` and `qwen-3.8-27b` (checked 2026-09-25). Every vision call
+  on the platform path therefore failed. `web/src/lib/ai.js` `PLATFORM_AI`
+  now names `qwen-3.8-27b`, and a test pins both defaults to the recorded
+  model list. A bring-your-own configuration is unchanged.
+
+- **Assemblies exports: the CSV set, and coil-derived valves in the HIT
+  export (MCP 0.9.83).** `web/src/lib/assemblies/exportSet.ts` builds eight
+  CSV files from one application of the library: `equipment.csv`,
+  `lines.csv`, `lines_rollup.csv` (rounded at the roll-up), `points.csv` (a
+  unit's printed points list where the drawing has one, otherwise its
+  typical's points), `valves.csv`, `damper_actuators.csv`, `sensors.csv` and
+  `desigo_select_worksheet.csv`. Units are in the column names. Every
+  engineering field has a `*_source` column from one closed list (`schedule`,
+  `drawing`, `derived`, `project`, `partner_default`, `starter_default`,
+  `user`, `typical`, `selection`, `unknown`), and a field left for the
+  selection tool is blank on purpose. Responsibility is six columns, and the
+  partner columns (part number, cost, hours, labor category) stay blank
+  unless the partner's own library fills them (below). The
+  columns are documented in `docs/ASSEMBLIES_CSV.md`, and a test fails when a
+  column is not. **Takeoff → Assemblies → Download CSV set** zips them, and
+  `apply_assemblies` writes the same bytes with the new `export_dir`
+  argument (the whole project's, whatever `families` narrows the reply to).
+  Both add `assemblies.pdf`, the report as a PDF section
+  (`assemblies/reportPdf.ts`: a summary, exceptions first, the family table,
+  and the units with their schedule rows), and the Takeoff panel's PDF
+  carries the same section once assemblies are applied.
+
+  The HIT valve export (`compile_corpus_takeoff` `export_path`, the UI's
+  "Export to HIT" and `export-valve-size-template.mjs`) adds one row for each
+  hydronic coil printed inside an equipment schedule that no scheduled valve
+  serves, from the embedded-coil compile, flagged coil-derived. Flow is the
+  coil's printed GPM. System comes only from printed service text, and CoilDP
+  stays blank. Past 195 valves the rows split across workbooks
+  (`…_part1of2.xlsx`), so every row stays inside the template's dropdown
+  range.
+
+  `apply_assemblies`' description and the Takeoff panel's note now say what
+  the apply path does with drawing evidence: a printed points list replaces a
+  unit's typical point lines. Components declared in a reviewed BAS assembly
+  register are not read yet (ASSEMBLIES_BUG_CATALOGUE AS-21).
+
+  The partner's library travels as CSV. **Library → Export CSV / Import
+  CSV…** (`assemblies/libraryCsv.ts`: one row per record, option, variable
+  and line, read back through the profile's gate with every problem by row
+  and column), and `apply_assemblies`' `library_path` now takes that CSV.
+  **Project settings** in the Assemblies view set the hook-up profile's
+  switches and variables and apply the starter's responsibility presets
+  (`assemblies/presets.ts`); over MCP, `settings.hookup_defaults` and
+  `settings.responsibility_preset` do the same, under the project's own
+  settings. The export's **Scope** menu and `export_scope` narrow `lines.csv`
+  and the roll-up to one party's lines. A partner's own part numbers, unit
+  costs, hours and labor categories reach `lines.csv` and the device files
+  labelled `partner-entered`. `lines.csv` extends them (`extended_cost` is
+  the quantity with waste × unit cost, `extended_hours` the installed
+  quantity × hours; `assemblies/partner.ts`), and `report.partner` and the
+  PDF section sum them by labor category. The starter ships no price, rate or
+  hour. Three scripted persona scenarios (a BAS integrator, a mechanical
+  contractor, a distributor) run the whole path in CI.
+
+  Fixed: under the dev server the Assemblies view never loaded the starter
+  library ("0 assemblies"). Its on-demand import passed JSON import
+  attributes that Vite keeps on a dynamic import while serving JavaScript, so
+  the browser refused the module. A test now fails on any such import
+  (ASSEMBLIES_BUG_CATALOGUE AS-23).
+
+- **Controls assemblies on the shared path: `apply_assemblies` (MCP 0.9.82; 62 tools).**
+  The scheduled HVAC equipment of a set now gets its controls typical and
+  mechanical hook-up from an assembly library. `web/src/lib/assemblies/apply.ts`
+  runs these steps:
+  - normalizes each compiled row with the notes, legend and code legends
+    printed with its table;
+  - derives what no row prints, each with a rule and basis: a 100%
+    outdoor-air air handler is a DOAS, a gas-fired fan coil a furnace, and
+    `terminals_served` comes from the terminal rows that name their air
+    handler;
+  - attaches drawing evidence (D6): a unit named by a printed points list,
+    through the BAS points compile's own served-equipment mapping, has its
+    typical's point lines replaced by the printed rows;
+  - applies the library (the starter US typicals v1 and hook-ups by default).
+
+  Every unit gets a record per layer: its typical, options and variables
+  with their source, and a status. An `unresolved` record names what it
+  waits for; nothing is guessed. `web/src/lib/assemblies/report.ts` shapes
+  the result for every surface: exceptions first, a table per family, a row
+  per unit with cites. The MCP tool takes `library_path` (an assemblies file
+  or an estimator profile), `settings`, `overrides` with reasons, `families`,
+  `detail` and `path`.
+
+  In the browser, **Takeoff → Assemblies** shows the same result, read
+  through `/__ot/assemblies-project` (the builder the MCP tool uses) and
+  applied by the same function. Overrides ask for a reason. The project file
+  keeps an `assemblies` block (`projectState.ts`): the definitions the
+  records used (pinned, so a library edit never changes a saved project
+  silently), settings and overrides. "Update to latest" lists each option
+  and line that would change and applies nothing until adopted. The
+  **Library** view keeps the starter read-only. **Clone to edit** makes your
+  version (same id, next version), validated live against the whole library
+  and tinted where it overrides the starter.
+
+  Library fix: a printed hardwired chiller/boiler/RTU interface no longer
+  counts as a network (BACnet) interface.
+
+- **HIT valve export: three correctness fixes (MCP 0.9.81).** The Siemens
+  "Global Valves" mass-sizing export (`valveSizeExport.ts`, used by
+  `compile_corpus_takeoff`'s `export_path`, the UI's "Export to HIT" and
+  `export-valve-size-template.mjs`) wrote three things the template does not
+  mean or accept:
+  - **Consumer Δp (column H) is now always blank.** The template's defined
+    name for that column is `CoilDP` — the coil's own pressure drop — and the
+    export had been writing the valve's (GPM / Cv)², a different quantity.
+    The valve's drop is still computed and reported (the notes' "valve Δp
+    (derived)" count and each row's `_derived.valveDpPsi`), never written to
+    the workbook. Column H stays blank until the HIT owners confirm what
+    CoilDP expects.
+  - **Tolerance accepts only the template's own list** (10, 20, 30, 40, 50 —
+    `Constants!F2:F6`, which validates column J). Any other
+    `toleranceOverridePct` now throws a `RangeError` instead of writing a
+    value the workbook rejects. No caller passes one today; the column stays
+    blank by default.
+  - **Positioning Signal comes only from printed signal text**: printed
+    0–10 V → "0...10 Vdc"; printed floating (also tri-state or 3-point) →
+    "Floating control"; read from the Control signal cell, or from an
+    Actuator cell that prints the signal type itself. Removed: any
+    "modulating" actuator → 0...10 Vdc, and any "x–y V" range (2–10 V
+    included) → 0...10 Vdc. 2–10 V, 4–20 mA, two-position and text naming
+    two signal types are left blank, and the notes list every blank with the
+    printed text that caused it. Operating Voltage is still written only
+    alongside a Positioning Signal.
+  - API: the `deriveConsumerDpFromCv` option is removed (no caller used it);
+    `computeConsumerDpPsi` is renamed `computeValveDpPsi`;
+    `resolvePositioningSignal` and `HIT_TOLERANCE_PCT_VALUES` are new.
+  - Before/after on navfac-cherry-point-atc and itd-d1-lab (one compile per
+    set fed to both builders, VectorGrid on):
+    `opentakeoff-corpus/reports/assemblies/00-hit-export-before-after.md`.
+  - `export-valve-size-template.mjs` now exits after writing its files. It
+    could hang there, held open by a VectorGrid sidecar
+    (ASSEMBLIES_BUG_CATALOGUE AS-6).
+
 - Add Siemens Valve Size Template (`Valve_Size_Template_US_Global.xlsx`) export
   from the production control-valve takeoff (`compile_corpus_takeoff`
   kind `control_valves`/T-VALVE-01, the same Session+ODL pipeline MCP and the

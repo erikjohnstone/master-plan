@@ -44,6 +44,104 @@
       "categories": {
         "GRD": 11
       }
+    },
+    {
+      "set_id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+      "source_pdf": "bulk/HVAC_BAS_Plan_Sets_Vol2/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
+      "source_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+      "page": 47,
+      "review": {
+        "change": "AS-63, AS-65",
+        "method": "Visual review of the rendered schedules (PyMuPDF crops of the printed tables), cross-checked with the sheet graph's extracted rows. The frozen key predates the mark rules that read the split system's rows (AS-63) and the reading of a schedule whose units run across its columns (AS-65)."
+      },
+      "evidence": [
+        "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE has one authored row, SYMBOL SS-1/SSCU-1 (service IT ROOM, 24 MBH cooling, R-410A): the split system's indoor unit SS-1 and its outdoor condensing unit SSCU-1.",
+        "AIR HANDLING UNIT SCHEDULE prints its one unit across its column: SYMBOL AHU-15, SERVICE NEW SPS (the sterile processing service the project expands), supply fan 26,000 CFM (21,500 connected) at 3.00 in. ESP, outside air 26,000 CFM design and 21,500 minimum, 480-3, VENTROL CUSTOM. The key's note (UH/FAN/PUMP/GRD/louver + PRV) lists the schedules read before a transposed schedule was read (AS-65)."
+      ],
+      "totals": {
+        "items": 32
+      },
+      "categories": {
+        "FCU": 1,
+        "CONDENSING_UNIT": 1,
+        "AHU": 1
+      }
+    },
+    {
+      "set_id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+      "source_pdf": "bulk/HVAC_BAS_Plan_Sets_Vol2/094_FL_Orange_County_Regional_History_Center_HVAC.pdf",
+      "source_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+      "page": 8,
+      "review": {
+        "change": "AS-63",
+        "method": "Visual review of the rendered schedule (PyMuPDF crop of the printed table), cross-checked with the sheet graph's extracted rows. The frozen key predates the mark rules that read these rows."
+      },
+      "evidence": [
+        "DISPOSABLE CYLINDER ELECTRIC HUMIDIFIER SCHEDULE has four authored rows, MARK HF-4, HF-5, HF-6 and HF-8 (models NH-EL-050 and NH-EL-030), each installed in its air handler's cabinet (IN AHU-4 CABINET and so on)."
+      ],
+      "totals": {
+        "items": 11
+      },
+      "categories": {
+        "HUMIDIFIER": 4
+      }
+    },
+    {
+      "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+      "source_pdf": "bulk/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+      "source_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+      "page": 13,
+      "review": {
+        "change": "AS-63",
+        "method": "Visual review of the rendered schedule (PyMuPDF crop of the printed table), cross-checked with the sheet graph's extracted rows. The frozen key predates the mark rules that read these rows."
+      },
+      "evidence": [
+        "RETURN FAN SCHEDULE has nine authored rows, MARK E-A-1 through E-A-8 and E-A-13 (return fans for ACU-A-1 to ACU-A-6, wing A toilet exhaust, mechanical room ventilation and sub-basement exhaust). The key's note left them unclaimed because they once extracted with CFM as the row key."
+      ],
+      "totals": {
+        "items": 28
+      },
+      "categories": {
+        "FAN": 15
+      }
+    },
+    {
+      "set_id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
+      "source_pdf": "bulk/HVAC_BAS_Plan_Sets_Vol2/039_TX_VA_Project_580_22_201_Replace_and_Upgrade.pdf",
+      "source_sha256": "27002597f1d70ab48ffeedc0f1be3a189440a6352de0bc2f9ddfc6137d7a4042",
+      "page": 32,
+      "review": {
+        "change": "AS-62",
+        "method": "Visual review of the rendered schedule (PyMuPDF crop of the printed table), cross-checked with the sheet graph's extracted rows and the page's text layer. Found while guarding AS-63: AS-62's census predates this document's cached graph."
+      },
+      "evidence": [
+        "BLDG 109 AIR TERMINAL UNIT SCHEDULE (two tables on the sheet) prints 186 terminal units, TU-101C and TU-101H through TU-241C and TU-241H: a C and an H unit per room, each with its room served, air handler, duct inlet, maximum and minimum airflow and control type VAV. The page's text layer holds the same 186 marks. The key's [ZERO] note predates the TU mark rule (AS-62)."
+      ],
+      "totals": {
+        "items": 186
+      },
+      "categories": {
+        "VAV": 186
+      }
+    },
+    {
+      "set_id": "087_US_Contra_Costa_College_Chiller_Replacement",
+      "source_pdf": "bulk/HVAC_BAS_Plan_Sets_Vol2/087_US_Contra_Costa_College_Chiller_Replacement.pdf",
+      "source_sha256": "f47838bdff2ba4c329ccdb35731219eea37e8831a29b1d9121e692d6a7268c39",
+      "page": 1,
+      "review": {
+        "change": "AS-64",
+        "method": "Visual review of the rendered schedule (PyMuPDF crop of the printed table), cross-checked with the sheet graph's extracted row. The frozen key predates the mark rule that reads ACCH-n under an air-cooled chiller's own title."
+      },
+      "evidence": [
+        "AIR-COOLED CHILLER SCHEDULE prints one row: TAG ACCH-1, CARRIER 30RB120, location GRADE, service (E) AHU'S, 120.1 nominal tons, 287 GPM entering at 54 F and leaving at 44 F, 460/3. It is the chiller the project replaces. The key's [ZERO] note (no extractable HVAC schedule tables) predates the ACCH rule (AS-64)."
+      ],
+      "totals": {
+        "items": 1
+      },
+      "categories": {
+        "AIR_COOLED_CHILLER": 1
+      }
     }
   ]
 }

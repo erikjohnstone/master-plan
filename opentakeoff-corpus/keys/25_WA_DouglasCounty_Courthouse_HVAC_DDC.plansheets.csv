@@ -1,0 +1,12 @@
+# 25_WA_DouglasCounty_Courthouse_HVAC_DDC.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, check).
+# Authored 2026-09-30 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#11,FIRST FLOOR PLAN - HVAC DEMO,M,demolition,yes,ME1.01; combined mechanical/electrical demo sheet with keyed and electrical keyed notes and key plan
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,SECOND FLOOR PLAN - HVAC DEMO,M,demolition,yes,ME1.02; combined mechanical/electrical demo sheet
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#13,THIRD FLOOR PLAN - HVAC DEMO,M,demolition,yes,ME1.03; combined mechanical/electrical demo sheet; only thermostat labels name units
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,ATTIC PLAN - HVAC DEMO,M,demolition,yes,"ME1.04; existing attic fan coils FC-1 to FC-13 shown solid, OA ducts and louvers demolished"
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FIRST FLOOR PLAN - HVAC,M,new,yes,ME4.01; new work plus existing to remain; site area with chiller and outdoor units
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,SECOND FLOOR PLAN - HVAC,M,new,yes,ME4.02; plan plus a DOAS-30 front view detail (not a plan view)
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,THIRD FLOOR PLAN - HVAC,M,new,yes,ME4.03
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,ATTIC PLAN - HVAC,M,new,yes,"ME4.04; plan plus south and east louver details (elevations, not plan views)"
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#19,ATTIC PLAN - HVAC - UPPER,M,new,yes,ME4.05; upper attic ductwork plan

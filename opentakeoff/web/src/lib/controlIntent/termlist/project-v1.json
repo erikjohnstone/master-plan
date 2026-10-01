@@ -1,0 +1,87 @@
+{
+  "version": "control_project_terms_v1",
+  "about": "The printed phrases a project question's pre-fill may quote (goals/CONTROL_INTENT.md WP1.3; decisions C3, CI4). A pre-fill is a proposal the estimator confirms with a click; it never answers a question. Every pattern names its sources: UFGS/UFC vocabulary, the VA master specification, or dev documents of two drafters or more. No key text.",
+  "sources": {
+    "ufgs-230900-sa": "UFGS 23 09 00 §1 (system requirements): 'stand-alone system and does not require connection to any other system'",
+    "ufgs-230900-names": "UFGS 23 09 00 and 23 09 23.02 name the building control system and its parts: DDC, Building Control System (BCS), Utility Monitoring and Control System (UMCS)",
+    "ufc-3-410-02-dod": "UFC 3-410-02 (foreword): prepared by the U.S. Army Corps of Engineers (USACE), Naval Facilities Engineering Command (NAVFAC) and Air Force Civil Engineer Center (AFCEC); its criteria apply to DoD projects",
+    "va-230923": "VA master specification 23 09 23 (the source of the default responsibility preset, ASSEMBLIES D13): the owner is the Department of Veterans Affairs; its project forms are VA forms",
+    "goal-wp31": "goals/CONTROL_INTENT.md WP3.1: exclusion phrases (STANDALONE, NOT CONTROLLED BY, BY OTHERS, TO REMAIN)",
+    "dev-bas-commands": "dev documents of 3 drafters make the control system the subject of a control act: 'THE BMS SHALL …' (smithgroup federal-mech), 'THE DDC CONTROLLER SHALL …' (musgrove-engineering itd-d1-lab), 'FMCS SHALL …' (imeg 040)",
+    "dev-existing-controls": "dev documents keep existing controls in place: 'EXISTING ECC, ASSOCIATED COMMUNICATION NETWORK AND CONTROLLERS TO REMAIN' (imeg 031); UFGS 23 09 00 requires an existing-conditions survey of the existing control system"
+  },
+  "PQ1": {
+    "yes": [
+      {
+        "id": "bas_commands",
+        "re": "\\b(?:THE\\s+)?(?:BAS|BMS|BCS|EMCS|FMCS|UMCS|DDC(?:\\s+(?:SYSTEM|CONTROLLER|CONTROL\\s+SYSTEM))?|BUILDING\\s+(?:AUTOMATION|MANAGEMENT)\\s+SYSTEM)\\s+(?:SHALL|WILL)\\s+(?:\\w+\\s+){0,2}?(?:START|STOP|ENABLE|DISABLE|MODULATE|OPEN|CLOSE|CONTROL|COMMAND|STAGE|CYCLE|INDEX|RESET|SEND|OPERATE|ENERGIZE)\\b",
+        "sources": [
+          "ufgs-230900-names",
+          "dev-bas-commands"
+        ]
+      }
+    ],
+    "no": [
+      {
+        "id": "standalone",
+        "re": "\\b(?:SYSTEMS?|EQUIPMENT|CONTROLS?)\\s+(?:IS|ARE|SHALL\\s+BE|TO\\s+BE|WILL\\s+BE)\\s+(?:A\\s+)?STAND[-\\s]?ALONE\\b|\\bSTAND[-\\s]?ALONE\\s+(?:SYSTEMS?|CONTROLS?|OPERATION)\\b",
+        "sources": [
+          "ufgs-230900-sa",
+          "goal-wp31"
+        ]
+      },
+      {
+        "id": "not_controlled_by_bas",
+        "re": "\\bNOT\\s+(?:BE\\s+)?(?:CONTROLLED|MONITORED)\\s+BY\\s+(?:THE\\s+|A\\s+|AN\\s+)?(?:DDC|BAS|BMS|EMS|EMCS|FMCS|UMCS|BUILDING\\s+(?:AUTOMATION|MANAGEMENT))\\b",
+        "sources": [
+          "goal-wp31",
+          "ufgs-230900-sa"
+        ]
+      }
+    ]
+  },
+  "PQ2": {
+    "dod": [
+      {
+        "id": "dod_component",
+        "re": "\\bAIR\\s+FORCE\\s+BASE\\b|\\bU\\.?\\s?S\\.?\\s+ARMY\\s+CORPS\\s+OF\\s+ENGINEERS\\b|\\bUSACE\\b|\\bNAVFAC\\b|\\bNAVAL\\s+FACILITIES\\s+ENGINEERING\\b|\\bAFCEC\\b|\\bAIR\\s+FORCE\\s+CIVIL\\s+ENGINEER\\b|\\bUFC\\s+3-410\\b",
+        "sources": [
+          "ufc-3-410-02-dod"
+        ]
+      }
+    ],
+    "va": [
+      {
+        "id": "va_owner",
+        "re": "\\bDEPARTMENT\\s+OF\\s+VETERANS\\s+AFFAIRS\\b|\\bVETERANS\\s+(?:HEALTH\\s+ADMINISTRATION|AFFAIRS\\s+MEDICAL\\s+CENTER)\\b|\\bVA\\s+FORM\\b|\\bVA\\s+MEDICAL\\s+CENTER\\b",
+        "sources": [
+          "va-230923"
+        ]
+      }
+    ]
+  },
+  "PQ3": {
+    "keep": [
+      {
+        "id": "existing_controls_remain",
+        "re": "\\bEXISTING\\b[^.;]{0,60}\\b(?:CONTROLS?|CONTROLLERS?|DDC|BAS|BMS|ECC|CONTROL\\s+SYSTEM)\\b[^.;]{0,60}\\bTO\\s+REMAIN\\b",
+        "sources": [
+          "goal-wp31",
+          "dev-existing-controls"
+        ]
+      }
+    ]
+  },
+  "PQ5": {
+    "as_drawn": [
+      {
+        "id": "bas_named",
+        "re": "\\b(?:BAS|BMS|BCS|EMCS|FMCS|UMCS|DDC|BUILDING\\s+(?:AUTOMATION|MANAGEMENT)(?:\\s+SYSTEM)?)\\b",
+        "sources": [
+          "ufgs-230900-names",
+          "dev-bas-commands"
+        ]
+      }
+    ]
+  }
+}

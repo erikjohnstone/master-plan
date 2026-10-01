@@ -1,0 +1,451 @@
+# 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-601 and EP601 (pages 58 and 71) of the Ames Laboratory Wilhelm Hall HVAC Upgrades (BBS Architects Engineers), the tables the fifth tier's seed drew for its AHU, FCU, HEAT_PUMP, PUMP, FAN and HEAT_EXCHANGER strata.
+#   061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58 | CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE | AHU | all 1 printed row | render: part 1, page 58 overview at 40 dpi; crop 208,72,2530,275 at 3x in 5 tiles (DESIGNATION column repeated); second read of the row, every cell, against the text layer
+#   061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58 | CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE | AHU | all 1 printed row | render: part 2, printed as "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)", page 58 crop 208,360,560,230 at 3x, and the remarks beside it read in the text layer (crop 760,360,800,160); second read of the row, every cell, against the text layer
+#   061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58 | FAN COIL UNIT SCHEDULE | FCU | all 1 printed row | render: page 58 overview at 40 dpi; crop 1700,1880,1040,140 at 3x in 2 tiles (DESIGNATION column repeated), remarks included; second read of the row, every cell, against the text layer
+#   061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58 | HYDRONIC PUMP SCHEDULE | PUMP | all 7 printed rows | render: page 58 overview at 40 dpi; crop 1450,1175,1290,200 at 3x in 2 tiles (DESIGNATION column repeated), remarks included; second read of every row, every cell, against the text layer
+#   061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58 | SHELL AND TUBE HEAT EXCHANGER SCHEDULE | HEAT_EXCHANGER | all 2 printed rows | render: page 58 overview at 40 dpi; crop 278,1175,1080,125 at 3x in 2 tiles (DESIGNATION column repeated), remarks included; second read of both rows, every cell, against the text layer
+#   061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71 | EQUIPMENT SCHEDULE | FAN | the 12 printed fan rows (SF-1 to SF-6, RF-1 to RF-4, EF-2, EF-3); the heat pump is keyed in the next block, and the pumps are outside the FAN stratum | render: page 71 overview at 40 dpi; crop 1700,72,1060,830 at 2.2x in 2 tiles (TAG column repeated), and the notes read in the text layer; second read of every fan row, every keyed cell, against the text layer
+#   061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71 | EQUIPMENT SCHEDULE | HEAT_PUMP | the 1 printed heat pump row (WWHP-A); the fans are keyed in the block above | render: page 71 overview at 40 dpi; crop 1700,72,1060,830 at 2.2x in 2 tiles (TAG column repeated); second read of the row, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and model numbers, weights, fan arrays, motor types, rated speeds, brake horsepower and static pressures of the air handler's fans, its louvers, air blender and prefilters, every coil's air temperatures, face velocity, fins, coil count and air pressure drop, the heat recovery coil's performance, impeller diameters and efficiencies, the exchangers' passes, shell size and fouling, currents, kVA, disconnects other than the drive, feeders and panels, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building: 7 table(s), 24 instance(s), 428 keyed attribute value(s) (177 printed, 251 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,supply_cfm,60000,cfm,TOTAL AIRFLOW (CFM),"printed '60,000'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,oa_cfm_min,18000,cfm,MINIMUM VENTILATION AIRFLOW (CFM),"printed '18,000'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,supply_fan_hp,20,hp,SUPPLY FAN / MOTOR NOMINAL HP (EACH),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,supply_fan_qty,6,,SUPPLY FAN / QUANTITY,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,return_fan_hp,15,hp,RETURN FAN / MOTOR NOMINAL HP (EACH),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,exhaust_fan_hp,,hp,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,vfd,yes,,NOTE 10,remark 10 (the table has no REMARKS column; its remarks apply to its one unit): 'SUPPLY AND RETURN FANS SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES.'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,economizer,airside,,ECONOMIZER LOUVER,"the row prints an ECONOMIZER LOUVER block sized for 35,000 CFM, the outdoor air louver of an airside economizer (the author's reading)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,outdoor_air_pct,,%,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,cooling_type,chw,,COOLING COIL,"the cooling coil prints FLUID WATER at E.W.T./L.W.T. 42.0/58.0, and remark 4 names the unit's CHILLED WATER COIL (the author's reading)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,cooling_mbh,2904.6,MBH,COOLING COIL / TOTAL CAPACITY (MBH),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,cooling_tons,,tons,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,dx_stages,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_gpm,362,gpm,COOLING COIL / FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_ewt_f,42,F,COOLING COIL / E.W.T./L.W.T.(°F/°F): E.W.T. part,printed '42.0'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_lwt_f,58,F,COOLING COIL / E.W.T./L.W.T.(°F/°F): L.W.T. part,printed '58.0'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_wpd_ft,17,ft,COOLING COIL / W.P.D. (FT. H2O),printed '17.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_mbh,,MBH,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_rows,8,,COOLING COIL / ROWS,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,chw_glycol_pct,0,%,"COOLING COIL / FLUID: WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,heating_type,hw,,HEATING COIL,the heating coil prints FLUID WATER at E.W.T./L.W.T. 120.0/95.3 (the author's reading)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,heating_mbh,1225.7,MBH,HEATING COIL / TOTAL CAPACITY (MBH),"printed '1,225.7'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_gpm,100,gpm,HEATING COIL / FLOW RATE (GPM),printed '100.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_ewt_f,120,F,HEATING COIL / E.W.T./L.W.T.(°F/°F): E.W.T. part,printed '120.0'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_lwt_f,95.3,F,HEATING COIL / E.W.T./L.W.T.(°F/°F): L.W.T. part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_wpd_ft,9.8,ft,HEATING COIL / W.P.D. (FT. H2O),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_mbh,,MBH,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_rows,1,,HEATING COIL / ROWS,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,hw_glycol_pct,0,%,"HEATING COIL / FLUID: WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,steam_psig,,psig,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,steam_lb_hr,,lb/hr,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,gas_input_mbh,,MBH,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,eh_kw,,kW,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,humidifier,yes,,NOTE 5,remark 5 (the table has no REMARKS column; its remarks apply to its one unit): 'FACTORY PROVIDED HUMIDIFIER DISPERSION TUBES USING CONTRACTOR PROVIDED STEAM-TO-STEAM GENERATOR.'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,energy_recovery,runaround,,HEAT RECOVERY COIL (BASE BID),"the heat recovery coil is a 30% PG water coil, and remark 9 ties it to the water-to-water heat pump and the heat recovery unit: a pumped coil loop (the author's reading)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,filter_merv,13,,FINAL FILTER / ASHRAE MERV RATING,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,bas_interface,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,volts,480,V,"SUPPLY FAN / VOLTS/Ø: volts part; the unit's service, EP601",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,AHU-A,AHU,phase,3,,"SUPPLY FAN / VOLTS/Ø: phase part; the unit's service, EP601",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,pipes,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,cfm,667,cfm,SUPPLY FAN / AIRFLOW (CFM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,motor_hp,,hp,SUPPLY FAN / MOTOR (HP),printed 'PSC' — not a single value for this attribute
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,fan_speeds,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,ecm,no,,"SUPPLY FAN / MOTOR (HP): PSC, a permanent split capacitor motor, not EC",printed 'PSC'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,cooling_type,chw,,COOLING COIL / FLUID,"the cooling coil prints FLUID WATER leaving at 60.0 °F, and remark 2 rates it on 42 °F entering water: a chilled water coil (the author's reading)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_gpm,2.5,gpm,COOLING COIL / FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_ewt_f,42,F,NOTE 2,remark 2 (the table has no REMARKS column; its remarks apply to its one unit): 'CAPACITY BASED ON 42 DEG. F. ENTERING WATER TEMPERATURE AND 80 DEG. F. D.B./67 DEG. F. W.B. ENTERING AIR CONDITIONS.'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_lwt_f,60,F,COOLING COIL / L.W.T. (°F),printed '60.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_wpd_ft,3.5,ft,COOLING COIL / W.P.D. (FT. H2O),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_mbh,22.3,MBH,COOLING COIL / TOTAL CAPACITY (MBh),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_rows,4,,COOLING COIL / ROWS,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,chw_glycol_pct,0,%,"COOLING COIL / FLUID: WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,heating_type,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_gpm,,gpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_ewt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_lwt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_wpd_ft,,ft,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_mbh,,MBH,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_rows,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,hw_glycol_pct,,%,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,eh_kw,,kW,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,volts,120,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,FCU-A,FCU,phase,1,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,service,HEAT RECOVERY - CONDENSER,,SERVICE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,gpm,150,gpm,FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,head_ft,90,ft,TOTAL HEAD (FT. H20),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,motor_hp,7.5,hp,MOTOR NOMINAL POWER (HP),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,rpm,1760,rpm,MOTOR NOMINAL SPEED (RPM),"printed '1,760'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,vfd,yes,,"NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES",printed 'REMARK 1'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,pump_arrangement,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,glycol_pct,30,%,"FLUID TYPE: its glycol percentage; WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,conn_in,3,in,INLET SIZE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,volts,480,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-1,PUMP,phase,3,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,service,HEAT RECOVERY - CONDENSER,,SERVICE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,gpm,150,gpm,FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,head_ft,90,ft,TOTAL HEAD (FT. H20),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,motor_hp,7.5,hp,MOTOR NOMINAL POWER (HP),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,rpm,1760,rpm,MOTOR NOMINAL SPEED (RPM),"printed '1,760'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,vfd,yes,,"NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES",printed 'REMARK 1'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,pump_arrangement,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,glycol_pct,30,%,"FLUID TYPE: its glycol percentage; WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,conn_in,3,in,INLET SIZE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,volts,480,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-A-2,PUMP,phase,3,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,service,HEAT RECOVERY - EVAPORATOR,,SERVICE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,gpm,150,gpm,FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,head_ft,70,ft,TOTAL HEAD (FT. H20),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,motor_hp,5,hp,MOTOR NOMINAL POWER (HP),printed '5.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,rpm,1760,rpm,MOTOR NOMINAL SPEED (RPM),"printed '1,760'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,vfd,yes,,"NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES",printed 'REMARK 1'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,pump_arrangement,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,glycol_pct,30,%,"FLUID TYPE: its glycol percentage; WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,conn_in,2,in,INLET SIZE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,volts,480,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-1,PUMP,phase,3,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,service,HEAT RECOVERY - EVAPORATOR,,SERVICE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,gpm,150,gpm,FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,head_ft,70,ft,TOTAL HEAD (FT. H20),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,motor_hp,5,hp,MOTOR NOMINAL POWER (HP),printed '5.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,rpm,1760,rpm,MOTOR NOMINAL SPEED (RPM),"printed '1,760'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,vfd,yes,,"NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES",printed 'REMARK 1'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,pump_arrangement,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,glycol_pct,30,%,"FLUID TYPE: its glycol percentage; WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,conn_in,2,in,INLET SIZE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,volts,480,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,GWP-B-2,PUMP,phase,3,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,service,HEATING HOT WATER,,SERVICE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,gpm,250,gpm,FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,head_ft,40,ft,TOTAL HEAD (FT. H20),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,motor_hp,5,hp,MOTOR NOMINAL POWER (HP),printed '5.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,rpm,1760,rpm,MOTOR NOMINAL SPEED (RPM),"printed '1,760'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,vfd,yes,,"NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES",printed 'REMARK 1'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,pump_arrangement,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol percentage; WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,conn_in,4,in,INLET SIZE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,volts,480,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-1,PUMP,phase,3,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,service,HEATING HOT WATER,,SERVICE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,gpm,250,gpm,FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,head_ft,40,ft,TOTAL HEAD (FT. H20),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,motor_hp,5,hp,MOTOR NOMINAL POWER (HP),printed '5.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,rpm,1760,rpm,MOTOR NOMINAL SPEED (RPM),"printed '1,760'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,vfd,yes,,"NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES",printed 'REMARK 1'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,pump_arrangement,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol percentage; WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,conn_in,4,in,INLET SIZE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,volts,480,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-A-2,PUMP,phase,3,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,service,HEATING HOT WATER - AHU COIL,,SERVICE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,gpm,25,gpm,FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,head_ft,10,ft,TOTAL HEAD (FT. H20),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,motor_hp,0.16666666666666666,hp,MOTOR NOMINAL POWER (HP),printed '1/6'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,rpm,1760,rpm,MOTOR NOMINAL SPEED (RPM),"printed '1,760'"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,vfd,,,"NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES",blank cell
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,pump_arrangement,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol percentage; WATER, so no glycol",author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,conn_in,2,in,INLET SIZE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,volts,120,V,ELECTRICAL DATA / VOLT/Ø: volts part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,HWP-B-1,PUMP,phase,1,,ELECTRICAL DATA / VOLT/Ø: phase part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,hx_type,shell_and_tube,,TABLE TITLE,title printed 'SHELL AND TUBE HEAT EXCHANGER SCHEDULE'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,primary_medium,steam,,SHELL SIDE / FLUID,printed 'STEAM'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,secondary_medium,hw,,"TUBE SIDE / FLUID: WATER heated from 95 to 120 °F, the heating hot water",printed 'WATER'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,secondary_gpm,250,gpm,TUBE SIDE / FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,secondary_ewt_f,95,F,TUBE SIDE / E.W.T./L.W.T. (°F/°F): E.W.T. part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,secondary_lwt_f,120,F,TUBE SIDE / E.W.T./L.W.T. (°F/°F): L.W.T. part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,capacity_mbh,3093,MBH,TUBE SIDE / CAPACITY (MBH),printed '3093.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,primary_steam_psig,12,psig,SHELL SIDE / PRESSURE (PSI),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-1,HEAT_EXCHANGER,primary_steam_lb_hr,3256.8,lb/hr,SHELL SIDE / CAPACITY (LBS/H),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,hx_type,shell_and_tube,,TABLE TITLE,title printed 'SHELL AND TUBE HEAT EXCHANGER SCHEDULE'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,primary_medium,steam,,SHELL SIDE / FLUID,printed 'STEAM'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,secondary_medium,hw,,"TUBE SIDE / FLUID: WATER heated from 95 to 120 °F, the heating hot water",printed 'WATER'; author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,secondary_gpm,250,gpm,TUBE SIDE / FLOW RATE (GPM),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,secondary_ewt_f,95,F,TUBE SIDE / E.W.T./L.W.T. (°F/°F): E.W.T. part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,secondary_lwt_f,120,F,TUBE SIDE / E.W.T./L.W.T. (°F/°F): L.W.T. part,author's reading of the printed row
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,capacity_mbh,3093,MBH,TUBE SIDE / CAPACITY (MBH),printed '3093.0'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,primary_steam_psig,12,psig,SHELL SIDE / PRESSURE (PSI),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,HX-A-2,HEAT_EXCHANGER,primary_steam_lb_hr,3256.8,lb/hr,SHELL SIDE / CAPACITY (LBS/H),
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,motor_hp,20,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-1,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,motor_hp,20,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-2,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,motor_hp,20,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-3,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,motor_hp,20,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-4,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,motor_hp,20,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-5,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,motor_hp,20,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,SF-6,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,motor_hp,15,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD 60A3P LOCAL - NF - NEMA 3R'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-1,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,motor_hp,15,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD 60A3P LOCAL - NF - NEMA 3R'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-2,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,motor_hp,15,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD 60A3P LOCAL - NF - NEMA 3R'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-3,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,motor_hp,15,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD 60A3P LOCAL - NF - NEMA 3R'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,RF-4,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,motor_hp,30,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD 60A3P LOCAL - NF - NEMA 3R'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,volts,208,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-2,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,service,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,esp_in,,in. w.c.,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,motor_hp,30,hp,ELECTRICAL CHARACTERISTICS / HP,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,motor_watts,,W,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,rpm,,rpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,drive,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,vfd,yes,,LOCAL DISCONNECT / SWITCH,printed 'VFD 60A3P LOCAL - NF - NEMA 3R'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,ecm,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,control,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,EF-3,FAN,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,building,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,floor,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,area_served,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,qty,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,cfm,,cfm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,cooling_tons,,tons,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,heating_mbh,,MBH,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,hw_gpm,,gpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,hw_ewt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,hw_lwt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,chw_gpm,,gpm,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,chw_ewt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,chw_lwt_f,,F,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,motor_hp,,hp,ELECTRICAL CHARACTERISTICS / HP,printed '--'
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,eh_kw,,kW,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,conn_in,,in,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,bas_interface,,,,not printed
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,volts,480,V,ELECTRICAL CHARACTERISTICS / VOLTAGE,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EQUIPMENT SCHEDULE,WWHP-A,HEAT_PUMP,phase,3,,ELECTRICAL CHARACTERISTICS / PHASE,

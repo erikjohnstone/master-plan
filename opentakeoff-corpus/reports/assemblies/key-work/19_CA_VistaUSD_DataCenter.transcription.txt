@@ -1,0 +1,29 @@
+# 19_CA_VistaUSD_DataCenter — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheet M001 MECHANICAL GENERAL NOTES AND LEGEND (PDF page 10, a
+# 270-degree-rotated sheet read in its displayed orientation) of the Vista Unified School
+# District data center, Oceanside CA (AlphaStudio Design Group; DEC Engineers): an overview of
+# the page at 40 dpi, then the legend rows the page's text layer finds fan words in, at 3x (216
+# dpi), rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26. The
+# pipeline's output for this sheet was not consulted while keying (AS-28, before the draw, read
+# the column names the normalizer left unread across the unseen corpus, this document's among
+# them). The third tier keys the tables its seed drew (tier3/01-split.md): one per keyed family.
+SET 19_CA_VistaUSD_DataCenter
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheet M001 (page 10) of the Vista Unified School District data center, Oceanside CA (AlphaStudio Design Group), the table the third tier's seed drew for its FAN stratum.
+EXCLUDES Every other sheet of the set.
+
+# (untitled) (page 10, sheet M001): the census claims an untitled FAN table on this page. The
+# sheet prints HVAC GENERAL NOTES, MECHANICAL PLAN CHECK NOTES, the MECHANICAL LEGEND (symbols
+# and abbreviations) and a DUCTWORK MATERIAL SCHEDULE. The page's text layer has four fan
+# words, all MECHANICAL LEGEND abbreviation rows: "EF EXHAUST FAN", "FC FAN COIL", "RF RETURN
+# FAN" and "SF SUPPLY FAN". An abbreviation is not a unit; no fan tag prints on the page (nor
+# anywhere in the set's text layer). Nothing on the page is a fan.
+TABLE
+sheet: 19_CA_VistaUSD_DataCenter.pdf#10
+title: (untitled)
+family: FAN
+render: page 10 overview at 40 dpi (a 270-degree-rotated sheet, read in its displayed orientation); the page's text layer searched for fan words and tags (pymupdf get_text blocks): the four hits are MECHANICAL LEGEND abbreviation rows, cropped at 3x (crop 2090,715,560,150)
+rows: none — a general notes and legend sheet (M001): its MECHANICAL LEGEND lists abbreviations (EF EXHAUST FAN, FC FAN COIL, RF RETURN FAN, SF SUPPLY FAN among them); no row is a fan
+grid:
+END

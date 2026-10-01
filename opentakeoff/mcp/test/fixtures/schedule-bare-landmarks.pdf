@@ -1,0 +1,183 @@
+%PDF-1.5
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 2298 >>
+stream
+BT /F1 14 Tf 40 580 Td (MECHANICAL PLAN) Tj ET
+1 w
+30 30 552 552 re S
+0.5 w
+44 470 m 52 470 l S
+52 470 m 56 474 l S
+56 474 m 56 482 l S
+56 482 m 52 486 l S
+52 486 m 44 486 l S
+44 486 m 40 482 l S
+40 482 m 40 474 l S
+40 474 m 44 470 l S
+BT /F1 10 Tf 44.5 474.5 Td (A) Tj ET
+560 470 m 568 470 l S
+568 470 m 572 474 l S
+572 474 m 572 482 l S
+572 482 m 568 486 l S
+568 486 m 560 486 l S
+560 486 m 556 482 l S
+556 482 m 556 474 l S
+556 474 m 560 470 l S
+BT /F1 10 Tf 560.5 474.5 Td (A) Tj ET
+0.2 w 56 478 m 556 478 l S 0.5 w
+44 390 m 52 390 l S
+52 390 m 56 394 l S
+56 394 m 56 402 l S
+56 402 m 52 406 l S
+52 406 m 44 406 l S
+44 406 m 40 402 l S
+40 402 m 40 394 l S
+40 394 m 44 390 l S
+BT /F1 10 Tf 44.5 394.5 Td (B) Tj ET
+560 390 m 568 390 l S
+568 390 m 572 394 l S
+572 394 m 572 402 l S
+572 402 m 568 406 l S
+568 406 m 560 406 l S
+560 406 m 556 402 l S
+556 402 m 556 394 l S
+556 394 m 560 390 l S
+BT /F1 10 Tf 560.5 394.5 Td (B) Tj ET
+0.2 w 56 398 m 556 398 l S 0.5 w
+44 310 m 52 310 l S
+52 310 m 56 314 l S
+56 314 m 56 322 l S
+56 322 m 52 326 l S
+52 326 m 44 326 l S
+44 326 m 40 322 l S
+40 322 m 40 314 l S
+40 314 m 44 310 l S
+BT /F1 10 Tf 44.5 314.5 Td (C) Tj ET
+560 310 m 568 310 l S
+568 310 m 572 314 l S
+572 314 m 572 322 l S
+572 322 m 568 326 l S
+568 326 m 560 326 l S
+560 326 m 556 322 l S
+556 322 m 556 314 l S
+556 314 m 560 310 l S
+BT /F1 10 Tf 560.5 314.5 Td (C) Tj ET
+0.2 w 56 318 m 556 318 l S 0.5 w
+44 230 m 52 230 l S
+52 230 m 56 234 l S
+56 234 m 56 242 l S
+56 242 m 52 246 l S
+52 246 m 44 246 l S
+44 246 m 40 242 l S
+40 242 m 40 234 l S
+40 234 m 44 230 l S
+BT /F1 10 Tf 44.5 234.5 Td (D) Tj ET
+560 230 m 568 230 l S
+568 230 m 572 234 l S
+572 234 m 572 242 l S
+572 242 m 568 246 l S
+568 246 m 560 246 l S
+560 246 m 556 242 l S
+556 242 m 556 234 l S
+556 234 m 560 230 l S
+BT /F1 10 Tf 560.5 234.5 Td (D) Tj ET
+0.2 w 56 238 m 556 238 l S 0.5 w
+150 420 m 170 420 l S
+170 420 m 170 440 l S
+170 440 m 150 440 l S
+150 440 m 150 420 l S
+150 420 m 170 440 l S
+BT /F1 10 Tf 154.2 404 Td (RG-1) Tj ET
+220 300 m 240 300 l S
+240 300 m 240 320 l S
+240 320 m 220 320 l S
+220 320 m 220 300 l S
+220 300 m 240 320 l S
+BT /F1 10 Tf 224.2 284 Td (RG-1) Tj ET
+450 360 m 470 360 l S
+470 360 m 470 380 l S
+470 380 m 450 380 l S
+450 380 m 450 360 l S
+450 360 m 470 380 l S
+BT /F1 10 Tf 454.2 344 Td (RG-1) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 798 >>
+stream
+BT /F1 14 Tf 40 580 Td (MECHANICAL EQUIPMENT SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 150 540 Td (DESCRIPTION) Tj ET
+BT /F1 9 Tf 330 540 Td (HP) Tj ET
+BT /F1 9 Tf 400 540 Td (VOLTAGE) Tj ET
+BT /F1 9 Tf 50 515 Td (AC-1) Tj ET
+BT /F1 9 Tf 150 515 Td (AIR COMPRESSOR) Tj ET
+BT /F1 9 Tf 330 515 Td (1) Tj ET
+BT /F1 9 Tf 400 515 Td (208) Tj ET
+BT /F1 9 Tf 50 490 Td (B-1) Tj ET
+BT /F1 9 Tf 150 490 Td (BOILER) Tj ET
+BT /F1 9 Tf 330 490 Td (1) Tj ET
+BT /F1 9 Tf 400 490 Td (208) Tj ET
+BT /F1 9 Tf 50 465 Td (CU-1) Tj ET
+BT /F1 9 Tf 150 465 Td (CONDENSING UNIT) Tj ET
+BT /F1 9 Tf 330 465 Td (1) Tj ET
+BT /F1 9 Tf 400 465 Td (208) Tj ET
+BT /F1 9 Tf 50 440 Td (DP-1) Tj ET
+BT /F1 9 Tf 150 440 Td (DOMESTIC PUMP) Tj ET
+BT /F1 9 Tf 330 440 Td (1) Tj ET
+BT /F1 9 Tf 400 440 Td (208) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 9 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 483 >>
+stream
+BT /F1 14 Tf 40 580 Td (AIR DEVICE SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 170 540 Td (CFM) Tj ET
+BT /F1 9 Tf 280 540 Td (NECK SIZE) Tj ET
+BT /F1 9 Tf 400 540 Td (TYPE) Tj ET
+BT /F1 9 Tf 50 515 Td (RG-1) Tj ET
+BT /F1 9 Tf 170 515 Td (300) Tj ET
+BT /F1 9 Tf 280 515 Td (12X12) Tj ET
+BT /F1 9 Tf 400 515 Td (RETURN) Tj ET
+BT /F1 9 Tf 50 490 Td (SG-1) Tj ET
+BT /F1 9 Tf 170 490 Td (150) Tj ET
+BT /F1 9 Tf 280 490 Td (8) Tj ET
+BT /F1 9 Tf 400 490 Td (SUPPLY) Tj ET
+endstream
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000000323 00000 n 
+0000002673 00000 n 
+0000002799 00000 n 
+0000003648 00000 n 
+0000003774 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+4308
+%%EOF

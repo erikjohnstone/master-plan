@@ -1,0 +1,22 @@
+# baker-county-eoc.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, check).
+# Authored 2026-09-30 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+baker-county-eoc-bidset.pdf#38,FCU-2,baker-county-eoc-bidset.pdf#41|FCU-2,1,yes,new,boxed tag beside the wall-mounted unit on the east wall of IDF 109 (schedule location IDF)
+baker-county-eoc-bidset.pdf#38,FCU-1,baker-county-eoc-bidset.pdf#41|FCU-1,1,yes,new,boxed tag beside the ceiling cassette in 911 CALL CENTER 111 (schedule location 911 CALL CENTER)
+baker-county-eoc-bidset.pdf#38,ERV-01,baker-county-eoc-bidset.pdf#41|ERV-01,1,yes,new,boxed tag beside the ERV at the west wall of 911 CALL CENTER 111
+baker-county-eoc-bidset.pdf#38,EWH-1,baker-county-eoc-bidset.pdf#41|EWH-1,1,yes,new,"boxed tag with leader to the wall heater on the west wall of RR 1 104 (schedule location RR1); ELECTRIC UNIT HEATER SCHEDULE row, omitted by info.json"
+baker-county-eoc-bidset.pdf#38,EWH-2,baker-county-eoc-bidset.pdf#41|EWH-2,1,yes,new,"boxed tag with leader to the wall heater on the north wall of RR 2 103 (schedule location RR2); ELECTRIC UNIT HEATER SCHEDULE row, omitted by info.json"
+baker-county-eoc-bidset.pdf#39,CU-2,baker-county-eoc-bidset.pdf#41|CU-2,1,yes,new,boxed tag at the condensing unit on the new roof
+baker-county-eoc-bidset.pdf#39,RTU-1,baker-county-eoc-bidset.pdf#41|RTU-1,1,yes,new,"boxed tag at the unit on the new roof; the M1.01 p38 duct note 24X14 AND 26X10 UP TO RTU-1 is note text, not a placement"
+baker-county-eoc-bidset.pdf#39,CU-1,baker-county-eoc-bidset.pdf#41|CU-1,1,yes,new,boxed tag at the condensing unit on the new roof
+baker-county-eoc-bidset.pdf#39,RTU-2,baker-county-eoc-bidset.pdf#41|RTU-2,1,yes,new,"boxed tag at the unit on the new roof; the M1.01 p38 duct note 18X12 AND 16X10 DUCT UP TO RTU-2 is note text, not a placement"
+baker-county-eoc-bidset.pdf#39,EF-1,baker-county-eoc-bidset.pdf#41|EF-1,1,yes,new,"boxed tag at the roof exhaust fan; the M1.01 p38 note 8X8 EA UP TO EF-1 is note text, not a placement"
+baker-county-eoc-bidset.pdf#55,ERV-01,baker-county-eoc-bidset.pdf#41|ERV-01,1,no,discipline-repeat,electrical power plan: tag with leader to the ERV outline (motor switch C-5 beside it); same unit as on M1.01 p38
+baker-county-eoc-bidset.pdf#55,FCU-1,baker-county-eoc-bidset.pdf#41|FCU-1,1,no,discipline-repeat,"electrical power plan: tag leader ends just below motor switch C-28,30 (FCU-1's MRSS per E6.02 p60) and aims at the NE corner of the cassette location; cassette not drawn on the E plan; read as a label at the unit like ERV-01/EWH on this sheet; same unit as on M1.01 p38"
+baker-county-eoc-bidset.pdf#55,EWH-1,baker-county-eoc-bidset.pdf#41|EWH-1,1,no,discipline-repeat,electrical power plan: tag with leader to the heater outline in RR 1 104 (switch C-21 beside it); same unit as on M1.01 p38
+baker-county-eoc-bidset.pdf#55,EWH-2,baker-county-eoc-bidset.pdf#41|EWH-2,1,no,discipline-repeat,electrical power plan: tag with leader to the heater outline in RR 2 103 (switch C-23 beside it); same unit as on M1.01 p38
+baker-county-eoc-bidset.pdf#56,CU-2,baker-county-eoc-bidset.pdf#41|CU-2,1,no,discipline-repeat,electrical roof plan: tag with leader to the unit; same unit as on M1.21 p39
+baker-county-eoc-bidset.pdf#56,RTU-1,baker-county-eoc-bidset.pdf#41|RTU-1,1,no,discipline-repeat,"electrical roof plan: tag with leader to the unit (disconnect C-29,31,33 labeled separately); same unit as on M1.21 p39"
+baker-county-eoc-bidset.pdf#56,CU-1,baker-county-eoc-bidset.pdf#41|CU-1,1,no,discipline-repeat,electrical roof plan: tag with leader to the unit; same unit as on M1.21 p39
+baker-county-eoc-bidset.pdf#56,RTU-2,baker-county-eoc-bidset.pdf#41|RTU-2,1,no,discipline-repeat,"electrical roof plan: tag with leader to the unit (disconnect C-32,34,36 labeled separately); same unit as on M1.21 p39"
+baker-county-eoc-bidset.pdf#56,EF-1,baker-county-eoc-bidset.pdf#41|EF-1,1,no,discipline-repeat,electrical roof plan: tag with leader to the fan (switch C-4 beside it); same unit as on M1.21 p39

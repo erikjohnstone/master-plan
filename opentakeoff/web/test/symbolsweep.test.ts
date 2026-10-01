@@ -463,6 +463,27 @@ test("fragmentedTagOcc: itd-d1-lab's own stacked 2-span split (\"EF\" over \"1\"
   assert.deepEqual(occ[0].bbox, [50, 100, 64, 124]);
 });
 
+test("fragmentedTagOcc and deepHyphenChainTagOcc: a text index built for a spans array is not reused once a run in its middle changes (AS-127)", () => {
+  // The readers index a sheet's spans once and reuse the index for every
+  // mark read on it; an array changed in place reads as the new text.
+  const spans: FlatSpan[] = [
+    { str: "NOTE", x0: 0, y0: 0, x1: 24, y1: 6 },
+    { str: "SR", x0: 100, y0: 200, x1: 112, y1: 206 },
+    { str: "-", x0: 112, y0: 200, x1: 115, y1: 206 },
+    { str: "1", x0: 115, y0: 200, x1: 120, y1: 206 },
+    { str: "END", x0: 900, y0: 900, x1: 918, y1: 906 },
+  ];
+  assert.equal(fragmentedTagOcc(spans, "SR-1").length, 1);
+  spans[2] = { ...spans[2], str: "X" };
+  assert.equal(fragmentedTagOcc(spans, "SR-1").length, 0, "the changed middle run is read, not the index built before");
+  let x = 100;
+  const chain: FlatSpan[] = ["CV", "-", "CHW", "-", "BP"].map((str) => { const sp = { str, x0: x, y0: 50, x1: x + 6 * str.length, y1: 56 }; x = sp.x1; return sp; });
+  assert.equal(deepHyphenChainTagOcc(chain, "CV-CHW-BP").length, 1);
+  chain[2] = { ...chain[2], str: "HW" };
+  assert.equal(deepHyphenChainTagOcc(chain, "CV-CHW-BP").length, 0);
+  assert.equal(deepHyphenChainTagOcc(chain, "CV-HW-BP").length, 1, "and the new text is found");
+});
+
 test("fragmentedTagOcc: no false match when the tag simply isn't drawn", () => {
   const spans: FlatSpan[] = [
     { str: "EF", x0: 50, y0: 100, x1: 64, y1: 112 },

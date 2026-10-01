@@ -1,0 +1,1282 @@
+[
+ {
+  "cat": "wrong_typical",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "GEF - 1",
+  "family": "FAN",
+  "detail": "key none, got ok fan-variable — fan-variable@1: attr.vfd = 'yes' (rank 20)",
+  "typical": "none",
+  "options": "",
+  "note": "Grease exhaust fan; controls furnished by the kitchen hood manufacturer (M-602 general controls notes). M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "GUH - 1",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Gas unit heater with a factory mounted or line voltage thermostat (unit heater notes 3 and 5). M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-EUH-1",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Existing electric unit heater to remain (schedule remark 'EXISTING'; M-101 'EXISTING ELECTRIC UNIT HEATER 14-EUH1 TO REMAIN'): no new controls."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-EUH-2",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Existing electric unit heater to remain (schedule remark 'EXISTING'; M-101 'EXISTING ELECTRIC UNIT HEATER 14-EUH2 TO REMAIN'): no new controls."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "B-1(E)",
+  "family": "BOILER",
+  "detail": "key none, got ok boiler — boiler@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Existing unit (schedule remark 1: 'SPECIFICATIONS SHOWN FOR REFERENCE ONLY'); its controls are existing and stay (M-601/M-602: the control contractor modifies the existing DDC package and integrates only the new components). No new controls typical applies; v1 has no re-sequence-only typical. The boiler keeps its unit controller and BACnet interface."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "B-2(E)",
+  "family": "BOILER",
+  "detail": "key none, got ok boiler — boiler@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Existing unit (schedule remark 1: 'SPECIFICATIONS SHOWN FOR REFERENCE ONLY'); its controls are existing and stay (M-601/M-602: the control contractor modifies the existing DDC package and integrates only the new components). No new controls typical applies; v1 has no re-sequence-only typical. The boiler keeps its unit controller and BACnet interface."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "baker-county-eoc",
+  "tag": "RTU-1",
+  "family": "RTU",
+  "detail": "key none, got ok ahu-constant-volume — ahu-constant-volume@1: attr.vfd = 'no' (rank 20)",
+  "typical": "none",
+  "options": "",
+  "note": "M5.01 detail 5 RTU sequence: the unit's programmable thermostat starts it on its schedule or optimal start, with occupancy override at the thermostat; economizer with powered exhaust, CO2 demand ventilation and FDD annunciated on the zone thermostat, all packaged. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "baker-county-eoc",
+  "tag": "RTU-2",
+  "family": "RTU",
+  "detail": "key none, got ok ahu-constant-volume — ahu-constant-volume@1: attr.vfd = 'no' (rank 20)",
+  "typical": "none",
+  "options": "",
+  "note": "M5.01 detail 5 RTU sequence: the unit's programmable thermostat starts it on its schedule or optimal start, with occupancy override at the thermostat; economizer with powered exhaust, CO2 demand ventilation and FDD annunciated on the zone thermostat, all packaged. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "baker-county-eoc",
+  "tag": "ERV-01",
+  "family": "ERV",
+  "detail": "key none, got ok erv — erv@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Dwelling-unit ERV (85 CFM); remark 2 points to the sequence of operations, and the set has no ERV sequence. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "baker-county-eoc",
+  "tag": "EF-1",
+  "family": "FAN",
+  "detail": "key none, got ok fan-constant — fan-constant@1: attr.vfd = 'no' (rank 20)",
+  "typical": "none",
+  "options": "",
+  "note": "Restroom/custodial exhaust fan; remark 2 'PROVIDE FACTORY MOUNTED SPEED CONTROLLER', remark 1 disconnect by electrical. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "federal-mech",
+  "tag": "UH-1",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 unit heater: the local thermostat modulates the valve and cycles the fan; manual fan speed selector; no BMS point. Standalone."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "federal-mech",
+  "tag": "UH-2",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 unit heater: the local thermostat modulates the valve and cycles the fan; manual fan speed selector; no BMS point. Standalone."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-1",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 5 points to M6.5 electric unit heater sequence: the thermostat cycles the heater; the BAS reads space temperature (AI) and heater status by current sensing relay (DI) for alarms. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-2",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 5 points to M6.5 electric unit heater sequence: the thermostat cycles the heater; the BAS reads space temperature (AI) and heater status by current sensing relay (DI) for alarms. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-3",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 5 points to M6.5 electric unit heater sequence: the thermostat cycles the heater; the BAS reads space temperature (AI) and heater status by current sensing relay (DI) for alarms. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-4",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 5 points to M6.5 electric unit heater sequence: the thermostat cycles the heater; the BAS reads space temperature (AI) and heater status by current sensing relay (DI) for alarms. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-5",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 5 points to M6.5 electric unit heater sequence: the thermostat cycles the heater; the BAS reads space temperature (AI) and heater status by current sensing relay (DI) for alarms. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-6",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 5 points to M6.5 electric unit heater sequence: the thermostat cycles the heater; the BAS reads space temperature (AI) and heater status by current sensing relay (DI) for alarms. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-7",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 6: 'PROVIDE WITH INTEGRAL THERMOSTAT. UNIT TO BE STANDALONE AND NOT CONTROLLED BY DDC.'"
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-8",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 6: 'PROVIDE WITH INTEGRAL THERMOSTAT. UNIT TO BE STANDALONE AND NOT CONTROLLED BY DDC.'"
+ },
+ {
+  "cat": "wrong_typical",
+  "set": "itd-d1-lab",
+  "tag": "EH-9",
+  "family": "UNIT_HEATER",
+  "detail": "key none, got ok unit-heater — unit-heater@1: (every unit of the family) (rank 10)",
+  "typical": "none",
+  "options": "",
+  "note": "Electric heater remark 6: 'PROVIDE WITH INTEGRAL THERMOSTAT. UNIT TO BE STANDALONE AND NOT CONTROLLED BY DDC.'"
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-1",
+  "family": "UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "M402 detail 4 (UNIT HEATER CONTROL - HYDRONIC): wall mounted temperature sensor AI, modulating normally open valve AO with valve feedback AI, fan start/stop DO; no fan status and no setpoint adjustment. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-2",
+  "family": "UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "M402 detail 4 (UNIT HEATER CONTROL - HYDRONIC): wall mounted temperature sensor AI, modulating normally open valve AO with valve feedback AI, fan start/stop DO; no fan status and no setpoint adjustment. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-3",
+  "family": "UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "M402 detail 4 (UNIT HEATER CONTROL - HYDRONIC): wall mounted temperature sensor AI, modulating normally open valve AO with valve feedback AI, fan start/stop DO; no fan status and no setpoint adjustment. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-4",
+  "family": "UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "M402 detail 4 (UNIT HEATER CONTROL - HYDRONIC): wall mounted temperature sensor AI, modulating normally open valve AO with valve feedback AI, fan start/stop DO; no fan status and no setpoint adjustment. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-5",
+  "family": "UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "M402 detail 4 (UNIT HEATER CONTROL - HYDRONIC): wall mounted temperature sensor AI, modulating normally open valve AO with valve feedback AI, fan start/stop DO; no fan status and no setpoint adjustment. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-6",
+  "family": "UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "M402 detail 4 (UNIT HEATER CONTROL - HYDRONIC): wall mounted temperature sensor AI, modulating normally open valve AO with valve feedback AI, fan start/stop DO; no fan status and no setpoint adjustment. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-1A",
+  "family": "FAN",
+  "detail": "key fan-variable, got ok fan-variable — motorized_damper: key true, got false (starter_default); pressure_control: key true, got false (starter_default)",
+  "typical": "fan-variable",
+  "options": "motorized_damper=true;pressure_control=true",
+  "note": "Schedule control 'FAN-A' = M402 detail 1 (EXHAUST FAN CONTROL - AHU INTERLOCK): start/stop DO, status DI by current switch, 2-position damper actuator that opens with the fan, and the FMCS modulates the VFD to hold exhaust duct static pressure. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-1B",
+  "family": "FAN",
+  "detail": "key fan-variable, got ok fan-variable — motorized_damper: key true, got false (starter_default); pressure_control: key true, got false (starter_default)",
+  "typical": "fan-variable",
+  "options": "motorized_damper=true;pressure_control=true",
+  "note": "Schedule control 'FAN-A' = M402 detail 1 (EXHAUST FAN CONTROL - AHU INTERLOCK): start/stop DO, status DI by current switch, 2-position damper actuator that opens with the fan, and the FMCS modulates the VFD to hold exhaust duct static pressure. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-2A",
+  "family": "FAN",
+  "detail": "key fan-constant, got ok fan-constant — motorized_damper: key true, got false (starter_default)",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "Schedule control 'FAN-B' = M402 detail 2 (CARTWASHER AND WASHER DISINFECTOR FAN CONTROL): start/stop DO from the washer's remote fan contacts (DI), status DI by current switch, 2-position damper actuator that opens with the fan. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-2B",
+  "family": "FAN",
+  "detail": "key fan-constant, got ok fan-constant — motorized_damper: key true, got false (starter_default)",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "Schedule control 'FAN-B' = M402 detail 2 (CARTWASHER AND WASHER DISINFECTOR FAN CONTROL): start/stop DO from the washer's remote fan contacts (DI), status DI by current switch, 2-position damper actuator that opens with the fan. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-3A",
+  "family": "FAN",
+  "detail": "key fan-constant, got ok fan-constant — motorized_damper: key true, got false (starter_default)",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "Schedule control 'FAN-B' = M402 detail 2 (CARTWASHER AND WASHER DISINFECTOR FAN CONTROL): start/stop DO from the washer's remote fan contacts (DI), status DI by current switch, 2-position damper actuator that opens with the fan. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-3B",
+  "family": "FAN",
+  "detail": "key fan-constant, got ok fan-constant — motorized_damper: key true, got false (starter_default)",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "Schedule control 'FAN-B' = M402 detail 2 (CARTWASHER AND WASHER DISINFECTOR FAN CONTROL): start/stop DO from the washer's remote fan contacts (DI), status DI by current switch, 2-position damper actuator that opens with the fan. VA project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-04",
+  "family": "AHU",
+  "detail": "key ahu-single-zone, got ok ahu-single-zone — setpoint_adjust: key false, got true (starter_default); freezestat_to_bas: key false, got true (starter_default); duct_smoke_detectors: key false, got true (starter_default)",
+  "typical": "ahu-single-zone",
+  "options": "co2_sensor=false;occupancy_sensor=false;window_switch=false;setpoint_adjust=false;relief_damper=false;relief_fan=false;return_fan=false;enthalpy_economizer=false;differential_economizer=false;dx_staged=false;freezestat_to_bas=false;duct_smoke_detectors=false;ufc_minimum_points=false",
+  "note": "M-201 detail 1 (VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS): VFD fan, return temperature and humidity, no duct static sensor and no terminal-unit schedule, so a single-zone VAV unit. Note 9: OA and RA dampers hold constant OA (no economizer). Freezestat wired to the starter. No relief/return fan, no zone sensor, CO2, occupancy or smoke detector on the schematic. County project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-05",
+  "family": "AHU",
+  "detail": "key ahu-single-zone, got ok ahu-single-zone — setpoint_adjust: key false, got true (starter_default); freezestat_to_bas: key false, got true (starter_default); duct_smoke_detectors: key false, got true (starter_default)",
+  "typical": "ahu-single-zone",
+  "options": "co2_sensor=false;occupancy_sensor=false;window_switch=false;setpoint_adjust=false;relief_damper=false;relief_fan=false;return_fan=false;enthalpy_economizer=false;differential_economizer=false;dx_staged=false;freezestat_to_bas=false;duct_smoke_detectors=false;ufc_minimum_points=false",
+  "note": "M-201 detail 1 (VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS): VFD fan, return temperature and humidity, no duct static sensor and no terminal-unit schedule, so a single-zone VAV unit. Note 9: OA and RA dampers hold constant OA (no economizer). Freezestat wired to the starter. No relief/return fan, no zone sensor, CO2, occupancy or smoke detector on the schematic. County project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-08",
+  "family": "AHU",
+  "detail": "key ahu-single-zone, got ok ahu-single-zone — setpoint_adjust: key false, got true (starter_default); freezestat_to_bas: key false, got true (starter_default); duct_smoke_detectors: key false, got true (starter_default)",
+  "typical": "ahu-single-zone",
+  "options": "co2_sensor=false;occupancy_sensor=false;window_switch=false;setpoint_adjust=false;relief_damper=false;relief_fan=false;return_fan=false;enthalpy_economizer=false;differential_economizer=false;dx_staged=false;freezestat_to_bas=false;duct_smoke_detectors=false;ufc_minimum_points=false",
+  "note": "M-201 detail 1 (VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS): VFD fan, return temperature and humidity, no duct static sensor and no terminal-unit schedule, so a single-zone VAV unit. Note 9: OA and RA dampers hold constant OA (no economizer). Freezestat wired to the starter. No relief/return fan, no zone sensor, CO2, occupancy or smoke detector on the schematic. County project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "12_MT_MSU_ReidHall_Renovation",
+  "tag": "CUH-1",
+  "family": "CABINET_UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "Ceiling-concealed hot water cabinet heater in a vestibule. Schedule note 2: 0-24 VDC modulating two-way valve furnished by the controls contractor. M0.0 sequence C: the DDC space sensor opens the valve and a unit-mounted return water sensor enables and modulates the integral fan (no fan status to the BAS). Vestibule is a public space: flat plate sensor, no adjustment (note C)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "12_MT_MSU_ReidHall_Renovation",
+  "tag": "CUH-2",
+  "family": "CABINET_UNIT_HEATER",
+  "detail": "key unit-heater, got ok unit-heater — modulating_valve: key true, got false (starter_default)",
+  "typical": "unit-heater",
+  "options": "modulating_valve=true;fan_status=false;setpoint_adjust=false",
+  "note": "Ceiling-concealed hot water cabinet heater in a vestibule. Schedule note 2: 0-24 VDC modulating two-way valve furnished by the controls contractor. M0.0 sequence C: the DDC space sensor opens the valve and a unit-mounted return water sensor enables and modulates the integral fan (no fan status to the BAS). Vestibule is a public space: flat plate sensor, no adjustment (note C)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "bldg5406-hvac-demo",
+  "tag": "CH-1",
+  "family": "AIR_COOLED_CHILLER",
+  "detail": "key chiller, got ok chiller — chw_isolation_valve: key false, got true (starter_default); ufc_minimum_points: key true, got false (starter_default)",
+  "typical": "chiller",
+  "options": "chw_isolation_valve=false;modulating_isolation=false;isolation_end_switches=false;network_interface=false;ufc_minimum_points=true",
+  "note": "M-901 (SINGLE AIR COOLED CHILLER SYSTEM): one chiller with lead/standby pumps and a bypass valve, no isolation valve; hardwired chiller enable BO, status BI and emergency shutdown BI, no network interface; CHW supply/return temperatures and flow as AIs. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "AHU-1",
+  "family": "AHU",
+  "detail": "key ahu-multizone-vav, got ok ahu-multizone-vav — return_fan: key true, got false (starter_default); enthalpy_economizer: key true, got false (starter_default); differential_economizer: key true, got false (starter_default); freezestat_to_bas: key false, got true (starter_default); ufc_minimum_points: key true, got false (starter_default)",
+  "typical": "ahu-multizone-vav",
+  "options": "dedicated_min_oa=true;min_oa_dp=false;relief_damper=false;relief_fan=false;return_fan=true;return_fan_airflow=false;enthalpy_economizer=true;differential_economizer=true;dx_staged=false;freezestat_to_bas=false;duct_smoke_detectors=true;ufc_minimum_points=true",
+  "note": "M8.5/M8.6: VFD supply fan array on duct static pressure serving the VAV boxes; separate minimum OA damper D-7 with airflow station and economizer damper D-6; return fan array in the return path, its speed on space differential pressure (not airflow tracking); economizer enabled when OA enthalpy is below return enthalpy; freezestat hardwired to the fans (M802) and monitored; supply and return smoke detector status reaches the BMS through addressable relays for shutdown alarms; CHW and HHW coils, enthalpy wheel. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "B-1",
+  "family": "BOILER",
+  "detail": "key boiler, got ok boiler — isolation_valve: key true, got false (starter_default)",
+  "typical": "boiler",
+  "options": "isolation_valve=true;network_interface=false",
+  "note": "M8.4: BMS-controlled boiler isolation valve (V-1 AO) with the boiler's open signal (CV-1 DI); hardwired enable DO, status and alarm DIs, setpoint AO; boiler-to-boiler communication is the manufacturer's. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "B-2",
+  "family": "BOILER",
+  "detail": "key boiler, got ok boiler — isolation_valve: key true, got false (starter_default)",
+  "typical": "boiler",
+  "options": "isolation_valve=true;network_interface=false",
+  "note": "M8.4: BMS-controlled boiler isolation valve (V-2 AO) with the boiler's open signal (CV-2 DI); hardwired enable DO, status and alarm DIs, setpoint AO; boiler-to-boiler communication is the manufacturer's. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "CH-1",
+  "family": "AIR_COOLED_CHILLER",
+  "detail": "key chiller, got ok chiller — chw_isolation_valve: key false, got true (starter_default); ufc_minimum_points: key true, got false (starter_default)",
+  "typical": "chiller",
+  "options": "chw_isolation_valve=false;modulating_isolation=false;isolation_end_switches=false;network_interface=false;ufc_minimum_points=true",
+  "note": "M8.3: one air-cooled chiller, variable primary pumps with a bypass valve, no isolation valve; hardwired chiller interface (schedule 'HARDWIRE'): enable DO, status and alarm DIs, setpoint AO; CHWS/CHWR temperatures and flow as AIs. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "CWP-1",
+  "family": "PUMP",
+  "detail": "key pump-vfd, got ok pump-vfd — ufc_minimum_points: key true, got false (starter_default)",
+  "typical": "pump-vfd",
+  "options": "ufc_minimum_points=true",
+  "note": "M8.3: VFD pump, start/stop DO, status DI by current sensing relay, speed AO, VFD alarm DI; duty/standby on loop differential pressure. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "CWP-2",
+  "family": "PUMP",
+  "detail": "key pump-vfd, got ok pump-vfd — ufc_minimum_points: key true, got false (starter_default)",
+  "typical": "pump-vfd",
+  "options": "ufc_minimum_points=true",
+  "note": "M8.3: VFD pump, start/stop DO, status DI by current sensing relay, speed AO, VFD alarm DI; duty/standby on loop differential pressure. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "HWP-1",
+  "family": "PUMP",
+  "detail": "key pump-vfd, got ok pump-vfd — ufc_minimum_points: key true, got false (starter_default)",
+  "typical": "pump-vfd",
+  "options": "ufc_minimum_points=true",
+  "note": "M8.4: VFD pump, start/stop DO, status DI by current sensing relay, speed AO, VFD alarm DI; duty/standby on loop differential pressure. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "HWP-2",
+  "family": "PUMP",
+  "detail": "key pump-vfd, got ok pump-vfd — ufc_minimum_points: key true, got false (starter_default)",
+  "typical": "pump-vfd",
+  "options": "ufc_minimum_points=true",
+  "note": "M8.4: VFD pump, start/stop DO, status DI by current sensing relay, speed AO, VFD alarm DI; duty/standby on loop differential pressure. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-1",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-13",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-16",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-18",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-2",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-21",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-22",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-28",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-31",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-35",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-37",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-38",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-44",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-46",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "federal-mech",
+  "tag": "VAV-55",
+  "family": "VAV",
+  "detail": "key vav-reheat-hw, got ok vav-reheat-hw — co2_sensor: key true, got false (starter_default)",
+  "typical": "vav-reheat-hw",
+  "options": "co2_sensor=true;occupancy_sensor=false;window_switch=false;setpoint_adjust=true;reheat_water_temps=false",
+  "note": "M8.7 VAV box (single duct, hot water reheat): airflow AI, damper AO, reheat valve AO, discharge temperature AI; room sensor 'WITH LCD INDICATOR, SETPOINT ADJUSTMENT, AND OVERRIDE BUTTON'. M2.1 HVAC zone legend shows a wall CO2 sensor (keyed note M234) in this zone. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "itd-d1-lab",
+  "tag": "HUM-1",
+  "family": "HUMIDIFIER",
+  "detail": "key humidifier, got ok humidifier — space_humidity: key true, got false (starter_default)",
+  "typical": "humidifier",
+  "options": "space_humidity=true",
+  "note": "Gas-fired steam humidifier with its own unit control panel (remark 3 'CONNECT UNIT TO DDC CONTROL SYSTEM'); M6.3: enabled on space relative humidity below the low limit, setpoint written to the UCP. State DOT project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "itd-d1-lab",
+  "tag": "LEF-1",
+  "family": "FAN",
+  "detail": "key fan-variable, got ok fan-variable — motorized_damper: key true, got false (starter_default); pressure_control: key true, got false (starter_default)",
+  "typical": "fan-variable",
+  "options": "motorized_damper=true;pressure_control=true",
+  "note": "M6.1 lab exhaust system: two fume exhaust fans on VFDs holding duct static pressure (pressure transmitter), isolation dampers with end switches, modulating bypass damper. State DOT project (not DoD)."
+ },
+ {
+  "cat": "option_wrong",
+  "set": "itd-d1-lab",
+  "tag": "F-1",
+  "family": "FCU→FURNACE",
+  "detail": "key split-dx-indoor, got ok split-dx-indoor — fan_status: key true, got false (starter_default)",
+  "typical": "split-dx-indoor",
+  "options": "setpoint_adjust=true;fan_status=true",
+  "note": "Gas furnace with DX split cooling (CU-1). M6.1 split system: DDC fan enable DO with current sensing relay status DI, heating enable DO, cooling enable DO, space sensor with +/-1 F occupant adjustment, OA damper, overflow alarm. The schedule is claimed as a fan coil table, but the unit is a furnace: unitary staged typical. State DOT project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "RTU -1",
+  "family": "RTU",
+  "detail": "key none, got unresolved ahu-single-zone — waits for attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Factory controller with a 7-day programmable thermostat (RTU notes 7-8); M-602 RTU-1, 2, 3, 4, 6, 7 sequence alarms annunciate at the unit. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "RTU - 2",
+  "family": "RTU",
+  "detail": "key none, got unresolved ahu-single-zone — waits for attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Factory controller with a 7-day programmable thermostat (RTU notes 7-8); M-602 RTU-1, 2, 3, 4, 6, 7 sequence alarms annunciate at the unit. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "RTU -3",
+  "family": "RTU",
+  "detail": "key none, got unresolved ahu-single-zone — waits for attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Factory controller with a 7-day programmable thermostat (RTU notes 7-8); M-602 RTU-1, 2, 3, 4, 6, 7 sequence alarms annunciate at the unit. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "RTU -4",
+  "family": "RTU",
+  "detail": "key none, got unresolved ahu-single-zone — waits for attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Factory controller with a 7-day programmable thermostat (RTU notes 7-8); M-602 RTU-1, 2, 3, 4, 6, 7 sequence alarms annunciate at the unit. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "RTU -6",
+  "family": "RTU",
+  "detail": "key none, got unresolved ahu-single-zone — waits for attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Factory controller with a 7-day programmable thermostat (RTU notes 7-8); M-602 RTU-1, 2, 3, 4, 6, 7 sequence alarms annunciate at the unit. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "RTU -7",
+  "family": "RTU",
+  "detail": "key none, got unresolved ahu-single-zone — waits for attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Factory controller with a 7-day programmable thermostat (RTU notes 7-8); M-602 RTU-1, 2, 3, 4, 6, 7 sequence alarms annunciate at the unit. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "RTU -5",
+  "family": "RTU→DOAS",
+  "detail": "key none, got unresolved doas — waits for attr.energy_recovery [honest], attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "100% outdoor air unit; M-602 RTU-5 sequence: factory controller with its own 7-day time clock and LCD, enabled per programmable thermostat. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "DOAS - 1",
+  "family": "DOAS",
+  "detail": "key none, got unresolved doas — waits for attr.energy_recovery [honest], attr.dx_stages [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Kitchen makeup air unit run by the kitchen hood control panel (M-602 kitchen hood sequence). M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "EF - 1",
+  "family": "FAN",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "none",
+  "options": "",
+  "note": "ECM exhaust fan interlocked with RTU-5 (M-602 EF-1 control sequence), speeds set at balancing. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "EF - 2",
+  "family": "FAN",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "none",
+  "options": "",
+  "note": "Restroom exhaust fan interlocked with the room lighting circuit (M-602 EF-2 control sequence). M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "SP - 1",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Plumbing sump pump on its own controls; no BAS point on any sheet. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "tag": "HWRP - 1",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Domestic hot water recirculation pump (plumbing); no BAS point on any sheet. M-602 general controls note 1: the sequences run on the manufacturers' factory controllers 'WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM (BAS), UNLESS OTHERWISE NOTED', and nothing is noted otherwise; the mechanical contractor furnishes the thermostats and control wiring. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-AHU-1",
+  "family": "AHU",
+  "detail": "key ahu-multizone-vav, got unresolved — waits for attr.vfd [honest], attr.terminals_served [derived]; candidates ahu-constant-volume@1, ahu-multizone-vav@1, ahu-single-zone@1",
+  "typical": "ahu-multizone-vav",
+  "options": "dedicated_min_oa=false;min_oa_dp=false;relief_damper=false;relief_fan=false;return_fan=true;return_fan_airflow=true;enthalpy_economizer=false;differential_economizer=false;dx_staged=false;freezestat_to_bas=false;duct_smoke_detectors=false;ufc_minimum_points=false",
+  "note": "M-401 (VAV AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR): supply fan VSMC on duct static pressure reset by polling the terminal units; return fan VSMC holding supply minus return airflow at the minimum outside air (no separate minimum OA damper); dry-bulb economizer against a fixed 75 F limit and the supply temperature; freezestat hardwired to the supply fan drive and monitored (mixed air low limit BI); the duct smoke detectors report to the fire alarm system and have no BAS point. VA project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-SF1",
+  "family": "FAN",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "none",
+  "options": "",
+  "note": "Supply fan array of WHSE-AHU-1 (schedule service 'WHSE-AHU-1'); its points are the air handler's (M-401), so no separate fan typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-RF1",
+  "family": "FAN",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "none",
+  "options": "",
+  "note": "Return fan of WHSE-AHU-1 (schedule service 'WHSE-AHU-1'); its points are the air handler's (M-401), so no separate fan typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-EF1",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=false?",
+  "note": "Toilet/breakroom exhaust fan, schedule SPEED CONTROL 'CONSTANT'. No control diagram or sequence covers it: typical from the schedule on a BACnet BAS project (M-400 control system configuration), its damper option not shown. VA project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-EF2",
+  "family": "FAN",
+  "detail": "key fan-variable, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-variable",
+  "options": "motorized_damper=false?;pressure_control=false?",
+  "note": "Forklift-area exhaust fan, schedule SPEED CONTROL 'VARIABLE'. No control diagram or sequence covers it: typical from the schedule on a BACnet BAS project (M-400 control system configuration), its options not shown. VA project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-P1",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "The schedule row prints 'NOT USED': no pump."
+ },
+ {
+  "cat": "unresolved",
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "BP-1",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "New boiler pump started by its boiler: schematic 'BOILER INTERLOCK(N)', sequence 'EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING'. No BAS point on the pump, so no pump typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "BP-2",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "New boiler pump started by its boiler: schematic 'BOILER INTERLOCK(N)', sequence 'EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING'. No BAS point on the pump, so no pump typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "CWP-1",
+  "family": "PUMP",
+  "detail": "key pump-constant, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "pump-constant",
+  "options": "ufc_minimum_points=false",
+  "note": "New constant-speed primary pump (M-602 general: 'TWO (2) NEW CONSTANT SPEED PRIMARY CHILLED WATER PUMPS'); schematic: control relay (enable/disable) and current sensing relay (status). State DOT project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "CWP-2",
+  "family": "PUMP",
+  "detail": "key pump-constant, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "pump-constant",
+  "options": "ufc_minimum_points=false",
+  "note": "New constant-speed primary pump (M-602 general: 'TWO (2) NEW CONSTANT SPEED PRIMARY CHILLED WATER PUMPS'); schematic: control relay (enable/disable) and current sensing relay (status). State DOT project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "AHU-1(E)",
+  "family": "AHU",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates ahu-constant-volume@1, ahu-single-zone@1",
+  "typical": "none",
+  "options": "",
+  "note": "Existing unit (schedule remark 1: 'SPECIFICATIONS SHOWN FOR REFERENCE ONLY'); its controls are existing and stay (M-601/M-602: the control contractor modifies the existing DDC package and integrates only the new components). No new controls typical applies; v1 has no re-sequence-only typical. Remark 2 adds a new 3-way valve at the heating coil, a hook-up item on the existing unit."
+ },
+ {
+  "cat": "unresolved",
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-06",
+  "family": "AHU",
+  "detail": "key ahu-constant-volume, got unresolved ahu-constant-volume — waits for attr.economizer [honest]",
+  "typical": "ahu-constant-volume",
+  "options": "economizer=false;occupancy_sensor=false;setpoint_adjust=false;freezestat_to_bas=false;duct_smoke_detectors=false;ufc_minimum_points=false",
+  "note": "M-201 detail 2 (CONSTANT VOLUME AHU-6 CONTROLS): no VFD; preconditioned OA through a 2-position damper (no economizer); freezestat wired to the starter; no zone sensor or smoke detector on the schematic."
+ },
+ {
+  "cat": "unresolved",
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-07",
+  "family": "AHU→DOAS",
+  "detail": "key doas, got unresolved doas — waits for attr.energy_recovery [honest]",
+  "typical": "doas",
+  "options": "exhaust_fan=false;variable_speed_wheel=false;dx_staged=false;duct_smoke_detectors=false;ufc_minimum_points=false",
+  "note": "M-201 detail 3 (100% DEDICATED OUTDOOR AIR SYSTEM AHU-7 CONTROLS); the schedule prints OA CFM equal to supply CFM. No exhaust fan or energy recovery; chilled-water coil and electric heat."
+ },
+ {
+  "cat": "unresolved",
+  "set": "baker-county-eoc",
+  "tag": "FCU-1",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Ductless split cassette (DX) on CU-1, the manufacturer's own controls. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "baker-county-eoc",
+  "tag": "FCU-2",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "Ductless split wall unit (DX) on CU-2, the manufacturer's own controls; remark 2 integral condensate pump. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "AHU-1",
+  "family": "AHU",
+  "detail": "key ahu-multizone-vav, got unresolved ahu-multizone-vav — waits for attr.cooling_type [dishonest key \"chw\"], attr.dx_stages [honest]",
+  "typical": "ahu-multizone-vav",
+  "options": "dedicated_min_oa=false;min_oa_dp=false;relief_damper=false;relief_fan=false;return_fan=false;return_fan_airflow=false;enthalpy_economizer=false;differential_economizer=false;dx_staged=false;freezestat_to_bas=true;duct_smoke_detectors=true;ufc_minimum_points=true",
+  "note": "M-902 (VARIABLE AIR VOLUME AHU): VFD on duct static pressure, serving VAV-1 to VAV-9; one set of 2-position mixed air dampers (BO) held at a fixed minimum position with outside airflow monitored, no economizer, no relief or return fan; freezestat, supply and return smoke detectors as BIs; chilled water coil. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-1",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M-903 detail 2 (EXHAUST FAN - ON/OFF, EF-1 THRU EF-3): start/stop BO, status BI (current switch), exhaust air damper BO with damper status BI proving it before the fan runs; interlocked with AHU-1. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-2",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M-903 detail 2 (EXHAUST FAN - ON/OFF, EF-1 THRU EF-3): start/stop BO, status BI (current switch), exhaust air damper BO with damper status BI proving it before the fan runs; interlocked with AHU-1. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-3",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M-903 detail 2 (EXHAUST FAN - ON/OFF, EF-1 THRU EF-3): start/stop BO, status BI (current switch), exhaust air damper BO with damper status BI proving it before the fan runs; interlocked with AHU-1. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-4",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M-904 detail 1 (EXHAUST FAN - COOLING, EF-4): two-speed fan (low and high speed BOs) on zone temperature, status BI, exhaust and outside air dampers each with a command BO and status BI. v1 has no two-speed fan typical: constant-speed start/stop is the fit. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-5",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=false",
+  "note": "M-904 detail 2 (EXHAUST FAN - ON/OFF SWITCH, EF-5): manual switch starts the fan; the BAS has start/stop BO and status BI only. Schedule note 1 gives the fan a motorized damper, but no damper point is on the BAS. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "AC-1",
+  "family": "FCU",
+  "detail": "key fcu, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "fcu",
+  "options": "variable_speed_fan=false;scr_heat=false;occupancy_sensor=false;window_switch=false;setpoint_adjust=false",
+  "note": "M-904 detail 3 (MINI SPLIT AIR CONDITIONER, AC-1): zone temperature AI and supply air temperature AI, fan status BI, cooling stage BO, fan low/medium/high speed BOs (multi-speed fan); setpoints are software values, no adjust point; no heat. Davis-Monthan AFB (DoD): UFC 3-410-01 applies; the M-901 to M-904 points schedules are in its hardware/software format."
+ },
+ {
+  "cat": "unresolved",
+  "set": "bldg5406-hvac-demo",
+  "tag": "CP-1",
+  "family": "PUMP",
+  "detail": "key pump-constant, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "pump-constant",
+  "options": "ufc_minimum_points=false",
+  "note": "Domestic hot water recirculation pump; P-601 remark 'STAINLESS STEEL HOUSING AND BMS CONTROLS' (BAS start/stop and status), no VFD scheduled and no points list. Plumbing service, outside UFC 3-410-01's HVAC control scope, so no UFC pump minimums."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "CP-1",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Condensate pump (schedule service CONDENSATE); no BMS point on any controls sheet: packaged float control."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "CP-2",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Condensate pump (schedule service CONDENSATE); no BMS point on any controls sheet: packaged float control."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "CP-3",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Condensate pump (schedule service CONDENSATE); no BMS point on any controls sheet: packaged float control."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "CP-4",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Condensate pump (schedule service CONDENSATE); no BMS point on any controls sheet: packaged float control."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "CP-5",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Condensate pump (schedule service CONDENSATE); no BMS point on any controls sheet: packaged float control."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "CP-6",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "Condensate pump (schedule service CONDENSATE); no BMS point on any controls sheet: packaged float control."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EF-1",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M8.8 toilet exhaust fans (EF-1,2,3): BMS start/stop DO interlocked with AHU-1, status DI by current sensing relay, damper hardwire-interlocked with its end switch permitting the fan. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EF-2",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M8.8 toilet exhaust fans (EF-1,2,3): BMS start/stop DO interlocked with AHU-1, status DI by current sensing relay, damper hardwire-interlocked with its end switch permitting the fan. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EF-3",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M8.8 toilet exhaust fans (EF-1,2,3): BMS start/stop DO interlocked with AHU-1, status DI by current sensing relay, damper hardwire-interlocked with its end switch permitting the fan. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EF-4",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M8.8 mechanical room exhaust fan: start/stop DO, status DI, space temperature AI; outside air intake and exhaust dampers hardwire-interlocked with end switches. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "HWRP-1",
+  "family": "PUMP",
+  "detail": "key pump-constant, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "pump-constant",
+  "options": "ufc_minimum_points=true",
+  "note": "AHU-1 heating coil recirculation pump: M8.5 points SS-5 start/stop DO and CSR-5 status DI; no VFD. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EV-1",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 DX split system: room temperature control by the fan coil manufacturer; the controls contractor adds a wall sensor for monitoring and alarms. The BMS only monitors a room sensor here and never commands the unit; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EV-2",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 DX split system: room temperature control by the fan coil manufacturer; the controls contractor adds a wall sensor for monitoring and alarms. The BMS only monitors a room sensor here and never commands the unit; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EV-3",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 DX split system: room temperature control by the fan coil manufacturer; the controls contractor adds a wall sensor for monitoring and alarms. The BMS only monitors a room sensor here and never commands the unit; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EV-4",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 DX split system: room temperature control by the fan coil manufacturer; the controls contractor adds a wall sensor for monitoring and alarms. The BMS only monitors a room sensor here and never commands the unit; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EV-5",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 DX split system: room temperature control by the fan coil manufacturer; the controls contractor adds a wall sensor for monitoring and alarms. The BMS only monitors a room sensor here and never commands the unit; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "EV-6",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "M8.8 DX split system: room temperature control by the fan coil manufacturer; the controls contractor adds a wall sensor for monitoring and alarms. The BMS only monitors a room sensor here and never commands the unit; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "federal-mech",
+  "tag": "FCU-1",
+  "family": "FCU",
+  "detail": "key fcu, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "fcu",
+  "options": "variable_speed_fan=false;scr_heat=false?;occupancy_sensor=false;window_switch=false;setpoint_adjust=false",
+  "note": "M8.8 fan coil unit: BMS cycles the fan (start/stop DO, status DI) and modulates the hot water valve (AO) on a space temperature sensor (AI, no adjustment point); heating only. Eglin AFB (DoD): UFC 3-410-01 applies."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "BP-1",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "M6.2: each boiler enables its own pump ('BOILER PUMP INTERLOCK'); the BAS reads the pump status through a current sensing relay. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "BP-2",
+  "family": "PUMP",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates pump-constant@1, pump-vfd@1",
+  "typical": "none",
+  "options": "",
+  "note": "M6.2: each boiler enables its own pump ('BOILER PUMP INTERLOCK'); the BAS reads the pump status through a current sensing relay. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "EF-1",
+  "family": "FAN",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "none",
+  "options": "",
+  "note": "M6.5 general exhaust fan (EF-1, EF-2 & EF-3): wall switch, 'THIS SYSTEM IS STANDALONE AND NOT CONTROLLED BY THE DDC SYSTEM'."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "EF-2",
+  "family": "FAN",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "none",
+  "options": "",
+  "note": "M6.5 general exhaust fan (EF-1, EF-2 & EF-3): wall switch, 'THIS SYSTEM IS STANDALONE AND NOT CONTROLLED BY THE DDC SYSTEM'."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "EF-3",
+  "family": "FAN",
+  "detail": "key none, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "none",
+  "options": "",
+  "note": "M6.5 general exhaust fan (EF-1, EF-2 & EF-3): wall switch, 'THIS SYSTEM IS STANDALONE AND NOT CONTROLLED BY THE DDC SYSTEM'."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "EF-4",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=false?",
+  "note": "Electrical room exhaust fan; remark 4 'SEE CONTROL DRAWINGS FOR SEQUENCE OF OPERATION', but no control drawing names EF-4. The DDC exhaust fan sequences are the heat relief fans (M6.0): start/stop, status, damper. Damper option not decided for EF-4. State DOT project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "EF-5",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M6.0 heat relief fan (EF-5): DDC start/stop DO by control relay, status DI by current sensing relay, motorized exhaust damper open/close DO with end switch DI, space temperature AI. State DOT project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "EF-6",
+  "family": "FAN",
+  "detail": "key fan-constant, got unresolved — waits for attr.vfd [honest]; candidates fan-constant@1, fan-variable@1",
+  "typical": "fan-constant",
+  "options": "motorized_damper=true",
+  "note": "M6.0 heat relief fan with louver (EF-6/L-1): DDC start/stop and status, motorized intake louver and exhaust damper each with open/close DO and end switch DI, space temperature AI. State DOT project (not DoD)."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "DFC-1",
+  "family": "FCU",
+  "detail": "key none, got unresolved fcu — waits for attr.ecm [honest]",
+  "typical": "none",
+  "options": "",
+  "note": "M6.0 ductless split system: 'THIS SYSTEM SHALL BE STANDALONE' on the manufacturer's wired controller; the control contractor monitors space temperature for an alarm. The BAS only monitors this unit and never commands it; v1 has no monitor-only typical."
+ },
+ {
+  "cat": "unresolved",
+  "set": "itd-d1-lab",
+  "tag": "AHU-1",
+  "family": "AHU",
+  "detail": "key doas, got unresolved — waits for attr.vfd [honest], attr.terminals_served [derived]; candidates ahu-constant-volume@1, ahu-multizone-vav@1, ahu-single-zone@1",
+  "typical": "doas",
+  "options": "exhaust_fan=false;variable_speed_wheel=false;dx_staged=false;duct_smoke_detectors=false;ufc_minimum_points=false",
+  "note": "M6.3 schematic: 100% outdoor air (outside air damper with position feedback, filter, DX coil, gas heat, EC supply fans on duct static pressure, humidifier), building pressure sensor, no return air path, serving the lab supply air valves. A 100% outdoor air unit, so the DOAS typical, though the schedule calls it an air handling unit. Inverter compressors modulate (not staged); no exhaust fan, wheel or smoke detector on the unit. State DOT project (not DoD)."
+ }
+]

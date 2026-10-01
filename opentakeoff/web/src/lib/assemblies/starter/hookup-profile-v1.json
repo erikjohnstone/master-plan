@@ -1,0 +1,170 @@
+{
+ "version": "1",
+ "switches": {
+  "strainer_at_coils": {
+   "default": true,
+   "label": "A line-size strainer with blowdown ahead of each coil",
+   "sources": [
+    "UFGS 23 21 13 §2.7.1 (strainer with blowdown)",
+    "IMEG 23 21 00 §2.7 E",
+    "NSCS 231000 item 18 (strainers ahead of control valves and equipment)"
+   ]
+  },
+  "pt_ports_at_coils": {
+   "default": true,
+   "label": "Pressure/temperature ports at every coil inlet and outlet",
+   "sources": [
+    "UFGS 23 05 93 §3.2.4.1 b (adjacent to every coil)",
+    "NSCS 231000 item 31 (before and after every terminal coil)"
+   ]
+  },
+  "hoses_at_terminal_coils": {
+   "default": false,
+   "label": "Flexible hoses at terminal-unit coils",
+   "sources": [
+    "UFGS 23 81 47 §2.1.1 l allows hoses",
+    "IMEG 23 21 16 §2.8 A: \"coil connections shall be rigid\""
+   ]
+  },
+  "thermometers_at_ahu_coils": {
+   "default": true,
+   "label": "Thermometers and pressure gauges in and out of each air handler water coil",
+   "sources": [
+    "NSCS 231000 items 31-32",
+    "UFGS 23 21 13 §3.1.9 (a thermometer at any automatic control device without one)"
+   ]
+  },
+  "access_door_at_reheat_coil": {
+   "default": true,
+   "label": "An access door upstream of each terminal reheat coil",
+   "sources": [
+    "IMEG 23 36 00 §2.2 F",
+    "UFGS 23 30 00 §2.12.2 (doors upstream and downstream of coils)"
+   ]
+  },
+  "condensate_trap_at_fcu": {
+   "default": false,
+   "label": "A condensate trap at room fan coil units",
+   "sources": [
+    "UFGS 23 30 00 §3.2.1 (traps sized 2 in. plus static; room fan coil units may be exempted)"
+   ]
+  },
+  "steam_trap_bypass": {
+   "default": false,
+   "label": "A 3-valve bypass around each steam trap",
+   "sources": [
+    "UFGS 23 22 26 §3.1.1.9 (where the equipment must stay in service during trap work)"
+   ]
+  },
+  "gas_regulator_at_boilers": {
+   "default": false,
+   "label": "A gas pressure regulator at each boiler",
+   "sources": [
+    "Boiler installation manual (vendor, research 04 §1.5): only when supply pressure exceeds 10.5 in. w.c."
+   ]
+  },
+  "tower_float_makeup": {
+   "default": true,
+   "label": "A float makeup valve in each tower cell",
+   "sources": [
+    "UFGS 23 65 00 §2.5.4.11 (float makeup; electronic level control an option)"
+   ]
+  }
+ },
+ "variables": {
+  "balancing": {
+   "default": "manual",
+   "values": [
+    "manual",
+    "automatic"
+   ],
+   "label": "Balancing at coils",
+   "sources": [
+    "UFGS 23 21 13 §2.6.9: automatic flow control valves must not be used with 2-way modulating control valves",
+    "NSCS 231000 item 16: automatic flow control valves at terminal devices",
+    "IMEG 23 21 16 §2.8 A.3: no automatic flow control devices inside combination packages"
+   ]
+  },
+  "coil_valve_body": {
+   "default": "2-way",
+   "values": [
+    "2-way",
+    "3-way",
+    "picv"
+   ],
+   "label": "Coil control valve body",
+   "sources": [
+    "UFGS 23 09 13 §2.5 (2-way, 3-way or pressure-independent)",
+    "NSCS 231000 item 13 (some owners ban 3-way valves)"
+   ]
+  },
+  "flange_min_in": {
+   "default": 2,
+   "unit": "in",
+   "label": "Unions below, flanges at and above this size",
+   "sources": [
+    "UFGS 23 21 13 §3.2.5 (unions below 2 in., flanges at 2 in. and above)",
+    "IMEG 23 21 16 §3.1 A.5-6"
+   ]
+  },
+  "kit_max_in": {
+   "default": 1,
+   "unit": "in",
+   "label": "Coil piping kits at and below this size (0 for none)",
+   "sources": [
+    "IMEG 23 21 16 §2.8: kits only at unitary equipment with 1 in. or smaller connections",
+    "VA 23 21 13 §2.8 H.3: combination assemblies accepted (no size stated)"
+   ]
+  },
+  "condensate_lift": {
+   "default": false,
+   "label": "Condensate lifted or returned against back pressure after the trap",
+   "sources": [
+    "UFGS 23 22 26 §3.1.1.9 (a check valve after the trap when it lifts condensate)"
+   ]
+  },
+  "closed_loops": {
+   "default": null,
+   "label": "Closed water loops in the project (each gets its system specialties)",
+   "sources": [
+    "UFGS 23 21 13 §2.9-2.11; IMEG 23 25 00 §2.2 A"
+   ]
+  },
+  "hw_plants": {
+   "default": null,
+   "label": "Hot-water plants",
+   "sources": [
+    "UFGS 23 09 00 §3.7.8.5.2"
+   ]
+  },
+  "chw_plants": {
+   "default": null,
+   "label": "Chilled-water plants",
+   "sources": [
+    "UFGS 23 09 00 §3.7.8.5.1"
+   ]
+  },
+  "buildings": {
+   "default": null,
+   "label": "Buildings (each gets its meters and shutdown switch)",
+   "sources": [
+    "UFC 3-410-01 Table 3-1, General Building Systems"
+   ]
+  },
+  "gas_service": {
+   "default": null,
+   "label": "Natural gas service to the building",
+   "sources": [
+    "UFC 3-410-01 Table 3-1 (building natural gas meter)"
+   ]
+  },
+  "steam_service": {
+   "default": null,
+   "label": "Steam service to the building",
+   "sources": [
+    "UFC 3-410-01 Table 3-1 (building steam meter)"
+   ]
+  }
+ },
+ "note": "A null default is left for the project to set: an unset plant, loop or building count leaves its lines unresolved rather than guessed (plan §8.1 A4)."
+}

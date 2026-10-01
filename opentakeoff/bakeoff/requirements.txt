@@ -20,3 +20,9 @@
 # arbitrary floors.
 pymupdf>=1.24.0
 shapely>=2.0.0
+# Pictures of schedules (AS-153, rastergrid.py): a table pasted into a sheet as
+# an image is read from its pixels, its rules by OpenCV and its text by
+# RapidOCR (PP-OCR models bundled in the wheel; Apache-2.0; pulls in
+# opencv-python and onnxruntime). Optional: without it vectorgrid reports the
+# picture as a raster region, as before, and sheet_graph says so.
+rapidocr_onnxruntime>=1.4.4

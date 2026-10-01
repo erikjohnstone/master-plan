@@ -1,0 +1,72 @@
+# itd-d1-lab.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's controls sheets (PDF text layer and renders), never pipeline output.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/itd-d1-lab.typicals.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+itd-d1-lab-mechanical.pdf#12,BP-1,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,BP-1,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,BP-2,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,BP-2 is printed as a second BP-1
+itd-d1-lab-mechanical.pdf#12,BP-2,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,EF-1,FAN,itd-d1-lab-mechanical.pdf#21,GENERAL EXHAUST FAN CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,EF-1,FAN,itd-d1-lab-mechanical.pdf#21,GENERAL EXHAUST FAN SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,EF-2,FAN,itd-d1-lab-mechanical.pdf#21,GENERAL EXHAUST FAN CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,EF-2,FAN,itd-d1-lab-mechanical.pdf#21,GENERAL EXHAUST FAN SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,EF-3,FAN,itd-d1-lab-mechanical.pdf#21,GENERAL EXHAUST FAN CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,EF-3,FAN,itd-d1-lab-mechanical.pdf#21,GENERAL EXHAUST FAN SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,EF-4,FAN,,none,,
+itd-d1-lab-mechanical.pdf#12,EF-5,FAN,itd-d1-lab-mechanical.pdf#16,HEAT RELIEF FAN CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,EF-5,FAN,itd-d1-lab-mechanical.pdf#16,HEAT RELIEF FAN SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,EF-6,FAN,itd-d1-lab-mechanical.pdf#16,HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,EF-6,FAN,itd-d1-lab-mechanical.pdf#16,HEAT RELIEF FAN SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,HWP-1,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,HWP-1,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#12,HWP-2,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#12,HWP-2,PUMP,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#13,B-1,BOILER,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#13,B-1,BOILER,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#13,B-2,BOILER,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#13,B-2,BOILER,itd-d1-lab-mechanical.pdf#18,HEATING WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#13,HC-1,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-2,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-3,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-4,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-5,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-6,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-7,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-8,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HC-9,DUCT_MOUNTED_COIL,itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC,semantic,the reheat coil of a lab supply air valve
+itd-d1-lab-mechanical.pdf#13,HUM-1,HUMIDIFIER,itd-d1-lab-mechanical.pdf#19,VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#13,HUM-1,HUMIDIFIER,itd-d1-lab-mechanical.pdf#19,VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#13,LEF-1,FAN,itd-d1-lab-mechanical.pdf#17,LAB EXHAUST SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#13,LEF-1,FAN,itd-d1-lab-mechanical.pdf#17,LAB EXHAUST SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#14,CU-1,CONDENSING_UNIT,itd-d1-lab-mechanical.pdf#17,SPLIT SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#14,CU-1,CONDENSING_UNIT,itd-d1-lab-mechanical.pdf#17,SPLIT SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#14,DCU-1,CONDENSING_UNIT,itd-d1-lab-mechanical.pdf#16,DUCTLESS SPLIT SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#14,DCU-1,CONDENSING_UNIT,itd-d1-lab-mechanical.pdf#16,DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#14,DFC-1,FCU,itd-d1-lab-mechanical.pdf#16,DUCTLESS SPLIT SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#14,DFC-1,FCU,itd-d1-lab-mechanical.pdf#16,DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#14,EH-1,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER CONTROL SCHEMATIC,cross_reference,schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)
+itd-d1-lab-mechanical.pdf#14,EH-1,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER SEQUENCE OF OPERATION,cross_reference,
+itd-d1-lab-mechanical.pdf#14,EH-2,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER CONTROL SCHEMATIC,cross_reference,schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)
+itd-d1-lab-mechanical.pdf#14,EH-2,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER SEQUENCE OF OPERATION,cross_reference,
+itd-d1-lab-mechanical.pdf#14,EH-3,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER CONTROL SCHEMATIC,cross_reference,schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)
+itd-d1-lab-mechanical.pdf#14,EH-3,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER SEQUENCE OF OPERATION,cross_reference,
+itd-d1-lab-mechanical.pdf#14,EH-4,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER CONTROL SCHEMATIC,cross_reference,schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)
+itd-d1-lab-mechanical.pdf#14,EH-4,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER SEQUENCE OF OPERATION,cross_reference,
+itd-d1-lab-mechanical.pdf#14,EH-5,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#14,EH-5,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER SEQUENCE OF OPERATION,tag,
+itd-d1-lab-mechanical.pdf#14,EH-6,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER CONTROL SCHEMATIC,cross_reference,schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)
+itd-d1-lab-mechanical.pdf#14,EH-6,UNIT_HEATER,itd-d1-lab-mechanical.pdf#21,ELECTRIC UNIT HEATER SEQUENCE OF OPERATION,cross_reference,
+itd-d1-lab-mechanical.pdf#14,EH-7,UNIT_HEATER,,none,,
+itd-d1-lab-mechanical.pdf#14,EH-8,UNIT_HEATER,,none,,
+itd-d1-lab-mechanical.pdf#14,EH-9,UNIT_HEATER,,none,,
+itd-d1-lab-mechanical.pdf#14,F-1,FCU,itd-d1-lab-mechanical.pdf#17,SPLIT SYSTEM CONTROL SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#14,F-1,FCU,itd-d1-lab-mechanical.pdf#17,SPLIT SYSTEM SEQUENCE OF OPERATION,family_detail,
+itd-d1-lab-mechanical.pdf#15,AHU-1,AHU,itd-d1-lab-mechanical.pdf#19,VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC,tag,
+itd-d1-lab-mechanical.pdf#15,AHU-1,AHU,itd-d1-lab-mechanical.pdf#19,VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION,family_detail,

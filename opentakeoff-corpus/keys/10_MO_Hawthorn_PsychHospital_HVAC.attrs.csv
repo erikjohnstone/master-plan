@@ -1,0 +1,148 @@
+# 10_MO_Hawthorn_PsychHospital_HVAC.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/10_MO_Hawthorn_PsychHospital_HVAC.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet MEP-601 MEP SCHEDULES (page 9) of the Hawthorn Children's Psychiatric Hospital cottages HVAC replacement (Hurst-Rosche), the tables the fifth tier's seed drew for its AHU and CONDENSING_UNIT strata.
+#   10_MO_Hawthorn_PsychHospital_HVAC.pdf#9 | AIR HANDLING UNIT SCHEDULE | AHU | all 2 printed rows | render: page 9 overview at 40 dpi; crop 1080,70,1215,175 at 3x in 3 tiles (EQUIP. TAG column repeated), notes included; second read of both rows, every cell, against the text layer
+#   10_MO_Hawthorn_PsychHospital_HVAC.pdf#9 | AIR-COOLED CONDENSING UNIT | CONDENSING_UNIT | all 2 printed rows | render: page 9 overview at 40 dpi; crop 1393,265,900,180 at 3x in 2 tiles (EQUIP. TAG column repeated), notes included; second read of both rows, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers, model numbers and weights, external static pressure, sensible capacity, gas heating stages, compressor and stage counts, refrigerant, currents (MCA, MOCP), who furnishes and installs the disconnects, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 10_MO_Hawthorn_PsychHospital_HVAC: 2 table(s), 4 instance(s), 130 keyed attribute value(s) (26 printed, 104 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,building,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,floor,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,area_served,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,qty,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,supply_cfm,1500,cfm,SUPPLY FAN / CFM,"printed '1,500'"
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,oa_cfm_min,210,cfm,SUPPLY FAN / OA CFM,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,supply_fan_hp,1,hp,SUPPLY FAN / FAN HP,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,supply_fan_qty,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,return_fan_hp,,hp,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,exhaust_fan_hp,,hp,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,vfd,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,economizer,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,outdoor_air_pct,,%,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,cooling_type,dx,,DX COOLING COIL,every row prints the DX COOLING COIL block
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,cooling_mbh,46.3,MBH,DX COOLING COIL / TOTAL (MBH),
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,cooling_tons,,tons,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,dx_stages,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_wpd_ft,,ft,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_rows,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_conn_in,,in,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,chw_glycol_pct,,%,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,heating_type,gas,,GAS HEAT,every row prints the GAS HEAT block (heating input and output)
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,heating_mbh,77.6,MBH,GAS HEAT / HEATING OUTPUT (MBH),
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_wpd_ft,,ft,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_rows,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_conn_in,,in,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,hw_glycol_pct,,%,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,steam_psig,,psig,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,steam_lb_hr,,lb/hr,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,gas_input_mbh,80,MBH,GAS HEAT / HEATING INPUT (MBH),
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,eh_kw,,kW,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,humidifier,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,energy_recovery,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,filter_merv,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,bas_interface,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,volts,120,V,ELECTRICAL DATA / VOLTAGE,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1A,AHU,phase,1,,ELECTRICAL DATA / PHASE,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,building,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,floor,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,area_served,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,qty,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,supply_cfm,1500,cfm,SUPPLY FAN / CFM,"printed '1,500'"
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,oa_cfm_min,215,cfm,SUPPLY FAN / OA CFM,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,supply_fan_hp,1,hp,SUPPLY FAN / FAN HP,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,supply_fan_qty,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,return_fan_hp,,hp,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,exhaust_fan_hp,,hp,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,vfd,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,economizer,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,outdoor_air_pct,,%,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,cooling_type,dx,,DX COOLING COIL,every row prints the DX COOLING COIL block
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,cooling_mbh,46.3,MBH,DX COOLING COIL / TOTAL (MBH),
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,cooling_tons,,tons,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,dx_stages,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_wpd_ft,,ft,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_rows,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_conn_in,,in,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,chw_glycol_pct,,%,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,heating_type,gas,,GAS HEAT,every row prints the GAS HEAT block (heating input and output)
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,heating_mbh,77.6,MBH,GAS HEAT / HEATING OUTPUT (MBH),
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_wpd_ft,,ft,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_rows,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_conn_in,,in,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,hw_glycol_pct,,%,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,steam_psig,,psig,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,steam_lb_hr,,lb/hr,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,gas_input_mbh,80,MBH,GAS HEAT / HEATING INPUT (MBH),
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,eh_kw,,kW,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,humidifier,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,energy_recovery,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,filter_merv,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,bas_interface,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,volts,120,V,ELECTRICAL DATA / VOLTAGE,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR HANDLING UNIT SCHEDULE,AHU-1B,AHU,phase,1,,ELECTRICAL DATA / PHASE,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,building,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,floor,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,area_served,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,qty,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,cfm,,cfm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,cooling_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,cooling_tons,4,tons,NOM. TONS,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,motor_hp,,hp,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,eh_kw,,kW,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,conn_in,,in,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,bas_interface,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,volts,208,V,ELECTRICAL DATA / VOLTAGE,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1B,CONDENSING_UNIT,phase,1,,ELECTRICAL DATA / PHASE,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,building,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,floor,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,area_served,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,qty,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,cfm,,cfm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,cooling_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,cooling_tons,4,tons,NOM. TONS,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,motor_hp,,hp,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,eh_kw,,kW,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,conn_in,,in,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,bas_interface,,,,not printed
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,volts,208,V,ELECTRICAL DATA / VOLTAGE,
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#9,AIR-COOLED CONDENSING UNIT,CU-1A,CONDENSING_UNIT,phase,1,,ELECTRICAL DATA / PHASE,

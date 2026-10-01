@@ -1,0 +1,91 @@
+# 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-602 (page 24), M-601 (page 23) and S-513 (page 52) of the LAMBDA project mechanical drawings (Burns & McDonnell), the tables drawn for this document.
+#   060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24 | CONDENSING UNIT SCHEDULE (RCUA) | CONDENSING_UNIT | all 2 printed rows | render: page 24 crop 540,898,1530,205 at 3x in 3 tiles (TAG NO. column repeated), notes in the same tiles; second read at 4x (crops 805,925,245,72 and 1500,925,60,72) of both rows' cooling and heating capacity and volts
+#   060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23 | VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE | PUMP | all 2 printed rows | render: page 23 crop 135,310,1948,212 at 3x in 4 tiles (TAG NO. column repeated), tag crop 100,340,140,80 at 4x and notes crop 100,418,800,105 at 3x; second read at 4x (crops 868,340,210,85 and 1405,340,55,85) of both rows' GPM, head and HP
+#   060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#52 | (untitled) | DUCT_MOUNTED_COIL | none — the table is S-513's structural EQUIPMENT ANCHORAGE SCHEDULE; none of its 15 rows is a duct-mounted coil | render: page 52 (S-513) crop 108,42,1480,400 at 2.2x in 2 tiles and a 0.45x page overview
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Interlocks, staging, compressor, efficiency, refrigerant, fluid temperatures, discharge/impeller sizes, BHP, motor type, starter responsibility, MCA, weights, sizes and basis of design, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project: 3 table(s), 4 instance(s), 70 keyed attribute value(s) (30 printed, 40 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,building,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,floor,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,area_served,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,qty,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,cfm,,cfm,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,cooling_mbh,24000,BTU/H,COOLING CAPACITY (BTU/H),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,heating_mbh,24000,BTU/H,HEATING CAPACITY (BTU/H),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,motor_hp,,hp,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,eh_kw,,kW,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,conn_in,,in,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,bas_interface,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,volts,208,V,UNIT ELECTRICAL / VOLT,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA01-2H,CONDENSING_UNIT,phase,1,,UNIT ELECTRICAL / PH.,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,building,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,floor,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,area_served,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,qty,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,cfm,,cfm,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,cooling_mbh,12000,BTU/H,COOLING CAPACITY (BTU/H),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,heating_mbh,12000,BTU/H,HEATING CAPACITY (BTU/H),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,motor_hp,,hp,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,eh_kw,,kW,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,conn_in,,in,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,bas_interface,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,volts,208,V,UNIT ELECTRICAL / VOLT,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,CONDENSING UNIT SCHEDULE (RCUA),432RCUA02-3H,CONDENSING_UNIT,phase,1,,UNIT ELECTRICAL / PH.,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,building,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,floor,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,area_served,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,qty,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,service,CHILLED WATER,,SERVICE,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,gpm,220,gpm,CAPACITY (GPM),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,head_ft,130,ft,HEAD (FT. W.C.),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,motor_hp,15,hp,MOTOR / HP,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,rpm,3600,rpm,MOTOR / RPM,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,vfd,yes,,SPEED CONTROL TYPE,printed 'VFD'
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,pump_arrangement,duty_standby,,NOTE 1: PUMPS ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE,printed 'PUMPS ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE'; author's reading of the printed row
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,glycol_pct,0,%,NOTE 2,"note 2, every row's NOTES cell says ALL: 'OPERATING FLUID IS WATER'"
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,conn_in,2.5,in,SUCTION SIZE (IN.),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,volts,460,V,ELECTRICAL / VOLTS,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW01-1,PUMP,phase,3,,ELECTRICAL / PHASE,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,building,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,floor,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,area_served,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,qty,,,,not printed
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,service,CHILLED WATER,,SERVICE,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,gpm,220,gpm,CAPACITY (GPM),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,head_ft,130,ft,HEAD (FT. W.C.),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,motor_hp,15,hp,MOTOR / HP,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,rpm,3600,rpm,MOTOR / RPM,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,vfd,yes,,SPEED CONTROL TYPE,printed 'VFD'
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,pump_arrangement,duty_standby,,NOTE 1: PUMPS ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE,printed 'PUMPS ARE EACH SIZED FOR 100% DESIGN CHILLED WATER FLOWRATE'; author's reading of the printed row
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,glycol_pct,0,%,NOTE 2,"note 2, every row's NOTES cell says ALL: 'OPERATING FLUID IS WATER'"
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,conn_in,2.5,in,SUCTION SIZE (IN.),
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,volts,460,V,ELECTRICAL / VOLTS,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE,432PCHW02-1,PUMP,phase,3,,ELECTRICAL / PHASE,
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#52,,,DUCT_MOUNTED_COIL,,,,,no DUCT_MOUNTED_COIL instance printed: none — the table is S-513's structural EQUIPMENT ANCHORAGE SCHEDULE; none of its 15 rows is a duct-mounted coil

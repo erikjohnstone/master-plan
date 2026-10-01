@@ -1,0 +1,176 @@
+# 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheets M-601, M-602 and M-603 MECHANICAL SCHEDULES (PDF pages 84, 85 and
+# 86, 270-degree-rotated sheets read in their displayed orientation) of the EHRM infrastructure
+# upgrades at the VA Syracuse NY (Spees Design Build): an overview of each page at 40 dpi, then each
+# table at 2.2x (158 dpi) in tiles with the EQUIPMENT TAG column repeated, rendered with MuPDF
+# (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26, with the PDF's own text layer (pymupdf
+# words, row by row) as a reading aid; every keyed cell was checked on the render (the text layer
+# sets a few rows' cells on a second baseline; the render places them). Each drawn title was found
+# with the text layer (pymupdf search_for). The pipeline's output for these tables was not consulted
+# while keying (AS-28, before the draw, read the column names the normalizer left unread across the
+# unseen corpus, this document's among them). The fourth tier keys the tables its seed drew
+# (tier4/01-split.md): one per keyed family.
+SET 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheets M-601 to M-603 MECHANICAL SCHEDULES (pages 84-86) of the EHRM infrastructure upgrades, VA Syracuse NY (Spees Design Build), the tables the fourth tier's seed drew for its FCU, CONDENSING_UNIT, PUMP and HEAT_EXCHANGER strata.
+EXCLUDES Manufacturers and models, room locations, sensible capacities, air temperatures, filters, MOP, MCA and FLA, dimensions, weights, energy recovery effectiveness and air pressure drops, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# TWO-PIPE FAN COIL UNIT SCHEDULE (page 84): 14 printed rows, 001-FCU-01-CG06A to
+# ROME-FCU-01-G120 (the census claims 1). The title names two-pipe units: pipes 2. FAN AIR FLOW
+# (CFM) keys cfm. COOLING REQUIREMENTS prints a chilled-water coil (FLOW (GPM), EWT 48, LWT, WPD):
+# cooling_type chw; MIN TOTAL CAPACITY (BTUH) keys chw_mbh in the BTU/H it prints, FLOW (GPM)
+# chw_gpm, EWT chw_ewt_f, LWT chw_lwt_f, WPD (FT) chw_wpd_ft. ELECTRICAL DATA / POWER (HP) keys
+# motor_hp, PHASE phase, VOLT volts. SPEED CONTROL prints 3-STAGE: three fan speeds, fan_speeds 3
+# (the author's reading). LOCATION prints the room each unit sits in (CG06A, C203): no level, and
+# not a served area. No heating is printed. Remark 1 (a 2-way modulating control valve) and remark
+# 2 (vibration isolation) key nothing in the family's vocabulary.
+TABLE
+sheet: 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84
+title: TWO-PIPE FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 84 overview at 40 dpi; crop 160,145,2780,410 at 2.2x in 4 tiles (EQUIPMENT TAG column repeated), remarks included; second read at 3x of 001-FCU-01-CG06A, 001-FCU-12-C808 and ROME-FCU-01-G120, every keyed cell
+rows: all 14 printed rows
+col: EQUIPMENT TAG => tag
+col: BASIS OF DESIGN MANUFACTURER => -
+col: BASIS OF DESIGN MODEL => -
+col: LOCATION => -
+col: TYPE => -
+col: FAN AIR FLOW (CFM) => cfm
+col: COOLING REQUIREMENTS / MIN SENSIBLE CAPACITY (BTUH) => -
+col: COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH) => chw_mbh [BTU/H]
+col: COOLING REQUIREMENTS / EAT / DB (°F) => -
+col: COOLING REQUIREMENTS / EAT / WB (°F) => -
+col: COOLING REQUIREMENTS / FLOW (GPM) => chw_gpm
+col: COOLING REQUIREMENTS / EWT (°F) => chw_ewt_f
+col: COOLING REQUIREMENTS / LWT (°F) => chw_lwt_f
+col: COOLING REQUIREMENTS / WPD (FT) => chw_wpd_ft
+col: FILTER / MERV RATING => -
+col: ELECTRICAL DATA / POWER (HP) => motor_hp
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / VOLT => volts
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / SPEED CONTROL => -
+col: [ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds] => fan_speeds
+col: ELECTRICAL DATA / MOP (A) => -
+col: ELECTRICAL DATA / MCA (A) => -
+col: DIMENSIONS / LENGTH (IN) => -
+col: DIMENSIONS / WIDTH (IN) => -
+col: DIMENSIONS / HEIGHT (IN) => -
+col: WEIGHT (LBS) => -
+col: REMARKS => -
+derive: pipes = 2 ; header=TABLE TITLE ; note=title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+derive: cooling_type = chw ; header=COOLING REQUIREMENTS / FLOW (GPM) ; note=every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)
+grid:
+001-FCU-01-CG06A | TRANE | FCBJ100 | CG06A | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-02-C106A | TRANE | FCBJ100 | C106A | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-04-C203 | TRANE | FCBJ100 | C203 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-05-C303 | TRANE | FCBJ100 | C303 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-06-C403A | TRANE | FCBJ100 | C403A | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-07-C507 | TRANE | FCBJ100 | C507 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-08-C607 | TRANE | FCBJ100 | C607 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-09-DC6 | TRANE | FCBJ100 | DC6 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-10-DC7 | TRANE | FCBJ100 | DC7 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-11-C703 | TRANE | FCBJ100 | C703 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-12-C808 | TRANE | FCBJ100 | C808 | FLOOR | 900 | 18,500 | 21,000 | 80 | 67 | 3.5 | 48 | 60 | 3.54 | 8 | 1/4 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+001-FCU-13-C907 | TRANE | FCBJ100 | C907 | FLOOR | 1200 | 25,700 | 30,000 | 80 | 67 | 3.5 | 48 | 65.4 | 4.30 | 8 | 1/2 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+002-FCU-01-BT03 | TRANE | FCBJ100 | BT-03 | FLOOR | 900 | 18,500 | 21,000 | 80 | 67 | 3.5 | 48 | 60 | 3.54 | 8 | 1/4 | 1 | 115 | 60 | 3-STAGE | 3 | 15 | 6.07 | 75.25 | 10 | 28.5 | 218 | 1,2
+ROME-FCU-01-G120 | TRANE | BCHE054 | G120 | CEILING | 1700 | 36,910 | 41,000 | 80 | 67 | 4.9 | 48 | 65 | 1.67 | 8 | 1 | 1 | 115 | 60 | 3-STAGE | 3 | 25 | 16.63 | 35.8 | 46 | 18 | 188 | 1,2
+END
+
+# CRAC AIR-COOLED CONDENSING UNIT (page 84): two rows, the computer room units' condensing units.
+# COOLING CAPACITY prints only the condenser's AIRFLOW (CFM), keyed cfm, and its AMBIENT DESIGN
+# (°F DB): no capacity is printed. ELECTRICAL / V keys volts and PH phase. Remark 1 (single point
+# power connection) keys nothing.
+TABLE
+sheet: 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84
+title: CRAC AIR-COOLED CONDENSING UNIT
+family: CONDENSING_UNIT
+render: page 84 overview at 40 dpi; crop 160,1415,1380,145 at 2.2x in 2 tiles (EQUIPMENT TAG column repeated), remarks included; second read at 3x of both rows, every keyed cell
+rows: all 2 printed rows
+col: EQUIPMENT TAG => tag
+col: BASIS OF DESIGN MANUFACTURER => -
+col: MODEL => -
+col: COOLING CAPACITY / AIRFLOW (CFM) => cfm
+col: COOLING CAPACITY / AMBIENT DESIGN (°F DB) => -
+col: ELECTRICAL / V => volts
+col: ELECTRICAL / PH => phase
+col: ELECTRICAL / HZ => -
+col: ELECTRICAL / FLA => -
+col: ELECTRICAL / OPD => -
+col: WEIGHT (LBS) => -
+col: REMARKS => -
+grid:
+001-CU-01-ROOF | LIEBERT | MCM160E8 | 22,000 | 89.1 | 208 | 3 | 60 | 11.4 | 15 | 766 | 1
+001-CU-02-ROOF | LIEBERT | MCM160E8 | 22,000 | 89.1 | 208 | 3 | 60 | 11.4 | 15 | 766 | 1
+END
+
+# CONDENSATE PUMP SCHEDULE (page 86): 14 rows, one condensate pump per fan coil. OPERATING POINT
+# @10' WC (GPM) keys gpm, and its header's 10 ft of water column is the head that flow is rated at:
+# head_ft 10 (the author's reading). ELECTRICAL / POWER (HP) keys motor_hp, V ("115 VAC") volts, PH
+# phase. The table prints no SERVICE column, so service stays not printed (as 21_VA's pumps); ROOM
+# is where each pump sits. Remarks 1 and 2 (single point power, check valve) key nothing.
+TABLE
+sheet: 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86
+title: CONDENSATE PUMP SCHEDULE
+family: PUMP
+render: page 86 overview at 40 dpi; crop 160,875,1450,420 at 2.2x in 2 tiles (EQUIPMENT TAG column repeated), remarks included; second read at 3x of 001-FCP-01-CG06A, 001-FCP-08-C607 and ROME-FCP-01-G120, every keyed cell
+rows: all 14 printed rows
+col: EQUIPMENT TAG => tag
+col: BOD EQUIPMENT / MANUFACTURER => -
+col: BOD EQUIPMENT / MODEL => -
+col: ROOM => -
+col: OPERATING POINT @10' WC (GPM) => gpm
+col: [OPERATING POINT @10' WC (GPM): the head the flow is rated at] => head_ft
+col: ELECTRICAL / POWER (HP) => motor_hp
+col: ELECTRICAL / V => volts
+col: ELECTRICAL / PH => phase
+col: ELECTRICAL / HZ => -
+col: ELECTRICAL / FLA => -
+col: REMARKS => -
+grid:
+001-FCP-01-CG06A | LITTLEGIANT | VCMA-20-ULST | CG06A | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-02-C106A | LITTLEGIANT | VCMA-20-ULST | C106A | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-04-C203 | LITTLEGIANT | VCMA-20-ULST | C203 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-05-C303 | LITTLEGIANT | VCMA-20-ULST | C303 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-06-C403A | LITTLEGIANT | VCMA-20-ULST | C403A | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-07-C507 | LITTLEGIANT | VCMA-20-ULST | C507 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-08-C607 | LITTLEGIANT | VCMA-20-ULST | C607 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-09-DC6 | LITTLEGIANT | VCMA-20-ULST | DC6 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-10-DC7 | LITTLEGIANT | VCMA-20-ULST | DC7 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-11-C703 | LITTLEGIANT | VCMA-20-ULST | C703 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-12-C808 | LITTLEGIANT | VCMA-20-ULST | C808 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+001-FCP-13-C907 | LITTLEGIANT | VCMA-20-ULST | C907 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+002-FCP-01-BT03 | LITTLEGIANT | VCMA-20-ULST | BT-03 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+ROME-FCP-01-G120 | LITTLEGIANT | VCMA-20-ULST | G120 | 0.8 | 10 | 1/30 | 115 VAC | 1 | 60 | 1.5 | 1,2
+END
+
+# DOAS HEAT EXCHANGER SCHEDULE (page 85): one row, 001-DHX-01 (printed under ASSOCIATED
+# EQUIPMENT). The exchanger's sides are the DOAS's SUPPLY and EXHAUST air (the WINTER and SUMMER
+# TEMPERATURES blocks): air, which the vocabulary names other (as 096_IN's energy recovery
+# exchanger). Its temperatures, air pressure drops and effectiveness are not in the family's
+# vocabulary, and no type, flow or capacity is printed.
+TABLE
+sheet: 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85
+title: DOAS HEAT EXCHANGER SCHEDULE
+family: HEAT_EXCHANGER
+render: page 85 overview at 40 dpi; crop 150,560,2800,200 at 2.2x in 3 tiles (ASSOCIATED EQUIPMENT column repeated); second read at 3x of the row, every cell
+rows: all 1 printed row
+col: ASSOCIATED EQUIPMENT => tag
+col: WINTER TEMPERATURES / SUPPLY / ENTERING DB/WB (°F) => -
+col: WINTER TEMPERATURES / SUPPLY / LEAVING DB/WB (°F) => -
+col: WINTER TEMPERATURES / EXHAUST / ENTERING DB/WB (°F) => -
+col: SUMMER TEMPERATURES / SUPPLY / ENTERING DB/WB (°F) => -
+col: SUMMER TEMPERATURES / SUPPLY / LEAVING DB/WB (°F) => -
+col: SUMMER TEMPERATURES / EXHAUST / ENTERING DB/WB (°F) => -
+col: SUPPLY AIR PRESSURE DROP (IN WC) => -
+col: EXHUAST AIR PRESSURE DROP (IN WC) => -
+col: ENERGY RECOVERY EFFECTIVESNESS / WINTER / SENSIBLE (%) => -
+col: ENERGY RECOVERY EFFECTIVESNESS / WINTER / TOTAL (%) => -
+col: ENERGY RECOVERY EFFECTIVESNESS / SUMMER / SENSIBLE (%) => -
+col: ENERGY RECOVERY EFFECTIVESNESS / SUMMER / TOTAL (%) => -
+derive: primary_medium = other ; header=TABLE TITLE ; note=the exchanger's sides are the DOAS's SUPPLY and EXHAUST air (the WINTER and SUMMER TEMPERATURES blocks): air, which the vocabulary names other
+derive: secondary_medium = other ; header=TABLE TITLE ; note=the exchanger's sides are the DOAS's SUPPLY and EXHAUST air (the WINTER and SUMMER TEMPERATURES blocks): air, which the vocabulary names other
+grid:
+001-DHX-01 | 1.2/0.0 | 44.9/39.1 | 70/58 | 89.2/73.2 | 80.2/68.1 | 75/62.5 | 0.21 | 0.41 | 63.5 | 57.6 | 63.4 | 50.5
+END

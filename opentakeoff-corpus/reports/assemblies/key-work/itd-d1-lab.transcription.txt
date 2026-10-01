@@ -1,0 +1,505 @@
+# itd-d1-lab — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheets M5.0 (PDF page 12), M5.1 (page 13), M5.2 (page 14) and
+# M5.3 (page 15) at 3x (mcp/scripts/render-page-crop.mjs), read by eye on 2026-09-23;
+# second reads at 4x with MuPDF (pymupdf get_pixmap) on chosen columns. The pipeline's
+# output for these sheets was not consulted. This dev document's key covers every
+# claimed keyed-family table (01-split.md, key-authoring scope); the claimed families
+# with no key vocabulary (valves, hoods, grilles, louvers, specialties) are outside it.
+# Every schedule's REMARKS column cites the table's numbered notes per row; a note that
+# prints a covered value keys only the rows that cite it (a per-row [NOTE n] column).
+SET itd-d1-lab
+SEED 20260923
+SCOPE Sheets M5.0 (page 12), M5.1 (page 13), M5.2 (page 14) and M5.3 (page 15) of the ITD D-1 Testing Laboratory HVAC bid set (Musgrove Engineering), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, weights, efficiencies, static and total pressures other than a fan's external static, air-side temperatures, sound data, dimensions, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# PUMP SCHEDULE (M5.0): notes 1 "APPROVED ALTERNATE MANUFACTURERS: B&G, GRUNDFOS, TACO,
+# PACO, & PATTERSON."; 2 "PROVIDE UNIT WITH PREMIUM EFFICIENCY MOTOR."; 3 "PROVIDE WITH
+# INTEGRAL VARIABLE SPEED DRIVE." (vfd, where cited: HWP-1 and HWP-2); 4 "CAPACITY BASED
+# ON 100% WATER." (glycol_pct 0, cited by every row). AREA SERVED keys area_served as
+# printed. V/Ø prints volts and phase in one cell.
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#12
+title: PUMP SCHEDULE
+family: PUMP
+render: page 12 crop 158,925,1085,272 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 158,1185,800,105 at 3x; second read at 4x with MuPDF (bands 160-216, 446-560 and 608-722) of every row's GPM, head, HP and RPM
+rows: all 4 printed rows
+col: SYMBOL => tag
+col: AREA SERVED => area_served
+col: TYPE => -
+col: CAPACITY / FLOW (GPM) => gpm
+col: CAPACITY / HEAD (FT) => head_ft
+col: CAPACITY / MIN EFF => -
+col: MOTOR / HP => motor_hp
+col: MOTOR / RPM => rpm
+col: MOTOR / V/Ø => -
+col: [MOTOR / V/Ø: volts part] => volts
+col: [MOTOR / V/Ø: phase part] => phase
+col: SUCTION DIFFUSER => -
+col: TRIPLE DUTY VALVE => -
+col: OPERATING WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+col: [NOTE 3, where the row's REMARKS cite it: PROVIDE WITH INTEGRAL VARIABLE SPEED DRIVE] => vfd
+col: [NOTE 4, where the row's REMARKS cite it: CAPACITY BASED ON 100% WATER] => glycol_pct
+grid:
+BP-1 | BOILER PUMP ( B-1 ) | INLINE | 27.0 | 15.0 | 72.3% | 0.5 | 1,750 | 115/1 | 115 | 1 | N/A | N/A | 50 | GRUNDFOS MAGNA 3 | 1 , 2 , 4 |  | 0
+BP-2 | BOILER PUMP ( B-2 ) | INLINE | 27.0 | 15.0 | 72.3% | 0.5 | 1,750 | 115/1 | 115 | 1 | N/A | N/A | 50 | GRUNDFOS MAGNA 3 | 1 , 2 , 4 |  | 0
+HWP-1 | HOT WATER LOOP | INLINE VARIABLE PRIMARY | 46 | 40 | 64% | 1.0 | 3,768 | 208/3 | 208 | 3 | N/A | FTV-2TS | 50 | ARMSTRONG 4380 | 1 , 2 , 3 , 4 | yes | 0
+HWP-2 | HOT WATER LOOP | INLINE VARIABLE PRIMARY | 46 | 40 | 64% | 1.0 | 3,768 | 208/3 | 208 | 3 | N/A | FTV-2TS | 50 | ARMSTRONG 4380 | 1 , 2 , 3 , 4 | yes | 0
+END
+
+# EXHAUST FAN SCHEDULE (M5.0): notes 1 "APPROVED ALTERNATE MANUFACTURERS: ACME, GREENHECK,
+# PENNBARRY, TWIN CITY FAN COMPANY, & SOLER & PALAU."; 2 "PROVIDE UNIT WITH MANUFACTURER'S
+# ALUMINUM ROOF CAP (FLAT ROOF) EQUAL TO COOK MODEL PR (W/ INTEGRAL BIRD SCREEN AND ROOF
+# CURB), BACKDRAFT DAMPER, OUTLET FLEX DUCT CONNECTION, STANDARD PLUG DISCONNECT,
+# PRE-WIRED FAN SPEED CONTROLLER, THERMAL OVERLOAD PROTECTION, HANGING VIBRATION
+# ISOLATORS, AND WHITE ALUMINUM GRILLE." (control, where cited: EF-1..EF-3, as baker keys
+# its speed-controller note); 3 "PROVIDE UNIT WITH MANUFACTURER'S ROOF CURB W/ DAMPER TRAY
+# AND BACKDRAFT DAMPER, THERMAL OVERLOAD PROTECTION, PRE-WIRED NEMA 3R ELECTRICAL
+# DISCONNECT SWITCH, AND INTEGRAL BIRD SCREEN"; 4 "SEE CONTROL DRAWINGS FOR SEQUENCE OF
+# OPERATION." The HP/W column prints watts, which key motor_watts. UNIT TYPE "ROOF" (EF-4)
+# is a fan type, not a LOCATION column, so floor stays not printed.
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#12
+title: EXHAUST FAN SCHEDULE
+family: FAN
+render: page 12 crop 1287,1190,1088,332 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1287,1515,1000,120 at 3x in 2 tiles, the end of note 2's first line re-rendered at 4x with MuPDF (crop 2050,1515,350,125); second read at 4x with MuPDF (bands 1289-1346, 1585-1726 and 1765-1816) of every row's CFM, ESP, RPM and watts
+rows: all 6 printed rows
+col: SYMBOL => tag
+col: AREA SERVED => area_served
+col: UNIT TYPE => -
+col: BLOWER / CFM => cfm
+col: BLOWER / ESP => esp_in
+col: BLOWER / MAXIMUM RPM => rpm
+col: BLOWER / DRIVE => drive
+col: ELECTRICAL / HP/W => motor_watts
+col: ELECTRICAL / V/Ø => -
+col: [ELECTRICAL / V/Ø: volts part] => volts
+col: [ELECTRICAL / V/Ø: phase part] => phase
+col: MAXIMUM SONES => -
+col: OPERATING WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+col: [NOTE 2, where the row's REMARKS cite it: ... PRE-WIRED FAN SPEED CONTROLLER ...] => control
+grid:
+EF-1 | RESTROOM 102 | CEILING CABINET | 100 | 0.375 | 1,075 | direct (DIRECT) | 46.5 W | 115/1 | 115 | 1 | 2.5 | 15 | COOK MODEL GC-148 | 1 , 2 , 4 | =PRE-WIRED FAN SPEED CONTROLLER (PRE-WIRED FAN SPEED CONTROLLER)
+EF-2 | RESTROOM 103 | CEILING CABINET | 100 | 0.375 | 1,075 | direct (DIRECT) | 46.5 W | 115/1 | 115 | 1 | 2.5 | 15 | COOK MODEL GC-148 | 1 , 2 , 4 | =PRE-WIRED FAN SPEED CONTROLLER (PRE-WIRED FAN SPEED CONTROLLER)
+EF-3 | JANITOR 105 | CEILING CABINET | 100 | 0.375 | 1,075 | direct (DIRECT) | 46.5 W | 115/1 | 115 | 1 | 2.5 | 15 | COOK MODEL GC-148 | 1 , 2 , 4 | =PRE-WIRED FAN SPEED CONTROLLER (PRE-WIRED FAN SPEED CONTROLLER)
+EF-4 | ELECTRICAL 116 | ROOF | 125 | 0.25 | 1,550 | direct (DIRECT) | 75.9 W | 115/1 | 115 | 1 | 5.5 | 25 | COOK MODEL 70R15DH | 1 , 3 , 4 | 
+EF-5 | LAB MECHANICAL 120 | CEILING CABINET | 250 | 0.25 | 1,550 | direct (DIRECT) | 66.9 W | 115/1 | 115 | 1 | 3.7 | 30 | COOK MODEL 90R15DH | 1 , 3 , 4 | 
+EF-6 | NUCLEAR GAUGE STORAGE 128 | CEILING CABINET | 125 | 0.25 | 1,550 | direct (DIRECT) | 75.9 W | 115/1 | 115 | 1 | 5.5 | 25 | COOK MODEL 70R15DH | 1 , 3 , 4 | 
+END
+
+# CONDENSING HOT WATER BOILER SCHEDULE (M5.1): both rows cite notes 1-4. Notes 1
+# "APPROVED ALTERNATE MANUFACTURERS: FULTON ENDURA, CLEAVER BROOKS CLEARFIRE, AERCO
+# BENCHMARK."; 2 "PROVIDE BOILER VENTING KIT, BACnet INTERFACE, NEUTRALIZING KIT,
+# COMBUSTION AIR INTAKE KIT, LOW WATER CUT-OFF, FLOW SWITCH, MODULATING GAS BURNER,
+# CONDENSATE TRAP, 316L STAINLESS STEEL COMBUSTION CHAMBER, EXHAUST PIPE, CSD-1 AND OSA
+# RESET, AND ... CONTROL WITH 10:1 TURNDOWN." (bas_interface; the last words overprint);
+# 3 (factory start-up and cleaning); 4 "SEE CONTROLS DRAWINGS FOR SEQUENCE OF
+# OPERATION."; 5 "CAPACITY BASED ON 100% WATER." (cited by no row).
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#13
+title: CONDENSING HOT WATER BOILER SCHEDULE
+family: BOILER
+render: page 13 crop 161,78,1086,187 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 161,262,1090,155 at 3x in 3 tiles; second read at 4x with MuPDF (bands 163-220, 505-724 and 792-886) of both rows' EWT, LWT, flow, input and output
+rows: all 2 printed rows
+col: SYMBOL => tag
+col: AREA SERVED => area_served
+col: THERMAL EFFICIENCY => -
+col: FUEL => fuel
+col: EWT (°F) => ewt_f
+col: LWT (°F) => lwt_f
+col: BOILER FLOW (GPM) => gpm
+col: MAX P.D. (FT H2O) => -
+col: CAPACITY / INPUT MBH => input_mbh
+col: CAPACITY / OUTPUT MBH => output_mbh
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+col: [NOTE 2, where the row's REMARKS cite it: ... BACnet INTERFACE ...] => bas_interface
+grid:
+B-1 | HOT WATER LOOP | 95% | gas (NATURAL GAS) | 120.0 | 140.0 | 27.0 | 5.0 | 285 | 265 | LOCHINVAR KHB285N | 1 , 2 , 3 , 4 | =BACNET (BACnet INTERFACE)
+B-2 | HOT WATER LOOP | 95% | gas (NATURAL GAS) | 120.0 | 140.0 | 27.0 | 5.0 | 285 | 265 | LOCHINVAR KHB285N | 1 , 2 , 3 , 4 | =BACNET (BACnet INTERFACE)
+END
+
+# HOT WATER REHEAT COIL SCHEDULE (M5.1): every row cites notes 1-5. Notes 1 "APPROVED
+# ALTERNATE MANUFACTURERS: CARRIER, TRANE, & USA COIL."; 2 "SEE DETAILS FOR REQUIRED
+# VALVING."; 3 "CAPACITIES BASED ON 2,200 FEET ELEVATION."; 4 "CAPACITIES BASED ON 100%
+# WATER." (this family's vocabulary has no glycol attribute); 5 "PROVIDE BACnet
+# INTEGRATION CARD. SEE CONTROL DRAWINGS FOR SEQUENCE OF OPERATION." (bas_interface).
+# AREA / SUPPLY VALVE SERVED prints the area and the supply air valve, "RESIDENCY LAB 131 /
+# SAV-1"; the area part keys area_served. HC-6 and HC-7 print their valves as SV-6 and
+# SV-7 (typed as printed). PIPING RUNOUT SIZE is the coil hook-up's pipe size and keys
+# conn_in (the author's reading).
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#13
+title: HOT WATER REHEAT COIL SCHEDULE
+family: DUCT_MOUNTED_COIL
+render: page 13 crop 161,414,1086,415 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 161,826,800,135 at 3x; second read at 4x with MuPDF (bands 163-220, 360-454, 567-680 and 872-922) of every row's capacity, CFM, EWT, LWT, GPM and runout size
+rows: all 9 printed rows
+col: SYMBOL => tag
+col: AREA / SUPPLY VALVE SERVED => -
+col: [AREA / SUPPLY VALVE SERVED: the area, before the slash] => area_served
+col: CAPACITY (MBH) => heating_mbh
+col: CFM => cfm
+col: E.A.T. (°F) => -
+col: L.A.T. (°F) => -
+col: AIR P.D. (IN W.C.) => -
+col: FLUID PERFORMANCE / E.W.T. => hw_ewt_f
+col: FLUID PERFORMANCE / L.W.T. => hw_lwt_f
+col: FLUID PERFORMANCE / GPM => hw_gpm
+col: FLUID P.D. (FT) => -
+col: ROWS => -
+col: FPI => -
+col: COIL SIZE / WIDTH (IN) => -
+col: COIL SIZE / HEIGHT (IN) => -
+col: [PIPING RUNOUT SIZE: the coil hook-up's pipe size] => conn_in
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+col: [NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD] => bas_interface
+grid:
+HC-1 | RESIDENCY LAB 131 / SAV-1 | =RESIDENCY LAB 131 (RESIDENCY LAB 131 / SAV-1) | 80.0 | 2,250 | 55.0 | 90.3 | 0.4 | 140.0 | 122.2 | 9.0 | 0.9 | 2 | 12 | 24 | 16 | 1-1/4" | DAIKIN 5WH1202B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-2 | SOIL/AGGREGATE 126 / SAV-2 | =SOIL/AGGREGATE 126 (SOIL/AGGREGATE 126 / SAV-2) | 20.4 | 560 | 55.0 | 91.2 | 0.2 | 140.0 | 119.6 | 2.0 | 1.2 | 2 | 11 | 12 | 12 | 3/4" | DAIKIN 5BD1102B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-3 | ASPHALT LAB 124 / SAV-3 | =ASPHALT LAB 124 (ASPHALT LAB 124 / SAV-3) | 80.2 | 2,260 | 55.0 | 90.2 | 0.4 | 140.0 | 122.2 | 9.0 | 0.9 | 2 | 12 | 22 | 16 | 1-1/4" | DAIKIN 5WH1202B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-4 | D-1 LAB 123 / SAV-4 | =D-1 LAB 123 (D-1 LAB 123 / SAV-4) | 52.0 | 1,500 | 55.0 | 90.0 | 0.4 | 140.0 | 120.0 | 5.2 | 5.0 | 2 | 12 | 16 | 16 | 1" | DAIKIN 5BD1202B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-5 | CONCRETE 119 / SAV-5 | =CONCRETE 119 (CONCRETE 119 / SAV-5) | 20.9 | 585 | 55.0 | 90.4 | 0.3 | 140.0 | 119.1 | 2.0 | 1.2 | 2 | 11 | 12 | 12 | 3/4" | DAIKIN 5BD1102B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-6 | MATERIAL LAB 118 / SV-6 | =MATERIAL LAB 118 (MATERIAL LAB 118 / SV-6) | 25.7 | 725 | 55.0 | 90.1 | 0.4 | 140.0 | 121.0 | 2.7 | 1.9 | 2 | 12 | 12 | 12 | 3/4" | DAIKIN 5BD1202B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-7 | ASPHALT LAB 117 / SV-7 | =ASPHALT LAB 117 (ASPHALT LAB 117 / SV-7) | 80.2 | 2,260 | 55.0 | 90.2 | 0.4 | 140.0 | 122.2 | 9.0 | 0.9 | 2 | 12 | 22 | 16 | 3/4" | DAIKIN 5WH1202B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-8 | RESIDENCY NOISE ROOM 130 / SAV-8 | =RESIDENCY NOISE ROOM 130 (RESIDENCY NOISE ROOM 130 / SAV-8) | 22.3 | 630 | 55.0 | 90.1 | 0.3 | 140.0 | 120.6 | 2.3 | 10.3 | 2 | 10 | 12 | 12 | 3/4" | DAIKIN 5BD1002B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+HC-9 | GENERAL LAB 125 / SAV-9 | =GENERAL LAB 125 (GENERAL LAB 125 / SAV-9) | 45.6 | 1,290 | 55.0 | 90.1 | 0.4 | 140.0 | 119.3 | 4.4 | 6.6 | 2 | 12 | 16 | 14 | 1" | DAIKIN 5BD1202B | 1 , 2 , 3 , 4 , 5 | =BACNET (BACnet INTEGRATION CARD)
+END
+
+# HUMIDIFIER SCHEDULE (M5.1): one unit serving AHU-1, citing notes 1-3. Notes 1 "APPROVED
+# ALTERNATE MANUFACTURERS: DRISTEAM AND NEPTRONIC."; 2 "PROVIDE WITH FULLY MODULATING
+# CONTROL FUNCTIONS, RUBBER STEAM HOSES, STAINLESS STEEL STEAM DISTRIBUTOR, 3/8" CONDENSATE
+# HOSE, STEAM INLET KIT, DUCT MOUNTED DIFFERENTIAL PRESSURE SENSOR, DUCT TEMPERATURE &
+# RELATIVE HUMIDITY SENSOR, AND REMOTE PGDX TERMINAL KIT. PROVIDE FACTORY START-UP AND
+# CALIBRATION."; 3 "CONNECT UNIT TO DDC CONTROL SYSTEM." (this family's vocabulary has no
+# BAS attribute). The unit prints a GAS INPUT (368.5 MBH): humidifier_type gas_fired is the
+# author's reading. The V/Ø header's Ø renders as a box glyph in this font.
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#13
+title: HUMIDIFIER SCHEDULE
+family: HUMIDIFIER
+render: page 13 crop 1287,144,1085,150 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1287,290,1090,100 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 1 printed row
+col: SYMBOL => tag
+col: AREA SERVED => area_served
+col: AREA R.H. / °F => -
+col: STEAM CAPACITY / LBS OF STEAM/HR => capacity_lb_hr
+col: GAS INPUT / MBH => -
+col: [GAS INPUT / MBH: a gas-fired steam humidifier] => humidifier_type
+col: ELECTRIC REQUIREMENTS / AMPS => -
+col: ELECTRIC REQUIREMENTS / V/Ø => -
+col: [ELECTRIC REQUIREMENTS / V/Ø: volts part] => volts
+col: [ELECTRIC REQUIREMENTS / V/Ø: phase part] => phase
+col: OUTSIDE AIR / TEMP. => -
+col: OUTSIDE AIR / RH % => -
+col: ENTERING DISTRIBUTOR / TEMP. => -
+col: ENTERING DISTRIBUTOR / RH % => -
+col: AIR STREAM SYSTEM / DUCT SIZE (WxH) => -
+col: AIR STREAM SYSTEM / DUCT CFM => -
+col: WATER SYSTEM => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+grid:
+HUM-1 | AIR HANDLING UNIT AHU-1 | 30% / 70° | 330 | 368.5 | gas_fired (GAS INPUT 368.5 MBH) | 2.7 | 115/1 | 115 | 1 | 3°F | 5% | 55°F | 6% | 92"X70" | 13,000 | CITY / SOFTENED WATER | CAREL UG150H1105 | 1 , 2 , 3
+END
+
+# LAB EXHAUST FAN SCHEDULE (M5.1): one tag, two fans (# OF FANS 2, keyed qty as 031's
+# NUMBER OF FANS). The DESIGN CFM cell prints the tag's total and, in parentheses, the
+# per-fan figure ("15,000 (7,500 PER FAN)"); the total keys cfm. HP PER FAN keys
+# motor_hp. LEF-1 cites notes 1-3: 1 (construction, 316SS hardware, weather cowl, roof
+# curb, sound attenuator, spring isolation, a 41.4' effective plume height); 2
+# "CONTRACTOR SHALL PROVIDE AND INSTALL THE FOLLOWING OPTIONS AND SEQUENCE:" with 2.1
+# "... TO OPERATE AS A VARIABLE SPEED FAN SYSTEM:", 2.1.1 "(1) SHARED PLENUM WITH FACTORY
+# BYPASS/ISOLATION DAMPERS ...", 2.1.2 "(2) NEW DISCONNECT SWITCHES WITH AUXILIARY
+# CONTACTS", 2.1.3 "(2) VARIABLE FREQUENCY DRIVES (NEMA 3R)" (vfd), 2.2 (fan speed and
+# bypass dampers controlled through the DDC controller to a 5,000 FPM nozzle velocity);
+# 3 (air balancing confirms the static pressure set point).
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#13
+title: LAB EXHAUST FAN SCHEDULE
+family: FAN
+render: page 13 crop 1287,393,1140,155 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1287,548,1140,185 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: all 1 printed row
+col: SYMBOL => tag
+col: AREA SERVED => area_served
+col: UNIT TYPE => -
+col: BLOWER / CFM / DESIGN => -
+col: [BLOWER / CFM / DESIGN: the tag's total, before the parenthesis] => cfm
+col: BLOWER / CFM / ACTUAL => -
+col: BLOWER / ESP => esp_in
+col: BLOWER / MAXIMUM RPM => rpm
+col: BLOWER / DRIVE => drive
+col: [BLOWER / # OF FANS: fans under the one mark] => qty
+col: ELECTRICAL / HP PER FAN => motor_hp
+col: ELECTRICAL / V/Ø => -
+col: [ELECTRICAL / V/Ø: volts part] => volts
+col: [ELECTRICAL / V/Ø: phase part] => phase
+col: MAXIMUM SONES => -
+col: OPERATING WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+col: [NOTE 2.1.3, where the row's REMARKS cite note 2: (2) VARIABLE FREQUENCY DRIVES (NEMA 3R)] => vfd
+grid:
+LEF-1 | LAB AREA | NEW FUME EXHAUST FAN (HIGH-PLUME DILUTION) | 15,000 (7,500 PER FAN) | 15,000 | 12,310 (6,155 PER FAN) | 4.0" | 1,800 | belt (BELT) | 2 | 15.0 | 208/3 | 208 | 3 | 36 | 5,100 | MK PLASTICS MODEL AXIJET | 1 , 2 , 3 | yes
+END
+
+# ELECTRIC HEATER SCHEDULE (M5.2): nine electric heaters. Notes 1 "APPROVED ALTERNATE
+# MANUFACTURERS: BRASCH, QMARK, INDEECO, OUELLET, AND CHROMALOX."; 2 "MOUNT BOTTOM OF HEATER
+# 12" ABOVE FINISH FLOOR."; 3 "MOUNT BOTTOM OF HEATER 24" ABOVE FINISH FLOOR."; 4 "PROVIDE
+# WITH WALL SUSPENSION BRACKET MOUNTED APPROXIMATELY 9'-0" ABOVE FINISH FLOOR."; 5 "SEE
+# CONTROL DRAWINGS FOR SEQUENCE OF OPERATION."; 6 "PROVIDE WITH INTEGRAL THERMOSTAT. UNIT
+# TO BE STANDALONE AND NOT CONTROLLED BY DDC." (cited by EH-7..EH-9; this family's
+# vocabulary has no control or BAS attribute, catalogue). EH-5 prints HP "-".
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#14
+title: ELECTRIC HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 14 crop 201,65,1085,437 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 201,500,900,160 at 3x; second read at 4x with MuPDF (bands 203-260, 543-592, 633-727 and 768-817) of every row's CFM, HP, kW and V/Ø
+rows: all 9 printed rows
+col: SYMBOL => tag
+col: AREA SERVED => area_served
+col: UNIT TYPE => -
+col: FAN / CFM => cfm
+col: FAN / RPM => -
+col: FAN / HP => motor_hp
+col: ELECTRICAL / KW => eh_kw
+col: ELECTRICAL / STEPS => -
+col: ELECTRICAL / V/Ø => -
+col: [ELECTRICAL / V/Ø: volts part] => volts
+col: [ELECTRICAL / V/Ø: phase part] => phase
+col: ELECTRICAL / AMPS => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC HEATER SCHEDULE'
+grid:
+EH-1 | NUCLEAR GAUGE STORAGE 128 | SURFACE MOUNTED | 245 | 1,400 | 1/8 | 3.0 | 1 | 208 / 1 | 208 | 1 | 14.4 | MARKEL MODEL 3420 SERIES | 1 , 3 , 5
+EH-2 | ENCLOSED MATERIAL STORAGE 127 | SURFACE MOUNTED | 245 | 1,400 | 1/8 | 3.0 | 1 | 208 / 1 | 208 | 1 | 14.4 | MARKEL MODEL 3420 SERIES | 1 , 3 , 5
+EH-3 | ENCLOSED MATERIAL STORAGE 127 | SURFACE MOUNTED | 245 | 1,400 | 1/8 | 3.0 | 1 | 208 / 1 | 208 | 1 | 14.4 | MARKEL MODEL 3420 SERIES | 1 , 3 , 5
+EH-4 | FIRE RISER 121 | SURFACE MOUNTED | 245 | 1,400 | 1/8 | 2.0 | 1 | 208 / 1 | 208 | 1 | 9.6 | MARKEL MODEL 3420 SERIES | 1 , 3 , 5
+EH-5 | LAB MECHANICAL 120 | WALL MOUNTED UNIT HEATER | 300 | 1,400 | - | 3.0 | 1 | 208 / 1 | 208 | 1 | 14.4 | REZNOR MODEL EGW-3 | 1 , 4 , 5
+EH-6 | ELECTRICAL 116 | RECESSED | 245 | 1,400 | 1/8 | 2.0 | 1 | 208 / 1 | 208 | 1 | 9.6 | MARKEL MODEL 3420 SERIES | 1 , 3 , 5
+EH-7 | LOBBY 101 | RECESSED | 245 | 1,400 | 1/8 | 2.0 | 1 | 208 / 1 | 208 | 1 | 9.6 | MARKEL MODEL 3420 SERIES | 1 , 2 , 6
+EH-8 | OPEN OFFICE 110 | RECESSED | 245 | 1,400 | 1/8 | 2.0 | 1 | 208 / 1 | 208 | 1 | 9.6 | MARKEL MODEL 3420 SERIES | 1 , 2 , 6
+EH-9 | REST. 102 | RECESSED | 245 | 1,400 | 1/8 | 2.0 | 1 | 208 / 1 | 208 | 1 | 9.6 | MARKEL MODEL 3420 SERIES | 1 , 2 , 6
+END
+
+# SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS) (M5.2): one printed row whose
+# SYMBOL is "F-1 , CU-1", a gas furnace with a matching DX coil and its condensing unit;
+# the compile claims the table as both FCU and CONDENSING_UNIT, so it is keyed as two
+# instances from the same row, as bldg5406's split system is: F-1 (FCU: the supply fan)
+# and CU-1 (CONDENSING_UNIT: the system's nominal tons and cooling MBH, and the
+# ELECTRICAL FOR CONDENSING UNIT). The FCU vocabulary has no DX cooling capacity and no
+# gas heating capacity (catalogue). Notes 1 "APPROVED ALTERNATE MANUFACTURERS: TRANE,
+# LENNOX, DAIKIN AND YORK."; 2 "PROVIDE UNIT WITH MATCHING COOLING COIL, FIELD INSTALLED
+# HARD START FOR SINGLE PHASE UNITS, SHORT CYCLING DEVICE, CRANKCASE HEATER, EXPANSION
+# VALVE, HIGH/LOW PRESSURE SWITCH, NEUTRALIZING KIT - 3/4" LINE SIZE, LOW AMBIENT
+# CONTROLS (TO 0°F) & CONCENTRIC VENT KIT. SET FAN MOTOR ON FURNACE TO MAINTAIN A CONSTANT
+# SPEED."; 3 (long line set, tamper proof port caps); 4 "SEE CONTROL DRAWINGS FOR SEQUENCE
+# OF OPERATION."
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#14
+title: SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)
+family: FCU
+render: page 14 crop 201,941,1085,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 201,1090,1000,120 at 3x in 2 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: the 1 printed row, its indoor unit (F-1)
+col: [SYMBOL: the indoor unit, before the comma] => tag
+col: UNIT TYPE => -
+col: NOMINAL TONS => -
+col: SUPPLY FAN / CFM => cfm
+col: SUPPLY FAN / ESP => -
+col: SUPPLY FAN / HP => motor_hp
+col: SUPPLY FAN / V/Ø => -
+col: [SUPPLY FAN / V/Ø: volts part] => volts
+col: [SUPPLY FAN / V/Ø: phase part] => phase
+col: COOLING CAPACITY AT 95° OSA, 80° EDB, 62° EWB / TOTAL MBH => -
+col: COOLING CAPACITY AT 95° OSA, 80° EDB, 62° EWB / SENSIBLE MBH => -
+col: GAS HEATING CAPACITY / INPUT MBH => -
+col: GAS HEATING CAPACITY / OUTPUT MBH => -
+col: ELECTRICAL FOR CONDENSING UNIT / MCA => -
+col: ELECTRICAL FOR CONDENSING UNIT / MOCP => -
+col: ELECTRICAL FOR CONDENSING UNIT / V/Ø => -
+col: OSA CFM => -
+col: MIN. SEER2 => -
+col: FURNACE OPERATING WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title 'SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)' and note 2 'PROVIDE UNIT WITH MATCHING COOLING COIL ... EXPANSION VALVE': a split system's refrigerant (DX) coil (the author's reading)
+derive: heating_type = gas ; header=GAS HEATING CAPACITY ; note=the indoor unit prints a GAS HEATING CAPACITY (INPUT 80 / OUTPUT 78.0 MBH) and the title '(96%+ GAS)': a gas furnace (the author's reading)
+grid:
+F-1 | MULTIPOISE | 5 | 2,250 | 0.70 | 1.0 | 115/1 | 115 | 1 | 52.0 | 52.0 | 80 | 78.0 | 32.4 | 50 | 208/1 | 260 | 14.0 | 450 | CARRIER 59SC6A080C211-20 FURNACE / CARRIER 24SCA460 CONDENSING UNIT | 1 , 2 , 3 , 4
+END
+
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#14
+title: SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)
+family: CONDENSING_UNIT
+render: page 14 crop 201,941,1085,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 201,1090,1000,120 at 3x in 2 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: the 1 printed row, its outdoor unit (CU-1)
+col: [SYMBOL: the outdoor unit, after the comma] => tag
+col: UNIT TYPE => -
+col: NOMINAL TONS => cooling_tons
+col: SUPPLY FAN / CFM => -
+col: SUPPLY FAN / ESP => -
+col: SUPPLY FAN / HP => -
+col: SUPPLY FAN / V/Ø => -
+col: COOLING CAPACITY AT 95° OSA, 80° EDB, 62° EWB / TOTAL MBH => cooling_mbh
+col: COOLING CAPACITY AT 95° OSA, 80° EDB, 62° EWB / SENSIBLE MBH => -
+col: GAS HEATING CAPACITY / INPUT MBH => -
+col: GAS HEATING CAPACITY / OUTPUT MBH => -
+col: ELECTRICAL FOR CONDENSING UNIT / MCA => -
+col: ELECTRICAL FOR CONDENSING UNIT / MOCP => -
+col: ELECTRICAL FOR CONDENSING UNIT / V/Ø => -
+col: [ELECTRICAL FOR CONDENSING UNIT / V/Ø: volts part] => volts
+col: [ELECTRICAL FOR CONDENSING UNIT / V/Ø: phase part] => phase
+col: OSA CFM => -
+col: MIN. SEER2 => -
+col: FURNACE OPERATING WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+grid:
+CU-1 | MULTIPOISE | 5 | 2,250 | 0.70 | 1.0 | 115/1 | 52.0 | 52.0 | 80 | 78.0 | 32.4 | 50 | 208/1 | 208 | 1 | 260 | 14.0 | 450 | CARRIER 59SC6A080C211-20 FURNACE / CARRIER 24SCA460 CONDENSING UNIT | 1 , 2 , 3 , 4
+END
+
+# DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE (M5.2): one printed row, "DFC-1 ,
+# DCU-1", keyed as two instances like the split system above: DFC-1 (FCU: area, supply
+# fan CFM, cooling only) and DCU-1 (CONDENSING_UNIT: area, nominal tons, cooling MBH and
+# the ELECTRICAL OUTDOOR UNIT). The indoor unit's V/Ø prints "THRU O/U" (powered through
+# the outdoor unit), so the electrical keys the outdoor unit, as in bldg5406. Notes 1
+# (approved alternates); 2 "CONTROL UNIT WITH MANUFACTURER'S HARD-WIRED WALL MOUNTED 7 DAY
+# PROGRAMMABLE THERMOSTAT." (a thermostat, not a BAS interface, as in bessemer); 3
+# (crankcase heater, low ambient controls, line set, port caps); 4 (MIRO roof support); 5
+# (condensate pump powered by the fan coil); 6 "ELECTRICAL TO PROVIDE DISCONNECT."
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#14
+title: DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE
+family: FCU
+render: page 14 crop 1298,900,1087,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1298,1048,1090,168 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: the 1 printed row, its indoor unit (DFC-1)
+col: [SYMBOL: the indoor unit, before the comma] => tag
+col: AREA SERVED => area_served
+col: NOMINAL TONS => -
+col: UNIT TYPE => -
+col: [UNIT TYPE: HIGH WALL COOLING ONLY, so no heating] => heating_type
+col: SUPPLY FAN / CFM => cfm
+col: SUPPLY FAN / V/Ø => -
+col: COOLING CAPACITY AT 95°F OSA / TOTAL (MBH) => -
+col: COOLING CAPACITY AT 95°F OSA / SENSIBLE (MBH) => -
+col: ELECTRICAL OUTDOOR UNIT / MCA => -
+col: ELECTRICAL OUTDOOR UNIT / MOCP => -
+col: ELECTRICAL OUTDOOR UNIT / V/Ø => -
+col: MINIMUM SEER => -
+col: INDOOR / OUTDOOR WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title 'DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE': a ductless split indoor unit is a refrigerant (DX) evaporator (the author's reading)
+grid:
+DFC-1 | IT 115 | 2.0 | HIGH WALL COOLING ONLY | none (HIGH WALL COOLING ONLY) | 640 | THRU O/U | 25.0 | 18.0 | 18 | 25 | 208/1 | 18.5 | 35 / 95 | CARRIER FAN COIL MODEL 40MHH24 / CARRIER CONDENSING UNIT MODEL 38MHRBC24 | 1 , 2 , 3 , 4 , 5 , 6
+END
+
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#14
+title: DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 14 crop 1298,900,1087,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1298,1048,1090,168 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+rows: the 1 printed row, its outdoor unit (DCU-1)
+col: [SYMBOL: the outdoor unit, after the comma] => tag
+col: AREA SERVED => area_served
+col: NOMINAL TONS => cooling_tons
+col: UNIT TYPE => -
+col: SUPPLY FAN / CFM => -
+col: SUPPLY FAN / V/Ø => -
+col: COOLING CAPACITY AT 95°F OSA / TOTAL (MBH) => cooling_mbh
+col: COOLING CAPACITY AT 95°F OSA / SENSIBLE (MBH) => -
+col: ELECTRICAL OUTDOOR UNIT / MCA => -
+col: ELECTRICAL OUTDOOR UNIT / MOCP => -
+col: ELECTRICAL OUTDOOR UNIT / V/Ø => -
+col: [ELECTRICAL OUTDOOR UNIT / V/Ø: volts part] => volts
+col: [ELECTRICAL OUTDOOR UNIT / V/Ø: phase part] => phase
+col: MINIMUM SEER => -
+col: INDOOR / OUTDOOR WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+grid:
+DCU-1 | IT 115 | 2.0 | HIGH WALL COOLING ONLY | 640 | THRU O/U | 25.0 | 18.0 | 18 | 25 | 208/1 | 208 | 1 | 18.5 | 35 / 95 | CARRIER FAN COIL MODEL 40MHH24 / CARRIER CONDENSING UNIT MODEL 38MHRBC24 | 1 , 2 , 3 , 4 , 5 , 6
+END
+
+# AIR HANDLING UNIT SCHEDULE (M5.3): one unit, keyed as 069's AHU (the same engineer's
+# format): HP/QTY "7.6 \ 4" splits into supply_fan_hp and supply_fan_qty; the DX coil
+# block's TOTAL keys the unit's cooling_mbh; the GAS HEATING COIL's INPUT keys
+# gas_input_mbh and its OUTPUT heating_mbh; the final filter's MERV keys filter_merv (the
+# MERV 8 pre-filter is typed for audit only); cooling_type, heating_type and humidifier
+# are read from the block headers. The unit's ELECTRICAL REQUIREMENTS V/PH keys volts and
+# phase (the supply fan's own V/PH "-"). The row cites notes 3-6 and its SUPPLY FAN TYPE
+# cell prints "REMARK 2": 1 (approved alternates); 2 "PROVIDE FAN ASSEMBLY WITH ECM
+# MOTORIZED IMPELLER FANS." (this family's vocabulary has no ECM attribute); 3 "EXTERNAL
+# STATIC PRESSURE (ESP) DOES NOT INCLUDE THE COILS, FILTERS, OR OTHER INTERNAL AIR
+# HANDLER LOSSES."; 4 "CAPACITIES FOR FANS AND COILS ARE BASED ON 2,200 FEET ELEVATION.";
+# 5 "PROVIDE WITH 20" TALL VIBRATION ISOLATION ROOF CURB."; 6 "SEE HUMIDIFIER SCHEDULE
+# FOR ADDITIONAL INFORMATION." (the COIL TYPE cell prints "REMARK 6").
+TABLE
+sheet: itd-d1-lab-mechanical.pdf#15
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 15 crop 209,207,2040,157 at 3x in 5 tiles (SYMBOL column repeated) and notes crop 209,362,1000,155 at 3x in 2 tiles; second read at 4x with MuPDF (bands 211-260, 440-492, 602-644, 755-806, 1106-1202, 1704-1746 and 1911-1989) of supply CFM, HP/QTY, DX total, gas input and output, final filter, unit V/PH and minimum O.S.A. CFM
+rows: all 1 printed row
+col: SYMBOL => tag
+col: TYPE => -
+col: AREA SERVED => area_served
+col: SUPPLY FAN / TYPE => -
+col: SUPPLY FAN / AIRFLOW (CFM) / DESIGN => supply_cfm
+col: SUPPLY FAN / AIRFLOW (CFM) / ACTUAL => -
+col: SUPPLY FAN / ESP => -
+col: SUPPLY FAN / TSP => -
+col: SUPPLY FAN / HP/QTY => -
+col: [SUPPLY FAN / HP/QTY: HP part] => supply_fan_hp
+col: [SUPPLY FAN / HP/QTY: QTY part] => supply_fan_qty
+col: SUPPLY FAN / V/PH => -
+col: SUPPLY FAN / RPM => -
+col: DX / DEHUMIDIFICATION COOLING COIL / CAPACITY (MBH) / SENSIBLE => -
+col: DX / DEHUMIDIFICATION COOLING COIL / CAPACITY (MBH) / TOTAL => cooling_mbh
+col: DX / DEHUMIDIFICATION COOLING COIL / CFM => -
+col: DX / DEHUMIDIFICATION COOLING COIL / E.A.T. (°F) / D.B. => -
+col: DX / DEHUMIDIFICATION COOLING COIL / E.A.T. (°F) / W.B. => -
+col: DX / DEHUMIDIFICATION COOLING COIL / L.A.T. (°F) / D.B. => -
+col: DX / DEHUMIDIFICATION COOLING COIL / L.A.T. (°F) / W.B. => -
+col: DX / DEHUMIDIFICATION COOLING COIL / MAX FACE VELOCITY (FPM) => -
+col: DX / DEHUMIDIFICATION COOLING COIL / AIR P.D. (W.C.) => -
+col: DX / DEHUMIDIFICATION COOLING COIL / MAX RH => -
+col: GAS HEATING COIL / CAPACITY (MBH) / INPUT => gas_input_mbh
+col: GAS HEATING COIL / CAPACITY (MBH) / OUTPUT => heating_mbh
+col: GAS HEATING COIL / CFM => -
+col: GAS HEATING COIL / E.A.T. (°F) / D.B. => -
+col: GAS HEATING COIL / L.A.T. (°F) / D.B. => -
+col: GAS HEATING COIL / MODULATION % => -
+col: HUMIDIFICATION COIL / UNIT TAG => -
+col: HUMIDIFICATION COIL / COIL AIR P.D. (FT) => -
+col: HUMIDIFICATION COIL / FINNED HEIGHT (IN) => -
+col: HUMIDIFICATION COIL / FINNED WIDTH (IN) => -
+col: HUMIDIFICATION COIL / FACE AREA (FT2) => -
+col: HUMIDIFICATION COIL / FACE VEL. (FPM) => -
+col: HUMIDIFICATION COIL / COIL TYPE => -
+col: COMBINATION FILTER / PRE-FILTER / EFF. => -
+col: COMBINATION FILTER / PRE-FILTER / DEPTH => -
+col: COMBINATION FILTER / FINAL FILTER / EFF. => -
+col: [COMBINATION FILTER / FINAL FILTER / EFF.: MERV] => filter_merv
+col: COMBINATION FILTER / FINAL FILTER / DEPTH => -
+col: COMBINATION FILTER / MAX FACE VELOCITY (FPM) => -
+col: ELECTRICAL REQUIREMENTS / MCA => -
+col: ELECTRICAL REQUIREMENTS / MROPD => -
+col: ELECTRICAL REQUIREMENTS / V/PH => -
+col: [ELECTRICAL REQUIREMENTS / V/PH: volts part] => volts
+col: [ELECTRICAL REQUIREMENTS / V/PH: phase part] => phase
+col: MIN. O.S.A. CFM => oa_cfm_min
+col: AHRI EER RATING => -
+col: OPERATING WEIGHT (LBS) => -
+col: MANUFACTURER AND MODEL => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=DX / DEHUMIDIFICATION COOLING COIL ; note=the row prints the DX / dehumidification cooling coil block
+derive: heating_type = gas ; header=GAS HEATING COIL ; note=the row prints a GAS HEATING COIL block (INPUT 1,125.0 / OUTPUT 893.8 MBH)
+derive: humidifier = yes ; header=HUMIDIFICATION COIL ; note=the row's HUMIDIFICATION COIL block names UNIT TAG HUM-1, the HUMIDIFIER SCHEDULE's unit
+grid:
+AHU-1 | SEMI-CUSTOM | LABORATORIES | REMARK 2 | 13,000 | 11,540 | 1.5 | 4.3 | 7.6 \ 4 | 7.6 | 4 | 208/3 | 2,246 | 502.1 | 502.1 | 13,000 | 92.0 | 63.5 | 53.6 | 49.3 | 500 | 0.6 | 50% | 1,125.0 | 893.8 | 13,000 | 3.0 | 55.0 | 5-100% | HUM-1 | 0.01 | 24.0 | 109.0 | 52.1 | 451 | REMARK 6 | MERV 8 | 2" | MERV 13 | 13 | 4" | 500 | 178.9 | 225.0 | 208 / 3 | 208 | 3 | 3,950 | 10.8 | 10,000 | DAIKIN DPSA040 | 3 , 4 , 5 , 6
+END

@@ -1,0 +1,13 @@
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-25 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output. What an estimator would answer for this project.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,THE CONTROL CONTRACTOR SHALL MODIFY THE EXISTING DDC,M-601: modify the existing DDC package; integrate the new components into the existing Delta system
+PQ2,other,,,Idaho Transportation Department (state)
+PQ3,keep,069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,NEW COMPONENTS SHALL BE INTEGRATED INTO THE EXISTING DELTA CONTROL SYSTEM,existing boilers and AHU keep their controls; only new components are integrated
+PQ4,constant,,,the NEW PUMP SCHEDULE prints no speed column; M-602 names the new chilled water pumps constant speed
+PQ5,n/a,,,no packaged or plumbing-service pump keyed

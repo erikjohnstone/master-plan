@@ -1,0 +1,38 @@
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#2,PIPE BASEMENT DEMOLITION - PIPING - PHASE 2,M,demolition,yes,MD2PB.2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#3,BASEMENT DEMOLITION - VENTILATION - PHASE 1,M,demolition,yes,MD100.1
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#4,BASEMENT DEMOLITION - VENTILATION - PHASE 2,M,demolition,yes,MD100.2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#5,BASEMENT DEMOLITION - VENTILATION - PHASE 3,M,demolition,yes,MD100.3; phase-2 TABs shown as background
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#6,BASEMENT DEMOLITION - VENTILATION - PHASE 4,M,demolition,yes,MD100.4; phase-2 TABs and split system shown as background
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#7,FIRST FLOOR DEMOLITION - VENTILATION - PHASE 2,M,demolition,yes,MD101.2; existing AHU-3/4/5/15 shown
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#8,FIRST FLOOR DEMOLITION - VENTILATION - PHASE 4,M,demolition,yes,MD101.4; phase-2 AHU-15 and TAB-201/202 shown as background
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#9,SECOND FLOOR DEMOLITION – VENTILATION – PHASE 4,M,demolition,yes,MD102.4; phase-2 exhaust fans shown thin as background
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#10,THIRD FLOOR DEMOLITION – VENTILATION – PHASE 4,M,demolition,yes,MD103.4; duct removals only
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#11,FOURTH FLOOR DEMOLITION – VENTILATION – PHASE 4,M,demolition,yes,MD104.4; existing roof exhaust fans EF-13/14/25/26/33/35
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#12,BASEMENT DEMOLITION - PIPING - PHASE 4,M,demolition,yes,MD200.4
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#13,PIPE BASEMENT - VENTILATION - PHASE 2,M,new,yes,M1PB.2; ductwork and air devices only
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#14,PIPE BASEMENT - PIPING - PHASE 2,M,new,yes,M2PB.2; only plan of the pipe basement piping
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#15,BASEMENT - VENTILATION - ALL PHASES,M,new,yes,M100.0; overall plan of all phases (sheet note defers detail to phase sheets)
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#16,BASEMENT - VENTILATION - PHASE 1,M,new,yes,M100.1
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#17,BASEMENT - VENTILATION - PHASE 2,M,new,yes,M100.2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#18,BASEMENT - VENTILATION - PHASE 3,M,new,yes,M100.3
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#19,BASEMENT - VENTILATION - PHASE 4,M,new,yes,M100.4
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#20,BASEMENT – VENTILATION – PHASE 4 - BID ALTERNATE 1,M,new,yes,M100.41; bid alternate partial plan
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#21,BASEMENT – VENTILATION – PHASE 4 - BID ALTERNATE 2,M,new,yes,M100.42; bid alternate partial plan
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#22,BASEMENT – VENTILATION – PHASE 4 - BID ALTERNATE 3,M,new,yes,M100.43; bid alternate partial plan
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#23,BASEMENT – VENTILATION – PHASE 4 - BID ALTERNATE 4,M,new,yes,M100.44; bid alternate partial plan
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#24,FIRST FLOOR - VENTILATION - ALL PHASES,M,new,yes,M101.0; overall plan of all phases
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#25,FIRST FLOOR - VENTILATION - PHASE 2,M,new,yes,M101.2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#26,FIRST FLOOR - VENTILATION - PHASE 4,M,new,yes,M101.4
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#27,SECOND FLOOR PLAN - VENTILATION - ALL PHASES,M,new,yes,M102.0; roof-mounted exhaust fans over the addition
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#28,SECOND FLOOR - VENTILATION - PHASE 2,M,new,yes,M102.2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#29,BASEMENT - PIPING - ALL PHASES,M,new,yes,M200.0; overall plan of all phases
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#30,BASEMENT - PIPING - PHASE 2,M,new,yes,M200.2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#31,BASEMENT - PIPING - PHASE 4,M,new,yes,M200.4
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#32,BASEMENT – PIPING – PHASE 4 – BID ALTERNATE 4,M,new,yes,M200.44; bid alternate partial plan
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#33,FIRST FLOOR - PIPING - ALL PHASES,M,new,yes,M201.0; overall plan of all phases
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#34,FIRST FLOOR - PIPING - PHASE 2,M,new,yes,M201.2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#40,AIRFLOW MAP - BASEMENT,M,new,yes,M305; room airflow tables on the floor plan; no equipment drawn
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#41,AIRFLOW MAP - PIPE BASEMENT / AIRFLOW MAP - FIRST FLOOR,M,new,yes,M306; two airflow-map plan views; no equipment drawn

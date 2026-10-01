@@ -1,5 +1,19 @@
 # Production BAS takeoff workflow — deterministic, evidence-backed, non-commercial
 
+> **Amendment, 2026-09-23 (confirmed by the owner).** The assemblies goal,
+> `opentakeoff-corpus/goals/ASSEMBLIES.md`, opens two things that the first
+> "Non-negotiable boundaries" bullet below excluded:
+> 1. **Typical-derived points and devices.** They are always labelled as coming
+>    from an explicit, versioned recipe. They are never merged into printed or
+>    source-declared truth, and never presented as extracted fact.
+> 2. **Optional partner-entered prices and labor hours**, stored as opaque
+>    partner data.
+>
+> Still excluded everywhere: product catalogs, product or model selection, and
+> any shipped price, rate or labor-hour number. This document's five workflows
+> and their contracts are otherwise unchanged. That includes the source-declared
+> assembly register, which still records only what the drawings declare.
+
 ## Objective
 
 Research, design, implement, and verify five complete BAS takeoff workflows:

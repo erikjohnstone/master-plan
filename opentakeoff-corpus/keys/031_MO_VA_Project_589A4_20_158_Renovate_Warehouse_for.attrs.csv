@@ -1,0 +1,575 @@
+# 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-500 (page 71), M-501 (page 72) and AE401 (page 33) of the Harry S. Truman VA warehouse renovation for pandemic preparedness (IMEG), every claimed keyed-family table of this dev document.
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71 | FAN SCHEDULE | FAN | all 6 printed rows, 4 marks (WHSE-SF1 and WHSE-RF1 print a selection and an operating row each) | render: page 71 crop 1268,108,1732,250 at 3x in 4 tiles (MARK column repeated) and notes crop 1268,355,700,45 at 3x; second read at 4x (crops 1540,185,60,170 and 2408,185,48,170) of every row's CFM and HP
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71 | STEAM HUMIDIFER SCHEDULE | HUMIDIFIER | all 1 printed row | render: page 71 crop 1320,735,1680,140 at 3x in 4 tiles (MARK column repeated), note in the same tiles; second read at 4x (crop 2488,808,70,25) of the steam flow; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop), re-checking CFM, LAT dewpoint and trap capacity
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71 | STEAM TO WATER HEAT EXCHANGER SCHEDULE | HEAT_EXCHANGER | all 4 printed rows, 2 marks (each exchanger prints a row per control valve) | render: page 71 crop 1325,890,1675,200 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 1836,985,58,95) of both units' water EWT; whole table re-rendered at 4x with MuPDF, re-checking both units' GPM, steam PSIG and control valve LBS/HR
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71 | PUMP SCHEDULE | PUMP | all 4 printed rows | render: page 71 crop 1505,1105,1495,145 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 1995,1180,58,65) of every row's GPM
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72 | AIR HANDLING UNIT SCHEDULE | AHU | all 1 printed row | render: page 72 crop 1375,108,1625,108 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 1845,183,58,22) of the minimum OA; whole table re-rendered at 4x with MuPDF, re-checking supply CFM, heat recovery mark and humidifier mark
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72 | CHILLED WATER COOLING COIL SCHEDULE | DUCT_MOUNTED_COIL | both printed rows, 1 mark (a selection and an operating row) | render: page 72 crop 1140,228,1860,145 at 3x in 5 tiles (MARK column repeated), note in the same tiles; second read at 4x (crop 2123,300,58,38) of both rows' total capacity; whole table re-rendered at 4x with MuPDF, re-checking both rows' CFM, GPM, EWT and LWT
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72 | HOT WATER HEATING COIL SCHEDULE | DUCT_MOUNTED_COIL | all 15 printed rows, 14 marks (WHSE-PHC1 prints two identical rows) | render: page 72 crop 1415,615,1585,305 at 3x in 4 tiles (MARK column repeated); second read at 4x (crops 1808,690,58,225 and 2280,690,148,225) of every row's CFM, MBH and GPM
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72 | ELECTRIC UNIT HEATER SCHEDULE | UNIT_HEATER | all 2 printed rows (a third ruled row is empty) | render: page 72 crop 1745,1578,1255,140 at 3x in 3 tiles (MARK column repeated); second read at 4x (crop 2347,1650,62,40) of both rows' BTUH; whole table re-rendered at 4x with MuPDF, re-checking both rows' CFM, phase, volt and fan HP
+#   031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33 | EQUIPMENT SCHEDULE | FAN | none — AE401's architectural EQUIPMENT SCHEDULE of 12 toilet accessories and appliances; no row is a fan | render: page 33 (AE401) crop 2185,90,440,250 at 3x
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Bracketed SI conversions, fan construction data, efficiencies, air-side temperatures, face data, pressure drops, NPSH, specific gravity, control-valve and trap data, component marks, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for: 9 table(s), 29 instance(s), 548 keyed attribute value(s) (200 printed, 348 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,floor,,,LOCATION names a level,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,qty,2,,FAN / NUMBER OF FANS: fans under the one mark,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,service,WHSE-AHU-1,,SYSTEM AND/OR SERVICE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,cfm,,cfm,AIR FLOW / CFM,printed '13500 (SELECTION CRITERIA) / 11250 (OPERATING CONDITION)' — not a single value for this attribute
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,esp_in,,in. w.c.,TSP / IN: the static pressure of a stand-alone return or exhaust fan,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,motor_hp,15,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,motor_watts,,W,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,rpm,1314,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,drive,direct,,FAN / DRIVE,printed 'DIRECT'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,vfd,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,ecm,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,control,VARIABLE,,MOTOR ELECTRICAL / SPEED CONTROL,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-SF1,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,floor,,,LOCATION names a level,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,qty,1,,FAN / NUMBER OF FANS: fans under the one mark,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,service,WHSE-AHU-1,,SYSTEM AND/OR SERVICE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,cfm,,cfm,AIR FLOW / CFM,printed '11250 (SELECTION CRITERIA) / 9000 (OPERATING CONDITION)' — not a single value for this attribute
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,esp_in,1,in. w.c.,TSP / IN: the static pressure of a stand-alone return or exhaust fan,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,motor_hp,5,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,motor_watts,,W,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,rpm,950,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,drive,direct,,FAN / DRIVE,printed 'DIRECT'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,vfd,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,ecm,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,control,VARIABLE,,MOTOR ELECTRICAL / SPEED CONTROL,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-RF1,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,floor,ROOF,,LOCATION names a level,printed 'ROOF'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,qty,1,,FAN / NUMBER OF FANS: fans under the one mark,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,service,TOILET/ BREAKROOM...,,SYSTEM AND/OR SERVICE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,cfm,620,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,esp_in,0.75,in. w.c.,TSP / IN: the static pressure of a stand-alone return or exhaust fan,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,motor_hp,0.25,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,motor_watts,,W,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,rpm,1705,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,drive,direct,,FAN / DRIVE,printed 'DIRECT'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,vfd,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,ecm,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,control,CONSTANT,,MOTOR ELECTRICAL / SPEED CONTROL,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,volts,120,V,MOTOR ELECTRICAL / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF1,FAN,phase,1,,MOTOR ELECTRICAL / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,floor,,,LOCATION names a level,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,qty,1,,FAN / NUMBER OF FANS: fans under the one mark,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,service,FORKLIFT...,,SYSTEM AND/OR SERVICE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,cfm,1300,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,esp_in,0.75,in. w.c.,TSP / IN: the static pressure of a stand-alone return or exhaust fan,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,motor_hp,0.334,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,motor_watts,,W,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,rpm,1200,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,drive,direct,,FAN / DRIVE,printed 'DIRECT'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,vfd,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,ecm,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,control,VARIABLE,,MOTOR ELECTRICAL / SPEED CONTROL,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,volts,120,V,MOTOR ELECTRICAL / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,FAN SCHEDULE,WHSE-EF2,FAN,phase,1,,MOTOR ELECTRICAL / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,area_served,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,humidifier_type,direct_injection,,HUMIDIFIER TYPE: a dispersion tube fed from a clean steam source,printed 'UNIT-MOUNTED DISPERSION TUBE; SOURCE CLEAN STEAM'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,capacity_lb_hr,79.2,lb/hr,STEAM / FLOW / LBS/HR,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM HUMIDIFER SCHEDULE,WHSE-SH1,HUMIDIFIER,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,floor,BASEMENT,,LOCATION names a level,printed 'B1 C11 PIPE BASEMENT'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,hx_type,shell_and_tube,,TYPE,printed 'SHELL & TUBE'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,primary_medium,steam,,TABLE TITLE,title printed 'STEAM TO WATER HEAT EXCHANGER SCHEDULE'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,secondary_medium,hw,,SYSTEM AND/OR SERVICE,"the water side is REHEAT WATER, heating hot water (the author's reading)"
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,secondary_gpm,55,gpm,WATER CONDITIONS / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,secondary_ewt_f,120,F,WATER CONDITIONS / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,secondary_lwt_f,160,F,WATER CONDITIONS / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,capacity_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,primary_steam_psig,15,psig,STEAM PRESSURE / ENT CONTROL VALVE / PSIG: the supply steam pressure,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX1,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,CONTROL VALVE / LBS/HR,printed '375 (1/3 CONTROL VALVE) / 745 (2/3 CONTROL VALVE)' — not a single value for this attribute
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,floor,BASEMENT,,LOCATION names a level,printed 'B1 C11 PIPE BASEMENT'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,hx_type,shell_and_tube,,TYPE,printed 'SHELL & TUBE'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,primary_medium,steam,,TABLE TITLE,title printed 'STEAM TO WATER HEAT EXCHANGER SCHEDULE'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,secondary_medium,hw,,SYSTEM AND/OR SERVICE,"the water side is REHEAT WATER, heating hot water (the author's reading)"
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,secondary_gpm,55,gpm,WATER CONDITIONS / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,secondary_ewt_f,120,F,WATER CONDITIONS / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,secondary_lwt_f,160,F,WATER CONDITIONS / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,capacity_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,primary_steam_psig,15,psig,STEAM PRESSURE / ENT CONTROL VALVE / PSIG: the supply steam pressure,author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,STEAM TO WATER HEAT EXCHANGER SCHEDULE,WHSE-HX2,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,CONTROL VALVE / LBS/HR,printed '375 (1/3 CONTROL VALVE) / 745 (2/3 CONTROL VALVE)' — not a single value for this attribute
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,area_served,,,AREA AND/OR BLDG SERVED,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,service,,,SYSTEM AND/OR SERVICE,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,gpm,,gpm,CIRCULATING FLUID / FLOW / GPM,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,head_ft,,ft,CIRCULATING FLUID / HEAD / FT,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,motor_hp,,hp,ELECTRICAL MOTOR / NOMINAL POWER / HP,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,rpm,,rpm,ELECTRICAL MOTOR / MAX RPM,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,vfd,,,ELECTRICAL MOTOR / SPEED CONTROL,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,pump_arrangement,,,REMARKS: DUTY/STANDBY,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,glycol_pct,,%,"CIRCULATING FLUID / FLUID: WATER, so no glycol",blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,volts,,V,ELECTRICAL MOTOR / VOLT,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P1,PUMP,phase,,,ELECTRICAL MOTOR / PHASE,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,area_served,B14,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,service,REHEAT WATER,,SYSTEM AND/OR SERVICE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,gpm,60,gpm,CIRCULATING FLUID / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,head_ft,60,ft,CIRCULATING FLUID / HEAD / FT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,motor_hp,3,hp,ELECTRICAL MOTOR / NOMINAL POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,rpm,1800,rpm,ELECTRICAL MOTOR / MAX RPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,vfd,yes,,ELECTRICAL MOTOR / SPEED CONTROL,printed 'VFD'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,pump_arrangement,duty_standby,,REMARKS: DUTY/STANDBY,printed 'DUTY/STANDBY'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,glycol_pct,0,%,"CIRCULATING FLUID / FLUID: WATER, so no glycol",author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,volts,460,V,ELECTRICAL MOTOR / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P2,PUMP,phase,3,,ELECTRICAL MOTOR / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,area_served,B14,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,service,REHEAT WATER,,SYSTEM AND/OR SERVICE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,gpm,60,gpm,CIRCULATING FLUID / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,head_ft,60,ft,CIRCULATING FLUID / HEAD / FT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,motor_hp,3,hp,ELECTRICAL MOTOR / NOMINAL POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,rpm,1800,rpm,ELECTRICAL MOTOR / MAX RPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,vfd,yes,,ELECTRICAL MOTOR / SPEED CONTROL,printed 'VFD'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,pump_arrangement,duty_standby,,REMARKS: DUTY/STANDBY,printed 'DUTY/STANDBY'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,glycol_pct,0,%,"CIRCULATING FLUID / FLUID: WATER, so no glycol",author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,volts,460,V,ELECTRICAL MOTOR / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P3,PUMP,phase,3,,ELECTRICAL MOTOR / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,area_served,WHSE-AHU-1,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,service,PREHEAT WATER,,SYSTEM AND/OR SERVICE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,gpm,10,gpm,CIRCULATING FLUID / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,head_ft,25,ft,CIRCULATING FLUID / HEAD / FT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,motor_hp,0.1667,hp,ELECTRICAL MOTOR / NOMINAL POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,rpm,3300,rpm,ELECTRICAL MOTOR / MAX RPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,vfd,no,,ELECTRICAL MOTOR / SPEED CONTROL,printed 'NONE'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,pump_arrangement,,,REMARKS: DUTY/STANDBY,blank cell
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,glycol_pct,0,%,"CIRCULATING FLUID / FLUID: WATER, so no glycol",author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,volts,115,V,ELECTRICAL MOTOR / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71,PUMP SCHEDULE,WHSE-P4,PUMP,phase,1,,ELECTRICAL MOTOR / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,supply_cfm,13500,cfm,AIR FLOW / SUPPLY / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,oa_cfm_min,1920,cfm,AIR FLOW / MIN OA / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,supply_fan_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,supply_fan_qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,return_fan_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,exhaust_fan_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,vfd,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,economizer,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,outdoor_air_pct,,%,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,cooling_type,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,dx_stages,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_wpd_ft,,ft,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_rows,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,chw_glycol_pct,,%,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,heating_type,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,heating_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_wpd_ft,,ft,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_rows,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,hw_glycol_pct,,%,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,steam_psig,,psig,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,steam_lb_hr,,lb/hr,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,gas_input_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,humidifier,yes,,HUMIDIFIER MARK: a humidifier is scheduled,printed 'WHSE-SH-1'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,energy_recovery,none,,"HEAT RECOVERY MARK: N/A, so none",printed 'N/A'; author's reading of the printed row
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,filter_merv,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,AIR HANDLING UNIT SCHEDULE,WHSE-AHU-1,AHU,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,cfm,,cfm,AIR FLOW / CFM,printed '13500 (SELECTION CRITERIA) / 11250 (OPERATING CONDITION)' — not a single value for this attribute
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,TOTAL CAPACITY / MBH,printed '570.59 (SELECTION CRITERIA) / 499 (OPERATING CONDITION)' — not a single value for this attribute
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,heating_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,chw_gpm,,gpm,CHILLED WATER / FLOW / GPM,printed '81.2 (SELECTION CRITERIA) / 71 (OPERATING CONDITION)' — not a single value for this attribute
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,chw_ewt_f,42,F,CHILLED WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,chw_lwt_f,56,F,CHILLED WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,CHILLED WATER COOLING COIL SCHEDULE,WHSE-CC-1,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,area_served,WAREHOUSE,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,cfm,6075,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,heating_mbh,188,MBH,TOTAL MIN CAPACITY / MBH,printed '188.0'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,hw_gpm,9.4,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-PHC1,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,area_served,W05,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,cfm,600,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,heating_mbh,25.9,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,hw_gpm,1.7,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC1,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,area_served,W06,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,cfm,300,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,heating_mbh,13,MBH,TOTAL MIN CAPACITY / MBH,printed '13.0'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,hw_gpm,0.9,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC2,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,area_served,W01,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,cfm,370,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,heating_mbh,16,MBH,TOTAL MIN CAPACITY / MBH,printed '16.0'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,hw_gpm,1.1,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC3,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,area_served,W02,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,cfm,900,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,heating_mbh,38.9,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,hw_gpm,2.6,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC4,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,area_served,WC01A,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,cfm,900,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,heating_mbh,38.9,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,hw_gpm,2.6,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC5,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,area_served,W05A,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,cfm,300,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,heating_mbh,13,MBH,TOTAL MIN CAPACITY / MBH,printed '13.0'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,hw_gpm,0.9,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC6,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,area_served,W04,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,cfm,520,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,heating_mbh,22.5,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,hw_gpm,1.5,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC7,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,area_served,W09,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,cfm,180,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,heating_mbh,7.8,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,hw_gpm,0.5,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC8,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,area_served,W04A,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,cfm,440,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,heating_mbh,19,MBH,TOTAL MIN CAPACITY / MBH,printed '19.0'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,hw_gpm,1.3,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC9,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,area_served,W03,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,cfm,1575,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,heating_mbh,68,MBH,TOTAL MIN CAPACITY / MBH,printed '68.0'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,hw_gpm,4.5,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC10,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,area_served,W03A,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,cfm,1025,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,heating_mbh,44.3,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,hw_gpm,3,gpm,HOT WATER / FLOW / GPM,printed '3.0'
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC11,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,area_served,W11,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,cfm,2600,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,heating_mbh,112.3,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,hw_gpm,7.5,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC12,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,area_served,W11,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,cfm,1125,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,heating_mbh,48.6,MBH,TOTAL MIN CAPACITY / MBH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,hw_gpm,3.2,gpm,HOT WATER / FLOW / GPM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,hw_ewt_f,160,F,HOT WATER / EWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,HOT WATER / LWT / °F,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,volts,,V,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,HOT WATER HEATING COIL SCHEDULE,WHSE-RHC13,DUCT_MOUNTED_COIL,phase,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,area_served,14 RECEIVING DOCK,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE' (TYPE: HORIZONTAL COIL RESISTANCE)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,cfm,500,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,heating_mbh,17100,BTU/H,MIN CAPACITY / BTUH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,motor_hp,0.1,hp,FAN MOTOR / FAN POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,volts,460,V,POWER / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-1,UNIT_HEATER,phase,3,,POWER / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,building,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,floor,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,area_served,14 RECEIVING DOCK,,AREA AND/OR BLDG SERVED,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,qty,,,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC UNIT HEATER SCHEDULE' (TYPE: HORIZONTAL COIL RESISTANCE)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,cfm,500,cfm,AIR FLOW / CFM,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,heating_mbh,17100,BTU/H,MIN CAPACITY / BTUH,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,eh_kw,,kW,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,motor_hp,0.1,hp,FAN MOTOR / FAN POWER / HP,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,conn_in,,in,,not printed
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,volts,460,V,POWER / VOLT,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72,ELECTRIC UNIT HEATER SCHEDULE,WHSE-EUH-2,UNIT_HEATER,phase,3,,POWER / PHASE,
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33,EQUIPMENT SCHEDULE,,FAN,,,,,no FAN instance printed: none — AE401's architectural EQUIPMENT SCHEDULE of 12 toilet accessories and appliances; no row is a fan

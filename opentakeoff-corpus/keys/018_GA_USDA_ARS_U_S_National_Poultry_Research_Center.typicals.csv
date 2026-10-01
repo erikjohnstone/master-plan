@@ -1,0 +1,16 @@
+# 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.attrs.csv, one row each.
+# Sources read: M-601 (page 13) schedules and notes; M-701 (page 14) mechanical controls and sequences. HELD-OUT set: scored at gates only.
+#
+sheet,tag,family,typical_id,options,basis_note
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EF-1,FAN,fan-constant,motorized_damper=false,"M-701 detail 2 (EXHAUST FAN CONTROLS): DDC start/stop BO and status BI (differential pressure switch), runs continuously; schedule note 2 gravity backdraft damper (not motorized)."
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WSHP-1,HEAT_PUMP,heat-pump,setpoint_adjust=true;fan_status=true,"M-701 detail 1 (WATER SOURCE HEAT PUMP CONTROLS): manufacturer BACnet controller integrated into the BMS, DDC start/stop DO and run status DI by current sensing relay, supply/return air temperature AIs, room thermostat with setpoint adjustment; compressors staged by the unit; isolation valve opened in occupied mode."

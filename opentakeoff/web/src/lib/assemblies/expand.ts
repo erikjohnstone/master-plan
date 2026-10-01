@@ -1,0 +1,323 @@
+// ASSEMBLIES goal, WP3.3 — expanding a unit's chosen assembly into lines
+// (plan §8.2 ExpandedLine, §8.4 quantity pipeline, decision D8).
+//
+// SHOULD THIS BE ON THE SHARED PATH? Yes: the lines are the takeoff's
+// quantities, and the UI panel, the MCP tool and every export read them.
+//
+// Per line, in a fixed order:
+//   1. a hook-up profile switch the project has off drops the line; one it
+//      has not set leaves the line unresolved;
+//   2. `when` false drops the line; unknown leaves it unresolved;
+//   3. qty_base = qty × the unit's multiplier (unknown → unresolved, null);
+//   4. qty_with_waste = qty_base × (1 + waste %); rounding is the roll-up's
+//      stage (rollup.ts), because it is an order quantity (D8);
+//   5. parameters evaluate with their sources; "<selection>" stays for the
+//      selection tool downstream;
+//   6. drawing evidence replaces typical lines of the same role and never
+//      adds to them (D6): a printed points list replaces the point lines, a
+//      component the drawing declares replaces the device line of its role.
+// A sub-assembly line expands its assembly's lines under the parent's path,
+// its quantity multiplying theirs; the container line itself carries no
+// quantity, so nothing is counted twice.
+
+import { ExprError, type Value } from "./expr";
+import type { ApplicationRecord, AssemblyDefinition, AssemblyLine, ExpandedLine, ValueSource } from "./schema";
+import { ACTIVITIES, familiesOf, PARTIES, SELECTION } from "./schema";
+import { envFor, latest, layersFor, PROJECT_INSTANCE, run, selectAssembly, selectProjectAssemblies, type Instance, type Override, type ProjectSettings } from "./select";
+
+/** What the drawing itself says about a unit's controls (read-only inputs from
+ * the BAS points and assembly-register outputs). */
+export interface DrawingEvidence {
+  /** The unit has a printed points list: its typical points become a
+   * comparison only. */
+  printedPoints?: boolean;
+  /** Device roles the drawing declares for the unit. */
+  declaredRoles?: readonly string[];
+}
+
+const round12 = (n: number) => Number(n.toPrecision(12));
+
+function findAssembly(library: readonly AssemblyDefinition[], id: string, version?: string): AssemblyDefinition | undefined {
+  return version ? library.find((a) => a.id === id && a.version === version) : latest(library.filter((a) => a.id === id))[0];
+}
+
+/** Expand one unit's application record into its lines. */
+export function expandApplication(
+  app: ApplicationRecord,
+  instance: Instance,
+  library: readonly AssemblyDefinition[],
+  settings: ProjectSettings = {},
+  evidence: DrawingEvidence = {},
+): ExpandedLine[] {
+  if (!app.assembly || app.status === "excluded" || app.status === "no_assembly" || app.status === "not_in_scope") return [];
+  const def = findAssembly(library, app.assembly.id, app.assembly.version);
+  if (!def) return [];
+  const vars = Object.fromEntries(Object.entries(app.variables).map(([k, v]) => [k, { value: v.value as Value | null, source: v.source }]));
+  const opts = Object.fromEntries(Object.entries(app.options).map(([k, v]) => [k, { value: v.value as Value | null, source: v.source }]));
+  const out: ExpandedLine[] = [];
+  const declared = new Set(evidence.declaredRoles ?? []);
+  const walk = (asm: AssemblyDefinition, path: string, factor: number | null, factorMissing: string[], depth: number, subVars = vars, subOpts = opts) => {
+    for (const line of asm.lines) {
+      const rule = `${path}${asm.id}@${asm.version}:${line.id}`;
+      const env = envFor(instance, subVars, subOpts);
+      const missing: string[] = [...factorMissing];
+      let status: ExpandedLine["status"] = "ok";
+      let error: string | null = null;
+      const evalOr = (src: string) => {
+        try {
+          return run(src, env);
+        } catch (e) {
+          error = e instanceof ExprError ? e.message : String(e);
+          return null;
+        }
+      };
+      // 1. The hook-up profile.
+      if (line.profile_switch) {
+        const on = settings.profile?.[line.profile_switch];
+        if (on === false) continue;
+        if (on === undefined) missing.push(`profile.${line.profile_switch}`);
+      }
+      // 2. The line's condition.
+      if (line.when) {
+        const w = evalOr(line.when);
+        if (w && w.known && w.value === false) continue;
+        if (w && !w.known) missing.push(...w.missing);
+      }
+      // A sub-assembly: its lines, times this line's quantity.
+      if (line.kind === "assembly" && line.ref) {
+        const sub = findAssembly(library, line.ref.id, line.ref.version);
+        if (!sub || depth > 8) continue;
+        const q = evalOr(line.qty);
+        const n = q && q.known && typeof q.value === "number" ? q.value : null;
+        const subApp = selectAssembly(instance, [sub], settings, { tag: instance.tag, reason: "sub-assembly", assembly: { id: sub.id, version: sub.version } }, app.layer);
+        const sv = Object.fromEntries(Object.entries(subApp.variables).map(([k, v]) => [k, { value: v.value as Value | null, source: v.source }]));
+        const so = Object.fromEntries(Object.entries(subApp.options).map(([k, v]) => [k, { value: v.value as Value | null, source: v.source }]));
+        walk(sub, `${rule}/`, factor !== null && n !== null ? factor * n : null, [...missing, ...(q && !q.known ? q.missing : [])], depth + 1, sv, so);
+        continue;
+      }
+      // 3. The quantity. It is never negative, and a point or device is
+      // counted whole unless the line rounds it: either would rest on a
+      // misread value, a count of -1 cells or 1.5 stages (AS-52).
+      const q = evalOr(line.qty);
+      let qtyBase: number | null = null;
+      if (q && q.known) {
+        if (typeof q.value !== "number" || !Number.isFinite(q.value)) error = `qty is ${JSON.stringify(q.value)}, not a number`;
+        else if (factor !== null && !missing.length) {
+          const n = round12(q.value * factor);
+          if (n < 0) error = `qty ${n} is negative`;
+          else if ((line.kind === "point" || line.kind === "device") && !line.round && !Number.isInteger(n)) error = `qty ${n} is not a whole count of ${line.kind}s`;
+          else qtyBase = n;
+        }
+      } else if (q) missing.push(...q.missing);
+      if (error) status = "error";
+      else if (missing.length || qtyBase === null) status = "unresolved";
+      // 6. Drawing evidence replaces the typical's line of the same role.
+      if ((line.kind === "point" && evidence.printedPoints) || (line.kind === "device" && declared.has(line.role.id))) status = "replaced";
+      // 4. Waste.
+      const waste = line.waste_pct ?? 0;
+      const known = status === "ok";
+      // 5. Parameters.
+      const params: ExpandedLine["params"] = {};
+      for (const [name, p] of Object.entries(line.params ?? {})) {
+        if (p === SELECTION) { params[name] = { value: null, source: "selection" }; continue; }
+        if (typeof p !== "string") { params[name] = { value: p, source: "literal" }; continue; }
+        let r: ReturnType<typeof run> | null = null;
+        try { r = run(p, env); } catch { r = null; }
+        params[name] = r && r.known ? { value: r.value, source: sourceOf(p, env.sources) } : { value: null, source: null };
+      }
+      // What a known quantity rests on (docs/ASSEMBLIES_CSV.md, qty_basis): a
+      // default that stands in, the partner's before the starter's, or else
+      // the drawings and the project.
+      const read = [...env.sources.values()];
+      const basis = read.includes("partner_default") ? "partner_default" : read.includes("starter_default") ? "starter_default" : "evidence";
+      out.push({
+        tag: instance.tag,
+        family: instance.family,
+        layer: app.layer,
+        scope: instance.scope,
+        rule,
+        kind: line.kind,
+        label: line.label ?? null,
+        role: line.role,
+        io: line.io ?? null,
+        device_role_ref: line.device_role_ref ?? null,
+        unit: line.unit,
+        qty_base: known ? qtyBase : null,
+        qty_with_waste: known && qtyBase !== null ? round12(qtyBase * (1 + waste / 100)) : null,
+        waste_pct: waste,
+        round: line.round ?? null,
+        params,
+        responsibility: { ...(line.responsibility ?? {}), ...(settings.responsibility?.[line.role.id] ?? {}) } as ExpandedLine["responsibility"],
+        trade: line.trade,
+        labor_task: line.labor_task ?? null,
+        status,
+        missing: error ? [error] : [...new Set(missing)],
+        qty_source: known ? basis : null,
+        cites: instance.cites,
+        source: line.source,
+        ...(line.partner && Object.keys(line.partner).length ? { partner: { ...line.partner } } : {}),
+      });
+    }
+  };
+  const mult = app.multiplier?.value ?? 1;
+  walk(def, "", Number.isFinite(mult) ? mult : null, [], 0);
+  return out;
+}
+
+function sourceOf(src: string, sources: Map<string, ValueSource | null>): ExpandedLine["params"][string]["source"] {
+  const ref = src.trim().match(/^(?:attr|var|opt)\.[A-Za-z_][A-Za-z0-9_]*$/)?.[0];
+  if (ref) return sources.get(ref) ?? null;
+  return "expr";
+}
+
+/** Whether an override is for this unit's layer: its tag, its family where
+ * it names one (AS-43), the layer (none: every layer), and a typical it
+ * chooses that the library offers in that layer. */
+export function overrideFits(o: Override, inst: Pick<Instance, "tag" | "family">, layer: string, library: readonly AssemblyDefinition[]): boolean {
+  return o.tag === inst.tag && (!o.family || o.family === inst.family) && (o.layer ?? layer) === layer
+    && (!o.assembly || library.some((a) => a.id === o.assembly!.id && (a.applies_to.layer ?? "controls") === layer));
+}
+
+/** The overrides no unit takes, each with why, so none is kept silently
+ * (AS-45): a tag no unit has (a typo; a unit a later read no longer finds),
+ * a family or layer its units have not, a typical the layer does not
+ * offer, and any for the project's own records, which follow the project
+ * settings instead. */
+export function unmatchedOverrides(instances: readonly Instance[], library: readonly AssemblyDefinition[], overrides: readonly Override[]): Array<{ override: Override; why: string }> {
+  const out: Array<{ override: Override; why: string }> = [];
+  for (const o of overrides) {
+    if (instances.some((inst) => layersFor(inst.family, library).some((layer) => overrideFits(o, inst, layer, library)))) continue;
+    const tagged = instances.filter((i) => i.tag === o.tag);
+    const ofFamily = tagged.filter((i) => !o.family || i.family === o.family);
+    const why = o.tag === PROJECT_INSTANCE.tag ? "the project's own records follow its settings (the project variables), not an override"
+      : !tagged.length ? `no unit is tagged "${o.tag}"`
+        : !ofFamily.length ? `no ${o.family} is tagged "${o.tag}" (${[...new Set(tagged.map((i) => i.family))].join(", ")} is)`
+          : o.layer && !ofFamily.some((i) => layersFor(i.family, library).includes(o.layer!)) ? `"${o.tag}" has no ${o.layer} layer`
+            : `the library offers ${o.assembly?.id ?? "that typical"} in no layer of "${o.tag}"${o.layer ? ` (${o.layer})` : ""}`;
+    out.push({ override: o, why });
+  }
+  return out;
+}
+
+/** The override a unit's record takes in a layer: one naming its family
+ * before one naming none (AS-43), and of those, an exclusion before a
+ * choice, wherever each sits: an excluded unit stays excluded until its
+ * exclusion is removed, its earlier choices kept (AS-44). Otherwise the
+ * first, as before. */
+export function effectiveOverride(overrides: readonly Override[], inst: Pick<Instance, "tag" | "family">, layer: string, library: readonly AssemblyDefinition[]): Override | undefined {
+  const rank = (o: Override) => (o.family === inst.family ? 0 : 2) + (o.exclude ? 0 : 1);
+  return overrides.filter((o) => overrideFits(o, inst, layer, library)).reduce<Override | undefined>((best, o) => (!best || rank(o) < rank(best) ? o : best), undefined);
+}
+
+/** What an override sets that no record takes (AS-49), each with why, so
+ * none of it is dropped silently: an option or variable its unit's typical
+ * has no such id for (a typo over MCP; a typical chosen after it, without
+ * it), any of them while the unit has no typical, and a whole override that
+ * another for the same unit and layer decides instead. An id counts as
+ * taken where any record the override decides has it. One the unit's
+ * exclusion sets aside is not named: it applies again once the exclusion is
+ * removed (AS-44); one that fits no unit is unmatchedOverrides'. */
+export function ignoredOverrideParts(applications: readonly ApplicationRecord[], library: readonly AssemblyDefinition[], overrides: readonly Override[]): Array<{ override: Override; options: string[]; variables: string[]; why: string }> {
+  const out: Array<{ override: Override; options: string[]; variables: string[]; why: string }> = [];
+  for (const o of overrides) {
+    if (o.exclude) continue;
+    const decided: ApplicationRecord[] = [], whys: string[] = [];
+    let setAside = false;
+    for (const a of applications) {
+      if (a.instance.tag === PROJECT_INSTANCE.tag || !overrideFits(o, a.instance, a.layer, library)) continue;
+      const winner = effectiveOverride(overrides, a.instance, a.layer, library);
+      if (winner === o) decided.push(a);
+      else if (winner?.exclude) setAside = true;
+      else whys.push(`another override for ${a.instance.tag} (${a.layer}) decides it`);
+    }
+    if (setAside || (!decided.length && !whys.length)) continue;
+    // A record's options and variables are its typical's own.
+    const options = Object.keys(o.options ?? {}).filter((k) => !decided.some((a) => k in a.options));
+    const variables = Object.keys(o.variables ?? {}).filter((k) => !decided.some((a) => k in a.variables));
+    if (options.length || variables.length) {
+      const ids = [...options.map((k) => `option ${k}`), ...variables.map((k) => `variable ${k}`)].join(", ");
+      for (const a of decided) {
+        const unit = `${a.instance.tag} (${a.layer})`;
+        whys.push(a.assembly ? `${a.assembly.id}@${a.assembly.version} has no ${ids}`
+          : a.status === "not_in_scope" ? `${unit} is out of scope`
+            : a.status === "unresolved" ? `no typical is chosen for ${unit} yet`
+              : o.assembly ? `the library has no ${o.assembly.id}${o.assembly.version ? `@${o.assembly.version}` : ""}`
+                : `no typical applies to ${unit}`);
+      }
+    }
+    if (options.length || variables.length || !decided.length) out.push({ override: o, options, variables, why: [...new Set(whys)].join("; ") });
+  }
+  return out;
+}
+
+/** The settings no part of the library reads, each with why (AS-50), so
+ * none is kept silently: a project variable no typical takes from the
+ * project, a partner default for an id no typical has (or, for an option,
+ * one that is not true or false), a hook-up switch no line names, and a
+ * responsibility edit for a role no line has, or an activity or party the
+ * matrix does not know. A partner default keyed "<assembly id>.<id>" is
+ * read by that typical's own options and variables. */
+export function unreadSettings(library: readonly AssemblyDefinition[], settings: ProjectSettings = {}): Array<{ key: string; why: string }> {
+  const out: Array<{ key: string; why: string }> = [];
+  const lines = library.flatMap((d) => d.lines);
+  const fromProject = new Set(library.flatMap((d) => d.variables.flatMap((v) => (v.from?.startsWith("project.") ? [v.from.slice(8)] : []))));
+  for (const k of Object.keys(settings.variables ?? {})) {
+    if (!fromProject.has(k)) out.push({ key: `variables.${k}`, why: `no typical takes project.${k}` });
+  }
+  for (const [k, value] of Object.entries(settings.partnerDefaults ?? {})) {
+    const dot = k.lastIndexOf(".");
+    const owner = dot > 0 && library.some((d) => d.id === k.slice(0, dot)) ? k.slice(0, dot) : null;
+    const id = owner ? k.slice(dot + 1) : k;
+    const defs = owner ? library.filter((d) => d.id === owner) : library;
+    const option = defs.some((d) => d.options.some((o) => o.id === id));
+    const variable = defs.some((d) => d.variables.some((v) => v.id === id));
+    if (!option && !variable) out.push({ key: `partnerDefaults.${k}`, why: owner ? `${owner} has no option or variable ${id}` : `no typical has an option or variable ${id}` });
+    else if (!variable && typeof value !== "boolean") out.push({ key: `partnerDefaults.${k}`, why: `${id} is an option: its default is true or false` });
+  }
+  const switches = new Set(lines.flatMap((l) => (l.profile_switch ? [l.profile_switch] : [])));
+  for (const k of Object.keys(settings.profile ?? {})) {
+    if (!switches.has(k)) out.push({ key: `profile.${k}`, why: `no line has the switch ${k}` });
+  }
+  const roles = new Set(lines.map((l) => l.role.id));
+  for (const [role, cells] of Object.entries(settings.responsibility ?? {})) {
+    if (!roles.has(role)) { out.push({ key: `responsibility.${role}`, why: `no line has the role ${role}` }); continue; }
+    for (const [activity, party] of Object.entries(cells ?? {})) {
+      if (!(ACTIVITIES as readonly string[]).includes(activity)) out.push({ key: `responsibility.${role}.${activity}`, why: `the matrix's activities are ${ACTIVITIES.join(", ")}` });
+      else if (!(PARTIES as readonly string[]).includes(String(party))) out.push({ key: `responsibility.${role}.${activity}`, why: `${party} is no party of the matrix (${PARTIES.join(", ")})` });
+    }
+  }
+  return out;
+}
+
+/** Choose and expand every unit in every layer the library offers its
+ * family: instances in tag order, layers in name order, so the result does
+ * not depend on the order they arrive in. */
+export function expandAll(
+  instances: readonly Instance[],
+  library: readonly AssemblyDefinition[],
+  settings: ProjectSettings = {},
+  overrides: readonly Override[] = [],
+  evidence: Readonly<Record<string, DrawingEvidence>> = {},
+): { applications: ApplicationRecord[]; lines: ExpandedLine[] } {
+  const sorted = [...instances].sort((a, b) => a.tag.localeCompare(b.tag) || a.family.localeCompare(b.family));
+  const applications: ApplicationRecord[] = [];
+  const lines: ExpandedLine[] = [];
+  for (const inst of sorted) {
+    for (const layer of layersFor(inst.family, library)) {
+      const override = effectiveOverride(overrides, inst, layer, library);
+      const app = selectAssembly(inst, library, settings, override, layer);
+      applications.push(app);
+      lines.push(...expandApplication(app, inst, library, settings, evidence[inst.tag]));
+    }
+  }
+  // Project assemblies, once each, after the units.
+  for (const app of selectProjectAssemblies(library, settings)) {
+    applications.push(app);
+    const def = library.find((a) => a.id === app.assembly?.id && a.version === app.assembly?.version);
+    const inst = { ...PROJECT_INSTANCE, family: def ? familiesOf(def)[0] : "project" };
+    lines.push(...expandApplication(app, inst, library, settings).map((l) => ({ ...l, family: "project" })));
+  }
+  return { applications, lines };
+}
+
+export type { AssemblyLine };

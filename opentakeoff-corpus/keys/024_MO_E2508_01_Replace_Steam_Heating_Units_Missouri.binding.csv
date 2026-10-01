@@ -1,0 +1,13 @@
+# 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's sheets (PDF text layer), never pipeline output: no control-intent code
+# had run on this held-out document. One row per (keyed instance, governing control packet): the control detail,
+# schematic, sequence section or points schedule that decides the unit's BAS scope and options. packet_title is
+# the title as printed (a line break joined by a space). binding: tag · list_range · cross_reference ·
+# family_detail · semantic (as in the dev keys). packet "none": no control packet governs the instance.
+# Population: every instance of keys/024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.typicals.csv. Project-wide general controls notes and a schedule's own
+# notes are not packets. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-101,RTU,,none,,"no sequence, control diagram or points list: the RTU schedule's notes and the plan keynotes carry the controls"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-102,RTU,,none,,"no sequence, control diagram or points list: the RTU schedule's notes and the plan keynotes carry the controls"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-103,RTU,,none,,"no sequence, control diagram or points list: the RTU schedule's notes and the plan keynotes carry the controls"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-104,RTU,,none,,"no sequence, control diagram or points list: the RTU schedule's notes and the plan keynotes carry the controls"

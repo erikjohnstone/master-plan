@@ -59,6 +59,12 @@ as resolved drawing truth or its `calculated` status as project completeness.
 The additive `bas_point_lists` record retains listed observations with source
 versions/pages, original cells, sparse/uninterpreted columns and supported
 controller notes. It does not establish installed quantity or field wiring.
+Its `rule_version` names the reading (`point_observations_2` reads standard
+point lists' function, fail-mode and alarm columns, "■" marks and direction/
+signal I/O headers, checks a printed TOTALS row instead of counting it, and
+reads the rows a list prints that the table extraction dropped from the page
+text, each flagged SOURCE_TEXT_ROW_RECOVERED); a saved result is re-checked
+under the rule that read it. `bas_math` counts the same matrices' rows.
 Do not substitute alarm/trend flags for I/O, or an unobserved cell for a verified
 zero. Its unavailable state is separate from math-policy failure. Durable
 equipment assignment, review and snapshot records are part of the shared workflow;
@@ -233,7 +239,7 @@ client that honors `tools/list_changed`; leave it unset otherwise.
 
 ## What the agent gets
 
-Fifty-eight tools, in the order an agent tends to reach for them:
+Sixty-four tools, in the order an agent tends to reach for them:
 
 - **Open and orient**—`load_plan`, `sheet_info` (including the sheet's PDF
   layer table—Optional Content Groups with a classified role, confidence,
@@ -290,7 +296,33 @@ Fifty-eight tools, in the order an agent tends to reach for them:
   `status` (matched / schedule-only / plan-only / …), citing both the
   schedule row and the plan ink. Report both quantities and the status per
   line, never the schedule count alone—the same discipline as `export_report`
-  below.
+  below. A tag found drawn as text only, with no symbol verified, is AMBIGUOUS
+  with each occurrence in `plan_tag_cites`; every other drawn occurrence of a
+  row's mark it does not count (the same unit on another view, bare tag text,
+  a demolition plan) is in `plan_other_cites`, a link and never a quantity; and
+  `unscheduled_units` is the short review list of drawn marks no schedule lists
+  that read as a scheduled family's unit, beside the full `unscheduled_tags`.
+  For a controls estimate, `apply_assemblies` then proposes each scheduled
+  unit's controls typical and mechanical hook-up (options, variables, lines,
+  each citing its schedule row and library rule) on the same shared path as
+  the Takeoff panel; its `report.exceptions` come first, and an unresolved
+  unit names what it waits for rather than guessing. It also reads the control
+  drawings bound to each unit (`control_readings`): a reading applies only
+  where two readers agree, and `control` lists the rest as proposals or
+  unresolved. `export_dir` writes the
+  project's CSV set ([ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md)), and
+  `export_scope` narrows its lines to one party. `settings.hookup_defaults`
+  and `settings.responsibility_preset` start from the starter's hook-up
+  profile and responsibility presets. `library_path` takes a partner library
+  as JSON or as the panel's library CSV, and its own prices and hours come
+  back labelled partner-entered. `project_questions` lists the few project
+  questions whose answer changes something here (BAS scope, owner criteria,
+  existing units' controls, unscheduled speed, packaged pumps), each with
+  the lines and records it changes and, where printed text proposes one, a
+  pre-fill with its quotes. Ask the estimator, then record the answer they
+  give with `answer_project_question`: an append-only journal event, origin
+  `agent_proposal`, which `apply_assemblies` applies and `export_takeoff`
+  saves. Never answer from the pre-fill yourself.
 - **Measure**—`one_click`, `detect_rooms` (both take `layers {include,
   exclude}` to override the sheet's stated layer roles for a call),
   `measure_polygon`, `measure_line`, `measure_surface` (wall SF: an open run

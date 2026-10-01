@@ -1,0 +1,158 @@
+# 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-001, M-801 and E-601 (pages 10, 21 and 27) of the VAMC Durham chiller replacement for AHU 1 & 2 (Above Group), the tables the second tier's seed drew for its CONDENSING_UNIT, VRF_INDOOR, VRF_OUTDOOR, AIR_COOLED_CHILLER, HEAT_RECOVERY_CHILLER and PUMP strata.
+#   047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#10 | -CONDENSING UNIT | CONDENSING_UNIT | none — the HVAC ABBREVIATIONS legend ("CU -CONDENSING UNIT"); no row is a condensing unit | render: page 10 overview at 40 dpi; both text-layer hits for CONDENSING UNIT cropped at 3x (crops 1460,700,500,100 and 1460,190,500,60), each an abbreviations-legend line
+#   047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 | VRF INDOOR UNIT SCHEDULE | VRF_INDOOR | all 2 printed rows | render: page 21 crop 2212,1344,688,161 at 3x in 3 tiles (UNIT NO. column repeated), notes included; second read at 4x (crops 2212,1374,688,50 and 2212,1398,688,32) of both rows, every cell
+#   047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 | VRF OUTDOOR UNIT SCHEDULE | VRF_OUTDOOR | all 1 printed row | render: page 21 crop 2275,1555,625,220 at 3x in 3 tiles (UNIT NO. column repeated), notes included; second read at 4x (crop 2275,1585,625,49) of the row, every cell
+#   047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 | AIR COOLED WATER CHILLER SCHEDULE | AIR_COOLED_CHILLER | all 2 printed rows | render: page 21 crop 1488,148,1412,207 at 3x in 6 tiles (MARK column repeated), notes included; second read at 4x (crops 1488,178,1412,70 and 1488,226,1412,32) of both rows, every cell
+#   047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#27 | EQUIPMENT SCHEDULE | HEAT_RECOVERY_CHILLER | none — an electrical equipment connection schedule; its chillers CH-1 and CH-2 are air-cooled water chillers, and no row is a heat recovery chiller | render: page 27 overview at 40 dpi; crop 268,95,1088,215 at 3x in 4 tiles (IDENTIFICATION column repeated), every row's EQUIPMENT NAME read
+#   047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 | PUMP SCHEDULE | PUMP | all 3 printed rows | render: page 21 crop 1595,412,1305,194 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 1595,455,1305,87) of all 3 rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Basis of design, weights and dimensions, MCA/MOP, efficiencies (SEER2, HSPF2, IPLV, EER), ambient and fluid temperatures, compressor and condenser-fan data, refrigerant, pressure drops, impeller and efficiency, discharge size, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU: 6 table(s), 8 instance(s), 133 keyed attribute value(s) (61 printed, 72 empty), 2 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#10,-CONDENSING UNIT,,CONDENSING_UNIT,,,,,"no CONDENSING_UNIT instance printed: none — the HVAC ABBREVIATIONS legend (""CU -CONDENSING UNIT""); no row is a condensing unit"
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,cfm,512,cfm,CFM (MAX.),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,cooling_mbh,15.4,MBH,TOTAL COOLING CAP. (MBH),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,cooling_tons,,tons,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,heating_mbh,17.1,MBH,TOTAL HEATING CAP. (MBH),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,hw_gpm,,gpm,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,hw_ewt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,hw_lwt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,chw_gpm,,gpm,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,chw_ewt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,chw_lwt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,motor_hp,,hp,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,eh_kw,,kW,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,conn_in,,in,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,bas_interface,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,volts,208,V,ELECTRICAL DATA / V,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-1,VRF_INDOOR,phase,1,,ELECTRICAL DATA / PH,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,cfm,512,cfm,CFM (MAX.),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,cooling_mbh,15.4,MBH,TOTAL COOLING CAP. (MBH),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,cooling_tons,,tons,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,heating_mbh,17.1,MBH,TOTAL HEATING CAP. (MBH),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,hw_gpm,,gpm,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,hw_ewt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,hw_lwt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,chw_gpm,,gpm,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,chw_ewt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,chw_lwt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,motor_hp,,hp,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,eh_kw,,kW,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,conn_in,,in,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,bas_interface,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,volts,208,V,ELECTRICAL DATA / V,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF INDOOR UNIT SCHEDULE,IDU-2,VRF_INDOOR,phase,1,,ELECTRICAL DATA / PH,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,cfm,,cfm,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,cooling_mbh,,MBH,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,cooling_tons,3,tons,NOM. TONS,printed '3.0'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,heating_mbh,,MBH,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,hw_gpm,,gpm,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,hw_ewt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,hw_lwt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,chw_gpm,,gpm,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,chw_ewt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,chw_lwt_f,,F,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,motor_hp,,hp,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,eh_kw,,kW,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,conn_in,,in,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,bas_interface,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,volts,208,V,ELECTRICAL DATA / V,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,VRF OUTDOOR UNIT SCHEDULE,ODU-1,VRF_OUTDOOR,phase,1,,ELECTRICAL DATA / PH,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,condenser,air,,TABLE TITLE,title printed 'AIR COOLED WATER CHILLER SCHEDULE'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,tons,117,tons,NOMINAL CAPACITY (TONS),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_gpm,342.4,gpm,WATER DATA / FLOW (GPM),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,44,F,WATER DATA / EWT (F°),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,34,F,WATER DATA / LWT (F°),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,kw_input,162.9,kW,ELECTRICAL DATA / TOTAL POWER (KW),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,bas_interface,BUILDING AUTOMATION SYSTEM,,NOTE 7,note 7: 'CONTROLLER SHALL INTERFACE WITH BUILDING AUTOMATION SYSTEM.'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,volts,460,V,ELECTRICAL DATA / V/PH/HZ: volts part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL DATA / V/PH/HZ: phase part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,condenser,air,,TABLE TITLE,title printed 'AIR COOLED WATER CHILLER SCHEDULE'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,tons,117,tons,NOMINAL CAPACITY (TONS),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_gpm,342.4,gpm,WATER DATA / FLOW (GPM),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_ewt_f,44,F,WATER DATA / EWT (F°),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_lwt_f,34,F,WATER DATA / LWT (F°),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,kw_input,162.9,kW,ELECTRICAL DATA / TOTAL POWER (KW),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,bas_interface,BUILDING AUTOMATION SYSTEM,,NOTE 7,note 7: 'CONTROLLER SHALL INTERFACE WITH BUILDING AUTOMATION SYSTEM.'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,volts,460,V,ELECTRICAL DATA / V/PH/HZ: volts part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,AIR COOLED WATER CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL DATA / V/PH/HZ: phase part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#27,EQUIPMENT SCHEDULE,,HEAT_RECOVERY_CHILLER,,,,,"no HEAT_RECOVERY_CHILLER instance printed: none — an electrical equipment connection schedule; its chillers CH-1 and CH-2 are air-cooled water chillers, and no row is a heat recovery chiller"
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,service,CHILLED WATER,,SYSTEM,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,gpm,275,gpm,FLUID DATA / FLOW (GPM),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,head_ft,116,ft,FLUID DATA / HEAD FT,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,motor_hp,25,hp,ELECTRICAL DATA / MOTOR HP,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,rpm,1800,rpm,ELECTRICAL DATA / MOTOR RPM,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,vfd,yes,,ELECTRICAL DATA / VFD YES/NO,printed 'YES'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,pump_arrangement,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,glycol_pct,40,%,FLUID DATA / FLUID TYPE: the glycol percentage it prints,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,conn_in,4,in,PIPING DATA / SUCT. SIZE (IN.),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,volts,460,V,ELECTRICAL DATA / V/PH/HZ: volts part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-1,PUMP,phase,3,,ELECTRICAL DATA / V/PH/HZ: phase part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,service,CHILLED WATER,,SYSTEM,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,gpm,275,gpm,FLUID DATA / FLOW (GPM),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,head_ft,116,ft,FLUID DATA / HEAD FT,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,motor_hp,25,hp,ELECTRICAL DATA / MOTOR HP,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,rpm,1800,rpm,ELECTRICAL DATA / MOTOR RPM,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,vfd,yes,,ELECTRICAL DATA / VFD YES/NO,printed 'YES'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,pump_arrangement,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,glycol_pct,40,%,FLUID DATA / FLUID TYPE: the glycol percentage it prints,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,conn_in,4,in,PIPING DATA / SUCT. SIZE (IN.),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,volts,460,V,ELECTRICAL DATA / V/PH/HZ: volts part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-2,PUMP,phase,3,,ELECTRICAL DATA / V/PH/HZ: phase part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,building,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,floor,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,area_served,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,qty,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,service,CHILLED WATER,,SYSTEM,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,gpm,275,gpm,FLUID DATA / FLOW (GPM),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,head_ft,116,ft,FLUID DATA / HEAD FT,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,motor_hp,25,hp,ELECTRICAL DATA / MOTOR HP,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,rpm,1800,rpm,ELECTRICAL DATA / MOTOR RPM,
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,vfd,yes,,ELECTRICAL DATA / VFD YES/NO,printed 'YES'
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,pump_arrangement,,,,not printed
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,glycol_pct,40,%,FLUID DATA / FLUID TYPE: the glycol percentage it prints,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,conn_in,4,in,PIPING DATA / SUCT. SIZE (IN.),
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,volts,460,V,ELECTRICAL DATA / V/PH/HZ: volts part,author's reading of the printed row
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,P-3,PUMP,phase,3,,ELECTRICAL DATA / V/PH/HZ: phase part,author's reading of the printed row

@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, arbitrateTaggedSweepModels, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, splitHyphenTagOcc, type Point, type RoomSweepInstance, type SweepSheetMatch, type SweepWithheld, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, arbitrateTaggedSweepModels, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, keptIndividualView, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, splitHyphenTagOcc, type Point, type RoomSweepInstance, type SweepSheetMatch, type SweepWithheld, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, scheduleCountMultiplier as typicalCountMultiplier } from "../src/lib/schedulePlanReconcile.mjs";
 
 const SYMBOL: [number, number, number, number][] = [
@@ -291,6 +291,35 @@ test("dedupeCrossDisciplineRoomViews: same tag, same room, two different-discipl
   assert.equal(redundant[0].keptDiscipline, "M");
   assert.equal(redundant[0].keptSheet, "M3.0");
   assert.match(redundant[0].room, /120/);
+});
+
+// AS-100: overlays of one floor (a piping plan, its phase plan, the
+// ventilation plan) print a unit's tag where it was, while the matched symbol
+// geometry may be anchored at another point of the unit: 040_IL's SS-1 tags
+// sit within 4 px of each other on three sheets, its matched geometry up to
+// 120 px apart. The tag's own position registers the redraw.
+test("dedupeCrossDisciplineRoomViews: the same tag printed at the same spot on two sheets of a floor is one unit, wherever its geometry was matched (AS-100)", () => {
+  const withTag = (id: number, sheet: string, at: Point, tagAt: Point, level: string | null = null): RoomSweepInstance<number> =>
+    ({ ...inst(id, sheet, "M", at, []), tagAt, level });
+  // two units, each tagged at the same spot on both sheets; geometry 118 px and 42 px apart
+  const redundant = dedupeCrossDisciplineRoomViews([
+    withTag(1, "M200.0", [2492, 1097], [2460, 978]), withTag(2, "M200.0", [2560, 980], [2544, 978]),
+    withTag(3, "M200.2", [2507, 1108], [2456, 978]), withTag(4, "M200.2", [2589, 951], [2542, 978]),
+  ]);
+  assert.deepEqual(redundant.map((r) => [r.id, r.keptSheet]).sort(), [[3, "M200.0"], [4, "M200.0"]]);
+  // without the tags the geometry alone registers one pair of the two
+  const geometryOnly = dedupeCrossDisciplineRoomViews([
+    inst(1, "M200.0", "M", [2492, 1097], []), inst(2, "M200.0", "M", [2560, 980], []),
+    inst(3, "M200.2", "M", [2507, 1108], []), inst(4, "M200.2", "M", [2589, 951], []),
+  ]);
+  assert.deepEqual(geometryOnly.map((r) => r.id), [3]);
+  // negative controls: two known different levels never merge; tags far apart are two units
+  assert.equal(dedupeCrossDisciplineRoomViews([
+    withTag(1, "M101", [2492, 1097], [2460, 978], "1"), withTag(2, "M102", [2507, 1108], [2460, 978], "2"),
+  ]).length, 0);
+  assert.equal(dedupeCrossDisciplineRoomViews([
+    withTag(1, "M200.0", [1000, 1000], [1000, 950]), withTag(2, "M200.2", [3000, 2000], [3000, 1950]),
+  ]).length, 0);
 });
 
 test("dedupeCrossDisciplineRoomViews: negative control — same tag, DIFFERENT rooms, different disciplines — both real, both kept", () => {
@@ -658,4 +687,65 @@ test("repeatable air-device placement quorum requires set-wide and per-sheet evi
   assert.equal(hasRepeatableAirDevicePlacementQuorum([9], 9), false,
     "a small one-sheet population does not manufacture the set-wide quorum");
   assert.equal(hasRepeatableAirDevicePlacementQuorum([], 100), false);
+});
+
+// AS-104: a unit drawn on several sheets counts on its own trade's sheet.
+test("dedupeCrossDisciplineRoomViews: the unit's own trade keeps a redraw another trade's sheet ties (AS-104)", () => {
+  // itd-d1-lab's plumbing roof plan tags CU-1 as background to its piping;
+  // the key string "#24" sorted before "#6" and kept the plumbing view.
+  const instances = [
+    { ...inst(1, "set.pdf#6", "M", NEAR_ROOM, [ROOM]), ord: 6 },
+    { ...inst(2, "set.pdf#24", "P", NEAR_ROOM, [ROOM]), ord: 24 },
+  ];
+  const own = dedupeCrossDisciplineRoomViews(instances, "M");
+  assert.equal(own.length, 1);
+  assert.equal(own[0].keptSheet, "set.pdf#6");
+  // A plumbing schedule's unit keeps its plumbing view.
+  assert.equal(dedupeCrossDisciplineRoomViews(instances, "P")[0].keptSheet, "set.pdf#24");
+  // With no trade to prefer, page order decides a tie, never the key string.
+  assert.equal(dedupeCrossDisciplineRoomViews(instances)[0].keptSheet, "set.pdf#6");
+});
+
+test("keptIndividualView: an individually marked unit counts on its own trade's view, a thermostat's label after its other views (AS-104, AS-105)", () => {
+  // 004_MO's rooftop units: the plumbing roof plan's gas piping (p26), the
+  // mechanical floor plan lettering each at its thermostat (p36), the
+  // mechanical roof plan drawing it (p37)
+  const plumbingRoof = { sheet: "p26", trade: "P", score: 1, ord: 26 };
+  const floorThermostat = { sheet: "p36", trade: "M", sensorLabel: true, score: 1, ord: 36 };
+  const mechanicalRoof = { sheet: "p37", trade: "M", score: 1, ord: 37 };
+  assert.equal(keptIndividualView([plumbingRoof, floorThermostat, mechanicalRoof], "M")?.sheet, "p37");
+  // a thermostat's label is still the unit's view where no other verifies
+  assert.equal(keptIndividualView([plumbingRoof, floorThermostat], "M")?.sheet, "p36");
+  assert.equal(keptIndividualView([floorThermostat], "M")?.sheet, "p36");
+  // then geometry, then the earlier page; no trade known keeps page order
+  assert.equal(keptIndividualView([{ sheet: "a", trade: "M", score: 0.8, ord: 1 }, { sheet: "b", trade: "M", score: 0.9, ord: 2 }], "M")?.sheet, "b");
+  assert.equal(keptIndividualView([mechanicalRoof, { sheet: "p5", trade: "M", score: 1, ord: 5 }], null)?.sheet, "p5");
+});
+
+// AS-107: 011_IL prints its heat pumps "HP 12-1"; its zoning plan (p15) letters
+// each at the thermostat it serves as two runs, "HP 12" and "-1", read only
+// under the row's printed spelling, before the duct plan (p16) drawing it.
+test("keptIndividualView: a view read only under the row's printed spelling ranks after a view read under the key (AS-107)", () => {
+  const zoning = { sheet: "p15", trade: "M", printed: true, score: 1, ord: 15 };
+  const duct = { sheet: "p16", trade: "M", score: 1, ord: 16 };
+  const power = { sheet: "p24", trade: "E", score: 1, ord: 24 };
+  assert.equal(keptIndividualView([zoning, duct, power], "M")?.sheet, "p16");
+  // still the unit's view where no view is read under the key
+  assert.equal(keptIndividualView([zoning, power], "M")?.sheet, "p15");
+  assert.equal(keptIndividualView([zoning], "M")?.sheet, "p15");
+  // own trade first, and a thermostat's label after a printed-only view
+  assert.equal(keptIndividualView([{ ...power, printed: true }, { ...duct, sensorLabel: true }], "M")?.sheet, "p16");
+  assert.equal(keptIndividualView([zoning, { ...duct, sensorLabel: true }], "M")?.sheet, "p15");
+});
+
+test("dedupeCrossDisciplineRoomViews: a redraw read only under the row's printed spelling yields to one read under the key (AS-107)", () => {
+  const zoning = { ...inst(1, "set.pdf#15", "M", NEAR_ROOM, [ROOM]), ord: 15, printed: true };
+  const duct = { ...inst(2, "set.pdf#16", "M", NEAR_ROOM, [ROOM]), ord: 16 };
+  // same trade and count: the earlier page kept the zoning plan's label
+  const redundant = dedupeCrossDisciplineRoomViews([zoning, duct], "M");
+  assert.deepEqual(redundant.map((r) => [r.id, r.keptSheet]), [[1, "set.pdf#16"]]);
+  // own trade still decides first; without the flag page order decides
+  const plumbing = { ...inst(3, "set.pdf#24", "P", NEAR_ROOM, [ROOM]), ord: 24 };
+  assert.deepEqual(dedupeCrossDisciplineRoomViews([zoning, plumbing], "M").map((r) => r.keptSheet), ["set.pdf#15"]);
+  assert.deepEqual(dedupeCrossDisciplineRoomViews([{ ...zoning, printed: undefined }, duct], "M").map((r) => r.keptSheet), ["set.pdf#15"]);
 });

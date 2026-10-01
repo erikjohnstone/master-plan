@@ -1,0 +1,287 @@
+# 045_FL_VA_Project_516_21_107_EHRM_Infrastructure.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/045_FL_VA_Project_516_21_107_EHRM_Infrastructure.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M501 (page 21) of the VA Lee County HCC EHRM infrastructure upgrades, Cape Coral FL (Toland Mizell Molnar), the table the second tier's seed drew for its FCU stratum.
+#   045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21 | CHILLED WATER FAN COIL UNIT SCHEDULE | FCU | all 9 printed rows | render: page 21 title and notes crop 1320,600,860,120 at 3x; crop 1320,715,860,230 at 3x in 2 tiles (MARK column repeated); second read at 4x (crops 1320,780,860,48 and 1320,822,860,32 and 1320,900,860,48) of FCU1-1-1, FCU1-3-4, FCU1-5-3, FCU1-7-2, FCU2-6-19, FCU3-1-17 and FCU4-1-24, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Layout basis (manufacturer, model), outside air, external static pressure, sensible capacity, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 045_FL_VA_Project_516_21_107_EHRM_Infrastructure: 1 table(s), 9 instance(s), 270 keyed attribute value(s) (63 printed, 207 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-1-1,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-3-4,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-5-3,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,cfm,800,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_gpm,5,gpm,COOLING COIL / FLOW (GPM),printed '5.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_wpd_ft,5,ft,COOLING COIL / MAX PD (FT-H2O),printed '5.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_mbh,23400,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '23400.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU1-7-2,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-1-7,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-4-16,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU2-6-19,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU3-1-17,FCU,phase,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,building,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,floor,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,area_served,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,qty,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,pipes,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,cfm,1000,cfm,AIR SIDE / SUPPLY AIR (CFM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,motor_hp,,hp,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,fan_speeds,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,ecm,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,cooling_type,chw,,TABLE TITLE,"title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_gpm,6.9,gpm,COOLING COIL / FLOW (GPM),
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_ewt_f,45,F,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_wpd_ft,6,ft,COOLING COIL / MAX PD (FT-H2O),printed '6.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_mbh,31000,BTU/H,COOLING COIL / TOTAL CAPACITY (BTU/H),printed '31000.0'
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_rows,4,,NOTE 3,"note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'"
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,chw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,heating_type,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_gpm,,gpm,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_ewt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_lwt_f,,F,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_wpd_ft,,ft,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_mbh,,MBH,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_rows,,,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_conn_in,,in,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,hw_glycol_pct,,%,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,eh_kw,,kW,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,volts,,V,,not printed
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU4-1-24,FCU,phase,,,,not printed

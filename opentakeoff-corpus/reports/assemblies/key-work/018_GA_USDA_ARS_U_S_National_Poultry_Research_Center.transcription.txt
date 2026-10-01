@@ -1,0 +1,111 @@
+# 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M-601 (PDF page 13) at 3x, read by eye on 2026-09-23.
+# The pipeline's output for this sheet was not consulted. Tables are the ones the
+# WP0.2 draw (seed 20260923) named for this held-out document.
+SET 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center
+SEED 20260923
+SCOPE Sheet M-601 (page 13) of the U.S. National Poultry Research Center room P111 renovation (USDA ARS Southeast Area), the tables drawn for this document.
+EXCLUDES Basis of design, type, sones, FLA/MCA/MOP, weight, filters, air-side temperatures, the heat pump's source-water side, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# EXHAUST FAN SCHEDULE: notes 1 "INSTALL IN ACCORDANCE WITH MANUFACTURER'S PUBLISHED
+# INSTALLATION INSTRUCTIONS." and 2 "PROVIDE WITH GRAVITY BACKDRAFT DAMPER." CONTROL
+# INTERLOCKS prints SWITCH "NO" and OTHER AS NOTED "VARIABLE"; control keys the latter
+# as printed.
+TABLE
+sheet: 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13
+title: EXHAUST FAN SCHEDULE
+family: FAN
+render: page 13 crop 135,408,1508,215 at 3x in 4 tiles (MARK column repeated), notes in the same tiles; second read at 4x (crops 455,455,75,120 and 725,455,75,120 and 795,455,140,120) of EF-1 airflow, RPM and power HP
+rows: all 1 printed row
+col: MARK => tag
+col: BASIS OF DESIGN => -
+col: TYPE => -
+col: FAN DATA / AIRFLOW CFM => cfm
+col: FAN DATA / S.P. IN.WC. => esp_in
+col: FAN DATA / DRIVE => drive
+col: FAN DATA / FAN TYPE => -
+col: FAN DATA / RPM => rpm
+col: FAN DATA / MAX SONES => -
+col: ELEC. DATA / POWER HP => motor_hp
+col: ELEC. DATA / VOLTS/ PHASE => -
+col: [ELEC. DATA / VOLTS/ PHASE: volts part] => volts
+col: [ELEC. DATA / VOLTS/ PHASE: phase part] => phase
+col: ELEC. DATA / FLA => -
+col: ELEC. DATA / MCA => -
+col: ELEC. DATA / MOP => -
+col: CONTROL INTERLOCKS / SWITCH => -
+col: CONTROL INTERLOCKS / OTHER AS NOTED => control
+col: OPER. WEIGHT (LBS) => -
+col: REMARKS => -
+grid:
+EF-1 | GREENHECK SQ-70-VG | INLINE | 70 | 0.2 | direct (DIRECT) | CENT. | 1164 | 1.9 | 1/15 | 115/1 | 115 | 1 | 1.3 | 1.6 | 15 | NO | VARIABLE | 27 | SEE NOTES
+END
+
+# WATER SOURCE HEAT PUMP, printed in two parts. The drawn table is "WATER SOURCE HEAT
+# PUMP (PART 1 OF 2)" (the compile keeps the part suffix), so both TABLE blocks carry
+# that title (key-work README rule 8). Part 2 prints under "WATER SOURCE HEAT PUMP
+# (PART 2 OF 2)" directly below and has no MARK column; its one row is WSHP-1, as in
+# part 1. The WATER SIDE blocks are the unit's source/condenser loop (70.3 F in, 15
+# GPM), which is neither chilled nor hot water, so the vocabulary has no attribute for
+# them (catalogue: vocabulary gap). Part 2 notes (REMARKS: SEE NOTES) 1 "ALL UNITS TO
+# BE DOUBLE WALL WITH HINGED ACCESS DOORS.", 2 "PROVIDE UNITS WITH VARIABLE FREQUENCY
+# DRIVE(S) AND SINGLE POINT POWER CONNECTIONS. ...", 3 "PROVIDE SMOKE DETECTORS IN
+# SUPPLY AND RETURN DUCTS. ...", 4 "INTERLOCK AHU(S) VIA BAS TO DE-ENERGIZE ON ANY FIRE
+# ALARM/SMOKE DETECTION IN THE BUILDING." (a BAS interlock, not a printed interface),
+# 5 "PROVIDE DISPOSABLE MERV 13 FINAL FILTERS.", 6 "PROVIDE UNIT WITH CONDENSATE PUMP."
+TABLE
+sheet: 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13
+title: WATER SOURCE HEAT PUMP (PART 1 OF 2)
+family: HEAT_PUMP
+render: part 1, page 13 crop 135,992,1505,150 at 3x in 4 tiles (MARK column repeated); second read at 4x (crops 490,1035,80,110 and 805,1035,65,110) of total airflow and cooling total MBH
+rows: all 1 printed row
+col: MARK => tag
+col: BASIS OF DESIGN => -
+col: TYPE => -
+col: SERVES => area_served
+col: SUPPLY FAN / TOTAL AIRFLOW (CFM) => cfm
+col: SUPPLY FAN / OA AIRFLOW (TOTAL) => -
+col: SUPPLY FAN / HP (EACH) => motor_hp
+col: SUPPLY FAN / ESP (IN H2O) => -
+col: SUPPLY FAN / TSP (IN H2O) => -
+col: COOLING / CAPACITY / TOTAL MBH => cooling_mbh
+col: COOLING / CAPACITY / SENS MBH => -
+col: COOLING / AIR SIDE / EAT °F (DB/WB) => -
+col: COOLING / AIR SIDE / LAT °F (DB/WB) => -
+col: COOLING / WATER SIDE / FLUID => -
+col: COOLING / WATER SIDE / EWT (°F) => -
+col: COOLING / WATER SIDE / LWT (°F) => -
+col: COOLING / WATER SIDE / FLOW (GPM) => -
+col: COOLING / WATER SIDE / WPD (FT) => -
+grid:
+WSHP-1 | TRANE | VERTICAL | P121 & P121A | 3200 | 240 | 2.0 | 1.5 | 1.5 | 127.2 | 89.2 | 80.6/66.2 | 57/53.7 | WATER | 70.3 | 90.1 | 15.0 | 4.8
+END
+
+TABLE
+sheet: 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13
+title: WATER SOURCE HEAT PUMP (PART 1 OF 2)
+family: HEAT_PUMP
+render: part 2, printed as "WATER SOURCE HEAT PUMP (PART 2 OF 2)", page 13 crop 135,1206,1105,255 at 3x in 3 tiles, notes in the same tiles; second read at 4x (crops 140,1250,120,110 and 890,1250,90,110) of heating total MBH and volts/phase
+rows: all 1 printed row (no MARK column; the row is WSHP-1)
+col: [MARK: part 2 prints none; its one row is WSHP-1, as in part 1] => tag
+col: HEATING / CAPACITY / TOTAL MBH => heating_mbh
+col: HEATING / AIR SIDE / EAT °F (DB) => -
+col: HEATING / AIR SIDE / LAT °F (DB) => -
+col: HEATING / WATER SIDE / FLUID => -
+col: HEATING / WATER SIDE / EWT (°F) => -
+col: HEATING / WATER SIDE / LWT (°F) => -
+col: HEATING / WATER SIDE / FLOW (GPM) => -
+col: HEATING / WATER SIDE / WPD (FT) => -
+col: PRE / FINAL FILTERS => -
+col: ELECTRICAL / FLA => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOP => -
+col: ELECTRICAL / VOLTS/ PHASE => -
+col: [ELECTRICAL / VOLTS/ PHASE: volts part] => volts
+col: [ELECTRICAL / VOLTS/ PHASE: phase part] => phase
+col: OPER. WEIGHT (LBS) => -
+col: AIRFLOW MONITORING STATION LOCATION => -
+col: REMARKS => -
+grid:
+WSHP-1 | 126.1 | 56.8 | 105.8 | WATER | 70.3 | 56.8 | 15 | 4.8 | NONE/ MERV 13 | 18.70 | 20.65 | 25 | 460V/3PH | 460 | 3 | 857 | OA INTAKE DUCT | SEE NOTES
+END

@@ -1,0 +1,228 @@
+# 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M3.01 (page 11) of the Guaranteed Rate Field HVAC / AHU renovation, phase IX, Chicago IL (Elara Engineering), the tables the second tier's seed drew for its FCU and CONDENSING_UNIT strata.
+#   092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11 | FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU) | FCU | all 5 printed rows | render: page 11 crop 115,670,1651,285 at 3x in 4 tiles (TAG and QTY. columns repeated) and notes crop 115,950,1000,200 at 2x; second read at 3x (crop 215,760,1100,190) and 4x (crop 1180,760,586,190) of all 5 rows, every cell
+#   092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11 | C O N D E N S I N G U N I T S C H E D U L E ( C U ) | CONDENSING_UNIT | all 3 printed rows | render: page 11 crop 115,1195,1597,215 at 3x in 4 tiles (TAG column repeated) and notes crop 115,1405,1000,200 at 2x; second read at 3x (crop 115,1300,1600,110) of all 3 rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and models, orientation, weights and dimensions, fan speed, external static pressure, coil working pressure, air-side temperatures, sensible capacities, circuits, compressor and refrigerant, EER, refrigerant line sizes, FLA, MCA, MOCP, hertz, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation: 2 table(s), 8 instance(s), 210 keyed attribute value(s) (83 printed, 127 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,floor,LEVEL 200,,LOCATION names a level,printed 'LEVEL 200 SECTION 7'; author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,area_served,LEVEL 200 SECTION 7,,GENERAL DATA / SERVICE: the area the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,qty,1,,QTY.,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,pipes,2,,TABLE TITLE,title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,cfm,300,cfm,UNIT DATA / NOMINAL AIRFLOW (CFM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,fan_speeds,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,ecm,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,cooling_type,chw,,TABLE TITLE,"title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'; every row prints the chilled-water coil's water side (WATER FLOW, E.W.T. 44.0)"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_gpm,1.4,gpm,UNIT DATA / WATER FLOW (GPM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_ewt_f,44,F,COOLING DATA / E.W.T. (°F),printed '44.0'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_wpd_ft,8.6,ft,UNIT DATA / WATER PRESSURE DROP (FT. HD.),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_mbh,6.3,MBH,COOLING DATA / TOTAL CAP. (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_rows,4,,UNIT DATA / COIL ROWS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,chw_glycol_pct,30,%,NOTE 7,note 7 (every row's NOTES reads SEE BELOW): 'ALL UNITS SHALL BE SIZED FOR 30% ETHYLENE GLYCOL CONCENTRATION IN CHILLED WATER.'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,heating_type,electric,,"NOTE 3, for the unit it names: EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)",printed 'EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)'; author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_wpd_ft,,ft,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_rows,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,hw_glycol_pct,,%,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,volts,277,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-1,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,floor,LEVEL 200,,LOCATION names a level,printed 'LEVEL 200 SECTION 7'; author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,area_served,LEVEL 200 SECTION 7,,GENERAL DATA / SERVICE: the area the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,qty,1,,QTY.,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,pipes,2,,TABLE TITLE,title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,cfm,800,cfm,UNIT DATA / NOMINAL AIRFLOW (CFM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,fan_speeds,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,ecm,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,cooling_type,chw,,TABLE TITLE,"title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'; every row prints the chilled-water coil's water side (WATER FLOW, E.W.T. 44.0)"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_gpm,3.4,gpm,UNIT DATA / WATER FLOW (GPM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_ewt_f,44,F,COOLING DATA / E.W.T. (°F),printed '44.0'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_wpd_ft,1.79,ft,UNIT DATA / WATER PRESSURE DROP (FT. HD.),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_mbh,20.4,MBH,COOLING DATA / TOTAL CAP. (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_rows,7,,UNIT DATA / COIL ROWS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,chw_glycol_pct,30,%,NOTE 7,note 7 (every row's NOTES reads SEE BELOW): 'ALL UNITS SHALL BE SIZED FOR 30% ETHYLENE GLYCOL CONCENTRATION IN CHILLED WATER.'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,heating_type,,,"NOTE 3, for the unit it names: EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)",blank cell
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_wpd_ft,,ft,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_rows,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,hw_glycol_pct,,%,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,volts,277,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-2,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,floor,,,LOCATION names a level,blank cell
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,area_served,VISITORS CLUBHOUSE,,GENERAL DATA / SERVICE: the area the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,qty,1,,QTY.,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,pipes,2,,TABLE TITLE,title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,cfm,1000,cfm,UNIT DATA / NOMINAL AIRFLOW (CFM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,fan_speeds,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,ecm,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,cooling_type,chw,,TABLE TITLE,"title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'; every row prints the chilled-water coil's water side (WATER FLOW, E.W.T. 44.0)"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_gpm,5.3,gpm,UNIT DATA / WATER FLOW (GPM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_ewt_f,44,F,COOLING DATA / E.W.T. (°F),printed '44.0'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_wpd_ft,4.23,ft,UNIT DATA / WATER PRESSURE DROP (FT. HD.),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_mbh,24.4,MBH,COOLING DATA / TOTAL CAP. (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_rows,4,,UNIT DATA / COIL ROWS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,chw_glycol_pct,30,%,NOTE 7,note 7 (every row's NOTES reads SEE BELOW): 'ALL UNITS SHALL BE SIZED FOR 30% ETHYLENE GLYCOL CONCENTRATION IN CHILLED WATER.'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,heating_type,,,"NOTE 3, for the unit it names: EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)",blank cell
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_wpd_ft,,ft,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_rows,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,hw_glycol_pct,,%,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,volts,277,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-3,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,floor,,,LOCATION names a level,blank cell
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,area_served,ISFA CONF. ROOM,,GENERAL DATA / SERVICE: the area the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,qty,1,,QTY.,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,pipes,2,,TABLE TITLE,title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,cfm,1200,cfm,UNIT DATA / NOMINAL AIRFLOW (CFM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,fan_speeds,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,ecm,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,cooling_type,chw,,TABLE TITLE,"title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'; every row prints the chilled-water coil's water side (WATER FLOW, E.W.T. 44.0)"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_gpm,7.6,gpm,UNIT DATA / WATER FLOW (GPM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_ewt_f,44,F,COOLING DATA / E.W.T. (°F),printed '44.0'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_wpd_ft,10.35,ft,UNIT DATA / WATER PRESSURE DROP (FT. HD.),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_mbh,34.6,MBH,COOLING DATA / TOTAL CAP. (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_rows,4,,UNIT DATA / COIL ROWS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,chw_glycol_pct,30,%,NOTE 7,note 7 (every row's NOTES reads SEE BELOW): 'ALL UNITS SHALL BE SIZED FOR 30% ETHYLENE GLYCOL CONCENTRATION IN CHILLED WATER.'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,heating_type,,,"NOTE 3, for the unit it names: EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)",blank cell
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_wpd_ft,,ft,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_rows,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,hw_glycol_pct,,%,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,volts,277,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-4,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,floor,,,LOCATION names a level,blank cell
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,area_served,PRESSBOX,,GENERAL DATA / SERVICE: the area the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,qty,11,,QTY.,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,pipes,2,,TABLE TITLE,title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,cfm,1600,cfm,UNIT DATA / NOMINAL AIRFLOW (CFM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,fan_speeds,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,ecm,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,cooling_type,chw,,TABLE TITLE,"title printed 'FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)'; every row prints the chilled-water coil's water side (WATER FLOW, E.W.T. 44.0)"
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_gpm,10.9,gpm,UNIT DATA / WATER FLOW (GPM),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_ewt_f,44,F,COOLING DATA / E.W.T. (°F),printed '44.0'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_wpd_ft,7.84,ft,UNIT DATA / WATER PRESSURE DROP (FT. HD.),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_mbh,50.1,MBH,COOLING DATA / TOTAL CAP. (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_rows,4,,UNIT DATA / COIL ROWS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,chw_glycol_pct,30,%,NOTE 7,note 7 (every row's NOTES reads SEE BELOW): 'ALL UNITS SHALL BE SIZED FOR 30% ETHYLENE GLYCOL CONCENTRATION IN CHILLED WATER.'
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,heating_type,,,"NOTE 3, for the unit it names: EXISTING ELECTRIC HEATING COILS IN SUITES SHALL REMAIN AND BE RE-USED.(FCU-1 ONLY)",blank cell
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_wpd_ft,,ft,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_rows,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,hw_glycol_pct,,%,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,volts,277,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU),FCU-5,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,floor,200 LEVEL,,LOCATION names a level,printed '200 LEVEL SECTION 2'; author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,area_served,PATIO AHU,,GENERAL DATA / SERVICE: what the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,qty,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,cfm,,cfm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,cooling_mbh,373.5,MBH,PERFORMANCE DATA / TOTAL CAPACITY (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,bas_interface,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,volts,460,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-1,CONDENSING_UNIT,phase,3,,ELECTRICAL DATA / PHASE,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,floor,200 LEVEL,,LOCATION names a level,printed '200 LEVEL SECTION 5'; author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,area_served,SCORE BOARD CONTROL,,GENERAL DATA / SERVICE: what the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,qty,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,cfm,,cfm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,cooling_mbh,185.7,MBH,PERFORMANCE DATA / TOTAL CAPACITY (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,bas_interface,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,volts,460,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-2,CONDENSING_UNIT,phase,3,,ELECTRICAL DATA / PHASE,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,building,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,floor,200 LEVEL,,LOCATION names a level,printed '200 LEVEL SECTION 5'; author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,area_served,SCORE BOARD CONTROL,,GENERAL DATA / SERVICE: what the unit serves,author's reading of the printed row
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,qty,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,cfm,,cfm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,cooling_mbh,185.7,MBH,PERFORMANCE DATA / TOTAL CAPACITY (MBH),
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,motor_hp,,hp,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,eh_kw,,kW,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,conn_in,,in,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,bas_interface,,,,not printed
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,volts,460,V,ELECTRICAL DATA / VOLTS,
+092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11,C O N D E N S I N G U N I T S C H E D U L E ( C U ),CU-3,CONDENSING_UNIT,phase,3,,ELECTRICAL DATA / PHASE,

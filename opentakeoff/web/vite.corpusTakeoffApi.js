@@ -8,6 +8,7 @@
  *   POST /__ot/sweep-schedule-row       → Session.sweepScheduleRow (shared path)
  *   POST /__ot/count-marks              → Session.countMarks (shared path)
  *   POST /__ot/reconcile-schedule-plan  → reconcileSchedulePlan (shared path)
+ *   POST /__ot/assemblies-project       → the assemblies apply path's project (shared path)
  *
  * Same MCP Session.graphForPipeline() path every blueprint uses — not a
  * takeoff-only fork. Body: JSON { pdfPath } or multipart file(s) + kind.
@@ -74,6 +75,14 @@ export function resolveTsxLoader() {
   );
 }
 
+/** A yes/no request field that may be left unset: "1"/"true" or true is
+ * yes, "0"/"false" or false is no, anything else leaves the default. */
+export function optionalFlag(value) {
+  if (value === true || value === "1" || value === "true") return true;
+  if (value === false || value === "0" || value === "false") return false;
+  return undefined;
+}
+
 function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol, onProgress, signal, postGraphTimeoutMs }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
@@ -94,7 +103,9 @@ function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, m
     if (family) args.push("--family", family);
     if (tags?.length) args.push("--tags", tags.join(","));
     if (categories?.length) args.push("--categories", categories.join(","));
-    if (familySweepAll) args.push("--family-sweep-all");
+    // Unset leaves MCP's default: a family reconcile sweeps every row (AS-117).
+    if (familySweepAll === true) args.push("--family-sweep-all");
+    else if (familySweepAll === false) args.push("--no-family-sweep-all");
     if (evaluationFast) args.push("--evaluation-fast");
     if (sweepOptions) args.push("--sweep-options", JSON.stringify(sweepOptions));
     if (symbol) {
@@ -265,7 +276,7 @@ async function resolvePdfs(req) {
   let family = null;
   let tags = null;
   let categories = null;
-  let familySweepAll = false;
+  let familySweepAll;
   let evaluationFast = false;
   let sweepOptions = null;
   let symbol = null;
@@ -284,7 +295,7 @@ async function resolvePdfs(req) {
     categories = mp.fields.categories
       ? mp.fields.categories.split(",").map((value) => value.trim()).filter(Boolean)
       : null;
-    familySweepAll = mp.fields.familySweepAll === "1" || mp.fields.familySweepAll === "true";
+    familySweepAll = optionalFlag(mp.fields.familySweepAll);
     evaluationFast = mp.fields.evaluationFast === "1" || mp.fields.evaluationFast === "true";
     sweepOptions = mp.fields.sweepOptions ? JSON.parse(mp.fields.sweepOptions) : null;
     if (mp.fields.symbolSeedRect) {
@@ -331,7 +342,7 @@ async function resolvePdfs(req) {
     family = body.family || null;
     tags = body.tags || null;
     categories = Array.isArray(body.categories) ? body.categories : null;
-    familySweepAll = !!body.familySweepAll;
+    familySweepAll = optionalFlag(body.familySweepAll);
     evaluationFast = !!body.evaluationFast;
     sweepOptions = body.sweepOptions || null;
     symbol = body.symbol || null;
@@ -344,7 +355,45 @@ async function resolvePdfs(req) {
     }
     fileNames = pdfPaths.map((p) => p.split(/[\\/]/).at(-1));
   }
+  ({ pdfPaths, fileNames, symbol } = onePathPerDocument(pdfPaths, fileNames, symbol));
   return { kind, service, basMathOptions, pdfPaths, fileNames, tmpDir, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol };
+}
+
+/**
+ * One path per document. The spool names an upload by its sha256, so a plan
+ * set opened twice under two names ("set.pdf" and "set (1).pdf") arrives as
+ * one path twice, and a Session cannot load a path twice: the CLI threw, and
+ * every production read of that canvas (sheet graph, compiles, sweeps,
+ * assemblies) failed with a stack trace naming a hash. Identical bytes are
+ * one document, read once. It keeps the last name sent, as the browser's
+ * sha → name map does (TakeoffCanvas buildProductionFormData), or, for a
+ * symbol sweep, the name of the file swept, so its results land on the
+ * sheet the estimator is on; the sweep's file index follows the path.
+ * @template {{ pdfIndex?: number }} T
+ * @param {string[]} pdfPaths
+ * @param {string[]} fileNames
+ * @param {T | null} [symbol]
+ * @returns {{ pdfPaths: string[], fileNames: string[], symbol: T | null }}
+ */
+export function onePathPerDocument(pdfPaths, fileNames, symbol = null) {
+  const at = new Map();
+  const paths = [];
+  const names = [];
+  const index = [];
+  pdfPaths.forEach((p, i) => {
+    if (!at.has(p)) {
+      at.set(p, paths.length);
+      paths.push(p);
+      names.push(fileNames[i]);
+    } else {
+      names[at.get(p)] = fileNames[i];
+    }
+    index.push(at.get(p));
+  });
+  const swept = symbol?.pdfIndex;
+  if (!Number.isInteger(swept) || swept < 0 || swept >= index.length) return { pdfPaths: paths, fileNames: names, symbol };
+  names[index[swept]] = fileNames[swept];
+  return { pdfPaths: paths, fileNames: names, symbol: { ...symbol, pdfIndex: index[swept] } };
 }
 
 function restoreUploadedSheetKeys(result, pdfPaths, fileNames) {
@@ -419,6 +468,10 @@ async function handle(req, res, mode) {
     if (mode === "symbol_sweep") {
       const result = await runCli({ mode: "symbol_sweep", pdfPaths, symbol, signal: abortController.signal });
       return sendJson(res, 200, restoreUploadedSheetKeys(result, pdfPaths, fileNames));
+    }
+    if (mode === "assemblies_project") {
+      const result = await runCli({ mode: "assemblies_project", pdfPaths, signal: abortController.signal });
+      return sendJson(res, 200, result);
     }
     if (mode === "count_marks") {
       const markList = marks
@@ -534,6 +587,7 @@ const OT_ROUTES = [
   ["/__ot/symbol-sweep", "symbol_sweep"],
   ["/__ot/count-marks", "count_marks"],
   ["/__ot/reconcile-schedule-plan", "reconcile"],
+  ["/__ot/assemblies-project", "assemblies_project"],
 ];
 const assignmentMiddleware = basAssignmentMiddleware(resolveTsxLoader);
 const assemblyMiddleware = basAssemblyMiddleware(resolveTsxLoader);

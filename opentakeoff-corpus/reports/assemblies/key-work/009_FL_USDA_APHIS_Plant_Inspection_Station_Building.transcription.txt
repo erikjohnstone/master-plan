@@ -1,0 +1,179 @@
+# 009_FL_USDA_APHIS_Plant_Inspection_Station_Building — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheet M-601 SCHEDULES (PDF page 18) of the Building 63 Envelope and HVAC
+# Modifications, USDA APHIS, Coral Gables FL (Clark Nexsen): an overview of the page at 40 dpi,
+# then each table at 3x (216 dpi), rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye
+# on 2026-09-26, with the PDF's own text layer (pymupdf words, row by row) as a reading aid; second
+# read of the fan and air handling unit rows at 4x. Each drawn title was found with the text layer
+# (pymupdf search_for). The pipeline's output for these tables was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): AS-30's notes A/B printed this page's
+# HYDRONIC CONTROL VALVE SCHEDULE notes and the AIR HANDLING UNIT SCHEDULE's NOTES: 1-2, and the
+# control-intent unseen audit checked its readings against its drawings; AS-28 read its column
+# names. The fifth tier keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 009_FL_USDA_APHIS_Plant_Inspection_Station_Building
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheet M-601 SCHEDULES (page 18) of the Building 63 Envelope and HVAC Modifications, USDA APHIS, Coral Gables FL (Clark Nexsen), the tables the fifth tier's seed drew for its AHU, AIR_COOLED_CHILLER, PUMP, FAN and UNIT_HEATER strata.
+EXCLUDES Manufacturers and model numbers, efficiencies (EER, IPLV), fouling factors and pressure drops, the air handlers' unoccupied minimum airflow, external static pressure and fan speed, coil sensible capacities and air temperatures, the fans' weights, sones and accessories other than the EC motor, the duct heaters' preheat/reheat type and the air handling system they sit in, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE: two rows, AHU-1 and AHU-2 (both CARRIER 39MN), then one empty ruled
+# row. SUPPLY FAN / MAX CFM keys supply_cfm and MIN OA CFM oa_cfm_min. MOTOR / MAX MOTOR HP is the
+# supply fan's motor: supply_fan_hp. COOLING COIL / TOTAL MBH CLG keys cooling_mbh (an air
+# handler's coil capacity is the unit's), and the coil's GPM keys chw_gpm. The coil prints a water
+# flow and the project's plant is an air-cooled chiller (CH-1) with chilled water pumps: a chilled
+# water coil, cooling_type chw (the author's reading). No heating coil prints. Notes 1-4 (existing
+# units, cleaning, a flexible connection, the unoccupied minimum) state no key attribute.
+TABLE
+sheet: 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 18 overview at 40 dpi; crop 1887,936,833,332 at 3x in 2 tiles (MARK column repeated), notes included; second read at 4x (crop 1887,1122,833,30 in 2 tiles) of both rows, every cell
+rows: all 2 printed rows (one empty ruled row below them)
+col: MARK => tag
+col: MNFR / CARRIER => -
+col: MNFR / JCI => -
+col: MNFR / DAIKIN => -
+col: MODEL SERIES => -
+col: SUPPLY FAN / MAX CFM => supply_cfm
+col: SUPPLY FAN / MIN OA CFM => oa_cfm_min
+col: SUPPLY FAN / UNOCCMIN CFM => -
+col: SUPPLY FAN / EXTERNAL IN WG => -
+col: MOTOR / MAX MOTOR HP => supply_fan_hp
+col: MOTOR / MAX RPM => -
+col: COOLING COIL / TOTAL MBH CLG => cooling_mbh
+col: COOLING COIL / SENS MBH CLG => -
+col: COOLING COIL / EAT / db F => -
+col: COOLING COIL / EAT / wb F => -
+col: COOLING COIL / LAT / db F => -
+col: COOLING COIL / LAT / wb F => -
+col: COOLING COIL / GPM => chw_gpm
+col: NOTES => -
+derive: cooling_type = chw ; header=COOLING COIL / GPM ; note=the cooling coil prints a water flow (GPM) and the project's plant is air-cooled chiller CH-1 with chilled water pumps CWP-1/2: a chilled water coil (the author's reading)
+grid:
+AHU-1 | X | | | 39MN | 2,565 | 640 | - | 3.5 | 5 | 3,500 | 106.2 | 64.5 | 78.3 | 66.5 | 55 | 54 | 19 | 1:2:3
+AHU-2 | X | | | 39MN | 4,930 | 4,930 | 4,200 | 3.25 | 15 | 1,800 | 461.4 | 191.7 | 91 | 79 | 55 | 54 | 80 | 1:2:4
+END
+
+# AIR COOLED CHILLER SCHEDULE: one row, CH-1, then two empty ruled rows. The title names the
+# condenser: condenser air (from the title, as 094_FL's and bldg5406's chillers). CAPACITY / TONS
+# keys tons. CHILLED WATER / EWT (F) 44 keys chw_ewt_f and LWT (F) 45 chw_lwt_f, typed as printed
+# (a chiller's leaving water is normally the colder; the key types the print), GPM 99 chw_gpm. MIN
+# EER and MIN IPLV are efficiencies. FLUID prints WATER (the family keys no glycol). Notes 1-3
+# (R-32 refrigerant; digital scroll compressors, a non-fused disconnect, a brazed plate heat
+# exchanger; two refrigerant circuits) state no key attribute.
+TABLE
+sheet: 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18
+title: AIR COOLED CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 18 overview at 40 dpi; crop 864,505,775,335 at 3x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every cell, against the text layer
+rows: all 1 printed row (two empty ruled rows below it)
+col: MARK => tag
+col: CAPACITY / TONS => tons
+col: CAPACITY / MIN EER => -
+col: CAPACITY / MIN IPLV => -
+col: CHILLED WATER / EWT (F) => chw_ewt_f
+col: CHILLED WATER / LWT (F) => chw_lwt_f
+col: CHILLED WATER / GPM => chw_gpm
+col: CHILLED WATER / FOULNG FACTOR => -
+col: CHILLED WATER / MAX PRESSURE DROP FT WG => -
+col: FLUID => -
+col: NOTES => -
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'AIR COOLED CHILLER SCHEDULE'
+grid:
+CH-1 | 60 | 10.29 | 15.53 | 44 | 45 | 99 | 0.0001 | 20 | WATER | 1:2:3:
+END
+
+# FAN SCHEDULE: five rows (EF-1, EF-2, EF-3, then an empty ruled row, then EF-5 and EF-6), then
+# two empty ruled rows. CFM keys cfm and ESP IN WG esp_in; MOTOR / MAX. HP. keys motor_hp and MAX
+# FAN SPEED (RPM) the fan's rpm (EF-5 prints "-", EF-6 nothing). The DRIVE group prints a DIRECT
+# and a BELT column, marked with an X: EF-1 to EF-3 are marked DIRECT, drive direct (the column
+# marked X); EF-5 and EF-6 mark neither. The ACCESSORIES group prints an EC MOTOR column: EF-1 to
+# EF-3, new fans whose MOTORIZED BYPASS DAMPER and ROOF CURB are marked, leave it blank, so their
+# motors are not EC: ecm no (the author's reading). EF-5 and EF-6 are existing fans (note 3,
+# "EXISTING FAN. INFORMATION PROVIDED FOR BALANCING.") with no accessory marked, left unkeyed.
+# Notes 1-2 (a Miami-Dade approved fan; a tubular centrifugal fan) state no key attribute.
+TABLE
+sheet: 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18
+title: FAN SCHEDULE
+family: FAN
+render: page 18 overview at 40 dpi; crop 1663,508,1057,385 at 3x in 2 tiles (MARK column repeated), notes included; second read at 4x (crop 1663,700,1057,90 in 2 tiles) of every row, every cell, and the text layer row by row
+rows: all 5 printed rows (an empty ruled row between EF-3 and EF-5, two below EF-6)
+col: MARK => tag
+col: CFM => cfm
+col: ESP IN WG => esp_in
+col: MNFR / COOK => -
+col: MNFR / GREENHECK => -
+col: MODEL NO. => -
+col: MOTOR / MAX. HP. => motor_hp
+col: MAX OPER WEIGHT (LBS) => -
+col: MAX FAN SPEED (RPM) => rpm
+col: MAX. NOISE SONES => -
+col: DRIVE / DIRECT => -
+col: DRIVE / BELT => -
+col: [DRIVE: the column marked X] => drive
+col: ACCESSORIES / MOTORIZED BYPASS DAMPER => -
+col: ACCESSORIES / ROOF CURB => -
+col: ACCESSORIES / ENERGY STAR RATED => -
+col: ACCESSORIES / DELAY TIMER => -
+col: ACCESSORIES / CEILING GRILLE => -
+col: ACCESSORIES / BIRD SCREEN => -
+col: ACCESSORIES / EC MOTOR => -
+col: [ACCESSORIES / EC MOTOR: left blank on a new fan whose other accessories are marked] => ecm
+col: ACCESSORIES / EQUIPMENT RAILS => -
+col: NOTES => -
+grid:
+EF-1 | 2,200 | 2.00 | | X | VK-H | 2 | 700 | 2,000 | 21 | X | | direct (DIRECT: X) | X | X | | | | | | no (EC MOTOR: blank) | | 1:2:
+EF-2 | 1,400 | 1.00 | | X | VK-H | 1 | 500 | 2,200 | 20 | X | | direct (DIRECT: X) | X | X | | | | | | no (EC MOTOR: blank) | | 1:2:
+EF-3 | 1,400 | 1.00 | | X | VK-H | 1 | 500 | 2,200 | 20 | X | | direct (DIRECT: X) | X | X | | | | | | no (EC MOTOR: blank) | | 1:2:
+EF-5 | 150 | 0.125 | X | | 70 SQN | 1/4 | - | - | - | | | | | | | | | | | | | 3:
+EF-6 | 200 | 0.125 | X | | 70 SQN | 1/4 | | | | | | | | | | | | | | | | 3:
+END
+
+# CHILLED WATER PUMP: two rows, CWP-1 and CWP-2, then one empty ruled row. GPM keys gpm, HEAD (ft
+# WG) head_ft and MOTOR HP motor_hp. FLUID prints WATER: glycol_pct 0 (as 004_MO's and
+# federal-mech's pumps). The title names the loop, but no column prints a service. Note 1
+# (replace the pump; coordinate down time) states no key attribute.
+TABLE
+sheet: 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18
+title: CHILLED WATER PUMP
+family: PUMP
+render: page 18 overview at 40 dpi; crop 1848,1586,430,230 at 3x, notes included; second read at 3x of both rows, every cell, against the text layer
+rows: all 2 printed rows (one empty ruled row below them)
+col: MARK => tag
+col: GPM => gpm
+col: HEAD (ft WG) => head_ft
+col: MOTOR HP => motor_hp
+col: FLUID => -
+col: [FLUID: WATER, so no glycol] => glycol_pct
+col: NOTES => -
+grid:
+CWP-1 | 99 | 35 | 2 | WATER | 0 | 1:
+CWP-2 | 99 | 35 | 2 | WATER | 0 | 1:
+END
+
+# ELECTRIC DUCT HEATER: five rows, EDH-1 to EDH-5, then two empty ruled rows. The title names the
+# medium: heating_medium electric (from the title, as 031_MO's ELECTRIC UNIT HEATER SCHEDULE). CFM
+# keys cfm and kW eh_kw. TYPE marks REHEAT on every row. AIR HANDLING SYSTEM names the unit each
+# heater sits in (AHU-2), no area served (as a coil's SERVICE naming only units, AS-29). Note 1
+# ("PROVIDE DUCT HEATER WITH A MINIMUM OF THREE STAGES.") names stages, which the family does
+# not key.
+TABLE
+sheet: 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18
+title: ELECTRIC DUCT HEATER
+family: UNIT_HEATER
+render: page 18 overview at 40 dpi; crop 2294,1586,426,290 at 3x, notes included; second read at 3x of the first, middle and last rows, every cell, against the text layer
+rows: all 5 printed rows (two empty ruled rows below them)
+col: MARK => tag
+col: CFM => cfm
+col: TYPE / PREHEAT => -
+col: TYPE / REHEAT => -
+col: AIR HANDLING SYSTEM => -
+col: kW => eh_kw
+col: NOTES => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC DUCT HEATER'
+grid:
+EDH-1 | 1,750 | | X | AHU-2 | 10.0 | 1:
+EDH-2 | 690 | | X | AHU-2 | 8.0 | 1:
+EDH-3 | 900 | | X | AHU-2 | 8.0 | 1:
+EDH-4 | 690 | | X | AHU-2 | 10.0 | 1:
+EDH-5 | 900 | | X | AHU-2 | 8.0 | 1:
+END

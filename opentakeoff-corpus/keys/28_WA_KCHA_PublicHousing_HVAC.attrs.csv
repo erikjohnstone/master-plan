@@ -1,0 +1,86 @@
+# 28_WA_KCHA_PublicHousing_HVAC.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/28_WA_KCHA_PublicHousing_HVAC.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M101 (page 2) of the Brittany Park HVAC Upgrades, King County Housing Authority (Tres West Engineers), the tables the fifth tier's seed drew for its HEAT_PUMP, PUMP and FAN strata.
+#   28_WA_KCHA_PublicHousing_HVAC.pdf#2 | HEAT PUMP AC UNIT SCHEDULE | HEAT_PUMP | all 1 printed row | render: page 2 overview at 40 dpi; crop 110,48,2280,125 at 3x in 5 tiles (UNIT NO column repeated), notes read in the text layer; second read of the row, every cell, against the text layer
+#   28_WA_KCHA_PublicHousing_HVAC.pdf#2 | PUMP SCHEDULE | PUMP | all 1 printed row | render: page 2 overview at 40 dpi; crop 1294,255,1092,170 at 3x in 2 tiles (UNIT NO column repeated), notes included; second read of the row, every cell, against the text layer
+#   28_WA_KCHA_PublicHousing_HVAC.pdf#2 | EXHAUST FAN SCHEDULE | FAN | all 2 printed rows | render: page 2 overview at 40 dpi; crop 110,255,1175,180 at 3x in 2 tiles (UNIT NO column repeated), notes included; second read of both rows, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers, families, model numbers, dimensions and weights, the heat pump's type, vents, efficiencies, compressor currents, refrigerant, condensate drain, sound ratings and filters, the fans' type and sones, currents (MCA, MOCP, FLA), who furnishes the disconnects, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 28_WA_KCHA_PublicHousing_HVAC: 3 table(s), 4 instance(s), 67 keyed attribute value(s) (33 printed, 34 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,building,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,floor,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,area_served,,,AREA SERVED,printed 'SEE PLAN' — not a single value for this attribute
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,qty,43,,QUANTITY,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,cfm,300,cfm,CFM,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,cooling_mbh,9790,BTU/H,COOLING CAPACITY (BTUH) MIN. - MAX. 95°F,"printed '9,790'"
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,cooling_tons,,tons,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,heating_mbh,10000,BTU/H,HEATING CAPACITY (BTUH) MIN. - MAX. 47°F,"printed '10,000'"
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,hw_gpm,,gpm,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,hw_ewt_f,,F,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,hw_lwt_f,,F,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,chw_gpm,,gpm,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,chw_ewt_f,,F,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,chw_lwt_f,,F,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,motor_hp,,hp,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,eh_kw,1800,W,AUXILIARY HEAT (WATT),
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,conn_in,,in,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,bas_interface,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,volts,230,V,"POWER CONNECTION W/ 1,800 HEAT STRIP / VOLT/PH: volts part",author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,HEAT PUMP AC UNIT SCHEDULE,VHP,HEAT_PUMP,phase,1,,"POWER CONNECTION W/ 1,800 HEAT STRIP / VOLT/PH: phase part",author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,building,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,floor,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,area_served,ATTIC,,AREA SERVED,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,qty,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,service,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,gpm,43.5,gpm,FLOW (GPM),
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,head_ft,20,ft,HEAD (FT),
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,motor_hp,0.75,hp,MOTOR / HP,printed '3/4'
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,rpm,2426,rpm,MOTOR / RPM,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,vfd,no,,"STARTER BY E.C.: a checked motor starter, not a variable-frequency drive",printed '✓'; author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,pump_arrangement,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,glycol_pct,,%,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,conn_in,,in,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,volts,208,V,ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,PUMP SCHEDULE,CP-4,PUMP,phase,3,,ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,building,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,floor,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,area_served,BUILDING EXHAUST,,AREA SERVED,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,qty,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,service,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,cfm,3705,cfm,PERFORMANCE / CFM,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,esp_in,1.5,in. w.c.,PERFORMANCE / TSP (IN): the fan's scheduled static pressure,author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,motor_hp,2,hp,POWER CONNECTION / HP,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,motor_watts,,W,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,rpm,1309,rpm,PERFORMANCE / RPM,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,drive,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,vfd,no,,"STARTER BY E.C.: a checked motor starter, not a variable-frequency drive",printed '✓'; author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,ecm,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,control,INTERLOCK WITH MOTORIZED DAMPER,,INTERLOCK WITH: how the fan is controlled,printed 'MOTORIZED DAMPER'; author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,volts,208,V,POWER CONNECTION / VOLT/PH: volts part,author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,EF-5,FAN,phase,3,,POWER CONNECTION / VOLT/PH: phase part,author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,building,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,floor,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,area_served,BUILDING SUPPLY,,AREA SERVED,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,qty,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,service,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,cfm,4495,cfm,PERFORMANCE / CFM,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,esp_in,1.5,in. w.c.,PERFORMANCE / TSP (IN): the fan's scheduled static pressure,author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,motor_hp,3,hp,POWER CONNECTION / HP,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,motor_watts,,W,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,rpm,1173,rpm,PERFORMANCE / RPM,
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,drive,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,vfd,no,,"STARTER BY E.C.: a checked motor starter, not a variable-frequency drive",printed '✓'; author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,ecm,,,,not printed
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,control,INTERLOCK WITH MOTORIZED DAMPER,,INTERLOCK WITH: how the fan is controlled,printed 'MOTORIZED DAMPER'; author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,volts,208,V,POWER CONNECTION / VOLT/PH: volts part,author's reading of the printed row
+28_WA_KCHA_PublicHousing_HVAC.pdf#2,EXHAUST FAN SCHEDULE,SF-6,FAN,phase,3,,POWER CONNECTION / VOLT/PH: phase part,author's reading of the printed row

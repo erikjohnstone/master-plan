@@ -1,0 +1,19 @@
+# 30_WA_SpokaneTransit_CoolingTower.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/30_WA_SpokaneTransit_CoolingTower.attrs.csv, one row each.
+# Sources read: M-001 (page 2) schedules and notes; M-401/M-402 (pages 11-12) system diagrams, existing sequences and controls scope. HELD-OUT set: scored at gates only.
+#
+sheet,tag,family,typical_id,options,basis_note
+30_WA_SpokaneTransit_CoolingTower.pdf#2,BOILER 1,BOILER,boiler,isolation_valve=false;network_interface=false,"New boiler: DDC start/stop and status (hardwired, M-401 hot water plant diagram), staged on loop supply temperature; combustion air damper opens with any boiler; no isolation valve. M-401 controls scope: the new unit is integrated into the existing DDC controller, reusing the existing points, replacing instruments as needed and adding new wiring. The BAS still commands the new unit, so its typical applies. Transit authority (not DoD)."
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CT-1,COOLING_TOWER,cooling-tower,two_speed_fans=false;cell_isolation_valves=false;vibration_switches=false?;basin_heater=false?;bypass_valve=false,"New closed-loop fluid cooler, one cell, with integral VFD fan speed control (schedule note 2), so not two-speed; basin pump and fan staged by the DDC on condenser water temperature (M-401). Vibration switch and basin heater control not shown. M-401 controls scope: the new unit is integrated into the existing DDC controller, reusing the existing points, replacing instruments as needed and adding new wiring. The BAS still commands the new unit, so its typical applies. Transit authority (not DoD)."
+30_WA_SpokaneTransit_CoolingTower.pdf#2,P-1,PUMP,pump-vfd,ufc_minimum_points=false,"Heating water pump, duty/standby with P-2, on VFD-1 (furnished by controls, Ethernet adapter); DDC start/stop and status. M-401 controls scope: the new unit is integrated into the existing DDC controller, reusing the existing points, replacing instruments as needed and adding new wiring. The BAS still commands the new unit, so its typical applies. Transit authority (not DoD)."
+30_WA_SpokaneTransit_CoolingTower.pdf#2,P-2,PUMP,pump-vfd,ufc_minimum_points=false,"Heating water pump, duty/standby with P-1, on VFD-2 (furnished by controls, Ethernet adapter); DDC start/stop and status. M-401 controls scope: the new unit is integrated into the existing DDC controller, reusing the existing points, replacing instruments as needed and adding new wiring. The BAS still commands the new unit, so its typical applies. Transit authority (not DoD)."
+30_WA_SpokaneTransit_CoolingTower.pdf#2,P-6,PUMP,pump-vfd,ufc_minimum_points=false,"Condenser water pump on VFD-3 (furnished by controls, Ethernet adapter); DDC start/stop and status with heat pump demand. M-401 controls scope: the new unit is integrated into the existing DDC controller, reusing the existing points, replacing instruments as needed and adding new wiring. The BAS still commands the new unit, so its typical applies. Transit authority (not DoD)."

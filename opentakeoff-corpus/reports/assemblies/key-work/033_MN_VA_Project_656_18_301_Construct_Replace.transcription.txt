@@ -1,0 +1,176 @@
+# 033_MN_VA_Project_656_18_301_Construct_Replace — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheets M501 and M502 MECHANICAL - SCHEDULES (PDF pages 68 and 69,
+# 270-degree-rotated sheets read in their displayed orientation) of the Construct/Replace Building
+# 51 MEP Systems project, St. Cloud VAHCS MN (Bancroft Architects + Engineers): an overview of each
+# page at 40 dpi, then each table at 2.4x-2.6x (173-187 dpi) in tiles with the EQUIPMENT TAG column
+# repeated, rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26, with the
+# PDF's own text layer (pymupdf words, row by row) as a reading aid; every keyed cell was checked on
+# the render. Each drawn title was found with the text layer (pymupdf search_for). The pipeline's
+# output for these tables was not consulted while keying (AS-28, before the draw, read the column
+# names the normalizer left unread across the unseen corpus, this document's among them). The
+# fourth tier keys the tables its seed drew (tier4/01-split.md): one per keyed family.
+SET 033_MN_VA_Project_656_18_301_Construct_Replace
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheets M501 and M502 MECHANICAL - SCHEDULES (pages 68 and 69) of the Building 51 MEP systems project, St. Cloud VAHCS MN (Bancroft Architects + Engineers), the tables the fourth tier's seed drew for its AHU, FAN and PUMP strata.
+EXCLUDES Manufacturers and models, room locations, dimensions and weights, static pressures of the air handler's fans, fan types and speeds, brake horsepower, coil rows, fins, velocities and air pressure drops, air temperatures, the heat pump's source-water side, the humidifier's performance, MCA and MOCP, pump NPSH, impeller and efficiency, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE (page 68): one row, AHU-6, a VAV air handler with an integral water
+# source heat pump (note 7: "INTEGRAL WATER SOURCE HEAT PUMP REFRIGERATION SYSTEM WITH HERMETIC
+# SCROLL COMPRESSORS"). MIN. O.A. keys oa_cfm_min. SUPPLY FAN / NUMBER OF FANS keys supply_fan_qty
+# and SUPPLY CFM supply_cfm; its MOTOR / HP prints "(2) @ 10", two motors at 10 hp: supply_fan_hp
+# 10 as each motor (as 071_ME's "(2)@1.5"). RETURN FAN / MOTOR / HP keys return_fan_hp. The DX COIL
+# (GEOTHERMAL HEAT PUMP) is a refrigerant coil: cooling_type dx and heating_type heat_pump; TOTAL
+# COOLING (MBH) keys cooling_mbh and TOTAL HEATING (MBH) heating_mbh. Its EWT/LWT, FLUID TYPE (20%
+# PROP. GLYCOL), FLOW RATE and WATER PRESSURE DROP are the heat pump's source-water side, not a
+# chilled- or hot-water coil, and key nothing. The STEAM HUMIDIFIER block (PURE HUMIDIFIER CO. IP03)
+# keys humidifier yes; its steam pressure and flow are the humidifier's, not a steam coil's.
+# ELECTRICAL / PHASE and VOLTAGE are the unit's power: phase 3, volts 208 (the fan motors' own PH
+# and VOLT columns key nothing). FINAL FILTER TYPE (MERV 15) keys filter_merv 15. Note 10 lists the
+# unit's sections, an ECONOMIZER SECTION among them: economizer airside. The other notes (spring
+# isolators, BAS-provided controls, access doors, drain pan, base frame, coil handing, shipping
+# sections, filter gauges) key nothing.
+TABLE
+sheet: 033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 68 overview at 40 dpi; crop 175,1555,2760,200 at 2.4x in 5 tiles (EQUIPMENT TAG column repeated), notes read in the text layer and on the overview; second read at 3x of the row, every keyed cell
+rows: all 1 printed row
+col: EQUIPMENT TAG => tag
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: LOCATION => -
+col: TYPE OF SYSTEM => -
+col: APPROX. OVERALL DIMENSIONS (IN.) / H => -
+col: APPROX. OVERALL DIMENSIONS (IN.) / W => -
+col: APPROX. OVERALL DIMENSIONS (IN.) / L => -
+col: WEIGHT (LBS) => -
+col: MIN. O.A. => oa_cfm_min
+col: SUPPLY FAN / NUMBER OF FANS => supply_fan_qty
+col: SUPPLY FAN / SUPPLY CFM => supply_cfm
+col: SUPPLY FAN / TSP (IN. WG) => -
+col: SUPPLY FAN / ESP (IN. WG) => -
+col: SUPPLY FAN / TYPE => -
+col: SUPPLY FAN / FAN RPM => -
+col: SUPPLY FAN / MOTOR / BHP => -
+col: SUPPLY FAN / MOTOR / HP => -
+col: [SUPPLY FAN / MOTOR / HP: each motor ("(2) @ 10": two motors at 10 hp)] => supply_fan_hp
+col: SUPPLY FAN / MOTOR / PH => -
+col: SUPPLY FAN / MOTOR / VOLT => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / MIN. ROWS => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / MAX. FPI => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / MAX. VEL. (FPM) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / AIR PRESSURE DROP (IN.) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / COOLING EAT (°F DB/WB) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / COOLING LAT (°F DB/WB) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / COOLING EWT/LWT (°F) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / SENSIBLE COOLING (MBH) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / TOTAL COOLING (MBH) => cooling_mbh
+col: DX COIL (GEOTHERMAL HEAT PUMP) / SST (°F) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / HEATING EAT (°F) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / HEATING LAT (°F) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / HEATING EWT/LWT (°F) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / TOTAL HEATING (MBH) => heating_mbh
+col: DX COIL (GEOTHERMAL HEAT PUMP) / FLUID TYPE => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / FLOW RATE (GPM) => -
+col: DX COIL (GEOTHERMAL HEAT PUMP) / WATER PRESSURE DROP (FT) => -
+col: RETURN FAN / NUMBER OF FANS => -
+col: RETURN FAN / RETURN CFM => -
+col: RETURN FAN / TSP (IN. WG) => -
+col: RETURN FAN / ESP (IN.) => -
+col: RETURN FAN / TYPE => -
+col: RETURN FAN / FAN RPM => -
+col: RETURN FAN / MOTOR / BHP => -
+col: RETURN FAN / MOTOR / HP => return_fan_hp
+col: RETURN FAN / MOTOR / PH => -
+col: RETURN FAN / MOTOR / VOLT => -
+col: STEAM HUMIDIFIER / BASIS OF DESIGN / MANUFACTURER => -
+col: [STEAM HUMIDIFIER: the unit's humidifier section] => humidifier
+col: STEAM HUMIDIFIER / BASIS OF DESIGN / MODEL => -
+col: STEAM HUMIDIFIER / EAT (°F) => -
+col: STEAM HUMIDIFIER / LEAVING AIR % RH => -
+col: STEAM HUMIDIFIER / STEAM PRESSURE (PSI) => -
+col: STEAM HUMIDIFIER / FLOW (LBS/HR) => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / VOLTAGE => volts
+col: PRE FILTERS TYPE => -
+col: FINAL FILTER TYPE => -
+col: [FINAL FILTER TYPE: its MERV] => filter_merv
+col: NOTES => -
+derive: cooling_type = dx ; header=DX COIL (GEOTHERMAL HEAT PUMP) ; note=the row prints a DX coil block served by the unit's integral water source heat pump (note 7)
+derive: heating_type = heat_pump ; header=DX COIL (GEOTHERMAL HEAT PUMP) ; note=the DX coil heats as the water source heat pump's condenser (TOTAL HEATING; note 7: 'INTEGRAL WATER SOURCE HEAT PUMP REFRIGERATION SYSTEM')
+derive: economizer = airside ; header=NOTE 10 ; note=note 10: 'UNIT SHALL HAVE THE FOLLOWING CONFIGURATION: ... INLET PLENUM, RETURN FAN, ECONOMIZER SECTION, ...' (NOTES 1-11)
+grid:
+AHU-6 | INNOVENT | CAHU-6200-HP-HM-208 | 11 MECHANICAL | VAV | 86 | 54 | 281 | 7,400 | 2,100 | 2 | 6,200 | 6.2 | 3.0 | BACKWARD CURVED | 2,408 | 9.5 | (2) @ 10 | 10 | 3 | 208 | 4 | 10 | 489 | 0.47 | 80.1 / 66.2 | 54.7 / 52.6 | 70 / 80 | 172.7 | 254.0 | 39.0 | 42.3 | 66.4 | 30 / 24.6 | 161.8 | 20% PROP. GLYCOL | 49.9 | 7.7 | 1 | 6,200 | 2.3 | 2.0 | AIRFOIL | 1,789 | 3.6 | 5.0 | 3 | 208 | PURE HUMIDIFIER CO. | yes (PURE HUMIDIFIER CO. IP03) | IP03 | 55.0 | 50 | 5 | 65.6 | 134.9 | 150 | 3 | 208 | MERV 8 / MERV 11 | MERV 15 | 15 | 1,2,3,4,5,6,7,8,9,10,11
+END
+
+# EXHAUST FAN SCHEDULE (page 68): three rows. AREA SERVED keys area_served (LOCATION prints the room
+# each fan sits in). DRIVE keys drive, CFM cfm, SP (IN.) esp_in (as 028_TX's EXT SP), FAN RPM rpm
+# (the fan's, over the MOTOR / RPM beside it), MOTOR / HP motor_hp, PHASE phase, VOLT volts.
+# CONTROL TYPE prints BAS, keyed control as printed. Note 2 ("PROVIDE THE FOLLOWING OPTIONS:
+# BACKDRAFT DAMPER, DISCONNECT SWITCH, AND SPEED CONTROLLER") adds options, not the control type the
+# column prints; notes 1 and 3 key nothing.
+TABLE
+sheet: 033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68
+title: EXHAUST FAN SCHEDULE
+family: FAN
+render: page 68 overview at 40 dpi; crop 1655,340,1230,285 at 2.4x in 2 tiles (EQUIPMENT TAG column repeated), notes included; second read at 3x of EF-2, EF-2A and EF-19, every keyed cell
+rows: all 3 printed rows
+col: EQUIPMENT TAG => tag
+col: BASIS OF DESIGN / MANUFACTURER => -
+col: BASIS OF DESIGN / MODEL => -
+col: LOCATION => -
+col: AREA SERVED => area_served
+col: TYPE => -
+col: DRIVE => drive
+col: WEIGHT (LBS) => -
+col: CFM => cfm
+col: SP (IN.) => esp_in
+col: MAXIMUM SONES => -
+col: FAN RPM => rpm
+col: BHP => -
+col: MOTOR / HP => motor_hp
+col: MOTOR / RPM => -
+col: MOTOR / PHASE => phase
+col: MOTOR / VOLT => volts
+col: CONTROL TYPE => control
+col: NOTES => -
+grid:
+EF-2 | GREENHECK | SQ-100-VG | 2 FEMALE LOCKER | 2 FEMALE LOCKER | CENTRIFUGAL INLINE | direct (DIRECT) | 47 | 740 | 0.5 | 6.7 | 1,312 | 0.1 | 1/4 | 1725 | 1 | 115 | BAS | 1,2,3
+EF-2A | GREENHECK | SQ-80-VG | 2A BATH | 2A BATH | CENTRIFUGAL INLINE | direct (DIRECT) | 49 | 265 | 0.5 | 8.3 | 1,676 | 0.07 | 1/10 | 1725 | 1 | 115 | BAS | 1,2,3
+EF-19 | GREENHECK | SQ-90-VG | 19 MALE BATH | 19 MALE BATH AND 20 FEMALE BATH | CENTRIFUGAL INLINE | direct (DIRECT) | 49 | 325 | 0.5 | 7.5 | 1,556 | 0.07 | 1/10 | 1725 | 1 | 115 | BAS | 1,2,3
+END
+
+# PUMP SCHEDULE (page 69): two rows, P-12 and P-13. SERVICE ("HEAT PUMP WATER TO AHU-6") keys
+# service as printed. GPM keys gpm, HEAD (FT.) head_ft, RPM rpm, MOTOR / HP motor_hp, PHASE phase,
+# VOLT volts. Note 2 ("STANDBY PUMP") is cited by P-13's NOTES only: P-13's pump_arrangement is
+# standby; P-12 cites note 1 alone and prints no arrangement.
+TABLE
+sheet: 033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69
+title: PUMP SCHEDULE
+family: PUMP
+render: page 69 overview at 40 dpi; crop 960,1655,805,265 at 2.6x, notes included; second read at 3x of both rows, every keyed cell
+rows: all 2 printed rows
+col: EQUIPMENT TAG => tag
+col: LOCATION => -
+col: SERVICE => service
+col: MANUFACTURER => -
+col: MODEL => -
+col: TYPE => -
+col: GPM => gpm
+col: HEAD (FT.) => head_ft
+col: NPSHr => -
+col: IMP. DIA. (IN.) => -
+col: RPM => rpm
+col: MINIMUM EFFICIENCY => -
+col: MOTOR / HP => motor_hp
+col: MOTOR / PHASE => phase
+col: MOTOR / VOLT => volts
+col: NOTES => -
+col: [NOTE 2, where the row's NOTES cite it: STANDBY PUMP] => pump_arrangement
+grid:
+P-12 | 11 MECHANICAL | HEAT PUMP WATER TO AHU-6 | BELL & GOSSETT | e-90 | CENTRIFUGAL IN-LINE | 49.9 | 30.0 | 5.1 | 6 | 1618 | 62.1% | 1 | 3 | 208 | 1 | 
+P-13 | 11 MECHANICAL | HEAT PUMP WATER TO AHU-6 | BELL & GOSSETT | e-90 | CENTRIFUGAL IN-LINE | 49.9 | 30.0 | 5.1 | 6 | 1618 | 62.1% | 1 | 3 | 208 | 1,2 | standby (STANDBY PUMP)
+END

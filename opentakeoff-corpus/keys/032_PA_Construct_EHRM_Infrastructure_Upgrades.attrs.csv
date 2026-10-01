@@ -1,0 +1,47 @@
+# 032_PA_Construct_EHRM_Infrastructure_Upgrades.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/032_PA_Construct_EHRM_Infrastructure_Upgrades.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M0.02 MECHANICAL SCHEDULES (page 3) of the EHRM Infrastructure Upgrades, CMCVAMC Philadelphia PA (Introba), the table the fifth tier's seed drew for its PUMP stratum.
+#   032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3 | MECHANICAL - PUMP SCHEDULE | PUMP | all 2 printed rows | render: page 3 overview at 40 dpi; crop 215,960,1300,215 at 3x in 2 tiles (TYPE and EQUIPMENT NUMBER columns repeated), notes included; second read of both rows, every cell, against the text layer; page 43 crop 600,640,110,100 at 4x (the plan tags)
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and model numbers, the pump type, impeller diameters, efficiencies, brake horsepower, frequency and weights, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 032_PA_Construct_EHRM_Infrastructure_Upgrades: 1 table(s), 2 instance(s), 30 keyed attribute value(s) (16 printed, 14 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,building,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,floor,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,area_served,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,qty,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,service,"AC-A1, AC-A2",,SERVICE,
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,gpm,143,gpm,PUMP / FLOW (GPM),printed '143.0'
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,head_ft,142,ft,PUMP / HEAD (FT.WC),printed '142.0'
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,motor_hp,10,hp,ELECTRICAL / HP,
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,rpm,3600,rpm,PUMP / SPEED (RPM),
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,vfd,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,pump_arrangement,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,glycol_pct,40,%,NOTE 4,"note 4, the rows' NOTES say ALL: 'SYSTEM INCLUDES 40% PROPYLENE GLYCOL BY VOLUME'"
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,conn_in,,in,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,volts,460,V,ELECTRICAL / VOLT (V),
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-A,PUMP,phase,3,,ELECTRICAL / PHASE,
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,building,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,floor,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,area_served,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,qty,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,service,"AC-B1, AC-B2",,SERVICE,
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,gpm,143,gpm,PUMP / FLOW (GPM),printed '143.0'
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,head_ft,142,ft,PUMP / HEAD (FT.WC),printed '142.0'
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,motor_hp,10,hp,ELECTRICAL / HP,
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,rpm,3600,rpm,PUMP / SPEED (RPM),
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,vfd,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,pump_arrangement,,,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,glycol_pct,40,%,NOTE 4,"note 4, the rows' NOTES say ALL: 'SYSTEM INCLUDES 40% PROPYLENE GLYCOL BY VOLUME'"
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,conn_in,,in,,not printed
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,volts,460,V,ELECTRICAL / VOLT (V),
+032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf#3,MECHANICAL - PUMP SCHEDULE,P-B,PUMP,phase,3,,ELECTRICAL / PHASE,

@@ -1,0 +1,169 @@
+# 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-601 and E-602 SCHEDULES (pages 18 and 27) of Alter / Repair B1624, Irish Hill, Air Force Research Laboratory, Rome NY (N.K. Bhandari), the tables the fifth tier's seed drew for its AHU, FCU, CONDENSING_UNIT, BOILER, PUMP and FIN_TUBE_RADIATION strata.
+#   016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18 | AIR HANDLING UNIT SCHEDULE | AHU | all 1 printed row | render: page 18 overview at 40 dpi; crop 308,60,2250,160 at 3x in 4 tiles (UNIT NO. column repeated), notes included; second read of the row, every cell, against the text layer
+#   016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#27 | (untitled) | FCU | none — panelboard PP-4's circuit schedule on E-602; its F-1 and F-2 circuits feed fans (the sheet's EQUIPMENT CONNECTION SCHEDULE), and no row is a fan coil unit | render: page 27 overview at 40 dpi; crop 80,915,720,330 at 2.2x in 2 tiles (DESCRIPTION column repeated), every circuit's description read, and the text layer row by row; the EQUIPMENT CONNECTION SCHEDULE's equipment rows (crop 960,1060,440,145 at 3x) read for F-1 and F-2
+#   016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18 | AIR COOLED CONDENSING UNIT SCHEDULE | CONDENSING_UNIT | all 1 printed row | render: page 18 overview at 40 dpi; crop 1177,250,1381,170 at 3x in 2 tiles (UNIT NO. column repeated), notes included; second read of the row, every cell, against the text layer
+#   016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18 | BOILER SCHEDULE (EXISTING) | BOILER | the 1 printed row (its UNIT NO. "B-1 & 2" names two boilers, keyed as B-1 and B-2) | render: page 18 overview at 40 dpi; crop 1240,462,1318,143 at 3x in 2 tiles (UNIT NO. column repeated); second read of the row, every cell, against the text layer
+#   016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18 | PUMP SCHEDULE | PUMP | all 2 printed rows | render: page 18 overview at 40 dpi; crop 1632,637,926,157 at 3x in 2 tiles (UNIT NO. column repeated); second read of both rows, every cell, against the text layer
+#   016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18 | FIN TUBE RADIATION SCHEDULE | FIN_TUBE_RADIATION | all 1 printed row | render: page 18 overview at 40 dpi; crop 150,250,815,152 at 3x in 2 tiles (UNIT NO. column repeated), notes included; second read of the row, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Manufacturers and model numbers (basis of design), efficiencies, coil air temperatures, air pressure drops, face velocities and suction temperatures, fan types, brake horsepower, speeds and static pressures of the air handler's fans, currents (MCA, MOP), refrigerant data, heat rejection and compressor data of the condensing unit, the boilers' type, system fluid, gas pressures and relief and working pressures, the pumps' type, the fin tube's fin, row, length, enclosure and mounting data, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test: 6 table(s), 7 instance(s), 145 keyed attribute value(s) (48 printed, 97 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,building,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,floor,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,area_served,,,AREA SERVED,printed 'SEE PLANS' — not a single value for this attribute
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_cfm,3450,cfm,SUPPLY CFM,"printed '3,450'"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,oa_cfm_min,680,cfm,OA CFM (MIN),
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_hp,3,hp,SUPPLY FAN / MOTOR HP,printed '3.0'
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,return_fan_hp,2,hp,RETURN FAN / MOTOR HP,printed '2.0'
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,exhaust_fan_hp,,hp,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,vfd,no,,NOTE 2,"note 2, cited by the row's REMARKS: 'PROVIDE WITH UNIT MOUNTED STARTER AND DISCONNECT.', a motor starter, not a variable-frequency drive; both fans print TYPE CONST. VOL. (the author's reading)"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,economizer,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,outdoor_air_pct,,%,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_type,dx,,COOLING COIL - DX,the row prints the COOLING COIL - DX block
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_mbh,111.4,MBH,COOLING COIL - DX / TOTAL MBH,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_tons,,tons,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,dx_stages,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_gpm,,gpm,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_ewt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_lwt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_wpd_ft,,ft,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_mbh,,MBH,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_rows,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_conn_in,,in,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_glycol_pct,,%,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_type,hw,,HEATING COIL - WATER,the row prints the HEATING COIL - WATER block (water side EWT 160 / LWT 140)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_mbh,151.6,MBH,HEATING COIL - WATER / MBH,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_gpm,15.5,gpm,HEATING COIL - WATER / GPM,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_ewt_f,160,F,HEATING COIL - WATER / EWT (°F),
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_lwt_f,140,F,HEATING COIL - WATER / LWT (°F),
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_wpd_ft,3.2,ft,HEATING COIL - WATER / WPD (FT HD),
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_mbh,,MBH,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_rows,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_conn_in,,in,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_glycol_pct,,%,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_psig,,psig,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_lb_hr,,lb/hr,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,gas_input_mbh,,MBH,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,eh_kw,,kW,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,humidifier,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,energy_recovery,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,filter_merv,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,bas_interface,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,volts,208,V,"SUPPLY FAN / VOLTS /PH: volts part; the unit's single point power connection, note 3",author's reading of the printed row
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,phase,3,,"SUPPLY FAN / VOLTS /PH: phase part; the unit's single point power connection, note 3",author's reading of the printed row
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#27,,,FCU,,,,,"no FCU instance printed: none — panelboard PP-4's circuit schedule on E-602; its F-1 and F-2 circuits feed fans (the sheet's EQUIPMENT CONNECTION SCHEDULE), and no row is a fan coil unit"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,building,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,floor,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,area_served,AHU-1,,UNIT SERVED,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,cfm,,cfm,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,cooling_mbh,,MBH,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,motor_hp,0.3333333333333333,hp,FANS / HP (EA): each condenser fan's motor,printed '1/3'; author's reading of the printed row
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,conn_in,,in,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,bas_interface,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ACCU-1,CONDENSING_UNIT,phase,3,,ELECTRICAL / PHASE,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,building,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,floor,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,area_served,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,fuel,propane,,PROPANE,"the row prints the PROPANE input block (INPUT MBH, minimum and maximum input pressures)"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,input_mbh,100,MBH,PROPANE / INPUT MBH,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,output_mbh,90,MBH,IBR GROSS OUTPUT (MBH),
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,gpm,10.75,gpm,GPM,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,ewt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,lwt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,eh_kw,,kW,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,conn_in,,in,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,bas_interface,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,volts,120,V,ELECTRICAL / VOLTS,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-1,BOILER,phase,1,,ELECTRICAL / PHASE,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,building,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,floor,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,area_served,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,fuel,propane,,PROPANE,"the row prints the PROPANE input block (INPUT MBH, minimum and maximum input pressures)"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,input_mbh,100,MBH,PROPANE / INPUT MBH,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,output_mbh,90,MBH,IBR GROSS OUTPUT (MBH),
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,gpm,10.75,gpm,GPM,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,ewt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,lwt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,eh_kw,,kW,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,conn_in,,in,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,bas_interface,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,volts,120,V,ELECTRICAL / VOLTS,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),B-2,BOILER,phase,1,,ELECTRICAL / PHASE,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,building,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,floor,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,area_served,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,service,HEATING,,SYSTEM SERVED,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,gpm,21.5,gpm,GPM,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,head_ft,25,ft,TDH (FT WG),printed '25.0'
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,motor_hp,0.5,hp,ELECTRICAL / HP,printed '1/2'
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,rpm,1750,rpm,RPM,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,vfd,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,pump_arrangement,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,glycol_pct,,%,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,conn_in,,in,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,volts,115,V,ELECTRICAL / VOLTS,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-1,PUMP,phase,1,,ELECTRICAL / PHASE,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,building,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,floor,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,area_served,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,service,HEATING,,SYSTEM SERVED,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,gpm,21.5,gpm,GPM,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,head_ft,25,ft,TDH (FT WG),printed '25.0'
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,motor_hp,0.5,hp,ELECTRICAL / HP,printed '1/2'
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,rpm,1750,rpm,RPM,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,vfd,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,pump_arrangement,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,glycol_pct,,%,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,conn_in,,in,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,volts,115,V,ELECTRICAL / VOLTS,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,P-2,PUMP,phase,1,,ELECTRICAL / PHASE,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,building,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,floor,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,area_served,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,qty,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,cfm,,cfm,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,cooling_mbh,,MBH,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,cooling_tons,,tons,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,heating_mbh,,MBH,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,hw_gpm,,gpm,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,hw_ewt_f,160,F,EWT,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,hw_lwt_f,140,F,LWT,
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,chw_gpm,,gpm,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,chw_ewt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,chw_lwt_f,,F,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,motor_hp,,hp,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,eh_kw,,kW,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,conn_in,0.75,in,PIPE DIA.,printed '3/4'
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,bas_interface,,,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,volts,,V,,not printed
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,FT-A,FIN_TUBE_RADIATION,phase,,,,not printed

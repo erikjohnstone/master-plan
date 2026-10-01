@@ -56,7 +56,9 @@ export interface TableRegionResult {
 
 let proc: ChildProcessWithoutNullStreams | null = null;
 let nextId = 1;
-const pending = new Map<number, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
+// Each request remembers the process it was sent to, so a process that exits
+// fails only its own requests (the race vectorGridClient.ts describes).
+const pending = new Map<number, { resolve: (v: unknown) => void; reject: (e: Error) => void; child: ChildProcessWithoutNullStreams }>();
 
 function sidecarEnabled(): boolean {
   if (process.env.OPENTAKEOFF_TABLE_SIDECAR === "0") return false;
@@ -66,11 +68,12 @@ function sidecarEnabled(): boolean {
 function ensureProc(): ChildProcessWithoutNullStreams {
   if (proc) return proc;
   const py = process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON || "python3";
-  proc = spawn(py, [SIDECAR_SCRIPT], {
+  const child = spawn(py, [SIDECAR_SCRIPT], {
     stdio: ["pipe", "pipe", "pipe"],
     env: { ...process.env, PYTHONUNBUFFERED: "1" },
   });
-  const rl = createInterface({ input: proc.stdout });
+  proc = child;
+  const rl = createInterface({ input: child.stdout });
   rl.on("line", (line) => {
     try {
       const msg = JSON.parse(line) as { id?: number; result?: unknown; error?: { message?: string } };
@@ -84,13 +87,16 @@ function ensureProc(): ChildProcessWithoutNullStreams {
       /* ignore malformed lines */
     }
   });
-  proc.on("exit", () => {
-    proc = null;
-    for (const [, p] of pending) p.reject(new Error("table sidecar exited"));
-    pending.clear();
+  child.on("exit", () => {
+    if (proc === child) proc = null;
+    for (const [id, p] of pending) {
+      if (p.child !== child) continue;
+      pending.delete(id);
+      p.reject(new Error("table sidecar exited"));
+    }
   });
-  proc.stderr.on("data", () => {});
-  return proc;
+  child.stderr.on("data", () => {});
+  return child;
 }
 
 function rpc<T>(method: string, params: Record<string, unknown> = {}): Promise<T> {
@@ -98,7 +104,7 @@ function rpc<T>(method: string, params: Record<string, unknown> = {}): Promise<T
   const child = ensureProc();
   const id = nextId++;
   return new Promise<T>((resolve, reject) => {
-    pending.set(id, { resolve: resolve as (v: unknown) => void, reject });
+    pending.set(id, { resolve: resolve as (v: unknown) => void, reject, child });
     child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", id, method, params })}\n`);
   });
 }

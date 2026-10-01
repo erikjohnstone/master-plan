@@ -1,0 +1,889 @@
+{
+ "seed": 20260926,
+ "heldout_min_docs": 5,
+ "dev_min_docs": 8,
+ "key_rows_per_table_max": 30,
+ "population_docs": 53,
+ "population_groups": 47,
+ "left_out_split_drafters": [],
+ "examined": [
+  "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+  "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+  "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+  "011_IL_VA_Hines_Finance_Center_Renovation",
+  "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+  "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+  "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+  "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+  "03_FL_HurlburtField_ChildDevCenter",
+  "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+  "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+  "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+  "05_MO_VA_StLouis_AHU_VAV_Replacement",
+  "06_MO_NatlGuard_JeffCity_CST_Addition",
+  "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+  "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+  "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+  "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+  "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+  "14_OR_KlamathCC_LearningCtr_Mechanical",
+  "16_NV_CarsonValleyMS_HVAC_Replacement",
+  "21_VA_OrangeCounty_PublicSafetyBldg"
+ ],
+ "shuffled_group_order": [
+  {
+   "group": "pivot-colebreit",
+   "docs": 1,
+   "pick": "14_OR_KlamathCC_LearningCtr_Mechanical"
+  },
+  {
+   "group": "glumac",
+   "docs": 1,
+   "pick": "11_CA_SDSU_EngSciences_Complex_100SD"
+  },
+  {
+   "group": "toland-mizell-molnar",
+   "docs": 1,
+   "pick": "045_FL_VA_Project_516_21_107_EHRM_Infrastructure"
+  },
+  {
+   "group": "alares",
+   "docs": 1,
+   "pick": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers"
+  },
+  {
+   "group": "schmidt-consulting-group",
+   "docs": 1,
+   "pick": "03_FL_HurlburtField_ChildDevCenter"
+  },
+  {
+   "group": "mes-group",
+   "docs": 1,
+   "pick": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17"
+  },
+  {
+   "group": "elara-engineering",
+   "docs": 1,
+   "pick": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation"
+  },
+  {
+   "group": "cr-engineering",
+   "docs": 1,
+   "pick": "16_NV_CarsonValleyMS_HVAC_Replacement"
+  },
+  {
+   "group": "morrison-maierle",
+   "docs": 3,
+   "pick": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation"
+  },
+  {
+   "group": "wiley-wilson",
+   "docs": 1,
+   "pick": "21_VA_OrangeCounty_PublicSafetyBldg"
+  },
+  {
+   "group": "johnsondanforth",
+   "docs": 1,
+   "pick": "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling"
+  },
+  {
+   "group": "above-group",
+   "docs": 1,
+   "pick": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU"
+  },
+  {
+   "group": "apogee-consulting",
+   "docs": 2,
+   "pick": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure"
+  },
+  {
+   "group": "nbp-engineers",
+   "docs": 1,
+   "pick": "22_GA_Valdosta_FireStation8_100CD"
+  },
+  {
+   "group": "tlc-engineering",
+   "docs": 2,
+   "pick": "17_FL_SuwanneeHS_Courtyard_100CD"
+  },
+  {
+   "group": "haley-ward",
+   "docs": 1,
+   "pick": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades"
+  },
+  {
+   "group": "kendall-fmi",
+   "docs": 1,
+   "pick": "028_TX_Renovation_of_Building_615_Final_Design_Plans"
+  },
+  {
+   "group": "cushing-terrell",
+   "docs": 1,
+   "pick": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+  },
+  {
+   "group": "ahp-engineers",
+   "docs": 1,
+   "pick": "23_GA_MaconBibb_RecreationCenter"
+  },
+  {
+   "group": "mechanical-systems-engineers",
+   "docs": 1,
+   "pick": "08_ME_BGS_Augusta_EastCampus_Renovation"
+  },
+  {
+   "group": "dec-engineers",
+   "docs": 1,
+   "pick": "19_CA_VistaUSD_DataCenter"
+  },
+  {
+   "group": "faa-atct-standard",
+   "docs": 1,
+   "pick": "02_UT_FAA_Ogden_AirTrafficControlTower"
+  },
+  {
+   "group": "g-and-w-engineering",
+   "docs": 1,
+   "pick": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated"
+  },
+  {
+   "group": "bancroft",
+   "docs": 1,
+   "pick": "033_MN_VA_Project_656_18_301_Construct_Replace"
+  },
+  {
+   "group": "gannett-fleming",
+   "docs": 1,
+   "pick": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX"
+  },
+  {
+   "group": "hultz-bhu",
+   "docs": 1,
+   "pick": "25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+  },
+  {
+   "group": "spur-design",
+   "docs": 1,
+   "pick": "011_IL_VA_Hines_Finance_Center_Renovation"
+  },
+  {
+   "group": "klingner",
+   "docs": 1,
+   "pick": "06_MO_NatlGuard_JeffCity_CST_Addition"
+  },
+  {
+   "group": "wsp",
+   "docs": 1,
+   "pick": "26_CA_TransbayTower_Mechanical_64Sheets"
+  },
+  {
+   "group": "heath-engineering",
+   "docs": 1,
+   "pick": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project"
+  },
+  {
+   "group": "insite-group",
+   "docs": 1,
+   "pick": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral"
+  },
+  {
+   "group": "bbs-architects-engineers",
+   "docs": 1,
+   "pick": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building"
+  },
+  {
+   "group": "avcon",
+   "docs": 1,
+   "pick": "089_FL_Airport_Terminal_and_Hangar_Development"
+  },
+  {
+   "group": "modus-engineering",
+   "docs": 1,
+   "pick": "24_IA_JohnsonCounty_Courthouse"
+  },
+  {
+   "group": "aesus",
+   "docs": 1,
+   "pick": "043_FL_VA_Project_673_21_151_Replace_Air_Handling"
+  },
+  {
+   "group": "nk-bhandari",
+   "docs": 1,
+   "pick": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test"
+  },
+  {
+   "group": "spees-design-build",
+   "docs": 1,
+   "pick": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction"
+  },
+  {
+   "group": "cfr-engineering",
+   "docs": 1,
+   "pick": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling"
+  },
+  {
+   "group": "gordon-prill",
+   "docs": 1,
+   "pick": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid"
+  },
+  {
+   "group": "rqaw",
+   "docs": 1,
+   "pick": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set"
+  },
+  {
+   "group": "blw-engineers",
+   "docs": 1,
+   "pick": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades"
+  },
+  {
+   "group": "clark-nexsen",
+   "docs": 1,
+   "pick": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building"
+  },
+  {
+   "group": "lavallee-brensinger",
+   "docs": 2,
+   "pick": "09_ME_BGS_KennebecValleyCC_Renovation"
+  },
+  {
+   "group": "solutions-aec",
+   "docs": 1,
+   "pick": "10_MO_Hawthorn_PsychHospital_HVAC"
+  },
+  {
+   "group": "tres-west",
+   "docs": 1,
+   "pick": "28_WA_KCHA_PublicHousing_HVAC"
+  },
+  {
+   "group": "fourfront-design",
+   "docs": 1,
+   "pick": "04_NV_VA_LasVegas_CentralUtilityPlant"
+  },
+  {
+   "group": "introba",
+   "docs": 2,
+   "pick": "032_PA_Construct_EHRM_Infrastructure_Upgrades"
+  }
+ ],
+ "skipped_for_heldout": [
+  {
+   "group": "pivot-colebreit",
+   "examined": [
+    "14_OR_KlamathCC_LearningCtr_Mechanical"
+   ]
+  },
+  {
+   "group": "alares",
+   "examined": [
+    "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers"
+   ]
+  },
+  {
+   "group": "schmidt-consulting-group",
+   "examined": [
+    "03_FL_HurlburtField_ChildDevCenter"
+   ]
+  },
+  {
+   "group": "cr-engineering",
+   "examined": [
+    "16_NV_CarsonValleyMS_HVAC_Replacement"
+   ]
+  },
+  {
+   "group": "morrison-maierle",
+   "examined": [
+    "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+    "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC"
+   ]
+  },
+  {
+   "group": "wiley-wilson",
+   "examined": [
+    "21_VA_OrangeCounty_PublicSafetyBldg"
+   ]
+  }
+ ],
+ "dev": {
+  "groups": [
+   "pivot-colebreit",
+   "alares",
+   "schmidt-consulting-group",
+   "cr-engineering",
+   "morrison-maierle",
+   "wiley-wilson",
+   "above-group",
+   "apogee-consulting",
+   "cushing-terrell",
+   "gannett-fleming"
+  ],
+  "sets": [
+   "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+   "03_FL_HurlburtField_ChildDevCenter",
+   "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+   "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+   "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+   "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "16_NV_CarsonValleyMS_HVAC_Replacement",
+   "21_VA_OrangeCounty_PublicSafetyBldg"
+  ],
+  "covers": [
+   "VAV",
+   "AHU/DOAS/RTU",
+   "FCU",
+   "pump",
+   "fan",
+   "UH/CUH",
+   "boiler",
+   "chiller",
+   "cooling tower",
+   "HX",
+   "ERV",
+   "humidifier"
+  ],
+  "added_for_coverage": [
+   {
+    "group": "cushing-terrell",
+    "adds": [
+     "humidifier"
+    ]
+   },
+   {
+    "group": "gannett-fleming",
+    "adds": [
+     "cooling tower"
+    ]
+   }
+  ],
+  "tables": [
+   {
+    "set": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+    "family": "CONDENSING_UNIT",
+    "table": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf#63 :: VRV- AIR-COOLED CONDENSING UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "03_FL_HurlburtField_ChildDevCenter",
+    "family": "AHU",
+    "table": "03_FL_HurlburtField_ChildDevCenter.pdf#64 :: VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "03_FL_HurlburtField_ChildDevCenter",
+    "family": "VAV",
+    "table": "03_FL_HurlburtField_ChildDevCenter.pdf#64 :: AIR TERMINAL UNIT SCHEDULE (AHU 2)",
+    "claimed_rows": 15,
+    "keyed_rows_max": 15,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "03_FL_HurlburtField_ChildDevCenter",
+    "family": "BOILER",
+    "table": "03_FL_HurlburtField_ChildDevCenter.pdf#64 :: CONDENSING BOILER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "03_FL_HurlburtField_ChildDevCenter",
+    "family": "PUMP",
+    "table": "03_FL_HurlburtField_ChildDevCenter.pdf#64 :: PUMP SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "03_FL_HurlburtField_ChildDevCenter",
+    "family": "FAN",
+    "table": "03_FL_HurlburtField_ChildDevCenter.pdf#65 :: FAN SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "family": "CONDENSING_UNIT",
+    "table": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22 :: AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU)",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "family": "BOILER",
+    "table": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 :: BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "family": "PUMP",
+    "table": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 :: GENERATOR FUEL OIL PUMP SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "family": "FAN",
+    "table": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 :: FAN SCHEDULE",
+    "claimed_rows": 7,
+    "keyed_rows_max": 7,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "family": "UNIT_HEATER",
+    "table": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 :: STEAM UNIT HEATER SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "family": "HEAT_EXCHANGER",
+    "table": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22 :: BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+    "family": "CONDENSING_UNIT",
+    "table": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#10 :: -CONDENSING UNIT",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+    "family": "VRF_INDOOR",
+    "table": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 :: VRF INDOOR UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+    "family": "VRF_OUTDOOR",
+    "table": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 :: VRF OUTDOOR UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 :: AIR COOLED WATER CHILLER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+    "family": "HEAT_RECOVERY_CHILLER",
+    "table": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#27 :: EQUIPMENT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+    "family": "PUMP",
+    "table": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21 :: PUMP SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+    "family": "VAV",
+    "table": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9 :: EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+    "family": "FAN",
+    "table": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9 :: EXHAUST FAN SCHEDULE - EXTRUDER LAB",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+    "family": "HEAT_PUMP",
+    "table": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8 :: WATER SOURCE HEAT PUMP SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+    "family": "HUMIDIFIER",
+    "table": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf#8 :: HUMIDIFIER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "AHU",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 :: AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "FCU",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 :: CHILLED WATER FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "CONDENSING_UNIT",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31 :: AIR COOLED CONDENSING UNIT SCHEDULE",
+    "claimed_rows": 5,
+    "keyed_rows_max": 5,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246 :: WATER COOLED CENTRIFUGAL CHILLER SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "PUMP",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31 :: PUMP SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "COOLING_TOWER",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246 :: COOLING TOWER SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "FAN",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 :: SMOKE EXHAUST FAN SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "family": "UNIT_HEATER",
+    "table": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 :: ELECTRIC DUCT HEATER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "DOAS",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2 :: DEDICATED OUTDOOR AIR SYSTEM",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "OUTDOOR_AIR_UNIT",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 :: MAKE UP AIR UNITS",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "FCU",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 :: SPLIT SYSTEM HEAT PUMPS",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "HEAT_PUMP",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 :: SPLIT SYSTEM HEAT PUMPS",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2 :: AIR COOLED CHILLER",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "BOILER",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2 :: HOT WATER CONDENSING BOILER",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "PUMP",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 :: HYDRONIC PUMPS",
+    "claimed_rows": 8,
+    "keyed_rows_max": 8,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "UNIT_HEATER",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 :: ELECTRIC HEATERS",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "family": "HEAT_EXCHANGER",
+    "table": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 :: HEAT EXCHANGER",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "family": "OUTDOOR_AIR_UNIT",
+    "table": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 :: OUTDOOR AIR UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "family": "RTU",
+    "table": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4 :: EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "family": "ERV",
+    "table": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 :: ENERGY RECOVERY VENTILATOR SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "family": "FURNACE",
+    "table": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 :: 2-STAGE, GAS FIRED FURNACE SCHEDULE",
+    "claimed_rows": 21,
+    "keyed_rows_max": 21,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "family": "CONDENSING_UNIT",
+    "table": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 :: CONDENSING UNIT SCHEDULE",
+    "claimed_rows": 23,
+    "keyed_rows_max": 23,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "21_VA_OrangeCounty_PublicSafetyBldg",
+    "family": "VAV",
+    "table": "21_VA_OrangeCounty_PublicSafetyBldg.pdf#50 :: VAV TERMINAL BOX SCHEDULE",
+    "claimed_rows": 57,
+    "keyed_rows_max": 30,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "21_VA_OrangeCounty_PublicSafetyBldg",
+    "family": "CONDENSING_UNIT",
+    "table": "21_VA_OrangeCounty_PublicSafetyBldg.pdf#51 :: AIR COOLED CONDENSING UNIT SCHEDULE",
+    "claimed_rows": 9,
+    "keyed_rows_max": 9,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "21_VA_OrangeCounty_PublicSafetyBldg",
+    "family": "PUMP",
+    "table": "21_VA_OrangeCounty_PublicSafetyBldg.pdf#30 :: DOMESTIC WATER BOOSTER PUMP SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "21_VA_OrangeCounty_PublicSafetyBldg",
+    "family": "FAN",
+    "table": "21_VA_OrangeCounty_PublicSafetyBldg.pdf#117 :: ",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   }
+  ]
+ },
+ "heldout": {
+  "groups": [
+   "glumac",
+   "toland-mizell-molnar",
+   "mes-group",
+   "elara-engineering",
+   "johnsondanforth"
+  ],
+  "sets": [
+   "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+   "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+   "045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
+   "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+   "11_CA_SDSU_EngSciences_Complex_100SD"
+  ],
+  "covers": [
+   "VAV",
+   "AHU/DOAS/RTU",
+   "FCU",
+   "pump",
+   "fan",
+   "HX",
+   "humidifier"
+  ],
+  "withheld": [
+   "035_AR_564_19_101_Construct_New_Water_Storage",
+   "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation"
+  ],
+  "tables": [
+   {
+    "set": "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+    "family": "PUMP",
+    "table": "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#56 :: ",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+    "family": "FAN",
+    "table": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#24 :: ",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
+    "family": "FCU",
+    "table": "045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21 :: CHILLED WATER FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 9,
+    "keyed_rows_max": 9,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+    "family": "FCU",
+    "table": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11 :: FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)",
+    "claimed_rows": 5,
+    "keyed_rows_max": 5,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+    "family": "CONDENSING_UNIT",
+    "table": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11 :: C O N D E N S I N G U N I T S C H E D U L E ( C U )",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "AHU",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#81 :: AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "FCU",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#83 :: TWO PIPE COOLING FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 18,
+    "keyed_rows_max": 18,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "VAV",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#81 :: VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE-HOT WATER REHEAT",
+    "claimed_rows": 40,
+    "keyed_rows_max": 30,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "PUMP",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#84 :: PUMP SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 4
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "FAN",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#81 :: LABORATORY EXHAUST FAN SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "HUMIDIFIER",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#84 :: ELECTRIC HUMIDIFIER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "HEAT_EXCHANGER",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#84 :: WATER-TO-WATER HEAT EXCHANGER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "family": "DUCT_MOUNTED_COIL",
+    "table": "11_CA_SDSU_EngSciences_Complex_100SD.pdf#84 :: DUCT MOUNTED COIL SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   }
+  ]
+ },
+ "required_coverage_missing_from_population": [],
+ "dev_coverage_missing": [],
+ "generated_at": "2026-09-26T14:54:59.328Z",
+ "census_generated_at": "2026-09-26T14:54:23.159Z",
+ "census_errors": []
+}

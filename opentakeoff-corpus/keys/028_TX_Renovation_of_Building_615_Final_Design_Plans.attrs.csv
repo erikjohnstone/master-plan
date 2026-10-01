@@ -1,0 +1,958 @@
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/028_TX_Renovation_of_Building_615_Final_Design_Plans.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M-601 HVAC SCHEDULES I (page 9) of the building 615 renovation, Fort Sam Houston TX (Kendall / FMI for the US Army Corps of Engineers), the tables the fourth tier's seed drew for its FCU, DOAS, AIR_COOLED_CHILLER, BOILER, FAN and UNIT_HEATER strata.
+#   028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9 | CHILLED WATER FAN COIL UNIT SCHEDULE | FCU | all 23 printed rows | render: page 9 overview at 40 dpi; crops 135,88,2200,330 and 135,405,2200,250 at 3x, each in 5 tiles (MARK column repeated), notes included; second read at 3x of every row in the text layer's order, every keyed cell
+#   028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9 | DEDICATED OUTSIDE AIR SYSTEM SCHEDULE | DOAS | all 3 printed rows | render: page 9 overview at 40 dpi; crop 135,682,2200,160 at 3x in 4 tiles (MARK column repeated), notes included; second read at 3x of all 3 rows in the text layer's order, every keyed cell
+#   028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9 | BOILER SCHEDULE | BOILER | all 1 printed row | render: page 9 overview at 40 dpi; crop 135,944,1400,150 at 2.2x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every keyed cell
+#   028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9 | UNIT HEATER SCHEDULE | UNIT_HEATER | the 1 printed row (its MARK "UH-1 & UH-2" names two units, keyed as UH-1 and UH-2) | render: page 9 overview at 40 dpi; crop 1545,944,790,160 at 2.2x, notes included; second read at 3x of the row, every keyed cell
+#   028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9 | AIR-COOLED CHILLER SCHEDULE | AIR_COOLED_CHILLER | all 1 printed row | render: page 9 overview at 40 dpi; crop 135,1170,1130,150 at 2.2x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every keyed cell
+#   028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9 | EXHAUST FAN SCHEDULE | FAN | all 3 printed rows | render: page 9 overview at 40 dpi; crop 1290,1170,1050,150 at 2.2x in 2 tiles (MARK column repeated), notes included; second read at 3x of EF-1, EF-2 and EF-3, every keyed cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Unit types, fouling factors, sensible capacities, air temperatures, air-side pressure drops, efficiencies, MCA and MOCP, amps, NEMA sizes, dimensions, weights, sound ratings, manufacturers and models, clearances, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans: 6 table(s), 33 instance(s), 936 keyed attribute value(s) (487 printed, 449 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,area_served,LIBRARY 101,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_mbh,29.3,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-1,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,area_served,LIBRARY 101,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 1-2,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,area_served,"RESTROOM AREA: 103, 104, 105, 106",,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,cfm,600,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,motor_hp,8,hp,ELECTRICAL / HP,printed '8.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_gpm,4.3,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_wpd_ft,8.8,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_mbh,20.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_gpm,1.8,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_wpd_ft,5.7,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_mbh,20.5,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-3,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,area_served,CORRIDORS & STORAGE 107,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,cfm,600,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,motor_hp,8,hp,ELECTRICAL / HP,printed '8.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_gpm,4.3,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_wpd_ft,8.8,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_mbh,20.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_gpm,1.8,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_wpd_ft,5.7,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_mbh,20.5,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-4,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,area_served,GROUP REHERSAL 1-3,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,cfm,800,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,motor_hp,9.4,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_gpm,5,gpm,COOLING COIL / CHILLED WATER GPM,printed '5.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_wpd_ft,12.3,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_mbh,23.6,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_gpm,2.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_wpd_ft,6.2,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_mbh,23.5,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-5,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,area_served,GROUP REHERSAL 4 & STORAGES,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,cfm,400,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,motor_hp,4,hp,ELECTRICAL / HP,printed '4.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_gpm,3.2,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_wpd_ft,4.1,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_mbh,13.9,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_gpm,1.3,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_wpd_ft,6.4,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_mbh,13.9,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-6,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,area_served,"INSTR. ROOMS & MECH 116,117 & 119",,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,cfm,400,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,motor_hp,4,hp,ELECTRICAL / HP,printed '4.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_gpm,3.2,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_wpd_ft,4.1,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_mbh,13.9,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_gpm,1.3,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_wpd_ft,6.4,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_mbh,13.9,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-7,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,area_served,"MENS 120, MEN SHOWER 121, & MEN LOCKER 122",,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,cfm,600,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,motor_hp,8,hp,ELECTRICAL / HP,printed '8.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_gpm,4.5,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_wpd_ft,8.8,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_mbh,20.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_gpm,1.8,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_wpd_ft,5.7,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_mbh,20.5,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-8,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,area_served,IND. PRACTICE ROOMS & CORRIDORS,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,cfm,600,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,motor_hp,8,hp,ELECTRICAL / HP,printed '8.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_gpm,4.5,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_wpd_ft,8.8,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_mbh,20.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_gpm,1.8,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_wpd_ft,5.7,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_mbh,20.5,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 1-9,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,area_served,PERFORMANCE/REHERSAL HALL 213,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,cfm,3810,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,motor_hp,5,hp,ELECTRICAL / HP,printed '5.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_gpm,28.1,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_wpd_ft,15.34,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_mbh,170.1,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_gpm,16.6,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_wpd_ft,22.04,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_mbh,162,MBH,HEATING COIL / TOTAL MBH,printed '162.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 3ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-1,FCU,phase,3,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,area_served,OPEN OFFICE 216,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-2,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,area_served,OPEN OFFICE 216,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_lwt_f,161,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-3,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,area_served,OPEN OFFICE 216,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_lwt_f,162,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-4,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,area_served,OPEN OFFICE 216,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,cfm,700,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_gpm,6.1,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_wpd_ft,12.93,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_mbh,28,MBH,COOLING COIL / TOT. MBH,printed '28.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_gpm,4.9,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_wpd_ft,6.93,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_mbh,46.6,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-5,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,area_served,ROCK REHERSAL 218,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,cfm,700,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_gpm,6.1,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_wpd_ft,12.93,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_mbh,28,MBH,COOLING COIL / TOT. MBH,printed '28.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_gpm,4.9,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_wpd_ft,6.93,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_mbh,46.6,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-6,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,area_served,ROCK REHERSAL 218,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,cfm,700,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_gpm,6.1,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_wpd_ft,12.93,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_mbh,28,MBH,COOLING COIL / TOT. MBH,printed '28.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_gpm,4.9,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_wpd_ft,6.93,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_mbh,46.6,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-7,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,area_served,CORRIDOR C206 & MECHANICAL 215,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,cfm,800,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,motor_hp,9.4,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_gpm,5,gpm,COOLING COIL / CHILLED WATER GPM,printed '5.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_wpd_ft,12.3,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_mbh,23.6,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_gpm,2.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_wpd_ft,6.2,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_mbh,20.3,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-8,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,area_served,BREAK/CONFERENCE 203,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-9,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,area_served,BREAK/CONFERENCE 203,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-10,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,area_served,BREAK/CONFERENCE 203,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-11,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,area_served,BREAK/CONFERENCE 203,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,cfm,630,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,motor_hp,0.125,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_gpm,4.9,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_wpd_ft,7.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_mbh,18.4,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_gpm,3.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_wpd_ft,5.54,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_mbh,13,MBH,HEATING COIL / TOTAL MBH,printed '13.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCC 2-12,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,area_served,"CORRIDORS ,STORAGES, 207, & 209",,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,cfm,800,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,motor_hp,9.4,hp,ELECTRICAL / HP,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_gpm,5,gpm,COOLING COIL / CHILLED WATER GPM,printed '5.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_wpd_ft,12.3,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_mbh,23.6,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_gpm,2.1,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_wpd_ft,6.2,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_mbh,23.5,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-13,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,area_served,WOMEN 204 & MEN 206,,ROOM: the rooms the unit serves,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,pipes,4,,NOTE 3,"note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,cfm,400,cfm,SUPPLY FAN MAX. CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,motor_hp,4,hp,ELECTRICAL / HP,printed '4.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,fan_speeds,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,cooling_type,chw,,COOLING COIL / CHILLED WATER GPM,every row prints the chilled-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_gpm,3.2,gpm,COOLING COIL / CHILLED WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_ewt_f,44,F,COOLING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_wpd_ft,4.1,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_mbh,13.9,MBH,COOLING COIL / TOT. MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,heating_type,hw,,HEATING COIL / HOT WATER GPM,every row prints the hot-water coil block
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_gpm,1.3,gpm,HEATING COIL / HOT WATER GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_ewt_f,180,F,HEATING COIL / EWT/LWT (F): EWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_lwt_f,160,F,HEATING COIL / EWT/LWT (F): LWT part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_wpd_ft,6.4,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_mbh,13.9,MBH,HEATING COIL / TOTAL MBH,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,volts,,V,ELECTRICAL / VOLT-PH: volts part,printed '208-230V 1ph' — not a single value for this attribute
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU 2-14,FCU,phase,1,,ELECTRICAL / VOLT-PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,supply_cfm,1200,cfm,MAX. CFM,"printed '1,200'"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,oa_cfm_min,,cfm,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,supply_fan_hp,0.75,hp,ELECTRICAL CHARACTERISTICS / SUPPLY FAN MOTOR HP,printed '3/4'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,supply_fan_qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,return_fan_hp,,hp,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,exhaust_fan_hp,0.75,hp,ELECTRICAL CHARACTERISTICS / EXHAUST FAN MOTOR HP,printed '3/4'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,vfd,yes,,NOTE 1,"note 1: 'PROVIDE WITH DIRECT DRIVE MOTORS ON SUPPLY AND CONDENSER FANS WITH VFDS.', cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,economizer,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,outdoor_air_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,cooling_type,chw,,COOLING COIL / FLOW RATE (GPM),"every row prints a chilled-water cooling coil block (EWT/LWT 42.0/56.0, flow, water-side pressure drop)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,cooling_mbh,88.5,MBH,COOLING COIL / TOTAL CAP (MBH),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,cooling_tons,,tons,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,dx_stages,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_gpm,12.6,gpm,COOLING COIL / FLOW RATE (GPM),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_ewt_f,42,F,COOLING COIL / EWT/LWT (0F): EWT part,printed '42.0'; author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (0F): LWT part,printed '56.0'; author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_wpd_ft,12.24,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT. W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,heating_type,hw,,HEATING COIL / FLOW RATE (GPM),"every row prints a water heating coil block (flow, water-side pressure drop)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,heating_mbh,51.3,MBH,HEATING COIL / TOTAL HEAT CAP. (MBH),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_gpm,5.2,gpm,HEATING COIL / FLOW RATE (GPM),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_ewt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_lwt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_wpd_ft,10.77,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT. W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,steam_psig,,psig,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,steam_lb_hr,,lb/hr,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,gas_input_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,humidifier,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,energy_recovery,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,filter_merv,13,,NOTE 7,"note 7: 'PROVIDE WITH MERV-8 PLEATED PRE- FILTER AND MERV-13 FINAL FILTER.', the final filter, cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,bas_interface,BACNET,,NOTE 5,"note 5: 'PROVIDE WITH FACTORY FURNISHED ONBOARD BACNET CONTROLLER.', cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,volts,208,V,ELECTRICAL CHARACTERISTICS / VOLT /PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-1,DOAS,phase,1,,ELECTRICAL CHARACTERISTICS / VOLT /PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,supply_cfm,1850,cfm,MAX. CFM,"printed '1,850'"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,oa_cfm_min,,cfm,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,supply_fan_hp,1,hp,ELECTRICAL CHARACTERISTICS / SUPPLY FAN MOTOR HP,printed '1.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,supply_fan_qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,return_fan_hp,,hp,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,exhaust_fan_hp,1,hp,ELECTRICAL CHARACTERISTICS / EXHAUST FAN MOTOR HP,printed '1.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,vfd,yes,,NOTE 1,"note 1: 'PROVIDE WITH DIRECT DRIVE MOTORS ON SUPPLY AND CONDENSER FANS WITH VFDS.', cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,economizer,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,outdoor_air_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,cooling_type,chw,,COOLING COIL / FLOW RATE (GPM),"every row prints a chilled-water cooling coil block (EWT/LWT 42.0/56.0, flow, water-side pressure drop)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,cooling_mbh,126,MBH,COOLING COIL / TOTAL CAP (MBH),printed '126.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,cooling_tons,,tons,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,dx_stages,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_gpm,18,gpm,COOLING COIL / FLOW RATE (GPM),printed '18.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_ewt_f,42,F,COOLING COIL / EWT/LWT (0F): EWT part,printed '42.0'; author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (0F): LWT part,printed '56.0'; author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_wpd_ft,22.16,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT. W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,heating_type,hw,,HEATING COIL / FLOW RATE (GPM),"every row prints a water heating coil block (flow, water-side pressure drop)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,heating_mbh,77.7,MBH,HEATING COIL / TOTAL HEAT CAP. (MBH),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_gpm,7.9,gpm,HEATING COIL / FLOW RATE (GPM),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_ewt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_lwt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_wpd_ft,15.58,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT. W.G.),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,steam_psig,,psig,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,steam_lb_hr,,lb/hr,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,gas_input_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,humidifier,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,energy_recovery,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,filter_merv,13,,NOTE 7,"note 7: 'PROVIDE WITH MERV-8 PLEATED PRE- FILTER AND MERV-13 FINAL FILTER.', the final filter, cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,bas_interface,BACNET,,NOTE 5,"note 5: 'PROVIDE WITH FACTORY FURNISHED ONBOARD BACNET CONTROLLER.', cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,volts,208,V,ELECTRICAL CHARACTERISTICS / VOLT /PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-2,DOAS,phase,1,,ELECTRICAL CHARACTERISTICS / VOLT /PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,supply_cfm,2550,cfm,MAX. CFM,"printed '2,550'"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,oa_cfm_min,,cfm,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,supply_fan_hp,2,hp,ELECTRICAL CHARACTERISTICS / SUPPLY FAN MOTOR HP,printed '2.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,supply_fan_qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,return_fan_hp,,hp,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,exhaust_fan_hp,2,hp,ELECTRICAL CHARACTERISTICS / EXHAUST FAN MOTOR HP,printed '2.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,vfd,yes,,NOTE 1,"note 1: 'PROVIDE WITH DIRECT DRIVE MOTORS ON SUPPLY AND CONDENSER FANS WITH VFDS.', cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,economizer,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,outdoor_air_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,cooling_type,chw,,COOLING COIL / FLOW RATE (GPM),"every row prints a chilled-water cooling coil block (EWT/LWT 42.0/56.0, flow, water-side pressure drop)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,cooling_mbh,137.5,MBH,COOLING COIL / TOTAL CAP (MBH),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,cooling_tons,,tons,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,dx_stages,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_gpm,28,gpm,COOLING COIL / FLOW RATE (GPM),printed '28.0'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_ewt_f,42,F,COOLING COIL / EWT/LWT (0F): EWT part,printed '42.0'; author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_lwt_f,56,F,COOLING COIL / EWT/LWT (0F): LWT part,printed '56.0'; author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_wpd_ft,11.5,ft,COOLING COIL / WATER SIDE PRESS. DROP (FT. W.G.),printed '11.50'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,chw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,heating_type,hw,,HEATING COIL / FLOW RATE (GPM),"every row prints a water heating coil block (flow, water-side pressure drop)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,heating_mbh,40.4,MBH,HEATING COIL / TOTAL HEAT CAP. (MBH),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_gpm,2.6,gpm,HEATING COIL / FLOW RATE (GPM),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_ewt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_lwt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_wpd_ft,0.9,ft,HEATING COIL / WATER SIDE PRESS. DROP (FT. W.G.),printed '0.90'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_rows,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,hw_glycol_pct,,%,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,steam_psig,,psig,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,steam_lb_hr,,lb/hr,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,gas_input_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,humidifier,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,energy_recovery,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,filter_merv,13,,NOTE 7,"note 7: 'PROVIDE WITH MERV-8 PLEATED PRE- FILTER AND MERV-13 FINAL FILTER.', the final filter, cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,bas_interface,BACNET,,NOTE 5,"note 5: 'PROVIDE WITH FACTORY FURNISHED ONBOARD BACNET CONTROLLER.', cited by every row's NOTES"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,volts,208,V,ELECTRICAL CHARACTERISTICS / VOLT /PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DEDICATED OUTSIDE AIR SYSTEM SCHEDULE,DOAS-3,DOAS,phase,3,,ELECTRICAL CHARACTERISTICS / VOLT /PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,fuel,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,input_mbh,160,MBH,INPUT MBH / MAX.,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,output_mbh,146,MBH,OUTPUT MBH / MAX.,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,gpm,15.4,gpm,MAX. GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,ewt_f,100,F,EWT (0F),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,lwt_f,140,F,LWT(0F),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,bas_interface,BACNET MSTP,,NOTE 1,"note 1: 'PROVIDE WITH BACNET MSTP.', cited by the row's NOTES (1,2,3,4,5,6)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,volts,120,V,VOLT/PH/HZ: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,BOILER SCHEDULE,B-1,BOILER,phase,1,,VOLT/PH/HZ: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,area_served,MECHANICAL 108,,SERVES,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,heating_medium,gas,,GAS TYPE,printed 'NATURAL'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,cfm,,cfm,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,motor_hp,,hp,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,volts,115,V,VOLT/PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-1,UNIT_HEATER,phase,1,,VOLT/PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,area_served,MECHANICAL 108,,SERVES,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,heating_medium,gas,,GAS TYPE,printed 'NATURAL'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,cfm,,cfm,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,heating_mbh,,MBH,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,eh_kw,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,motor_hp,,hp,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,volts,115,V,VOLT/PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UNIT HEATER SCHEDULE,UH-2,UNIT_HEATER,phase,1,,VOLT/PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,condenser,air,,TYPE,printed 'AIR-COOLED SCROLL'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,tons,40.7,tons,NOM SIZE (TONS),
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_gpm,78.5,gpm,EVAPORATOR / GPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,56,F,EVAPORATOR / EWT,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,44,F,EVAPORATOR / LWT,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,bas_interface,BACNET,,NOTE 4,"note 4: 'PROVIDE WITH CHILLER CONTROLLER COMPATIBLE WITH BACnet DDC SYSTEM.', cited by the row's NOTES (1,2,3,4,5)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,volts,208,V,ELECTRICAL / VOLTS/PH /HZ: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,AIR-COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL / VOLTS/PH /HZ: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,cfm,620,cfm,CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,esp_in,0.5,in. w.c.,EXT SP IN. WG,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_hp,0.16666666666666666,hp,MOTOR DATA / HP,printed '1/6'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,rpm,1725,rpm,MOTOR DATA / RPM,"printed '1,725'"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,drive,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,control,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,volts,115,V,MOTOR DATA / VOLT/PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-1,FAN,phase,1,,MOTOR DATA / VOLT/PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,service,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,cfm,920,cfm,CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,esp_in,0.5,in. w.c.,EXT SP IN. WG,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,motor_hp,0.75,hp,MOTOR DATA / HP,printed '3/4'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,rpm,2200,rpm,MOTOR DATA / RPM,"printed '2,200'"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,drive,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,vfd,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,control,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,volts,115,V,MOTOR DATA / VOLT/PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-2,FAN,phase,1,,MOTOR DATA / VOLT/PH: phase part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,building,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,floor,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,area_served,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,qty,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,service,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,cfm,645,cfm,CFM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,esp_in,0.5,in. w.c.,EXT SP IN. WG,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,motor_hp,0.16666666666666666,hp,MOTOR DATA / HP,printed '1/6'
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,motor_watts,,W,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,rpm,1725,rpm,MOTOR DATA / RPM,
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,drive,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,vfd,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,ecm,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,control,,,,not printed
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,volts,115,V,MOTOR DATA / VOLT/PH: volts part,author's reading of the printed row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EXHAUST FAN SCHEDULE,EF-3,FAN,phase,1,,MOTOR DATA / VOLT/PH: phase part,author's reading of the printed row

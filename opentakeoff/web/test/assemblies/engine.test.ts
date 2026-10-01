@@ -1,0 +1,475 @@
+// ASSEMBLIES WP3 — the engine: the library gate (schema.ts), selection
+// (select.ts), expansion (expand.ts) and roll-up (rollup.ts), and the
+// invariants GATE 3 names: conservation, determinism under shuffling,
+// unknown propagation, drawing-evidence precedence, no double counting of
+// nested sub-assemblies, and no exceptions on random attribute sets.
+import test from "node:test";
+import assert from "node:assert/strict";
+import { sanitizeAssemblyDefinitions, validateAssembly, type AssemblyDefinition, type ExpandedLine } from "../../src/lib/assemblies/schema.ts";
+import { selectAssembly, typicalChoices, type Instance, type Override } from "../../src/lib/assemblies/select.ts";
+import { expandAll, expandApplication, ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../../src/lib/assemblies/expand.ts";
+import { rollup, type Breakdown } from "../../src/lib/assemblies/rollup.ts";
+import type { Value } from "../../src/lib/assemblies/expr.ts";
+
+const src = { ref: "test fixture", license: "test", derivation: "inferred" as const };
+const line = (l: Record<string, unknown>) => ({ unit: "ea", trade: "controls", source: src, ...l });
+
+const RAW: unknown[] = [
+  {
+    id: "vav-hw", version: "1", title: "VAV, hot-water reheat", kind: "equipment", status: "starter",
+    applies_to: { family: "VAV", selector: "attr.heat_type = 'hw'", rank: 20 },
+    options: [{ id: "co2", label: "CO2 sensor", auto: "attr.cfm_max >= 1000" }],
+    variables: [{ id: "valve_size", from: "attr.hw_conn_in", unit: "in" }, { id: "spare", default: 0 }],
+    lines: [
+      line({ id: "dat", kind: "device", qty: "1", role: { vocab: "s223", id: "TemperatureSensor" } }),
+      line({ id: "dat-ai", kind: "point", qty: "1", io: "AI", role: { vocab: "xeto", id: "discharge-air-temp-sensor" }, device_role_ref: "TemperatureSensor" }),
+      line({ id: "valve", kind: "device", qty: "1", role: { vocab: "s223", id: "Valve" }, params: { size: "var.valve_size", body: "'2-way'", model: "<selection>" } }),
+      line({ id: "valve-ao", kind: "point", qty: "1", io: "AO", role: { vocab: "xeto", id: "hot-water-valve-cmd" }, device_role_ref: "Valve" }),
+      line({ id: "co2", kind: "device", qty: "1", when: "opt.co2", role: { vocab: "s223", id: "CO2Sensor" } }),
+      line({ id: "wire", kind: "component", qty: "25 + var.spare", unit: "ft", waste_pct: 10, round: { increment: 100 }, role: { vocab: "ot", id: "lv-cable" }, profile_switch: "cable_per_device" }),
+      line({ id: "hookup", kind: "assembly", qty: "1", ref: { id: "coil-hookup" }, role: { vocab: "ot", id: "hydronic-coil-hookup" }, trade: "mechanical" }),
+    ],
+  },
+  {
+    id: "vav-cool", version: "1", title: "VAV, cooling only", kind: "equipment", status: "starter",
+    applies_to: { family: "VAV", selector: "attr.heat_type = 'none'", rank: 20 },
+    lines: [line({ id: "dat", kind: "device", qty: "1", role: { vocab: "s223", id: "TemperatureSensor" } })],
+  },
+  {
+    id: "vav-any", version: "1", title: "VAV, any", kind: "equipment", status: "starter",
+    applies_to: { family: "VAV", rank: 0 },
+    lines: [line({ id: "zone", kind: "device", qty: "1", role: { vocab: "s223", id: "ZoneTemperatureSensor" } })],
+  },
+  {
+    id: "coil-hookup", version: "1", title: "Hydronic coil hook-up", kind: "part", status: "starter",
+    applies_to: { family: "ANY", rank: 0 },
+    lines: [
+      line({ id: "ball", kind: "component", qty: "2", trade: "mechanical", role: { vocab: "ot", id: "ball-valve" }, params: { size: "attr.hw_conn_in" } }),
+      line({ id: "strainer", kind: "component", qty: "1", trade: "mechanical", role: { vocab: "ot", id: "y-strainer" } }),
+    ],
+  },
+];
+
+const { assemblies: LIB, rejected } = sanitizeAssemblyDefinitions(RAW);
+const vav = (tag: string, attrs: Record<string, Value>, extra: Partial<Instance> = {}): Instance => ({
+  tag, family: "VAV", attributes: Object.fromEntries(Object.entries(attrs).map(([k, v]) => [k, { value: v }])),
+  scope: { building: "B1", floor: "LEVEL 1", system: "AHU-1" }, cites: [], ...extra,
+});
+const known = (lines: ExpandedLine[]) => lines.filter((l) => l.status === "ok");
+
+test("the fixture library loads whole", () => {
+  assert.deepEqual(rejected, []);
+  assert.deepEqual(LIB.map((a) => a.id), ["vav-hw", "vav-cool", "vav-any", "coil-hookup"]);
+});
+
+test("the gate refuses a record with the offending token, field by field", () => {
+  const base = RAW[1] as Record<string, unknown>;
+  const errs = (patch: Record<string, unknown>) => {
+    const v = validateAssembly({ ...base, ...patch });
+    return v.ok ? [] : v.rejected.errors.join(" | ");
+  };
+  assert.match(String(errs({ applies_to: { family: "VAV", selector: "attr.heat_typ = 'none'", rank: 1 } })), /applies_to\.selector: "attr\.heat_typ" is not an attribute of this family at 1/);
+  assert.match(String(errs({ lines: [line({ id: "p", kind: "point", qty: "1", role: { vocab: "xeto", id: "x" } })] })), /a point line names its io/);
+  assert.match(String(errs({ lines: [line({ id: "p", kind: "point", qty: "1", io: "AI", role: { vocab: "xeto", id: "x" }, device_role_ref: "Valve" })] })), /no device line of role "Valve"/);
+  assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "1", role: { vocab: "s223", id: "X" } }), line({ id: "a", kind: "device", qty: "2", role: { vocab: "s223", id: "Y" } })] })), /line "a" appears twice/);
+  assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "1 +", role: { vocab: "s223", id: "X" } })] })), /lines\.a\.qty: unexpected end of expression/);
+  // A quantity with nothing to read is checked as expansion checks it (AS-52).
+  assert.match(String(errs({ lines: [line({ id: "a", kind: "component", qty: "2 - 3", unit: "ft", role: { vocab: "ot", id: "X" } })] })), /lines\.a\.qty: -1 is negative/);
+  assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "0.5", role: { vocab: "s223", id: "X" } })] })), /lines\.a\.qty: 0\.5 is not a whole count of devices/);
+  assert.deepEqual(errs({ lines: [line({ id: "a", kind: "device", qty: "0.5", round: { increment: 1 }, role: { vocab: "s223", id: "X" } })] }), [], "a line that rounds may compute a fraction");
+  assert.deepEqual(errs({ lines: [line({ id: "a", kind: "component", qty: "12.5", unit: "ft", role: { vocab: "ot", id: "X" } })] }), [], "a length may be fractional");
+  assert.match(String(errs({ version: "v1" })), /version: a version is 1, 1\.2 or 1\.2\.3/);
+  assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "1", role: { vocab: "s223", id: "X" }, price: 5 })] })), /Unrecognized key/);
+  const cyc = sanitizeAssemblyDefinitions([
+    { ...(RAW[3] as object), id: "p1", lines: [line({ id: "s", kind: "assembly", qty: "1", ref: { id: "p2" }, role: { vocab: "ot", id: "x" } })] },
+    { ...(RAW[3] as object), id: "p2", lines: [line({ id: "s", kind: "assembly", qty: "1", ref: { id: "p1" }, role: { vocab: "ot", id: "x" } })] },
+    { ...(RAW[3] as object), id: "p3", lines: [line({ id: "s", kind: "assembly", qty: "1", ref: { id: "nope" }, role: { vocab: "ot", id: "x" } })] },
+  ]);
+  assert.deepEqual(cyc.assemblies, []);
+  assert.match(cyc.rejected.map((r) => r.errors.join()).join(" | "), /contains itself.*contains itself.*no assembly "nope"/);
+});
+
+test("selection: the most specific true selector wins; an unknown one only makes a candidate possible", () => {
+  assert.equal(selectAssembly(vav("VAV-1", { heat_type: "hw" }), LIB).assembly?.id, "vav-hw");
+  assert.equal(selectAssembly(vav("VAV-2", { heat_type: "none" }), LIB).assembly?.id, "vav-cool");
+  assert.equal(selectAssembly(vav("VAV-3", { heat_type: "electric" }), LIB).assembly?.id, "vav-any");
+  const unknown = selectAssembly(vav("VAV-4", {}), LIB);
+  assert.equal(unknown.status, "unresolved");
+  assert.equal(unknown.assembly, null);
+  assert.deepEqual(unknown.unresolved, { missing: ["attr.heat_type"], candidates: ["vav-cool@1", "vav-hw@1", "vav-any@1"] });
+  assert.equal(selectAssembly({ ...vav("FCU-1", {}), family: "FCU" }, LIB).status, "no_assembly");
+  // A typical the estimator chose still waits for what it reads (AS-47): its
+  // record stays unresolved, an exception, until nothing is missing.
+  const user = selectAssembly(vav("VAV-5", {}), LIB, {}, { tag: "VAV-5", reason: "per engineer's RFI 12", assembly: { id: "vav-hw" } });
+  assert.deepEqual([user.status, user.selected_by, user.reason, user.assembly?.id], ["unresolved", "user", "per engineer's RFI 12", "vav-hw"]);
+  assert.deepEqual(user.unresolved.missing, ["attr.cfm_max", "attr.hw_conn_in"]);
+  const given = selectAssembly(vav("VAV-5", {}), LIB, {}, { tag: "VAV-5", reason: "per engineer's RFI 12", assembly: { id: "vav-hw" }, options: { co2: false }, variables: { valve_size: 0.75 } });
+  assert.deepEqual([given.status, given.unresolved.missing], ["overridden", []]);
+  assert.equal(selectAssembly(vav("VAV-5", {}), LIB, {}, { tag: "VAV-5", reason: "r", assembly: { id: "vav-cool" } }).status, "overridden", "a typical that reads nothing unknown");
+  const out = selectAssembly(vav("VAV-6", { heat_type: "hw" }), LIB, {}, { tag: "VAV-6", reason: "existing to remain", exclude: true });
+  assert.deepEqual([out.status, out.excluded_reason], ["excluded", "existing to remain"]);
+  assert.equal(selectAssembly({ ...vav("X-1", {}), family: "ANY" }, LIB).status, "no_assembly", "a part is never chosen on its own");
+});
+
+test("options and variables: attribute, project, partner default, starter default — and unknown stays unknown", () => {
+  const app = selectAssembly(vav("VAV-1", { heat_type: "hw", cfm_max: 1200, hw_conn_in: 0.75 }), LIB);
+  assert.equal(app.status, "ok");
+  assert.deepEqual(app.options.co2, { value: true, source: "attr" });
+  assert.deepEqual(app.variables.valve_size, { value: 0.75, source: "attr" });
+  assert.deepEqual(app.variables.spare, { value: 0, source: "starter_default" });
+  const open = selectAssembly(vav("VAV-2", { heat_type: "hw" }), LIB);
+  assert.equal(open.status, "unresolved");
+  assert.deepEqual(open.unresolved.missing, ["attr.cfm_max", "attr.hw_conn_in"]);
+  const defaulted = selectAssembly(vav("VAV-3", { heat_type: "hw" }), LIB, { partnerDefaults: { "vav-hw.co2": false, valve_size: 0.5 } });
+  assert.deepEqual([defaulted.status, defaulted.options.co2.source, defaulted.variables.valve_size.source], ["ok", "partner_default", "partner_default"]);
+});
+
+test("expansion: the quantity pipeline, parameters and their sources, the profile switch", () => {
+  const inst = vav("VAV-1", { heat_type: "hw", cfm_max: 1200, hw_conn_in: 0.75 }, { multiplier: { value: 2, basis: "QTY 2 printed" } });
+  const app = selectAssembly(inst, LIB);
+  const lines = expandApplication(app, inst, LIB, { profile: { cable_per_device: true } });
+  const by = (rule: string) => lines.find((l) => l.rule.endsWith(rule))!;
+  assert.deepEqual([by(":dat").qty_base, by(":dat").qty_with_waste], [2, 2]);
+  assert.deepEqual([by(":wire").qty_base, by(":wire").qty_with_waste], [50, 55], "waste on the base, never rounded per line");
+  assert.deepEqual(by(":valve").params, { size: { value: 0.75, source: "attr" }, body: { value: "2-way", source: "expr" }, model: { value: null, source: "selection" } });
+  assert.equal(by(":co2").status, "ok");
+  const off = expandApplication(app, inst, LIB, { profile: { cable_per_device: false } });
+  assert.equal(off.some((l) => l.rule.endsWith(":wire")), false, "a switch the profile has off drops the line");
+  const unset = expandApplication(app, inst, LIB, {});
+  assert.deepEqual([unset.find((l) => l.rule.endsWith(":wire"))!.status, unset.find((l) => l.rule.endsWith(":wire"))!.missing], ["unresolved", ["profile.cable_per_device"]]);
+});
+
+test("unknown propagation: an unknown never yields a known quantity, unless a partner default stands in and says so", () => {
+  const inst = vav("VAV-7", { heat_type: "hw", hw_conn_in: 1 });
+  const lines = expandApplication(selectAssembly(inst, LIB), inst, LIB, { profile: { cable_per_device: true } });
+  const co2 = lines.find((l) => l.rule.endsWith(":co2"))!;
+  assert.deepEqual([co2.status, co2.qty_base, co2.qty_with_waste, co2.missing], ["unresolved", null, null, ["opt.co2"]]);
+  const withDefault = expandApplication(selectAssembly(inst, LIB, { partnerDefaults: { co2: true } }), inst, LIB, { partnerDefaults: { co2: true }, profile: { cable_per_device: true } });
+  const co2d = withDefault.find((l) => l.rule.endsWith(":co2"))!;
+  assert.deepEqual([co2d.status, co2d.qty_base, co2d.qty_source], ["ok", 1, "partner_default"]);
+  assert.equal(withDefault.find((l) => l.rule.endsWith(":dat"))!.qty_source, "evidence");
+});
+
+test("a known quantity names the default that stands in: the partner's, else the starter's (AS-46)", () => {
+  const inst = vav("VAV-9", { heat_type: "hw", cfm_max: 500, hw_conn_in: 1 });
+  const wire = (lines: ExpandedLine[]) => lines.find((l) => l.rule.endsWith(":wire"))!;
+  const lines = expandApplication(selectAssembly(inst, LIB), inst, LIB, { profile: { cable_per_device: true } });
+  // "25 + var.spare", spare the starter's default 0: the drawing does not give it.
+  assert.deepEqual([wire(lines).status, wire(lines).qty_base, wire(lines).qty_source], ["ok", 25, "starter_default"]);
+  // A literal quantity rests on the unit the schedule prints.
+  assert.equal(lines.find((l) => l.rule.endsWith(":dat"))!.qty_source, "evidence");
+  // The partner's default for the same variable stands in before the starter's.
+  const partner = expandApplication(selectAssembly(inst, LIB, { partnerDefaults: { spare: 5 } }), inst, LIB, { partnerDefaults: { spare: 5 }, profile: { cable_per_device: true } });
+  assert.deepEqual([wire(partner).qty_base, wire(partner).qty_source], [30, "partner_default"]);
+  // The estimator's own value is no default.
+  const user = expandApplication(selectAssembly(inst, LIB, {}, { tag: "VAV-9", reason: "measured", variables: { spare: 10 } }), inst, LIB, { profile: { cable_per_device: true } });
+  assert.deepEqual([wire(user).qty_base, wire(user).qty_source], [35, "evidence"]);
+});
+
+test("drawing evidence replaces the typical's lines of the same role and never adds to them", () => {
+  const inst = vav("VAV-8", { heat_type: "hw", cfm_max: 500, hw_conn_in: 1 });
+  const app = selectAssembly(inst, LIB);
+  const lines = expandApplication(app, inst, LIB, { profile: { cable_per_device: true } }, { printedPoints: true, declaredRoles: ["Valve"] });
+  const status = Object.fromEntries(lines.map((l) => [l.rule.split(":").pop(), l.status]));
+  assert.deepEqual([status["dat-ai"], status["valve-ao"], status.valve, status.dat], ["replaced", "replaced", "replaced", "ok"]);
+  assert.ok(lines.filter((l) => l.status === "replaced").every((l) => l.qty_base === null));
+  const rows = rollup(lines);
+  assert.equal(rows.find((r) => r.role.id === "Valve")!.qty_base, 0);
+  assert.equal(rows.find((r) => r.role.id === "Valve")!.replaced, 1);
+});
+
+test("a nested sub-assembly counts once per use, under its parent's quantity and path", () => {
+  const inst = vav("VAV-9", { heat_type: "hw", cfm_max: 500, hw_conn_in: 0.5 }, { multiplier: { value: 3, basis: "QTY 3" } });
+  const lines = expandApplication(selectAssembly(inst, LIB), inst, LIB, { profile: { cable_per_device: true } });
+  const ball = lines.filter((l) => l.role.id === "ball-valve");
+  assert.equal(ball.length, 1);
+  assert.equal(ball[0].rule, "vav-hw@1:hookup/coil-hookup@1:ball");
+  assert.equal(ball[0].qty_base, 6, "2 per hook-up × 1 hook-up × 3 units");
+  assert.deepEqual(ball[0].params.size, { value: 0.5, source: "attr" });
+  assert.ok(!lines.some((l) => l.kind === "assembly"), "the container line carries no quantity of its own");
+});
+
+// Random attribute sets for property tests: seeded, deterministic.
+function randomInstances(seed: number, n: number): Instance[] {
+  let s = seed;
+  const rand = () => ((s = (s * 1103515245 + 12345) % 2147483648) / 2147483648);
+  const pick = <T,>(xs: T[]) => xs[Math.floor(rand() * xs.length)];
+  return Array.from({ length: n }, (_, i) => {
+    const attrs: Record<string, Value> = {};
+    if (rand() < 0.8) attrs.heat_type = pick(["hw", "none", "electric", "HW"]);
+    if (rand() < 0.6) attrs.cfm_max = Math.round(rand() * 3000);
+    if (rand() < 0.6) attrs.hw_conn_in = pick([0.5, 0.75, 1, 1.25]);
+    return vav(`VAV-${i + 1}`, attrs, {
+      scope: { building: pick(["B1", "B2", null]), floor: pick(["LEVEL 1", "LEVEL 2", null]), system: pick(["AHU-1", "AHU-2", null]) },
+      multiplier: { value: pick([1, 1, 2, 3]), basis: "fixture" },
+    });
+  });
+}
+const settings = { profile: { cable_per_device: true } };
+
+test("property: random attribute sets expand without an exception, and every roll-up conserves the lines", () => {
+  for (let seed = 1; seed <= 40; seed++) {
+    const { lines } = expandAll(randomInstances(seed, 25), LIB, settings);
+    const total = known(lines).reduce((n, l) => n + l.qty_base!, 0);
+    const totalWaste = known(lines).reduce((n, l) => n + l.qty_with_waste!, 0);
+    for (const by of [[], ["building"], ["floor"], ["system"], ["family"], ["building", "floor", "system", "family"]] as Breakdown[][]) {
+      const rows = rollup(lines, by);
+      assert.ok(Math.abs(rows.reduce((n, r) => n + r.qty_base, 0) - total) < 1e-9, `seed ${seed} by ${by}`);
+      assert.ok(Math.abs(rows.reduce((n, r) => n + r.qty_with_waste, 0) - totalWaste) < 1e-9, `seed ${seed} by ${by} (waste)`);
+      assert.equal(rows.reduce((n, r) => n + r.lines + r.unresolved + r.replaced + r.errors, 0), lines.length, "every line in exactly one row");
+      for (const r of rows) assert.ok(r.qty_order >= r.qty_with_waste - 1e-9, "rounding only raises an order quantity");
+    }
+  }
+});
+
+test("determinism: shuffling the units and the library changes nothing", () => {
+  const insts = randomInstances(7, 30);
+  const a = expandAll(insts, LIB, settings);
+  let s = 99;
+  const shuffle = <T,>(xs: T[]) => xs.map((x) => ({ x, k: (s = (s * 1103515245 + 12345) % 2147483648) })).sort((p, q) => p.k - q.k).map((p) => p.x);
+  for (let i = 0; i < 5; i++) {
+    const b = expandAll(shuffle([...insts]), shuffle([...LIB]) as AssemblyDefinition[], settings);
+    assert.equal(JSON.stringify(b), JSON.stringify(a));
+    assert.equal(JSON.stringify(rollup(b.lines, ["building", "floor"])), JSON.stringify(rollup(a.lines, ["building", "floor"])));
+  }
+});
+
+test("the order quantity rounds at roll-up: sum first, then round", () => {
+  const insts = [1, 2, 3].map((i) => vav(`VAV-${i}`, { heat_type: "hw", cfm_max: 100, hw_conn_in: 1 }));
+  const { lines } = expandAll(insts, LIB, settings);
+  const wire = rollup(lines).find((r) => r.role.id === "lv-cable")!;
+  assert.deepEqual([wire.qty_base, wire.qty_with_waste, wire.qty_order], [75, 82.5, 100], "3 × 25 ft, +10%, ordered in 100 ft");
+});
+
+test("a project assembly applies once per project, on project variables; unknown stays unresolved", () => {
+  const { assemblies, rejected: bad } = sanitizeAssemblyDefinitions([...RAW, {
+    id: "loop-specialties", version: "1", title: "Closed-loop specialties", kind: "project", status: "starter",
+    applies_to: { family: "project", selector: "var.loops > 0", rank: 0 },
+    variables: [{ id: "loops", from: "project.closed_loops" }],
+    lines: [line({ id: "air-sep", kind: "component", qty: "var.loops", trade: "mechanical", role: { vocab: "ot", id: "air-separator" } })],
+  }]);
+  assert.deepEqual(bad, []);
+  const inst = [vav("VAV-1", { heat_type: "none" })];
+  const withLoops = expandAll(inst, assemblies, { variables: { closed_loops: 2 } });
+  const sep = withLoops.lines.filter((l) => l.role.id === "air-separator");
+  assert.deepEqual(sep.map((l) => [l.tag, l.family, l.qty_base]), [["(project)", "project", 2]]);
+  const unset = expandAll(inst, assemblies, {});
+  const app = unset.applications.find((a) => a.instance.tag === "(project)")!;
+  assert.deepEqual([app.status, app.unresolved.missing], ["unresolved", ["var.loops"]]);
+  assert.equal(unset.lines.filter((l) => l.role.id === "air-separator").length, 0);
+  assert.equal(expandAll(inst, assemblies, { variables: { closed_loops: 0 } }).lines.filter((l) => l.role.id === "air-separator").length, 0);
+});
+
+test("layers: a unit gets one assembly per layer, each chosen by its own selectors", () => {
+  const { assemblies, rejected: bad } = sanitizeAssemblyDefinitions([...RAW, {
+    id: "vav-hw-hookup", version: "1", title: "VAV reheat coil hook-up", kind: "equipment", status: "starter",
+    applies_to: { family: "VAV", selector: "attr.heat_type = 'hw'", rank: 20, layer: "hookup" },
+    lines: [line({ id: "coil", kind: "assembly", qty: "1", ref: { id: "coil-hookup" }, trade: "mechanical", role: { vocab: "ot", id: "hydronic-coil-hookup" } })],
+  }]);
+  assert.deepEqual(bad, []);
+  const inst = vav("VAV-1", { heat_type: "hw", cfm_max: 500, hw_conn_in: 0.75 });
+  const { applications, lines } = expandAll([inst], assemblies, settings);
+  assert.deepEqual(applications.map((a) => [a.layer, a.assembly?.id]), [["controls", "vav-hw"], ["hookup", "vav-hw-hookup"]]);
+  assert.deepEqual([...new Set(lines.map((l) => l.layer))], ["controls", "hookup"]);
+  const cool = expandAll([vav("VAV-2", { heat_type: "none" })], assemblies, settings).applications;
+  assert.deepEqual(cool.map((a) => [a.layer, a.status]), [["controls", "ok"], ["hookup", "no_assembly"]], "a cooling-only box has no hook-up in this library");
+  const excluded = expandAll([inst], assemblies, settings, [{ tag: "VAV-1", reason: "by others", exclude: true, layer: "hookup" }]).applications;
+  assert.deepEqual(excluded.map((a) => [a.layer, a.status]), [["controls", "ok"], ["hookup", "excluded"]]);
+});
+
+test("an override names its unit's family where units of two families share the tag; one naming none covers each (AS-43)", () => {
+  // 16_NV's shape: a furnace, a condensing unit and an outdoor air unit all
+  // compiled as "B1". Excluding one must not exclude the others.
+  const box = vav("B1", { heat_type: "hw" });
+  const coil = { ...vav("B1", {}), family: "FCU" };
+  const statuses = (overrides: Parameters<typeof expandAll>[3]) => expandAll([box, coil], LIB, {}, overrides).applications.map((a) => [a.instance.family, a.status, a.assembly?.id ?? null]);
+  assert.deepEqual(statuses([{ tag: "B1", family: "VAV", reason: "existing to remain", exclude: true }]), [["FCU", "no_assembly", null], ["VAV", "excluded", null]]);
+  assert.deepEqual(statuses([{ tag: "B1", family: "FCU", reason: "existing to remain", exclude: true }]), [["FCU", "excluded", null], ["VAV", "unresolved", "vav-hw"]], "the box keeps its typical, waiting on its variables");
+  // An override from before names no family: it still covers every unit with the tag.
+  assert.deepEqual(statuses([{ tag: "B1", reason: "existing to remain", exclude: true }]), [["FCU", "excluded", null], ["VAV", "excluded", null]]);
+  // The unit's own override wins over one naming none, wherever it sits.
+  assert.deepEqual(statuses([{ tag: "B1", reason: "all of them", exclude: true }, { tag: "B1", family: "VAV", layer: "controls", reason: "per RFI 12", assembly: { id: "vav-cool" } }]),
+    [["FCU", "excluded", null], ["VAV", "overridden", "vav-cool"]]);
+});
+
+test("an exclusion wins over the unit's other overrides, wherever it sits; removing it gives them back (AS-44)", () => {
+  // The panel appends: a unit given an option or a typical, then excluded,
+  // kept that layer in the estimate because the earlier override came first.
+  const box = vav("VAV-7", { heat_type: "hw" });
+  const choice = { tag: "VAV-7", layer: "controls", reason: "per RFI 3", assembly: { id: "vav-cool" } };
+  const exclusion = { tag: "VAV-7", reason: "existing to remain", exclude: true };
+  const status = (overrides: Parameters<typeof expandAll>[3]) => expandAll([box], LIB, {}, overrides).applications.map((a) => [a.layer, a.status, a.assembly?.id ?? null]);
+  assert.deepEqual(status([choice, exclusion]), [["controls", "excluded", null]]);
+  assert.deepEqual(status([exclusion, choice]), [["controls", "excluded", null]]);
+  assert.deepEqual(status([choice]), [["controls", "overridden", "vav-cool"]], "the choice is kept for when the exclusion goes");
+  // Only a layer's own exclusion covers the layer; one naming another family never does.
+  assert.deepEqual(status([choice, { ...exclusion, layer: "hookup" }]), [["controls", "overridden", "vav-cool"]]);
+  assert.deepEqual(status([choice, { ...exclusion, family: "FCU" }]), [["controls", "overridden", "vav-cool"]]);
+});
+
+test("an override no unit takes is named with why, never kept silently (AS-45)", () => {
+  const box = vav("VAV-1", { heat_type: "hw" });
+  const coil = { ...vav("FCU-1", {}), family: "FCU" };
+  const why = (overrides: Parameters<typeof unmatchedOverrides>[2]) => unmatchedOverrides([box, coil], LIB, overrides).map((u) => [u.override.tag, u.why]);
+  assert.deepEqual(why([{ tag: "VAV-1", reason: "fits", exclude: true }, { tag: "FCU-1", reason: "fits, no typical", exclude: true }]), []);
+  assert.deepEqual(why([{ tag: "VAV-9", reason: "a typo", exclude: true }]), [["VAV-9", 'no unit is tagged "VAV-9"']]);
+  assert.deepEqual(why([{ tag: "VAV-1", family: "FCU", reason: "another family", exclude: true }]), [["VAV-1", 'no FCU is tagged "VAV-1" (VAV is)']]);
+  assert.deepEqual(why([{ tag: "VAV-1", layer: "hookup", reason: "a layer it has not", exclude: true }]), [["VAV-1", '"VAV-1" has no hookup layer']]);
+  assert.deepEqual(why([{ tag: "VAV-1", layer: "controls", reason: "a typical not offered", assembly: { id: "no-such-typical" } }]), [["VAV-1", 'the library offers no-such-typical in no layer of "VAV-1" (controls)']]);
+  assert.match(why([{ tag: "(project)", reason: "the project's own", exclude: true }])[0][1], /follow its settings/);
+});
+
+test("what an override sets that no record takes is named with why, the rest still applied (AS-49)", () => {
+  // VAV-1 takes vav-hw (option co2; variables valve_size, spare); VAV-2
+  // prints no heat type and waits between typicals; VAV-3 is out of scope.
+  const box = vav("VAV-1", { heat_type: "hw" });
+  const open = vav("VAV-2", {});
+  const out = vav("VAV-3", { heat_type: "hw" }, { intent: { out_of_scope: { value: true, source: "project", rule: "project_answer:PQ1=no", basis: "no BAS scope", cites: [] } } });
+  const ignored = (overrides: Parameters<typeof ignoredOverrideParts>[2]) => {
+    const { applications } = expandAll([box, open, out], LIB, {}, overrides);
+    return ignoredOverrideParts(applications, LIB, overrides).map((x) => [x.override.reason, x.options, x.variables, x.why]);
+  };
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "fits", options: { co2: true }, variables: { spare: 2 } }]), []);
+  // A typo over MCP: the ids the typical has apply, and the others are named.
+  const typo = { tag: "VAV-1", reason: "typo", options: { co2: true, c02: true }, variables: { spares: 2 } };
+  assert.deepEqual(ignored([typo]), [["typo", ["c02"], ["spares"], "vav-hw@1 has no option c02, variable spares"]]);
+  const rec = expandAll([box], LIB, {}, [typo]).applications[0];
+  assert.deepEqual([rec.options.co2, rec.variables.spare.source], [{ value: true, source: "user" }, "starter_default"]);
+  // A typical chosen without the option; a unit with no typical yet; one out of scope.
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "cooling only", assembly: { id: "vav-cool" }, options: { co2: true } }]), [["cooling only", ["co2"], [], "vav-cool@1 has no option co2"]]);
+  assert.deepEqual(ignored([{ tag: "VAV-2", reason: "early", options: { co2: true } }]), [["early", ["co2"], [], "no typical is chosen for VAV-2 (controls) yet"]]);
+  assert.deepEqual(ignored([{ tag: "VAV-3", reason: "out", options: { co2: true } }]), [["out", ["co2"], [], "VAV-3 (controls) is out of scope"]]);
+  assert.deepEqual(ignored([{ tag: "VAV-3", reason: "chosen anyway", assembly: { id: "vav-hw" }, options: { co2: true } }]), [], "a typical the estimator chooses takes the unit back in");
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "v9", assembly: { id: "vav-hw", version: "9" }, options: { co2: true } }]), [["v9", ["co2"], [], "the library has no vav-hw@9"]]);
+  // Another override for the unit and layer decides it: all of it (a
+  // project file from before AS-43 left one without a family).
+  assert.deepEqual(ignored([{ tag: "VAV-1", family: "VAV", reason: "own", options: { co2: false } }, { tag: "VAV-1", reason: "older, no family", options: { co2: true } }]),
+    [["older, no family", ["co2"], [], "another override for VAV-1 (controls) decides it"]]);
+  // An exclusion sets a choice aside, to apply again once it goes (AS-44);
+  // one that fits no unit is unmatchedOverrides' (AS-45).
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "choice", options: { c02: true } }, { tag: "VAV-1", reason: "out", exclude: true }]), []);
+  assert.deepEqual(ignored([{ tag: "VAV-9", reason: "a typo", options: { co2: true } }]), []);
+});
+
+test("the settings no part of the library reads are named with why (AS-50)", () => {
+  const unread = (settings: Parameters<typeof unreadSettings>[1]) => unreadSettings(LIB, settings).map((u) => [u.key, u.why]);
+  // Read: partner defaults for an option and variables (plain, or under
+  // their typical), a switch a line names, a role's cells.
+  assert.deepEqual(unread({ partnerDefaults: { co2: true, spare: 2, "vav-hw.valve_size": 1 }, profile: { cable_per_device: true },
+    responsibility: { Valve: { furnish: "mechanical", install: "mechanical" } } }), []);
+  assert.deepEqual(unread({
+    variables: { chw_plants: 1 },
+    partnerDefaults: { c02: true, co2: "yes", "vav-cool.co2": true },
+    profile: { cable_per_devise: true },
+    responsibility: { Valve: { fitting: "mechanical", furnish: "kit_maker" }, NoSuchRole: { furnish: "controls" } },
+  }), [
+    ["variables.chw_plants", "no typical takes project.chw_plants"],
+    ["partnerDefaults.c02", "no typical has an option or variable c02"],
+    ["partnerDefaults.co2", "co2 is an option: its default is true or false"],
+    ["partnerDefaults.vav-cool.co2", "vav-cool has no option or variable co2"],
+    ["profile.cable_per_devise", "no line has the switch cable_per_devise"],
+    ["responsibility.Valve.fitting", "the matrix's activities are furnish, install, wire_lv, power, program, test"],
+    ["responsibility.Valve.furnish", "kit_maker is no party of the matrix (controls, mechanical, electrical, fire_alarm, factory, owner, general, unassigned)"],
+    ["responsibility.NoSuchRole", "no line has the role NoSuchRole"],
+  ]);
+  // Each changes nothing, which is why it is named.
+  const box = vav("VAV-1", { heat_type: "hw" });
+  const bytes = (settings: Parameters<typeof expandAll>[2]) => JSON.stringify(expandAll([box], LIB, settings));
+  assert.equal(bytes({ variables: { chw_plants: 1 }, partnerDefaults: { c02: true, "vav-cool.co2": true }, profile: { cable_per_devise: true }, responsibility: { NoSuchRole: { furnish: "controls" } } }), bytes({}));
+});
+
+test("a quantity is never negative, and a point or device is counted whole unless its line rounds it (AS-52)", () => {
+  const { assemblies: towerLib, rejected: bad } = sanitizeAssemblyDefinitions([{
+    id: "tower", version: "1", title: "Cooling tower, per cell", kind: "equipment", status: "starter",
+    applies_to: { family: "COOLING_TOWER", rank: 1 },
+    lines: [
+      line({ id: "fan-cmd", kind: "point", qty: "attr.cells", io: "BO", role: { vocab: "xeto", id: "fan-cmd" } }),
+      line({ id: "vibration", kind: "device", qty: "attr.cells / 2", round: { increment: 1 }, role: { vocab: "s223", id: "VibrationSwitch" } }),
+      line({ id: "wire", kind: "component", qty: "attr.cells * 12.5", unit: "ft", role: { vocab: "ot", id: "lv-cable" } }),
+    ],
+  }]);
+  assert.deepEqual(bad, []);
+  const tower = (cells: number, extra: Partial<Instance> = {}) => {
+    const lines = expandAll([{ ...vav("CT-1", { cells }), family: "COOLING_TOWER", ...extra }], towerLib).lines;
+    return Object.fromEntries(lines.map((l) => [l.rule.split(":")[1], [l.status, l.qty_base, l.missing.join()]]));
+  };
+  assert.deepEqual(tower(2), { "fan-cmd": ["ok", 2, ""], vibration: ["ok", 1, ""], wire: ["ok", 25, ""] });
+  // A misread 1.5 cells: half a fan command is no count, a rounded device
+  // and a length stand.
+  assert.deepEqual(tower(1.5), { "fan-cmd": ["error", null, "qty 1.5 is not a whole count of points"], vibration: ["ok", 0.75, ""], wire: ["ok", 18.75, ""] });
+  // A negative count, or a negative multiplier (the unit's printed QTY), is an error on every line.
+  assert.deepEqual(tower(-2), { "fan-cmd": ["error", null, "qty -2 is negative"], vibration: ["error", null, "qty -1 is negative"], wire: ["error", null, "qty -25 is negative"] });
+  assert.deepEqual(tower(2, { multiplier: { value: -1, basis: "a misread QTY" } }), { "fan-cmd": ["error", null, "qty -2 is negative"], vibration: ["error", null, "qty -1 is negative"], wire: ["error", null, "qty -25 is negative"] });
+});
+
+test("every selector false is no assembly, not unresolved", () => {
+  const onlyHw = LIB.filter((a) => a.id === "vav-hw");
+  assert.equal(selectAssembly(vav("VAV-1", { heat_type: "none" }), onlyHw).status, "no_assembly");
+  assert.equal(selectAssembly(vav("VAV-2", {}), onlyHw).status, "unresolved");
+});
+
+test("an assembly may apply to several families; its expressions read only attributes every one of them has", () => {
+  const multi = {
+    id: "air-handler", version: "1", title: "Air handler, any packaging", kind: "equipment", status: "starter",
+    applies_to: { family: ["AHU", "RTU"], selector: "attr.vfd = 'yes'", rank: 10 },
+    lines: [line({ id: "vfd", kind: "device", qty: "1", role: { vocab: "ot", id: "vfd" } })],
+  };
+  const { assemblies, rejected: bad } = sanitizeAssemblyDefinitions([multi]);
+  assert.deepEqual(bad, []);
+  const unit = (tag: string, family: string): Instance => ({ ...vav(tag, { vfd: "yes" }), family });
+  assert.equal(selectAssembly(unit("AHU-1", "AHU"), assemblies).assembly?.id, "air-handler");
+  assert.equal(selectAssembly(unit("RTU-1", "RTU"), assemblies).assembly?.id, "air-handler");
+  assert.equal(selectAssembly(unit("FCU-1", "FCU"), assemblies).status, "no_assembly");
+  assert.deepEqual(expandAll([unit("RTU-2", "RTU")], assemblies).lines.map((l) => [l.family, l.role.id]), [["RTU", "vfd"]]);
+  // terminal_type is a VAV attribute and not an FCU one: refused, token named.
+  const narrow = validateAssembly({ ...multi, applies_to: { family: ["VAV", "FCU"], selector: "attr.terminal_type = 'single_duct'", rank: 1 } });
+  assert.equal(narrow.ok, false);
+  assert.match(narrow.ok ? "" : narrow.rejected.errors.join(), /"attr\.terminal_type" is not an attribute of this family/);
+  const twice = validateAssembly({ ...multi, applies_to: { family: ["AHU", "AHU"], rank: 1 } });
+  assert.match(twice.ok ? "" : twice.rejected.errors.join(), /family "AHU" appears twice/);
+  assert.equal(validateAssembly({ ...multi, applies_to: { family: [], rank: 1 } }).ok, false);
+});
+
+test("a line's label (its description on a points schedule) is carried to the expanded line", () => {
+  const rec = {
+    id: "labelled", version: "1", title: "Labelled", kind: "equipment", status: "starter",
+    applies_to: { family: "VAV", rank: 0 },
+    lines: [line({ id: "zt", kind: "point", io: "AI", qty: "1", label: "Zone temperature", role: { vocab: "xeto", id: "ZoneAirTempSensor" } })],
+  };
+  const { assemblies, rejected: bad } = sanitizeAssemblyDefinitions([rec]);
+  assert.deepEqual(bad, []);
+  assert.deepEqual(expandAll([vav("VAV-1", {})], assemblies).lines.map((l) => l.label), ["Zone temperature"]);
+  assert.equal(validateAssembly({ ...rec, lines: [line({ id: "zt", kind: "point", io: "AI", qty: "1", label: "", role: { vocab: "xeto", id: "x" } })] }).ok, false, "an empty label is refused");
+});
+
+test("a unit's typical choices: its family's (the rules' candidates), else the layer's others (AS-55)", () => {
+  // The rules choose among exactly the family's typicals; a part is never one.
+  const vavs = typicalChoices("VAV", LIB);
+  assert.deepEqual(vavs.family.map((a) => a.id).sort(), ["vav-any", "vav-cool", "vav-hw"]);
+  assert.deepEqual(vavs.other, [], "a part (coil-hookup) is no choice");
+  assert.ok(vavs.family.some((a) => a.id === selectAssembly(vav("VAV-1", { heat_type: "hw" }), LIB).assembly?.id), "the rules' pick is among them");
+  assert.deepEqual(typicalChoices("VAV", LIB, "hookup"), { family: [], other: [] }, "another layer's are not this layer's");
+  // The newest version of each id only.
+  const v2 = sanitizeAssemblyDefinitions([...RAW, { ...(RAW[1] as object), version: "2", title: "VAV, cooling only (v2)" }]).assemblies;
+  assert.deepEqual(typicalChoices("VAV", v2).family.filter((a) => a.id === "vav-cool").map((a) => a.version), ["2"]);
+  // A family no typical lists: the rules pick none, and the layer's others are offered.
+  const valve: Instance = { ...vav("GEV-1", {}), family: "LAB_AIR_VALVE" };
+  const labs = typicalChoices("LAB_AIR_VALVE", LIB);
+  assert.deepEqual(labs.family, []);
+  assert.deepEqual(labs.other.map((a) => a.id).sort(), ["vav-any", "vav-cool", "vav-hw"]);
+  assert.equal(selectAssembly(valve, LIB).status, "no_assembly");
+  // The estimator's choice of one applies as theirs, and nothing of it is left unmatched or unread.
+  const o: Override = { tag: "GEV-1", family: "LAB_AIR_VALVE", layer: "controls", reason: "a lab exhaust valve", assembly: { id: "vav-any", version: "1" } };
+  const rec = selectAssembly(valve, LIB, {}, o);
+  assert.deepEqual([rec.status, rec.assembly?.id, rec.selected_by], ["overridden", "vav-any", "user"]);
+  assert.deepEqual(unmatchedOverrides([valve], LIB, [o]), []);
+  const { applications, lines } = expandAll([valve], LIB, {}, [o]);
+  assert.deepEqual(ignoredOverrideParts(applications, LIB, [o]), []);
+  assert.deepEqual(lines.map((l) => [l.tag, l.role.id, l.status]), [["GEV-1", "ZoneTemperatureSensor", "ok"]]);
+  // One that reads what the unit's row does not print waits among the exceptions, naming it (AS-47).
+  const other: Override = { ...o, assembly: { id: "vav-hw" } };
+  const waits = selectAssembly(valve, LIB, {}, other);
+  assert.deepEqual([waits.status, waits.assembly?.id, waits.selected_by], ["unresolved", "vav-hw", "user"]);
+  assert.deepEqual(waits.unresolved?.missing, ["attr.cfm_max", "attr.hw_conn_in"]);
+  assert.deepEqual(expandAll([valve], LIB, {}, [other]).lines.filter((l) => l.status === "unresolved").map((l) => [l.role.id, l.missing]), [["CO2Sensor", ["opt.co2"]], ["lv-cable", ["profile.cable_per_device"]]]);
+});

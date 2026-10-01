@@ -95,3 +95,92 @@ with a source PDF, earlier compile, fresh CLI compile and report destination.
 End-to-end delivery still requires reviewed corrections, SOO/equipment mapping,
 historical source retention and the complete review/release UI/export journey.
 Do not declare workflow A complete when only these internal checks pass.
+
+## Rule version 2: `point_observations_2` (2026-10-01)
+
+**Should this be on the shared path? Yes.** The one Python reader the Takeoff
+BAS workspace and MCP share; the BAS math reads the same typed columns
+(`point_columns`, `alarm_cell_roles`), so its totals and the point lists agree.
+
+Every result names its `rule_version`. Version 2 adds readings; version 1 is
+kept and reproduced byte for byte (`review_point_lists(payload,
+"point_observations_1")`). A saved matrix is re-checked by the same reader
+(`read_matrix`, `read_row`) under the rule that made it: assignment demand
+reads its points' rule, and a revision request carries each matrix's
+`point_rule_version` (absent means version 1). An assignment result's
+`point_rule_version` is its points'.
+
+Version 2 reads, beyond version 1:
+- filled-square marks ("■" and kin) as marks; hollow shapes stay unread;
+- a column printed under one direction and one signal kind ("SYSTEM INPUTS
+  ANALOG TEMPERATURE", "BINARY OUTPUTS START/STOP") as that physical channel;
+  values, variables, software/network scopes, two directions or two signal
+  kinds decide nothing;
+- software function, fail mode, alarm-priority and trend/graphic/schedule/loop
+  columns as attributes, only where every printed cell is a mark or a count
+  (never a quantity);
+- a row's number, tags, abbreviation and programmed parameters (limits,
+  ranges, set points, intervals) as descriptions of the row;
+- EQUIPMENT DESCRIPTION as the point name where it is the only one, a header
+  printed twice once, and a name extracted into the unlabelled column beside
+  an empty name column;
+- an ALARM-headed binary input column as the point's alarm beside an analog
+  input on its row, as the row's binary input when it is the only mark, and
+  as POINT_CHANNEL_AMBIGUOUS (not counted) beside any other channel;
+- a TOTAL/TOTALS/SUBTOTAL row as a check, never points:
+  PRINTED_TOTAL_MISMATCH where it disagrees with the rows above it;
+- a header cell the extraction shares between several columns ("AV BV ADJ
+  SCH" over four) by each column's own header;
+- a limit, range or set point column printing values other than 0 or 1
+  ("55") as the point's programmed parameter, never an attribute count;
+- a point function schedule recovered from the page text (the graph omitted
+  it) with the columns it prints right of POINT TYPE: each rotated header,
+  named with the group label printed over it as the graph names it ("FAIL
+  MODE FAIL ON (OPEN)", "SOFTWARE TREND", "ALARM LIMITS LOW LIMIT"), and
+  NOTES. Only where the group labels partition the columns and every mark on
+  every row sits at a column's centre; otherwise the schedule keeps its core
+  columns and SOURCE_SPAN_CORE_COLUMNS_ONLY;
+- the rows a list prints that its extraction dropped (below).
+
+### Rows the extraction dropped (version 2)
+
+A full-width section band ("DDC CONTROLLER", "CROSS-TIE LOOP") ends many
+table extractions while the list goes on below it, and a row can fall out
+between two extracted rows. Version 2 reads those rows from the page's own
+text, in the list's own columns:
+- the columns are the extracted cells' x-extents (a merged header cell is
+  shared evenly in header order);
+- a printed line is a row only where every span on it sits inside one column,
+  cells are set apart as cells are (not run on a word space apart), it names
+  the row in the name or key column, and it marks an I/O, attribute or count
+  column or prints the row's point type;
+- reading stops at text wider than the list, a sentence or heading, another
+  point list's table, a point-list caption, the list's own header printed
+  again, a row named as one the list already printed (a repeated block or
+  another unit's copy), a gap of more than three rows, or three printed lines
+  that are not rows.
+
+A first row the extraction folded into the header ("EQUIPMENT DESCRIPTION
+COOLING VALVE V-1", "... VALVE POSITION ●": the name header carries more
+words and another header ends with a printed mark) is read too: the header
+without the folded values, and the row from the printed line just above the
+first extracted row, only where that line reads exactly the folded values,
+column by column; otherwise the matrix stays as extracted.
+
+Each such row is `review_required` with SOURCE_TEXT_ROW_RECOVERED and cites
+its own spans. The rows are kept only where the list's I/O columns, name and
+point types read as before and every extracted row reads exactly as before.
+The matrix keeps its identity and extracted region; BAS math swaps the
+graph's copy for it, so math and the point lists count the same rows.
+
+BAS math also reads each matrix's name, per-row point type and printed totals
+rows with `read_matrix` and `printed_total_row` (a header the extraction
+printed twice, "POINT TYPE POINT TYPE", is read once there too).
+
+Never read away: a note or remark, a network or calculated point flag, and a
+column naming who furnishes, reuses or defers a point. Such rows stay
+`review_required`. Measured and tested in ASSEMBLIES_BUG_CATALOGUE AS-129 to
+AS-135, `bas_engine/tests/test_point_rules_v2.py`,
+`bas_engine/tests/test_point_rows_from_text.py`,
+`bas_engine/tests/test_point_function_columns.py` and
+`bas_engine/tests/test_point_folded_header.py`.

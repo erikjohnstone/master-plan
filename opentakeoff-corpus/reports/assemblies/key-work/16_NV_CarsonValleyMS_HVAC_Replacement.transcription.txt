@@ -1,0 +1,276 @@
+# 16_NV_CarsonValleyMS_HVAC_Replacement — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheets M0.02 (PDF page 3) and M0.03 (page 4): an overview of each
+# page at 60 dpi, then each table at 3x (216 dpi) in tiles with the MARK column repeated,
+# rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second read
+# at 4x of every keyed row, every cell. Each drawn title was found with the PDF's own text
+# layer (pymupdf search_for), and the two longest SERVICE cells (furnaces B8 and B9) were
+# checked against it. The pipeline's output for these sheets was not consulted. The second
+# tier keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+#
+# Every table here prints a hexagon tag symbol in its MARK header (F, CU, ERV, OAU or AC over
+# a line) and the bare mark in each row (B1, C12, BO1, 2). The sheet's own text composes
+# them with a dash ("F-B1 AND EC-B1"), and the bare marks repeat from table to table (B1 is
+# a furnace, a condensing unit, an evaporator coil and an outdoor air unit). The key types
+# each MARK cell as printed, as every key does; the symbol's prefix is recorded here and not
+# composed into the tag.
+SET 16_NV_CarsonValleyMS_HVAC_Replacement
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheets M0.02 and M0.03 (pages 3 and 4) of the Carson Valley Middle School phase 1 HVAC replacement bid/permit set, Gardnerville, Nevada (CR Engineering), the tables the second tier's seed drew for its FURNACE, CONDENSING_UNIT, ERV, OUTDOOR_AIR_UNIT and RTU strata.
+EXCLUDES Manufacturer/model, weight, unit width, outside air and static pressures, MCA/MOCP/FLA, gas input where the family keys none, the first-stage furnace ratings, air temperatures and design conditions, efficiencies (SEER, EER), sensible capacity, fan quantities, recovery performance, coil airflow, pressure drops, rows and fins, unit options, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# 2-STAGE, GAS FIRED FURNACE SCHEDULE (page 3): 21 rows. SERVICE prints the rooms each
+# furnace serves (typed as printed, "CLASROOM 28" included); this family has no service
+# attribute, so it keys area_served. AIRFLOW (ACFM) keys cfm. VOLTS/Ø/Hz ("115/1/60") keys
+# its volts part and its phase part. The heating ratings print two stages under headers
+# that name them ("SECOND STAGE/FIRST STAGE"): the second, full-fire stage of OUTPUT
+# CAPACITY keys heating_mbh (60; B8 63). This family keys no gas input. The table has no
+# notes column: its general notes (elevation, disconnects), unit features (96% efficient,
+# 2-stage heating, high-altitude kit) and lettered unit options (vent kit, EC motor, MERV-8
+# filter racks, upflow conversion, stainless heat exchanger) key nothing in this vocabulary.
+TABLE
+sheet: 16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3
+title: 2-STAGE, GAS FIRED FURNACE SCHEDULE
+family: FURNACE
+render: page 3 crop 1040,120,1715,442 at 3x in 6 tiles (MARK column repeated) and notes crop 1040,558,1715,134 at 150 dpi; second read at 4x (crop 1040,176,1715,386) of all 21 rows, every cell
+rows: all 21 printed rows
+col: MARK => tag
+col: [SERVICE: the rooms the unit serves] => area_served
+col: GENERAL UNIT DATA / MANUFACTURER => -
+col: GENERAL UNIT DATA / MODEL => -
+col: GENERAL UNIT DATA / OPERATING WEIGHT (LB) => -
+col: GENERAL UNIT DATA / AIRFLOW (ACFM) => cfm
+col: GENERAL UNIT DATA / OUTSIDE AIR (ACFM) => -
+col: GENERAL UNIT DATA / ESP (IN WG) => -
+col: GENERAL UNIT DATA / UNIT WIDTH (IN) => -
+col: ELECTRICAL / VOLTS/Ø/Hz => -
+col: [ELECTRICAL / VOLTS/Ø/Hz: volts part] => volts
+col: [ELECTRICAL / VOLTS/Ø/Hz: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: HEATING PERFORMANCE / INPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH) => -
+col: HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH) => -
+col: [HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part] => heating_mbh
+col: HEATING PERFORMANCE / EAT (°F) => -
+col: HEATING PERFORMANCE / LAT (°F) => -
+col: HEATING PERFORMANCE / AMBIENT DESIGN (°F) => -
+col: UNIT OPTIONS => -
+grid:
+B1 | CLASSROOM 23 | RHEEM | R962V0705A21 | 175 | 1,600 | 450 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+B2 | CLASSROOM 24 | RHEEM | R962V0705A21 | 175 | 1,600 | 475 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+B3 | CLASSROOM 25, CORRIDOR B101 | RHEEM | R962V0705A21 | 175 | 1,600 | 550 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 59 | 100 | 0 | A,B,C
+B4 | CLASSROOM 26 | RHEEM | R962V0705A21 | 175 | 1,600 | 475 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+B5 | CLASSROOM 27 | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+B6 | CLS CLASSROOM 29 | RHEEM | R962V0705A21 | 175 | 1,600 | 675 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 56 | 97 | 0 | A,B,C
+B7 | CLASROOM 28 | RHEEM | R962V0705A21 | 175 | 1,600 | 475 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+B8 | CORRIDOR B101, UNISEX RR 29A, BOYS RR 30A, GIRLS RR 30B, WOMENS RR 30C, MENS RR 30D | FRASER JOHNSTON | TM9Y080C16MP11 | 140 | 1,050 | 700 | 0.5 | 21 | 115/1/60 | 115 | 1 | 8.7 | 15 | 80/52 | 63/50 | 63 | 48 | 113 | 0 | A,B,C,F
+B9 | STORAGE ROOM 21, OFFICE ROOM 22, ROOM B3, OFFICE ROOM 22A, OFFICE ROOM 22B, VESTIBULE B100, STORAGE ROOM 22 | RHEEM | R962V0705A21 | 175 | 1,600 | 150 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 59 | 100 | 0 | A,B,D,E
+C1 | CLASSROOM 41, CORRIDOR 40A | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 23 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+C2 | CLASSROOM 40 | RHEEM | R962V0705A21 | 175 | 1,600 | 450 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+C3 | CLASSROOM 43, CORRIDOR 40A | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 27 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+C4 | CLASSROOM 42 | RHEEM | R962V0705A21 | 175 | 1,600 | 450 | 0.5 | 23 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+C5 | CLASSROOM 45, RESTROOM 47A | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+C6 | CLASSROOM 44, MECHANICAL 44A, MECHANICAL 44B | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 27 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+C7 | CLASSROOM 47, RESTROOM 47B | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 23 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+C8 | CLASSROOM 46, ROOM 46A, ROOM 46B | RHEEM | R962V0705A21 | 175 | 1,600 | 625 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 57 | 98 | 0 | A,B,C
+C9 | CLASSROOM 49, CORRIDOR 40A | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 27 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+C10 | CLASSROOM 48 | RHEEM | R962V0705A21 | 175 | 1,600 | 450 | 0.5 | 23 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+C11 | CLASSROOM 51 | RHEEM | R962V0705A21 | 175 | 1,600 | 450 | 0.5 | 21 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 61 | 102 | 0 | A,B,C
+C12 | CLASSROOM 50, CORRIDOR 40A | RHEEM | R962V0705A21 | 175 | 1,600 | 600 | 0.5 | 27 | 115/1/60 | 115 | 1 | 15 | 20 | 70/49 | 60/42 | 60 | 58 | 99 | 0 | A,B,C
+END
+
+# CONDENSING UNIT SCHEDULE (page 3): 23 rows. BO1 and BO2 print a letter O (typed as
+# printed). SERVICE prints the equipment each unit serves ("F-B1 AND EC-B1", "OAU-B1"); this
+# family has no service attribute, so it keys area_served (as 03_FL keys the hoods its fans
+# serve). VOLTS/Ø/Hz ("208/1/60") keys volts and phase; COOLING PERFORMANCE / CAPACITY (MBH)
+# / TOTAL keys cooling_mbh. The general notes, the unit feature (R410A) and the options (low
+# ambient control, 3- or 2-stage compressor, seismic curb) key nothing in this vocabulary.
+TABLE
+sheet: 16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3
+title: CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 3 crop 643,752,1069,488 at 3x in 4 tiles (MARK column repeated) and notes crop 643,1236,1069,114 at 200 dpi; second read at 4x (crop 643,815,1069,425) of all 23 rows, every cell
+rows: all 23 printed rows
+col: MARK => tag
+col: [SERVICE: the equipment the unit serves] => area_served
+col: UNIT GENERAL DATA / MANUFACTURER => -
+col: UNIT GENERAL DATA / MODEL => -
+col: UNIT GENERAL DATA / OPERATING WEIGHT (LBS) => -
+col: ELECTRICAL / VOLTS/Ø/Hz => -
+col: [ELECTRICAL / VOLTS/Ø/Hz: volts part] => volts
+col: [ELECTRICAL / VOLTS/Ø/Hz: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: COOLING PERFORMANCE / AMBIENT DESIGN TEMPERATURE (°F DB/WB) => -
+col: COOLING PERFORMANCE / MIN EFFICIENCY / SEER => -
+col: COOLING PERFORMANCE / MIN EFFICIENCY / EER => -
+col: COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL => cooling_mbh
+col: COOLING PERFORMANCE / CAPACITY (MBH) / SENSIBLE => -
+col: UNIT OPTIONS => -
+grid:
+B1 | F-B1 AND EC-B1 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 30.9 | 30.9 | A,B
+B2 | F-B2 AND EC-B2 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 32.4 | 32.4 | A,B
+B3 | F-B3 AND EC-B3 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 35.3 | 35.3 | A,B
+B4 | F-B4 AND EC-B4 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 30.9 | 30.9 | A,B
+B5 | F-B5 AND EC-B5 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 36.8 | 36.8 | A,B
+B6 | F-B6 AND EC-B6 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 36.8 | 36.8 | A,B,D
+B7 | F-B7 AND EC-B7 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 30.9 | 30.9 | A,B
+B8 | F-B8 AND EC-B8 | FRASER JOHNSTON | AL19B3621S | 270 | 208/1/60 | 208 | 1 | 21.4 | 35 | 100/61 | 16 | N/A | 24.2 | 24.2 | A,C,D
+B9 | F-B9 AND EC-B9 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 35.3 | 35.3 | A,B
+BO1 | OAU-B1 | FRASER JOHNSTON | AL19B6021S | 300 | 208/1/60 | 208 | 1 | 31.4 | 50 | 100/61 | 19 | N/A | 50 | 50 | A,C
+BO2 | OAU-B2 | FRASER JOHNSTON | AL19B6021S | 300 | 208/1/60 | 208 | 1 | 31.4 | 50 | 100/61 | 19 | N/A | 50 | 50 | A,C
+C1 | F-C1 AND EC-C1 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 33.9 | 33.9 | A,B
+C2 | F-C2 AND EC-C2 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 29.5 | 29.5 | A,B
+C3 | F-C3 AND EC-C3 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 32.4 | 32.4 | A,B
+C4 | F-C4 AND EC-C4 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 29.5 | 29.5 | A,B
+C5 | F-C5 AND EC-C5 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 32.4 | 32.4 | A,B
+C6 | F-C6 AND EC-C6 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 32.4 | 32.4 | A,B
+C7 | F-C7 AND EC-C7 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 32.4 | 32.4 | A,B
+C8 | F-C8 AND EC-C8 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 38.3 | 38.3 | A,B
+C9 | F-C9 AND EC-C9 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 32.4 | 32.4 | A,B
+C10 | F-C10 AND EC-C10 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 29.5 | 29.5 | A,B
+C11 | F-C11 AND EC-C11 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 29.5 | 29.5 | A,B
+C12 | F-C12 AND EC-C12 | RHEEM | RA16AZ48AJ3 | 250 | 208/1/60 | 208 | 1 | 25 | 40 | 100/61 | 16 | N/A | 33.9 | 33.9 | A,B
+END
+
+# ENERGY RECOVERY VENTILATOR SCHEDULE (page 3): two rows. The outdoor air stream is the
+# supply: OUTDOOR AIR PERFORMANCE / AIR VOLUME (CFM) keys supply_cfm and its MOTOR SIZE (HP)
+# supply_fan_hp; EXHAUST AIR PERFORMANCE keys exhaust_cfm and exhaust_fan_hp. VOLTS/Ø/Hz
+# ("460/3/60") keys volts and phase. The recovery type is printed twice and disagrees:
+# general note 1 "UNIT SHALL BE ENTHALPY WHEEL TYPE." and indoor unit feature 4 "POLYMER
+# MEMBRANE ENERGY RECOVERY CORE" (a fixed membrane core, not a wheel), so recovery_type is not
+# one value ("?"). Option F (manufacturer's BACnet IP controller), the filters and the
+# dampers are outside this family's vocabulary.
+TABLE
+sheet: 16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3
+title: ENERGY RECOVERY VENTILATOR SCHEDULE
+family: ERV
+render: page 3 crop 643,1413,2112,99 at 3x in 8 tiles (MARK column repeated) and notes crop 643,1508,1357,177 at 170 dpi; second read at 4x (crop 643,1476,2112,36) of both rows, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: UNIT GENERAL DATA / MANUFACTURER => -
+col: UNIT GENERAL DATA / MODEL => -
+col: UNIT GENERAL DATA / TYPE => -
+col: UNIT GENERAL DATA / OPERATING WEIGHT (LBS) => -
+col: ELECTRICAL / VOLTS/Ø/Hz => -
+col: [ELECTRICAL / VOLTS/Ø/Hz: volts part] => volts
+col: [ELECTRICAL / VOLTS/Ø/Hz: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: OUTDOOR AIR PERFORMANCE / AIR VOLUME (CFM) => supply_cfm
+col: OUTDOOR AIR PERFORMANCE / ESP (IN WG) => -
+col: OUTDOOR AIR PERFORMANCE / QUANTITY => -
+col: OUTDOOR AIR PERFORMANCE / MOTOR SIZE (HP) => supply_fan_hp
+col: EXHAUST AIR PERFORMANCE / AIR VOLUME (CFM) => exhaust_cfm
+col: EXHAUST AIR PERFORMANCE / ESP (IN WG) => -
+col: EXHAUST AIR PERFORMANCE / QUANTITY => -
+col: EXHAUST AIR PERFORMANCE / MOTOR SIZE (HP) => exhaust_fan_hp
+col: SUMMER DESIGN CONDITIONS / OUTDOOR (°F DB/WB) => -
+col: SUMMER DESIGN CONDITIONS / INDOOR (°F DB) => -
+col: SUMMER DESIGN CONDITIONS / OUTDOOR RELATIVE HUMIDITY (%) => -
+col: WINTER DESIGN CONDITIONS / OUTDOOR (°F DB) => -
+col: WINTER DESIGN CONDITIONS / INDOOR (°F DB) => -
+col: WINTER DESIGN CONDITIONS / OUTDOOR RELATIVE HUMIDITY (%) => -
+col: SUMMER SUPPLY CONDITIONS / AIR VOLUME (CFM) => -
+col: SUMMER SUPPLY CONDITIONS / SA (°F DB) => -
+col: SUMMER SUPPLY CONDITIONS / SENSIBLE HEAT RECOVERED (MBH) => -
+col: SUMMER SUPPLY CONDITIONS / SENSIBLE RECOVERY EFFECTIVENESS (%) => -
+col: WINTER SUPPLY CONDITIONS / AIR VOLUME (CFM) => -
+col: WINTER SUPPLY CONDITIONS / SA (°F DB) => -
+col: WINTER SUPPLY CONDITIONS / SENSIBLE HEAT RECOVERED (MBH) => -
+col: WINTER SUPPLY CONDITIONS / SENSIBLE RECOVERY EFFECTIVENESS (%) => -
+col: UNIT OPTIONS => -
+col: [NOTE 1 of the GENERAL NOTES and UNIT FEATURE 4: the recovery type] => recovery_type
+grid:
+C1 | SWEGON | NAGOLD020FRX | INDOOR | 1,600 | 460/3/60 | 460 | 3 | 8.8 | 15 | 3,300 | 0.75 | 1 | 3.2 | 2,950 | 0.75 | 1 | 3.2 | 100/61 | 76 | 10 | 0 | 66 | 80 | 3,300 | 82 | 56.2 | 85 | 3,300 | 50 | 152.1 | 85 | A,B,C,D,E,F,G | ?ENTHALPY WHEEL TYPE (general note 1) and POLYMER MEMBRANE ENERGY RECOVERY CORE (unit feature 4)
+C2 | SWEGON | NAGOLD020FRX | INDOOR | 1,600 | 460/3/60 | 460 | 3 | 8.8 | 15 | 3,325 | 0.75 | 1 | 3.2 | 2,750 | 0.75 | 1 | 3.2 | 100/61 | 76 | 10 | 0 | 66 | 80 | 3,325 | 82 | 53.8 | 87 | 3,325 | 48 | 145.9 | 87 | A,B,C,D,E,F,G | ?ENTHALPY WHEEL TYPE (general note 1) and POLYMER MEMBRANE ENERGY RECOVERY CORE (unit feature 4)
+END
+
+# OUTDOOR AIR UNIT SCHEDULE (page 3): two rows. SERVICE prints "BUILDING B OUTSIDE AIR": the
+# area the unit's outside air serves keys area_served ("BUILDING B"). SUPPLY FAN / AIRFLOW
+# (CFM) keys supply_cfm and MOTOR (HP) supply_fan_hp; VOLTS/Ø/Hz ("208/3/60") keys volts and
+# phase. Every cell of the HOT WATER HEATING PERFORMANCE block prints N/A: its capacity and
+# water side are keyed with the printed N/A (no value), and heating_type is none (the
+# author's reading, as 031_MO keys a HEAT RECOVERY MARK of N/A as none). COOLING PERFORMANCE
+# / CAPACITY (MBH) / TOTAL keys cooling_mbh; unit feature 1 ("R410A REFRIGERANT SYSTEM")
+# makes the coil DX. AIR FILTER DATA 1 prints the final filters' MERV 8 (filter_merv). Unit
+# feature 4 puts a direct-drive ECM on the supply fan; as in 069_ID and itd-d1-lab, an ECM
+# printed outside a speed-control column keys no VFD answer (vfd stays not printed).
+TABLE
+sheet: 16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3
+title: OUTDOOR AIR UNIT SCHEDULE
+family: OUTDOOR_AIR_UNIT
+render: page 3 crop 1157,1753,1598,115 at 3x in 6 tiles (MARK column repeated) and notes crop 1157,1864,1598,151 at 150 dpi; second read at 4x (crop 1157,1832,1598,36) of both rows, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: [SERVICE: the area the unit's outside air serves] => area_served
+col: UNIT GENERAL DATA / MANUFACTURER => -
+col: UNIT GENERAL DATA / MODEL => -
+col: UNIT GENERAL DATA / OPERATING WEIGHT (LBS) => -
+col: ELECTRICAL / VOLTS/Ø/Hz => -
+col: [ELECTRICAL / VOLTS/Ø/Hz: volts part] => volts
+col: [ELECTRICAL / VOLTS/Ø/Hz: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: SUPPLY FAN / AIRFLOW (CFM) => supply_cfm
+col: SUPPLY FAN / ESP (IN WC) => -
+col: SUPPLY FAN / MOTOR (HP) => supply_fan_hp
+col: HOT WATER HEATING PERFORMANCE / CAPACITY (MBH) => heating_mbh
+col: HOT WATER HEATING PERFORMANCE / AIRFLOW (CFM) => -
+col: HOT WATER HEATING PERFORMANCE / MAX APD (IN WC) => -
+col: HOT WATER HEATING PERFORMANCE / EAT (°F) => -
+col: HOT WATER HEATING PERFORMANCE / LAT (°F) => -
+col: HOT WATER HEATING PERFORMANCE / FLUID FLOW (GPM) => hw_gpm
+col: HOT WATER HEATING PERFORMANCE / MAX WPD (FT WC) => hw_wpd_ft
+col: HOT WATER HEATING PERFORMANCE / EWT (°F) => hw_ewt_f
+col: HOT WATER HEATING PERFORMANCE / LWT (°F) => hw_lwt_f
+col: HOT WATER HEATING PERFORMANCE / ROWS => hw_rows
+col: HOT WATER HEATING PERFORMANCE / FINS/IN => -
+col: COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL => cooling_mbh
+col: COOLING PERFORMANCE / CAPACITY (MBH) / SENSIBLE => -
+col: COOLING PERFORMANCE / AIRFLOW (CFM) => -
+col: COOLING PERFORMANCE / MAX APD (IN WC) => -
+col: COOLING PERFORMANCE / EAT (°F DB/WB) => -
+col: COOLING PERFORMANCE / LAT (°F) => -
+col: COOLING PERFORMANCE / ROWS => -
+col: COOLING PERFORMANCE / FINS/IN => -
+col: UNIT OPTIONS => -
+derive: cooling_type = dx ; header=NOTE 1 of the UNIT FEATURES ; note=unit feature 1: 'R410A REFRIGERANT SYSTEM', with the COOLING PERFORMANCE block's refrigerant coil (the author's reading)
+derive: heating_type = none ; header=HOT WATER HEATING PERFORMANCE ; note=every cell of the block prints N/A (the author's reading)
+derive: filter_merv = 8 ; header=NOTE 1 of the AIR FILTER DATA ; note=air filter data 1: 'FINAL FILTERS: 2" PLEATED, MERV 8'
+grid:
+B1 | =BUILDING B (BUILDING B OUTSIDE AIR) | ENVIRO-TEC | HDD20 | 300 | 208/3/60 | 208 | 3 | 5.5 | 15 | 2,200 | 1.0 | 1.5 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 50.0 | 50.0 | 2,200 | 0.25 | 100/61 | 75 | 3 | 10 | A,B,C,D
+B2 | =BUILDING B (BUILDING B OUTSIDE AIR) | ENVIRO-TEC | HDD20 | 300 | 208/3/60 | 208 | 3 | 5.5 | 15 | 2,200 | 1.0 | 1.5 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 50.0 | 50.0 | 2,200 | 0.25 | 100/61 | 75 | 3 | 10 | A,B,C,D
+END
+
+# EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY) (page 4): four
+# existing units, marked 2 to 5 under the AC symbol. VOLTS/Ø/Hz ("208/3/60") keys volts and
+# phase. EXISTING UNIT GAS INPUT (MBH) prints two stage inputs with no stage named ("82/115",
+# "50/72"), so gas_input_mbh is not one value ("?"); the furnace table's stages are named in
+# its header. The title prints the gas heat and the DX cooling. The table prints no notes.
+TABLE
+sheet: 16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4
+title: EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)
+family: RTU
+render: page 4 crop 640,700,740,245 at 3x in 3 tiles (MARK column repeated); second read at 4x (crop 640,842,740,103) of all 4 rows, every cell
+rows: all 4 printed rows
+col: MARK => tag
+col: EXISTING UNIT DATA / EXISTING UNIT MANUFACTURER => -
+col: EXISTING UNIT DATA / EXISTING UNIT MODEL => -
+col: EXISTING UNIT DATA / EXISTING CURB WEIGHT (lb) => -
+col: EXISTING UNIT DATA / EXISTING UNIT MAX TOTAL WEIGHT (lb) => -
+col: ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz => -
+col: [ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: volts part] => volts
+col: [ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: phase part] => phase
+col: ELECTRICAL / EXISTING UNIT / MCA => -
+col: ELECTRICAL / EXISTING UNIT / FLA => -
+col: ELECTRICAL / EXISTING UNIT / MOCP => -
+col: HEATING / EXISTING UNIT GAS INPUT (MBH) => gas_input_mbh
+derive: heating_type = gas ; header=TABLE TITLE ; note=title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'; every row prints an EXISTING UNIT GAS INPUT
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'
+grid:
+2 | CARRIER | 48HJE005---551-- | 115 | 655 | 208/3/60 | 208 | 3 | 22 | 22 | 30 | ?82/115
+3 | CARRIER | 48HJE004---541-- | 115 | 645 | 208/3/60 | 208 | 3 | 18 | 18 | 25 | ?50/72
+4 | CARRIER | 48HJE004---541-- | 115 | 645 | 208/3/60 | 208 | 3 | 18 | 18 | 25 | ?50/72
+5 | CARRIER | 48HJE004---541-- | 115 | 645 | 208/3/60 | 208 | 3 | 18 | 18 | 25 | ?50/72
+END

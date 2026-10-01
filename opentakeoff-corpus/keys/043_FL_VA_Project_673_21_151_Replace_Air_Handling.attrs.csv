@@ -1,0 +1,77 @@
+# 043_FL_VA_Project_673_21_151_Replace_Air_Handling.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/043_FL_VA_Project_673_21_151_Replace_Air_Handling.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet E001 (page 23) of Replace Air Handling Unit ED-203, James A. Haley VA Hospital (Aesus design group), the table the fifth tier's seed drew for its PUMP stratum.
+#   043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23 | MECHANICAL EQUIPMENT SCHEDULE | PUMP | the 2 printed pump rows (EQUIP ID "HWP 1-2" and "CWP 9-10", each naming two pumps: keyed as HWP-1, HWP-2, CWP-9 and CWP-10); ED 203, an air handling unit, is not keyed | render: page 23 overview at 40 dpi; crop 295,1440,1105,245 at 3x in 2 tiles (EQUIP ID column repeated); second read of every row, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Currents (F.L.A., M.C.A., MOCP), disconnect and fuse data other than the drive, feeder wire and conduit, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 043_FL_VA_Project_673_21_151_Replace_Air_Handling: 1 table(s), 4 instance(s), 60 keyed attribute value(s) (16 printed, 44 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,building,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,floor,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,area_served,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,qty,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,service,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,gpm,,gpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,head_ft,,ft,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,motor_hp,2,hp,EQUIPMENT RATING / HP,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,rpm,,rpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,vfd,yes,,DISC SWITCH/FUSE DATA,printed 'VFD WITH INTEGRAL DISCONNECT'
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,pump_arrangement,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,glycol_pct,,%,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,conn_in,,in,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,volts,480,V,EQUIPMENT RATING / VOLTS,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-1,PUMP,phase,3,,EQUIPMENT RATING / PHASE: the number before Ø,author's reading of the printed row
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,building,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,floor,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,area_served,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,qty,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,service,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,gpm,,gpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,head_ft,,ft,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,motor_hp,2,hp,EQUIPMENT RATING / HP,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,rpm,,rpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,vfd,yes,,DISC SWITCH/FUSE DATA,printed 'VFD WITH INTEGRAL DISCONNECT'
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,pump_arrangement,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,glycol_pct,,%,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,conn_in,,in,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,volts,480,V,EQUIPMENT RATING / VOLTS,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,HWP-2,PUMP,phase,3,,EQUIPMENT RATING / PHASE: the number before Ø,author's reading of the printed row
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,building,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,floor,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,area_served,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,qty,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,service,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,gpm,,gpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,head_ft,,ft,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,motor_hp,7.5,hp,EQUIPMENT RATING / HP,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,rpm,,rpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,vfd,yes,,DISC SWITCH/FUSE DATA,printed 'VFD WITH INTEGRAL DISCONNECT'
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,pump_arrangement,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,glycol_pct,,%,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,conn_in,,in,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,volts,480,V,EQUIPMENT RATING / VOLTS,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-9,PUMP,phase,3,,EQUIPMENT RATING / PHASE: the number before Ø,author's reading of the printed row
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,building,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,floor,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,area_served,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,qty,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,service,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,gpm,,gpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,head_ft,,ft,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,motor_hp,7.5,hp,EQUIPMENT RATING / HP,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,rpm,,rpm,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,vfd,yes,,DISC SWITCH/FUSE DATA,printed 'VFD WITH INTEGRAL DISCONNECT'
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,pump_arrangement,,,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,glycol_pct,,%,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,conn_in,,in,,not printed
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,volts,480,V,EQUIPMENT RATING / VOLTS,
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,MECHANICAL EQUIPMENT SCHEDULE,CWP-10,PUMP,phase,3,,EQUIPMENT RATING / PHASE: the number before Ø,author's reading of the printed row

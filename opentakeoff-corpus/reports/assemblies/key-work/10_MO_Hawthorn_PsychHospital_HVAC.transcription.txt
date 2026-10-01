@@ -1,0 +1,85 @@
+# 10_MO_Hawthorn_PsychHospital_HVAC — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheet MEP-601 MEP SCHEDULES (PDF page 9) of Replace HVAC & Mechanical Room
+# Doors, Cottages A-E, Hawthorn Children's Psychiatric Hospital, St. Louis MO (Hurst-Rosche, with
+# Solutions AEC): an overview of the page at 40 dpi, then each table at 3x (216 dpi), rendered with
+# MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-27, with the PDF's own text layer
+# (pymupdf words, row by row) as a reading aid; second read of every row against the text layer.
+# Each drawn title was found with the text layer (pymupdf search_for). The pipeline's output for
+# these tables was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (5 units, one packet, nothing applied), and AS-28 read its column names. The fifth
+# tier keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 10_MO_Hawthorn_PsychHospital_HVAC
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheet MEP-601 MEP SCHEDULES (page 9) of the Hawthorn Children's Psychiatric Hospital cottages HVAC replacement (Hurst-Rosche), the tables the fifth tier's seed drew for its AHU and CONDENSING_UNIT strata.
+EXCLUDES Manufacturers, model numbers and weights, external static pressure, sensible capacity, gas heating stages, compressor and stage counts, refrigerant, currents (MCA, MOCP), who furnishes and installs the disconnects, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE: two rows, AHU-1A and AHU-1B (gas furnaces with an A-coil, note 2).
+# SUPPLY FAN / CFM keys supply_cfm, OA CFM oa_cfm_min and FAN HP supply_fan_hp. The DX COOLING COIL
+# block's TOTAL (MBH) keys cooling_mbh; the block's title prints DX, cooling_type dx. The GAS HEAT
+# block prints HEATING INPUT (MBH), keyed gas_input_mbh, and HEATING OUTPUT (MBH), keyed
+# heating_mbh; its title prints GAS, heating_type gas. ELECTRICAL DATA / VOLTAGE and PHASE key
+# volts and phase. Notes 1-2 (a condensate neutralizer kit; upflow arrangement) key nothing.
+TABLE
+sheet: 10_MO_Hawthorn_PsychHospital_HVAC.pdf#9
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 9 overview at 40 dpi; crop 1080,70,1215,175 at 3x in 3 tiles (EQUIP. TAG column repeated), notes included; second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: EQUIP. TAG => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: SUPPLY FAN / CFM => supply_cfm
+col: SUPPLY FAN / OA CFM => oa_cfm_min
+col: SUPPLY FAN / ESP. (IN. W.C.) => -
+col: SUPPLY FAN / FAN HP => supply_fan_hp
+col: DX COOLING COIL / TOTAL (MBH) => cooling_mbh
+col: DX COOLING COIL / SENSIBLE (MBH) => -
+col: GAS HEAT / HEATING INPUT (MBH) => gas_input_mbh
+col: GAS HEAT / HEATING OUTPUT (MBH) => heating_mbh
+col: GAS HEAT / HEATING STAGES => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: ELECTRICAL DATA / VOLTAGE => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: DISCONNECT / FURNISHED BY => -
+col: DISCONNECT / INSTALLED BY => -
+col: WEIGHT (LBS) => -
+col: NOTES => -
+derive: cooling_type = dx ; header=DX COOLING COIL ; note=every row prints the DX COOLING COIL block
+derive: heating_type = gas ; header=GAS HEAT ; note=every row prints the GAS HEAT block (heating input and output)
+grid:
+AHU-1A | AMERICAN STANDARD / TRANE | S9X2C080U5PSBA /5TXCC007AS3 | 1,500 | 210 | 0.70 | 1 | 46.3 | 34.8 | 80 | 77.6 | 2 | 11.8 | 15 | 120 | 1 | EC | EC | 210 | 1,2
+AHU-1B | AMERICAN STANDARD / TRANE | S9X2C080U5PSBA /5TXCC007AS3 | 1,500 | 215 | 0.70 | 1 | 46.3 | 34.8 | 80 | 77.6 | 2 | 11.8 | 15 | 120 | 1 | EC | EC | 210 | 1,2
+END
+
+# AIR-COOLED CONDENSING UNIT: two rows, CU-1B and CU-1A (in that printed order). NOM. TONS keys
+# cooling_tons; ELECTRICAL DATA / VOLTAGE and PHASE key volts and phase. No column prints the unit
+# each serves. Notes 1-5 (anti-short-cycle timer, hail guards, low ambient control, refrigerant
+# piping, leak detection) key nothing.
+TABLE
+sheet: 10_MO_Hawthorn_PsychHospital_HVAC.pdf#9
+title: AIR-COOLED CONDENSING UNIT
+family: CONDENSING_UNIT
+render: page 9 overview at 40 dpi; crop 1393,265,900,180 at 3x in 2 tiles (EQUIP. TAG column repeated), notes included; second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: EQUIP. TAG => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: NOM. TONS => cooling_tons
+col: # OF COMP. => -
+col: # OF STAGES => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: ELECTRICAL DATA / VOLTAGE => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: REFRIGERANT TYPE => -
+col: DISCONNECT / FURNISHED BY => -
+col: DISCONNECT / INSTALLED BY => -
+col: WEIGHT (LBS.) => -
+col: NOTES => -
+grid:
+CU-1B | TRANE | 5TTR3048A1000 | 4 | 1 | 1 | 23 | 35 | 208 | 1 | R-454B | EC | EC | 400 | 1,2,3,4,5
+CU-1A | TRANE | 5TTR3048A1000 | 4 | 1 | 1 | 23 | 35 | 208 | 1 | R-454B | EC | EC | 400 | 1,2,3,4,5
+END

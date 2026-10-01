@@ -1,0 +1,17 @@
+# 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2 (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,B950A-PCWP-1001,PUMP,067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#6,(N) NEH PCW SKID P&ID,tag,detail 2 on M6.3 draws PCWP-1001
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,B950A-PCWP-1001,PUMP,067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#6,SEQUENCE OF OPERATION,family_detail,"the skid's sequence, printed beside detail 2 (both pumps run; the PLC sets their speed)"
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,B950A-PCWP-1002,PUMP,067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#6,(N) NEH PCW SKID P&ID,tag,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,B950A-PCWP-1002,PUMP,067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#6,SEQUENCE OF OPERATION,family_detail,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,B950A-HX-PCWP-1001,HEAT_EXCHANGER,067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#6,(N) NEH PCW SKID P&ID,tag,detail 2 draws (N) B950A-HX-PCWP-1001
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,B950A-HX-PCWP-1001,HEAT_EXCHANGER,067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#6,SEQUENCE OF OPERATION,semantic,its chilled water control valve holds the PCW supply at 63 F

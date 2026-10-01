@@ -1,0 +1,126 @@
+# 24_IA_JohnsonCounty_Courthouse.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/24_IA_JohnsonCounty_Courthouse.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M-601.4 MECHANICAL SCHEDULES (page 23) of the Johnson County Courthouse second level courtroom renovation (Neumann Monson Architects, with Modus Engineering), the tables the fifth tier's seed drew for its FCU, ERV, PUMP and RADIANT_CEILING_PANEL strata.
+#   24_IA_JohnsonCounty_Courthouse.pdf#23 | FAN COIL UNIT SCHEDULE - PROJECT 4 | FCU | all 2 printed rows | render: page 23 overview at 40 dpi; crop 255,302,2020,110 at 3x in 4 tiles (UNIT TAG column repeated) and the second row alone (crop 255,380,2020,26) at 3x in 4 tiles, notes read in the text layer; second read of both rows, every cell, against the text layer
+#   24_IA_JohnsonCounty_Courthouse.pdf#23 | ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4 | ERV | all 1 printed row | render: page 23 overview at 40 dpi; crop 50,98,2220,90 at 3x in 5 tiles (UNIT TAG column repeated), notes read in the text layer; second read of the row, every cell, against the text layer
+#   24_IA_JohnsonCounty_Courthouse.pdf#23 | INLINE PUMP SCHEDULE - PROJECT 4 | PUMP | all 1 printed row | render: page 23 overview at 40 dpi; crop 1505,485,770,70 at 3x in 2 tiles (UNIT TAG column repeated); second read of the row, every cell, against the text layer
+#   24_IA_JohnsonCounty_Courthouse.pdf#23 | ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4 | RADIANT_CEILING_PANEL | all 1 printed row | render: page 23 overview at 40 dpi; crop 1690,810,585,90 at 3x, notes included; second read of the row, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers, model numbers, dimensions and weights, filters, external static pressure, sensible capacities and air temperatures, the energy recovery effectiveness and conditions, the ventilator's coils and electric preheat (outside its vocabulary), fan brake horsepower and motor counts, currents (MCA, MOCP, FLA), panel sizes, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 24_IA_JohnsonCounty_Courthouse: 4 table(s), 5 instance(s), 106 keyed attribute value(s) (55 printed, 51 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,building,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,floor,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,area_served,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,qty,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,pipes,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,cfm,300,cfm,FAN / CFM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,motor_hp,,hp,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,fan_speeds,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,ecm,,,"FAN / MOTOR TYPE: ECM, an EC motor",blank cell
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,cooling_type,chw,,CHILLED WATER COIL,every row prints the CHILLED WATER COIL block
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_gpm,1,gpm,CHILLED WATER COIL / GPM,printed '1.0'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_ewt_f,44,F,CHILLED WATER COIL / EWT/LWT: EWT part,printed '44.0'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_lwt_f,54,F,CHILLED WATER COIL / EWT/LWT: LWT part,printed '54.0'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_wpd_ft,1.6,ft,CHILLED WATER COIL / FLUID PD (FT),
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_mbh,5.2,MBH,CHILLED WATER COIL / TOTAL CAPACITY (MBH),printed '5.20'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_rows,,,CHILLED WATER COIL / ROWS,printed '-'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_conn_in,0.75,in,CHILLED WATER SUPPLY/RETURN (IN),printed '3/4'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,chw_glycol_pct,0,%,"CHILLED WATER COIL / FLUID: WATER, so no glycol",author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,heating_type,hw,,HOT WATER COIL,every row prints the HOT WATER COIL block (EWT 180)
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_gpm,0.5,gpm,HOT WATER COIL / GPM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_ewt_f,180,F,HOT WATER COIL / EWT/LWT: EWT part,printed '180.0'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_lwt_f,140,F,HOT WATER COIL / EWT/LWT: LWT part,printed '140.0'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_wpd_ft,0.5,ft,HOT WATER COIL / FLUID PD (FT),
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_mbh,10,MBH,HOT WATER COIL / TOTAL CAPACITY (MBH),printed '10.0'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_rows,1,,HOT WATER COIL / ROWS,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_conn_in,0.75,in,HEATING WATER SUPPLY/RETRUN (IN),printed '3/4'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,hw_glycol_pct,0,%,"HOT WATER COIL / FLUID: WATER, so no glycol",author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,eh_kw,,kW,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,volts,120,V,ELECTRICAL / VOLTAGE/PHASE: volts part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-00,FCU,phase,1,,ELECTRICAL / VOLTAGE/PHASE: phase part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,building,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,floor,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,area_served,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,qty,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,pipes,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,cfm,300,cfm,FAN / CFM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,motor_hp,,hp,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,fan_speeds,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,ecm,yes,,"FAN / MOTOR TYPE: ECM, an EC motor",printed 'MODULATING ECM'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,cooling_type,chw,,CHILLED WATER COIL,every row prints the CHILLED WATER COIL block
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_gpm,1.5,gpm,CHILLED WATER COIL / GPM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_ewt_f,44,F,CHILLED WATER COIL / EWT/LWT: EWT part,printed '44.0'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_lwt_f,54,F,CHILLED WATER COIL / EWT/LWT: LWT part,printed '54.0'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_wpd_ft,1.04,ft,CHILLED WATER COIL / FLUID PD (FT),
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_mbh,7.36,MBH,CHILLED WATER COIL / TOTAL CAPACITY (MBH),
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_rows,4,,CHILLED WATER COIL / ROWS,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_conn_in,0.75,in,CHILLED WATER SUPPLY/RETURN (IN),printed '3/4'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,chw_glycol_pct,0,%,"CHILLED WATER COIL / FLUID: WATER, so no glycol",author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,heating_type,hw,,HOT WATER COIL,every row prints the HOT WATER COIL block (EWT 180)
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_gpm,0.5,gpm,HOT WATER COIL / GPM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_ewt_f,180,F,HOT WATER COIL / EWT/LWT: EWT part,printed '180.0'; author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_lwt_f,139.6,F,HOT WATER COIL / EWT/LWT: LWT part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_wpd_ft,0.27,ft,HOT WATER COIL / FLUID PD (FT),
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_mbh,10.5,MBH,HOT WATER COIL / TOTAL CAPACITY (MBH),
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_rows,1,,HOT WATER COIL / ROWS,
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_conn_in,0.75,in,HEATING WATER SUPPLY/RETRUN (IN),printed '3/4'
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,hw_glycol_pct,0,%,"HOT WATER COIL / FLUID: WATER, so no glycol",author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,eh_kw,,kW,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,volts,120,V,ELECTRICAL / VOLTAGE/PHASE: volts part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,FAN COIL UNIT SCHEDULE - PROJECT 4,FCU-04,FCU,phase,1,,ELECTRICAL / VOLTAGE/PHASE: phase part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,building,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,floor,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,area_served,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,qty,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,recovery_type,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,supply_cfm,4000,cfm,SUPPLY FANS / CFM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,exhaust_cfm,4000,cfm,EXHAUST FANS / CFM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,supply_fan_hp,,hp,SUPPLY FANS / MOTOR HP,printed '2.0 kW' — not a single value for this attribute
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,exhaust_fan_hp,,hp,EXHAUST FANS / MOTOR HP,printed '1.0 kW' — not a single value for this attribute
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,volts,208,V,MAIN UNIT ELECTRICAL / VOLTAGE/PHASE: volts part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4,ERV-2,ERV,phase,3,,MAIN UNIT ELECTRICAL / VOLTAGE/PHASE: phase part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,building,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,floor,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,area_served,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,qty,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,service,HOT WATER,,SYSTEM,
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,gpm,10,gpm,FLOWRATE (GPM),
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,head_ft,25,ft,TOTAL HEAD (FT),
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,motor_hp,,hp,MOTOR HP,printed '-'
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,rpm,,rpm,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,vfd,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,pump_arrangement,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,glycol_pct,,%,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,conn_in,1.5,in,CONNECTION SIZE,"printed '1 1/2""'"
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,volts,115,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,INLINE PUMP SCHEDULE - PROJECT 4,CP-1,PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,building,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,floor,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,area_served,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,qty,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,cfm,,cfm,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,cooling_mbh,,MBH,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,cooling_tons,,tons,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,heating_mbh,,MBH,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,hw_gpm,,gpm,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,hw_ewt_f,,F,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,hw_lwt_f,,F,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,chw_gpm,,gpm,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,chw_ewt_f,,F,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,chw_lwt_f,,F,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,motor_hp,,hp,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,eh_kw,0.5,kW,CAPACITY (kW),
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,conn_in,,in,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,bas_interface,,,,not printed
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,volts,120,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+24_IA_JohnsonCounty_Courthouse.pdf#23,ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4,ECP-1,RADIANT_CEILING_PANEL,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row

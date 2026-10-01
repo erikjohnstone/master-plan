@@ -171,10 +171,16 @@ export const compileCorpusTakeoffOutput = {
    * less than source_item_count when a family was out of this template's
    * hydronic/actuated scope (see excluded_families); per-column coverage
    * and notes disclose exactly what filled from the schedule vs. was left
-   * blank (PN class / Branch Δp have no source anywhere in this pipeline). */
+   * blank (PN class / Branch Δp have no source anywhere in this pipeline;
+   * Consumer Δp, the template's CoilDP, stays blank until the HIT owners
+   * confirm what it expects). */
   valve_size_template: z.object({
     path: z.string(),
+    /** Every workbook written: one per 195 rows, so each row keeps its dropdowns. */
+    files: z.array(z.object({ path: z.string(), rows: z.number().int() })).optional(),
     rows_written: z.number().int(),
+    /** Rows for hydronic coils no scheduled valve serves (embedded-coil compile). */
+    coil_derived_rows: z.number().int().optional(),
     source_item_count: z.number().int(),
     excluded_families: z.array(z.object({ family: z.string(), count: z.number().int(), reason: z.string() })),
     coverage: z.record(z.string(), z.object({ filled: z.number().int(), total: z.number().int() })),
@@ -404,8 +410,11 @@ export const reconcileSchedulePlanOutput = {
     scheduled_qty: z.number().int().nullable(),
     scheduled_qty_basis: z.enum([
       "printed_schedule_quantity",
+      "printed_schedule_quantity_per_mark",
       "one_per_unique_schedule_row",
+      "one_per_typical_level",
       "unparseable_printed_quantity",
+      "printed_quantity_for_several_marks",
       "type_definition_not_quantity",
     ]).optional(),
     scheduled_qty_source_header: z.string().nullable().optional(),
@@ -430,6 +439,14 @@ export const reconcileSchedulePlanOutput = {
     // enum was missing.
     status: z.enum(["MATCH", "SCHEDULE_ONLY", "PLAN_ONLY", "REFUSED_NO_SCALE", "REFUSED_NO_TEXT", "AMBIGUOUS", "ERROR"]),
     quantity_comparison: z.enum(["scheduled_vs_installed", "type_definition_vs_plan_count"]).optional(),
+    typical_levels: z.object({
+      levels: z.number().int(),
+      header: z.string(),
+      text: z.string(),
+      placements: z.number().int(),
+      levels_drawn: z.array(z.string()),
+      levels_missing: z.array(z.string()),
+    }).optional().describe("AS-139: a row standing for one unit on each typical level it lists (TYPICAL LEVELS \"6-33\" beside AHU-(6-33)-1, or an X where the level goes, CAV-X-1): its placements read over the levels their plans' titles draw (a typical plan for levels 6-16 stands for eleven), the levels no plan in the set draws named"),
     schedule_cite: z.object({
       sheet: z.string(),
       title: z.string().nullable(),
@@ -469,6 +486,13 @@ export const reconcileSchedulePlanOutput = {
       grounding_basis: z.literal("exact_authored_diagram_tag"),
       schedule_binding_status: z.enum(["bound", "ambiguous", "unbound"]),
     })).optional(),
+    plan_other_cites: z.array(z.object({
+      sheet: z.string(),
+      at: z.array(z.number()).optional(),
+      bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+      reason: z.enum(["repeat_view", "unattached_tag", "demolition_view", "reference_view"]),
+      counted_on: z.string().optional(),
+    })).optional().describe("AS-92: every other drawn occurrence of this row's own mark on a plan-like sheet that the row does not count — the same unit on another plan view (repeat_view; counted_on names the sheet that counts it), the mark's text with no attached symbol (unattached_tag), the mark on a demolition plan (demolition_view), the mark on a zone plan titled by its legend, a detail, a diagram or an elevation (reference_view, AS-109). Links from a drawn tag to its row, never installed quantity"),
     reference_tag_cites: z.array(z.object({
       sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }), text: z.string(),
     })).optional().describe("Every non-plan drawn occurrence of this row's mark (schematic/legend/detail/etc) — a citation, never installed evidence; present only when sweep_schedule_row returned status: reference_only"),
@@ -479,6 +503,8 @@ export const reconcileSchedulePlanOutput = {
   })),
   unscheduled_tags: z.array(drawnTagWire).optional()
     .describe("WP6: every drawn tag occurrence (sheet callouts excluded) whose key never appears as any schedule row's own identity anywhere in the set. A review list — never changes any row's quantity or status."),
+  unscheduled_units: z.array(drawnTagWire).optional()
+    .describe("AS-93: the likely units among unscheduled_tags — drawn on a plan or demolition plan sheet, outside every table and sheet callout, and shaped like a unit of a scheduled family (the same letters and form as a unit mark an equipment schedule prints). A review list — never changes any row's quantity or status."),
   alias_candidates: z.array(z.object({
     drawn: z.string(), nearest_row_key: z.string(), distance: z.literal(1),
   })).optional().describe("WP6: for every distinct drawn key, the nearest schedule-row key exactly one letter-edit away (never a digit edit), when one exists — a likely typo/OCR spelling drift between the drawing and the schedule, or between two schedule rows. A review list — never changes any row's quantity or status."),
@@ -1457,6 +1483,7 @@ export const sheetGraphOutput = {
       kind: z.string(), title: z.string(), rows: z.number().int(), region: wireBox,
       continues: z.string().optional().describe("Present on a continuation fragment ('… SCHEDULE — CONT'D'): the sheet carrying the table's base fragment. The fragments read as ONE table — resolve_tag and find_schedule already see the union"),
       rotated_headers: z.boolean().optional().describe("true when the column headers were read at a quarter-turn"),
+      read_from_picture: z.boolean().optional().describe("true when the table is a picture pasted into the sheet and was read by OCR: its values are the ink's reading, not the PDF's text; view_sheet the region to confirm a value that matters"),
     })),
   })),
   rooms: z.array(graphRoom).describe("Numbers CORROBORATED as rooms — a room-finish row answers for them, or (where the set carries no room-finish schedule) a room name is drawn with them. Each says which in `corroboration`. Schedule sheets contribute rows, never phantom rooms"),
@@ -1507,6 +1534,7 @@ export const findScheduleOutput = {
     building: z.string().optional().describe("The building this table answers for, when its title or sheet names one"),
     drawing_group: z.string().optional().describe("The authored project/site scope carried by the table's source sheet"),
     rotated_headers: z.boolean().optional().describe("true when the column headers were read at a quarter-turn"),
+    read_from_picture: z.boolean().optional().describe("true when the table is a picture pasted into the sheet and was read by OCR: its values are the ink's reading, not the PDF's text; view_sheet the region to confirm a value that matters"),
     revised_rows: z.number().int().optional().describe("Rows carrying a delta/REV marker — the ink changed there; resolve those tags to see which"),
     parts: z.array(z.object({ sheet: z.string(), title: z.string(), rows: z.number().int(), region: wireBox }))
       .optional().describe("Present when the table CONTINUES across sheets ('… SCHEDULE — CONT'D'): every fragment, base first, each with its own viewable region"),
@@ -1837,4 +1865,95 @@ export const countMarksOutput = {
   excluded_in_tables: z.number().int().optional().describe("Tag occurrences inside a schedule table's own region — row labels, never instances"),
   skipped: z.array(z.object({ sheet: z.string(), role: z.string(), reason: z.string() })),
   complete: z.boolean(),
+};
+
+// ASSEMBLIES WP5.3 — apply_assemblies (mcp/src/assemblies.ts; the report is
+// web/src/lib/assemblies/report.ts, the records and lines schema.ts).
+export const applyAssembliesOutput = {
+  library: z.object({ source: z.string(), assemblies: z.number().int() }),
+  control: z.object({
+    mode: z.enum(["off", "deterministic", "models"]),
+    units_read: z.number().int(),
+    decisions: z.object({ applied: z.number().int(), proposal: z.number().int(), unresolved: z.number().int() }),
+    models: z.object({ r1: z.string().nullable(), r2: z.string().nullable() }).optional(),
+    versions: z.record(z.string(), z.string()).optional(),
+    calls: z.record(z.string(), z.record(z.string(), z.number())).optional(),
+    readings: z.array(z.record(z.string(), z.unknown())).optional(),
+  }).describe("What the control drawings read (control_readings): counts of applied, proposed and unresolved readings; with detail units or lines, each reading with its rule, readers and cites"),
+  report: z.object({
+    schema: z.literal("opentakeoff.assemblies_report.v1"),
+    totals: z.object({
+      units: z.number().int(), records: z.number().int(), by_status: z.record(z.string(), z.number().int()),
+      lines: z.number().int(), lines_by_status: z.record(z.string(), z.number().int()),
+    }),
+    partner: z.object({
+      label: z.literal("partner-entered"), lines: z.number().int(), extended_cost: z.number().nullable(), costed_lines: z.number().int(),
+      hours: z.array(z.object({ labor_category: z.string(), extended_hours: z.number(), lines: z.number().int() })), not_extended: z.number().int(),
+    }).nullable().describe("The partner's own cost and labor fields, extended; null when the library carries none"),
+    exceptions: z.array(z.record(z.string(), z.unknown())),
+    line_errors: z.array(z.record(z.string(), z.unknown())).describe("Lines whose quantity cannot stand, each with its unit, rule and why: an expression that fails, a negative quantity, or a point or device count that is not whole. No total counts them; report them with the exceptions"),
+    schedules_unread: z.array(z.object({ sheet: z.string(), sheet_number: z.string().optional(), picture_share: z.number(), why: z.string() })).optional()
+      .describe("The schedule sheets whose tables are pictures (pasted images or a scan): no table could be read from them, so any unit they schedule is missing from this report, however complete it looks. Each with its printed sheet number when the title block has one, the share of the sheet the pictures cover (0 to 1) and why. Absent when there is none"),
+    schedules_left_out: z.array(z.object({ sheet: z.string(), sheet_number: z.string().optional(), title: z.string(), families: z.array(z.string()), rows: z.number().int(), marks: z.array(z.string()), why: z.string() })).optional()
+      .describe("The schedules titled as a family the library prices whose rows the takeoff reads as no unit: it does not read their marks as the family's (a building prefix such as 1-VAV-1, a letter its rule does not know), so no record or line counts them, however complete the report looks. Each with its sheet (and printed sheet number), title, families, rows that carry a mark, the marks left out as printed, and why. Absent when there is none"),
+    families: z.array(z.record(z.string(), z.unknown())),
+    units: z.array(z.record(z.string(), z.unknown())).optional(),
+  }),
+  applications: z.array(z.record(z.string(), z.unknown())).optional(),
+  lines: z.array(z.record(z.string(), z.unknown())).optional(),
+  typical_choices: z.object({
+    by_family: z.array(z.object({ family: z.string(), layer: z.string(), typicals: z.array(z.string()) })),
+    by_layer: z.record(z.string(), z.array(z.string())),
+  }).optional().describe("With detail units or lines: the typicals an override's assembly may name (id@version). by_family holds each of the reply's families' own per layer, the list the rules choose among (a typical such as lab-airflow, which the rules never pick, among them); by_layer holds each layer's whole list, which a family with none of its own may take. The Takeoff panel's Use another typical… offers the same lists. Name one only on the estimator's word"),
+  overrides_unmatched: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), why: z.string() })).optional()
+    .describe("Overrides that no unit takes, each with why (a tag no unit has, a family or layer its units have not, a typical the layer does not offer, or the project's own records, which follow the project settings). They applied nothing"),
+  overrides_ignored: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), options: z.array(z.string()), variables: z.array(z.string()), why: z.string() })).optional()
+    .describe("What overrides that fit a unit set and no record takes, each with why: the options and variables its typical has not (a typo; a typical chosen without them), any while the unit has no typical (none chosen yet, or out of scope), or an override another for the same unit and layer decides (options and variables then list all of it). The rest of each override applied; one an exclusion sets aside is not listed"),
+  settings_unread: z.array(z.object({ key: z.string(), why: z.string() })).optional()
+    .describe("The settings no part of the library reads, each with why: a project variable no typical takes from the project, a partner default for an id no typical has (or not true or false, for an option), a hook-up switch no line names, or a responsibility edit for a role no line has or an activity or party the matrix does not know. They changed nothing"),
+  families_left_out: z.array(z.object({ family: z.string(), why: z.string() })).optional()
+    .describe("The families the reply was narrowed to that leave units out, each with why: one no unit applies as, or units scheduled as one that apply as a family not named (a 100% outdoor-air AHU applies as DOAS). Only the reply was narrowed; the application is whole"),
+  path: z.string().optional(),
+  export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
+  answers: z.object({
+    head: z.string().nullable(), events: z.number().int(),
+    applied: z.record(z.string(), z.string()).describe("The project questions' answers the records applied, question id → answer"),
+    error: z.string().optional().describe("The journal failed its check: none of its answers applied"),
+  }).optional().describe("The Session's answer journal (answer_project_question, or a project file's); absent when no question is answered"),
+};
+
+// CONTROL INTENT Track A — project_questions and answer_project_question
+// (web/src/lib/controlIntent/questions.ts and journal.ts).
+const questionEvidence = z.object({ sheet: z.string().nullable(), text: z.string(), bbox: z.array(z.number()).nullable(), finder: z.string() });
+const journalState = z.object({
+  head: z.string().nullable().describe("The journal's head: pass it as expected_head to answer_project_question"),
+  events: z.number().int(),
+  answers: z.record(z.string(), z.string()).describe("The answers the journal holds, question id → answer"),
+  recorded_by: z.record(z.string(), z.string()).describe("Who recorded each answer: operator_input (the estimator, in the Takeoff panel) or agent_proposal (an agent, for the estimator)"),
+  error: z.string().optional().describe("The journal failed its check: none of its answers applies, and no answer can be added to it"),
+});
+export const projectQuestionsOutput = {
+  version: z.string(), catalogue: z.string(), terms: z.string(),
+  journal: journalState,
+  questions: z.array(z.object({
+    id: z.string(), key: z.string(), text: z.string(),
+    choices: z.array(z.object({ value: z.string(), label: z.string(), lines_changed: z.number().int(), records_changed: z.number().int() })),
+    lines_changed: z.number().int(), records_changed: z.number().int(),
+    answer: z.string().nullable(),
+    prefill: z.object({ value: z.string(), evidence: z.array(questionEvidence) }).nullable().describe("A proposal from printed text, for the estimator to confirm; never an answer"),
+    evidence: z.array(questionEvidence).describe("What makes it a question here: the units it is about"),
+    partner_default_allowed: z.boolean(),
+  })).describe("At most six, ranked by what an answer changes; none that changes nothing"),
+  zero_effect: z.array(z.string()).describe("Catalogue questions no answer changes anything with here (not shown)"),
+  over_cap: z.array(z.string()).describe("Questions past the cap of six"),
+  next_move: z.string(),
+};
+export const answerProjectQuestionOutput = {
+  event: z.object({
+    event_id: z.string(), operation_id: z.string(), question: z.string(), answer: z.string(),
+    origin: z.literal("agent_proposal"), reviewer: z.string(), reviewer_identity: z.literal("self_declared"), approved: z.literal(false), created_at: z.string(),
+    prefill: z.object({ value: z.string() }).nullable(),
+  }),
+  journal: journalState,
+  note: z.string(),
 };

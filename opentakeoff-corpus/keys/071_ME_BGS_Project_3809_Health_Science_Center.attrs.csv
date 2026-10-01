@@ -1,0 +1,630 @@
+# 071_ME_BGS_Project_3809_Health_Science_Center.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/071_ME_BGS_Project_3809_Health_Science_Center.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M6.0 (page 44) of the SMCC Health Science Center, South Portland ME (Lavallee Brensinger Architects, Allied Engineering), the tables the third tier's seed drew for its VAV, RTU and FAN strata.
+#   071_ME_BGS_Project_3809_Health_Science_Center.pdf#44 | PACKAGED ROOF TOP UNIT SCHEDULE | RTU | all 3 printed unit columns (a transposed schedule) | render: page 44 overview at 40 dpi; crops 226,92,690,300 and 226,385,690,300 and 226,680,690,280 at 3x (the whole table and its notes); second read at 4x (crops 326,92,590,300 and 326,385,590,300 and 326,680,590,170) of all three unit columns, every cell
+#   071_ME_BGS_Project_3809_Health_Science_Center.pdf#44 | SINGLE DUCT AIR TERMINAL SCHEDULE | VAV | all 20 printed rows | render: page 44 overview at 40 dpi; crop 1375,282,1220,403 at 3x in 2 tiles (TAG column repeated), notes cropped at 3x (crop 1375,680,1220,80); second read at 4x (crops 1375,349,610,16 and 1985,349,610,16; 1375,483,610,16 and 1985,483,610,16; 1375,513,610,16 and 1985,513,610,16; 1375,648,610,16 and 1985,648,610,16) of VAV-G-1, VAV-G-10, VAV-2-1 and VAV-2-10, every cell
+#   071_ME_BGS_Project_3809_Health_Science_Center.pdf#44 | FAN SCHEDULE | FAN | all 1 printed row | render: page 44 overview at 40 dpi; crop 1280,92,1330,133 at 3x in 2 tiles (TAG column repeated); second read at 4x (crops 1280,181,665,16 and 1945,181,665,16) of EF-1, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and models, discharge orientation, weights, MCA/MFS, smoke detector responsibilities, peak outside airflow, static pressures and brake horsepower, exhaust airflow, voltage and FLA, coil air temperatures, sensible capacity, face area and velocity, refrigerant, fins and rows, heat pump input kW, air temperatures and COP, secondary heat stages, outlet sizes, NC, air pressure drop, VAV coil and room heat loads, SCR modulation, room temperature, sones, dampers, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 071_ME_BGS_Project_3809_Health_Science_Center: 3 table(s), 24 instance(s), 611 keyed attribute value(s) (247 printed, 364 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,floor,ROOF,,GENERAL / LOCATION names a level,printed 'ROOF'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,area_served,GROUND LEVEL,,GENERAL / SERVICE: the level the unit serves,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,qty,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,supply_cfm,4235,cfm,"SUPPLY FAN / SUPPLY AIRFLOW, CFM","printed '4,235'"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,oa_cfm_min,,cfm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,supply_fan_hp,3,hp,SUPPLY FAN / MOTOR HP,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,supply_fan_qty,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,return_fan_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,exhaust_fan_hp,,hp,"EXHAUST FAN / HP: each fan's motor (""(2)@1.5"": two fans at 1.5 hp)",printed '-'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,vfd,,,"SUPPLY FAN / TYPE and ELECTRICAL / VFD'S FURNISHED BY: an ECM fan motor, and drives the maker furnishes","printed 'ECM, DIRECT DRIVE; VFD'S FURNISHED BY MANUFACTURER' — not a single value for this attribute"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,economizer,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,outdoor_air_pct,24,%,SUPPLY FAN / % OA,printed '24%'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,cooling_type,dx,,"COOLING COIL / FLUID: a refrigerant, a DX coil",printed 'R-454B'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,cooling_mbh,128.7,MBH,COOLING COIL / GROSS / NET TOTAL MBH,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,cooling_tons,,tons,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,dx_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,chw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,heating_type,heat_pump,,PRIMARY HEAT / TYPE,printed 'HEAT PUMP'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,heating_mbh,105.7,MBH,"PRIMARY HEAT / TOTAL CAPACITY, MBH @ 47°F...: the 47 F part",author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,steam_psig,,psig,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,steam_lb_hr,,lb/hr,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,gas_input_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,eh_kw,36,kW,SECONDARY HEAT / KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,humidifier,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,energy_recovery,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,filter_merv,8,,FILTERS (SUPPLY) / TYPE: MERV,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,bas_interface,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,volts,,V,ELECTRICAL / VOLTAGE: volts part,printed '208/230' — not a single value for this attribute
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-G,RTU,phase,3,,ELECTRICAL / VOLTAGE: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,floor,ROOF,,GENERAL / LOCATION names a level,printed 'ROOF'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,area_served,FIRST FLOOR,,GENERAL / SERVICE: the level the unit serves,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,qty,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,supply_cfm,7000,cfm,"SUPPLY FAN / SUPPLY AIRFLOW, CFM","printed '7,000'"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,oa_cfm_min,,cfm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,supply_fan_hp,7.5,hp,SUPPLY FAN / MOTOR HP,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,supply_fan_qty,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,return_fan_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,exhaust_fan_hp,1.5,hp,"EXHAUST FAN / HP: each fan's motor (""(2)@1.5"": two fans at 1.5 hp)",author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,vfd,,,"SUPPLY FAN / TYPE and ELECTRICAL / VFD'S FURNISHED BY: an ECM fan motor, and drives the maker furnishes","printed 'ECM, DIRECT DRIVE; VFD'S FURNISHED BY MANUFACTURER' — not a single value for this attribute"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,economizer,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,outdoor_air_pct,25,%,SUPPLY FAN / % OA,printed '25%'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,cooling_type,dx,,"COOLING COIL / FLUID: a refrigerant, a DX coil",printed 'R-454B'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,cooling_mbh,251.2,MBH,COOLING COIL / GROSS / NET TOTAL MBH,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,cooling_tons,,tons,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,dx_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,chw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,heating_type,heat_pump,,PRIMARY HEAT / TYPE,printed 'HEAT PUMP'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,heating_mbh,218,MBH,"PRIMARY HEAT / TOTAL CAPACITY, MBH @ 47°F...: the 47 F part",printed '218.0'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,steam_psig,,psig,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,steam_lb_hr,,lb/hr,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,gas_input_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,eh_kw,75,kW,SECONDARY HEAT / KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,humidifier,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,energy_recovery,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,filter_merv,8,,FILTERS (SUPPLY) / TYPE: MERV,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,bas_interface,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,volts,,V,ELECTRICAL / VOLTAGE: volts part,printed '208/230' — not a single value for this attribute
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-1 (ALT#2),RTU,phase,3,,ELECTRICAL / VOLTAGE: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,floor,ROOF,,GENERAL / LOCATION names a level,printed 'ROOF'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,area_served,SECOND FLOOR,,GENERAL / SERVICE: the level the unit serves,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,qty,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,supply_cfm,9400,cfm,"SUPPLY FAN / SUPPLY AIRFLOW, CFM","printed '9,400'"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,oa_cfm_min,,cfm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,supply_fan_hp,10,hp,SUPPLY FAN / MOTOR HP,printed '10.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,supply_fan_qty,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,return_fan_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,exhaust_fan_hp,1.5,hp,"EXHAUST FAN / HP: each fan's motor (""(2)@1.5"": two fans at 1.5 hp)",author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,vfd,,,"SUPPLY FAN / TYPE and ELECTRICAL / VFD'S FURNISHED BY: an ECM fan motor, and drives the maker furnishes","printed 'ECM, DIRECT DRIVE; VFD'S FURNISHED BY MANUFACTURER' — not a single value for this attribute"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,economizer,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,outdoor_air_pct,22,%,SUPPLY FAN / % OA,printed '22%'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,cooling_type,dx,,"COOLING COIL / FLUID: a refrigerant, a DX coil",printed 'R-454B'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,cooling_mbh,293.3,MBH,COOLING COIL / GROSS / NET TOTAL MBH,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,cooling_tons,,tons,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,dx_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,chw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,heating_type,heat_pump,,PRIMARY HEAT / TYPE,printed 'HEAT PUMP'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,heating_mbh,278,MBH,"PRIMARY HEAT / TOTAL CAPACITY, MBH @ 47°F...: the 47 F part",printed '278.0'; author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,steam_psig,,psig,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,steam_lb_hr,,lb/hr,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,gas_input_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,eh_kw,75,kW,SECONDARY HEAT / KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,humidifier,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,energy_recovery,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,filter_merv,8,,FILTERS (SUPPLY) / TYPE: MERV,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,bas_interface,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,volts,,V,ELECTRICAL / VOLTAGE: volts part,printed '208/230' — not a single value for this attribute
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,PACKAGED ROOF TOP UNIT SCHEDULE,RTU-2,RTU,phase,3,,ELECTRICAL / VOLTAGE: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,area_served,DEBRIEF G05,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,inlet_size_in,6,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,cfm_max,300,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,cfm_min,180,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,eh_kw,1,kW,KW,printed '1.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-1,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,area_served,PATIENT RM SIM LAB G01A,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,inlet_size_in,7,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,cfm_max,500,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,cfm_min,300,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,cfm_heat,300,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,eh_kw,2.5,kW,KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-2,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,area_served,DEBRIEF G03,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,inlet_size_in,6,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,cfm_max,300,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,cfm_min,180,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,eh_kw,1,kW,KW,printed '1.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-3,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,area_served,CONTROL RM G01B,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,inlet_size_in,5,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,cfm_max,260,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,cfm_min,160,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,cfm_heat,160,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,eh_kw,1.5,kW,KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-4,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,area_served,CONTROL RM G01C,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,inlet_size_in,5,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,cfm_max,260,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,cfm_min,160,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,cfm_heat,160,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,eh_kw,1.5,kW,KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-5,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,area_served,PATIENT RM SIM LAB G01D,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,inlet_size_in,8,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,cfm_max,500,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,cfm_min,300,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,cfm_heat,300,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,eh_kw,2.5,kW,KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-6,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,area_served,CONTROL RM G01E,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,inlet_size_in,5,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,cfm_max,275,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,cfm_min,165,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,cfm_heat,165,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,eh_kw,1.5,kW,KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-7,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,area_served,PATIENT RM SIM LAB G01F,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,inlet_size_in,8,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,cfm_max,600,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,cfm_min,360,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,cfm_heat,360,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,eh_kw,2.5,kW,KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-8,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,area_served,MOULAGE PREP/STOR/STAFF G01G,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,inlet_size_in,6,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,cfm_max,350,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,cfm_min,200,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,cfm_heat,150,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,eh_kw,2,kW,KW,printed '2.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-9,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,area_served,NURSING LAB G18,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,inlet_size_in,10,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,cfm_max,990,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,cfm_min,600,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,cfm_heat,600,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,eh_kw,6,kW,KW,printed '6.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-G-10,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,area_served,RADIATION TECH SIM LAB 221,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,inlet_size_in,9,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,cfm_max,855,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,cfm_min,525,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,eh_kw,5,kW,KW,printed '5.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-1,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,area_served,RADIATION TECH SIM LAB 221,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,inlet_size_in,9,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,cfm_max,855,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,cfm_min,525,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,eh_kw,5,kW,KW,printed '5.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-2,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,area_served,COMPUTER LAB 216,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,inlet_size_in,12,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,cfm_max,1400,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,cfm_min,840,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,eh_kw,10,kW,KW,printed '10.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-3,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,area_served,COMPUTER LAB 216,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,inlet_size_in,12,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,cfm_max,1400,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,cfm_min,840,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,eh_kw,10,kW,KW,printed '10.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-4,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,area_served,MA LAB 206,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,inlet_size_in,10,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,cfm_max,1200,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,cfm_min,720,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,eh_kw,5,kW,KW,printed '5.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-5,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,area_served,OFFICE 212C & NURSING OFFICE 212A,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,inlet_size_in,6,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,cfm_max,350,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,cfm_min,210,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,eh_kw,1,kW,KW,printed '1.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-6,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,area_served,OFFICE 212E,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,inlet_size_in,6,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,cfm_max,360,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,cfm_min,220,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,eh_kw,1.5,kW,KW,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-7,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,area_served,"OFFICE 212E, 212F, 212G, & 212H",,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,inlet_size_in,8,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,cfm_max,700,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,cfm_min,420,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,eh_kw,5,kW,KW,printed '5.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-8,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,area_served,CLASS ROOM 217,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,inlet_size_in,10,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,cfm_max,1140,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,cfm_min,700,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,eh_kw,5,kW,KW,printed '5.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-9,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,area_served,CLASS ROOM 217,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,inlet_size_in,10,in,INLET SIZE,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,cfm_max,1140,cfm,CFM MAX,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,cfm_min,700,cfm,CFM MIN,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,cfm_heat,100,cfm,HEATC FM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,heat_type,electric,,NOTE 1,"note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_gpm,,gpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_ewt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_lwt_f,,F,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_wpd_ft,,ft,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_mbh,,MBH,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_rows,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_conn_in,,in,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,hw_glycol_pct,,%,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,eh_kw,5,kW,KW,printed '5.0'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,eh_stages,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,ecm,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,volts,208,V,ELEC: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,SINGLE DUCT AIR TERMINAL SCHEDULE,VAV-2-10,VAV,phase,3,,ELEC: phase part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,area_served,REST ROOMS JANITORS CLOSET,,SERVES,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,cfm,450,cfm,CFM,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,esp_in,0.5,in. w.c.,SP (IN. WC.),"printed '0.5""'"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,motor_hp,,hp,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,motor_watts,115,W,ELECTRICAL / MOTOR WATTS,
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,rpm,,rpm,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,vfd,no,,ELECTRICAL / STARTER / CONTROLLER TYPE,printed 'ECM - FAN MFR'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,ecm,yes,,ELECTRICAL / MOTOR TYPE,printed 'ECM'
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,control,,,,not printed
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,volts,120,V,ELECTRICAL / VOLTS / PH: volts part,author's reading of the printed row
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#44,FAN SCHEDULE,EF-1,FAN,phase,1,,ELECTRICAL / VOLTS / PH: phase part,author's reading of the printed row

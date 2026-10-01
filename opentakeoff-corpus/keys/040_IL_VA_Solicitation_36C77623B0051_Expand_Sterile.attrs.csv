@@ -1,0 +1,247 @@
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M600 (page 47) of the Lovell FHCC sterile processing service expansion (IMEG), every claimed keyed-family table of this dev document.
+#   040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47 | UNIT HEATER SCHEDULE - HOT WATER | UNIT_HEATER | all 6 printed rows | render: page 47 crop 1750,555,1160,210 at 3x in 3 tiles (TAG NAME column repeated); second read at 4x (crop 1750,615,380,145) of UH-1 MBH, UH-4 GPM and UH-6 CFM
+#   040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47 | FAN SCHEDULE | FAN | all 6 printed rows | render: page 47 crop 1480,1005,1425,190 at 3x in 4 tiles (TAG NAME column repeated), notes in the same tiles and SCHEDULE GENERAL NOTES crop 2595,115,330,420 at 2.5x; second read at 4x (crops 1480,1060,245,127 and 2165,1060,70,127 and 2520,1060,100,127) of EF-1A CFM, EF-2B MHP and EF-3B starter type
+#   040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47 | PUMP SCHEDULE | PUMP | all 2 printed rows | render: page 47 crop 1550,1240,1355,105 at 3x in 4 tiles (TAG NAME column repeated), notes in the same tiles; second read at 4x (crops 1550,1280,245,68 and 2090,1280,85,68 and 2595,1280,85,68) of CWP-1 GPM, CWP-2 HP and CWP-2 starter type
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, configuration, wheel and impeller sizes, efficiency, sones, damper and curb types, BHP, disconnect and starter responsibility, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile: 3 table(s), 14 instance(s), 228 keyed attribute value(s) (144 printed, 84 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,area_served,MECHANICAL ROOM,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,heating_medium,hw,,TABLE TITLE,title printed 'UNIT HEATER SCHEDULE - HOT WATER'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,cfm,550,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,heating_mbh,13.5,MBH,MBH,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,hw_gpm,1.6,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,hw_ewt_f,150,F,EWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,hw_lwt_f,120,F,LWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,eh_kw,,kW,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,motor_hp,0.25,hp,ELECTRICAL / HP,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,conn_in,,in,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,volts,120,V,ELECTRICAL / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-1,UNIT_HEATER,phase,1,,ELECTRICAL / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,area_served,MECHANICAL ROOM,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,heating_medium,hw,,TABLE TITLE,title printed 'UNIT HEATER SCHEDULE - HOT WATER'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,cfm,550,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,heating_mbh,13.5,MBH,MBH,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,hw_gpm,1.6,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,hw_ewt_f,150,F,EWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,hw_lwt_f,120,F,LWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,eh_kw,,kW,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,motor_hp,0.25,hp,ELECTRICAL / HP,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,conn_in,,in,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,volts,120,V,ELECTRICAL / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-2,UNIT_HEATER,phase,1,,ELECTRICAL / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,area_served,MECHANICAL ROOM,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,heating_medium,hw,,TABLE TITLE,title printed 'UNIT HEATER SCHEDULE - HOT WATER'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,cfm,550,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,heating_mbh,13.5,MBH,MBH,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,hw_gpm,1.6,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,hw_ewt_f,150,F,EWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,hw_lwt_f,120,F,LWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,steam_psig,,psig,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,eh_kw,,kW,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,motor_hp,0.25,hp,ELECTRICAL / HP,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,conn_in,,in,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,volts,120,V,ELECTRICAL / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-3,UNIT_HEATER,phase,1,,ELECTRICAL / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,area_served,CRAWL SPACE,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,heating_medium,hw,,TABLE TITLE,title printed 'UNIT HEATER SCHEDULE - HOT WATER'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,cfm,450,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,heating_mbh,9,MBH,MBH,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,hw_gpm,1.1,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,hw_ewt_f,150,F,EWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,hw_lwt_f,120,F,LWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,steam_psig,,psig,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,eh_kw,,kW,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,motor_hp,0.25,hp,ELECTRICAL / HP,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,conn_in,,in,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,volts,120,V,ELECTRICAL / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-4,UNIT_HEATER,phase,1,,ELECTRICAL / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,area_served,CRAWL SPACE,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,heating_medium,hw,,TABLE TITLE,title printed 'UNIT HEATER SCHEDULE - HOT WATER'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,cfm,450,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,heating_mbh,9,MBH,MBH,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,hw_gpm,1.1,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,hw_ewt_f,150,F,EWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,hw_lwt_f,120,F,LWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,steam_psig,,psig,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,eh_kw,,kW,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,motor_hp,0.25,hp,ELECTRICAL / HP,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,conn_in,,in,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,volts,120,V,ELECTRICAL / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-5,UNIT_HEATER,phase,1,,ELECTRICAL / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,area_served,CRAWL SPACE,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,heating_medium,hw,,TABLE TITLE,title printed 'UNIT HEATER SCHEDULE - HOT WATER'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,cfm,450,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,heating_mbh,9,MBH,MBH,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,hw_gpm,1.1,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,hw_ewt_f,150,F,EWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,hw_lwt_f,120,F,LWT °F,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,steam_psig,,psig,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,eh_kw,,kW,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,motor_hp,0.25,hp,ELECTRICAL / HP,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,conn_in,,in,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,volts,120,V,ELECTRICAL / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,UH-6,UNIT_HEATER,phase,1,,ELECTRICAL / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,area_served,GENERAL EXHAUST,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,cfm,24000,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,esp_in,1.5,in. w.c.,S.P. IN. W.C.,printed '1.50'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,motor_hp,15,hp,ELECTRICAL (NOTE 1) / MHP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,motor_watts,,W,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,rpm,874,rpm,FAN RPM (NOTE F),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,vfd,yes,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C),printed 'VFD'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,ecm,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C): EC motor,printed 'VFD'; author's reading of the printed row
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,control,FAN-A,,CONTROL TYPE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,volts,480,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1A,FAN,phase,3,,ELECTRICAL (NOTE 1) / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,area_served,GENERAL EXHAUST,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,cfm,24000,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,esp_in,1.5,in. w.c.,S.P. IN. W.C.,printed '1.50'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,motor_hp,15,hp,ELECTRICAL (NOTE 1) / MHP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,motor_watts,,W,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,rpm,874,rpm,FAN RPM (NOTE F),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,vfd,yes,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C),printed 'VFD'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,ecm,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C): EC motor,printed 'VFD'; author's reading of the printed row
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,control,FAN-A,,CONTROL TYPE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,volts,480,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-1B,FAN,phase,3,,ELECTRICAL (NOTE 1) / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,area_served,CARTWASHER EXHAUST,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,cfm,2000,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,esp_in,1,in. w.c.,S.P. IN. W.C.,printed '1.00'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,motor_hp,1,hp,ELECTRICAL (NOTE 1) / MHP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,motor_watts,,W,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,rpm,1467,rpm,FAN RPM (NOTE F),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,vfd,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C),printed 'FV'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,ecm,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C): EC motor,printed 'FV'; author's reading of the printed row
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,control,FAN-B,,CONTROL TYPE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,volts,480,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2A,FAN,phase,3,,ELECTRICAL (NOTE 1) / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,area_served,CARTWASHER EXHAUST,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,cfm,2000,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,esp_in,1,in. w.c.,S.P. IN. W.C.,printed '1.00'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,motor_hp,1,hp,ELECTRICAL (NOTE 1) / MHP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,motor_watts,,W,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,rpm,1467,rpm,FAN RPM (NOTE F),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,vfd,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C),printed 'FV'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,ecm,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C): EC motor,printed 'FV'; author's reading of the printed row
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,control,FAN-B,,CONTROL TYPE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,volts,480,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-2B,FAN,phase,3,,ELECTRICAL (NOTE 1) / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,area_served,WASHER/ DISINFECTOR,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,cfm,240,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,esp_in,0.75,in. w.c.,S.P. IN. W.C.,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,motor_hp,0.13,hp,ELECTRICAL (NOTE 1) / MHP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,motor_watts,,W,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,rpm,1405,rpm,FAN RPM (NOTE F),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,vfd,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C),printed 'ECM'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,ecm,yes,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C): EC motor,printed 'ECM'; author's reading of the printed row
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,control,FAN-B,,CONTROL TYPE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,volts,120,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3A,FAN,phase,1,,ELECTRICAL (NOTE 1) / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,area_served,WASHER/ DISINFECTOR,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,cfm,240,cfm,CFM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,esp_in,0.75,in. w.c.,S.P. IN. W.C.,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,motor_hp,0.13,hp,ELECTRICAL (NOTE 1) / MHP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,motor_watts,,W,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,rpm,1405,rpm,FAN RPM (NOTE F),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,drive,direct,,DRIVE TYPE,printed 'DIRECT'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,vfd,no,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C),printed 'ECM'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,ecm,yes,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE (NOTE C): EC motor,printed 'ECM'; author's reading of the printed row
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,control,FAN-B,,CONTROL TYPE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,volts,120,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,EF-3B,FAN,phase,1,,ELECTRICAL (NOTE 1) / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,area_served,SPD CHILLED WATER,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,gpm,325,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,head_ft,50,ft,PUMP FT. HEAD AT DESIGN,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,motor_hp,7.5,hp,ELECTRICAL (NOTE 1) / HP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,rpm,1750,rpm,ELECTRICAL (NOTE 1) / RPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,vfd,yes,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE,printed 'VFD'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,pump_arrangement,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,glycol_pct,,%,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,conn_in,2.5,in,INLET SIZE,"printed '2.5""'"
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,volts,480,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-1,PUMP,phase,3,,ELECTRICAL (NOTE 1) / PHASES,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,building,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,floor,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,area_served,SPD CHILLED WATER,,AREA SERVED,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,qty,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,service,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,gpm,325,gpm,GPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,head_ft,50,ft,PUMP FT. HEAD AT DESIGN,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,motor_hp,7.5,hp,ELECTRICAL (NOTE 1) / HP (NOTE E),
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,rpm,1750,rpm,ELECTRICAL (NOTE 1) / RPM,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,vfd,yes,,ELECTRICAL (NOTE 1) / CONTROLLER/ STARTER / TYPE,printed 'VFD'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,pump_arrangement,,,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,glycol_pct,,%,,not printed
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,conn_in,2.5,in,INLET SIZE,"printed '2.5""'"
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,volts,480,V,ELECTRICAL (NOTE 1) / VOLTAGE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,CWP-2,PUMP,phase,3,,ELECTRICAL (NOTE 1) / PHASES,

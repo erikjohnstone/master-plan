@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { basRevisionBasisSchema } from './basRevisionBasisContract.ts';
 import { basRevisionItemSchema } from './basRevisionInventoryContract.ts';
-import { basPointListsSchema } from './basPointLists.ts';
+import { basPointListsSchema, basPointRuleSchema } from './basPointLists.ts';
 import { canonicalBasJson } from './basCanonical.ts';
 import { sha256Hex } from './graphKeys.js';
 
@@ -26,7 +26,9 @@ const count = z.number().int().nonnegative().safe();
 export const basRevisionQuantityPairSchema = z.object({ row_id: sha, metric_key: id, dimension: id, basis: id, before: count, after: count }).strict();
 export type BasRevisionQuantityPair = z.infer<typeof basRevisionQuantityPairSchema>;
 export const basRevisionQuantityRequestSchema = z.object({ pairs: z.array(basRevisionQuantityPairSchema).max(1000),
-  point_matrices: z.array(z.object({ capture_id: sha, matrix: basPointListsSchema.innerType().shape.matrices.element }).strict()).max(1000) }).strict();
+  point_matrices: z.array(z.object({ capture_id: sha, matrix: basPointListsSchema.innerType().shape.matrices.element,
+    // The rule its capture read the matrix with; Python checks it under that rule.
+    point_rule_version: basPointRuleSchema.optional() }).strict()).max(1000) }).strict();
 export const basRevisionQuantityResultSchema = z.object({ schema_version: z.literal('bas_revision_quantities_v1'),
   rule_version: z.literal('comparable_declared_count_deltas_1'), engine: z.literal('bas_math_v1'),
   pairs: z.array(basRevisionQuantityPairSchema.extend({ delta: z.number().int().safe() }).strict()).max(1000),

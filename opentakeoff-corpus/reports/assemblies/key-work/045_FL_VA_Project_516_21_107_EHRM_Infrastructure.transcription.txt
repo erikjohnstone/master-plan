@@ -1,0 +1,54 @@
+# 045_FL_VA_Project_516_21_107_EHRM_Infrastructure — attribute-key transcription (ASSEMBLIES AS-17, held-out 2)
+# Typed from renders of sheet M501 (PDF page 21) of the VA Lee County HCC EHRM infrastructure
+# upgrades (Toland Mizell Molnar): an overview of the page at 40 dpi, then the table at 3x
+# (216 dpi) in tiles with the MARK column repeated, rendered with MuPDF (pymupdf
+# get_pixmap(clip), displayed orientation) and read by eye on 2026-09-26; second read at 4x
+# (288 dpi) of the first, a middle and the last row. The drawn title was found with the PDF's
+# own text layer (pymupdf search_for). Keyed after the dev-2 normalizer was frozen (6e1a626);
+# the pipeline's output for this document was never consulted. The second tier keys the tables
+# its seed drew (tier2/01-split.md): one per keyed family.
+SET 045_FL_VA_Project_516_21_107_EHRM_Infrastructure
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheet M501 (page 21) of the VA Lee County HCC EHRM infrastructure upgrades, Cape Coral FL (Toland Mizell Molnar), the table the second tier's seed drew for its FCU stratum.
+EXCLUDES Layout basis (manufacturer, model), outside air, external static pressure, sensible capacity, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# CHILLED WATER FAN COIL UNIT SCHEDULE (page 21): nine rows. Its three notes print between the
+# title and the header. TOTAL CAPACITY (BTU/H) is the coil's capacity, keyed chw_mbh in the unit
+# its header prints (BTU/H); FLOW (GPM) keys chw_gpm and MAX PD (FT-H2O) chw_wpd_ft. The title
+# names chilled water and every row prints the COOLING COIL block: cooling_type chw. Every
+# row's REMARKS cites note 3 ("1:3:" or "2:3:"): "45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW
+# COIL." keys chw_ewt_f 45 and chw_rows 4. Notes 1 and 2 (cabinet or ceiling model) key
+# nothing. No heating coil prints (heating_type stays not printed, as 088_AZ's chilled-water
+# fan coils). No column prints electrical data or a location.
+TABLE
+sheet: 045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21
+title: CHILLED WATER FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 21 title and notes crop 1320,600,860,120 at 3x; crop 1320,715,860,230 at 3x in 2 tiles (MARK column repeated); second read at 4x (crops 1320,780,860,48 and 1320,822,860,32 and 1320,900,860,48) of FCU1-1-1, FCU1-3-4, FCU1-5-3, FCU1-7-2, FCU2-6-19, FCU3-1-17 and FCU4-1-24, every cell
+rows: all 9 printed rows
+col: MARK => tag
+col: LAYOUT BASIS / MANUFACTURER => -
+col: LAYOUT BASIS / MODEL => -
+col: AIR SIDE / SUPPLY AIR (CFM) => cfm
+col: AIR SIDE / OUTSIDE AIR (CFM) => -
+col: AIR SIDE / ESP (IN-WG) => -
+col: COOLING COIL / SENSIBLE CAPACITY (BTU/H) => -
+col: COOLING COIL / TOTAL CAPACITY (BTU/H) => chw_mbh [BTU/H]
+col: COOLING COIL / FLOW (GPM) => chw_gpm
+col: COOLING COIL / MAX PD (FT-H2O) => chw_wpd_ft
+col: REMARKS => -
+derive: cooling_type = chw ; header=TABLE TITLE ; note=title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the COOLING COIL block (FLOW (GPM), MAX PD (FT-H2O))
+derive: chw_ewt_f = 45 ; header=NOTE 3 ; note=note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'
+derive: chw_rows = 4 ; header=NOTE 3 ; note=note 3, cited by every row's REMARKS ('1:3:' or '2:3:'): '45 F ENTERING CHILLED WATER TEMPERATURE; 4-ROW COIL.'
+grid:
+FCU1-1-1 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+FCU1-3-4 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+FCU1-5-3 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+FCU1-7-2 | CARRIER | 42DE-08 | 800 | 0 | 0.25 | 17600.0 | 23400.0 | 5.0 | 5.0 | 2:3:
+FCU2-1-7 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+FCU2-4-16 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+FCU2-6-19 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+FCU3-1-17 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+FCU4-1-24 | CARRIER | 42CG-10 | 1000 | 0 | 0.25 | 22000.0 | 31000.0 | 6.9 | 6.0 | 1:3:
+END

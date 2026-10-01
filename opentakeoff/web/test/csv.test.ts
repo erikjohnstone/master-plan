@@ -5,7 +5,7 @@
 // includes() can't catch a type-blind guard.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { csvEsc } from "../src/lib/csv.js";
+import { csvEsc, parseCsvRows } from "../src/lib/csv.js";
 import { conditionTotals, totalsToCsv } from "../src/lib/totals.js";
 
 test("csvEsc: numbers pass through untouched — the formula guard is string-only", () => {
@@ -40,4 +40,14 @@ test("a formula-shaped finish tag exports inert end-to-end through totalsToCsv",
   const rows = conditionTotals(conds, shapes);
   const line = totalsToCsv(rows).split("\n")[1];   // first data row (no title line)
   assert.ok(line.startsWith("'=SUM(A1),"), line);
+});
+
+test("parseCsvRows reads what csvEsc writes: quoted commas, doubled quotes, line breaks in a cell, CRLF/LF/CR rows, a BOM", () => {
+  const cells = ["plain", "a,b", 'say "hi"', "two\nlines", "=kept", -12.5, ""];
+  const line = cells.map(csvEsc).join(",");
+  assert.deepEqual(parseCsvRows(`${line}\r\n`), [["plain", "a,b", 'say "hi"', "two\nlines", "'=kept", "-12.5", ""]]);
+  assert.deepEqual(parseCsvRows("a,b\nc,d\re,f"), [["a", "b"], ["c", "d"], ["e", "f"]]);
+  assert.deepEqual(parseCsvRows("\uFEFFh1,h2\r\n1,2\r\n"), [["h1", "h2"], ["1", "2"]]);
+  assert.deepEqual(parseCsvRows("x,\r\n"), [["x", ""]], "a trailing empty cell is a cell");
+  assert.deepEqual(parseCsvRows(""), []);
 });

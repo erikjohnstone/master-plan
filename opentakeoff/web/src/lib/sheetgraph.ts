@@ -61,6 +61,28 @@ const isVertical = (s: GraphSpan): boolean =>
 // Apostrophes arrive both ways: ASCII ' and the typographic ’ (U+2019 —
 // pdf.js maps a Type1 quoteright there), so every CONT'D pattern accepts both.
 const SCHEDULE_TITLE_RE = /^[A-Z][A-Z ()/&.'’-]* SCHEDULE( *[-–] *[A-Z0-9 ()/&.'’-]+)?( *\(?(?:CONTINUATION|CONTINUED|CONT['’]?D?)\.?\)?)?$/;
+// A plan title with a level, floor, area, phase or option between its
+// discipline word and PLAN ("MECHANICAL LEVEL 34 PLAN", "FIRST FLOOR
+// MECHANICAL REMODEL PLAN", "HVAC ZONE PLAN - LEVEL 1", "LEVEL 2 - MECHANICAL
+// HVAC ZONING PLAN"): the plan signals below admit the discipline word only
+// next to PLAN, after "- LEVEL n", or with ENLARGED, so such a sheet scored no
+// role, or the role of a DETAILS/SECTIONS callout, an ELEVATION mention, a
+// legend box or a riser-diagram note printed beside the plan, and every unit
+// tag drawn on it went unswept (the reconcile keys, AS-91). The whole short
+// span must be the title: at most three words before the discipline word, at
+// most four between it and PLAN(S), and after it only a " - LEVEL(S)/FLOOR/
+// AREA/PHASE..." range. Never a sentence or a note fragment (SHALL, SEE, PER,
+// IN, FOR, WITH, TO, AND...), a key plan, a demolition or removals plan (its
+// own role), or a diagram/schedule/detail/section/elevation/riser/notes/
+// legend title. It decides only a sheet the signals leave without a
+// schedule, demolition or plan role (classifySheetRole), so no table the
+// schedule role gates and no demolition or plan sheet can change.
+const PLAN_DISCIPLINE = "(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)";
+const PLAN_TITLE_WITH_QUALIFIERS_RE = new RegExp(
+  "^(?!.*\\b(?:SHALL|SEE|REFER|PROVIDE|VERIFY|COORDINATE|INSTALL|FOR|WITH|TO|FROM|AND|OR|PER|IN|ON|AT|BY|AS|OF|THE|THIS|ALL|ARE|IS|BE|NOT|KEY\\s+PLAN|DEMO(?:LITION)?|REMOVALS?|DIAGRAMS?|SCHEDULES?|DETAILS?|SECTIONS?|ELEVATIONS?|RISERS?|SCHEMATICS?|NOTES?|LEGENDS?)\\b)"
+  + "(?:[A-Z0-9#&'./()-]+\\s+){0,3}" + PLAN_DISCIPLINE + "(?:\\s+[A-Z0-9#&'./()-]+){1,4}?\\s+PLANS?"
+  + "(?:\\s*[-\u2013:]\\s*(?:LEVELS?|FLOORS?|AREAS?|PHASES?|ZONES?|BUILDINGS?|BLDG\\.?|WINGS?)\\b[^,;]{0,20})?$",
+);
 const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // Real, found live (baker-county-eoc's own sheet #36, immediately after the
   // "- LEVEL N PLAN" fix above started matching MORE titles): a SHEET INDEX
@@ -318,7 +340,17 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // "ELEVATION NUMBER" exclusion two lines above -- excludes only this one
   // measured phrase shape, never loosens a real "WALL SECTION"/"BUILDING
   // SECTION A-A"/"CROSS SECTION" sheet-title match anywhere else.
-  { re: /DETAILS?\b|(?<!CODE )SECTIONS?\b/, role: "detail", conf: 0.6 },
+  //
+  // A specification reference is not a section drawing either (AS-108):
+  // a schedule titled with the section that specifies its equipment
+  // ("PUMPS (SPECIFICATION SECTION 23 21 23)", "FAN POWERED TERMINAL UNIT
+  // SCHEDULE (SECTION 23 36 00)"), or a note citing one ("LISTED IN SPEC
+  // SECTION 012300"), outvoted 26_CA's schedules sheet M0.09, whose tables
+  // print no SCHEDULE word, and none of its tables was extracted. SECTION
+  // after SPECIFICATION(S) or SPEC, or before a MasterFormat number (three
+  // pairs of digits, or five digits), is that reference; a drawn section
+  // ("SECTION A-A", "SECTION 3", "BUILDING SECTION") reads as before.
+  { re: /DETAILS?\b|(?<!CODE )(?<!SPECIFICATIONS? )(?<!SPEC\.? )SECTIONS?\b(?!\s+(?:\d{2}\s?\d{2}\s?\d{2}|\d{5})\b)/, role: "detail", conf: 0.6 },
 ];
 // Running-text references are not titles: "SEE FINISH PLAN FOR ADDITIONAL
 // INFORMATION" in a remark cell must never make a schedule sheet a plan.
@@ -353,7 +385,13 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
 // never a title in its own right.
 const REFERENCE_RE = /^(SEE|REFER|NOTED|AS SHOWN)\b|REFER TO|^PER\b(?:\s+\S+){2,}|\bFOR\s+(?:[A-Z]+\s+){0,3}(?:LEGEND|ABBREVIATIONS|SYMBOLS|NOTES)\b|^\d{3}\s+FOR\b/;
 
-export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
+/** The role the title and content signals give — classifySheetRole's first
+ * pass, before a plan title decides an unknown or incidental sheet. Every
+ * extractor reads this one (the drawn-delta hunt, table routing in the
+ * vector stack, room-tag suppression), so the plan-title pass, which decides
+ * only where drawn tags count, never changes an extracted table, room or
+ * diagram. */
+export function classifySheetRoleBySignals(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
   const hits: Array<{ role: SheetRole; conf: number; span: GraphSpan }> = [];
   for (const sp of sheet.spans) {
     const u = norm(sp.str);
@@ -374,6 +412,236 @@ export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confide
     role: best.role,
     confidence: dissent ? best.conf / 2 : best.conf,
     evidence: { sheet: sheet.key, text: best.span.str.trim(), bbox: bboxOf(best.span) },
+  };
+}
+
+// A plan title with no PLAN word: a level and a discipline, as the whole
+// title or as dash-separated parts with at most an area/phase qualifier
+// ("FIRST FLOOR - SECTOR A - HVAC", "MECHANICAL MEZZANINE - SECTOR A",
+// "BASEMENT - PIPING - ALL PHASES", "PIPE BASEMENT - PIPING - PHASE 2") — a
+// floor's discipline sheet is a plan of that floor. Every part must be one of
+// those three kinds, so a detail, riser or section title naming a floor
+// ("ROOF CURB - MECHANICAL UNIT", "HVAC RISER - LEVEL 2") never reads as one.
+const TITLE_LEVEL = "(?:(?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|GROUND|MAIN|UPPER|LOWER|\\d{1,2}(?:ST|ND|RD|TH))\\s+(?:FLOOR|LEVEL)|(?:LEVEL|FLOOR)\\s+[A-Z]?\\d{1,3}[A-Z]?|(?:[A-Z]+\\s+)?(?:BASEMENT|MEZZANINE|PENTHOUSE|ATTIC|CELLAR)|(?:LOW\\s+|HIGH\\s+)?ROOF|CRAWL\\s*SPACE|INTERSTITIAL)";
+const TITLE_DISCIPLINE = "(?:HVAC|MECHANICAL|PIPING|HYDRONICS?|VENTILATION|DUCTWORK|SHEET\\s*METAL|PLUMBING|ELECTRICAL|POWER|LIGHTING|FIRE\\s+PROTECTION|FIRE\\s+ALARM|SPRINKLERS?)";
+const LEVEL_PART_RE = new RegExp(`^${TITLE_LEVEL}$`);
+const DISCIPLINE_PART_RE = new RegExp(`^${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?$`);
+const LEVEL_DISCIPLINE_PART_RE = new RegExp(`^(?:${TITLE_LEVEL}\\s+${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?|${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?\\s+${TITLE_LEVEL})$`);
+const TITLE_QUALIFIER_PART_RE = /^(?:(?:SECTOR|AREA|ZONE|WING|PART|PHASE|UNIT|BUILDING|BLDG\.?|OPTION|ALTERNATE|BID\s+ALTERNATE|DEDUCT\s+ALTERNATE)\s+[A-Z0-9]{1,3}|ALL\s+PHASES|NEW\s+WORK|REMODEL|RENOVATION|OVERALL|ENLARGED|PARTIAL|NORTH|SOUTH|EAST|WEST|[A-Z]\d?)$/;
+const NOT_A_PLAN_TITLE_RE = /\b(?:DEMO(?:LITION)?|REMOVALS?|EXISTING|DETAILS?|SECTIONS?|ELEVATIONS?|RISERS?|DIAGRAMS?|SCHEMATICS?|SCHEDULES?|NOTES?|LEGENDS?|KEY)\b/;
+function isLevelDisciplineTitle(u: string): boolean {
+  if (NOT_A_PLAN_TITLE_RE.test(u)) return false;
+  const parts = u.split(/\s+[-–—:]\s+|\s*[–—]\s*/).map((part) => part.trim()).filter(Boolean);
+  if (!parts.length || parts.length > 4) return false;
+  let level = false, discipline = false;
+  for (const part of parts) {
+    if (LEVEL_DISCIPLINE_PART_RE.test(part)) level = discipline = true;
+    else if (LEVEL_PART_RE.test(part)) level = true;
+    else if (DISCIPLINE_PART_RE.test(part)) discipline = true;
+    else if (!TITLE_QUALIFIER_PART_RE.test(part)) return false;
+  }
+  return level && discipline;
+}
+
+// A demolition plan's own title with no PLAN word (AS-101): a level and a
+// discipline with a demolition word, as the whole title or among its
+// dash-separated parts ("BASEMENT DEMOLITION - VENTILATION - PHASE 3",
+// "LEVEL 2 HVAC DEMOLITION"). The DEMOLITION PLAN signal needs the PLAN word,
+// so 040_IL's five phase demolition plans scored no role at all, and the tags
+// drawn there never linked to their rows as demolition views. The title less
+// its one demolition word must be a level-and-discipline title
+// (isLevelDisciplineTitle), so a demolition note, detail or keynote list
+// ("DEMOLITION NOTES", "DEMO KEYNOTES - FIRST FLOOR HVAC") never reads as one.
+const DEMOLITION_WORD_RE = /\b(?:DEMOLITION|DEMO|REMOVALS?)\b/;
+function isLevelDisciplineDemolitionTitle(u: string): boolean {
+  if (!DEMOLITION_WORD_RE.test(u)) return false;
+  const rest = u.replace(/\s*\b(?:DEMOLITION|DEMO|REMOVALS?)\b\s*/, " ").replace(/\s+/g, " ").trim()
+    .replace(/^[-\u2013\u2014:]\s*|\s*[-\u2013\u2014:]$/g, "").replace(/\s+[-\u2013\u2014:]\s+[-\u2013\u2014:]\s+/g, " - ");
+  return !DEMOLITION_WORD_RE.test(rest) && isLevelDisciplineTitle(rest);
+}
+
+const quarterTurn = (sp: GraphSpan): number => (((Math.round((sp.rot ?? 0) / 90) * 90) % 360) + 360) % 360;
+/** A span's text height in its own reading frame. */
+const textHeight = (sp: GraphSpan): number => (quarterTurn(sp) % 180 === 90 ? sp.w : sp.h) || 0;
+
+/** The sheet's short phrases a title can be: each span; the words of one
+ * baseline joined while the gap stays a word space; and up to three such
+ * phrases stacked in one block (the same text height, tight leading,
+ * overlapping or aligned) joined in reading order — a title block prints
+ * "MECHANICAL LEVEL" over "34 PLAN", and each span alone is no title.
+ * Quarter-turned text is read in its own frame; h is the text height. */
+export function titlePhrases(spans: GraphSpan[]): Array<{ text: string; bbox: Bbox; h: number }> {
+  type Phrase = { str: string; rot: number; x0: number; x1: number; y: number; h: number; bbox: Bbox; words: number };
+  const out: Array<{ text: string; bbox: Bbox; h: number }> = [];
+  const byRot = new Map<number, Phrase[]>();
+  for (const sp of spans) {
+    const str = (sp.str || "").trim();
+    if (!str) continue;
+    const rot = quarterTurn(sp);
+    const along = rot % 180 === 90 ? sp.h || 0 : sp.w || 0, h = textHeight(sp);
+    out.push({ text: str, bbox: bboxOf(sp), h });
+    if (str.length > 60 || h <= 0) continue;
+    const cx = sp.x + (sp.w || 0) / 2, cy = sp.y + (sp.h || 0) / 2;
+    const [lx, ly] = rot === 90 ? [cy, -cx] : rot === 270 ? [-cy, cx] : rot === 180 ? [-cx, -cy] : [cx, cy];
+    const word = { str, rot, x0: lx - along / 2, x1: lx + along / 2, y: ly, h, bbox: bboxOf(sp), words: 1 };
+    (byRot.get(rot) ?? byRot.set(rot, []).get(rot)!).push(word);
+  }
+  for (const words of byRot.values()) {
+    // baseline lines, then phrases along each line while the gap stays a word space
+    words.sort((p, q) => p.y - q.y);
+    const lines: Phrase[][] = [];
+    let cur: Phrase[] = [], cy = 0;
+    for (const w of words) {
+      if (cur.length && Math.abs(w.y - cy) > Math.max(0.35 * w.h, 1)) { lines.push(cur); cur = []; }
+      cur.push(w);
+      cy = cur.reduce((sum, q) => sum + q.y, 0) / cur.length;
+    }
+    if (cur.length) lines.push(cur);
+    const phrases: Phrase[] = [];
+    for (const line of lines) {
+      line.sort((p, q) => p.x0 - q.x0);
+      let ph: Phrase | null = null;
+      for (const w of line) {
+        const gap = ph ? w.x0 - ph.x1 : Infinity;
+        if (ph && Math.abs(ph.h - w.h) <= 0.3 * Math.max(ph.h, w.h) && gap >= -0.2 * ph.h && gap <= ph.h) {
+          ph.str += ` ${w.str}`; ph.x1 = Math.max(ph.x1, w.x1); ph.bbox = merge(ph.bbox, w.bbox); ph.words++;
+        } else {
+          ph = { ...w };
+          phrases.push(ph);
+        }
+      }
+    }
+    for (const ph of phrases) if (ph.words > 1) out.push({ text: ph.str, bbox: ph.bbox, h: ph.h });
+    // up to three phrases stacked in one block: the same text height, tight
+    // leading, and overlapping, centred or left-aligned
+    phrases.sort((p, q) => p.y - q.y);
+    const below = (i: number): number => {
+      const a = phrases[i];
+      for (let j = i + 1; j < phrases.length && phrases[j].y - a.y <= 1.9 * a.h; j++) {
+        const b = phrases[j];
+        if (b.y - a.y < 0.9 * a.h || Math.abs(b.h - a.h) > 0.15 * Math.max(a.h, b.h)) continue;
+        const overlap = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0);
+        if (overlap >= 0.5 * Math.min(a.x1 - a.x0, b.x1 - b.x0)
+          || Math.abs((a.x0 + a.x1) / 2 - (b.x0 + b.x1) / 2) <= a.h || Math.abs(a.x0 - b.x0) <= a.h) return j;
+      }
+      return -1;
+    };
+    for (let i = 0; i < phrases.length; i++) {
+      let text = phrases[i].str, bbox = phrases[i].bbox, k = i;
+      for (let n = 1; n < 3; n++) {
+        k = below(k);
+        if (k < 0) break;
+        text += ` ${phrases[k].str}`; bbox = merge(bbox, phrases[k].bbox);
+        out.push({ text, bbox, h: Math.min(phrases[i].h, phrases[k].h) });
+      }
+    }
+  }
+  return out;
+}
+
+// An enlarged or partial plan's own title on an engineering sheet, named by
+// the room or area it enlarges and no discipline word ("BOILER ROOM -
+// ENLARGED", "ENLARGED PLANS", "KITCHEN ENLARGED PLAN"), or a plan title that
+// prints its discipline after a dash ("MEZZANINE MECH ROOM PLAN - HVAC"): a
+// mechanical room's boilers, pumps and heat exchangers are often tagged on
+// such a plan alone (14_OR's M320). The sheet number's discipline designator
+// (M, MH, P, E, FP...) says it is an engineering plan; an architect's
+// enlarged restroom, stair or casework plans (A-401) stay as the signals left
+// them. Never a section, elevation, detail, diagram, riser, schedule,
+// demolition, notes or legend title, nor a sentence (SEE ENLARGED PLAN...),
+// nor a sheet that also titles such views (a details sheet's "ENLARGED PLAN
+// A" beside its PLAN VIEW and ELEVATION VIEW; a demolition sheet's temporary
+// installation plan), nor the first words of a longer title that is one
+// ("BUILDING 2 FLOOR 1 - ENLARGED" over "GROUNDING LAYOUT DEMOLITION").
+const MEP_SHEET_NUMBER_RE = /^(?:M|MH|MP|MD|MS|H|HV|P|PL|PD|FP|FA|E|ED|EP|EL)\s*[-.]?\s*\d/;
+const NOT_PLAN_VIEW_WORD_RE = /\b(?:SHALL|SEE|REFER|PROVIDE|VERIFY|COORDINATE|INSTALL|THE|THIS|ARE|IS|BE|NOT|KEY\s+PLAN|DEMO(?:LITION)?|REMOVALS?|DIAGRAMS?|SCHEDULES?|DETAILS?|SECTIONS?|ELEVATIONS?|RISERS?|SCHEMATICS?|NOTES?|LEGENDS?|ONE[-\s]?LINE|SINGLE[-\s]?LINE|GROUNDING)\b/;
+const ENLARGED_PLAN_TITLE_RE = /^(?:(?:.*\s)?(?:ENLARGED|PARTIAL)\s(?:.*\s)?PLANS?(?:\s*[-\u2013]\s*.{1,30})?|.*\bPLANS?\s*[-\u2013]\s*(?:ENLARGED|PARTIAL)\b.*|.{2,40}\s[-\u2013]\s(?:ENLARGED|PARTIAL)(?:\s+PLANS?)?)$/;
+const PLAN_DISCIPLINE_SUFFIX_RE = new RegExp(`^.{2,40}\\bPLANS?\\s*[-\u2013]\\s*${TITLE_DISCIPLINE}$`);
+const COMPETING_VIEW_RE = /\b(?:SECTIONS?|ELEVATIONS?|DETAILS?|DIAGRAMS?|RISERS?|DEMO(?:LITION)?|SCHEMATICS?)\b/;
+/** The sheet's enlarged or partial plan title, or its dash-discipline plan
+ * title, on an engineering sheet whose title-height phrases name no other
+ * kind of view (see ENLARGED_PLAN_TITLE_RE). */
+function enlargedPlanTitle(sheetNumber: string | null | undefined, phrases: Array<{ text: string; bbox: Bbox; h: number }>): { text: string; bbox: Bbox } | null {
+  if (!MEP_SHEET_NUMBER_RE.test(norm(sheetNumber || ""))) return null;
+  const texts = phrases.map((p) => norm(p.text).replace(/\s+/g, " "));
+  if (texts.some((u) => COMPETING_VIEW_RE.test(u) && !REFERENCE_RE.test(u) && u.length <= 60)) return null;
+  for (let i = 0; i < phrases.length; i++) {
+    const u = texts[i];
+    if (u.length < 4 || u.length > 60 || NOT_PLAN_VIEW_WORD_RE.test(u) || REFERENCE_RE.test(u)) continue;
+    if (!ENLARGED_PLAN_TITLE_RE.test(u) && !PLAN_DISCIPLINE_SUFFIX_RE.test(u)) continue;
+    if (texts.some((v) => v !== u && v.includes(u) && NOT_PLAN_VIEW_WORD_RE.test(v))) continue;
+    return { text: phrases[i].text, bbox: phrases[i].bbox };
+  }
+  return null;
+}
+
+// Roles a plan title decided in classifySheetRole's second pass never
+// overrides: a schedule sheet's role gates its table extraction, and a
+// demolition or plan sheet already has the answer the title would give.
+const PLAN_TITLE_DEFERS_TO = new Set<SheetRole>(["schedule", "demolition", "plan"]);
+// A sheet list prints other sheets' titles ("M211 FIRST FLOOR - SECTOR A -
+// HVAC" in a legend sheet's SHEET KEY), so a page carrying one never takes
+// its role from a plan title.
+const SHEET_LIST_TITLE_RE = /\b(?:SHEET|DRAWING)S?\s+(?:INDEX|LIST|KEY|SCHEDULE)\b|\b(?:INDEX|LIST)\s+OF\s+(?:DRAWINGS|SHEETS)\b/;
+
+/** A plan view's own title on a sheet, whatever role the signals give it: a
+ * plan title with qualifiers or a level-and-discipline title, printed as a
+ * title (among the sheet's largest text: at least its 80th-percentile height
+ * and a fifth above its median, so a note's second line, "GIRT SEE CAB" over
+ * "ROOF LEVEL PLAN", or a panel schedule's circuit, "PENTHOUSE LIGHTING",
+ * never counts), and never on a page that carries a sheet list.
+ * classifySheetRole decides an unknown or incidental sheet by it; a schedule
+ * sheet that also draws a plan ("LEVEL 2 - MECHANICAL HVAC DUCT PLAN AND
+ * SCHEDULES") keeps its schedule role, and the sweep reads its plan view by
+ * it (AS-94). */
+export function sheetPlanViewTitle(sheet: SheetSpans): Evidence | null {
+  const phrases = titleHeightPhrases(sheet);
+  if (!phrases) return null;
+  const title = phrases.find(({ text }) => {
+    const u = norm(text).replace(/\s+/g, " ");
+    return u.length >= 4 && u.length <= 60 && !REFERENCE_RE.test(u)
+      && (PLAN_TITLE_WITH_QUALIFIERS_RE.test(u) || isLevelDisciplineTitle(u));
+  }) ?? enlargedPlanTitle(sheet.sheet_number, phrases);
+  return title ? { sheet: sheet.key, text: title.text, bbox: title.bbox } : null;
+}
+
+/** The phrases printed as a title on a sheet: among its largest text (at
+ * least its 80th-percentile height and a fifth above its median), none on a
+ * page that carries a sheet list (sheetPlanViewTitle). */
+function titleHeightPhrases(sheet: SheetSpans): Array<{ text: string; bbox: Bbox; h: number }> | null {
+  if (sheet.spans.some((sp) => SHEET_LIST_TITLE_RE.test(norm(sp.str)))) return null;
+  const heights = sheet.spans.map(textHeight).filter((h) => h > 0).sort((a, b) => a - b);
+  if (!heights.length) return null;
+  const minTitleHeight = Math.max(0.95 * heights[Math.floor(0.8 * (heights.length - 1))], 1.2 * heights[Math.floor(0.5 * (heights.length - 1))]);
+  return titlePhrases(sheet.spans).filter(({ h }) => h >= minTitleHeight);
+}
+
+/** A demolition plan's own title on a sheet (isLevelDisciplineDemolitionTitle),
+ * printed as a title (titleHeightPhrases); AS-101. */
+function sheetDemolitionViewTitle(sheet: SheetSpans): Evidence | null {
+  const title = titleHeightPhrases(sheet)?.find(({ text }) => {
+    const u = norm(text).replace(/\s+/g, " ");
+    return u.length >= 4 && u.length <= 60 && !REFERENCE_RE.test(u) && isLevelDisciplineDemolitionTitle(u);
+  });
+  return title ? { sheet: sheet.key, text: title.text, bbox: title.bbox } : null;
+}
+
+export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
+  const bySignals = classifySheetRoleBySignals(sheet);
+  // an index page's own SHEET INDEX title (unknown at 0.95) stands too
+  if (PLAN_TITLE_DEFERS_TO.has(bySignals.role) || (bySignals.role === "unknown" && bySignals.confidence > 0)) return bySignals;
+  // A plan title first, then a demolition plan's title (AS-101). Neither pass
+  // makes or unmakes a schedule sheet, the one role an extractor reads from
+  // this function (the schedule-role table readers), so no table changes.
+  const title = sheetPlanViewTitle(sheet);
+  const demolition = title ? null : sheetDemolitionViewTitle(sheet);
+  if (!title && !demolition) return bySignals;
+  // the same dissent rule as the signals: a competing role within 0.1 halves it
+  const conf = title ? 0.85 : 0.9;
+  return {
+    role: title ? "plan" : "demolition",
+    confidence: bySignals.confidence >= conf - 0.1 ? conf / 2 : conf,
+    evidence: (title ?? demolition)!,
   };
 }
 
@@ -627,6 +895,10 @@ export interface ScheduleTable {
   drawing_group?: string;
   /** True when the header row was read at a quarter-turn (rotated headers). */
   rotated_headers?: boolean;
+  /** True when the table is a picture read by OCR (AS-153): its text is the
+   * ink's reading, not the PDF's text layer, so every value is disclosed as
+   * such and worth a look at the sheet. */
+  read_from_picture?: boolean;
   /** Present when the table continues across sheets: every fragment,
    * base first. rows[] above is already the union. */
   parts?: TablePart[];
@@ -3772,6 +4044,39 @@ const isTitleBlockRowLabel = (key: string): boolean => {
 // is the title-block shape this rule exists to catch.
 const isTitleBlockTable = (rows: TableRow[]): boolean =>
   rows.length > 0 && rows.every((r) => isTitleBlockRowLabel(r.key));
+
+// A TITLE BLOCK'S REVISION / ISSUE LOG IS NOT A SCHEDULE, WHATEVER ITS ROWS
+// SAY. isTitleBlockTable reads the row keys, and a filled-in issue log's
+// keys are the issues themselves ("CONTRACT DOCUMENTS", "DESIGN
+// DEVELOPMENT"), not title-block words — so federal-mech #16/#19's ISSUED
+// FOR / REV / DATE grid was listed among the schedules, and with a title
+// borrowed from the discipline line above it ("ELECTRONIC SECURITY /
+// TELECOMMUNICATIONS"). The column heads are what say it: every head is a
+// revision-log word, one is DATE, and one names the issue or revision (or
+// the table is titled REVISIONS). A sheet index (SHEET NUMBER / SHEET NAME
+// / ... DATE) has heads outside this set and is kept. (#260)
+const REVISION_LOG_HEADS = new Set([
+  "ISSUED FOR", "ISSUE", "ISSUED", "ISSUE/REVISION", "REV", "REV NO", "REVISION", "REVISIONS",
+  "NO", "NUMBER", "DATE", "REV DATE", "DESCRIPTION", "REMARKS", "BY", "DRN", "CHK", "APP", "APPR", "APPD",
+]);
+export const isRevisionLogTable = (title: string, headers: string[]): boolean => {
+  const heads = headers.map((h) => norm(h).replace(/\./g, "").replace(/:/g, "").replace(/\s+\d+$/, "").replace(/^(\S+)\s+\1$/, "$1").trim());
+  if (heads.length < 2 || !heads.every((h) => REVISION_LOG_HEADS.has(h))) return false;
+  if (!heads.some((h) => h === "DATE" || h === "REV DATE")) return false;
+  return heads.some((h) => /^(REV|ISSUE)/.test(h)) || /^REVISIONS?$/.test(norm(title));
+};
+
+// A ruled box with no column heads, a few rows, and a "title" that names
+// nothing (no word of three letters: a detail callout "341.1-2", a duct
+// size 38"x14", a tag "EF-4", a plan's "DN") is plan linework that happened
+// to close cells, not a schedule. Real, found in the vectorgrid census (all
+// 969 captured sheets): 10 such tables on 7 open documents, all reference
+// kind, every one junk; a sparse real schedule keeps its named title
+// (LAG SCREW SCHEDULE, DUCT INSULATION SCHEDULE) or its heads. (#260)
+export const isUnnamedFragmentTable = (title: string, headers: string[], rowCount: number): boolean =>
+  rowCount <= 3
+  && headers.filter((h) => !/^COL\d+$/.test(h)).length <= 1
+  && !/[A-Za-z]{3}/.test(title || "");
 
 
 // The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
@@ -7655,6 +7960,8 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // constructors did not, and the inconsistency is what surfaced as a
     // highlight that excludes its own schedule's title.
     if (title && region) region = merge(region, title.bbox);
+    // ...nor its revision/issue log, read by its column heads (#260).
+    if (isRevisionLogTable(title?.text ?? "", anchors.map((a) => a.label))) return { table: null, nextIdx: toIdx };
     const table: ScheduleTable = {
       kind: "reference", sheet: sheet.key, title,
       headers: anchors.map((a) => a.label), rows: banded.out, region: region!, anchors,
@@ -8310,7 +8617,7 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
 }
 
 // ── the graph ───────────────────────────────────────────────────────────────
-export interface SheetGraphSchedule { kind: TableKind; title: string; rows: number; region: Bbox; continues?: string; rotated_headers?: boolean }
+export interface SheetGraphSchedule { kind: TableKind; title: string; rows: number; region: Bbox; continues?: string; rotated_headers?: boolean; read_from_picture?: boolean }
 export interface SheetGraphSheet { key: string; role: SheetRole; confidence: number; evidence: Evidence | null; building?: string; drawing_group?: string; schedules: SheetGraphSchedule[] }
 /** L3.5 topology summary per plan sheet (shared vector pipeline). */
 export interface SheetTopologySummary {
@@ -8513,9 +8820,12 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   // kinds, and two reclassified-to-equipment fragments no longer look
   // distinct without this.
   const reclassified = new Set<ScheduleTable>();
+  // what the extractors read (classifySheetRoleBySignals): room-tag suppression below
+  const extractionRoles = new Map<string, ReturnType<typeof classifySheetRole>>();
   for (const s of withText) {
     const role = classifySheetRole(s);
     roles.set(s.key, role);
+    extractionRoles.set(s.key, classifySheetRoleBySignals(s));
     // A real 2-(or more-)up sheet layout is split into independently-
     // processed column bands here — see bandedSheets' own comment. A sheet
     // with no proven such layout gets back `[s]`, the same object, so every
@@ -9055,7 +9365,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const found: RoomTag[] = [];
   const callouts: DetailCallout[] = [];
   for (const s of withText) {
-    const role = roles.get(s.key)!;
+    const role = extractionRoles.get(s.key)!;
     // Read tags unless the sheet is CONFIDENTLY something that carries room
     // numbers as table content rather than as drawing tags. A weak guess must
     // not suppress the reading: a real finish plan whose title block the role
@@ -9165,6 +9475,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
           kind: t.kind, title: p.title || t.title?.text || "", rows: p.rows, region: p.region,
           ...(i > 0 ? { continues: t.sheet } : {}),
           ...(p.rotated_headers ? { rotated_headers: true } : {}),
+          ...(t.read_from_picture ? { read_from_picture: true } : {}),
         });
       }
     }
@@ -9857,7 +10168,91 @@ function hasTitlelessRowOrientedSchedule(
  * null when the table doesn't look like a recognized schedule shape at all
  * (kind classification fails to qualify) or carries no real keyed data rows
  * — never a guess, the same refusal discipline as the rest of this file. */
+/** Row 0's text cells, when printed runs of the drawing's own text chain each
+ * of them to the next across the cell boundary between them: one line of type
+ * that rules crossing the band cut into cells (AS-142). Its text, the cells
+ * joined in column order, and its box in source space; null otherwise. */
+function titleBandCutByRules(
+  cells: ODLTableCell[],
+  pageViewportTransform: number[],
+  spans: GraphSpan[],
+): { text: string; bbox: number[] } | null {
+  if (cells.length < 2 || cells.some((c) => (c["row span"] || 1) > 1)) return null;
+  const texted = cells
+    .filter((c) => odlCellText(c).trim())
+    .sort((a, b) => a["column number"] - b["column number"]);
+  if (texted.length < 2) return null;
+  const boxes = texted.map((c) => odlBboxToProjectSpace(c["bounding box"], pageViewportTransform));
+  const top = Math.min(...boxes.map((b) => b[1]));
+  const bottom = Math.max(...boxes.map((b) => b[3]));
+  const runs = spans.filter((s) => !s.rot && s.str.trim() && s.y + s.h / 2 >= top && s.y + s.h / 2 <= bottom);
+  for (let i = 0; i + 1 < texted.length; i++) {
+    const lo = Math.min(boxes[i][2], boxes[i + 1][0]);
+    const hi = Math.max(boxes[i][2], boxes[i + 1][0]);
+    if (!runs.some((s) => s.x < lo - 1 && s.x + s.w > hi + 1)) return null;
+  }
+  const all = cells.map((c) => c["bounding box"]);
+  return {
+    text: texted.map((c) => odlCellText(c).replace(/\s+/g, " ").trim()).join(" "),
+    bbox: [
+      Math.min(...all.map((b) => b[0])),
+      Math.min(...all.map((b) => b[1])),
+      Math.max(...all.map((b) => b[2])),
+      Math.max(...all.map((b) => b[3])),
+    ],
+  };
+}
+
+/** A key cell that names several units of one row by a range or a list
+ * (AS-142): "B-2-1 THRU 4", "EF-1 THRU EF-4", "P-1 & 2", "AHU-1, AHU-2 AND
+ * AHU-3". The first piece is a tag (rowKeyOf) printed without a space and
+ * with a number in it, so a phrase ("LEVEL 2 THRU 4", "SEE PLANS THRU 4") or a
+ * word ("SPARE") is not one; every later piece is such a tag or the bare number
+ * (letter) that continues the first. */
+function marksRangeOrList(raw: string, buildings: Set<string>): boolean {
+  const pieces = raw.replace(/\s+/g, " ").trim()
+    .split(/\s+(?:THRU|THROUGH|TO)\s+|\s*(?:&|,)\s*|\s+AND\s+/i)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const tag = (p: string) => !/\s/.test(p) && /\d/.test(p) && !!rowKeyOf(p, "equipment", buildings);
+  if (pieces.length < 2 || pieces.length > 12 || !tag(pieces[0])) return false;
+  return pieces.slice(1).every((p) => /^[A-Z]?\d{1,3}[A-Z]?$/i.test(p) || tag(p));
+}
+
 export function scheduleTableFromODL(
+  t: ODLTable,
+  sheetKey: string,
+  pageViewportTransform: number[],
+  opts: Parameters<typeof scheduleTableFromODLRead>[3] = {},
+): ScheduleTable | null {
+  // AS-142's title rules (a title band the rules cut, a lone cell across
+  // nearly every column) hold only where they give an equipment schedule its
+  // title: a refusal, or a reference, finish or other table, is read again
+  // without them, as before. Over the 90 open and check documents' replayed
+  // grids they otherwise titled an abbreviation list "CLG", a room tag
+  // "200.18", a concrete specification note and a points list's
+  // HARDWARE POINTS / SOFTWARE POINTS band, and lost a finish table.
+  let titled = false;
+  const declined: string[] = [];
+  const table = scheduleTableFromODLRead(t, sheetKey, pageViewportTransform,
+    { ...opts, reject: (reason) => declined.push(reason) }, () => { titled = true; });
+  if (!titled || table?.kind === "equipment") {
+    for (const reason of declined) opts.reject?.(reason);
+    return table;
+  }
+  return scheduleTableFromODLRead(t, sheetKey, pageViewportTransform, opts, null);
+}
+
+/** scheduleTableFromODL's reading, with AS-142's title rules when
+ * `onTitleRule` is given (called when one of them titles the table). */
+/**
+ * A cell that prints a unit's mark, as a row's first cell does (AS-146): one
+ * token holding a letter and a digit ("AHU-A1", "ACU-A-1", "F-2"). A header
+ * label (MARK, UNIT, TAG, NO.) never does, nor a grouping label ("HOT WATER").
+ */
+const printsAMark = (text: string): boolean => /^(?=\S*\d)(?=\S*[A-Z])\S+$/i.test(text.trim());
+
+function scheduleTableFromODLRead(
   t: ODLTable,
   sheetKey: string,
   pageViewportTransform: number[],
@@ -10011,6 +10406,7 @@ export function scheduleTableFromODL(
      * grid that starts with genuinely blank spacer rows). */
     unruledHeaderAbove?: boolean;
   } = {},
+  onTitleRule: (() => void) | null = null,
 ): ScheduleTable | null {
   const refuse = (reason: string): null => { opts.reject?.(reason); return null; };
   if (t["number of rows"] < 2 || t["number of columns"] < 2) {
@@ -10114,6 +10510,60 @@ export function scheduleTableFromODL(
           };
           bodyStart = 1;
         }
+      }
+    }
+    // A TITLE THAT RULES CUT IS STILL ONE LINE OF TYPE (AS-142).
+    //
+    // Neither rule above fires when the rules that cross a title band leave a
+    // narrow cell beside it. 26_CA's M0.09 prints HOT WATER BOILER
+    // (SPECIFICATION SECTION 23 52 16) over a fifteen-column table, and row 0
+    // came back as a blank one-column cell, "HOT WATER BOILER (SPECIFICATION
+    // SECTION 23 52" across eleven columns and "16)" across three; PLATE AND
+    // FRAME HEAT EXCHANGER (FLUID TO FLUID) (SPECIFICATION SECTION 23 57 19)
+    // as a blank cell, "PLATE" in one column and the rest across sixteen. The
+    // boiler's title was read as a header tier; the heat exchanger's was the
+    // first header candidate, failed the vocabulary bar, and the table was
+    // refused ("no header block above the data") with its six units.
+    //
+    // The drawing's own text says these cells are one title: one printed run
+    // ("(SPECIFICATION SECTION 23 52 16)", "PLATE AND FRAME HEAT EXCHANGER
+    // (FLUID TO FLUID)") crosses each cut. A run is one line of type, and no
+    // column boundary falls inside one, so cells that runs chain together are
+    // one piece of prose, not the labels of columns. Every text cell of the
+    // row must be on the chain (a header row's labels are separate runs, so a
+    // label that overflows into its neighbour links two cells, never all of
+    // them), the cells are one row tall (a header tier's labels often span
+    // down), and rows follow for a header and data.
+    //
+    // Or the rules leave the title whole in one cell and cut off its ends:
+    // 26_CA's FAN COIL (SPECIFICATION SECTION 23 82 19) spans 28 of its
+    // table's 30 columns beside a blank cell over DESIGNATION and LOCATION /
+    // SERVICE, PUMPS (SPECIFICATION SECTION 23 21 23) 15 of 17. Neither is
+    // the one cell across the table the first rule wants, and each was read
+    // as a header tier: the table had no title, and every column's name began
+    // with it ("FAN COIL (SPECIFICATION SECTION 23 82 19) CFM"). A cell that
+    // is the row's only text and spans all but two columns (three quarters at
+    // least), beside blank cells one row tall, names the table: a group label
+    // that wide would leave the key column's header beside it.
+    // Read so only when the caller asks (onTitleRule): scheduleTableFromODL
+    // keeps the result where it is an equipment schedule.
+    if (!titleCell && R >= 3 && onTitleRule) {
+      const band = opts.sourceSpans?.length ? titleBandCutByRules(row0.cells, pageViewportTransform, opts.sourceSpans) : null;
+      const texted = row0.cells.filter((c) => odlCellText(c).trim());
+      const lone = texted.length === 1 && row0.cells.every((c) => (c["row span"] || 1) === 1)
+        && (texted[0]["column span"] || 1) >= Math.max(2, C - 2, Math.ceil(C * 0.75)) ? texted[0] : null;
+      if (band) {
+        titleCell = {
+          type: "table cell", id: 0, "page number": t["page number"],
+          "bounding box": band.bbox, "row number": 1, "column number": 1,
+          "row span": 1, "column span": C, kids: [{ type: "text", content: band.text }],
+        };
+        bodyStart = 1;
+        onTitleRule();
+      } else if (lone) {
+        titleCell = lone;
+        bodyStart = 1;
+        onTitleRule();
       }
     }
   }
@@ -10273,6 +10723,21 @@ export function scheduleTableFromODL(
   // opts.headerLookahead) can classify a CANDIDATE row further down the
   // table with the exact same rule the main loop uses, rather than a
   // second, driftable copy of it.
+  // THE SECOND LINE OF A UNIT'S ROW (AS-146): a grid row whose key cell spans
+  // down from the row above, where that cell prints a mark, and which prints
+  // no mark of its own. 014_MT's AHU-A1 carries its coils' second line
+  // (75,000 CFM) and 017_MD's ACU-A-1 its discharge and inlet sound power
+  // under the mark; 18_OR's HP-5 spans FC-1 and FC-2 because one heat pump
+  // serves two fan coils, and FC-2's line is a unit of its own.
+  const isSecondLine = (r: number, keyCol: number): boolean => {
+    const keyCell = grid[r][keyCol];
+    if (!keyCell || keyCell["row number"] - 1 >= r || !printsAMark(odlCellText(keyCell))) return false;
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (cell && cell["row number"] - 1 === r && printsAMark(odlCellText(cell))) return false;
+    }
+    return true;
+  };
   const classifyBodyRow = (r: number, ownCells: Set<ODLTableCell>): { fullCoverage: boolean; grouped: boolean } => {
     const coveredCols = new Set<number>();
     for (let c = 0; c < C; c++) {
@@ -10289,7 +10754,19 @@ export function scheduleTableFromODL(
     if (ownsLeadCell) for (let c = 0; c < C; c++) if (grid[r][c]) inheritedCols++;
     const bar = Math.max(1, Math.min(C, maxCovered) - (opts.fullCoverageSlack ?? 0));
     const fullCoverage = coveredCols.size >= bar || (ownsLeadCell && inheritedCols >= bar);
-    const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size);
+    // A UNIT'S ROW PRINTED ON TWO LINES IS ITS ROW, NOT A HEADER TIER (AS-146).
+    // 014_MT M0.2's CUSTOM AIR HANDLING UNIT SCHEDULE prints AHU-A1 once, but
+    // its cooling and steam coils print a second line (48,400 and 75,000 CFM),
+    // so the mark and every single-valued cell span two grid rows. Half the
+    // row's cells span, which the majority rule above reads as a grouping
+    // tier: the row became part of the header, every column was named with
+    // its value ("MARK AHU-A1", "MANUFACTURER TEMTROL"), and the unit was gone.
+    // A grouping tier groups COLUMNS; a row whose spans run down only and whose
+    // first cell prints a mark is a unit's row, however many lines it takes.
+    const lead = grid[r][0];
+    const tallUnitRow = ownsLeadCell && !!lead && spanning.every((cl) => (cl["column span"] || 1) === 1)
+      && printsAMark(odlCellText(lead));
+    const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size) && !tallUnitRow;
     return { fullCoverage, grouped };
   };
   const headerVocabHitRate = (ownCells: Set<ODLTableCell>): { texts: string[]; hitRate: number } => {
@@ -11183,6 +11660,11 @@ export function scheduleTableFromODL(
       const identical = existingHeaders.length === newHeaders.length
         && existingHeaders.every((h) => dupOf.cells[h]?.text === cells[h]?.text);
       if (identical) continue;
+      // The second line of a unit's row (AS-146) inherits its mark and would
+      // mint the unit twice. A grouping label spanning a transposed table's
+      // rows (21_VA's "HOT WATER" over FLOW, EWT, LWT) is no mark and keeps
+      // its rows.
+      if (isSecondLine(r, keyCol)) continue;
     }
     emitted.add(r);
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
@@ -11347,6 +11829,8 @@ export function scheduleTableFromODL(
 
   const strictKeyCol = keyColIdx >= 0 ? keyColIdx : 0;
   buildRows([strictKeyCol], false);
+  // The column(s) the rows are keyed from, for the range rescue below.
+  let keyedBy: number[] = [strictKeyCol];
 
   // WHEN THE STRICT RULE FAILS MOST OF A TABLE, IT IS THE WRONG RULE HERE.
   //
@@ -11365,7 +11849,13 @@ export function scheduleTableFromODL(
   // qualified to replace it, and a table that had been read correctly was
   // refused. Speculating about which convention is right is unnecessary when
   // both can be run and counted.
-  if (rows.length && dataRows.length >= 2 && rows.length * 2 < dataRows.length) {
+  // A unit printed on several lines (AS-146) keys one row from its mark and
+  // fills the grid rows under it: 017_MD's ACU-A-1 to ACU-A-6 each print
+  // casing, discharge and inlet sound power, six units over eighteen lines.
+  // Those lines are not rows the strict rule failed, and counting them as such
+  // handed the table to its sound readings as keys.
+  const tallMarkLines = dataRows.filter((r) => isSecondLine(r, strictKeyCol)).length;
+  if (rows.length && dataRows.length >= 2 && rows.length * 2 < dataRows.length - tallMarkLines) {
     const strictRows = rows.slice();
     const strictEmitted = new Set(emitted);
     rows.length = 0;
@@ -11377,7 +11867,7 @@ export function scheduleTableFromODL(
       rows.push(...strictRows);
       emitted.clear();
       for (const r of strictEmitted) emitted.add(r);
-    }
+    } else keyedBy = evidenced;
   }
 
   // THE TABLE'S OWN KEY COLUMN, WHEN NO COLUMN HOLDS A TAG.
@@ -11532,7 +12022,34 @@ export function scheduleTableFromODL(
 
   if (!rows.length) {
     const evidenced = findEvidencedKeyColumn();
-    if (evidenced.length) buildRows(evidenced, true);
+    if (evidenced.length) {
+      buildRows(evidenced, true);
+      keyedBy = evidenced;
+    }
+  }
+  // A ROW THE NAMED KEY COLUMN SCHEDULES BY RANGE OR LIST IS A ROW (AS-142).
+  //
+  // rowKeyOf keys a tag and refuses "B-2-1 THRU 4": the shape is not a tag,
+  // and widening it would widen it for symbol sweep and resolve_tag too.
+  // Where the column is proven by its rows (three or more keyed) such a row
+  // keeps its printed text (the rescue above keys 26_CA's "CHWP-2-1 THRU 3"
+  // so). A table of one or two rows proves nothing by its rows: 26_CA's HOT
+  // WATER BOILER schedule is one row naming four boilers, and it was refused
+  // whole ("no keyed data rows"). Its column is proven another way: the
+  // header names it (DESIGNATION, MARK, TAG…), and the cell prints a tag,
+  // then THRU, TO, AND, "&" or "," and more tags or the number that continues
+  // the first. Such a row keeps its printed text as its key; the takeoff
+  // reads the units from the cell (expandEquipMarkRange). Only an equipment
+  // table, only rows no pass keyed, only when every row so far is keyed from
+  // that column, and never a key already minted (buildRows' printed path).
+  if (kind === "equipment" && keyColIdx >= 0 && keyedBy.length === 1 && keyedBy[0] === keyColIdx
+    && emitted.size < dataRows.length) {
+    const ranged = new Set(dataRows.filter((r) => {
+      if (emitted.has(r)) return false;
+      const cell = grid[r][keyColIdx];
+      return !!cell && cell["row number"] - 1 === r && marksRangeOrList(norm(odlCellText(cell)), selfEvidenced);
+    }));
+    if (ranged.size) buildRows([keyColIdx], true, ranged);
   }
   if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])})`);
   // A DRAWING'S OWN TITLE-BLOCK GRID IS NOT A SCHEDULE, HOWEVER IT IS READ.
@@ -11550,6 +12067,10 @@ export function scheduleTableFromODL(
   // the SAME closed vocabulary here (not inventing a second one) keeps this
   // exactly as narrow as the geometric path's own already-proven guard.
   if (isTitleBlockTable(rows)) return refuse("title-block/administrative table (every row key matches the closed title-block vocabulary)");
+  if (isRevisionLogTable(titleText || "", headers)) return refuse(`title-block revision/issue log (heads ${headers.join(" / ")})`);
+  if (kind === "reference" && isUnnamedFragmentTable(titleText || "", headers, rows.length)) {
+    return refuse(`unnamed ruled fragment: ${rows.length} row(s), no column heads, title "${titleText || ""}" names nothing`);
+  }
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
   headers.splice(0, headers.length, ...promotedHeaders);
   // Real, found-live gap (2026-09-03, 032_PA_Construct_EHRM_Infrastructure's
@@ -11612,6 +12133,7 @@ export function syncSheetSchedules(g: SheetGraph, sheetKeys: Iterable<string>): 
           kind: t.kind, title: p.title || t.title?.text || "", rows: p.rows, region: p.region,
           ...(i > 0 ? { continues: t.sheet } : {}),
           ...(p.rotated_headers ? { rotated_headers: true } : {}),
+          ...(t.read_from_picture ? { read_from_picture: true } : {}),
         });
       }
     }

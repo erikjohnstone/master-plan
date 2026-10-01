@@ -33,6 +33,8 @@ const TEMPLATE_LAST_PREBUILT_ROW = 1010;
 // bug to fix; callers should know a valve list past this length loses
 // dropdown support on Positioning Signal / Operating Voltage.
 export const VALVE_SIZE_TEMPLATE_DROPDOWN_LAST_ROW = 200;
+/** Data rows one workbook takes with every dropdown working (rows 6–200). */
+export const VALVE_SIZE_TEMPLATE_ROWS_PER_FILE = VALVE_SIZE_TEMPLATE_DROPDOWN_LAST_ROW - FIRST_DATA_ROW + 1;
 
 /** Exact controlled-vocabulary strings the template's own DomainValues /
  * Constants sheets define for each list-validated column — the only values
@@ -142,4 +144,26 @@ export async function fillValveSizeTemplate(templateBytes: Uint8Array, rows: Val
   const lastRow = Math.max(TEMPLATE_LAST_PREBUILT_ROW, FIRST_DATA_ROW - 1 + rows.length);
   xml = xml.replace(/<x:dimension ref="A1:L\d+"\s*\/>/, `<x:dimension ref="A1:L${lastRow}" />`);
   return zipSync({ ...files, [SHEET_PART]: encoder.encode(xml) }, { level: 6 });
+}
+
+/**
+ * The valve list as workbooks that each keep every row inside the template's
+ * dropdown range (ASSEMBLIES goal WP7.3). A list that fits is one file with
+ * the template's own name; a longer one is split in row order into
+ * "…_part1of3.xlsx" and so on, every row written exactly once.
+ */
+export async function valveSizeTemplateFiles(templateBytes: Uint8Array, rows: ValveSizeRow[]): Promise<Array<{ filename: string; rows: number; bytes: Uint8Array }>> {
+  const chunks: ValveSizeRow[][] = [];
+  for (let i = 0; i < rows.length; i += VALVE_SIZE_TEMPLATE_ROWS_PER_FILE) chunks.push(rows.slice(i, i + VALVE_SIZE_TEMPLATE_ROWS_PER_FILE));
+  if (!chunks.length) chunks.push([]);
+  const base = VALVE_SIZE_TEMPLATE_FILENAME.replace(/\.xlsx$/, "");
+  const out: Array<{ filename: string; rows: number; bytes: Uint8Array }> = [];
+  for (let i = 0; i < chunks.length; i++) {
+    out.push({
+      filename: chunks.length === 1 ? VALVE_SIZE_TEMPLATE_FILENAME : `${base}_part${i + 1}of${chunks.length}.xlsx`,
+      rows: chunks[i].length,
+      bytes: await fillValveSizeTemplate(templateBytes, chunks[i]),
+    });
+  }
+  return out;
 }

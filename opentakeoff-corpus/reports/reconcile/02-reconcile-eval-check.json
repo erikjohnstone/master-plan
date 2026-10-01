@@ -1,0 +1,64 @@
+{
+ "side": "check",
+ "fast": false,
+ "totals": {
+  "units": 288,
+  "unmatched": 5,
+  "duplicate_rows": 0,
+  "drawn_tp": 208,
+  "drawn_fn": 17,
+  "drawn_fp": 0,
+  "drawn_tn": 58,
+  "count_exact": 257,
+  "count_over": 4,
+  "count_under": 22,
+  "key_placements": 243,
+  "pipeline_placements": 218,
+  "placement_hits": 198,
+  "placement_located": 211,
+  "tag_drawn_tp": 210,
+  "tag_drawn_fn": 15,
+  "tag_observations": 222,
+  "tag_located": 213,
+  "links": 602,
+  "linked": 470,
+  "unscheduled": 72,
+  "unscheduled_listed": 45,
+  "unscheduled_linked_to_a_row": 0,
+  "review_listed": 2590,
+  "review_unscheduled": 45,
+  "review_scheduled": 52,
+  "review_not_a_unit": 2493,
+  "units_listed": 26,
+  "units_unscheduled": 9,
+  "units_scheduled": 8,
+  "units_not_a_unit": 9,
+  "unscheduled_units_listed": 9
+ },
+ "sets": [
+  {
+   "id": "071_ME_BGS_Project_3809_Health_Science_Center"
+  },
+  {
+   "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades"
+  },
+  {
+   "id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX"
+  },
+  {
+   "id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades"
+  },
+  {
+   "id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers"
+  },
+  {
+   "id": "baker-county-eoc"
+  },
+  {
+   "id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set"
+  },
+  {
+   "id": "25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+  }
+ ]
+}

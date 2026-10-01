@@ -1,0 +1,15 @@
+# 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 3, dev (reports/control-intent/binding-tier3/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output.
+# Checked row by row on the renders by a second, independent reader; its disagreements adjudicated on the renders (CONTROL_INTENT_BUG_CATALOGUE CI-54).
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,EF-1,FAN,008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#32,LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM.,family_detail,"E-601 detail 1 (title misspelt as printed); the relay output is labelled EF 1 and LV 1 inside; E-102 ceiling plan notes 3 and 4 refer to 1/E-601; the set's only exhaust fan"
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,UH-1,UNIT_HEATER,,none,,"no control drawing for the unit heaters; only schedule note 3 (24V heat-only thermostat); M-601 details 3 and 4 are mounting/piping"
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,UH-2,UNIT_HEATER,,none,,

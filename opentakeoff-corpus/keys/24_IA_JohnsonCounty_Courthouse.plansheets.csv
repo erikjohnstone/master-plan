@@ -1,0 +1,19 @@
+# 24_IA_JohnsonCounty_Courthouse.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+24_IA_JohnsonCounty_Courthouse.pdf#2,FIRST LEVEL FLOOR PLAN AND RCP DEMOLITION,A,demolition,yes,"AD-101.4: first level RCP demolition + first level demolition plan; text layer searched, no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#3,SECOND LEVEL RCP DEMOLITION,A,demolition,yes,"AD-102.4: second level RCP demolition + second level demolition plan; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#4,FIRST LEVEL FLOOR PLAN AND RCP,A,new,yes,"A-101.4: first level RCP + first level floor plan; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#5,SECOND LEVEL FLOOR PLAN AND RCP,A,new,yes,"A-102.4: second level RCP + second level floor plan; only generic EX. FCU / EXR FCU labels (no unit tags)"
+24_IA_JohnsonCounty_Courthouse.pdf#6,ENLARGED PLANS,A,enlarged,yes,"A-401.4: enlarged plan @ judge's stand 02D with casework elevations; only generic EX. FCU / EXR FCU labels"
+24_IA_JohnsonCounty_Courthouse.pdf#7,ENLARGED PLANS,A,enlarged,yes,"A-402.4: enlarged plan @ judge's stand 02C with casework elevations; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#8,ENLARGED PLANS,A,enlarged,yes,"A-403.4: enlarged plans @ court attendant 02 and @ RR with elevations; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#15,FINISH SCHEDULE AND PLAN,A,new,yes,"A-601.4: second level floor finish plan beside room finish/door schedules and details; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#17,FRAMING PLAN - LEVEL 2 SOUTH,other,new,yes,"S-101.4 structural framing plan with details; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#20,MECHANICAL DEMOLITION PLAN,M,demolition,yes,"MD-101.4: level 1/2/3 and attic mechanical demolition plans; only generic EX FCU / ER FCU / EXR FCU / ER VAV / EX VAV / ER AHU / ER FAN / EX ERV labels, no unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#21,MECHANICAL PLAN,M,new,yes,"M-101.4: level 1/2/3 mechanical plans phase 4 + attic HVAC plan phase 4, plus Section 31 (not a plan view)"
+24_IA_JohnsonCounty_Courthouse.pdf#24,ELECTRICAL DEMOLITION PLAN,E,demolition,yes,"ED-101.4: attic + level 2 electrical demolition plans; only generic EX VAV / ER AHU / ER FAN labels"
+24_IA_JohnsonCounty_Courthouse.pdf#25,ELECTRICAL POWER PLAN,E,new,yes,"E-101.4: attic electrical plan + level 2 electrical plan; power callouts for ERV-2, CP-1, ECP-1 and generic FCU"
+24_IA_JohnsonCounty_Courthouse.pdf#26,ELECTRICAL LIGHTING PLAN,E,new,yes,"E-201.4: level 2 lighting plan; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#29,SECOND LEVEL LOW VOLTAGE DEMOLITION PLAN,other,demolition,yes,"TD-101.4 technology; no HVAC unit tags"
+24_IA_JohnsonCounty_Courthouse.pdf#30,SECOND LEVEL LOW VOLTAGE PLAN,other,new,yes,"T-101.4 technology: level 2 low voltage plan + AV conduit riser; no HVAC unit tags"

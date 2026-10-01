@@ -1,0 +1,36 @@
+# 14_OR_KlamathCC_LearningCtr_Mechanical.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 3, dev (reports/control-intent/binding-tier3/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output.
+# Checked row by row on the renders by a second, independent reader; its disagreements adjudicated on the renders (CONTROL_INTENT_BUG_CATALOGUE CI-54).
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/14_OR_KlamathCC_LearningCtr_Mechanical.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-1,DOAS,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,DOAS UNITS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,M601 section DOAS UNITS; names no tag
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-2,DOAS,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,DOAS UNITS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-3,DOAS,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,DOAS UNITS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-4,DOAS,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,DOAS UNITS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,CH-1,AIR_COOLED_CHILLER,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"CHILLED WATER SYSTEM CONTROL SEQUENCE (CH-1, CHP-1, CHP-2):",list_range,M601 section CHILLED WATER SYSTEM; item 2 CHILLER (CH-1)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,B-1,BOILER,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"HEATING WATER SYSTEM CONTROL SEQUENCE (B-1, B-2, BP-1, BP-2, HWP-1, HWP-2)",list_range,"M601 section HEATING WATER SYSTEM; item B BOILERS (B-1, B-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,B-2,BOILER,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"HEATING WATER SYSTEM CONTROL SEQUENCE (B-1, B-2, BP-1, BP-2, HWP-1, HWP-2)",list_range,"item B BOILERS (B-1, B-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,CHP-1,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"CHILLED WATER SYSTEM CONTROL SEQUENCE (CH-1, CHP-1, CHP-2):",list_range,"item 3 CHILLED WATER PUMPS (CHP-1, CHP-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,CHP-2,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"CHILLED WATER SYSTEM CONTROL SEQUENCE (CH-1, CHP-1, CHP-2):",list_range,"item 3 CHILLED WATER PUMPS (CHP-1, CHP-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,BP-1,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"HEATING WATER SYSTEM CONTROL SEQUENCE (B-1, B-2, BP-1, BP-2, HWP-1, HWP-2)",list_range,"item C BOILER PUMPS (BP-1, BP-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,BP-2,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"HEATING WATER SYSTEM CONTROL SEQUENCE (B-1, B-2, BP-1, BP-2, HWP-1, HWP-2)",list_range,"item C BOILER PUMPS (BP-1, BP-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HWP-1,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"HEATING WATER SYSTEM CONTROL SEQUENCE (B-1, B-2, BP-1, BP-2, HWP-1, HWP-2)",list_range,"item D HEATING WATER PUMPS (HWP-1, HWP-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HWP-2,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,"HEATING WATER SYSTEM CONTROL SEQUENCE (B-1, B-2, BP-1, BP-2, HWP-1, HWP-2)",list_range,"item D HEATING WATER PUMPS (HWP-1, HWP-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SP-1,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE,semantic,item A SNOW MELT PUMPS; its schedule service is SNOWMELT
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SP-2,PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE,semantic,item A SNOW MELT PUMPS; its schedule service is SNOWMELT
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,FC-01,FCU,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,M601 section SPLIT SYSTEMS - AIR SOURCE; its DUCTLESS WALL MOUNT FAN COILS (not the four-pipe FAN COIL UNITS section)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,FC-02,FCU,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,its DUCTLESS WALL MOUNT FAN COILS (not the four-pipe FAN COIL UNITS section)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HP-01,HEAT_PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,the split system's OUTDOOR UNIT
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HP-02,HEAT_PUMP,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,the split system's OUTDOOR UNIT
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAU-1,OUTDOOR_AIR_UNIT,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,KITCHEN MECHANICAL EQUIPMENT - SEQUENCE OF OPERATION & BAS INTERFACE,semantic,"items B and C name MAKEUP AIR UNIT (MAU); the schedule's only MAU, serving KITCHEN"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,EH-1,UNIT_HEATER,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,ELECTRIC HEATERS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,EH-2,UNIT_HEATER,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,ELECTRIC HEATERS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,EH-3,UNIT_HEATER,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,ELECTRIC HEATERS - SEQUENCE OF OPERATION & BAS INTERFACE,family_detail,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HX-1,HEAT_EXCHANGER,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16,SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE,semantic,"item B HEAT EXCHANGER (HX) control valve; the schedule's only HX, a snow melt heat exchanger (its note 1)"

@@ -1,0 +1,225 @@
+# 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheets M-601 SCHEDULES (PDF page 18) and E-602 SCHEDULES (PDF page 27) of
+# Alter / Repair B1624, Irish Hill, Air Force Research Laboratory, Rome NY (N.K. Bhandari
+# Architecture & Engineering, with C&S Companies): an overview of each page at 40 dpi, then each
+# table at 3x (216 dpi), rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on
+# 2026-09-26, with the PDF's own text layer (pymupdf words, row by row) as a reading aid; second
+# read of every row against the text layer. Each drawn title was found with the text layer (pymupdf
+# search_for). The pipeline's output for these tables was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): AS-28 read this document's fin tube
+# PIPE DIA., the condensing unit's UNIT SERVED, the pumps' SYSTEM SERVED and the air handler's
+# AREA SERVED ("SEE PLANS") against their printed cells, and the control-intent unseen audit read
+# the document (15 units, one packet, nothing applied). The fifth tier keys the tables its seed
+# drew (tier5/01-split.md): one per keyed family.
+SET 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheets M-601 and E-602 SCHEDULES (pages 18 and 27) of Alter / Repair B1624, Irish Hill, Air Force Research Laboratory, Rome NY (N.K. Bhandari), the tables the fifth tier's seed drew for its AHU, FCU, CONDENSING_UNIT, BOILER, PUMP and FIN_TUBE_RADIATION strata.
+EXCLUDES Manufacturers and model numbers (basis of design), efficiencies, coil air temperatures, air pressure drops, face velocities and suction temperatures, fan types, brake horsepower, speeds and static pressures of the air handler's fans, currents (MCA, MOP), refrigerant data, heat rejection and compressor data of the condensing unit, the boilers' type, system fluid, gas pressures and relief and working pressures, the pumps' type, the fin tube's fin, row, length, enclosure and mounting data, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE: one row, AHU-1. AREA SERVED prints "SEE PLANS", a pointer, not one
+# area. SUPPLY CFM keys supply_cfm and OA CFM (MIN) oa_cfm_min. The HEATING COIL - WATER block
+# keys heating_mbh (MBH; an air handler's coil capacity is the unit's), hw_ewt_f, hw_lwt_f,
+# hw_wpd_ft (WPD (FT HD)) and hw_gpm; the row prints the block, heating_type hw. The COOLING COIL -
+# DX block's TOTAL MBH keys cooling_mbh; the block's title prints DX, cooling_type dx. SUPPLY FAN /
+# MOTOR HP keys supply_fan_hp and RETURN FAN / MOTOR HP return_fan_hp. No unit-level voltage
+# prints: both fans print VOLTS /PH 208/3 and note 3 provides a single point power connection, so
+# the supply fan's cell keys the unit's volts and phase (the author's reading; the return fan's is
+# typed for audit). Note 2 ("PROVIDE WITH UNIT MOUNTED STARTER AND DISCONNECT."), cited by the
+# row's REMARKS, provides a motor starter, not a variable-frequency drive, and both fans print TYPE
+# CONST. VOL.: vfd no (the author's reading, as 03_FL's pump remarks). Note 1 (a duct smoke
+# detector) states no key attribute.
+TABLE
+sheet: 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 18 overview at 40 dpi; crop 308,60,2250,160 at 3x in 4 tiles (UNIT NO. column repeated), notes included; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT NO. => tag
+col: LOCATION => -
+col: AREA SERVED => area_served
+col: SUPPLY CFM => supply_cfm
+col: OA CFM (MIN) => oa_cfm_min
+col: HEATING COIL - WATER / MBH => heating_mbh
+col: HEATING COIL - WATER / EAT (°F) => -
+col: HEATING COIL - WATER / LAT (°F) => -
+col: HEATING COIL - WATER / APD (IN WG) => -
+col: HEATING COIL - WATER / EWT (°F) => hw_ewt_f
+col: HEATING COIL - WATER / LWT (°F) => hw_lwt_f
+col: HEATING COIL - WATER / WPD (FT HD) => hw_wpd_ft
+col: HEATING COIL - WATER / GPM => hw_gpm
+col: COOLING COIL - DX / TOTAL MBH => cooling_mbh
+col: COOLING COIL - DX / SENSIBLE MBH => -
+col: COOLING COIL - DX / EDB (°F) => -
+col: COOLING COIL - DX / EWB (°F) => -
+col: COOLING COIL - DX / LDB (°F) => -
+col: COOLING COIL - DX / LWB (°F) => -
+col: COOLING COIL - DX / FACE VELOCITY (FPM) => -
+col: COOLING COIL - DX / APD (IN WG) => -
+col: COOLING COIL - DX / SUCTION TEMP (°F) => -
+col: SUPPLY FAN / TYPE => -
+col: SUPPLY FAN / FAN BHP => -
+col: SUPPLY FAN / FAN RPM => -
+col: SUPPLY FAN / TSP (IN WG) => -
+col: SUPPLY FAN / ESP (IN WG) => -
+col: SUPPLY FAN / MOTOR HP => supply_fan_hp
+col: SUPPLY FAN / VOLTS /PH => -
+col: [SUPPLY FAN / VOLTS /PH: volts part; the unit's single point power connection, note 3] => volts
+col: [SUPPLY FAN / VOLTS /PH: phase part; the unit's single point power connection, note 3] => phase
+col: RETURN FAN / TYPE => -
+col: RETURN FAN / FAN BHP => -
+col: RETURN FAN / FAN RPM => -
+col: RETURN FAN / TSP (IN WG) => -
+col: RETURN FAN / ESP (IN WG) => -
+col: RETURN FAN / MOTOR HP => return_fan_hp
+col: RETURN FAN / VOLTS /PH => -
+col: ELECTRICAL / MCA (A) => -
+col: ELECTRICAL / MOP (A) => -
+col: BASIS OF DESIGN YORK BY JOHNSON CONTROLS => -
+col: REMARKS => -
+derive: heating_type = hw ; header=HEATING COIL - WATER ; note=the row prints the HEATING COIL - WATER block (water side EWT 160 / LWT 140)
+derive: cooling_type = dx ; header=COOLING COIL - DX ; note=the row prints the COOLING COIL - DX block
+derive: vfd = no ; header=NOTE 2 ; note=note 2, cited by the row's REMARKS: 'PROVIDE WITH UNIT MOUNTED STARTER AND DISCONNECT.', a motor starter, not a variable-frequency drive; both fans print TYPE CONST. VOL. (the author's reading)
+grid:
+AHU-1 | MECH ROOM 005 | ?SEE PLANS | 3,450 | 680 | 151.6 | 50.2 | 89.9 | 0.11 | 160 | 140 | 3.2 | 15.5 | 111.4 | 76.5 | 80 | 67 | 59.2 | 56.5 | 507 | 0.47 | 45 | CONST. VOL. | 1.98 | 2333 | 2.03 | 1.0 | 3.0 | 208/3 | 208 | 3 | CONST. VOL. | 1.28 | 925 | 0.95 | 0.5 | 2.0 | 208/3 | 19 | 30 | SOLUTION-XTI-42X42 | 1,2,3
+END
+
+# The table the draw names "(untitled)" on page 27 (sheet E-602 SCHEDULES), claimed as FCU with 2
+# rows, is panelboard PP-4's circuit schedule (DESCRIPTION, WIRE, CON, CB. AMPS, CIR # on each
+# side). Its descriptions are AHU-1 (CIRCUIT 1), ACCU-1, B-1, B-2, P-1, P-2, F-1, F-2, ELEC WATER
+# HEATER, HOT WATER CIRC PUMP and spares; the same sheet's EQUIPMENT CONNECTION SCHEDULE names F-1
+# and F-2 FAN (TOILET ROOM 011 and COM ROOM 013, 1/4 HP, 120 V). No row is a fan coil unit.
+TABLE
+sheet: 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#27
+title: (untitled)
+family: FCU
+render: page 27 overview at 40 dpi; crop 80,915,720,330 at 2.2x in 2 tiles (DESCRIPTION column repeated), every circuit's description read, and the text layer row by row; the EQUIPMENT CONNECTION SCHEDULE's equipment rows (crop 960,1060,440,145 at 3x) read for F-1 and F-2
+rows: none — panelboard PP-4's circuit schedule on E-602; its F-1 and F-2 circuits feed fans (the sheet's EQUIPMENT CONNECTION SCHEDULE), and no row is a fan coil unit
+grid:
+END
+
+# AIR COOLED CONDENSING UNIT SCHEDULE: one row, ACCU-1. UNIT SERVED prints the air handler it
+# serves (AHU-1): this family has no service attribute, so it keys area_served (as 16_NV's
+# condensing units' SERVICE). TOTAL HEAT REJECTION (MBH) is the condenser's rejected heat, not a
+# cooling capacity, and no capacity prints. FANS / HP (EA) prints each condenser fan's motor
+# (QTY 2), keyed motor_hp as printed (the author's reading). ELECTRICAL / VOLTS and PHASE key volts
+# and phase. Notes 1-4 (single point power, a factory disconnect switch, pressure switches, hot gas
+# bypass) state no key attribute.
+TABLE
+sheet: 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18
+title: AIR COOLED CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 18 overview at 40 dpi; crop 1177,250,1381,170 at 3x in 2 tiles (UNIT NO. column repeated), notes included; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT NO. => tag
+col: LOCATION => -
+col: UNIT SERVED => area_served
+col: REFRIGERANT TYPE => -
+col: TOTAL HEAT REJECTION (MBH) => -
+col: SATURATED SUCTION TEMP => -
+col: SUCTION PRESSURE (PSIG) => -
+col: AMBIENT TEMP (°F) => -
+col: COMPRESSORS / QTY => -
+col: COMPRESSORS / TYPE => -
+col: COMPRESSORS / # OF STAGES => -
+col: FANS / QTY => -
+col: FANS / HP (EA) => -
+col: [FANS / HP (EA): each condenser fan's motor] => motor_hp
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOP => -
+col: BASIS OF DESIGN YORK BY JOHNSON CONTROLS => -
+col: REMARKS => -
+grid:
+ACCU-1 | OUTDOORS | AHU-1 | R-410A | 110.6 | 45 | 128.8 | 95 | 2 | SCROLL | 1 | 2 | 1/3 | 1/3 | 208 | 3 | 42.1 | 50.0 | J10YDC00A2GLB4 | 1,2,3,4
+END
+
+# BOILER SCHEDULE (EXISTING): one printed row whose UNIT NO. reads "B-1 & 2": two boilers, keyed as
+# B-1 and B-2 with the row's values (as 028_TX keys "UH-1 & UH-2"; E-602's panel and equipment
+# connection schedule list B-1 and B-2). IBR GROSS OUTPUT (MBH) keys output_mbh and GPM gpm. The
+# input group's header prints PROPANE: fuel propane, and its INPUT MBH keys input_mbh. ELECTRICAL /
+# VOLTS and PHASE key volts and phase. REMARKS prints "-". No water temperature prints.
+TABLE
+sheet: 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18
+title: BOILER SCHEDULE (EXISTING)
+family: BOILER
+render: page 18 overview at 40 dpi; crop 1240,462,1318,143 at 3x in 2 tiles (UNIT NO. column repeated); second read of the row, every cell, against the text layer
+rows: the 1 printed row (its UNIT NO. "B-1 & 2" names two boilers, keyed as B-1 and B-2)
+col: UNIT NO. => tag
+col: LOCATION => -
+col: TYPE => -
+col: SYSTEM FLUID => -
+col: IBR GROSS OUTPUT (MBH) => output_mbh
+col: GPM => gpm
+col: % EFF. => -
+col: PROPANE / INPUT MBH => input_mbh
+col: PROPANE / MIN. INPUT PRESS. (IN. WC.) => -
+col: PROPANE / MAX. INPUT PRESS. (IN. WC.) => -
+col: RELIEF VALVE SETTING (PSIG) => -
+col: WORKING PRESSURE RATING (PSIG) => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / MCA => -
+col: BASIS OF DESIGN UTICA BOILERS => -
+col: REMARKS => -
+derive: fuel = propane ; header=PROPANE ; note=the row prints the PROPANE input block (INPUT MBH, minimum and maximum input pressures)
+grid:
+B-1 | MECH RM 005 | CONDENSING | HOT WATER | 90 | 10.75 | 90 | 100 | 10 | 14 | 30 | 50 | 120 | 1 | 12 | UB90-100 | -
+B-2 | MECH RM 005 | CONDENSING | HOT WATER | 90 | 10.75 | 90 | 100 | 10 | 14 | 30 | 50 | 120 | 1 | 12 | UB90-100 | -
+END
+
+# PUMP SCHEDULE: two rows, P-1 and P-2. SYSTEM SERVED keys service (HEATING). GPM keys gpm, TDH (FT
+# WG) head_ft and RPM rpm. ELECTRICAL / VOLTS, PHASE and HP key volts, phase and motor_hp. TYPE
+# (INLINE) is a pump type, not an arrangement (as 047_NC's), so pump_arrangement stays not printed.
+# No fluid prints. REMARKS prints "-".
+TABLE
+sheet: 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18
+title: PUMP SCHEDULE
+family: PUMP
+render: page 18 overview at 40 dpi; crop 1632,637,926,157 at 3x in 2 tiles (UNIT NO. column repeated); second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: UNIT NO. => tag
+col: LOCATION => -
+col: TYPE => -
+col: SYSTEM SERVED => service
+col: GPM => gpm
+col: TDH (FT WG) => head_ft
+col: RPM => rpm
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / HP => motor_hp
+col: BASIS OF DESIGN BELL & GOSSETT => -
+col: REMARKS => -
+grid:
+P-1 | MECH. ROOM 005 | INLINE | HEATING | 21.5 | 25.0 | 1750 | 115 | 1 | 1/2 | E-60 1.25X5.25 | -
+P-2 | MECH. ROOM 005 | INLINE | HEATING | 21.5 | 25.0 | 1750 | 115 | 1 | 1/2 | E-60 1.25X5.25 | -
+END
+
+# FIN TUBE RADIATION SCHEDULE: one row, FT-A. CAPACITY (BTUH/FT) is a rating per foot of element,
+# not the unit's capacity (federal-mech keys its CAPACITY PER FT. column "-"), and ELEMENT LENGTH
+# prints SEE PLANS, so the unit's capacity is not printed. EWT and LWT key hw_ewt_f and hw_lwt_f.
+# PIPE DIA. (3/4) is the element's pipe, the size its supply and return connect at: conn_in. Notes
+# 1-2 (field verify the enclosure length; control wiring by mechanical) state no key attribute.
+TABLE
+sheet: 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18
+title: FIN TUBE RADIATION SCHEDULE
+family: FIN_TUBE_RADIATION
+render: page 18 overview at 40 dpi; crop 150,250,815,152 at 3x in 2 tiles (UNIT NO. column repeated), notes included; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT NO. => tag
+col: CAPACITY (BTUH/FT) => -
+col: EWT => hw_ewt_f
+col: LWT => hw_lwt_f
+col: PIPE DIA. => conn_in
+col: FIN SIZE => -
+col: FIN/FT => -
+col: ROWS => -
+col: ELEMENT LENGTH => -
+col: ENCLOSURE HEIGHT/DEPTH => -
+col: MOUNTING HEIGHT (AFF) => -
+col: BASIS OF DESIGN RITTLING => -
+col: REMARKS => -
+grid:
+FT-A | 1100 | 160 | 140 | 3/4 | 4-1/4 X 4-1/4 | 32 | 2 | SEE PLANS | 24" X 5-3/8" | 4" | 3/4C-4 1/4 X 4 1/4 - 32 | 1,2
+END

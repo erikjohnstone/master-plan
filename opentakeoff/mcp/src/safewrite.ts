@@ -15,13 +15,14 @@
 // still do it in one call; one that fat-fingered a path gets told.
 import { open, stat } from "node:fs/promises";
 import { UserError } from "./format.ts";
+import { COLUMNS as ASSEMBLIES_CSV_COLUMNS } from "../../web/src/lib/assemblies/exportSet.ts";
 
 /** Stamped as the PDF Producer on every marked set (web/src/lib/markedset.js),
  * which is what makes a prior marked set recognizable as ours here. Also plain
  * provenance: a distributed deliverable should say what produced it. */
 export const PDF_PRODUCER = "OpenTakeoff";
 
-export type ExportKind = "json" | "pdf" | "dxf" | "xlsx" | "zip";
+export type ExportKind = "json" | "pdf" | "dxf" | "xlsx" | "zip" | "csv";
 
 /** First `n` bytes, without reading a large export into memory to look at its head. */
 async function head(p: string, n: number): Promise<Buffer> {
@@ -46,6 +47,11 @@ async function isOwnExport(outPath: string, kind: ExportKind): Promise<boolean> 
       // Both payloads stamp their schema as the first key, so the head is enough:
       // {"schema":"opentakeoff.takeoff_canvas.v1",…} / {"schema":"opentakeoff.report.v1",…}
       return /"schema"\s*:\s*"opentakeoff\./.test((await head(outPath, 4096)).toString("utf8"));
+    }
+    if (kind === "csv") {
+      // An assemblies CSV starts with exactly one of its files' header rows.
+      const first = (await head(outPath, 4096)).toString("utf8").split(/\r?\n/)[0];
+      return Object.values(ASSEMBLIES_CSV_COLUMNS).some((cols) => first === cols.join(","));
     }
     if (kind === "dxf") {
       // dxf.ts writes its authorship stamp as the very first comment group:

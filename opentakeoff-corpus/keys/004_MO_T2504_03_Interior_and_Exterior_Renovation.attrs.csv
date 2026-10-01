@@ -1,0 +1,477 @@
+# 004_MO_T2504_03_Interior_and_Exterior_Renovation.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/004_MO_T2504_03_Interior_and_Exterior_Renovation.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-601 (page 39) and P-601 (page 31) of the Missouri National Guard Jefferson Barracks readiness center interior and exterior renovation (Casco Diversified), every claimed keyed-family table of this dev document.
+#   004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 | DOAS SCHEDULE | DOAS | all 1 printed row | render: page 39 crop 244,75,2136,258 at 3x in 5 tiles (one row), notes in the same tiles; second read at 4x (crops 595,140,85,45 and 1882,140,85,45) of total CFM and output BTUS
+#   004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 | ROOFTOP UNIT SCHEDULE | RTU | all 7 printed rows | render: page 39 crop 244,340,2136,340 at 3x in 5 tiles (seven rows at fixed heights), notes in the same tiles; second read at 4x (crops 650,445,65,140 and 1178,445,55,140 and 1662,445,85,140) of every row's CFM, total cooling and heating capacity
+#   004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 | NATURAL GAS UNIT HEATER SCHEDULE | UNIT_HEATER | all 1 printed row | render: page 39 crop 495,698,890,130 at 3x in 2 tiles, notes in the same tiles; second read at 4x (crop 890,745,100,28) of BTUH OUTPUT
+#   004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 | EXHAUST FAN SCHEDULE | FAN | all 3 printed rows | render: page 39 crop 1360,698,1025,250 at 3x in 3 tiles (MARK column repeated) and notes crop 1360,850,560,110 at 3x; second read at 4x (crops 1575,765,80,90 and 1862,765,80,90) of every row's CFM and RPM
+#   004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31 | SUMP PUMP SCHEDULE | PUMP | all 1 printed row | render: page 31 crop 1095,270,1305,150 at 3x in 4 tiles, notes in the same tiles; second read at 4x (crop 1560,335,90,30) of GPM
+#   004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31 | HOT WATER RETURN PUMP SCHEDULE | PUMP | all 1 printed row | render: page 31 crop 1285,438,1115,145 at 3x in 3 tiles and mark/notes crop 1180,470,560,95 at 3x; second read at 4x (crop 1770,505,95,26) of FLOW
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, blower, static pressures, RPM of air units, filters' depth, air-side temperatures, face data, A2L data, MCA/MOCP/FLA, weights, vent and impeller sizes, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 004_MO_T2504_03_Interior_and_Exterior_Renovation: 6 table(s), 14 instance(s), 455 keyed attribute value(s) (126 printed, 329 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,supply_cfm,3000,cfm,TOTAL CFM,"printed '3,000'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,oa_cfm_min,,cfm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,supply_fan_hp,3,hp,ELECTRICAL / HP: the unit's blower motor,printed '3.0'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,vfd,yes,,NOTE 2,"note 2, the row's NOTES cell says ALL: 'DIRECT DRIVE, VARIABLE SPEED PLENUM BLOWER WITH FACTORY VFD'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,economizer,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,cooling_type,dx,,DX COOLING,the row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,cooling_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,heating_type,gas,,NATURAL GAS HEATING,the row prints the NATURAL GAS HEATING block (GAS: NATURAL)
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,heating_mbh,324000,BTU/H,NATURAL GAS HEATING / OUTPUT BTUS,"printed '324,000'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,gas_input_mbh,400000,BTU/H,NATURAL GAS HEATING / INPUT BTUS,"printed '400,000'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,filter_merv,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,volts,208,V,ELECTRICAL / VOLT,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS SCHEDULE,DOAS - 1,DOAS,phase,3,,ELECTRICAL / PHASE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,supply_cfm,1700,cfm,SUPPLY FAN / CFM,"printed '1,700'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,oa_cfm_min,240,cfm,SUPPLY FAN / OA CFM: design minimum outdoor air,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,supply_fan_hp,3,hp,SUPPLY FAN / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,vfd,yes,,"NOTES 1, 2","notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,economizer,airside,,"NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER",printed 'COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,cooling_type,dx,,COOLING / DX COOLING,every row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,cooling_mbh,55.5,MBH,COOLING / CAPACITY (MBH) / TOTAL,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,heating_type,,,"NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,heating_mbh,100,MBH,HEATING / CAPACITY (MBH),printed '100.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,gas_input_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,filter_merv,8,,SUPPLY FAN / FILTER: MERV,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,volts,208,V,ELECTRICAL / CIRCUIT #1 / VOLTS,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -1,RTU,phase,3,,ELECTRICAL / CIRCUIT #1 / PHASE,printed '3 PH'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,supply_cfm,2250,cfm,SUPPLY FAN / CFM,"printed '2,250'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,oa_cfm_min,360,cfm,SUPPLY FAN / OA CFM: design minimum outdoor air,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,supply_fan_hp,3,hp,SUPPLY FAN / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,vfd,yes,,"NOTES 1, 2","notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,economizer,airside,,"NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER",printed 'COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,cooling_type,dx,,COOLING / DX COOLING,every row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,cooling_mbh,67.4,MBH,COOLING / CAPACITY (MBH) / TOTAL,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,heating_type,,,"NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,heating_mbh,120,MBH,HEATING / CAPACITY (MBH),printed '120.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,gas_input_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,filter_merv,8,,SUPPLY FAN / FILTER: MERV,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,volts,208,V,ELECTRICAL / CIRCUIT #1 / VOLTS,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU - 2,RTU,phase,3,,ELECTRICAL / CIRCUIT #1 / PHASE,printed '3 PH'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,supply_cfm,1600,cfm,SUPPLY FAN / CFM,"printed '1,600'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,oa_cfm_min,240,cfm,SUPPLY FAN / OA CFM: design minimum outdoor air,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,supply_fan_hp,3,hp,SUPPLY FAN / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,vfd,yes,,"NOTES 1, 2","notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,economizer,airside,,"NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER",printed 'COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,cooling_type,dx,,COOLING / DX COOLING,every row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,cooling_mbh,55,MBH,COOLING / CAPACITY (MBH) / TOTAL,printed '55.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,heating_type,,,"NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,heating_mbh,100,MBH,HEATING / CAPACITY (MBH),printed '100.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,gas_input_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,filter_merv,8,,SUPPLY FAN / FILTER: MERV,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,volts,208,V,ELECTRICAL / CIRCUIT #1 / VOLTS,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -3,RTU,phase,3,,ELECTRICAL / CIRCUIT #1 / PHASE,printed '3 PH'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,supply_cfm,3000,cfm,SUPPLY FAN / CFM,"printed '3,000'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,oa_cfm_min,240,cfm,SUPPLY FAN / OA CFM: design minimum outdoor air,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,supply_fan_hp,3,hp,SUPPLY FAN / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,vfd,yes,,"NOTES 1, 2","notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,economizer,airside,,"NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER",printed 'COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,cooling_type,dx,,COOLING / DX COOLING,every row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,cooling_mbh,93,MBH,COOLING / CAPACITY (MBH) / TOTAL,printed '93.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,heating_type,,,"NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,heating_mbh,150,MBH,HEATING / CAPACITY (MBH),printed '150.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,gas_input_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,filter_merv,8,,SUPPLY FAN / FILTER: MERV,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,volts,208,V,ELECTRICAL / CIRCUIT #1 / VOLTS,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -4,RTU,phase,3,,ELECTRICAL / CIRCUIT #1 / PHASE,printed '3 PH'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,supply_cfm,1510,cfm,SUPPLY FAN / CFM,"printed '1,510'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,oa_cfm_min,1510,cfm,SUPPLY FAN / OA CFM: design minimum outdoor air,"printed '1,510'; author's reading of the printed row"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,supply_fan_hp,1,hp,SUPPLY FAN / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,vfd,yes,,"NOTES 1, 2","notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,economizer,,,"NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,cooling_type,dx,,COOLING / DX COOLING,every row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,cooling_mbh,128.2,MBH,COOLING / CAPACITY (MBH) / TOTAL,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,heating_type,gas,,"NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN",printed 'INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,heating_mbh,200,MBH,HEATING / CAPACITY (MBH),printed '200.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,gas_input_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,filter_merv,8,,SUPPLY FAN / FILTER: MERV,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,volts,208,V,ELECTRICAL / CIRCUIT #1 / VOLTS,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -5,RTU,phase,3,,ELECTRICAL / CIRCUIT #1 / PHASE,printed '3 PH'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,supply_cfm,2100,cfm,SUPPLY FAN / CFM,"printed '2,100'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,oa_cfm_min,100,cfm,SUPPLY FAN / OA CFM: design minimum outdoor air,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,supply_fan_hp,3,hp,SUPPLY FAN / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,vfd,yes,,"NOTES 1, 2","notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,economizer,airside,,"NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER",printed 'COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,cooling_type,dx,,COOLING / DX COOLING,every row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,cooling_mbh,67,MBH,COOLING / CAPACITY (MBH) / TOTAL,printed '67.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,heating_type,,,"NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,heating_mbh,120,MBH,HEATING / CAPACITY (MBH),printed '120.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,gas_input_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,filter_merv,8,,SUPPLY FAN / FILTER: MERV,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,volts,208,V,ELECTRICAL / CIRCUIT #1 / VOLTS,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -6,RTU,phase,3,,ELECTRICAL / CIRCUIT #1 / PHASE,printed '3 PH'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,supply_cfm,1150,cfm,SUPPLY FAN / CFM,"printed '1,150'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,oa_cfm_min,100,cfm,SUPPLY FAN / OA CFM: design minimum outdoor air,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,supply_fan_hp,3,hp,SUPPLY FAN / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,supply_fan_qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,return_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,exhaust_fan_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,vfd,yes,,"NOTES 1, 2","notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,economizer,airside,,"NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER",printed 'COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,outdoor_air_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,cooling_type,dx,,COOLING / DX COOLING,every row prints the DX COOLING block
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,cooling_mbh,34,MBH,COOLING / CAPACITY (MBH) / TOTAL,printed '34.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,cooling_tons,,tons,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,dx_stages,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,chw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,heating_type,,,"NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,heating_mbh,100,MBH,HEATING / CAPACITY (MBH),printed '100.0'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_wpd_ft,,ft,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_rows,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,hw_glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,gas_input_mbh,,MBH,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,humidifier,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,energy_recovery,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,filter_merv,8,,SUPPLY FAN / FILTER: MERV,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,bas_interface,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,volts,208,V,ELECTRICAL / CIRCUIT #1 / VOLTS,printed '208 V'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,ROOFTOP UNIT SCHEDULE,RTU -7,RTU,phase,3,,ELECTRICAL / CIRCUIT #1 / PHASE,printed '3 PH'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,heating_medium,gas,,TABLE TITLE,title printed 'NATURAL GAS UNIT HEATER SCHEDULE'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,cfm,990,cfm,CFM,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,heating_mbh,49800,BTU/H,BTUH OUTPUT,"printed '49,800'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,steam_psig,,psig,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,eh_kw,,kW,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,motor_hp,,hp,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,conn_in,0.5,in,GAS CONNECTION,"printed '1/2""'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,volts,,V,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,NATURAL GAS UNIT HEATER SCHEDULE,GUH - 1,UNIT_HEATER,phase,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,service,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,cfm,1660,cfm,CFM,"printed '1,660'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,esp_in,1,in. w.c.,TSP (IN. H2O): the fan's scheduled static pressure,printed '1.0'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,motor_hp,1,hp,ELECTRICAL / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,motor_watts,,W,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,rpm,1338,rpm,ELECTRICAL / RPM,"printed '1,338'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,vfd,,,"NOTE 4, where the row's REMARKS cite it: NEMA PREMIUM EFFICIENT MOTOR AND VARIABLE FREQUENCY DRIVE",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,ecm,yes,,"NOTE 12, where the row's REMARKS cite it: ECM VARIABLE SPEED MOTOR",printed 'ECM VARIABLE SPEED MOTOR'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,control,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,volts,208,V,ELECTRICAL / VOLTAGE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 1,FAN,phase,3,,ELECTRICAL / PHASE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,service,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,cfm,4650,cfm,CFM,"printed '4,650'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,esp_in,2.25,in. w.c.,TSP (IN. H2O): the fan's scheduled static pressure,author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,motor_hp,5,hp,ELECTRICAL / HP,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,motor_watts,,W,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,rpm,1079,rpm,ELECTRICAL / RPM,"printed '1,079'"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,vfd,yes,,"NOTE 4, where the row's REMARKS cite it: NEMA PREMIUM EFFICIENT MOTOR AND VARIABLE FREQUENCY DRIVE",printed 'NEMA PREMIUM EFFICIENT MOTOR AND VARIABLE FREQUENCY DRIVE'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,ecm,,,"NOTE 12, where the row's REMARKS cite it: ECM VARIABLE SPEED MOTOR",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,control,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,volts,208,V,ELECTRICAL / VOLTAGE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,GEF - 1,FAN,phase,3,,ELECTRICAL / PHASE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,service,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,cfm,50,cfm,CFM,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,esp_in,0.5,in. w.c.,TSP (IN. H2O): the fan's scheduled static pressure,printed '.5'; author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,motor_hp,,hp,ELECTRICAL / HP,printed '-'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,motor_watts,,W,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,rpm,900,rpm,ELECTRICAL / RPM,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,vfd,,,"NOTE 4, where the row's REMARKS cite it: NEMA PREMIUM EFFICIENT MOTOR AND VARIABLE FREQUENCY DRIVE",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,ecm,,,"NOTE 12, where the row's REMARKS cite it: ECM VARIABLE SPEED MOTOR",blank cell
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,control,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,volts,115,V,ELECTRICAL / VOLTAGE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EXHAUST FAN SCHEDULE,EF - 2,FAN,phase,1,,ELECTRICAL / PHASE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,service,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,gpm,10,gpm,GPM,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,head_ft,20,ft,PUMP HEAD (FT),
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,motor_hp,0.3333333333333333,hp,ELECTRICAL / HP,printed '1/3'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,rpm,3450,rpm,RPM,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,vfd,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,pump_arrangement,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,glycol_pct,,%,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,conn_in,1.5,in,DISCHARGE SIZE: the pump's one printed connection,"printed '1-1/2""'; author's reading of the printed row"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,volts,115,V,ELECTRICAL / VOLTAGE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,SP - 1,PUMP,phase,1,,ELECTRICAL / PHASE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,building,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,floor,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,area_served,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,qty,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,service,HW RECIRC,,SERVICE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,gpm,7,gpm,FLOW,printed '7 GPM'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,head_ft,30,ft,PUMP HEAD,printed '30 FT'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,motor_hp,0.1,hp,ELECTRICAL / HP,printed '1/10'
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,rpm,,rpm,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,vfd,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,pump_arrangement,,,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,glycol_pct,0,%,"FLUID: WATER, so no glycol",author's reading of the printed row
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,conn_in,,in,,not printed
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,volts,115,V,ELECTRICAL / VOLTAGE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,HWRP - 1,PUMP,phase,1,,ELECTRICAL / PHASE,

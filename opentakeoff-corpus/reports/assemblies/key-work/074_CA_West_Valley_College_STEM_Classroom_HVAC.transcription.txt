@@ -1,0 +1,42 @@
+# 074_CA_West_Valley_College_STEM_Classroom_HVAC — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M002 (PDF page 25) at 3x, read by eye on 2026-09-23.
+# The pipeline's output for this sheet was not consulted. This dev document's key
+# covers every claimed keyed-family table (01-split.md, key-authoring scope).
+SET 074_CA_West_Valley_College_STEM_Classroom_HVAC
+SEED 20260923
+SCOPE Sheet M002 (page 25) of the West Valley College science and math HVAC renovations (P2S), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, type, ESP, MCA/MOP, weight, detail references and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# ENERGY RECOVERY VENTILATOR: one row. LOCATION prints a room ("A 157 CHEM.PREP
+# AREA"), which is not a level, so floor stays unkeyed. The SERVICE column lists the
+# rooms the unit serves; the ERV vocabulary has no service attribute, so it keys
+# area_served as printed (the author's reading of the header). FAN / AIRFLOW CFM is
+# the unit's one printed airflow and keys supply_cfm (the author's reading; no
+# exhaust airflow prints). Remark 1, cited by the row: "INTEGRATE CONTROLS INTO BAS.
+# PROVIDE CONTROLLER AT NEAREST CONTROL PANEL, IF REQUIRED." (the ERV vocabulary has
+# no BAS attribute). TYPE prints "CUSTOM", not a recovery type.
+TABLE
+sheet: 074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25
+title: ENERGY RECOVERY VENTILATOR
+family: ERV
+render: page 25 crop 1615,365,1105,140 at 3x in 3 tiles (MARK column repeated) and remark crop 1615,512,500,35 at 3x; second read at 4x (crop 2155,400,210,105) of QTY, airflow and V/PH
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURE & MODEL => -
+col: TYPE => -
+col: LOCATION => -
+col: [SERVICE: the rooms the unit serves] => area_served
+col: QTY => qty
+col: [FAN / AIRFLOW CFM: the unit's airflow, read as supply] => supply_cfm
+col: FAN / MAX ESP (IN. W.C.) => -
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOP => -
+col: OPERATING WEIGHT LBS. => -
+col: REMARK => -
+col: DETAIL => -
+grid:
+ERV-A-15 | GREENHECK MINIVENT-750-VG | CUSTOM | A 157 CHEM.PREP AREA | A 157 CHEM.PREP AREA, A 158 SHARED OFFICE, A 159 INSTRUMENT STORAGE, A 160 CHEMISTRY LAB | 1 | 450 | 1.5 | 115 / 1 | 115 | 1 | 20.5 | 25 | 240 | 1 | 2/M601, 4/S700
+END

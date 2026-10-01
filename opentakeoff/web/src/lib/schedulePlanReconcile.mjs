@@ -5,8 +5,11 @@
  *
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
-import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
-import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
+import {
+  normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark, expandEquipMarkRange, expandMarkList, expandEquipMarks, markLetters,
+  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, setDrawnMarks, tableRangeEvidence, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey,
+  HVAC_FAMILY_SPECS,
+} from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
 
@@ -241,6 +244,140 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
   };
 }
 
+/** A heading naming the typical levels (floors) one row stands for (AS-139):
+ * 26_CA's TYPICAL LEVELS (its tri-path air handlers) and TYPICAL FLOORS (its
+ * exhaust terminals). */
+const TYPICAL_LEVELS_HEADER_RE = /^TYP(?:ICAL|\.)?\s*(?:LEVELS?|FLOORS?)$/i;
+
+/**
+ * The levels a list prints, in its order, or null when any part of it is no
+ * level (AS-139): "6-33" (28 levels), "34-35", "3-4, 6-34", "34,35", "P3".
+ * A range runs up (6-33, never 33-6) and over at most 200 levels.
+ * @param {string} text
+ * @returns {string[]|null}
+ */
+export function parseLevelList(text) {
+  const raw = String(text ?? "").toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-").trim();
+  if (!raw) return null;
+  const out = [];
+  for (const part of raw.split(/\s*(?:,|&|\bAND\b)\s*/)) {
+    const range = part.match(/^(\d{1,3})\s*(?:-|THRU|TO)\s*(\d{1,3})$/);
+    if (range) {
+      const a = Number(range[1]), b = Number(range[2]);
+      if (!(a < b) || b - a > 199) return null;
+      for (let n = a; n <= b; n++) out.push(String(n));
+    } else if (/^\d{1,3}$/.test(part)) out.push(String(Number(part)));
+    else if (/^[A-Z]{1,2}\d{0,2}$/.test(part)) out.push(part);
+    else return null;
+  }
+  return out.length && new Set(out).size === out.length ? out : null;
+}
+
+const cellTextOf = (cell) => String((cell && typeof cell === "object" ? cell.text : cell) ?? "").trim();
+
+/**
+ * The typical levels a row stands for one unit on each of (AS-139), or null.
+ * The row prints two or more levels under a typical-levels heading (TYPICAL
+ * LEVELS "6-33"), and its mark is a template of them: it prints the same
+ * levels in parentheses (26_CA's "AHU-(6-33)-1"; "AHU-(34,35)-1" beside
+ * "34-35"), or an X where each level's number goes ("CAV-X-1" beside "3-4,
+ * 6-34"). A mark naming one unit ("CAV-2-1", TYPICAL FLOORS "2") or levels
+ * its column does not list stands for one unit, as before.
+ * @param {{ key?: string, cells?: Record<string, { text?: string } | string> }} row
+ * @param {string|null} [mark] the row's mark, where the caller read it
+ * @returns {{ levels: string[], count: number, header: string, text: string, template: "levels"|"placeholder" }|null}
+ */
+export function typicalLevelsOfRow(row, mark = null) {
+  let header = null, text = "";
+  for (const [h, cell] of Object.entries(row?.cells || {})) {
+    if (!TYPICAL_LEVELS_HEADER_RE.test(String(h || "").trim())) continue;
+    header = String(h).trim();
+    text = cellTextOf(cell);
+    break;
+  }
+  if (!header || !text) return null;
+  const levels = parseLevelList(text);
+  if (!levels || levels.length < 2) return null;
+  const name = String(mark ?? rowIdentityTag(row) ?? "").toUpperCase();
+  const groups = [...name.matchAll(/\(([^()]*)\)/g)].map((g) => g[1]);
+  let template = null;
+  if (groups.length === 1) {
+    const printed = parseLevelList(groups[0]);
+    if (printed && printed.length === levels.length && printed.every((l) => levels.includes(l))) template = "levels";
+  } else if (!groups.length && /(?:^|[^A-Z0-9])X(?=[^A-Z0-9]|$)/.test(name)) template = "placeholder";
+  if (!template) return null;
+  return { levels, count: levels.length, header, text, template };
+}
+
+/**
+ * The marks a typical-level row's unit is drawn by on the plans (AS-139):
+ * each level's own mark, the level where the row prints its levels or its X
+ * ("AHU-(6-33)-1" → AHU-6-1 … AHU-33-1; "CAV-X-1" → CAV-3-1 …), and for a
+ * row printing its levels, the mark with an X for its level (AHU-X-2), as
+ * 26_CA's level 36 plan tags AHU-(36-49)-2.
+ * @param {string} mark the row's mark
+ * @param {{ levels: string[], template: "levels"|"placeholder" }} typical typicalLevelsOfRow's reading
+ * @returns {string[]}
+ */
+export function typicalLevelMarks(mark, typical) {
+  const m = String(mark || "").trim();
+  const at = (level) => (typical.template === "levels"
+    ? m.replace(/\s*\([^()]*\)\s*/, level)
+    : m.replace(/(^|[^A-Z0-9])X(?=[^A-Z0-9]|$)/i, `$1${level}`));
+  const forms = typical.levels.map(at);
+  if (typical.template === "levels") forms.push(at("X"));
+  return [...new Set(forms)];
+}
+
+/**
+ * The levels a plan sheet's title says it draws (AS-139), or null: a typical
+ * plan the levels it stands for ("MECHANICAL TYPICAL PLAN - LEVELS 6-16",
+ * "... - LEVELS 4, 6-14"), a level's plan its level ("MECHANICAL LEVEL 17
+ * PLAN", "LEVEL 61 ALTERNATE PLAN"; a parking level P1), a numbered floor
+ * ("3RD FLOOR PLAN"). A roof or a title naming no level, none.
+ * @param {string} title
+ * @returns {string[]|null}
+ */
+export function planTitleLevels(title) {
+  const t = String(title || "").toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
+  const parking = t.match(/\bPARKING\s+LEVEL\s+(\d{1,2})\b/);
+  if (parking) return [`P${Number(parking[1])}`];
+  const many = t.match(/\b(?:LEVELS|FLOORS)\s+((?:\d{1,3}\s*(?:-|THRU|TO|,|&|AND)\s*)+\d{1,3})\b/);
+  if (many) return parseLevelList(many[1]);
+  const one = t.match(/\bLEVEL\s+(\d{1,3})\b/) || t.match(/\b(\d{1,3})(?:ST|ND|RD|TH)\s+FLOOR\b/) || t.match(/\bFLOOR\s+(\d{1,3})\b/);
+  return one ? [String(Number(one[1]))] : null;
+}
+
+/**
+ * A typical-level row's installed units (AS-139): each verified placement
+ * stands for the row's levels its plan draws (planTitleLevels), each level
+ * once — 26_CA's CAV-X-2 on MECHANICAL TYPICAL PLAN - LEVELS 6-16 stands for
+ * eleven of its levels, on MECHANICAL LEVEL 17 PLAN for one, and a second
+ * plan of a level already counted (LEVEL 61 ALTERNATE PLAN beside LEVEL 61
+ * PLAN) for none — and for one unit where its plan names no level of the
+ * row. Null when no placement is given.
+ * @param {string[]} levels the row's typical levels (typicalLevelsOfRow)
+ * @param {Array<{ sheet: string }>} cites its verified placements
+ * @param {(sheet: string) => string} titleOf a plan sheet's title
+ * @returns {{ qty: number, levels_drawn: string[], levels_missing: string[], placements: number }|null}
+ */
+export function typicalLevelInstalled(levels, cites, titleOf) {
+  if (!cites?.length) return null;
+  const drawn = new Set();
+  let qty = 0;
+  for (const cite of cites) {
+    const own = (planTitleLevels(titleOf(cite.sheet)) || []).filter((l) => levels.includes(l));
+    if (!own.length) { qty += 1; continue; }
+    for (const l of own) if (!drawn.has(l)) { drawn.add(l); qty += 1; }
+  }
+  return {
+    qty,
+    levels_drawn: levels.filter((l) => drawn.has(l)),
+    levels_missing: levels.filter((l) => !drawn.has(l)),
+    placements: cites.length,
+  };
+}
+
 /**
  * Read a printed QTY/QUANTITY/NO./COUNT/# cell off a schedule row — the
  * scheduled quantity a printed table actually states, as opposed to "one
@@ -255,10 +392,18 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
  * `cells` (`{ header: { text, bbox } }`) and a mcp/src/takeoff.ts TakeoffItem's
  * `schedule_row` (`{ header: string }`, flat text, no bbox) — a cell entry is
  * read as `cell.text` when it's an object, else as the entry itself.
+ *
+ * A row whose mark cell names several units of one kind ("EF-1 THRU EF-4",
+ * "B-1/B-2"; `opts.marks`, AS-75) prints one QTY for all of them: a QTY equal
+ * to that count is one unit per mark; any other QTY says nothing of each
+ * mark's count and is refused, never divided or multiplied.
+ * A row with no QTY column that stands for one unit on each typical level it
+ * lists (typicalLevelsOfRow; AS-139) schedules that many: 26_CA's
+ * "AHU-(6-33)-1" under TYPICAL LEVELS "6-33" is 28 air handlers.
  * @param {{ cells?: Record<string, { text?: string } | string> }} row
- * @param {{ typeDefinition?: boolean }} [opts]
+ * @param {{ typeDefinition?: boolean, marks?: number, mark?: string|null }} [opts]
  * @returns {{ qty: number|null, refused: boolean, reason: string|null,
- *   basis: "printed_schedule_quantity"|"one_per_unique_schedule_row"|"unparseable_printed_quantity"|"type_definition_not_quantity",
+ *   basis: "printed_schedule_quantity"|"printed_schedule_quantity_per_mark"|"one_per_unique_schedule_row"|"one_per_typical_level"|"unparseable_printed_quantity"|"printed_quantity_for_several_marks"|"type_definition_not_quantity",
  *   source_header: string|null, source_text: string|null }}
  */
 export function scheduledQtyStatusFromRow(row, opts = {}) {
@@ -275,6 +420,22 @@ export function scheduledQtyStatusFromRow(row, opts = {}) {
     // A QTY column with an empty or polluted cell is materially different
     // from a schedule with no QTY column. Refuse instead of silently treating
     // the physical row as one unit.
+    const marks = Number.isInteger(opts.marks) && opts.marks > 1 ? opts.marks : 1;
+    if (/^[1-9]\d*$/.test(raw) && marks > 1) return Number(raw) === marks ? {
+      qty: 1,
+      refused: false,
+      reason: null,
+      basis: "printed_schedule_quantity_per_mark",
+      source_header: String(header).trim(),
+      source_text: raw,
+    } : {
+      qty: 1,
+      refused: true,
+      reason: `QTY ${raw} is printed for the ${marks} marks the row names, not for each`,
+      basis: "printed_quantity_for_several_marks",
+      source_header: String(header).trim(),
+      source_text: raw,
+    };
     if (/^[1-9]\d*$/.test(raw)) return {
       qty: Number(raw),
       refused: false,
@@ -304,6 +465,17 @@ export function scheduledQtyStatusFromRow(row, opts = {}) {
       basis: "type_definition_not_quantity",
       source_header: null,
       source_text: null,
+    };
+  }
+  const typical = !(Number.isInteger(opts.marks) && opts.marks > 1) && typicalLevelsOfRow(row, opts.mark ?? null);
+  if (typical) {
+    return {
+      qty: typical.count,
+      refused: false,
+      reason: null,
+      basis: "one_per_typical_level",
+      source_header: typical.header,
+      source_text: typical.text,
     };
   }
   return {
@@ -337,6 +509,31 @@ export function scheduledQtyFromRow(row) {
  * @returns {string|null}
  */
 export function rowIdentityTag(row, identityHeaderRe = null) {
+  const printed = rowIdentityPrint(row, identityHeaderRe);
+  return printed == null ? null : plainIdentity(printed);
+}
+
+/** A unit's mark as one token, in plain type: AHU-1, EF-2A, SF-P1-4, B1. */
+const PLAIN_MARK_TOKEN_RE = /^[A-Z]{1,8}(?:-[A-Z0-9]{1,8})*-?\d{1,4}[A-Z]?$/i;
+
+/**
+ * A row's identity in plain type (AS-85), as the mark rules read a mark: its
+ * dash glyphs and spaces plain (plainMarkText: AHU‐1 is AHU-1), and a mark
+ * printed as one token without the footnote mark printed with it (plainMark:
+ * AHU-1*, EF-2†, P-1¹ are AHU-1, EF-2, P-1). The sweep's row lookup
+ * (session.ts) and project_takeoff read it, so a row printed AHU‐1, which the
+ * extraction keys AHU1, answers for a plan's AHU-1. Words, a list and a
+ * note's number keep what they print (DUCT SMOKE DETECTOR*, "1.").
+ * @param {string} text
+ */
+function plainIdentity(text) {
+  const plain = plainMarkText(text);
+  const mark = plainMark(plain);
+  return mark !== plain && PLAIN_MARK_TOKEN_RE.test(mark) ? mark : plain;
+}
+
+/** The row's identity as printed (rowIdentityTag reads it in plain type). */
+function rowIdentityPrint(row, identityHeaderRe = null) {
   // Return RAW mark text — normalizeEquipMark runs AFTER comma/slash split
   // (parity with compile uniqueFamily). Normalizing "AHU-1, HP-1" first would
   // strip to "AHU-1" and drop the outdoor HP half.
@@ -374,7 +571,116 @@ export function rowIdentityTag(row, identityHeaderRe = null) {
   }
   // Parity with compile uniqueFamily — extractor often puts the mark on row.key.
   const key = String(row?.key || "").trim();
+  // A key that prints no mark (12_MT keys its split systems by their MANUF.
+  // cell, DAIKIN) gives way to the first mark column under a group heading
+  // whose cell prints one (OUTDOOR UNIT DATA PLAN CODE: HP-1; AS-95).
+  if (!/\d/.test(key)) {
+    for (const [header, cell] of Object.entries(row?.cells || {})) {
+      if (!isGroupedMarkHeader(header)) continue;
+      const t = String(cell?.text || "").trim();
+      if (/^[A-Z]{1,8}[\s\-]?\d/i.test(t)) return t;
+    }
+  }
   return key || null;
+}
+
+/**
+ * The units a whole-set reconcile row's name schedules (AS-98): each mark of
+ * a range or a list of one family's marks, as the takeoff and the family
+ * reconcile read the row (AS-75, AS-86) — 26_CA's "SF-P1-4 THRU 11" is eight
+ * supply fans, "EF-P1-1 & 2" two exhaust fans, "WCU-2-1 ,2" two chillers —
+ * and the number of the row's units of that mark's kind (sameKindMarks: the
+ * row's printed QTY counts them all, never each). Any other name is one unit.
+ * @param {string} identity the row's name (rowIdentityTag)
+ * @returns {Array<{ tag: string, marks: number }>}
+ */
+export function rowUnitMarks(identity) {
+  const name = String(identity || "").trim();
+  const marks = (expandEquipMarkRange(name) ?? expandMarkList(name) ?? []).map((m) => String(m).trim()).filter(Boolean);
+  if (marks.length < 2) return name ? [{ tag: name, marks: 1 }] : [];
+  return [...new Set(marks)].map((tag) => ({ tag, marks: sameKindMarks(marks, tag) }));
+}
+
+/** The key two spellings of one unit's mark share (AS-99): the takeoff's own
+ * (unitMarkKey), in plain type. */
+export function reconcileUnitKey(tag) {
+  return unitMarkKey(plainMark(String(tag || "")).toUpperCase().replace(/\s+/g, ""));
+}
+
+/**
+ * Whether a row's name prints a mark (AS-99): the mark's letter and number
+ * groups in order, whatever separates them, starting after no letter or
+ * digit and never run on into a longer number ("FC-1" is in "(E) FC-1",
+ * "CV-FCU-1-HHW" holds FCU-1, "FC-10" never holds FC-1). `whole` also
+ * forbids a letter after it ("FOP-8AB" holds FOP-8A only as a part).
+ */
+function nameHoldsMark(name, mark, whole) {
+  const groups = String(plainMark(String(mark || "")) || "").toUpperCase().match(/[A-Z]+|\d+/g);
+  if (!groups?.length) return false;
+  const re = new RegExp(`(?:^|[^A-Z0-9])${groups.join("[^A-Z0-9]*")}${whole ? "(?![A-Z0-9])" : "(?![0-9])"}`);
+  return re.test(String(plainMark(String(name || "")) || "").toUpperCase());
+}
+
+/**
+ * The units a whole-set reconcile row stands for (AS-99): the units its name
+ * schedules (rowUnitMarks), and each unit the takeoff counts from the row
+ * (takeoffUnitsByRow) that its name does not print and no row of the set
+ * names (a split system's indoor unit beside its outdoor unit: 12_MT's HP-1
+ * row counts FC-1A). A name the takeoff reads as several units, printing
+ * one or more of them and never itself one ("F-1 , CU-1", "B-1/B-2" for
+ * "B-1 & 2"), stands for those units, each once, never for one unit drawn
+ * nowhere. A name that prints the one unit counted from it in another
+ * spelling ("(E) CT-1", "CV-FCU-1-HHW" beside FCU-1) stands as it is.
+ * @param {string} identity the row's name (rowIdentityTag)
+ * @param {Array<{ tag: string, marks: number }>} counted the takeoff's units from the row
+ * @param {Set<string>} [namedElsewhere] reconcileUnitKey of every unit a row of the set names
+ * @returns {Array<{ tag: string, marks: number }>}
+ */
+export function rowReconcileUnits(identity, counted = [], namedElsewhere = new Set()) {
+  const named = rowUnitMarks(identity);
+  if (!counted.length) return named;
+  const countedKeys = new Set(counted.map((u) => reconcileUnitKey(u.tag)));
+  const compound = named.length === 1 && counted.length > 1 && !countedKeys.has(reconcileUnitKey(named[0].tag))
+    && counted.some((u) => nameHoldsMark(named[0].tag, u.tag, false));
+  const units = compound ? [] : [...named];
+  for (const u of counted) {
+    const key = reconcileUnitKey(u.tag);
+    if (units.some((v) => reconcileUnitKey(v.tag) === key)) continue;
+    if (!compound && (named.some((v) => nameHoldsMark(v.tag, u.tag, true)) || namedElsewhere.has(key))) continue;
+    units.push({ tag: u.tag, marks: u.marks });
+  }
+  return units;
+}
+
+/**
+ * A mark as a plan may print it with the zero its number is padded with
+ * dropped or added (AS-97): 14_OR schedules HP-02 and tags it HP-2 on its
+ * floor plans. The mark with each number unpadded (HP-02 → HP-2, AHU-010 →
+ * AHU-10), and with its last number padded to two digits (HP-2 → HP-02). A
+ * lone zero stays (FCU-00). The sweep tries them after every printed form
+ * of the row, and only where no row of the set is named so.
+ * @param {string} mark
+ * @returns {string[]}
+ */
+export function markZeroRespellings(mark) {
+  const t = String(mark || "").trim();
+  const out = [];
+  for (const variant of [t.replace(/(^|[^0-9])0+(?=[1-9])/g, "$1"), t.replace(/(^|[^0-9])([1-9])(?!\d)(?!.*\d)/, "$10$2")]) {
+    if (variant && variant !== t && !out.includes(variant)) out.push(variant);
+  }
+  return out;
+}
+
+/**
+ * A mark's letter and number groups, joined by hyphens (AS-111): the form two
+ * spellings of one mark share where only their separators differ (EF-1, EF 1
+ * and EF1 read EF-1), never where a number group does, as the run-together
+ * markKey would (AHU-5-02 reads AHU-5-02, AHU 50-2 AHU-50-2).
+ * @param {string} mark
+ * @returns {string}
+ */
+function markGroups(mark) {
+  return (plainMark(String(mark || "")).toUpperCase().match(/[A-Z]+|\d+/g) || []).join("-");
 }
 
 /**
@@ -444,7 +750,17 @@ function letterEditDistanceOne(a, b) {
  * callouts excluded) whose key never appears as any schedule row's own
  * identity anywhere in the set (row.key and rowIdentityTag(row), each
  * split on compound "/" marks, the same way countMarks and the family
- * reconcile builder already split them).
+ * reconcile builder already split them), nor as a unit a row lists (AS-111):
+ * each mark of a pair, list or range a row's name prints, as the takeoff
+ * splits a row's marks for a family (splitRowMarks: itd-d1-lab's furnace and
+ * condensing unit "F-1 , CU-1", 26_CA's "FCU-17-1&2"), and a row's mark with
+ * the zero its number is padded with dropped or added (markZeroRespellings,
+ * the sweep's own respelling: 009_FL's electrical demolition plan tags its
+ * exhaust fans EF-01 to EF-03, scheduled EF-1 to EF-3). A tag no row names
+ * as drawn is the respelling of a unit a family's schedule lists, as the sweep
+ * reads it, where it prints its letters, a separator and its number, and only
+ * its zero differs: 011_IL's diffuser type D3 is not its door D03, nor 26_CA's
+ * AHU-5-2 its AHU 50-2 (the letter and number groups, markGroups).
  * `alias_candidates` — for every distinct drawn key, the nearest distinct
  * schedule-row key at letterEditDistanceOne, if any — a likely typo/OCR
  * spelling drift between the schedule and the drawing, or between two
@@ -454,18 +770,38 @@ function letterEditDistanceOne(a, b) {
  */
 export function unscheduledTagsAndAliasCandidates(graph) {
   const rowKeys = new Set();
-  for (const table of graph?.tables || []) {
+  const unitKeys = new Set();
+  for (const printed of graph?.tables || []) {
+    // A transposed schedule's units are its column headers (AS-65).
+    const table = scheduleTableView(printed);
     for (const row of table.rows || []) {
       for (const raw of [row?.key, rowIdentityTag(row)]) {
         if (!raw) continue;
         for (const part of markKey(raw).split("/").filter(Boolean)) rowKeys.add(part);
+        for (const mark of splitRowMarks(String(raw), true, false, tableRangeEvidence(table, setDrawnMarks(graph)))) {
+          const key = markKey(mark);
+          if (key) unitKeys.add(key);
+        }
       }
+      // Each level's mark of a typical-level row (AS-139): 26_CA's AHU 6-1
+      // and AHU 17-1 are AHU-(6-33)-1's units on levels 6 and 17.
+      const identity = rowIdentityTag(row);
+      const typical = identity ? typicalLevelsOfRow(row, identity) : null;
+      if (typical) for (const mark of typicalLevelMarks(identity, typical)) unitKeys.add(markKey(mark));
     }
   }
+  // A respelling reads as a unit a family's schedule lists (scheduleMarksRead),
+  // never a sheet index's or a note's entry (004_MO's P-001, a plumbing sheet).
+  const unitGroups = new Set(scheduleMarksRead(graph).map(markGroups).filter(Boolean));
+  const respelled = (t) => {
+    const text = plainMark(String(t.text || "")).trim();
+    return /^[A-Z]+[\s-]+\d/i.test(text) && markZeroRespellings(text).some((variant) => unitGroups.has(markGroups(variant)));
+  };
+  const scheduled = (t) => rowKeys.has(t.key) || unitKeys.has(t.key) || respelled(t);
   const drawnTags = (graph?.tags || []).filter((t) => !t.sheet_callout);
   // Wire shape (bbox tuple → object, optional fields omitted rather than
   // null) matches Session.listTags exactly, so both surfaces agree.
-  const unscheduled_tags = drawnTags.filter((t) => !rowKeys.has(t.key)).map((t) => ({
+  const unscheduled_tags = drawnTags.filter((t) => !scheduled(t)).map((t) => ({
     sheet: t.sheet, role: t.role, text: t.text, key: t.key, family: t.family,
     bbox: { x0: t.bbox[0], y0: t.bbox[1], x1: t.bbox[2], y1: t.bbox[3] },
     ...(t.rot ? { rot: t.rot } : {}),
@@ -489,6 +825,181 @@ export function unscheduledTagsAndAliasCandidates(graph) {
     if (nearest) alias_candidates.push({ drawn, nearest_row_key: nearest, distance: 1 });
   }
   return { unscheduled_tags, alias_candidates };
+}
+
+/** HVAC families whose schedule marks are types repeated for every device,
+ * never one unit's mark. */
+const TYPE_MARK_FAMILIES = new Set(["GRD", "LOUVER", "LOUVERED_PENTHOUSE", "FIN_TUBE_RADIATION", "FILTER", "STRAINER"]);
+
+/**
+ * Whether a unit family's row names one unit once (AS-96): one mark, no
+ * placeholder for a level or room (26_CA's CAV-X-2), and no word that it is
+ * a typical unit repeated floor by floor or room by room (its TYPICAL FLOORS
+ * column: "3-4, 6-34"). A split system's indoor and outdoor pair (040_IL's
+ * SS-1/SSCU-1) names two.
+ * @param {{ cells?: Record<string, { text?: string } | string> }} row
+ * @param {string} mark the row's name
+ */
+export function rowNamesOneUnitOnce(row, mark) {
+  const name = String(mark || "").toUpperCase();
+  if (!name || /[\/&,]|\bTHRU\b|\bTO\b/.test(name) || /(?:^|[-\s])X(?:[-\s]|$)/.test(name)) return false;
+  const TYPICAL = /\bTYP(?:ICAL|\.)?\b/i;
+  return !Object.entries(row?.cells || {}).some(([header, cell]) => TYPICAL.test(header) || TYPICAL.test(String(cell && typeof cell === "object" ? cell.text : cell || "")));
+}
+
+/**
+ * Whether a unit family's row names each of several units once (AS-106): its
+ * name is a range or list of one family's marks with the swept mark among
+ * them (26_CA's "SF-P1-4 THRU 11" and "EF-P1-1 & 2"; expandEquipMarks), it
+ * schedules one unit per mark (a QTY printed for the marks together, or none;
+ * scheduledQtyStatusFromRow), and no word says they are typical units nor
+ * does a placeholder stand for a level. Two families' marks name no one unit
+ * per mark: 040_IL's SS-1/SSCU-1, a split system's indoor and outdoor pair,
+ * stands for two systems (AS-103).
+ * @param {{ cells?: Record<string, { text?: string } | string> }} row
+ * @param {string} name the row's name
+ * @param {string} mark the mark swept
+ */
+export function rowNamesEachUnitOnce(row, name, mark) {
+  const marks = expandEquipMarks(String(name || "").toUpperCase());
+  const keys = marks.map((m) => markKey(m));
+  if (marks.length < 2 || new Set(keys).size !== marks.length || !keys.includes(markKey(mark))) return false;
+  if (new Set(marks.map((m) => markLetters(normalizeEquipMark(m)))).size !== 1) return false;
+  if (marks.some((m) => /(?:^|[-\s])X(?:[-\s]|$)/.test(m))) return false;
+  const status = scheduledQtyStatusFromRow(row, { marks: marks.length });
+  if (status.refused || status.qty !== 1) return false;
+  const TYPICAL = /\bTYP(?:ICAL|\.)?\b/i;
+  return !Object.entries(row?.cells || {}).some(([header, cell]) => TYPICAL.test(header) || TYPICAL.test(String(cell && typeof cell === "object" ? cell.text : cell || "")));
+}
+
+const unitFamilyTableCache = new WeakMap();
+/**
+ * A table a unit family reads by its own title (familyTableGate's titled
+ * pass): its rows name units one by one, as an individually marked
+ * schedule's title says (isIndividuallyMarkedEquipmentSchedule) — 040_IL's
+ * TERMINAL AIR BOX SCHEDULE, 26_CA's FANS and FAN POWERED TERMINAL UNIT
+ * SCHEDULE, federal-mech's VOLUME CONTROL BOX SCHEDULE. Never a type-mark
+ * family's table (grilles, louvers, fin tube, filters, strainers) nor a
+ * repeatable air device schedule (AS-96).
+ * @param {object} printed a sheet graph table
+ * @returns {boolean}
+ */
+export function isUnitFamilyTable(printed) {
+  if (!printed || typeof printed !== "object") return false;
+  const cached = unitFamilyTableCache.get(printed);
+  if (cached !== undefined) return cached;
+  const table = scheduleTableView(printed);
+  const hit = !!table && !isRepeatableAirDeviceSchedule(table.title?.text || "")
+    && Object.entries(HVAC_FAMILY_SPECS).some(([name, spec]) => !TYPE_MARK_FAMILIES.has(name) && familyTableGate(table, spec, name)?.pass === 1);
+  unitFamilyTableCache.set(printed, hit);
+  return hit;
+}
+
+/**
+ * A mark's form for the review list: its letter and number groups, with the
+ * separators drafters vary (a hyphen, a space, none) read alike and a dot or
+ * slash kept, so "EF-25", "EF 25" and "EF25" share a form while a grid bubble
+ * "B.1" or a zone label "AHU-1-Z-2" do not share one with a unit mark.
+ * `hyphen` says whether a separator stands between the leading letters and
+ * the first number ("D-1" has one; a detail callout "D57" does not).
+ * @param {string} text
+ */
+function unitMarkForm(text) {
+  const upper = String(text || "").toUpperCase().trim();
+  const groups = upper.match(/[A-Z]+|\d+|[./]/g) || [];
+  if (!groups.length || !/^[A-Z]+$/.test(groups[0]) || !groups.some((g) => /^\d+$/.test(g))) return null;
+  return {
+    letters: groups[0],
+    form: groups.map((g) => (/^[A-Z]+$/.test(g) ? "A" : /^\d+$/.test(g) ? "9" : g)).join(""),
+    hyphen: /^[A-Z]+[\s\-‐-―−]+\d/.test(upper),
+  };
+}
+
+/**
+ * The review list's likely units (AS-93): drawn tags on plan and demolition
+ * plan sheets, outside every table and sheet callout, that no schedule row
+ * lists (unscheduledTagsAndAliasCandidates) yet read as a unit of a scheduled
+ * family: the same letters and the same form as a unit mark an HVAC unit
+ * schedule prints (a table an HVAC family reads, familyTableGate; a door or
+ * luminaire schedule's marks and a grille, louver, fin-tube or filter type
+ * schedule's marks are no units). A one-letter family must also match the
+ * schedule's separator (a plan's "P9" callout is not a pump "P-1", as "P-9"
+ * would be). A drawn EF-25 beside
+ * a fan schedule of EF-1 to EF-12 is listed; a room number, a grid bubble, a
+ * sheet or detail reference, a zone label or a circuit is not. A review list
+ * like unscheduled_tags: it never changes any row's quantity or status.
+ * @param {{tables?: object[], tags?: object[]}} graph
+ * @param {object[]} [unscheduledTags] unscheduledTagsAndAliasCandidates(graph).unscheduled_tags
+ */
+export function unscheduledUnitCandidates(graph, unscheduledTags = unscheduledTagsAndAliasCandidates(graph).unscheduled_tags) {
+  /** family (letters|form) -> separator flags seen in the schedules */
+  const families = new Map();
+  for (const printed of graph?.tables || []) {
+    const table = scheduleTableView(printed);
+    if (!table || isRepeatableAirDeviceSchedule(table.title?.text || "")) continue;
+    if (!Object.entries(HVAC_FAMILY_SPECS).some(([name, spec]) => !TYPE_MARK_FAMILIES.has(name) && familyTableGate(table, spec, name))) continue;
+    for (const row of table.rows || []) {
+      for (const raw of [rowIdentityTag(row), row?.key]) {
+        for (const mark of String(raw || "").split(/[/,]/)) {
+          const f = unitMarkForm(mark);
+          if (!f) continue;
+          const id = `${f.letters}|${f.form}`;
+          if (!families.has(id)) families.set(id, new Set());
+          families.get(id).add(f.hyphen);
+        }
+      }
+    }
+  }
+  return (unscheduledTags || []).filter((t) => {
+    if ((t.role !== "plan" && t.role !== "demolition") || t.in_table || t.sheet_callout) return false;
+    const f = unitMarkForm(t.text);
+    const seps = f && families.get(`${f.letters}|${f.form}`);
+    return !!seps && (f.letters.length >= 2 || seps.has(f.hyphen));
+  });
+}
+
+/** @typedef {{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number }, reason: "repeat_view" | "unattached_tag" | "demolition_view" | "reference_view", counted_on?: string }} PlanOtherCite */
+
+/**
+ * Every other drawn occurrence of a row's own mark on a plan-like sheet that
+ * the row does not count (AS-92), so each drawn tag links to its row: the
+ * same unit drawn again on another view (an enlarged plan, another trade's
+ * plan, a piping plan beside the duct plan — the sweep's redundant views,
+ * each naming the sheet that counts it), the mark's own text with no attached
+ * symbol beside counted ones, and the mark on a demolition plan. Links only,
+ * never installed quantity. On a demolition plan the mark is read as the
+ * sweep reads it (Session.demolitionTagOccurrences, AS-101) where the caller
+ * has a session, and as the graph's tag index reads it besides. And the mark
+ * on the set's other drawing sheets, a zone plan titled by its legend, a
+ * detail, a diagram, an elevation (AS-109): a reference view.
+ * @param {object|null} sweep sweep_schedule_row's result (null when it threw)
+ * @param {{tags?: object[]}} graph
+ * @param {string} tag the row's mark as swept
+ * @param {Array<{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number } }>} [demolitionOccurrences]
+ * @param {Array<{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number } }>} [referenceOccurrences]
+ * @returns {PlanOtherCite[]}
+ */
+export function planOtherCites(sweep, graph, tag, demolitionOccurrences = [], referenceOccurrences = []) {
+  /** @type {PlanOtherCite[]} */
+  const out = [];
+  for (const ps of sweep?.sheets || []) {
+    for (const m of ps.redundant_view || []) {
+      out.push({ sheet: ps.sheet, at: m.at, ...(m.tag_at ? { bbox: m.tag_at } : {}), reason: "repeat_view", ...(m.kept_sheet ? { counted_on: m.kept_sheet } : {}) });
+    }
+    for (const t of ps.text_only || []) out.push({ sheet: ps.sheet, at: t.at, reason: "unattached_tag" });
+  }
+  const round1 = (v) => Math.round(v * 10) / 10;
+  const demolition = (demolitionOccurrences || []).map((o) => ({ sheet: o.sheet, at: o.at, ...(o.bbox ? { bbox: o.bbox } : {}), reason: "demolition_view" }));
+  // one cite a drawn tag, however many readings find it
+  const seen = (sheet, at) => demolition.some((d) => d.sheet === sheet && Math.hypot(d.at[0] - at[0], d.at[1] - at[1]) <= 5);
+  for (const dt of tag ? tagIndexFor(graph?.tags || [], tag) : []) {
+    if (dt.role !== "demolition" || dt.in_table || dt.sheet_callout) continue;
+    const at = [round1((dt.bbox[0] + dt.bbox[2]) / 2), round1((dt.bbox[1] + dt.bbox[3]) / 2)];
+    if (seen(dt.sheet, at)) continue;
+    demolition.push({ sheet: dt.sheet, at, bbox: { x0: dt.bbox[0], y0: dt.bbox[1], x1: dt.bbox[2], y1: dt.bbox[3] }, reason: "demolition_view" });
+  }
+  const reference = (referenceOccurrences || []).map((o) => ({ sheet: o.sheet, at: o.at, ...(o.bbox ? { bbox: o.bbox } : {}), reason: "reference_view" }));
+  return [...out, ...demolition, ...reference];
 }
 
 /**
@@ -524,7 +1035,53 @@ export async function sweepBasServedMark(session, tag, opts = {}) {
 }
 
 
-export function reconcileRowsFromTakeoffItems(items, failures = []) {
+/**
+ * The installed side of a typical-level row (AS-139): its verified placements
+ * read over the levels their plans draw (typicalLevelInstalled), with the
+ * reason a short count gives. Null for any other row.
+ * @param {{ basis: string }} qtyStatus the row's scheduledQtyStatusFromRow
+ * @param {object} row the row's cells, as scheduledQtyStatusFromRow reads them
+ * @param {string} mark the row's mark
+ * @param {Array<{ sheet: string }>} cites its verified placements
+ * @param {((sheet: string) => string)|null} titleOf a plan sheet's title
+ */
+function typicalLevelReading(qtyStatus, row, mark, cites, titleOf) {
+  if (qtyStatus?.basis !== "one_per_typical_level" || !titleOf) return null;
+  const typical = typicalLevelsOfRow(row, mark);
+  const installed = typical && typicalLevelInstalled(typical.levels, cites, titleOf);
+  if (!installed) return null;
+  const missing = installed.levels_missing;
+  return {
+    installed,
+    disclosure: {
+      levels: typical.count,
+      header: typical.header,
+      text: typical.text,
+      placements: installed.placements,
+      levels_drawn: installed.levels_drawn,
+      levels_missing: missing,
+    },
+    reason: missing.length
+      ? `One unit on each of the ${typical.count} levels ${typical.header} lists ("${typical.text}"): ${installed.placements} placement${installed.placements === 1 ? "" : "s"} on plans drawing ${installed.levels_drawn.length} of them; no plan in this set draws level${missing.length === 1 ? "" : "s"} ${compactLevels(missing)}.`
+      : null,
+  };
+}
+
+/** Levels as they print, runs joined: 7, 8, 9, 20 → "7-9, 20". */
+function compactLevels(levels) {
+  const out = [];
+  for (let i = 0; i < levels.length; i++) {
+    let j = i;
+    while (j + 1 < levels.length && /^\d+$/.test(levels[j]) && /^\d+$/.test(levels[j + 1]) && Number(levels[j + 1]) === Number(levels[j]) + 1) j++;
+    out.push(j > i + 1 ? `${levels[i]}-${levels[j]}` : j === i + 1 ? `${levels[i]}, ${levels[j]}` : levels[i]);
+    i = j;
+  }
+  return out.join(", ");
+}
+
+// opts.sheetTitleOf: a plan sheet's title, for a typical-level row's
+// placements (AS-139).
+export function reconcileRowsFromTakeoffItems(items, failures = [], { sheetTitleOf = /** @type {((sheet: string) => string) | null} */ (null) } = {}) {
   const failByTag = new Map();
   for (const f of failures || []) {
     if (f?.tag) failByTag.set(f.tag, f);
@@ -536,8 +1093,10 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     // path does; a synthesized/legend-only item with no backing row still
     // defaults to 1 (one row = one unit), unchanged.
     const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(item.schedule?.title || "");
+    // A unit of a row naming several (AS-98): the row's printed QTY counts
+    // them all, never each.
     const qtyStatus = item.schedule_row
-      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly })
+      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly, ...(item.row_marks > 1 ? { marks: item.row_marks } : {}), mark: item.tag })
       : scheduledQtyStatusFromRow({ cells: {} });
     const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
     // A refused/error sweep proves only that installed quantity could not be
@@ -559,7 +1118,14 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     const explicitInstallationVerified = item.status === "resolved" && installedEvidenceGrade === "explicit_installation_note";
     const tagTextOnly = item.status === "resolved" && (installedEvidenceGrade === "tag_text_only"
       || installedEvidenceGrade === "mixed_geometry_and_tag_text");
-    const installedQty = geometryVerified || explicitInstallationVerified ? (item.quantity ?? 0) : null;
+    // A typical-level row's placements stand for the levels their plans draw
+    // (AS-139): 26_CA's CAV-X-2 on its typical plan for levels 6-16 is eleven
+    // of its 31 exhaust terminals.
+    const typicalLevels = geometryVerified
+      ? typicalLevelReading(qtyStatus, { cells: item.schedule_row || {} }, item.tag, item.drawing_locations || [], sheetTitleOf)
+      : null;
+    const installedQty = typicalLevels ? typicalLevels.installed.qty
+      : geometryVerified || explicitInstallationVerified ? (item.quantity ?? 0) : null;
     const taggedPlanQty = tagTextOnly ? (item.tagged_plan_quantity ?? (basis === "exact_plan_tag" ? item.quantity : 0) ?? 0) : null;
     const fail = failByTag.get(item.tag);
     const status = classifyReconcileStatus({
@@ -597,6 +1163,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
       quantity_comparison: scheduleDefinitionOnly
         ? "type_definition_vs_plan_count"
         : "scheduled_vs_installed",
+      ...(typicalLevels ? { typical_levels: typicalLevels.disclosure } : {}),
       schedule_cite: item.schedule
         ? {
             sheet: item.schedule.sheet,
@@ -626,9 +1193,10 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
         ...(loc.reason ? { reason: loc.reason } : {}),
         ...(loc.hold ? { hold: loc.hold } : {}),
       })),
+      ...(item.plan_other_locations?.length ? { plan_other_cites: item.plan_other_locations } : {}),
       ...(item.reference_tags?.length ? { reference_tag_cites: item.reference_tags } : {}),
       ...(item.served_equipment_cites?.length ? { served_equipment_cites: item.served_equipment_cites } : {}),
-      reason: qtyStatus.reason || item.reason || fail?.detail
+      reason: qtyStatus.reason || item.reason || fail?.detail || typicalLevels?.reason
         || (tagTextOnly
           ? `Exact plan tag text was found ${taggedPlanQty} time${taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
           : null)
@@ -780,80 +1348,96 @@ export function summarizeReconcile(rows) {
  * @param {object} graph sheet graph
  * @param {{ label?: string, title?: string, titleRe?: RegExp, exclude?: RegExp,
  *   keyRe?: RegExp, blankKeyRe?: RegExp, altTitleRe?: RegExp, altKeyRe?: RegExp,
- *   identityHeaderRe?: RegExp, titledOnly?: boolean }} needle
+ *   identityHeaderRe?: RegExp, titledOnly?: boolean }} needle a family's
+ *   HVAC_FAMILY_SPECS entry (familyNeedleFromSpecs), read by the takeoff's
+ *   own gate (familyTableGate, AS-77)
  * @param {Map<string, { installedQty?: number|null, itemStatus?: string, reason?: string, failureType?: string, planCites?: object[] }>} [sweepByTag]
+ * @param {{ sources?: Map<string, Array<{ table: any, row: any, tag: string, families: string[] }>>|null }} [opts]
+ *   sources: filled with the table and row each unit is read from, by its
+ *   markKey (scheduleRowsReadingMark; AS-89)
  */
-export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
+export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map(), { sources = null } = {}) {
+  // A plan sheet's title, for a typical-level row's placements (AS-139).
+  const titles = new Map((graph?.sheets || []).map((s) => [s.key, String(s.evidence?.text || "")]));
+  const sheetTitleOf = (key) => titles.get(key) || "";
   const rows = [];
   const seen = new Set();
-  const keyRe = needle?.keyRe || null;
-  const blankKeyRe = needle?.blankKeyRe || null;
-  const altTitleRe = needle?.altTitleRe || null;
-  const altKeyRe = needle?.altKeyRe || null;
+  // The marks the scaffold holds a row for, in any table (AS-62).
+  const held = new Set();
+  // Parity with compile uniqueFamily: a reading of the mark as printed ranks
+  // above a widened one, so the scan first finds every unit a printed
+  // reading holds.
+  const printedCanons = new Set();
+  // Each table's reading by the family, by the takeoff's own gate (AS-77), so
+  // the scaffold holds a row for every unit the takeoff counts and for none it
+  // does not. A transposed schedule is read one row per unit (AS-65); a titled
+  // table is not gated on table.kind (Valdosta's GRILLE SCHEDULE extracts as
+  // reference-kind but is still schedule truth), one no title vouches for is
+  // (AS-66).
+  // The family's HVAC_FAMILY_SPECS key (familyNeedleFromSpecs labels it).
+  const family = String(needle?.label || "").trim().replace(/\s+/g, "_").toUpperCase();
+  const gated = [];
+  for (const printed of graph?.tables || []) {
+    const table = scheduleTableView(printed);
+    const gate = familyTableGate(table, needle, family);
+    if (gate) gated.push({ table, gate });
+  }
+  for (const mode of ["scan", "emit"]) {
   // Titled family schedules first (parity with compile uniqueFamily) so shared
   // marks cite the device definition, not a blank/catch-all accessory row.
   for (const pass of [1, 2]) {
-  for (const table of graph?.tables || []) {
-    const title = String(table.title?.text || "");
-    // Parity with compile uniqueFamily: do not gate on table.kind.
-    // Title/keyRe already exclude finish/lighting/note tables; Valdosta
-    // GRILLE SCHEDULE extracts as reference-kind but is still schedule truth.
-    // Match compile's uniqueFamily gate: titled soft-match OR blank title with
-    // a family keyRe (Transbay/Macon Bibb blank-title RAH/FCU/EF tables).
-    const titleOk = needle?.titleRe
-      ? scheduleTitleMatches(title, needle.titleRe, needle.exclude)
-      : (needle?.title
-        ? scheduleTitleMatches(title, needle.title, needle.exclude)
-        : false);
-    const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, needle.exclude);
-    const blankTitle = !title.trim();
-    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
-    const blankGate = blankKeyRe || keyRe;
-    const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
-    // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
-    // miscellaneous schedules only when the family has a keyRe/blankKeyRe.
-    // titledOnly families skip blank/catch-all (FIN_TUBE vs filter FTR).
-    if (titleOk || altOk) {
-      if (pass !== 1) continue;
-    } else {
-      if (pass !== 2) continue;
-      if (needle?.titledOnly) continue;
-      if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
-    }
-    const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
+  for (const { table, gate } of gated) {
+    if (gate.pass !== pass) continue;
+    const { title } = gate;
     for (const row of table.rows || []) {
-      const rawTag = rowIdentityTag(row, needle?.identityHeaderRe || null);
+      // In a valve table whose rows name both waters, the row's own, as the
+      // takeoff reads it (AS-78).
+      if (!familyRowRead(gate, row, table)) continue;
+      // The text the row names its unit by, the takeoff's own (AS-79).
+      const rawTag = rowIdentityText(row, gate.identity);
       if (!rawTag) continue;
-      const willFilter = Boolean(catchAllSchedule || filterRe);
-      const tagList = String(rawTag)
-        .split(willFilter ? /[/,]/ : "/")
-        .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
-        .filter(Boolean)
-        .flatMap((t) => expandAmpersandEquipMarks(t))
+      // The takeoff's split of a row's marks (AS-77).
+      const willFilter = Boolean(gate.catchAll || gate.filterRe);
+      const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
+      const working = rowMarkText(rawTag, rowKey, willFilter);
+      const tagList = splitRowMarks(working, willFilter, gate.wordsNamed, tableRangeEvidence(table, setDrawnMarks(graph)))
         .map((t) => normalizeEquipMark(t))
         .filter(Boolean);
-      for (const tag of (tagList.length ? tagList : [rawTag])) {
+      for (const tag of (tagList.length ? tagList : [working])) {
         if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
         const canonTag = String(tag).toUpperCase().replace(/\s+/g, "");
-        if (catchAllSchedule) {
-          const okBlank = blankKeyRe && (blankKeyRe.test(tag) || blankKeyRe.test(canonTag));
-          const okKey = keyRe && (keyRe.test(tag) || keyRe.test(canonTag));
-          const okAlt = altKeyRe && (altKeyRe.test(tag) || altKeyRe.test(canonTag));
-          if (!(okBlank || okKey || okAlt)) continue;
-        } else if (filterRe && !filterRe.test(tag) && !filterRe.test(canonTag)) {
-          continue;
-        }
+        // Parity with compile uniqueFamily: a header word or a legend's
+        // heading is no mark.
+        if (isScheduleHeaderJunkMark(canonTag)) continue;
+        // The takeoff's own mark rules (AS-77): 2 = read as printed; 1 = only
+        // in one of its forms (a building prefix WHSE-ET-1 or letter FC-A-2),
+        // through a title's vouching or in another family's schedule, a new
+        // admission, which adds no second row for a unit held; 0 = not the
+        // family's here, or read by its mark alone a word or another thing's.
+        const read = familyMarkRead(gate, needle, tag, canonTag);
+        if (!read) continue;
         // Parity with compile uniqueFamily — continuation / duplicate extracts
         // of the same MARK must not inflate reconcile rows (Douglas HP-20).
         const canon = markKey(tag);
         const tableFamily = title.toUpperCase().replace(/[^A-Z0-9]/g, "") || table.kind || "(untitled)";
         const rowId = `${table.sheet}::${canon}`;
         const scopeIdentity = `${canon}\0${tableFamily}\0${table.drawing_group || "(unscoped)"}`;
-        if (!canon || seen.has(scopeIdentity)) continue;
+        if (!canon) continue;
+        if (mode === "scan") {
+          if (read === 2) printedCanons.add(canon);
+          continue;
+        }
+        if (seen.has(scopeIdentity)) continue;
+        // A mark only one of its forms reads adds a row only for a unit the
+        // scaffold holds none for yet, as the compile counts it once: a second
+        // listing of 05_MO's 1-CP-1 in an untitled table, or of 061_IA's
+        // HWP-A-1 in a general EQUIPMENT SCHEDULE, is the same pump. Nor for a
+        // unit a printed reading holds anywhere, in whichever table comes first.
+        if (read === 1 && (held.has(canon) || printedCanons.has(canon))) continue;
         seen.add(scopeIdentity);
+        held.add(canon);
         const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);
-        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly });
+        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly, marks: sameKindMarks(tagList, tag), mark: tag });
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
         const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
         const reportedInstalledQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
@@ -884,7 +1468,13 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
             || (sweep.installedQtyBasis === "symbol_fingerprint" || sweep.installedQtyBasis === "tag_attached_vector" ? "symbol_geometry"
               : sweep.installedQtyBasis === "explicit_installation_note" ? "explicit_installation_note"
                 : sweep.installedQtyBasis === "exact_plan_tag" ? "tag_text_only" : "unverified");
-        const installedQty = installedEvidenceGrade === "symbol_geometry"
+        // A typical-level row's placements stand for the levels their plans
+        // draw (AS-139), as the whole-set reconcile reads them.
+        const typicalLevels = installedEvidenceGrade === "symbol_geometry"
+          ? typicalLevelReading(qtyStatus, row, tag, sweep.planCites || [], sheetTitleOf)
+          : null;
+        const installedQty = typicalLevels ? typicalLevels.installed.qty
+          : installedEvidenceGrade === "symbol_geometry"
           || installedEvidenceGrade === "explicit_installation_note"
           ? reportedInstalledQty
           : null;
@@ -919,6 +1509,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           quantity_comparison: scheduleDefinitionOnly
             ? "type_definition_vs_plan_count"
             : "scheduled_vs_installed",
+          ...(typicalLevels ? { typical_levels: typicalLevels.disclosure } : {}),
           schedule_cite: {
             sheet: table.sheet,
             title: table.title?.text || null,
@@ -928,9 +1519,10 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           plan_cites: sweep.planCites || [],
           plan_tag_cites: sweep.planTagCites || [],
           plan_candidate_cites: sweep.planCandidateCites || [],
+          ...(sweep.planOtherCites?.length ? { plan_other_cites: sweep.planOtherCites } : {}),
           ...(sweep.referenceTagCites?.length ? { reference_tag_cites: sweep.referenceTagCites } : {}),
           ...(servedEquipmentCites.length ? { served_equipment_cites: servedEquipmentCites } : {}),
-          reason: qtyStatus.reason || sweep.reason
+          reason: qtyStatus.reason || sweep.reason || typicalLevels?.reason
             || (installedEvidenceGrade === "tag_text_only"
               ? `Exact plan tag text was found ${sweep.taggedPlanQty ?? 0} time${sweep.taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
               : null)
@@ -941,11 +1533,124 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
               ? "This schedule row defines a repeatable air-device type; it does not state project quantity. Installed quantity is grounded from plan callouts."
               : null),
         });
+        // The table and row this unit's row is read from, the mark read and
+        // the family reading it, for the plan sweep (scheduleRowsReadingMark;
+        // AS-89).
+        if (sources) {
+          const hits = sources.get(canon) || [];
+          const hit = hits.find((h) => h.table === table && h.row === row);
+          if (!hit) hits.push({ table, row, tag, families: [family] });
+          else if (!hit.families.includes(family)) hit.families.push(family);
+          sources.set(canon, hits);
+        }
       }
     }
   }
   } // end titled-first / blank-fallback passes
+  } // end scan / emit
   return rows;
+}
+
+/** Each graph's reading: its schedule rows by the marks the reconcile reads
+ * in them, and the marks read in each table. */
+const SCHEDULE_READINGS = new WeakMap();
+
+/** The graph's reading by every family, read once per graph, and again if
+ * its tables are no longer the ones read (a graph still being built gains
+ * tables). */
+function scheduleReading(graph) {
+  const tables = graph && typeof graph === "object" && Array.isArray(graph.tables) ? graph.tables : null;
+  if (!tables) return null;
+  let read = SCHEDULE_READINGS.get(graph);
+  if (!read || read.tables.length !== tables.length || read.tables.some((table, i) => table !== tables[i])) {
+    const byMark = new Map();
+    for (const family of Object.keys(HVAC_FAMILY_SPECS)) {
+      const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+      if (needle) reconcileScheduleFamilyFromGraph(graph, needle, new Map(), { sources: byMark });
+    }
+    const byTable = new Map();
+    for (const [canon, hits] of byMark) {
+      for (const { table, tag, families } of hits) {
+        const marks = byTable.get(table) || new Map();
+        const mark = marks.get(canon) || { tag, families: new Set() };
+        for (const family of families) mark.families.add(family);
+        marks.set(canon, mark);
+        byTable.set(table, marks);
+      }
+    }
+    read = { tables: [...tables], byMark, byTable, vocabulary: null };
+    SCHEDULE_READINGS.set(graph, read);
+  }
+  return read;
+}
+
+/**
+ * The schedule rows the reconcile reads a unit's mark from (AS-89), each
+ * with its table, the mark as read and the families reading it: every
+ * family's rows, read by the takeoff's own gate, mark reading and split, as
+ * reconcileScheduleFamilyFromGraph holds them. The plan sweep (session.ts
+ * sweepScheduleRow) finds a row by the extraction's key or its printed
+ * identity; a unit the reconcile holds whose row answers by neither (a
+ * schedule printed on its side, a row naming a range or list of units, an
+ * outdoor unit's mark column, a mark the extraction ran a size into) is
+ * found here. A transposed schedule's row is its view's, one per unit.
+ * @param {object|null|undefined} graph the sheet graph
+ * @param {string} tag the unit's mark
+ * @returns {Array<{ table: any, row: any, tag: string, families: string[] }>}
+ */
+export function scheduleRowsReadingMark(graph, tag) {
+  return (scheduleReading(graph)?.byMark.get(markKey(tag)) || []).map((hit) => ({ ...hit, families: [...hit.families] }));
+}
+
+/**
+ * The marks the reconcile reads in a table (a transposed schedule's view, as
+ * scheduleRowsReadingMark returns it), by the given families or by any, or
+ * in every table of the graph: one spelling per unit (AS-89).
+ * @param {object|null|undefined} graph the sheet graph
+ * @param {object|null} [table]
+ * @param {string[]|null} [families]
+ * @returns {string[]}
+ */
+export function scheduleMarksRead(graph, table = null, families = null) {
+  const read = scheduleReading(graph);
+  if (!read) return [];
+  const out = new Map();
+  for (const [t, marks] of read.byTable) {
+    if (table && t !== table) continue;
+    for (const [canon, { tag, families: by }] of marks) {
+      if (families && ![...by].some((family) => families.includes(family))) continue;
+      if (!out.has(canon)) out.set(canon, tag);
+    }
+  }
+  return [...out.values()];
+}
+
+/**
+ * Every mark the set's schedules name (AS-89): each row's key or printed
+ * identity as the plan sweep reads it, split on "/", and every unit the
+ * reconcile's reading reads, spaces dropped and upper-cased. The vocabulary
+ * a drawn span is told apart from where the sweep looks for a unit its
+ * reading found: a bare prefix answers for a mark only where no other mark
+ * shares it (markid.ts spanAnswersFor), so a bare "D" is no DCU-1 where
+ * DAC-1 is scheduled, nor "DCU" where DCU-2 is, whichever table names them.
+ * @param {object|null|undefined} graph the sheet graph
+ * @returns {string[]}
+ */
+export function scheduleMarkVocabulary(graph) {
+  const read = scheduleReading(graph);
+  if (!read) return [];
+  if (!read.vocabulary) {
+    const canon = (text) => String(text || "").trim().toUpperCase().replace(/\s+/g, "");
+    const marks = new Set();
+    for (const table of graph.tables) {
+      for (const row of table?.rows || []) {
+        for (const part of canon(rowIdentityTag(row) || row.key).split("/")) if (part.trim()) marks.add(part.trim());
+      }
+    }
+    for (const mark of scheduleMarksRead(graph)) if (canon(mark)) marks.add(canon(mark));
+    read.vocabulary = [...marks];
+  }
+  return [...read.vocabulary];
 }
 
 /** Map user family word → schedule needle via HVAC_FAMILY_SPECS (set-agnostic). */
@@ -1049,6 +1754,7 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
           referenceTagCites: (r.reference_tags || []).map((rt) => ({
             sheet: rt.sheet, role: rt.role, bbox: rt.bbox, text: rt.text,
           })),
+          planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? [], session?.referenceTagOccurrences?.(graph, row.tag) ?? []),
         });
         processed++;
         opts.onProgress?.({
@@ -1120,12 +1826,14 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         planCites: geometryCites,
         planTagCites,
         planCandidateCites: candidateCites,
+        planOtherCites: planOtherCites(r, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? [], session?.referenceTagOccurrences?.(graph, row.tag) ?? []),
       });
     } catch (e) {
       sweepByTag.set(row.row_id || row.tag, {
         installedQty: null,
         itemStatus: "refused",
         reason: e?.message || String(e),
+        planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? [], session?.referenceTagOccurrences?.(graph, row.tag) ?? []),
       });
     }
     processed++;
@@ -1135,12 +1843,104 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
       status: sweepByTag.get(row.row_id || row.tag)?.itemStatus,
     });
   }
-  const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag);
+  // A row no sweep searched (outside the call's tags, or every row when the
+  // caller opts out of sweeping the family) has no plan evidence either way.
+  // It is not SCHEDULE_ONLY ("scheduled, not drawn"), which the summary, the
+  // agent and the estimator's discrepancy list read as a finding (AS-136).
+  // The reason names no scope, so a family reconciled in chunks reads as its
+  // one call does (reconcileFamilyInChunks).
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag).map((row) => (
+    sweepByTag.has(row.row_id) || sweepByTag.has(row.tag) ? row : {
+      ...row,
+      status: "AMBIGUOUS",
+      reason: `Not searched: this reconcile did not search the plans for ${row.tag}, so whether it is drawn is unknown.`
+        + (row.reason ? ` ${row.reason}` : ""),
+    }));
   return {
     rows,
     summary: summarizeReconcile(rows),
     family_filter: needle?.label || null,
   };
+}
+
+/**
+ * A family reconcile run as several calls of the shared reconcile (AS-117).
+ * The canvas's production run stops at its post-index limit; past it, the
+ * same family reconcile runs again in tag chunks. `run` is one call of the
+ * shared reconcile for the family (MCP's reconcile_schedule_plan on the
+ * Session, over the remote bridge or the production path) scoped to `tags`,
+ * so every row is the row that reconcile computes and the rows equal its one
+ * call's. `run({ familySweepAll: false })` reads the family's rows unswept;
+ * each chunk then sweeps its own tags. A chunk that fails is split in half and
+ * run again; a tag that fails alone keeps its row, marked as a plan search
+ * that did not finish (AMBIGUOUS, installed quantity unknown).
+ *
+ * @param {(o: { tags?: string[], familySweepAll?: boolean }) => Promise<any>} run
+ * @param {{ tags?: string[]|null, familySweepAll?: boolean, chunkSize?: number,
+ *   onChunk?: (p: { done: number, total: number, tags: string[], ok: boolean }) => void }} [opts]
+ */
+export async function reconcileFamilyInChunks(run, opts = {}) {
+  const attempt = async (o) => {
+    try {
+      const result = await run(o);
+      return result && !result.error && Array.isArray(result.rows)
+        ? result
+        : { error: result?.error || "The reconcile returned no rows." };
+    } catch (e) {
+      return { error: e?.message || String(e) };
+    }
+  };
+  const scaffold = await attempt({ familySweepAll: false });
+  if (scaffold.error) return scaffold;
+  const norm = (tag) => String(tag ?? "").trim().toUpperCase();
+  const requested = opts.tags?.length ? new Set(opts.tags.map(norm).filter(Boolean)) : null;
+  // reconcileSchedulePlan's rule: a family with no tag list sweeps every row
+  // unless the caller opts out.
+  const sweepAll = !requested && opts.familySweepAll !== false;
+  const wanted = [];
+  const seen = new Set();
+  for (const row of scaffold.rows) {
+    const tag = norm(row.tag);
+    if (!tag || seen.has(tag) || !(requested ? requested.has(tag) : sweepAll)) continue;
+    seen.add(tag);
+    wanted.push(tag);
+  }
+  const size = Math.max(1, Math.floor(opts.chunkSize || 8));
+  const queue = [];
+  for (let i = 0; i < wanted.length; i += size) queue.push(wanted.slice(i, i + size));
+  const key = (row) => row.row_id ?? `${row.schedule_cite?.sheet ?? ""}|${row.schedule_cite?.title ?? ""}|${row.tag}`;
+  const swept = new Map();
+  const failed = new Map();
+  let done = 0;
+  while (queue.length) {
+    const tags = queue.shift();
+    const result = await attempt({ tags });
+    if (result.error && tags.length > 1) {
+      const half = Math.ceil(tags.length / 2);
+      queue.unshift(tags.slice(0, half), tags.slice(half));
+      continue;
+    }
+    if (result.error) failed.set(tags[0], result.error);
+    else {
+      const own = new Set(tags);
+      for (const row of result.rows) if (own.has(norm(row.tag))) swept.set(key(row), row);
+    }
+    done += tags.length;
+    opts.onChunk?.({ done, total: wanted.length, tags, ok: !result.error });
+  }
+  const rows = scaffold.rows.map((row) => {
+    const own = swept.get(key(row));
+    if (own) return own;
+    const error = failed.get(norm(row.tag));
+    if (error == null) return row;
+    return {
+      ...row,
+      status: "AMBIGUOUS",
+      plan_search_complete: false,
+      reason: `The plan search for ${row.tag} did not finish (${error}); its installed quantity is unknown.`,
+    };
+  });
+  return { ...scaffold, rows, summary: summarizeReconcile(rows) };
 }
 
 /** CSV header row for contractor reconcile export. */

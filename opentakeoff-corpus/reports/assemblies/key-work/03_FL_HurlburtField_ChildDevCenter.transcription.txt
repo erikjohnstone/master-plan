@@ -1,0 +1,223 @@
+# 03_FL_HurlburtField_ChildDevCenter — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheets M1 (PDF page 64) and M2 (page 65): an overview of each page
+# at 40 dpi, then each table at 3x (216 dpi) in tiles with the MARK column repeated,
+# rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second
+# read at 4x of every row, every cell. Each drawn title was found with the PDF's own text
+# layer (pymupdf search_for). The pipeline's output for these sheets was not consulted.
+# The second tier keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+SET 03_FL_HurlburtField_ChildDevCenter
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheets M1 and M2 (pages 64 and 65) of the Hurlburt Field AFSOC child development center building 90353 (Schmidt Consulting Group), the tables the second tier's seed drew for its AHU, VAV, BOILER, PUMP and FAN strata.
+EXCLUDES Unit and pump types, minimum and heating airflows of the air handlers, external static pressure of the air handlers, total fan power, face velocities, coil air temperatures, sensible and latent capacities, valve types, efficiencies, design pressure, firing rate, burner, pressure drops of the boiler, pump speed columns' efficiency, sones, Hz, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE: two rows, no NOTES column, so every table
+# note applies to both units. FAN DATA groups TYPE, the airflows, ESP and FAN MOTOR (NO.
+# OF FAN(S), FAN POWER HP per fan, TOTAL FAN POWER HP, VOLTS, PHASE, Hz). MAX. AIRFLOW
+# keys supply_cfm; OA AIRFLOW keys oa_cfm_min as the design outdoor air (the author's
+# reading, as 004_MO's OA CFM). FAN POWER HP is per fan (2 x 4 = TOTAL 8), keyed with NO.
+# OF FAN(S) as supply_fan_qty. The PREHEAT COIL HOT WATER DATA block is the unit's heating
+# (its capacity keys heating_mbh); the CHILLED WATER COIL DATA block is its cooling (its
+# capacity keys cooling_mbh). Notes: 6 prints MERV 8 prefilters and MERV 13 final filters
+# (the final filter keys filter_merv); 11 prints minimum 8-row cooling and 1-row heating
+# coils; 13 (and 14, for variable air volume units) prints a VFD. Note 9 defines HDT
+# (horizontal draw thru).
+TABLE
+sheet: 03_FL_HurlburtField_ChildDevCenter.pdf#64
+title: VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 64 crop 214,510,2256,415 at 3x in 8 tiles (MARK column repeated), notes read at 2.25x and 1.8x (crops 214,700,876,225 and 1060,700,1410,235); second read at 4x (crop 214,598,2256,88) of both rows, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: FAN DATA / TYPE => -
+col: FAN DATA / MAX. AIRFLOW (CFM) => supply_cfm
+col: FAN DATA / MIN. AIRFLOW (CFM) => -
+col: FAN DATA / HEATING AIRFLOW (CFM) => -
+col: [FAN DATA / OA AIRFLOW (CFM): design minimum outdoor air] => oa_cfm_min
+col: FAN DATA / ESP IN W.G. => -
+col: FAN DATA / FAN MOTOR / NO. OF FAN(S) => supply_fan_qty
+col: FAN DATA / FAN MOTOR / FAN POWER HP => supply_fan_hp
+col: FAN DATA / FAN MOTOR / TOTAL FAN POWER HP => -
+col: FAN DATA / FAN MOTOR / VOLTS => volts
+col: FAN DATA / FAN MOTOR / PHASE => phase
+col: FAN DATA / FAN MOTOR / Hz => -
+col: PREHEAT COIL HOT WATER DATA / MAXIMUM FACE VELOCITY (FPM) => -
+col: PREHEAT COIL HOT WATER DATA / PREHEAT TOTAL CAPACITY (MBH) => heating_mbh
+col: PREHEAT COIL HOT WATER DATA / AIR SIDE / EAT (DEG. F) => -
+col: PREHEAT COIL HOT WATER DATA / AIR SIDE / LAT (DEG. F) => -
+col: PREHEAT COIL HOT WATER DATA / WATER SIDE / EWT (DEG. F) => hw_ewt_f
+col: PREHEAT COIL HOT WATER DATA / WATER SIDE / LWT (DEG. F) => hw_lwt_f
+col: PREHEAT COIL HOT WATER DATA / WATER SIDE / FLOW RATE (GPM) => hw_gpm
+col: PREHEAT COIL HOT WATER DATA / WATER SIDE / VALVE TYPE => -
+col: PREHEAT COIL HOT WATER DATA / WATER SIDE / MAX. WATER PD (FT) => hw_wpd_ft
+col: CHILLED WATER COIL DATA / MAXIMUM FACE VELOCITY (FPM) => -
+col: CHILLED WATER COIL DATA / COOLING TOTAL CAPACITY (MBH) => cooling_mbh
+col: CHILLED WATER COIL DATA / COOLING SENSIBLE CAPACITY (MBH) => -
+col: CHILLED WATER COIL DATA / COOLING LATENT CAPACITY (MBH) => -
+col: CHILLED WATER COIL DATA / AIR SIDE / EAT DB (DEG. F) => -
+col: CHILLED WATER COIL DATA / AIR SIDE / EAT WB (DEG. F) => -
+col: CHILLED WATER COIL DATA / AIR SIDE / LAT DB (DEG. F) => -
+col: CHILLED WATER COIL DATA / AIR SIDE / LAT WB (DEG. F) => -
+col: CHILLED WATER COIL DATA / WATER SIDE / EWT (DEG. F) => chw_ewt_f
+col: CHILLED WATER COIL DATA / WATER SIDE / LWT (DEG. F) => chw_lwt_f
+col: CHILLED WATER COIL DATA / WATER SIDE / FLOW RATE (GPM) => chw_gpm
+col: CHILLED WATER COIL DATA / WATER SIDE / VALVE TYPE => -
+col: CHILLED WATER COIL DATA / WATER SIDE / MAX. WATER PD (FT) => chw_wpd_ft
+derive: cooling_type = chw ; header=CHILLED WATER COIL DATA ; note=every row prints the CHILLED WATER COIL DATA block (water side EWT 44, GPM)
+derive: heating_type = hw ; header=PREHEAT COIL HOT WATER DATA ; note=every row prints the PREHEAT COIL HOT WATER DATA block (water side EWT 180 / LWT 160)
+derive: vfd = yes ; header=NOTE 13 ; note=note 13: 'PROVIDE SINGLE POINT POWER CONNECTION WITH VFD.' (note 14 also calls for a VFD on variable air volume units)
+derive: filter_merv = 13 ; header=NOTE 6 ; note=note 6: 'PROVIDE MERV 8 PRE FILTERS, AND MERV 13 FINAL FILTERS.' (the final filter keys; the MERV 8 prefilter does not)
+derive: chw_rows = 8 ; header=NOTE 11 ; note=note 11: 'PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS.'
+derive: hw_rows = 1 ; header=NOTE 11 ; note=note 11: 'PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS.'
+grid:
+AHU-1 | HDT | 7,100 | 2,792 | 3,270 | 1,800 | 1.5 | 2 | 4 | 8 | 208 | 3 | 60 | 500 | 80.9 | 47 | 70 | 180 | 160 | 8.1 | 3-WAY | 5 | 500 | 336.4 | 188.4 | 148.0 | 79.6 | 67.9 | 55.0 | 54.0 | 44 | 55 | 61.2 | 3-WAY | 10
+AHU-2 | HDT | 10,725 | 3,235 | 4,940 | 2,495 | 2.5 | 2 | 6.5 | 13 | 208 | 3 | 60 | 500 | 113.1 | 49 | 70 | 180 | 160 | 11.3 | 3-WAY | 5 | 500 | 440.2 | 280.2 | 160.0 | 79.2 | 67.6 | 55.0 | 54.0 | 44 | 56 | 73.4 | 3-WAY | 10
+END
+
+# AIR TERMINAL UNIT SCHEDULE (AHU 2): fifteen rows, eight existing boxes "(E)ATU A" to
+# "(E)ATU H" and seven new ones "(N)ATU I" to "(N)ATU N" (marks typed as printed). An
+# existing box prints "(E)" for its ROUND INLET SIZE, and one merged "( E )" cell across
+# ELECTRICAL VOLTS, PHASE and Hz: printed, but not one value. HEATING COIL REQUIREMENTS
+# groups the heating airflow, the coil's load, air and water temperatures, HW FLOW RATE
+# and VALVE TYPE: a hot-water coil in every row. The title prints no terminal type.
+# Notes 1-6 (insulation, inlet connection, disconnects, transformer, casing resistance,
+# acoustics) key nothing.
+TABLE
+sheet: 03_FL_HurlburtField_ChildDevCenter.pdf#64
+title: AIR TERMINAL UNIT SCHEDULE (AHU 2)
+family: VAV
+render: page 64 crop 214,945,1014,600 at 3x in 4 tiles (MARK column repeated) and the right edge (crop 1100,945,200,455) at 3x, notes included; second read at 4x (crop 214,1040,1048,326) of all 15 rows, every cell
+rows: all 15 printed rows
+col: MARK => tag
+col: MAXIMUM AIRFLOW (CFM) => cfm_max
+col: MINIMUM AIRFLOW (CFM) => cfm_min
+col: ROUND INLET SIZE => inlet_size_in
+col: HEATING COIL REQUIREMENTS / HEATING AIRFLOW (CFM) => cfm_heat
+col: HEATING COIL REQUIREMENTS / TOTAL HEATING LOAD (MBH) => hw_mbh
+col: HEATING COIL REQUIREMENTS / EAT (DEG F) => -
+col: HEATING COIL REQUIREMENTS / LAT (DEG F) => -
+col: HEATING COIL REQUIREMENTS / EWT (DEG F) => hw_ewt_f
+col: HEATING COIL REQUIREMENTS / LWT (DEG F) => hw_lwt_f
+col: HEATING COIL REQUIREMENTS / HW FLOW RATE (GPM) => hw_gpm
+col: HEATING COIL REQUIREMENTS / VALVE TYPE => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / Hz => -
+derive: heat_type = hw ; header=HEATING COIL REQUIREMENTS ; note=every row prints a hot-water coil (EWT 180, LWT 160, HW FLOW RATE)
+grid:
+(E)ATU A | 550 | 165 | ?(E) | 220 | 3.3 | 70.0 | 84.0 | 180 | 160 | 0.3 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(E)ATU B | 500 | 150 | ?(E) | 200 | 3.0 | 70.0 | 84.0 | 180 | 160 | 0.3 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(E)ATU C | 550 | 165 | ?(E) | 220 | 3.3 | 70.0 | 84.0 | 180 | 160 | 0.3 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(E)ATU D | 600 | 180 | ?(E) | 240 | 3.7 | 70.0 | 84.0 | 180 | 160 | 0.4 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(E)ATU E | 800 | 240 | ?(E) | 240 | 3.7 | 70.0 | 84.0 | 180 | 160 | 0.4 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(E)ATU F | 800 | 240 | ?(E) | 320 | 4.9 | 70.0 | 84.0 | 180 | 160 | 0.5 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(E)ATU G | 450 | 135 | ?(E) | 170 | 2.6 | 70.0 | 84.0 | 180 | 160 | 0.3 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(E)ATU H | 820 | 250 | ?(E) | 490 | 7.4 | 70.0 | 84.0 | 180 | 160 | 0.7 | 3-WAY | ?( E ) | ?( E ) | ( E )
+(N)ATU I | 530 | 160 | 8" | 220 | 3.3 | 70.0 | 84.0 | 180 | 160 | 0.3 | 3-WAY | 120 | 1 | 60
+(N)ATU J | 250 | 75 | 6" | 100 | 1.5 | 70.0 | 84.0 | 180 | 160 | 0.2 | 3-WAY | 120 | 1 | 60
+(N)ATU K1 | 1,190 | 360 | 10" | 380 | 5.8 | 70.0 | 84.0 | 180 | 160 | 0.6 | 3-WAY | 120 | 1 | 60
+(N)ATU K2 | 1,190 | 360 | 10" | 425 | 6.5 | 70.0 | 84.0 | 180 | 160 | 0.6 | 3-WAY | 120 | 1 | 60
+(N)ATU L | 970 | 295 | 10" | 570 | 8.7 | 70.0 | 84.0 | 180 | 160 | 0.9 | 3-WAY | 120 | 1 | 60
+(N)ATU M | 625 | 190 | 8" | 575 | 8.7 | 70.0 | 84.0 | 180 | 160 | 0.9 | 3-WAY | 120 | 1 | 60
+(N)ATU N | 900 | 270 | 8" | 570 | 8.7 | 70.0 | 84.0 | 180 | 160 | 0.9 | 3-WAY | 120 | 1 | 60
+END
+
+# CONDENSING BOILER SCHEDULE: one row, no NOTES column, so every note applies. BOILER
+# RATINGS prints MIN. INPUT and MIN, GROSS OUTPUT (keyed as input_mbh and output_mbh),
+# efficiency, design pressure, FIRING RATE (CFH) and BURNER ("FAC", note 10: fan assisted
+# combustion). HYDRONIC DATA prints GPM and EWT 160 / LWT 180. Note 2 ("NATURAL GAS TRAIN
+# TO BE CSD-1 BY BOILER MANUFACTURER.") keys fuel; note 6 ("PROVIDE BMS GATEWAY INTERFACE
+# AND CONNECT TO DDC SYSTEM.") keys bas_interface.
+TABLE
+sheet: 03_FL_HurlburtField_ChildDevCenter.pdf#64
+title: CONDENSING BOILER SCHEDULE
+family: BOILER
+render: page 64 crop 1393,945,1077,345 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 1393,1010,897,96) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: BOILER RATINGS / MIN. INPUT (MBH) => input_mbh
+col: BOILER RATINGS / MIN, GROSS OUTPUT (MBH) => output_mbh
+col: BOILER RATINGS / MIN. EFF. (%) => -
+col: BOILER RATINGS / DESIGN PRESSURE (PSIG) => -
+col: BOILER RATINGS / FIRING RATE (CFH) => -
+col: BOILER RATINGS / BURNER => -
+col: HYDRONIC DATA / GPM => gpm
+col: HYDRONIC DATA / EWT DEG. F => ewt_f
+col: HYDRONIC DATA / LWT DEG. F => lwt_f
+col: HYDRONIC DATA / MAX. PRESS. DROP (FT. W.C.) => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / Hz => -
+derive: fuel = gas ; header=NOTE 2 ; note=note 2: 'NATURAL GAS TRAIN TO BE CSD-1 BY BOILER MANUFACTURER.' (the FIRING RATE (CFH) column prints the gas flow)
+derive: bas_interface = BMS GATEWAY ; header=NOTE 6 ; note=note 6: 'PROVIDE BMS GATEWAY INTERFACE AND CONNECT TO DDC SYSTEM.'
+grid:
+B-1 | 390.0 | 358.8 | 92% | 125 | 390 | FAC | 35.9 | 160 | 180 | 15 | 120 | 1 | 60
+END
+
+# PUMP SCHEDULE: three rows. SERVICE keys service as printed. TYPE ("CS" close coupled end
+# suction, "IL" inline; note 1) is a pump type, not an arrangement. BP-1 prints one merged
+# "SEE NOTE 4" cell across FLOW, HEAD, MIN. EFF. and MAX. SPEED (note 4: "BOILER PUMP TO BE
+# SIZED PER MANUFACTURER."): printed, but not one value. MIN. POWER HP keys motor_hp. The
+# REMARKS "PROVIDE WITH MOTOR STARTER" of CHWP-1 and HWP-1 name a motor starter, not a
+# variable-frequency drive, so vfd keys "no" (the author's reading, as 040_IL's
+# full-voltage starters); BP-1's "INTERLOCK WITH BOILER" says nothing about its speed.
+TABLE
+sheet: 03_FL_HurlburtField_ChildDevCenter.pdf#64
+title: PUMP SCHEDULE
+family: PUMP
+render: page 64 crop 1393,1305,1077,300 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 1393,1350,937,122) of all 3 rows, every cell
+rows: all 3 printed rows
+col: MARK => tag
+col: SERVICE => service
+col: TYPE => -
+col: PERFORMANCE DATA / FLOW (GPM) => gpm
+col: PERFORMANCE DATA / HEAD (FT. W.C) => head_ft
+col: PERFORMANCE DATA / MIN. EFF. (%) => -
+col: PERFORMANCE DATA / MAX. SPEED (RPM) => rpm
+col: ELECTRICAL DATA / MIN. POWER HP => motor_hp
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / Hz => -
+col: REMARKS => -
+col: [REMARKS: a motor starter, not a variable-frequency drive] => vfd
+grid:
+CHWP-1 | CHILLED | CS | 73.4 | 35.0 | 60% | 1,760 | 1.5 | 208 | 3 | 60 | PROVIDE WITH MOTOR STARTER | no (PROVIDE WITH MOTOR STARTER)
+HWP-1 | HOT WATER | CS | 35.9 | 40.0 | 60% | 1,760 | 1.0 | 208 | 3 | 60 | PROVIDE WITH MOTOR STARTER | no (PROVIDE WITH MOTOR STARTER)
+BP-1 | BOILER #1 | IL | ?SEE NOTE 4 | ?SEE NOTE 4 | SEE NOTE 4 | ?SEE NOTE 4 | 1.0 | 115 | 1 | 60 | INTERLOCK WITH BOILER |
+END
+
+# FAN SCHEDULE (page 65, sheet M2): four rows. SERVING prints the hood or rooms each fan
+# serves (KH-1 and DWH-1 are kitchen and dishwasher hoods), keyed as area_served. TYPE (UB,
+# REF, SF; note 1) keys nothing. DRIVE prints BD / DD (note 2: belt drive, direct drive).
+# PERFORMANCE DATA ends with MIN. HP, keyed as motor_hp. Each row's NOTES cite notes: note
+# 3 ("PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING.") is cited by every row,
+# note 8 ("OPERATE WITH HOOD CONTROL SWITCH.") by EF-1 and EF-2, and note 7 ("INTERLOCK
+# WITH HOOD EXHAUST FAN.") by SF-1: how each fan is controlled, keyed as control. Notes 4,
+# 5, 6, 9-14 (disconnect, curb and damper, fire alarm relays, details, starter, hood
+# coordination, wind rating, motorized dampers) key nothing.
+TABLE
+sheet: 03_FL_HurlburtField_ChildDevCenter.pdf#65
+title: FAN SCHEDULE
+family: FAN
+render: page 65 crop 1092,665,1298,455 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 1092,710,1298,116) of all 4 rows, every cell
+rows: all 4 printed rows
+col: MARK => tag
+col: SERVING => area_served
+col: TYPE => -
+col: DRIVE => drive
+col: PERFORMANCE DATA / CFM => cfm
+col: PERFORMANCE DATA / E.S.P. (IN. W.C.) => esp_in
+col: PERFORMANCE DATA / MAX. RPM => rpm
+col: PERFORMANCE DATA / MAX. SONES => -
+col: PERFORMANCE DATA / MIN. HP => motor_hp
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / Hz => -
+col: NOTES => -
+col: [NOTES 3, 7, 8 as the row's NOTES cite them: how the fan is controlled] => control
+grid:
+EF-1 | KH-1 | UB | belt (BD) | 3,000 | 1.00 | 1725 | 24.0 | 1.5 | 208 | 3 | 60 | 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13 | =SPEED CONTROLLER; HOOD CONTROL SWITCH (PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING. OPERATE WITH HOOD CONTROL SWITCH.)
+EF-2 | DWH-1 | UB | direct (DD) | 615 | 1.00 | 1725 | 18.4 | 1/2 | 115 | 1 | 60 | 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 14 | =SPEED CONTROLLER; HOOD CONTROL SWITCH (PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING. OPERATE WITH HOOD CONTROL SWITCH.)
+EF-3 | RESTROOMS | REF | direct (DD) | 750 | 0.50 | 1725 | 9.4 | 1/4 | 115 | 1 | 60 | 1, 2, 3, 4, 5, 6, 10, 12, 13, 14 | =SPEED CONTROLLER (PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING.)
+SF-1 | KH-1 | SF | belt (BD) | 2,700 | 1.00 | 1725 | 15.6 | 1.0 | 208 | 3 | 60 | 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 14 | =SPEED CONTROLLER; INTERLOCK WITH HOOD EXHAUST FAN (PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING. INTERLOCK WITH HOOD EXHAUST FAN.)
+END

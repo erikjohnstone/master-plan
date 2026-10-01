@@ -1,0 +1,583 @@
+# 14_OR_KlamathCC_LearningCtr_Mechanical.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/14_OR_KlamathCC_LearningCtr_Mechanical.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M002 and M003 (pages 2 and 3) of the Klamath Community College childcare learning center bid and permit set (Pivot Architecture, with ColeBreit Engineering), the tables the second tier's seed drew for its DOAS, AIR_COOLED_CHILLER, BOILER, PUMP, FCU, HEAT_PUMP, OUTDOOR_AIR_UNIT, UNIT_HEATER and HEAT_EXCHANGER strata.
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2 | DEDICATED OUTDOOR AIR SYSTEM | DOAS | all 4 printed rows | render: page 2 crop 150,696,2000,146 at 3x in 7 tiles (MARK column repeated) and notes crop 150,840,950,80 at 3x; second read at 4x (crop 150,712,2000,130) of all 4 rows, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2 | AIR COOLED CHILLER | AIR_COOLED_CHILLER | all 1 printed row | render: page 2 crop 138,962,1327,72 at 3x in 5 tiles (MARK column repeated) and notes crop 138,1034,862,84 at 3x; second read at 4x (crop 138,990,1327,42) of the row, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2 | HOT WATER CONDENSING BOILER | BOILER | all 2 printed rows | render: page 2 crop 138,1160,1424,70 at 3x in 5 tiles (MARK column repeated) and notes crop 138,1228,862,117 at 3x; second read at 4x (crop 138,1175,1424,55) of both rows, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 | HYDRONIC PUMPS | PUMP | all 8 printed rows | render: page 3 crop 192,73,1308,195 at 3x in 5 tiles (MARK column repeated) and notes crop 192,264,908,104 at 3x; second read at 4x (crop 192,90,1308,178) of all 8 rows, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 | SPLIT SYSTEM HEAT PUMPS | FCU | the 2 indoor units (FC-01, FC-02); the outdoor units HP-01 and HP-02 are keyed as HEAT_PUMP in the next block | render: page 3 crop 192,411,1133,125 at 3x in 4 tiles (MARK column repeated) and notes crop 192,534,1133,96 at 3x; second read at 4x (crop 192,440,1133,96) of all 4 rows, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 | SPLIT SYSTEM HEAT PUMPS | HEAT_PUMP | the 2 outdoor units (HP-01, HP-02); the indoor units FC-01 and FC-02 are keyed as FCU in the block above | render: page 3 crop 192,411,1133,125 at 3x in 4 tiles (MARK column repeated) and notes crop 192,534,1133,96 at 3x; second read at 4x (crop 192,440,1133,96) of all 4 rows, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 | MAKE UP AIR UNITS | OUTDOOR_AIR_UNIT | all 1 printed row | render: page 3 crop 192,682,1058,104 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 192,700,1058,48) of the row, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 | ELECTRIC HEATERS | UNIT_HEATER | all 3 printed rows | render: page 3 crop 192,1388,803,157 at 3x in 3 tiles (MARK column repeated), notes included; second read at 4x (crop 192,1410,803,85) of all 3 rows, every cell
+#   14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3 | HEAT EXCHANGER | HEAT_EXCHANGER | all 1 printed row | render: page 3 crop 1240,1349,1015,111 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 1240,1370,1015,55) of the row, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, weight, static pressures, brake horsepower, fan and motor speeds other than a pump's operating speed, energy-recovery temperatures and effectiveness, coil air temperatures, sensible capacity, MCA/MOCP/SCCR/FLA/amps, compressor and condenser-fan data, refrigerant data, efficiencies (EER, IPLV, AFUE, SEER, SEER2, HSPF2, duty efficiency), NPSH, gas pressures, turndown, flow limits, pressure drops, flue/air/gas connection sizes, LMTD, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 14_OR_KlamathCC_LearningCtr_Mechanical: 9 table(s), 24 instance(s), 558 keyed attribute value(s) (242 printed, 316 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,floor,MEZZ,,LOCATION names a level,printed 'RR 136 MEZZ'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,area_served,SECTOR A - WEST,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,supply_cfm,2300,cfm,SUPPLY FAN / AIRFLOW CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,oa_cfm_min,,cfm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,supply_fan_hp,2,hp,SUPPLY FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,supply_fan_qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,return_fan_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,exhaust_fan_hp,4,hp,EXHAUST FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,vfd,no,,"SUPPLY FAN / MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'ECM'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,economizer,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,outdoor_air_pct,100,%,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,cooling_type,chw,,CHILLED WATER COIL,every row prints the CHILLED WATER COIL block (water side EWT 46)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,cooling_mbh,83.2,MBH,CHILLED WATER COIL / TOTAL COOL MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,cooling_tons,,tons,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,dx_stages,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_gpm,11,gpm,CHILLED WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_ewt_f,46,F,CHILLED WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_lwt_f,50.9,F,CHILLED WATER COIL / LWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_wpd_ft,4.2,ft,CHILLED WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_rows,6,,CHILLED WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,chw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,heating_type,hw,,HEATING WATER COIL,every row prints the HEATING WATER COIL block (water side EWT 130 / LWT 110)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,heating_mbh,88.4,MBH,HEATING WATER COIL / HEAT MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_gpm,9,gpm,HEATING WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_ewt_f,130,F,HEATING WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_lwt_f,110,F,HEATING WATER COIL / LWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_wpd_ft,0.7,ft,HEATING WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_rows,2,,HEATING WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,hw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,gas_input_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,humidifier,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,energy_recovery,plate,,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,filter_merv,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,volts,208,V,ELECTRICAL / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-1,DOAS,phase,3,,ELECTRICAL / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,floor,MEZZ,,LOCATION names a level,printed 'RR 160 MEZZ'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,area_served,SECTOR B - NORTH,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,supply_cfm,1290,cfm,SUPPLY FAN / AIRFLOW CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,oa_cfm_min,,cfm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,supply_fan_hp,1,hp,SUPPLY FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,supply_fan_qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,return_fan_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,exhaust_fan_hp,1.34,hp,EXHAUST FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,vfd,no,,"SUPPLY FAN / MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'ECM'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,economizer,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,outdoor_air_pct,100,%,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,cooling_type,chw,,CHILLED WATER COIL,every row prints the CHILLED WATER COIL block (water side EWT 46)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,cooling_mbh,47.7,MBH,CHILLED WATER COIL / TOTAL COOL MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,cooling_tons,,tons,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,dx_stages,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_gpm,8.5,gpm,CHILLED WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_ewt_f,46,F,CHILLED WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_lwt_f,53.8,F,CHILLED WATER COIL / LWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_wpd_ft,5.2,ft,CHILLED WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_rows,6,,CHILLED WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,chw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,heating_type,hw,,HEATING WATER COIL,every row prints the HEATING WATER COIL block (water side EWT 130 / LWT 110)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,heating_mbh,43.6,MBH,HEATING WATER COIL / HEAT MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_gpm,3,gpm,HEATING WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_ewt_f,130,F,HEATING WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_lwt_f,110,F,HEATING WATER COIL / LWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_wpd_ft,1.2,ft,HEATING WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_rows,2,,HEATING WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,hw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,gas_input_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,humidifier,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,energy_recovery,plate,,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,filter_merv,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,volts,208,V,ELECTRICAL / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-2,DOAS,phase,3,,ELECTRICAL / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,floor,MEZZ,,LOCATION names a level,printed 'RR 133 MEZZ'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,area_served,SECTOR A - EAST,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,supply_cfm,2215,cfm,SUPPLY FAN / AIRFLOW CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,oa_cfm_min,,cfm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,supply_fan_hp,2,hp,SUPPLY FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,supply_fan_qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,return_fan_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,exhaust_fan_hp,4,hp,EXHAUST FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,vfd,no,,"SUPPLY FAN / MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'ECM'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,economizer,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,outdoor_air_pct,100,%,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,cooling_type,chw,,CHILLED WATER COIL,every row prints the CHILLED WATER COIL block (water side EWT 46)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,cooling_mbh,82.5,MBH,CHILLED WATER COIL / TOTAL COOL MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,cooling_tons,,tons,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,dx_stages,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_gpm,12,gpm,CHILLED WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_ewt_f,46,F,CHILLED WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_lwt_f,55.6,F,CHILLED WATER COIL / LWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_wpd_ft,6.2,ft,CHILLED WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_rows,6,,CHILLED WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,chw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,heating_type,hw,,HEATING WATER COIL,every row prints the HEATING WATER COIL block (water side EWT 130 / LWT 110)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,heating_mbh,82.5,MBH,HEATING WATER COIL / HEAT MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_gpm,5.5,gpm,HEATING WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_ewt_f,130,F,HEATING WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_lwt_f,110,F,HEATING WATER COIL / LWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_wpd_ft,2.1,ft,HEATING WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_rows,2,,HEATING WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,hw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,gas_input_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,humidifier,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,energy_recovery,plate,,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,filter_merv,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,volts,208,V,ELECTRICAL / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-3,DOAS,phase,3,,ELECTRICAL / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,floor,MEZZ,,LOCATION names a level,printed 'RR 162 MEZZ'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,area_served,SECTOR B - SOUTH,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,supply_cfm,1830,cfm,SUPPLY FAN / AIRFLOW CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,oa_cfm_min,,cfm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,supply_fan_hp,2,hp,SUPPLY FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,supply_fan_qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,return_fan_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,exhaust_fan_hp,1,hp,EXHAUST FAN / MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,vfd,no,,"SUPPLY FAN / MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'ECM'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,economizer,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,outdoor_air_pct,100,%,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,cooling_type,chw,,CHILLED WATER COIL,every row prints the CHILLED WATER COIL block (water side EWT 46)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,cooling_mbh,62,MBH,CHILLED WATER COIL / TOTAL COOL MBH,printed '62.0'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,cooling_tons,,tons,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,dx_stages,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_gpm,12,gpm,CHILLED WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_ewt_f,46,F,CHILLED WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_lwt_f,53,F,CHILLED WATER COIL / LWT,printed '53.0'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_wpd_ft,7.9,ft,CHILLED WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_rows,6,,CHILLED WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,chw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,heating_type,hw,,HEATING WATER COIL,every row prints the HEATING WATER COIL block (water side EWT 130 / LWT 110)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,heating_mbh,48,MBH,HEATING WATER COIL / HEAT MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_gpm,4,gpm,HEATING WATER COIL / FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_ewt_f,130,F,HEATING WATER COIL / EWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_lwt_f,110,F,HEATING WATER COIL / LWT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_wpd_ft,2,ft,HEATING WATER COIL / WTR PD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_rows,2,,HEATING WATER COIL / ROWS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,hw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,gas_input_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,humidifier,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,energy_recovery,plate,,NOTE 2,note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,filter_merv,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,volts,208,V,ELECTRICAL / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DEDICATED OUTDOOR AIR SYSTEM,DOAS-4,DOAS,phase,3,,ELECTRICAL / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,condenser,air,,TABLE TITLE,title printed 'AIR COOLED CHILLER'; the row prints a CONDENSER FANS block
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,tons,50,tons,EVAPORATOR - OPERATING CONDITION / TONS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,chw_gpm,83.86,gpm,EVAPORATOR - OPERATING CONDITION / DESIGN FLOW (GPM),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,61,F,EVAPORATOR - OPERATING CONDITION / EWT (F),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,46,F,EVAPORATOR - OPERATING CONDITION / LWT (F),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,volts,208,V,ELECTRICAL / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,AIR COOLED CHILLER,CH-1,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,fuel,gas,,MIN GAS PRESS [IN. WC],every row prints minimum and maximum gas pressures and a GAS INLET; note 1 provides a gas regulator with each boiler (the author's reading)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,input_mbh,600,MBH,INPUT [MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,output_mbh,585,MBH,HIGH FIRE OUTPUT [MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,ewt_f,110,F,EWT [°F,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,lwt_f,130,F,LWT [°F,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,bas_interface,BACNET MSTP,,NOTE 5,"note 5, cited by every row: 'PROVIDE WITH BACNET MSTP OPTION FOR INTEGRATION INTO BAS. PROVIDE WITH FLOW SWITCH.'"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,volts,120,V,ELEC [V/H/P]: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-1,BOILER,phase,1,,"ELEC [V/H/P]: phase part, printed second (the cell prints volts and phase, no hertz)",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,fuel,gas,,MIN GAS PRESS [IN. WC],every row prints minimum and maximum gas pressures and a GAS INLET; note 1 provides a gas regulator with each boiler (the author's reading)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,input_mbh,600,MBH,INPUT [MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,output_mbh,585,MBH,HIGH FIRE OUTPUT [MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,ewt_f,110,F,EWT [°F,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,lwt_f,130,F,LWT [°F,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,bas_interface,BACNET MSTP,,NOTE 5,"note 5, cited by every row: 'PROVIDE WITH BACNET MSTP OPTION FOR INTEGRATION INTO BAS. PROVIDE WITH FLOW SWITCH.'"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,volts,120,V,ELEC [V/H/P]: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,HOT WATER CONDENSING BOILER,B-2,BOILER,phase,1,,"ELEC [V/H/P]: phase part, printed second (the cell prints volts and phase, no hertz)",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,service,CHILLED WATER,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,gpm,106,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,head_ft,55,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,motor_hp,3,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,rpm,1893,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,vfd,yes,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'VFD'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,glycol_pct,40,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,volts,208,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-1,PUMP,phase,3,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,service,CHILLED WATER,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,gpm,106,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,head_ft,55,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,motor_hp,3,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,rpm,1893,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,vfd,yes,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'VFD'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,glycol_pct,40,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,volts,208,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,CHP-2,PUMP,phase,3,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,service,PRIMARY HW,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,gpm,50,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,head_ft,12,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,motor_hp,0.5,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,rpm,2576,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,vfd,no,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'ECM'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,glycol_pct,0,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,volts,208,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-1,PUMP,phase,1,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,service,PRIMARY HW,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,gpm,50,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,head_ft,12,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,motor_hp,0.5,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,rpm,2576,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,vfd,no,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'ECM'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,glycol_pct,0,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,volts,208,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,BP-2,PUMP,phase,1,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,service,SECONDARY HW,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,gpm,116,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,head_ft,40,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,motor_hp,3,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,rpm,1681,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,vfd,yes,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'VFD'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,glycol_pct,0,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,volts,208,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-1,PUMP,phase,3,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,service,SECONDARY HW,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,gpm,116,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,head_ft,40,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,motor_hp,3,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,rpm,1681,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,vfd,yes,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD",printed 'VFD'; author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,glycol_pct,0,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,volts,208,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,HWP-2,PUMP,phase,3,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,service,SNOWMELT,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,gpm,17,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,head_ft,20,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,motor_hp,0.167,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,rpm,3417,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,vfd,,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD","printed 'ECM, while the row also cites note 1 (INTEGRATED VFD)' — not a single value for this attribute"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,glycol_pct,,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",blank cell
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,volts,115,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-1,PUMP,phase,1,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,service,SNOWMELT,,SERVICE,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,gpm,17,gpm,FLOW GPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,head_ft,20,ft,HEAD FT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,motor_hp,0.167,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,rpm,3417,rpm,OPER. RPM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,vfd,,,"MOTOR / CONTROL: VFD, or an ECM motor with no VFD","printed 'ECM, while the row also cites note 1 (INTEGRATED VFD)' — not a single value for this attribute"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,pump_arrangement,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,glycol_pct,,%,"NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.",blank cell
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,volts,115,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HYDRONIC PUMPS,SP-2,PUMP,phase,5,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,area_served,MDF,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,pipes,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,cfm,389,cfm,CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,motor_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,fan_speeds,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,ecm,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,cooling_type,dx,,TABLE TITLE,title 'SPLIT SYSTEM HEAT PUMPS'; the pair prints REFRIGERANT DATA (R-32) and no water coil: a DX indoor unit (the author's reading)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_wpd_ft,,ft,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_rows,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,chw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,heating_type,heat_pump,,TABLE TITLE,title 'SPLIT SYSTEM HEAT PUMPS'; the pair prints HEAT MBH and an HSPF2 rating: heated by the heat pump (the author's reading)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_wpd_ft,,ft,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_rows,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,hw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,volts,,V,ELECTRICAL DATA / V/PH: volts part,printed '-'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-01,FCU,phase,,,ELECTRICAL DATA / V/PH: phase part,printed '-'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,area_served,MDF,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,pipes,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,cfm,194,cfm,CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,motor_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,fan_speeds,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,ecm,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,cooling_type,dx,,TABLE TITLE,title 'SPLIT SYSTEM HEAT PUMPS'; the pair prints REFRIGERANT DATA (R-32) and no water coil: a DX indoor unit (the author's reading)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_wpd_ft,,ft,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_rows,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,chw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,heating_type,heat_pump,,TABLE TITLE,title 'SPLIT SYSTEM HEAT PUMPS'; the pair prints HEAT MBH and an HSPF2 rating: heated by the heat pump (the author's reading)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_wpd_ft,,ft,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_rows,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,hw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,volts,,V,ELECTRICAL DATA / V/PH: volts part,printed '-'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,FC-02,FCU,phase,,,ELECTRICAL DATA / V/PH: phase part,printed '-'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,area_served,MDF,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,cfm,,cfm,CFM,printed '-'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,cooling_mbh,30,MBH,COOL MBH / TC,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,cooling_tons,,tons,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,heating_mbh,30,MBH,HEAT MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,chw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,chw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,chw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,motor_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,volts,208,V,ELECTRICAL DATA / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-01,HEAT_PUMP,phase,1,,ELECTRICAL DATA / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,area_served,MDF,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,cfm,,cfm,CFM,printed '-'
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,cooling_mbh,14,MBH,COOL MBH / TC,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,cooling_tons,,tons,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,heating_mbh,12,MBH,HEAT MBH,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,chw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,chw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,chw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,motor_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,volts,208,V,ELECTRICAL DATA / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SPLIT SYSTEM HEAT PUMPS,HP-02,HEAT_PUMP,phase,1,,ELECTRICAL DATA / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,area_served,KITCHEN,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,supply_cfm,2150,cfm,CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,oa_cfm_min,,cfm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,supply_fan_hp,1.5,hp,MOTOR / HP,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,supply_fan_qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,return_fan_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,exhaust_fan_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,vfd,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,economizer,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,outdoor_air_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,cooling_type,dx,,SEER,"the row prints COOL MBH, TONS and a SEER rating: a packaged DX unit (the author's reading)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,cooling_mbh,91,MBH,COOL MBH / TC,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,cooling_tons,7.5,tons,TONS,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,dx_stages,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_wpd_ft,,ft,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_rows,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,chw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,heating_type,gas,,HEAT MBH,HEAT MBH prints an input (174) and an output (141) at HEAT EFF. 92%: a fuel-fired heater (the author's reading)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,heating_mbh,141,MBH,HEAT MBH / OUT,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_wpd_ft,,ft,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_rows,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,hw_glycol_pct,,%,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,gas_input_mbh,174,MBH,HEAT MBH / IN: the fuel-fired heater's input,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,eh_kw,,kW,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,humidifier,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,energy_recovery,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,filter_merv,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,bas_interface,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,volts,208,V,MOTOR / V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAKE UP AIR UNITS,MAU-1,OUTDOOR_AIR_UNIT,phase,3,,MOTOR / V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,area_served,BOILER 149,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATERS'; every row prints KW
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,cfm,100,cfm,CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,eh_kw,1.5,kW,KW,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,motor_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,volts,120,V,V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-1,UNIT_HEATER,phase,1,,V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,area_served,FIRE RISER 167,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATERS'; every row prints KW
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,cfm,100,cfm,CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,heating_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,eh_kw,1.5,kW,KW,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,motor_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,volts,120,V,V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-2,UNIT_HEATER,phase,1,,V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,area_served,VESTIBULE 100,,SERVING,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATERS'; every row prints KW
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,cfm,100,cfm,CFM,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,heating_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,hw_gpm,,gpm,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,hw_ewt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,hw_lwt_f,,F,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,eh_kw,1.5,kW,KW,
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,motor_hp,,hp,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,volts,120,V,V/PH: volts part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ELECTRIC HEATERS,EH-3,UNIT_HEATER,phase,1,,V/PH: phase part,author's reading of the printed row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,building,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,floor,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,area_served,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,qty,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,hx_type,,,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,primary_medium,hw,,HOT SIDE,"the HOT SIDE enters at 130 °F and leaves at 100 °F in the BOILER room, heating the snow-melt loop of note 1: the heating hot water (the author's reading)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,secondary_medium,glycol,,NOTE 1,"note 1, cited by the row: 'FLOOR MOUNTED, SNOW MELT HEAT EXCHANGER WITH 40% PROPYLENE GLYCOL' (the heated snow-melt side)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,primary_gpm,15.8,gpm,HOT SIDE / FLOW (GPM),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,primary_ewt_f,130,F,HOT SIDE / INLET TEMP (ºF),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,primary_lwt_f,100,F,HOT SIDE / OUTLET TEMP (ºF),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,secondary_gpm,17,gpm,COLD SIDE / FLOW (GPM),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,secondary_ewt_f,85,F,COLD SIDE / INLET TEMP (ºF),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,secondary_lwt_f,115,F,COLD SIDE / OUTLET TEMP (ºF),
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,capacity_mbh,,MBH,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,primary_steam_psig,,psig,,not printed
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HEAT EXCHANGER,HX-1,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,,not printed

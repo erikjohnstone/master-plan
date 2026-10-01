@@ -29,7 +29,11 @@ test("WP4 golden: D07 VAV reconcile CSV has contractor columns and MATCH/refuse 
     evaluationFast: true,
   });
   const csv = reconcileRowsToCsv(result.rows);
-  assert.match(csv, /^Tag,Family,Scheduled qty,Installed qty,Status,/);
+  // The contractor columns, in order, among the header's others (it has since
+  // gained the quantity basis, evidence and plan-search columns between them).
+  const header = csv.split("\n")[0].split(",");
+  const at = ["Tag", "Family", "Scheduled qty", "Installed qty", "Status"].map((col) => header.indexOf(col));
+  assert.ok(at.every((i, k) => i >= 0 && (k === 0 || i > at[k - 1])), `contractor columns in order: ${header.join(",")}`);
   assert.ok(result.rows.length >= 9, "VAV schedule rows");
   const summary = summarizeReconcile(result.rows);
   assert.ok(summary.match >= 3, "plan-drawn VAV tags MATCH");

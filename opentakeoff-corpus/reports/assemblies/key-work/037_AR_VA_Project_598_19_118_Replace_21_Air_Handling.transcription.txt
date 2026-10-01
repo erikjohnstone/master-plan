@@ -1,0 +1,28 @@
+# 037_AR_VA_Project_598_19_118_Replace_21_Air_Handling — attribute-key transcription (ASSEMBLIES AS-17, held-out 2)
+# Typed from renders of sheet AE105 (PDF page 56) of the VA EJT VAMC North Little Rock AHU and
+# chiller replacement (JohnsonDanforth): an overview of the page at 40 dpi, then the page's one
+# one-row table at 3x (216 dpi), rendered with MuPDF (pymupdf get_pixmap(clip), displayed
+# orientation) and read by eye on 2026-09-26. The page's text layer (pymupdf search_for) was
+# searched for PUMP and P3. Keyed after the dev-2 normalizer was frozen (6e1a626); the
+# pipeline's output for this document was never consulted. The second tier keys the tables its
+# seed drew (tier2/01-split.md): one per keyed family.
+SET 037_AR_VA_Project_598_19_118_Replace_21_Air_Handling
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheet AE105 (page 56) of the VA EJT VAMC North Little Rock AHU and chiller replacement (JohnsonDanforth), the table the second tier's seed drew for its PUMP stratum: claimed under no title, one row.
+EXCLUDES Nothing: the claimed table prints no pump.
+
+# The census claims a PUMP table on page 56 under no title, with one row. AE105 is an
+# architectural sheet (NEW PAD PLAN - GROUND LEVEL & FIRST LEVEL): four enlarged pad plans, a
+# PARTITION LEGEND, a KEY PLAN, NEW CONSTRUCT. GEN. NOTES and one one-row table, NEW
+# CONSTRUCTION KEYED NOTES, whose row is key value P3: "NEW HOUSEKEEPING PAD; GC TO COORDINATE
+# EXACT SIZES AND LOCATIONS WITH FINAL MECHANICAL SHOP DRAWINGS." The other P3 marks are that
+# keynote's tags on the plans. The text layer prints no PUMP on the page. No row is a pump.
+TABLE
+sheet: 037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#56
+title: (untitled)
+family: PUMP
+render: page 56 overview at 40 dpi; NEW CONSTRUCTION KEYED NOTES crop 2040,75,480,100 at 3x; text layer search: PUMP 0 hits, P3 9 hits (the keyed notes row and the plans' keynote tags)
+rows: none — an architectural pad plan (AE105); its one-row table is NEW CONSTRUCTION KEYED NOTES, key value P3 (a new housekeeping pad), and the page prints no pump
+grid:
+END

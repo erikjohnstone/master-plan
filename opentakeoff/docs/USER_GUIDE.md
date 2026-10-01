@@ -448,6 +448,33 @@ add terminals or software values. These are listed-table calculations, not
 verified installed quantities; controller-provided qualifiers and applicability
 still need review. The original cells and source locations remain available.
 
+The point lists also read the columns standard lists print around their I/O:
+"■" marks; I/O columns printed as a direction and a signal (the VA points
+list's "SYSTEM INPUTS ANALOG TEMPERATURE"); software function, fail mode and
+alarm columns as each point's attributes; a row's number, tags and programmed
+limits. An ALARM column under the binary inputs is an analog sensor's own alarm
+on its row and a binary alarm input on a row of its own; beside an output it is
+flagged for review and not counted. A printed TOTALS row is never counted: it
+is checked against the rows above it, and a disagreement is flagged (a row may
+be missing from the extraction). Notes, network or calculated point flags, and
+columns naming who furnishes or reuses a point still wait for your review.
+
+Where a list goes on past a section band ("DDC CONTROLLER", "CROSS-TIE LOOP")
+that ended the table extraction, or a row fell out between two rows, the
+points list reads those rows from the drawing's text in the list's own columns
+and flags each one "source text row recovered" for you to compare with the
+drawing; each cites its own text. The BAS calculation counts the same rows.
+Reading stops at notes, sentences, another list or its caption, a row
+repeating one the list already printed, and a gap.
+
+A UFGS point function schedule that the table extraction missed is read from
+the drawing's text with all of its columns (fail mode, software functions,
+alarm limits, notes), where every mark sits on its column; otherwise only its
+name, tag and point type are read and the rows wait for your review. When the
+extraction folds a list's first row into its column headings, the headings
+are read without it and that row is read from the drawing, only where the
+drawing's line matches what the headings carried.
+
 Full compile JSON additionally contains `bas_point_lists`: source-bound listed
 observations, supported controller footnotes, and separate unobserved-column
 accounting for sparse tables. The existing **Export BAS JSON** button exports
@@ -541,6 +568,237 @@ a second Escape closes Tools and returns focus to its tab. Clicking outside the
 condition properties still closes them. Drawing shortcuts and actions are unchanged.
 Takeoff retains its existing exports. The separate legacy per-condition report is
 available from **⋯ → Measurement report**, not a primary navigation tab.
+
+### Controls assemblies (Takeoff → Assemblies)
+
+**Takeoff → Assemblies** turns the set's scheduled HVAC equipment into a controls
+estimate. Press **Apply assemblies**. The same Session+ODL path MCP uses reads the
+equipment schedules and the notes printed with them, and your assembly library
+then gives each unit its controls typical and its mechanical hook-up:
+- its options and variables, each with its source (the schedule, a project
+  setting, a partner default, the library default, or you);
+- its lines (points, devices, labor hooks) with quantities, each citing the
+  schedule row and the library rule.
+
+A schedule printed in two tables, the second titled as its continuation
+("… (CONT.)"), is read as one: the unit's row in the continuation adds its
+columns, and each value cites the table it is printed in. A set that comes as
+several PDFs (the mechanical drawings in one, the controls in another) is read
+as one project: open them all before pressing **Apply assemblies**. Each cite
+names its file and page, and the same PDF opened twice under two names is read
+once. If you add, remove or revise a PDF after the schedules are read, the panel
+says so in red, naming each file, above units and lines that are still the
+earlier set's: press **Re-read schedules** to apply the assemblies to the set
+you have open.
+
+**Exceptions come first.** A unit the drawings do not decide is *unresolved*, and it
+says what it waits for: an attribute the schedule does not print, a project
+setting, or two typicals that tie. Nothing is guessed: a VAV box whose row
+prints a fan (its HP or airflow) but not whether it is series or parallel
+waits between the two fan-powered typicals, and never takes a single-duct one,
+which counts no fan. Resolve one with **Use …**,
+which picks a candidate typical, or open **Details** to set an option or exclude
+the unit. Every override asks for a reason and is kept on the record under
+**Your overrides**. Rows of one schedule that wait for the same things, with the
+same candidates, sit together under one header: **Use … for all N** gives them one
+typical, and **Exclude all N** takes out rows that are no units (a notes table
+read as equipment). You give one reason, and each unit still gets its own
+override, naming the group it was decided with. Under **Your overrides** the
+overrides one such decision wrote are one row, with **Remove all N** to take
+them back together; its units are listed under it, each with its own Remove. A typical you choose can still
+wait for a value its options read, such as an air handler's economizer: the
+unit then stays among the exceptions until you set it. Rows under one typical
+whose same options wait sit together too (fan coils whose schedule prints no
+motor type, say), with a yes and a no for all N for each option. An override is its own unit's:
+where units of two families share a tag, overriding or excluding one leaves the
+other alone. Excluding a unit keeps the choices you made for it, and removing the
+exclusion under **Your overrides** brings them back. The project's own records (a
+plant's controls, the building meters) follow the project variables, so their
+row offers **Project settings** instead of **Use …**. An override that no unit
+takes, such as one for a tag the drawings no longer have, is marked *applies to
+nothing* under **Your overrides**, with why. Part of one that no record takes, such
+as an option the unit's typical no longer has after you adopt an updated typical,
+is marked *not applied*, with why; the rest of it still applies. A line whose
+quantity cannot stand, such as a fan command counted from -2 cells the schedule
+reading got wrong, is listed under **Lines that cannot be counted**, with why: no
+total counts it, so check the unit's schedule row. A schedule pasted into a sheet
+as a picture is read from its pixels where it is a ruled table and the OCR engine
+is installed (`bakeoff/requirements.txt`): each unit read from one says *read from
+a picture* beside its tag, because its values are OCR's reading of the ink, so
+check the ones that matter on the sheet. A picture cut into tiles is read as one,
+and a picture holding only a table's rules under the page's own text is read from
+that text, so its units say nothing of a picture. Reading a picture takes a minute or
+more the first time; the result is kept under `~/.cache/opentakeoff-picture`
+(`OPENTAKEOFF_PICTURE_CACHE` names another folder, or `0` turns keeping off;
+`OPENTAKEOFF_RASTER_OCR=0` turns picture reading off), so the same drawing set
+opens at its usual speed after that. A schedule sheet whose pictures could
+not be read (no OCR, a scan with no ruled table) gives the takeoff no table, so any
+unit it schedules is missing here: the panel names each such sheet (its sheet
+number, page and file) in red above the settings, with the share of it the
+pictures cover, and the PDF section lists
+them after the totals. Check each sheet: if it schedules equipment, the estimate
+is missing that equipment. The takeoff reads a family's schedule rows by their
+marks, a mark under a building number or code (1-VAV-1, 40-AHU-2, W05-TU-01),
+under a building and its floor or wing (01-1-DAC-1, 05-B-DAC-1) or with a
+building letter (FC-A-2) included, and a mark the schedule's own title
+vouches for (E-A-1 under a return fan title, HF-4 under a humidifier title,
+FCC1-1 under a fan coil title, ACCH-1 under an air-cooled chiller title). A
+table titled with the family's own name in words, no SCHEDULE printed
+(EXHAUST FANS, SUPPLY FANS, VENTILATION FANS, VAV TERMINAL SCHEDULE,
+CONDENSATE PUMP, AIR/DIRT SEPARATOR SCHEDULE), is that family's schedule; one
+that only ends in the name (an electrical list headed "EQUIPMENT CONNECTION
+SCHEDULE - EXHAUST FANS") is not. A fan-powered terminal unit schedule (FAN
+POWERED TERMINAL UNIT SCHEDULE) is a VAV schedule, and under its title a
+fan-powered box's mark (FPB-3-11) is a VAV unit. It reads a family's units in
+another family's schedule that lists them (DOAS-1 in an air handler index),
+and each unit once, from the listing that prints its mark. A schedule
+printed on its side, its units across the columns and their attributes down
+the rows (DESIGNATION | AHU-1 | AHU-2, or UNIT NO. | RTU-G | RTU-1 (ALT#2)),
+is read one unit per column: a column that names several units (EF-2, EF-5;
+CHWP-1 AND CHWP-2; UH-1 THRU UH-3) is each of them, and each attribute is
+named by its row's label, with the section printed on the section's first
+row before it (SUPPLY FAN, ELECTRICAL). Where the drawing does not say which
+section a row is in (a section label drawn down a merged cell, a heading
+printed across the unit columns) or prints a label twice, those attributes
+are left unread rather than guessed: read them on the sheet. A table no
+title names (an untitled table, or a general EQUIPMENT or MISCELLANEOUS
+schedule) gives units only by their marks, so notes, a drawing index or an
+architectural or furnishings list give none, a word such as an abbreviation
+list's SPF is no mark, and a few marks are read under their own family's
+title only: EG-1 is an exhaust fan under a fan title and an exhaust grille
+elsewhere, and a bare F-1 a fan coil under a fan coil title. So a row whose
+mark it still does not read as that family's (a temporary unit's
+1-AC-36TEMP, or 016-AC-01-16-12 with a room code of its own hyphen) is no
+unit either, and nor is an existing unit printed "(E)FC-1" in one schedule
+while a new FC-1 is printed in another: the takeoff drops the "(E)" and
+reads the two as one. The panel names each such schedule in red (its title,
+sheet, page and file, the family, and every mark left out), and the PDF
+section lists them after the totals. Those units are not in the estimate:
+count them by hand. Below the exceptions sit a table per family (units, typicals,
+unresolved, without a typical, lines) and one row per unit. Click a unit, or its
+**Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
+typical, or the terminal count behind an air handler's typical), and lines.
+**Use another typical…** in the details gives the unit another typical of its
+family: the rules' pick is not always yours, and `lab-airflow` is applied only
+this way. For a family no typical lists (lab air valves, control valves,
+grilles), it offers the other families' typicals instead. It asks why, and the
+choice is an override like any other, listed under **Your overrides**. Beside
+it, **…for all N like it** makes the same choice for every row of the unit's
+schedule with the same typical (or none), with one reason and an override each,
+as the exceptions' groups do: the 21 exhaust valves of a lab's valve schedule
+take one typical in one step. A typical whose lines read values the unit's row
+does not print leaves the unit among the exceptions, waiting for them.
+Clicking a tag paints its schedule row on the drawing. **Printed points** shows the
+rows of any printed points list that names the unit. That list stands instead of
+the typical's point lines, which show as *replaced*: the drawing's own list wins.
+The typical never adds to it.
+
+**Control drawings.** The set's sequences of operation, control schematics and
+points lists are read for each unit they name (by tag, a tag list or range, a
+schedule cross-reference, or the family's typical detail). The reading answers
+closed questions only: whether the building automation system commands the unit,
+only monitors it, or leaves it standalone, and whether each option of its typical
+is drawn (a motorized damper, a modulating valve, smoke detectors, and so on).
+With the platform AI configured, a text model and a vision model read beside the
+deterministic reader. A reading changes a unit only where two readers agree (or
+the drawing states it in so many words, such as "THIS SYSTEM IS STANDALONE AND NOT
+CONTROLLED BY THE DDC SYSTEM"). One reader alone is a proposal, readers that
+disagree leave the option unresolved, and an option is read as not drawn only
+when the text and two looks at the drawing agree. An HVAC zone plan (a sheet
+whose title names zones, such as "HVAC ZONE LEGEND") is read too: a sensor
+symbol drawn inside the zone a unit's tag labels, such as a CO2 sensor, gives
+the unit that option. A unit's **Details** lists
+its readings under **Control drawings**, applied ones first, each with why, the
+readers behind it and the printed text it rests on (click it to see it on the
+sheet). **Reject** turns an applied reading back, and **Accept** applies a
+proposal; both are overrides with a reason. The header counts what was applied,
+proposed and left unresolved.
+
+**Project settings** (above the exceptions) hold what the library asks of the
+project, saved with it. The hook-up profile has switches, for example strainers
+and P/T ports at coils, hoses at terminal coils, and a condensate trap at fan
+coils. It also has variables, for example balancing, the coil valve body, the
+largest coil kit and the flange size. Hover over any of them for the
+specifications that make it a choice.
+**Fill unset from the starter's defaults** sets every one you have not set; a
+switch or count left unset keeps its lines waiting. **Who does what** applies a
+responsibility preset, for example "the controls contractor furnishes the valve
+and ships it to the kit maker". It shows which presets the project holds and
+lists your edits, which **Clear responsibility edits** removes. A setting the
+project's library reads nowhere, such as one kept from a project file made with
+another library, is listed at the top of the settings with why.
+
+**Project questions** (below the settings) ask the few facts only you know that
+decide many units at once:
+- whether the project has a BAS scope;
+- the owner's criteria (DoD, VA);
+- what happens to the controls of units the schedules mark existing;
+- whether fans and pumps with no speed column are constant speed;
+- whether condensate, sump and plumbing-service pumps are in scope.
+
+A question appears only when its answer changes something on this set. Each
+choice shows how many lines and records it changes, worked out by applying it.
+When printed text outside the schedules proposes an answer, the card quotes it
+("The drawings suggest …"); click a quote to see it on the sheet. The proposal
+changes nothing until you choose. Each answer asks why (kept with the answer),
+and **Don't know** takes an answer back. Answers are saved with the project as
+a journal that is only ever added to. An agent can answer over MCP
+(`answer_project_question`): its answers show as recorded by an agent for you,
+and so does every record they decide.
+
+**Exports.** **Download CSV set** saves a zip of eight CSV files for the whole
+project: equipment, lines and their roll-up, points, valves, damper actuators,
+sensors, and a Desigo Select hand-entry worksheet. The **Scope** menu beside it
+narrows the lines and the roll-up to one party's lines (for example, only the
+mechanical contractor's: its trade, or whatever it furnishes or installs); the
+unit list, points and device schedules stay whole. The zip also holds
+`assemblies.pdf`, the same report as a PDF (exceptions first, then the family
+table and the units). Once you apply assemblies, the Takeoff panel's **PDF**
+carries that section after its own tables. Units are in the column names,
+and every engineering field has a `*_source` column that says whether the
+schedule, the drawing, a setting, the typical or nobody gave it; a field left for
+the selection tool is blank and says so. The columns are listed in
+[ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md), and MCP's `apply_assemblies` writes the
+same files with `export_dir`. The Takeoff panel's **Export to HIT** (after a
+control-valve takeoff) now adds one row for each hydronic coil printed inside an
+equipment schedule that no scheduled valve serves, with the coil's printed flow.
+Past 195 valves it saves several workbooks in a zip, so every row keeps the
+template's dropdowns.
+
+**The project keeps its versions.** Applying pins every definition the records
+used into the saved project. A later edit to your library never changes a saved
+project silently. **Library** lists any updates under **Update to latest**, with
+each option and line that would change, and nothing moves until you press
+**Adopt**.
+
+**The library.** The starter library (US typicals v1 and the mechanical hook-ups)
+is read-only. **Clone to edit** makes your own version with the same id and the
+next version number, saved in your profile beside the starter. The editor
+validates live against the whole library: its shape, every expression against
+the families' attributes, device references, and sub-assembly references. What
+your version changes from the starter is tinted amber. **Export CSV** saves the
+whole library as one spreadsheet, a row per option, variable, line and record, and
+**Import CSV…** reads your edited copy back through the same checks, listing any
+problem by row and column. The export is UTF-8 with a byte-order mark, so a
+spreadsheet opens it with its characters (the starter cites its standards with
+"§"). Save it as CSV UTF-8 or as plain CSV: a plain CSV is read as Windows-1252,
+as a spreadsheet on Windows writes it, and the import says so; a spreadsheet's
+TRUE and FALSE read as true and false. A spreadsheet that separates the
+columns with semicolons is named as such; save the file with commas. The columns are in [ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md#the-library-as-csv-assemblies-librarycsv).
+A family the starter has no typical for (control dampers, flow meters, lab air
+valves) can have yours: clone a typical and give the copy its own `id` (a copy
+that keeps the id is that typical's next version, which replaces it for its own
+family too). Name the new family in its `applies_to.family`, and let its
+selector, options and lines read no attribute, since the schedule reading keeps
+attributes for the starter's families alone (the editor names any that fail). The rules
+then give it to that family's units; a selector that reads `false` (as
+lab-airflow's) leaves it to your choice under **Use another typical…**.
+Your own part numbers, unit costs, hours and labor categories go on your
+version's lines (the starter ships none). They come back labelled
+*partner-entered*: in `lines.csv`, with the cost and hours extended by each
+line's quantity; in the totals above the report; and in the PDF, which sums the
+extended cost and the hours by labor category. The currency and the categories
+are yours.
 
 ### Manual sections
 
@@ -1355,7 +1613,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->60<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->64<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

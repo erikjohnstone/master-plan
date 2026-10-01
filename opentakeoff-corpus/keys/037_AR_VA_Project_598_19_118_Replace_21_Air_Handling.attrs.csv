@@ -1,0 +1,19 @@
+# 037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet AE105 (page 56) of the VA EJT VAMC North Little Rock AHU and chiller replacement (JohnsonDanforth), the table the second tier's seed drew for its PUMP stratum: claimed under no title, one row.
+#   037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#56 | (untitled) | PUMP | none — an architectural pad plan (AE105); its one-row table is NEW CONSTRUCTION KEYED NOTES, key value P3 (a new housekeeping pad), and the page prints no pump | render: page 56 overview at 40 dpi; NEW CONSTRUCTION KEYED NOTES crop 2040,75,480,100 at 3x; text layer search: PUMP 0 hits, P3 9 hits (the keyed notes row and the plans' keynote tags)
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Nothing: the claimed table prints no pump.
+# 037_AR_VA_Project_598_19_118_Replace_21_Air_Handling: 1 table(s), 0 instance(s), 0 keyed attribute value(s) (0 printed, 0 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf#56,,,PUMP,,,,,"no PUMP instance printed: none — an architectural pad plan (AE105); its one-row table is NEW CONSTRUCTION KEYED NOTES, key value P3 (a new housekeeping pad), and the page prints no pump"

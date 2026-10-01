@@ -1,0 +1,708 @@
+# 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M-601 to M-603 MECHANICAL SCHEDULES (pages 84-86) of the EHRM infrastructure upgrades, VA Syracuse NY (Spees Design Build), the tables the fourth tier's seed drew for its FCU, CONDENSING_UNIT, PUMP and HEAT_EXCHANGER strata.
+#   030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84 | TWO-PIPE FAN COIL UNIT SCHEDULE | FCU | all 14 printed rows | render: page 84 overview at 40 dpi; crop 160,145,2780,410 at 2.2x in 4 tiles (EQUIPMENT TAG column repeated), remarks included; second read at 3x of 001-FCU-01-CG06A, 001-FCU-12-C808 and ROME-FCU-01-G120, every keyed cell
+#   030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84 | CRAC AIR-COOLED CONDENSING UNIT | CONDENSING_UNIT | all 2 printed rows | render: page 84 overview at 40 dpi; crop 160,1415,1380,145 at 2.2x in 2 tiles (EQUIPMENT TAG column repeated), remarks included; second read at 3x of both rows, every keyed cell
+#   030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86 | CONDENSATE PUMP SCHEDULE | PUMP | all 14 printed rows | render: page 86 overview at 40 dpi; crop 160,875,1450,420 at 2.2x in 2 tiles (EQUIPMENT TAG column repeated), remarks included; second read at 3x of 001-FCP-01-CG06A, 001-FCP-08-C607 and ROME-FCP-01-G120, every keyed cell
+#   030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85 | DOAS HEAT EXCHANGER SCHEDULE | HEAT_EXCHANGER | all 1 printed row | render: page 85 overview at 40 dpi; crop 150,560,2800,200 at 2.2x in 3 tiles (ASSOCIATED EQUIPMENT column repeated); second read at 3x of the row, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and models, room locations, sensible capacities, air temperatures, filters, MOP, MCA and FLA, dimensions, weights, energy recovery effectiveness and air pressure drops, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction: 4 table(s), 31 instance(s), 688 keyed attribute value(s) (246 printed, 442 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-01-CG06A,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-02-C106A,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-04-C203,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-05-C303,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-06-C403A,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-07-C507,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-08-C607,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-09-DC6,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-10-DC7,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-11-C703,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,cfm,900,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,motor_hp,0.25,hp,ELECTRICAL DATA / POWER (HP),printed '1/4'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_lwt_f,60,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_wpd_ft,3.54,ft,COOLING REQUIREMENTS / WPD (FT),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_mbh,21000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '21,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-12-C808,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,cfm,1200,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,motor_hp,0.5,hp,ELECTRICAL DATA / POWER (HP),printed '1/2'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_lwt_f,65.4,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_wpd_ft,4.3,ft,COOLING REQUIREMENTS / WPD (FT),printed '4.30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_mbh,30000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '30,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,001-FCU-13-C907,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,cfm,900,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,motor_hp,0.25,hp,ELECTRICAL DATA / POWER (HP),printed '1/4'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_gpm,3.5,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_lwt_f,60,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_wpd_ft,3.54,ft,COOLING REQUIREMENTS / WPD (FT),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_mbh,21000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '21,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,002-FCU-01-BT03,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,pipes,2,,TABLE TITLE,title printed 'TWO-PIPE FAN COIL UNIT SCHEDULE'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,cfm,1700,cfm,FAN AIR FLOW (CFM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,motor_hp,1,hp,ELECTRICAL DATA / POWER (HP),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,fan_speeds,3,,"ELECTRICAL DATA / SPEED CONTROL: 3-STAGE, three fan speeds",author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,ecm,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,cooling_type,chw,,COOLING REQUIREMENTS / FLOW (GPM),"every row prints a chilled-water coil (flow, EWT 48, LWT, water pressure drop)"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_gpm,4.9,gpm,COOLING REQUIREMENTS / FLOW (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_ewt_f,48,F,COOLING REQUIREMENTS / EWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_lwt_f,65,F,COOLING REQUIREMENTS / LWT (°F),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_wpd_ft,1.67,ft,COOLING REQUIREMENTS / WPD (FT),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_mbh,41000,BTU/H,COOLING REQUIREMENTS / MIN TOTAL CAPACITY (BTUH),"printed '41,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,chw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,heating_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_wpd_ft,,ft,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_rows,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,hw_glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,volts,115,V,ELECTRICAL DATA / VOLT,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,TWO-PIPE FAN COIL UNIT SCHEDULE,ROME-FCU-01-G120,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,cfm,22000,cfm,COOLING CAPACITY / AIRFLOW (CFM),"printed '22,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,cooling_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,motor_hp,,hp,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,bas_interface,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,volts,208,V,ELECTRICAL / V,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-01-ROOF,CONDENSING_UNIT,phase,3,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,cfm,22000,cfm,COOLING CAPACITY / AIRFLOW (CFM),"printed '22,000'"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,cooling_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,motor_hp,,hp,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,eh_kw,,kW,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,bas_interface,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,volts,208,V,ELECTRICAL / V,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#84,CRAC AIR-COOLED CONDENSING UNIT,001-CU-02-ROOF,CONDENSING_UNIT,phase,3,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-01-CG06A,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-02-C106A,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-04-C203,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-05-C303,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-06-C403A,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-07-C507,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-08-C607,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-09-DC6,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-10-DC7,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-11-C703,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-12-C808,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,001-FCP-13-C907,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,002-FCP-01-BT03,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,service,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,gpm,0.8,gpm,OPERATING POINT @10' WC (GPM),
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,head_ft,10,ft,OPERATING POINT @10' WC (GPM): the head the flow is rated at,author's reading of the printed row
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,motor_hp,0.03333333333333333,hp,ELECTRICAL / POWER (HP),printed '1/30'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,rpm,,rpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,vfd,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,pump_arrangement,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,glycol_pct,,%,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,volts,115,V,ELECTRICAL / V,printed '115 VAC'
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#86,CONDENSATE PUMP SCHEDULE,ROME-FCP-01-G120,PUMP,phase,1,,ELECTRICAL / PH,
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,building,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,floor,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,area_served,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,qty,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,hx_type,,,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,primary_medium,other,,TABLE TITLE,"the exchanger's sides are the DOAS's SUPPLY and EXHAUST air (the WINTER and SUMMER TEMPERATURES blocks): air, which the vocabulary names other"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,secondary_medium,other,,TABLE TITLE,"the exchanger's sides are the DOAS's SUPPLY and EXHAUST air (the WINTER and SUMMER TEMPERATURES blocks): air, which the vocabulary names other"
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,secondary_gpm,,gpm,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,secondary_ewt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,secondary_lwt_f,,F,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,capacity_mbh,,MBH,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,primary_steam_psig,,psig,,not printed
+030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#85,DOAS HEAT EXCHANGER SCHEDULE,001-DHX-01,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,,not printed

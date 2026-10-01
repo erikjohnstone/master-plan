@@ -1,0 +1,1493 @@
+{
+ "version": "1",
+ "table": "UFC 3-410-01 (28 July 2025) Table 3-1, DDC Minimum Points List",
+ "source": "UFC 3-410-01 (28 Jul 2025) Table 3-1",
+ "items": [
+  {
+   "item": "hwhs-01",
+   "list": "Hot Water Heating System",
+   "text": "Hot water pump status",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "status"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "status"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-02",
+   "list": "Hot Water Heating System",
+   "text": "Hot water pump start/stop",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "cmd"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "cmd"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-03",
+   "list": "Hot Water Heating System",
+   "text": "Hot water supply temperature",
+   "covered_by": [
+    {
+     "typical": "hw-plant",
+     "line": "hws-temp"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-04",
+   "list": "Hot Water Heating System",
+   "text": "Hot water return temperature",
+   "covered_by": [
+    {
+     "typical": "hw-plant",
+     "line": "hwr-temp"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-05",
+   "list": "Hot Water Heating System",
+   "text": "Hot water flow rate",
+   "covered_by": [
+    {
+     "typical": "hw-plant",
+     "line": "flow"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-06",
+   "list": "Hot Water Heating System",
+   "text": "Hot water mixing valve position",
+   "covered_by": [
+    {
+     "typical": "hw-plant",
+     "line": "mixing-cmd"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-07",
+   "list": "Hot Water Heating System",
+   "text": "Differential pressure across pump",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "dp-across-pump"
+    },
+    {
+     "typical": "pump-constant",
+     "line": "dp-across"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "dp-across-pump"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "dp-across"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-08",
+   "list": "Hot Water Heating System",
+   "text": "Boiler status",
+   "covered_by": [
+    {
+     "typical": "boiler",
+     "line": "status"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-09",
+   "list": "Hot Water Heating System",
+   "text": "Boiler enable/disable",
+   "covered_by": [
+    {
+     "typical": "boiler",
+     "line": "enable"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-10",
+   "list": "Hot Water Heating System",
+   "text": "Boiler failure alarms",
+   "covered_by": [
+    {
+     "typical": "boiler",
+     "line": "alarm"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-11",
+   "list": "Hot Water Heating System",
+   "text": "Heat exchanger inlet temperatures",
+   "covered_by": [
+    {
+     "typical": "heat-exchanger",
+     "line": "hx-temps-ufc"
+    },
+    {
+     "typical": "heat-exchanger",
+     "line": "hx-inlet"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-12",
+   "list": "Hot Water Heating System",
+   "text": "Heat exchanger leaving temperatures",
+   "covered_by": [
+    {
+     "typical": "heat-exchanger",
+     "line": "secondary-supply"
+    },
+    {
+     "typical": "heat-exchanger",
+     "line": "hx-primary-leaving"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-13",
+   "list": "Hot Water Heating System",
+   "text": "Hot water pump speed",
+   "covered_by": [
+    {
+     "typical": "pump-vfd",
+     "line": "speed"
+    }
+   ]
+  },
+  {
+   "item": "hwhs-14",
+   "list": "Hot Water Heating System",
+   "text": "Condensate return pump status",
+   "covered_by": [
+    {
+     "typical": "hw-plant",
+     "line": "condensate-pump-switch"
+    },
+    {
+     "typical": "hw-plant",
+     "line": "condensate-pump"
+    },
+    {
+     "typical": "heat-exchanger",
+     "line": "condensate-pump-switch"
+    },
+    {
+     "typical": "heat-exchanger",
+     "line": "condensate-pump"
+    }
+   ]
+  },
+  {
+   "item": "vs-01",
+   "list": "VAV System",
+   "text": "Airflow rate of each VAV box (primary)",
+   "covered_by": [
+    {
+     "typical": "vav-cooling-only",
+     "line": "airflow"
+    },
+    {
+     "typical": "vav-reheat-hw",
+     "line": "airflow"
+    },
+    {
+     "typical": "vav-reheat-electric",
+     "line": "airflow"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "airflow"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "airflow"
+    },
+    {
+     "typical": "vav-dual-duct",
+     "line": "cold-airflow"
+    },
+    {
+     "typical": "vav-dual-duct",
+     "line": "discharge-airflow"
+    }
+   ]
+  },
+  {
+   "item": "vs-02",
+   "list": "VAV System",
+   "text": "VAV box fan control start/stop",
+   "covered_by": [
+    {
+     "typical": "vav-series-fan",
+     "line": "fan-cmd"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "fan-cmd"
+    }
+   ]
+  },
+  {
+   "item": "vs-03",
+   "list": "VAV System",
+   "text": "VAV box fan status",
+   "covered_by": [
+    {
+     "typical": "vav-series-fan",
+     "line": "fan-status"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "fan-status"
+    }
+   ]
+  },
+  {
+   "item": "vs-04",
+   "list": "VAV System",
+   "text": "VAV box damper position",
+   "covered_by": [
+    {
+     "typical": "vav-cooling-only",
+     "line": "damper"
+    },
+    {
+     "typical": "vav-reheat-hw",
+     "line": "damper"
+    },
+    {
+     "typical": "vav-reheat-electric",
+     "line": "damper"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "damper"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "damper"
+    },
+    {
+     "typical": "vav-dual-duct",
+     "line": "cold-damper"
+    },
+    {
+     "typical": "vav-dual-duct",
+     "line": "hot-damper"
+    }
+   ]
+  },
+  {
+   "item": "vs-05",
+   "list": "VAV System",
+   "text": "Discharge air temperature at each VAV box",
+   "covered_by": [
+    {
+     "typical": "vav-cooling-only",
+     "line": "discharge-temp"
+    },
+    {
+     "typical": "vav-reheat-hw",
+     "line": "discharge-temp"
+    },
+    {
+     "typical": "vav-reheat-electric",
+     "line": "discharge-temp"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "discharge-temp"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "discharge-temp"
+    },
+    {
+     "typical": "vav-dual-duct",
+     "line": "discharge-temp"
+    }
+   ]
+  },
+  {
+   "item": "vs-06",
+   "list": "VAV System",
+   "text": "VAV box hot water valve position",
+   "covered_by": [
+    {
+     "typical": "vav-reheat-hw",
+     "line": "hw-valve-cmd"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "hw-valve-cmd"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "hw-valve-cmd"
+    }
+   ]
+  },
+  {
+   "item": "vs-07",
+   "list": "VAV System",
+   "text": "Electric reheat (on/off and number of stages)",
+   "covered_by": [
+    {
+     "typical": "vav-reheat-electric",
+     "line": "heat-stages"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "heat-stages"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "heat-stages"
+    },
+    {
+     "typical": "vav-reheat-electric",
+     "line": "heat-cmd"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "heat-cmd"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "heat-cmd"
+    }
+   ]
+  },
+  {
+   "item": "vs-08",
+   "list": "VAV System",
+   "text": "Zone temperature",
+   "covered_by": [
+    {
+     "typical": "vav-cooling-only",
+     "line": "zone-temp"
+    },
+    {
+     "typical": "vav-reheat-hw",
+     "line": "zone-temp"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "zone-temp"
+    },
+    {
+     "typical": "vav-dual-duct",
+     "line": "zone-temp"
+    }
+   ]
+  },
+  {
+   "item": "vs-09",
+   "list": "VAV System",
+   "text": "Effective zone temperature setpoint (heating/cooling) incorporating setpoint adjustment.",
+   "covered_by": [
+    {
+     "typical": "vav-cooling-only",
+     "line": "effective-setpoint"
+    },
+    {
+     "typical": "vav-reheat-hw",
+     "line": "effective-setpoint"
+    },
+    {
+     "typical": "vav-reheat-electric",
+     "line": "effective-setpoint"
+    },
+    {
+     "typical": "vav-series-fan",
+     "line": "effective-setpoint"
+    },
+    {
+     "typical": "vav-parallel-fan",
+     "line": "effective-setpoint"
+    },
+    {
+     "typical": "vav-dual-duct",
+     "line": "effective-setpoint"
+    }
+   ]
+  },
+  {
+   "item": "cws-01",
+   "list": "Chilled Water System",
+   "text": "Chiller enable/disable",
+   "covered_by": [
+    {
+     "typical": "chiller",
+     "line": "enable"
+    }
+   ]
+  },
+  {
+   "item": "cws-02",
+   "list": "Chilled Water System",
+   "text": "Chiller status",
+   "covered_by": [
+    {
+     "typical": "chiller",
+     "line": "status"
+    }
+   ]
+  },
+  {
+   "item": "cws-03",
+   "list": "Chilled Water System",
+   "text": "Chiller failure alarms",
+   "covered_by": [
+    {
+     "typical": "chiller",
+     "line": "alarm"
+    }
+   ]
+  },
+  {
+   "item": "cws-04",
+   "list": "Chilled Water System",
+   "text": "Entering and leaving water temperatures at each chiller",
+   "covered_by": [
+    {
+     "typical": "chiller",
+     "line": "chiller-temp-sensors"
+    },
+    {
+     "typical": "chiller",
+     "line": "chiller-temps"
+    }
+   ]
+  },
+  {
+   "item": "cws-05",
+   "list": "Chilled Water System",
+   "text": "Chilled water flow rates for each chiller",
+   "covered_by": [
+    {
+     "typical": "chiller",
+     "line": "chiller-flow-meter"
+    },
+    {
+     "typical": "chiller",
+     "line": "chiller-flow"
+    }
+   ]
+  },
+  {
+   "item": "cws-06",
+   "list": "Chilled Water System",
+   "text": "Secondary loop chilled water flow rate",
+   "covered_by": [
+    {
+     "typical": "chw-plant",
+     "line": "secondary-flow-meter"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "secondary-flow"
+    }
+   ]
+  },
+  {
+   "item": "cws-07",
+   "list": "Chilled Water System",
+   "text": "Chilled water supply and return temperatures for the central plant",
+   "covered_by": [
+    {
+     "typical": "chw-plant",
+     "line": "chwr-sensor"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "chwr-temp"
+    }
+   ]
+  },
+  {
+   "item": "cws-08",
+   "list": "Chilled Water System",
+   "text": "Water temperature in the common piping of the primary/secondary loop",
+   "covered_by": [
+    {
+     "typical": "chw-plant",
+     "line": "common-pipe-sensor"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "common-pipe-temp"
+    }
+   ]
+  },
+  {
+   "item": "cws-09",
+   "list": "Chilled Water System",
+   "text": "Chilled water system differential pressure at central chilled water plant",
+   "covered_by": [
+    {
+     "typical": "chw-plant",
+     "line": "plant-dp"
+    }
+   ]
+  },
+  {
+   "item": "cws-10",
+   "list": "Chilled Water System",
+   "text": "Chilled water system differential pressured used for control of secondary pumps",
+   "covered_by": [
+    {
+     "typical": "chw-plant",
+     "line": "remote-dp"
+    }
+   ]
+  },
+  {
+   "item": "cws-11",
+   "list": "Chilled Water System",
+   "text": "Primary chilled water pump start/stop",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "cmd"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "cmd"
+    }
+   ]
+  },
+  {
+   "item": "cws-12",
+   "list": "Chilled Water System",
+   "text": "Primary chilled water pump status",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "status"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "status"
+    }
+   ]
+  },
+  {
+   "item": "cws-13",
+   "list": "Chilled Water System",
+   "text": "Cooling tower fan status (high-low-off)",
+   "covered_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "fan-status"
+    }
+   ]
+  },
+  {
+   "item": "cws-14",
+   "list": "Chilled Water System",
+   "text": "Cooling tower fans - Adjustable frequency drive functions and alarms",
+   "covered_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "vfd-alarm"
+    }
+   ]
+  },
+  {
+   "item": "cws-15",
+   "list": "Chilled Water System",
+   "text": "Condenser water supply and return temperature",
+   "covered_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "cw-supply"
+    },
+    {
+     "typical": "cooling-tower",
+     "line": "cw-return"
+    }
+   ]
+  },
+  {
+   "item": "cws-16",
+   "list": "Chilled Water System",
+   "text": "Cooling tower bypass valve position",
+   "covered_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "bypass-valve"
+    },
+    {
+     "typical": "cooling-tower",
+     "line": "bypass-cmd"
+    }
+   ]
+  },
+  {
+   "item": "cws-17",
+   "list": "Chilled Water System",
+   "text": "Variable speed pump drive frequency",
+   "covered_by": [
+    {
+     "typical": "pump-vfd",
+     "line": "speed"
+    }
+   ]
+  },
+  {
+   "item": "cws-18",
+   "list": "Chilled Water System",
+   "text": "Heat exchanger inlet temperatures",
+   "covered_by": [
+    {
+     "typical": "heat-exchanger",
+     "line": "hx-inlet"
+    }
+   ]
+  },
+  {
+   "item": "cws-19",
+   "list": "Chilled Water System",
+   "text": "Heat exchanger outlet temperatures",
+   "covered_by": [
+    {
+     "typical": "heat-exchanger",
+     "line": "secondary-supply"
+    },
+    {
+     "typical": "heat-exchanger",
+     "line": "hx-primary-leaving"
+    }
+   ]
+  },
+  {
+   "item": "ads-01",
+   "list": "Air Distribution System",
+   "text": "Supply air temperature",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sa-temp"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sa-temp"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "sa-temp"
+    },
+    {
+     "typical": "doas",
+     "line": "da-temp"
+    }
+   ]
+  },
+  {
+   "item": "ads-02",
+   "list": "Air Distribution System",
+   "text": "Supply air dewpoint temperature",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sa-humidity-sensor"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sa-dewpoint"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sa-humidity-sensor"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sa-dewpoint"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "sa-humidity-sensor"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "sa-dewpoint"
+    },
+    {
+     "typical": "doas",
+     "line": "sa-humidity-sensor"
+    },
+    {
+     "typical": "doas",
+     "line": "sa-dewpoint"
+    }
+   ]
+  },
+  {
+   "item": "ads-03",
+   "list": "Air Distribution System",
+   "text": "Supply air static pressure",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "duct-static"
+    },
+    {
+     "typical": "doas",
+     "line": "duct-static"
+    }
+   ]
+  },
+  {
+   "item": "ads-04",
+   "list": "Air Distribution System",
+   "text": "Supply airflow rate",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sa-airflow-station"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sa-airflow"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sa-airflow-station"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sa-airflow"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "sa-airflow-station"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "sa-airflow"
+    },
+    {
+     "typical": "doas",
+     "line": "sa-airflow-station"
+    },
+    {
+     "typical": "doas",
+     "line": "sa-airflow"
+    }
+   ]
+  },
+  {
+   "item": "ads-05",
+   "list": "Air Distribution System",
+   "text": "Outdoor air temperature",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "oa-temp"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "oa-temp"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "oa-temp"
+    },
+    {
+     "typical": "doas",
+     "line": "oa-temp"
+    }
+   ]
+  },
+  {
+   "item": "ads-06",
+   "list": "Air Distribution System",
+   "text": "Outdoor air relative humidity",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "oa-humidity-sensor"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "oa-rh"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "oa-humidity-sensor"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "oa-rh"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "oa-humidity-sensor"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "oa-rh"
+    }
+   ]
+  },
+  {
+   "item": "ads-07",
+   "list": "Air Distribution System",
+   "text": "Calculated outdoor air dewpoint temperatures",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "oa-dewpoint"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "oa-dewpoint"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "oa-dewpoint"
+    },
+    {
+     "typical": "doas",
+     "line": "oa-dewpoint"
+    }
+   ]
+  },
+  {
+   "item": "ads-08",
+   "list": "Air Distribution System",
+   "text": "Return air temperature",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "ra-temp-sensor-ufc"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "ra-temp-ufc"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "ra-temp-sensor-ufc"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "ra-temp-ufc"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "ra-temp-sensor-ufc"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "ra-temp-ufc"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "ra-temp"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "ra-temp"
+    },
+    {
+     "typical": "doas",
+     "line": "ra-temp"
+    }
+   ]
+  },
+  {
+   "item": "ads-09",
+   "list": "Air Distribution System",
+   "text": "Mixed air temperature",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "ma-temp-sensor-ufc"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "ma-temp-ufc"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "ma-temp-sensor-ufc"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "ma-temp-ufc"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "ma-temp-sensor-ufc"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "ma-temp-ufc"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "ma-temp"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "ma-temp"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "ma-temp"
+    }
+   ]
+  },
+  {
+   "item": "ads-10",
+   "list": "Air Distribution System",
+   "text": "Discharge temperature from each heat transfer device",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "coil-lat-sensors"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "coil-lat"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "coil-lat-sensors"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "coil-lat"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "coil-lat-sensors"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "coil-lat"
+    }
+   ]
+  },
+  {
+   "item": "ads-11",
+   "list": "Air Distribution System",
+   "text": "Filter status",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "filter-switch"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "filter"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "filter-switch"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "filter"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "filter-switch"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "filter"
+    },
+    {
+     "typical": "doas",
+     "line": "filter-switch"
+    },
+    {
+     "typical": "doas",
+     "line": "filter"
+    }
+   ]
+  },
+  {
+   "item": "ads-12",
+   "list": "Air Distribution System",
+   "text": "Supply/return/exhaust damper positions",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "ra-damper"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "relief-damper"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "ra-damper"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "exhaust-damper"
+    },
+    {
+     "typical": "doas",
+     "line": "ea-isolation"
+    }
+   ]
+  },
+  {
+   "item": "ads-13",
+   "list": "Air Distribution System",
+   "text": "Outdoor air damper positions",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "oa-damper"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "min-oa-damper"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "oa-damper"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "economizer-damper"
+    },
+    {
+     "typical": "doas",
+     "line": "oa-isolation"
+    }
+   ]
+  },
+  {
+   "item": "ads-14",
+   "list": "Air Distribution System",
+   "text": "Chilled water valve positions",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "cooling-cmd"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "cooling-cmd"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "cooling-cmd"
+    },
+    {
+     "typical": "doas",
+     "line": "cooling-cmd"
+    },
+    {
+     "typical": "fcu",
+     "line": "cooling-cmd"
+    }
+   ]
+  },
+  {
+   "item": "ads-15",
+   "list": "Air Distribution System",
+   "text": "Hot water valve positions",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "heating-cmd"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "heating-cmd"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "heating-cmd"
+    },
+    {
+     "typical": "doas",
+     "line": "heating-cmd"
+    },
+    {
+     "typical": "fcu",
+     "line": "heating-cmd"
+    }
+   ]
+  },
+  {
+   "item": "ads-16",
+   "list": "Air Distribution System",
+   "text": "Electric heater status (on/off and number of stages energized or % power)",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "heater-status"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "heater-status"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "heater-status"
+    },
+    {
+     "typical": "doas",
+     "line": "heater-status"
+    }
+   ]
+  },
+  {
+   "item": "ads-17",
+   "list": "Air Distribution System",
+   "text": "Freezestat status",
+   "covered_by": [
+    {
+     "typical": "doas",
+     "line": "freezestat-switch"
+    },
+    {
+     "typical": "doas",
+     "line": "freezestat"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "freezestat"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "freezestat-monitor"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "freezestat"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "freezestat-monitor"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "freezestat"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "freezestat-monitor"
+    }
+   ]
+  },
+  {
+   "item": "ads-18",
+   "list": "Air Distribution System",
+   "text": "Smoke detector status",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "smoke"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "smoke"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "smoke"
+    },
+    {
+     "typical": "doas",
+     "line": "smoke"
+    },
+    {
+     "typical": "rtu-networked",
+     "line": "smoke"
+    }
+   ]
+  },
+  {
+   "item": "ads-19",
+   "list": "Air Distribution System",
+   "text": "Supply/return fan start/stop",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sf-cmd"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "rf-cmd"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sf-cmd"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "rf-cmd"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "sf-cmd"
+    },
+    {
+     "typical": "doas",
+     "line": "sf-cmd"
+    }
+   ]
+  },
+  {
+   "item": "ads-20",
+   "list": "Air Distribution System",
+   "text": "Supply/return fan speed",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sf-speed"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "rf-speed"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "rf-speed"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sf-speed-cmd"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sf-speed"
+    },
+    {
+     "typical": "doas",
+     "line": "sf-speed"
+    }
+   ]
+  },
+  {
+   "item": "ads-21",
+   "list": "Air Distribution System",
+   "text": "Supply/return fan status",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sf-status"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "rf-status"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sf-status"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "rf-status"
+    },
+    {
+     "typical": "ahu-constant-volume",
+     "line": "sf-status"
+    },
+    {
+     "typical": "doas",
+     "line": "sf-status"
+    }
+   ]
+  },
+  {
+   "item": "ads-22",
+   "list": "Air Distribution System",
+   "text": "Supply/return fan alarm",
+   "covered_by": [
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "sf-alarm"
+    },
+    {
+     "typical": "ahu-multizone-vav",
+     "line": "rf-alarm"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "sf-alarm"
+    },
+    {
+     "typical": "ahu-single-zone",
+     "line": "rf-alarm"
+    },
+    {
+     "typical": "doas",
+     "line": "sf-alarm"
+    }
+   ]
+  },
+  {
+   "item": "ads-23",
+   "list": "Air Distribution System",
+   "text": "Exhaust fan status",
+   "covered_by": [
+    {
+     "typical": "doas",
+     "line": "ef-status"
+    },
+    {
+     "typical": "fan-constant",
+     "line": "status-switch"
+    },
+    {
+     "typical": "fan-constant",
+     "line": "status"
+    },
+    {
+     "typical": "fan-variable",
+     "line": "status"
+    },
+    {
+     "typical": "erv",
+     "line": "ef-status"
+    }
+   ]
+  },
+  {
+   "item": "ads-24",
+   "list": "Air Distribution System",
+   "text": "Outdoor air fan status",
+   "covered_by": [
+    {
+     "typical": "doas",
+     "line": "sf-status"
+    },
+    {
+     "typical": "erv",
+     "line": "fan-status-switches"
+    },
+    {
+     "typical": "erv",
+     "line": "sf-status"
+    }
+   ]
+  },
+  {
+   "item": "ads-25",
+   "list": "Air Distribution System",
+   "text": "Energy recovery wheel rotation status",
+   "covered_by": [
+    {
+     "typical": "doas",
+     "line": "wheel-rotation-sensor"
+    },
+    {
+     "typical": "doas",
+     "line": "wheel-status"
+    },
+    {
+     "typical": "erv",
+     "line": "wheel-rotation-sensor"
+    },
+    {
+     "typical": "erv",
+     "line": "wheel-status"
+    }
+   ]
+  },
+  {
+   "item": "ads-26",
+   "list": "Air Distribution System",
+   "text": "Smoke damper status",
+   "not_applicable": "Smoke dampers are located by plan symbols, which this takeoff does not count (plan §8.9 puts symbol detection out of scope); a partner adds the damper's status point per damper. The hook-up layer carries no fire or smoke damper for the same reason."
+  },
+  {
+   "item": "gbs-01",
+   "list": "General Building Systems",
+   "text": "Building electrical meter*",
+   "covered_by": [
+    {
+     "typical": "building-meters",
+     "line": "electric"
+    }
+   ]
+  },
+  {
+   "item": "gbs-02",
+   "list": "General Building Systems",
+   "text": "Building water meter*",
+   "covered_by": [
+    {
+     "typical": "building-meters",
+     "line": "water-meter"
+    },
+    {
+     "typical": "building-meters",
+     "line": "water"
+    }
+   ]
+  },
+  {
+   "item": "gbs-03",
+   "list": "General Building Systems",
+   "text": "Building natural gas meter*",
+   "covered_by": [
+    {
+     "typical": "building-meters",
+     "line": "gas-meter"
+    },
+    {
+     "typical": "building-meters",
+     "line": "gas"
+    }
+   ]
+  },
+  {
+   "item": "gbs-04",
+   "list": "General Building Systems",
+   "text": "Building steam meter*",
+   "covered_by": [
+    {
+     "typical": "building-meters",
+     "line": "steam"
+    }
+   ]
+  },
+  {
+   "item": "gbs-05",
+   "list": "General Building Systems",
+   "text": "HVAC equipment shutdown switch status",
+   "covered_by": [
+    {
+     "typical": "building-meters",
+     "line": "shutdown-switch"
+    },
+    {
+     "typical": "building-meters",
+     "line": "shutdown"
+    }
+   ]
+  }
+ ]
+}

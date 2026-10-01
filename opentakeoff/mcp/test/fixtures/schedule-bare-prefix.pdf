@@ -1,0 +1,167 @@
+%PDF-1.5
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R 12 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 1098 >>
+stream
+BT /F1 14 Tf 40 580 Td (MECHANICAL PLAN) Tj ET
+1 w
+30 30 552 552 re S
+0.5 w
+120 400 m 144 400 l S
+144 400 m 144 424 l S
+144 424 m 120 424 l S
+120 424 m 120 400 l S
+120 400 m 144 424 l S
+120 424 m 144 400 l S
+BT /F1 10 Tf 129.2 384 Td (B) Tj ET
+BT /F1 10 Tf 129.2 373.5 Td (1) Tj ET
+300 400 m 320 400 l S
+320 400 m 320 414 l S
+320 414 m 310 424 l S
+310 424 m 300 414 l S
+300 414 m 300 400 l S
+BT /F1 10 Tf 304.2 384 Td (BP-1) Tj ET
+300 300 m 324 300 l S
+324 300 m 312 320 l S
+312 320 m 300 300 l S
+BT /F1 10 Tf 306.4 284 Td (CP) Tj ET
+BT /F1 10 Tf 309.2 273.5 Td (1) Tj ET
+126 200 m 138 200 l S
+138 200 m 144 210 l S
+144 210 m 138 220 l S
+138 220 m 126 220 l S
+126 220 m 120 210 l S
+120 210 m 126 200 l S
+BT /F1 10 Tf 128.2 184 Td (ET) Tj ET
+300 200 m 320 200 l S
+320 200 m 320 220 l S
+320 220 m 300 220 l S
+300 220 m 300 200 l S
+300 200 m 320 220 l S
+BT /F1 10 Tf 307.2 184 Td (S) Tj ET
+400 200 m 420 200 l S
+420 200 m 420 220 l S
+420 220 m 400 220 l S
+400 220 m 400 200 l S
+400 200 m 420 220 l S
+BT /F1 10 Tf 407.2 184 Td (S) Tj ET
+BT /F1 9 Tf 480 480 Td (B) Tj ET
+BT /F1 9 Tf 480 100 Td (B) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 344 >>
+stream
+BT /F1 14 Tf 40 580 Td (BOILER SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 170 540 Td (MBH) Tj ET
+BT /F1 9 Tf 280 540 Td (FUEL) Tj ET
+BT /F1 9 Tf 400 540 Td (REMARKS) Tj ET
+BT /F1 9 Tf 50 515 Td (B-1) Tj ET
+BT /F1 9 Tf 170 515 Td (399) Tj ET
+BT /F1 9 Tf 280 515 Td (NATURAL GAS) Tj ET
+BT /F1 9 Tf 400 515 Td (WALL HUNG) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 9 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 752 >>
+stream
+BT /F1 14 Tf 40 580 Td (PUMP SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 200 540 Td (GPM) Tj ET
+BT /F1 9 Tf 280 540 Td (HEAD) Tj ET
+BT /F1 9 Tf 360 540 Td (HP) Tj ET
+BT /F1 9 Tf 440 540 Td (SERVICE) Tj ET
+BT /F1 9 Tf 50 515 Td (BP-1) Tj ET
+BT /F1 9 Tf 200 515 Td (20) Tj ET
+BT /F1 9 Tf 280 515 Td (30) Tj ET
+BT /F1 9 Tf 360 515 Td (1/2) Tj ET
+BT /F1 9 Tf 440 515 Td (BOILER) Tj ET
+BT /F1 9 Tf 50 490 Td (SP-1) Tj ET
+BT /F1 9 Tf 200 490 Td (10) Tj ET
+BT /F1 9 Tf 280 490 Td (20) Tj ET
+BT /F1 9 Tf 360 490 Td (1/3) Tj ET
+BT /F1 9 Tf 440 490 Td (SUMP) Tj ET
+BT /F1 9 Tf 50 465 Td (CP-1) Tj ET
+BT /F1 9 Tf 200 465 Td (5) Tj ET
+BT /F1 9 Tf 280 465 Td (10) Tj ET
+BT /F1 9 Tf 360 465 Td (1/6) Tj ET
+BT /F1 9 Tf 440 465 Td (CIRCULATOR) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 11 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+11 0 obj
+<< /Length 347 >>
+stream
+BT /F1 14 Tf 40 580 Td (EXPANSION TANK SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 170 540 Td (GALLONS) Tj ET
+BT /F1 9 Tf 280 540 Td (PSIG) Tj ET
+BT /F1 9 Tf 400 540 Td (REMARKS) Tj ET
+BT /F1 9 Tf 50 515 Td (ET-1) Tj ET
+BT /F1 9 Tf 170 515 Td (15) Tj ET
+BT /F1 9 Tf 280 515 Td (12) Tj ET
+BT /F1 9 Tf 400 515 Td (DIAPHRAGM) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 13 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+13 0 obj
+<< /Length 477 >>
+stream
+BT /F1 14 Tf 40 580 Td (AIR DEVICE SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 170 540 Td (CFM) Tj ET
+BT /F1 9 Tf 280 540 Td (NECK SIZE) Tj ET
+BT /F1 9 Tf 400 540 Td (TYPE) Tj ET
+BT /F1 9 Tf 50 515 Td (S) Tj ET
+BT /F1 9 Tf 170 515 Td (150) Tj ET
+BT /F1 9 Tf 280 515 Td (8) Tj ET
+BT /F1 9 Tf 400 515 Td (SUPPLY) Tj ET
+BT /F1 9 Tf 50 490 Td (R) Tj ET
+BT /F1 9 Tf 170 490 Td (150) Tj ET
+BT /F1 9 Tf 280 490 Td (10X10) Tj ET
+BT /F1 9 Tf 400 490 Td (RETURN) Tj ET
+endstream
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000141 00000 n 
+0000000211 00000 n 
+0000000337 00000 n 
+0000001487 00000 n 
+0000001613 00000 n 
+0000002008 00000 n 
+0000002134 00000 n 
+0000002937 00000 n 
+0000003065 00000 n 
+0000003464 00000 n 
+0000003592 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+4121
+%%EOF

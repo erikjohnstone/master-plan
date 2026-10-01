@@ -1,0 +1,190 @@
+# 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheet H0.2 HVAC SCHEDULES (PDF page 4) of the Town of Andover Doherty
+# Middle School HVAC bid set (BLW Engineers): an overview of the page at 40 dpi, then each
+# table at 3x (216 dpi) in tiles with the TAG No. column repeated, rendered with MuPDF (pymupdf
+# get_pixmap(clip)) and read by eye on 2026-09-26; second read at 4x of every keyed row, every
+# cell. Each drawn title was found with the PDF's own text layer (pymupdf search_for). The
+# pipeline's output for this sheet was not consulted while keying (AS-28, before the draw,
+# read the column names the normalizer left unread across the unseen corpus, this document's
+# among them, and checked its ERV-2 LOCATION SERVED reading against the print). The third
+# tier keys the tables its seed drew (tier3/01-split.md): one per keyed family.
+SET 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheet H0.2 (page 4) of the Doherty Middle School HVAC bid set, Andover MA (BLW Engineers), the tables the third tier's seed drew for its FCU, ERV and HEAT_PUMP strata.
+EXCLUDES Manufacturers and models, unit types, DX fan coils' cooling and heating capacities (the fan coil family keys chilled- and hot-water coils only), outside and minimum airflows, static pressures, fan speeds, electrical watts, amps, frequency, MCA, FLA and MOCP, refrigerants, module counts, heat recovery and heat pump performance, filters and efficiencies, weights, remarks, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# COMMON AREA DX FAN COIL UNIT SCHEDULE (page 4): four ceiling cassettes. The title names DX
+# cooling: cooling_type dx. Every row prints HEATING MBH, and a DX coil that heats is a heat
+# pump's: heating_type heat_pump, the author's reading (as 14_OR's split heat pumps). The fan
+# coil family keys no DX capacity, so COOLING MBH and HEATING MBH are typed for audit. FAN DATA
+# / MAX (CFM) keys cfm (as 047_NC's CFM (MAX.)); MIN (CFM) is the low speed. ELECTRICAL DATA /
+# VOLT and PH key volts and phase. Notes 1-3 (field-installed accessories including a MERV 13
+# filter and a wall thermostat, condensate, refrigerant isolation valves) key nothing in the
+# family's vocabulary.
+TABLE
+sheet: 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4
+title: COMMON AREA DX FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 4 overview at 40 dpi; crop 43,97,967,243 at 3x in 2 tiles (TAG No. column repeated), notes in the same tiles; second read at 4x (crops 43,166,487,30 and 530,166,652,30; 43,227,487,30 and 530,227,652,30; 43,257,487,30 and 530,257,652,30) of FCU-1, FCU-3 and FCU-4, every cell
+rows: all 4 printed rows
+col: TAG No. => tag
+col: MANUFACTURER => -
+col: MODEL No. => -
+col: TYPE => -
+col: COOLING MBH => -
+col: HEATING MBH => -
+col: FAN DATA / OA (CFM) => -
+col: FAN DATA / MIN (CFM) => -
+col: FAN DATA / MAX (CFM) => cfm
+col: FAN DATA / ESP (IN WG) => -
+col: ELECTRICAL DATA / COOLING (W) => -
+col: ELECTRICAL DATA / COOLING (A) => -
+col: ELECTRICAL DATA / HEATING (W) => -
+col: ELECTRICAL DATA / HEATING (A) => -
+col: ELECTRICAL DATA / VOLT => volts
+col: ELECTRICAL DATA / PH => phase
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title printed 'COMMON AREA DX FAN COIL UNIT SCHEDULE'
+derive: heating_type = heat_pump ; header=TABLE TITLE ; note=title 'COMMON AREA DX FAN COIL UNIT SCHEDULE'; every row prints HEATING MBH: a DX coil that heats, a heat pump (the author's reading)
+grid:
+FCU-1 | DAIKIN | FXZQ05TAVJU | CEILING CASSETTE | 5.8 | 6.5 | - | 220 | 300 | - | - | - | - | - | 208 | 1 | 60 | 0.3 | 15
+FCU-2 | DAIKIN | FXZQ07TAVJU | CEILING CASSETTE | 7.5 | 8.5 | - | 229 | 307 | - | - | - | - | - | 208 | 1 | 60 | 0.3 | 15
+FCU-3 | DAIKIN | FXZQ09TAVJU | CEILING CASSETTE | 9.5 | 10.5 | - | 229 | 317 | - | - | - | - | - | 208 | 1 | 60 | 0.3 | 15
+FCU-4 | DAIKIN | FXZQ15TAVJU | CEILING CASSETTE | 15 | 17 | - | 282 | 405 | - | - | - | - | - | 208 | 1 | 60 | 0.4 | 15
+END
+
+# ENERGY RECOVERY VENTILATOR SCHEDULE (page 4): the sheet prints two tables under this title,
+# ERV-1 (an indoor unit) at the left and ERV-2 (an outdoor unit with a heat pump section)
+# below; the census claims them as one two-row table, so each is keyed as a part of it (as a
+# schedule printed in parts). LOCATION SERVED keys area_served: ERV-1 prints NURSE; ERV-2
+# prints "REFER TO PLANS", a pointer to the plans, not a place ("?"). SUPPLY and EXHAUST FAN
+# DATA key supply_cfm, supply_fan_hp, exhaust_cfm and exhaust_fan_hp (ERV-2 prints "-" for
+# both HPs). ERV-2's second TYPE column prints WHEEL: recovery_type wheel; ERV-1 prints no
+# recovery type (its TYPE is INDOOR). ELECTRICAL DATA / VOLTS and PHASE key volts and phase
+# (ERV-2 prints 220 and 1; its HZ cell prints 13.4, typed as printed). ERV-1's REMARKS cites
+# note 1; ERV-2's prints SEE NOTES. Neither table's notes key anything in the family's
+# vocabulary.
+TABLE
+sheet: 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4
+title: ENERGY RECOVERY VENTILATOR SCHEDULE
+family: ERV
+render: page 4 overview at 40 dpi; the first table (y 588) crop 43,583,1139,127 at 3x in 2 tiles (TAG No. column repeated), notes in the same tiles; second read at 4x (crops 43,649,487,22 and 530,649,652,22) of ERV-1, every cell
+rows: all 1 printed row of the first part
+col: TAG No. => tag
+col: LOCATION SERVED => area_served
+col: MANUFACTURER (AS STANDARD) => -
+col: MODEL No. (AS STANDARD) => -
+col: TYPE => -
+col: SUPPLY FAN DATA / CFM => supply_cfm
+col: SUPPLY FAN DATA / ESP (IN W.C.) => -
+col: SUPPLY FAN DATA / RPM => -
+col: SUPPLY FAN DATA / HP => supply_fan_hp
+col: EXHAUST FAN DATA / CFM => exhaust_cfm
+col: EXHAUST FAN DATA / ESP (IN W.C.) => -
+col: EXHAUST FAN DATA / RPM => -
+col: EXHAUST FAN DATA / HP => exhaust_fan_hp
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / FLA => -
+col: ELECTRICAL DATA / MOCP => -
+col: FILTER => -
+col: EFF% => -
+col: WEIGHT (LBS) => -
+col: REMARKS => -
+grid:
+ERV-1 | NURSE | RENEWAIRE | EV-L | INDOOR | 170 | 0.4 | - | 0.03 | 170 | 0.4 | - | 0.04 | 120 | 1 | 60 | 1.22 | 10 | MERV 13 | 65 | 52 | 1
+END
+
+TABLE
+sheet: 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4
+title: ENERGY RECOVERY VENTILATOR SCHEDULE
+family: ERV
+render: page 4 overview at 40 dpi; the second table (y 1093) crop 43,1087,1917,193 at 3x in 4 tiles (TAG No. column repeated), notes in the same tiles; second read at 4x (crops 43,1178,497,23 and 540,1178,500,23 and 1040,1178,500,23 and 1540,1178,420,23) of ERV-2, every cell
+rows: all 1 printed row of the second part
+col: TAG No. => tag
+col: LOCATION SERVED => area_served
+col: MANUFACTURER (AS STANDARD) => -
+col: MODEL No. (AS STANDARD) => -
+col: TYPE => -
+col: SUPPLY FAN DATA / CFM => supply_cfm
+col: SUPPLY FAN DATA / ESP (IN W.C.) => -
+col: SUPPLY FAN DATA / RPM => -
+col: SUPPLY FAN DATA / HP => supply_fan_hp
+col: EXHAUST FAN DATA / CFM => exhaust_cfm
+col: EXHAUST FAN DATA / ESP (IN W.C.) => -
+col: EXHAUST FAN DATA / RPM => -
+col: EXHAUST FAN DATA / HP => exhaust_fan_hp
+col: TYPE => recovery_type
+col: HEAT RECOVERY SECTION / WINTER PERFORMANCE / SUPPLY AIR / CFM => -
+col: HEAT RECOVERY SECTION / WINTER PERFORMANCE / SUPPLY AIR / EAT DB(°F) => -
+col: HEAT RECOVERY SECTION / WINTER PERFORMANCE / SUPPLY AIR / LAT DB(°F) => -
+col: HEAT RECOVERY SECTION / WINTER PERFORMANCE / EXHAUST AIR / CFM => -
+col: HEAT RECOVERY SECTION / WINTER PERFORMANCE / EXHAUST AIR / EAT DB(°F) => -
+col: HEAT RECOVERY SECTION / WINTER PERFORMANCE / EXHAUST AIR / LAT DB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / SUPPLY AIR / CFM => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / SUPPLY AIR / EAT / DB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / SUPPLY AIR / EAT / WB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / SUPPLY AIR / LAT / DB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / SUPPLY AIR / LAT / WB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / EXHAUST AIR / CFM => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / EXHAUST AIR / EAT / DB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / EXHAUST AIR / EAT / WB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / EXHAUST AIR / LAT / DB(°F) => -
+col: HEAT RECOVERY SECTION / SUMMER PERFORMANCE / EXHAUST AIR / LAT / WB(°F) => -
+col: HEAT PUMP DATA / COOLING DATA / TOTAL (MBH) => -
+col: HEAT PUMP DATA / COOLING DATA / SENSIBLE (MBH) => -
+col: HEAT PUMP DATA / COOLING DATA / EAT (°F) => -
+col: HEAT PUMP DATA / COOLING DATA / LAT (°F) => -
+col: HEAT PUMP DATA / HEATING DATA / OUTPUT (MBH) => -
+col: HEAT PUMP DATA / HEATING DATA / EAT (°F) => -
+col: HEAT PUMP DATA / HEATING DATA / LAT (°F) => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: FILTER => -
+col: SEER/EER => -
+col: WEIGHT (LBS) => -
+col: REMARKS => -
+grid:
+ERV-2 | ?REFER TO PLANS | SWEGON | GOLD12ARX | OUTDOOR | 1230 | 1.0 | - | - | 1230 | 1.0 | - | - | wheel (WHEEL) | 1230 | 0 | 57 | 1230 | 70 | 13.4 | 1100 | 91 | 76 | 78 | 66 | 1100 | 75 | 62.5 | - | - | 60 | 31 | - | 55/55 | 60 | 58.1 | 102 | 220 | 1 | 13.4 | 13.27 | 15 | MERV 13 | - | 1574 | SEE NOTES
+END
+
+# COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE (page 4): three outdoor units. FAN COIL(S)
+# SERVED keys area_served as printed (LIBRARY, NURSE, SWEGON: the Swegon unit's DX coil, per
+# HP-3's remark). MBH / COOL keys cooling_mbh and MBH / HEAT heating_mbh. ELECTRICAL DATA /
+# VOLTS and PHASE key volts and phase; HP-1 (two modules) prints one electrical line per
+# module, alike, typed once (its MCA and MOCP typed as both lines). The manufacturer prints
+# "DAIKEN", typed as printed. REMARKS print SEE NOTES (no notes print under this table) or
+# HP-3's connection remark; nothing in them is in the family's vocabulary.
+TABLE
+sheet: 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4
+title: COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE
+family: HEAT_PUMP
+render: page 4 overview at 40 dpi; crop 43,420,967,155 at 3x in 2 tiles (TAG No. column repeated); second read at 4x (crops 43,468,487,33 and 530,468,652,33; 43,501,487,33 and 530,501,652,33; 43,534,487,33 and 530,534,652,33) of HP-1, HP-2 and HP-3, every cell
+rows: all 3 printed rows
+col: TAG No. => tag
+col: FAN COIL(S) SERVED => area_served
+col: MANUFACTURER => -
+col: MODEL No. => -
+col: TYPE => -
+col: REFRIG. => -
+col: MBH / COOL => cooling_mbh
+col: MBH / HEAT => heating_mbh
+col: MODULE => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: OPERATING WEIGHT => -
+col: REMARKS => -
+grid:
+HP-1 | LIBRARY | DAIKEN | RXLQ144TATJU | AIR COOLED | R-410A | 144 | 162 | 2 | 208 | 3 | 60.8 / 60.8 | 70 / 70 | 1446 LBS | SEE NOTES
+HP-2 | NURSE | DAIKEN | RXYMQ36PVJU | AIR COOLED | R-410A | 36 | 40 | 1 | 208 | 1 | 27 | 30 | 283 LBS | SEE NOTES
+HP-3 | SWEGON | DAIKEN | RXTQ60TAVJUA | AIR COOLED | R-410A | 57.5 | 57 | 1 | 208 | 1 | 29.1 | 35 | 225 LBS | CONNECT TO OXYGEN 8 DX COIL, PROVIDE AHU INTEGRATION KIT(EXPANSION VALVE & CONTROL BOX)
+END

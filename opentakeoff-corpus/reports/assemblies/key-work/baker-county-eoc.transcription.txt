@@ -1,0 +1,193 @@
+# baker-county-eoc — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M6.01 (PDF page 41, printed rotated 90; crops in the
+# displayed orientation) at 3x, read by eye on 2026-09-23. The pipeline's output for
+# this sheet was not consulted. This dev document's key covers every claimed
+# keyed-family table (01-split.md, key-authoring scope).
+SET baker-county-eoc
+SEED 20260923
+SCOPE Sheet M6.01 (page 41) of the Baker Emergency Operations Center mechanical bid set (Sazan Group), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, fan and filter types, BHP, sensible loads, air temperatures, SEER/EER/COP, powered exhaust, sound, FLA/MCA/MOCP, weights, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# Every SERVICE column on this sheet names the area a unit serves ("MAIN OPERATIONS",
+# "911 CALL CENTER"); outside the FAN family (which has a service attribute) it keys
+# area_served as the author's reading. LOCATION keys floor only where it names a level
+# (ROOF, LEVEL - 1).
+#
+# PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT): remarks 1 "PROVIDE
+# MANUFACTURER'S INSULATED 14" ROOF CURB" and 2 "PROVIDE COMPATABLE FINAL FILTERS, MERV
+# 13, 4 IN." The group header over TYPE / MERV RATING / INITIAL PD prints blank.
+# ECONOMIZER prints YES; a packaged rooftop unit's economizer is airside (the author's
+# reading). cooling_type = dx is read from the packaged air-conditioning title and the
+# SEER-rated cooling block.
+TABLE
+sheet: baker-county-eoc-bidset.pdf#41
+title: PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)
+family: RTU
+render: page 41 crop 208,52,2175,320 at 3x in 5 tiles (two rows, no tag repeat needed), remarks in the same tiles; second read at 4x (crops 725,290,65,78 and 1570,290,65,78 and 2045,290,72,78) of both rows' supply CFM, gas input and V/PH/HZ
+rows: all 2 printed rows
+col: EQUIP NO => tag
+col: [LOCATION names a level] => floor
+col: [SERVICE: the area the unit serves] => area_served
+col: MANUFACTURER => -
+col: MODEL => -
+col: NOMINAL CAP (TONS) => cooling_tons
+col: SUPPLY AIR (CFM) => supply_cfm
+col: MIN OUTSIDE AIR (CFM) => oa_cfm_min
+col: [ECONOMIZER: a packaged rooftop unit's economizer is airside] => economizer
+col: SUPPLY AIR FAN / QTY => supply_fan_qty
+col: SUPPLY AIR FAN / EXT SP (IN WG) => -
+col: SUPPLY AIR FAN / TYPE => -
+col: SUPPLY AIR FAN / FAN (BHP) EACH => -
+col: SUPPLY AIR FAN / MOTOR (HP) EACH => supply_fan_hp
+col: SUPPLY AIR FAN / VFD => vfd
+col: EXHAUST AIR FAN / POWERED EXHAUST => -
+col: COOLING / LOAD / TOTAL LOAD (MBH) => cooling_mbh
+col: COOLING / LOAD / SENSIBLE LOAD (MBH) => -
+col: COOLING / COIL / EAT DB (DEG F) => -
+col: COOLING / COIL / EAT WB (DEG F) => -
+col: COOLING / COIL / LAT DB (DEG F) => -
+col: COOLING / COIL / LAT WB (DEG F) => -
+col: COOLING / SEER/SEER 2 => -
+col: GAS HEATER / INPUT CAP (MBH) => gas_input_mbh
+col: GAS HEATER / OUTPUT CAP (MBH) => heating_mbh
+col: GAS HEATER / EAT DB (DEG F) => -
+col: GAS HEATER / LAT DB (DEG F) => -
+col: TYPE => -
+col: MERV RATING => filter_merv
+col: INITIAL PD (IN WG) => -
+col: ELECTRICAL / FLA => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: ELECTRICAL / V/PH/HZ => -
+col: [ELECTRICAL / V/PH/HZ: volts part] => volts
+col: [ELECTRICAL / V/PH/HZ: phase part] => phase
+col: MAX SOUND PRESSURE (dBA) => -
+col: OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title 'PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)' with a SEER/SEER 2-rated cooling block (the author's reading)
+derive: heating_type = gas ; header=GAS HEATER ; note=title '(GAS HEAT)' and the GAS HEATER block
+grid:
+RTU-1 | =ROOF (ROOF) | MAIN OPERATIONS | CARRIER | 48FE | 5 | 1650 | 330 | airside (YES) | 1 | 0.5 | VA | 0.74 | 1.4 | no (NO) | YES | 52.1 | 38.63 | 79.2 | 63.8 | 53.3 | 52.1 | 14/13.4 | 92.4 | 73.9 | 58.1 | 105 | THROWAWAY | 13 | 0.22 | 33 | 33 | 45 | 208/3/60 | 208 | 3 | 79 | 790 | 1,2
+RTU-2 | =ROOF (ROOF) | BUILDING SOUTH | CARRIER | 48FE | 3 | 750 | 150 | airside (YES) | 1 | 0.5 | VA | 0.2 | 0.7 | no (NO) | YES | 28.3 | 18.89 | 79.2 | 63.8 | 53.3 | 52.1 | 14/13.4 | 56.3 | 45.4 | 57.4 | 119.8 | THROWAWAY | 13 | 0.22 | 24 | 24 | 30 | 208/3/60 | 208 | 3 | 79 | 653 | 1,2
+END
+
+# ENERGY RECOVERY VENTILATOR SCHEDULE: remarks 1 "PROVIDE MERV 8 PRE-FILTER PRIOR TO
+# SUPPLY AND EXHAUST FANS" and 2 "PROVIDE ALL DAMPERS AS REQUIRED BY THE ENERGY CODE.
+# ... PROVIDE ALL COMPONENTS REQUIRED FOR CONTROL AS PER THE SEQUENCE OF OPERATIONS."
+TABLE
+sheet: baker-county-eoc-bidset.pdf#41
+title: ENERGY RECOVERY VENTILATOR SCHEDULE
+family: ERV
+render: page 41 crop 1210,398,1175,215 at 3x in 3 tiles, remarks in the same tiles; second read at 4x (crop 1880,535,75,55) of the exhaust airflow
+rows: all 1 printed row
+col: EQUIP. NO => tag
+col: [LOCATION names a level] => floor
+col: [SERVICE: the area the unit serves] => area_served
+col: BASIS OF DESIGN MANUFACTURER => -
+col: BASIS OF DESIGN SERIES => -
+col: SUPPLY AIR / AIRFLOW (CFM) => supply_cfm
+col: SUPPLY AIR / ESP (IN WG) => -
+col: SUPPLY AIR / MOTOR (HP) => supply_fan_hp
+col: EXHAUST AIR / AIRFLOW (CFM) => exhaust_cfm
+col: EXHAUST AIR / ESP (IN WG) => -
+col: EXHAUST AIR / MOTOR (HP) => exhaust_fan_hp
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: ELECTRICAL / SINGLE POINT V/PH/HZ => -
+col: [ELECTRICAL / SINGLE POINT V/PH/HZ: volts part] => volts
+col: [ELECTRICAL / SINGLE POINT V/PH/HZ: phase part] => phase
+col: WEIGHT LBS => -
+col: REMARKS => -
+grid:
+ERV-01 | =LEVEL 1 (LEVEL - 1) | DWELLING UNIT | PANASONIC | FV-10VE2 | 85 | 0.25 | 0.11 | 85 | 0.25 | 0.11 | 3 | 10 | 120/1/60 | 120 | 1 | 60 | 1,2
+END
+
+# FAN SCHEDULE: remarks (cited 1,2,3) 1 "ELECTRICAL TO PROVIDE DISCONNECT SWITCH.",
+# 2 "PROVIDE FACTORY MOUNTED SPEED CONTROLLER.", 3 "PROVIDE MANUFACTURER INSULATED 14"
+# ROOF CURB." Remark 2 keys control, sourced to the note.
+TABLE
+sheet: baker-county-eoc-bidset.pdf#41
+title: FAN SCHEDULE
+family: FAN
+render: page 41 crop 1305,676,1080,170 at 3x in 2 tiles, remarks in the same tiles; second read at 4x (crop 1985,745,50,80) of the fan RPM
+rows: all 1 printed row
+col: EQUIP NO => tag
+col: [LOCATION names a level] => floor
+col: SERVICE => service
+col: MANUFACTURER => -
+col: MODEL => -
+col: TYPE => -
+col: AIRFLOW (CFM) => cfm
+col: STATIC PRESSURE (IN WG) => esp_in
+col: DRIVE => drive
+col: WHEEL TYPE => -
+col: FAN RPM => rpm
+col: MOTOR / HP => motor_hp
+col: MOTOR / EC => ecm
+col: MOTOR / V/PH => -
+col: [MOTOR / V/PH: volts part] => volts
+col: [MOTOR / V/PH: phase part] => phase
+col: VFD => vfd
+col: OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+col: [NOTE 2 (REMARKS): PROVIDE FACTORY MOUNTED SPEED CONTROLLER] => control
+grid:
+EF-1 | =ROOF (ROOF) | RESTROOMS/CUSTODIAL | GREENHECK | G-070-VG | DOWNBLAST | 150 | 0.5 | direct (DIRECT) | CENTRIFUGAL | 1536 | 1/15 | yes (YES) | 120/1 | 120 | 1 | no (NO) | 38 | 1,2,3 | =FACTORY MOUNTED SPEED CONTROLLER (PROVIDE FACTORY MOUNTED SPEED CONTROLLER)
+END
+
+# SPLIT SYSTEM CONDENSING UNIT SCHEDULE: remark 1 (roof support). The group header over
+# MCA / MOCP / V/PH/HZ prints blank.
+TABLE
+sheet: baker-county-eoc-bidset.pdf#41
+title: SPLIT SYSTEM CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 41 crops 1305,853,1080,172 (header) and 1305,1000,1080,75 (rows) at 3x in 2 tiles each; second read at 4x (crops 1770,1020,60,48 and 1900,1020,60,48) of both rows' cooling and heating loads
+rows: all 2 printed rows
+col: EQUIP NO => tag
+col: [LOCATION names a level] => floor
+col: [SERVICE: the area the unit serves] => area_served
+col: MANUFACTURER => -
+col: MODEL => -
+col: COOLING CAPACITY / TOTAL COOLING LOAD (MBH) => cooling_mbh
+col: COOLING CAPACITY / OA DESIGN TEMP (DEG F) => -
+col: COOLING CAPACITY / EER => -
+col: HEATING CAPACITY / TOTAL HEATING LOAD (MBH) => heating_mbh
+col: HEATING CAPACITY / OA DESIGN TEMP (DEG F) => -
+col: HEATING CAPACITY / COP/ HSPF => -
+col: MCA => -
+col: MOCP => -
+col: V/PH/HZ => -
+col: [V/PH/HZ: volts part] => volts
+col: [V/PH/HZ: phase part] => phase
+col: MAXIMUM SOUND PRESSURE (dBA) => -
+col: OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+grid:
+CU-1 | =ROOF (ROOF) | 911 CALL CENTER | DAIKIN | RX12 | 10.8 | 95 | 11.5 | 13.5 | 47 | 3.7/9.0 | 7.7 | 15 | 208/1/60 | 208 | 1 | 49 | 63 | 1
+CU-2 | =ROOF (ROOF) | IDF ROOM | DAIKIN | RXN18 | 17.1 | 95 | 12.2 | 18 | 47 | 3.8/8.2 | 13.3 | 15 | 208/1/60 | 208 | 1 | 56 | 97 | 1
+END
+
+# SPLIT SYSTEM FAN COIL UNIT SCHEDULE: remarks (cited 1,2) 1 "UNIT POWERED BY THE
+# OUTDOOR UNIT." (so no electrical columns print) and 2 "PROVIDE WITH INTEGRAL
+# CONDENSATE PUMP." LOCATION prints rooms (911 CALL CENTER, IDF), not levels.
+TABLE
+sheet: baker-county-eoc-bidset.pdf#41
+title: SPLIT SYSTEM FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 41 crop 1330,1310,1060,225 at 3x in 2 tiles, remarks in the same tiles; second read at 4x (crop 2065,1485,70,45) of both rows' airflow
+rows: all 2 printed rows
+col: EQUIP NO => tag
+col: LOCATION => -
+col: [SERVICE: the area the unit serves] => area_served
+col: MANUFACTURER => -
+col: MODEL => -
+col: TYPE => -
+col: FAN / AIRFLOW (CFM) => cfm
+col: MAX SOUND PRESSURE (dBA) => -
+col: OPERATING WEIGHT (LBS) => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title 'SPLIT SYSTEM FAN COIL UNIT SCHEDULE': a split-system fan coil is a refrigerant (DX) evaporator (the author's reading)
+grid:
+FCU-1 | 911 CALL CENTER | 911 CALL CENTER | DAIKIN | FFQ12 | CASSETTE | 406 | 39 | 36 | 1,2
+FCU-2 | IDF | IDF | DAIKIN | FTXN18 | WALL MOUNTED | 713 | 48 | 27 | 1,2
+END

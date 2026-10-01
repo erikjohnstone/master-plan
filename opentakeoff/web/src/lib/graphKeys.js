@@ -54,6 +54,20 @@ export function remapKey(key, shaToName) {
   return real ? `${real}${tail}` : key;
 }
 
+/** A control packet's id is its sheet key and its place on the sheet
+ *  ("<sha>.pdf#36#p8"), or, for a zone plan's readings, its sheet key and
+ *  "#zones" (controlIntent/record.ts): the page marker is not the key's last
+ *  part, so remapKey leaves it. The readings cite packets by it, and the cite
+ *  the browser prints names it ("(control packet …)"). */
+const PACKET_ID = /^([0-9a-f]{64})\.pdf(#\d+#(?:p\d+|zones))$/i;
+export function remapPacketId(id, shaToName) {
+  if (typeof id !== "string") return id;
+  const m = PACKET_ID.exec(id);
+  const real = m ? shaToName.get(m[1].toLowerCase()) : null;
+  return real ? `${real}${m[2]}` : id;
+}
+const PACKET_FIELDS = new Set(["packet", "id"]);
+
 /** Keys the graph carries under these names, at any depth. Walking by KEY NAME
  *  rather than rewriting every string that merely looks like one keeps room
  *  numbers, cell text and titles untouched. */
@@ -82,6 +96,7 @@ export function remapGraphSheetKeys(graph, shaToName) {
       const v = node[k];
       if (typeof v === "string") {
         if (KEY_FIELDS.has(k)) node[k] = remapKey(v, shaToName);
+        else if (PACKET_FIELDS.has(k)) node[k] = remapPacketId(v, shaToName);
       } else if (v && typeof v === "object") {
         walk(v);
       }

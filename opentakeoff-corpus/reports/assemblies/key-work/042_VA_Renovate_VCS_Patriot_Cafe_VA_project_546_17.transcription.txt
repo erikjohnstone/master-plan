@@ -1,0 +1,29 @@
+# 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 — attribute-key transcription (ASSEMBLIES AS-17, held-out 2)
+# Typed from renders of sheet 1-EP202-N (PDF page 24) of the VA Miami VCS Patriot Cafe
+# renovation (MES Group): an overview of the page at 40 dpi, then the FOOD SERVICE EQUIPMENT
+# SCHEDULE's header and last rows at 3x (216 dpi) and the KEYNOTES at 2x, rendered with MuPDF
+# (pymupdf get_pixmap(clip), displayed orientation) and read by eye on 2026-09-26. The page's
+# text layer (pymupdf search_for) was searched for FAN, EXHAUST and HOOD. Keyed after the dev-2
+# normalizer was frozen (6e1a626); the pipeline's output for this document was never consulted.
+# The second tier keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+SET 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheet 1-EP202-N (page 24) of the VA Miami VCS Patriot Cafe renovation (MES Group), the table the second tier's seed drew for its FAN stratum: claimed under no title, one row.
+EXCLUDES Nothing: the claimed table prints no fan.
+
+# The census claims a FAN table on page 24 under no title, with one row. 1-EP202-N is an
+# electrical power plan (ENLARGED 2ND FLOOR RENOVATION PLAN - POWER): the plans, GENERAL NOTES,
+# KEYNOTES and a FOOD SERVICE EQUIPMENT SCHEDULE of kitchen equipment (beverage counters,
+# ovens, fryers, registers). That schedule's only ventilation rows, H1, H2 and H3, are EXHAUST
+# HOODs that print nothing but their item name. The KEYNOTES name hood control panels, a
+# variable frequency drive by Division 23, an MCC unit for AHU-9 and 1-2-AH13's shunt trip. The
+# text layer prints no FAN on the page (EXHAUST only in the three hood rows). No row is a fan.
+TABLE
+sheet: 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#24
+title: (untitled)
+family: FAN
+render: page 24 overview at 40 dpi; FOOD SERVICE EQUIPMENT SCHEDULE header crop 120,75,940,110 and last rows crop 120,1085,940,180 at 3x; KEYNOTES crop 2530,405,450,380 at 2x; text layer search: FAN 0 hits, EXHAUST 3 hits (the hood rows), HOOD 6 hits (the hood rows and keynotes)
+rows: none — an electrical power plan (1-EP202-N); its food service schedule's H1-H3 are kitchen exhaust hoods with no fan data, and the page prints no fan
+grid:
+END

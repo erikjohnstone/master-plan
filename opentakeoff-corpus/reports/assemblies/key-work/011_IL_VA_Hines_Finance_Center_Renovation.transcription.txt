@@ -1,0 +1,56 @@
+# 011_IL_VA_Hines_Finance_Center_Renovation — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheet MH-101 LEVEL 2 - MECHANICAL HVAC DUCT PLAN AND SCHEDULES (PDF page
+# 16, unrotated) of the Hines Finance Center renovation, VA Hines IL (Spur SBBL Collaborative JV;
+# Spur Design, mechanical): an overview of the page at 40 dpi, then the table at 3x (216 dpi) in 2
+# tiles with the MARK column repeated, rendered with MuPDF (pymupdf get_pixmap(clip)) and read by
+# eye on 2026-09-26, with the PDF's own text layer (pymupdf words, row by row) as a reading aid;
+# every keyed cell was checked on the render. The drawn title was found with the text layer
+# (pymupdf search_for). The pipeline's output for this table was not consulted while keying (AS-28,
+# before the draw, read the column names the normalizer left unread across the unseen corpus, this
+# document's among them). The fourth tier keys the tables its seed drew (tier4/01-split.md): one per
+# keyed family.
+SET 011_IL_VA_Hines_Finance_Center_Renovation
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheet MH-101 (page 16) of the Hines Finance Center renovation, VA Hines IL (Spur Design for Spur SBBL Collaborative JV), the table the fourth tier's seed drew for its HEAT_PUMP stratum.
+EXCLUDES Equipment and model numbers, outside air flows (not in the family's vocabulary), the return and discharge arrangement in NOTES, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# EXISTING HEAT PUMP SCHEDULE (page 16): 15 rows, HP 12-1 to HP 48-15. HEATING CAPACITY prints
+# its unit in every cell ("12,000 BTU"), keyed heating_mbh in BTU/H (as 093_ME's HEATING
+# CAPACITY). DESIGN AIRFLOW prints "205 CFM", keyed cfm. OA CFM (the outside air each unit takes)
+# is not in the family's vocabulary. VOLTAGE/PHASE ("265/1", "460/3") keys its volts part and its
+# phase part. NOTES prints each unit's return and discharge arrangement and keys nothing. No cooling
+# capacity is printed.
+TABLE
+sheet: 011_IL_VA_Hines_Finance_Center_Renovation.pdf#16
+title: EXISTING HEAT PUMP SCHEDULE
+family: HEAT_PUMP
+render: page 16 overview at 40 dpi; crop 652,160,745,225 at 3x in 2 tiles (MARK column repeated); second read at 3x of HP 12-1, HP 15-8 and HP 48-15, every cell
+rows: all 15 printed rows
+col: MARK => tag
+col: EQUIPMENT # => -
+col: MODEL # => -
+col: HEATING CAPACITY => heating_mbh [BTU/H]
+col: DESIGN AIRFLOW => cfm
+col: OA CFM => -
+col: VOLTAGE/PHASE => -
+col: [VOLTAGE/PHASE: volts part] => volts
+col: [VOLTAGE/PHASE: phase part] => phase
+col: NOTES => -
+grid:
+HP 12-1 | RGSH012EL200CANNZ8N00SSD | 190201402 | 12,000 BTU | 205 CFM | 50 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 12-2 | RGSH012SR200CANNZ8N00SSD | 190201342 | 12,000 BTU | 365 CFM | 35 | 265/1 | 265 | 1 | RIGHT HAND RETURN WITH SIDE DISCHARGE
+HP 12-3 | RGSH012EL200CANNZ8N00SSD | 190201399 | 12,000 BTU | 290 CFM | 35 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 12-4 | RGSH012EL200CANNZ8N00SSD | 190201386 | 12,000 BTU | 325 CFM | 30 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 12-5 | RGSH012EL200CANNZ8N00SSD | 190201406 | 12,000 BTU | 460 CFM | 25 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 12-6 | RGSH012EL200CANNZ8N00SSD | 190201398 | 12,000 BTU | 310 CFM | 35 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 15-7 | RGSH015EL200CANNZ8N00SSD | 1902201449 | 15,000 BTU | 490 CFM | 35 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 15-8 | RGSH015EL200CANNZ8N00SSD | 190201450 | 15,000 BTU | 620 CFM | 50 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 15-9 | RGSH015SL200CANNZ8N00SSD | 190201343 | 15,000 BTU | 645 CFM | 80 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH SIDE DISCHARGE
+HP 24-10 | RGSH24EL200CANNZ8N00SSD | 190201442 | 24,000 BTU | 540 CFM | 65 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 24-11 | RGSH24EL200CANNZ8N00SSD | 190201443 | 24,000 BTU | 680 CFM | 55 | 265/1 | 265 | 1 | LEFT HAND RETURN WITH END DISCHARGE
+HP 36-12 | RGSH036EL400CANNZ8P00SSD | 190201455 | 36,000 BTU | 680 CFM | 90 | 460/3 | 460 | 3 | LEFT HAND RETURN WITH END DISCHARGE
+HP 42-13 | RGSH42EL400CANNZ8P00SSD | 190201329 | 42,000 BTU | 820 CFM | 280 | 460/3 | 460 | 3 | LEFT HAND RETURN WITH END DISCHARGE
+HP 42-14 | RGSH42EL400CANNZ8P00SSD | 190201328 | 42,000 BTU | 960 CFM | 110 | 460/3 | 460 | 3 | LEFT HAND RETURN WITH END DISCHARGE
+HP 48-15 | RGSH048EL400CANNZ8P00SSD | 190201367 | 48,000 BTU | 1275 CFM | 135 | 460/3 | 460 | 3 | LEFT HAND RETURN WITH END DISCHARGE
+END

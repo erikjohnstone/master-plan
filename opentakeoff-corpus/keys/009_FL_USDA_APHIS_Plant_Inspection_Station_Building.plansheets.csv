@@ -1,0 +1,17 @@
+# 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#3,PHASING PLAN & GENERAL PROJECT SYMBOLOGY,other,new,yes,general sheet GI003; view A1 PHASING PLAN of level 1 (interior phases 1 and 2); no HVAC unit tags in text layer or render
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#4,LEVEL 1 LIFE SAFETY PLAN,other,new,yes,general sheet GI101; view FIRST FLOOR LIFE SAFETY PLAN; no HVAC unit tags in text layer
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#6,ROOF FRAMING PLAN AND DETAILS,other,roof,yes,"structural SF101; views D1 ROOF FRAMING PLAN and B1 ENLARGED ROOF FRAMING PLAN (fan curbs drawn untagged, 'CL FAN'), plus details; no HVAC unit tags"
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#8,LEVEL 1 FLOOR PLAN,A,new,yes,AE101 view FIRST FLOOR PLAN; no HVAC unit tags
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#9,REFLECTED CEILING PLANS,A,mixed,yes,AE111 views LEVEL 1 REFLECTED CEILING PLAN (new) and REFLECTED CEILING DEMOLITION PLAN; no HVAC unit tags
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#10,ROOF PLANS,A,mixed,yes,AE121 views ROOF PLAN (new; three fan curbs untagged) and ROOF DEMOLITION PLAN; no HVAC unit tags
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#14,MECHANICAL DEMOLITION PLANS,M,demolition,yes,MD101 views C1 ATTIC - MECHANICAL DEMOLITION PLAN and A1 LEVEL ONE - MECHANICAL DEMOLITION PLAN
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,MECHANICAL PLANS,M,new,yes,MH101 views C1 ATTIC / MEZZANINE - MECHANICAL PLAN and A1 LEVEL ONE - MECHANICAL PLAN (new work; existing AHUs/VAVs/EF-5/EF-6 to remain)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,MECHANICAL ROOF PLAN,M,roof,yes,MH102 view C1 ROOF - MECHANICAL PLAN; sheet also carries the BUILDING AIR BALANCE table (not placements)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#24,ELECTRICAL DEMOLITION PLAN,E,demolition,yes,ED101 views C1 ELECTRICAL DEMOLITION PLAN - ATTIC and A1 ELECTRICAL DEMOLITION PLAN - FIRST FLOOR
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#25,LIGHTNING PROTECTION PLAN,E,mixed,yes,EG101 views C1 LIGHTNING PROTECTION - DEMO and A1 LIGHTNING PROTECTION - NEW (both roof plans); fans and chiller drawn untagged
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#27,LIGHTING PLANS,E,new,yes,EL101 views C2 LIGHTING PLAN - ATTIC and A2 LIGHTING PLAN - FIRST FLOOR; no HVAC unit tags
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,POWER PLANS,E,mixed,yes,EP101 views C1 POWER PLAN - ROOF (roof) and A1 POWER PLAN - FIRST FLOOR (new); rooms 122/123 deferred to enlarged plan A4 on EP601
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,PANELBOARD SCHEDULES & ENLARGED PLANS,E,enlarged,yes,EP601: mostly existing panelboard schedules; one plan view A4 ENLARGED POWER PLAN RMS 122 & 123 (mechanical and electrical rooms)

@@ -18,6 +18,7 @@ import {
   viewportScale,
   isFragmentAdjacent,
   stackFragments,
+  dropNumberedNotes,
   type VectorGridContext,
 } from "../src/lib/vectorGridAdapter.ts";
 import type { VectorGridTable } from "../src/lib/vectorGridClient.ts";
@@ -243,5 +244,80 @@ describe("vectorGridAdapter — space disagreement is refused, not absorbed", ()
   it("tolerates a pixel of rounding, not more", () => {
     assert.equal(pageBoxAgrees({ pageWidth: 600, pageHeight: 800 }, 3, 1801, 2400), "ok");
     assert.equal(pageBoxAgrees({ pageWidth: 600, pageHeight: 800 }, 3, 1805, 2400), "size");
+  });
+});
+
+// AS-155: 07_MO's pictured PUMP SCHEDULE prints its notes inside its own grid
+// — a NOTE row, then "1 BOLTED FLANGE" … "6 ECM MOTOR", each a number and one
+// line of text — and every note read as a pump keyed "1" to "6".
+describe("vectorGridAdapter — numbered notes inside the grid (AS-155)", () => {
+  const withNotes = (band: ReturnType<typeof cell>[], rows: number): VectorGridTable => ({
+    ...PUMPS,
+    bbox: [100, 200, 340, 200 + 20 * rows],
+    rows,
+    cells: [...PUMPS.cells, ...band],
+  });
+  const NOTES_BAND = [
+    cell(4, 0, "NOTE", [100, 280, 160, 300]),
+    cell(4, 1, "* SEE EQUIPMENT DATA SCHEDULE ON ELECTRICAL DRAWINGS.", [160, 280, 340, 300], 1, 3),
+    cell(5, 0, "1", [100, 300, 160, 320]),
+    cell(5, 1, "BOLTED FLANGE", [160, 300, 340, 320], 1, 3),
+    cell(6, 0, "2", [100, 320, 160, 340]),
+    cell(6, 1, "ECM MOTOR", [160, 320, 220, 340]),
+    cell(6, 2, "", [220, 320, 280, 340]),
+    cell(6, 3, "", [280, 320, 340, 340]),
+    cell(7, 0, "", [100, 340, 160, 360]),
+    cell(7, 1, "", [160, 340, 340, 360], 1, 3),
+  ];
+
+  it("reads no unit from a note, and keeps the pumps and the region", () => {
+    const built = vectorGridTableToScheduleTable(withNotes(NOTES_BAND, 8), 3, ctx(), 3);
+    assert.ok(built);
+    const keys = built.rows.map((r) => r.key);
+    assert.ok(keys.includes("P-1") && keys.includes("P-2"), keys.join(","));
+    assert.ok(!keys.includes("1") && !keys.includes("2"), `a note read as a row: ${keys.join(",")}`);
+    assert.equal(built.region[3], (200 + 20 * 8) * 3, "the notes stay inside the table's region");
+  });
+
+  it("drops only the band below the label; the label row stays", () => {
+    const t = dropNumberedNotes(withNotes(NOTES_BAND, 8));
+    assert.equal(t.rows, 5);
+    assert.deepEqual([...new Set(t.cells.map((c) => c.row))].sort(), [0, 1, 2, 3, 4]);
+  });
+
+  it("keeps the band when a row in it holds more than one line of text", () => {
+    const band = [...NOTES_BAND.slice(0, 4),
+      cell(6, 0, "3", [100, 320, 160, 340]),
+      cell(6, 1, "140", [160, 320, 220, 340]),
+      cell(6, 2, "70", [220, 320, 280, 340]),
+      cell(6, 3, "7.5", [280, 320, 340, 340])];
+    const t = withNotes(band, 7);
+    assert.equal(dropNumberedNotes(t), t);
+  });
+
+  it("keeps a table whose rows are numbered but print no NOTES label", () => {
+    const t: VectorGridTable = { ...PUMPS, cells: PUMPS.cells.map((c) =>
+      c.row >= 2 && c.col === 0 ? { ...c, text: String(c.row - 1) } : c) };
+    assert.equal(dropNumberedNotes(t), t);
+  });
+
+  it("keeps a label with only blank rows under it, and a table that starts with the label", () => {
+    const blank = withNotes([...NOTES_BAND.slice(0, 2), ...NOTES_BAND.slice(8)], 8);
+    assert.equal(dropNumberedNotes(blank), blank);
+    // A table that is all notes (07_MO M-601's VAV notes panel): its label is
+    // its first row, not a band under any unit's row.
+    const panel: VectorGridTable = { ...PUMPS, rows: 3, cols: 2, cells: [
+      cell(0, 0, "NOTES:", [100, 200, 340, 220], 1, 2),
+      cell(1, 0, "1", [100, 220, 160, 240]), cell(1, 1, "ALL BOXES ARE SINGLE DUCT", [160, 220, 340, 240]),
+      cell(2, 0, "2", [100, 240, 160, 260]), cell(2, 1, "SEE CONTROLS DWGS", [160, 240, 340, 260])] };
+    assert.equal(dropNumberedNotes(panel), panel);
+  });
+
+  it("keeps a band whose first cell is not a note number", () => {
+    const band = [...NOTES_BAND.slice(0, 2),
+      cell(5, 0, "P-3", [100, 300, 160, 320]),
+      cell(5, 1, "SPARE", [160, 300, 340, 320], 1, 3)];
+    const t = withNotes(band, 6);
+    assert.equal(dropNumberedNotes(t), t);
   });
 });

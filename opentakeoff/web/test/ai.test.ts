@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  aiConfig, isAiConfigured, aiRequestUrl, buildVisionRequest, parseVisionResponse, scaleReadPrompt,
+  PLATFORM_AI, aiConfig, isAiConfigured, aiRequestUrl, buildVisionRequest, parseVisionResponse, scaleReadPrompt,
   classifySymbolPrompt, parseClassifyResponse, buildStructuredJsonRequest, parseStructuredJsonResponse,
 } from "../src/lib/ai.js";
 import { scaleFromLabel, STANDARD_SCALES } from "../src/lib/sheets.js";
@@ -119,6 +119,14 @@ test("parseClassifyResponse: a real, live model reply (this project's own config
     confidence: 0.95,
     reasoning: "The symbol shows a valve body (bowtie shape) paired with a square actuator marked 'M' for motor-driven electric actuation.",
   });
+});
+
+test("the platform defaults name models the endpoint serves (GET /v1/models, recorded 2026-09-25)", () => {
+  // Recorded from https://api.cerebras.ai/v1/models on 2026-09-25. A default
+  // the endpoint no longer lists fails every vision call (gemma-4-31b did).
+  const served = ["gpt-oss-120b", "qwen-3.8-27b"];
+  assert.ok(served.includes(PLATFORM_AI.model), `agent model ${PLATFORM_AI.model} is not served`);
+  assert.ok(served.includes(PLATFORM_AI.visionModel), `vision model ${PLATFORM_AI.visionModel} is not served`);
 });
 
 test("parseClassifyResponse: bare JSON with no fence also parses", () => {

@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Annotated, Literal
 from pydantic import Field
 from .models import Contract
+from .adapters import POINT_RULE_V1, PointRule
 from .point_lists import PointMatrix
 from .assignment_demand import validate_observations
 
@@ -33,6 +34,8 @@ class QuantityDelta(QuantityPair):
 class RetainedPointMatrix(Contract):
     capture_id: Digest
     matrix: PointMatrix
+    # The rule its capture read the matrix with; absent on version 1 requests.
+    point_rule_version: PointRule = POINT_RULE_V1
 
 
 class RevisionQuantityInput(Contract):
@@ -66,7 +69,7 @@ def compare_revision_quantities(request: RevisionQuantityInput) -> RevisionQuant
         if key in matrices:
             raise ValueError('Duplicate retained revision point matrix')
         matrices.add(key)
-        validate_observations(source.matrix)
+        validate_observations(source.matrix, source.point_rule_version)
         result.checked_point_matrices.append(CheckedPointMatrix(capture_id=source.capture_id, matrix_id=source.matrix.matrix_id))
     for pair in checked.pairs:
         key = (pair.row_id, pair.metric_key)

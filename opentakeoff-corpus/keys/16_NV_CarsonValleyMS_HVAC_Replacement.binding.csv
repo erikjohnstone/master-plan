@@ -1,0 +1,140 @@
+# 16_NV_CarsonValleyMS_HVAC_Replacement.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2, dev (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/16_NV_CarsonValleyMS_HVAC_Replacement.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B1,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,its tag is printed under a symbol carrying F (F-B1)
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B1,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B1,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B2,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B2,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B2,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B3,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B3,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B3,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B4,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B4,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B4,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B5,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B5,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B5,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B6,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B6,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B6,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B7,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B7,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B7,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B8,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B8,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B8,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B9,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B9,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B9,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C1,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C1,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C1,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C2,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C2,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C2,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C3,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C3,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C3,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C4,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C4,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C4,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C5,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C5,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C5,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C6,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C6,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C6,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C7,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C7,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C7,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C8,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C8,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C8,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C9,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C9,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C9,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C10,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C10,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C10,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C11,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C11,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C11,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C12,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C12,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C12,FURNACE,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROLLER,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B1,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,the furnace's condensing unit (AREA SERVED F-B1 AND EC-B1); the furnace diagram labels its CU
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B1,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B2,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B2,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B3,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B3,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B4,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B4,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B5,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B5,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B6,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B6,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B7,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B7,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B8,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B8,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B9,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B9,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C1,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C1,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C2,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C2,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C3,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C3,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C4,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C4,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C5,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C5,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C6,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C6,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C7,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C7,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C8,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C8,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C9,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C9,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C10,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C10,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C11,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C11,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C12,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C12,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,FURNACE CONTROL DIAGRAM,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,BO1,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR SEQUENCE OF OPERATION,list_range,names the corresponding condensing units (CU-BO1 AND CU-BO2)
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,BO1,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR CONTROL DIAGRAM,family_detail,detail 3 labels a CU
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,BO2,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR SEQUENCE OF OPERATION,list_range,names the corresponding condensing units (CU-BO1 AND CU-BO2)
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,BO2,CONDENSING_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR CONTROL DIAGRAM,family_detail,detail 3 labels a CU
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C1,ERV,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,C-WING ENERGY RECOVERY VENTILATOR SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C1,ERV,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,C-WING ERV CONTROL DIAGRAM,family_detail,detail 4
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C2,ERV,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,C-WING ENERGY RECOVERY VENTILATOR SEQUENCE OF OPERATION,family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,C2,ERV,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28,C-WING ERV CONTROL DIAGRAM,family_detail,detail 4
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B1,OUTDOOR_AIR_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR SEQUENCE OF OPERATION,list_range,names the outside air units (OAU-B1 AND OAU-B2)
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B1,OUTDOOR_AIR_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR CONTROL DIAGRAM,family_detail,detail 3
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B2,OUTDOOR_AIR_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR SEQUENCE OF OPERATION,list_range,names the outside air units (OAU-B1 AND OAU-B2)
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,B2,OUTDOOR_AIR_UNIT,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,BUILDING B OUTSIDE AIR CONTROL DIAGRAM,family_detail,detail 3
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,2,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOFTOP UNIT WITH BAROMETRIC RELIEF SEQUENCE OF OPERATION (BID ALTERNATE 1),family_detail,the existing rooftop units' bid alternate 1 controls
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,2,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROLLER (BID ALTERNATE 1),family_detail,detail 1
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,2,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROL DIAGRAM (BID ALTERNATE 1),family_detail,detail 2
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,3,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOFTOP UNIT WITH BAROMETRIC RELIEF SEQUENCE OF OPERATION (BID ALTERNATE 1),family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,3,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROLLER (BID ALTERNATE 1),family_detail,detail 1
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,3,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROL DIAGRAM (BID ALTERNATE 1),family_detail,detail 2
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,4,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOFTOP UNIT WITH BAROMETRIC RELIEF SEQUENCE OF OPERATION (BID ALTERNATE 1),family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,4,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROLLER (BID ALTERNATE 1),family_detail,detail 1
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,4,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROL DIAGRAM (BID ALTERNATE 1),family_detail,detail 2
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,5,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOFTOP UNIT WITH BAROMETRIC RELIEF SEQUENCE OF OPERATION (BID ALTERNATE 1),family_detail,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,5,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROLLER (BID ALTERNATE 1),family_detail,detail 1
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,5,RTU,16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29,ROOF TOP UNIT WITH BAROMETRIC RELIEF CONTROL DIAGRAM (BID ALTERNATE 1),family_detail,detail 2

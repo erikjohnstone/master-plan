@@ -1,0 +1,66 @@
+# 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M7.0 MECHANICAL SCHEDULES (page 8) of the SLAC LCLS-II-HE process cooling water skid, Menlo Park CA (Gordon Prill), the tables the fourth tier's seed drew for its PUMP and HEAT_EXCHANGER strata.
+#   067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8 | (N) PUMP SCHEDULE | PUMP | all 2 printed rows | render: page 8 overview at 40 dpi; crop 180,128,1050,250 at 2.8x in 2 tiles (MARK column repeated), notes included; second read at 3x of both rows, every keyed cell
+#   067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8 | (N) HEAT EXCHANGER SCHEDULE | HEAT_EXCHANGER | all 1 printed row | render: page 8 overview at 40 dpi; crop 1310,665,1560,150 at 2.6x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and models, locations, selection and maximum flows and heads, brake horsepower, weights, maximum capacities, pressure drops, plate counts beyond the exchanger's type, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid: 2 table(s), 3 instance(s), 48 keyed attribute value(s) (29 printed, 19 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,building,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,floor,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,area_served,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,qty,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,service,NEH/XPP,,SERVICE,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,gpm,581.9,gpm,DESIGN FLOW (GPM),
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,head_ft,277,ft,DESIGN HEAD (FT WG/PSI): its feet of water part,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,motor_hp,75,hp,MOTOR / HP,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,rpm,3500,rpm,MOTOR / RPM,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,vfd,yes,,NOTE 2,"note 2: 'VFD'S SUPPORTING PUMPS SHALL BE NEW. SEE ADJACENT VFD SCHEDULE.', cited by both rows' REMARKS (1)-(9)"
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,pump_arrangement,duty_standby,,NOTE 1,"note 1: 'N+1 PUMPS.', cited by both rows' REMARKS (1)-(9): the pair is one duty pump and one standby (the author's reading)"
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,glycol_pct,,%,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,conn_in,,in,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,volts,480,V,ELECTRICAL V/PH/HZ: volts part,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1001,PUMP,phase,3,,ELECTRICAL V/PH/HZ: phase part,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,building,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,floor,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,area_served,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,qty,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,service,NEH/XPP,,SERVICE,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,gpm,581.9,gpm,DESIGN FLOW (GPM),
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,head_ft,277,ft,DESIGN HEAD (FT WG/PSI): its feet of water part,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,motor_hp,75,hp,MOTOR / HP,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,rpm,3500,rpm,MOTOR / RPM,
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,vfd,yes,,NOTE 2,"note 2: 'VFD'S SUPPORTING PUMPS SHALL BE NEW. SEE ADJACENT VFD SCHEDULE.', cited by both rows' REMARKS (1)-(9)"
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,pump_arrangement,duty_standby,,NOTE 1,"note 1: 'N+1 PUMPS.', cited by both rows' REMARKS (1)-(9): the pair is one duty pump and one standby (the author's reading)"
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,glycol_pct,,%,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,conn_in,,in,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,volts,480,V,ELECTRICAL V/PH/HZ: volts part,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,B950A-PCWP-1002,PUMP,phase,3,,ELECTRICAL V/PH/HZ: phase part,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,building,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,floor,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,area_served,B950A,,SERVICE: the building the exchanger serves,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,qty,,,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,hx_type,plate,,DESIGN PLATES (QTY): a plate exchanger,printed 'DESIGN PLATES 186'; author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,primary_medium,chw,,LOW TEMP WATER SIDE / FLUID: the source side's medium,printed 'CHW'; author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,secondary_medium,other,,HIGH TEMP WATER SIDE / FLUID: the load side's medium,printed 'PCW'; author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,primary_gpm,349.12,gpm,LOW TEMP WATER SIDE / DESIGN GPM: the source side,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,primary_ewt_f,45,F,LOW TEMP WATER SIDE / EWT(F): the source side,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,primary_lwt_f,65,F,LOW TEMP WATER SIDE / LWT(F): the source side,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,secondary_gpm,581.9,gpm,HIGH TEMP WATER SIDE / DESIGN GPM: the load side,author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,secondary_ewt_f,74,F,HIGH TEMP WATER SIDE / EWT(F): the load side,printed '74°'; author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,secondary_lwt_f,62,F,HIGH TEMP WATER SIDE / LWT(F): the load side,printed '62°'; author's reading of the printed row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,capacity_mbh,3462,MBH,DESIGN CAPACITY (MBH),
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,primary_steam_psig,,psig,,not printed
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,B950A-HX-PCWP-1001,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,,not printed

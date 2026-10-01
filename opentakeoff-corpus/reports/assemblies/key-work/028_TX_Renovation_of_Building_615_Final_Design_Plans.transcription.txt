@@ -1,0 +1,318 @@
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheet M-601 HVAC SCHEDULES I (PDF page 9, unrotated) of the renovation of
+# building 615, Joint Base San Antonio - Fort Sam Houston TX (US Army Corps of Engineers; Kendall /
+# FMI): an overview of the page at 40 dpi, then each table at 2.2x-3x (158-216 dpi) in tiles with
+# the MARK column repeated, rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on
+# 2026-09-26, with the PDF's own text layer (pymupdf words, row by row) as a reading aid; every
+# keyed cell was checked on the render. Each drawn title was found with the text layer (pymupdf
+# search_for). The pipeline's output for these tables was not consulted while keying. Disclosed
+# before the draw: the fan coil schedule's ELECTRICAL block (MCA 0.63 beside HP 8.0 / 9.4) and its
+# ROOM column were read by hand on 2026-09-26 (the invariant sweep's render of this page, and
+# AS-29's unseen A/B, which read the ROOM column's values against their cells), and AS-28's census
+# read the column names the normalizer left unread across the unseen corpus, this document's among
+# them. The fourth tier keys the tables its seed drew (tier4/01-split.md): one per keyed family.
+SET 028_TX_Renovation_of_Building_615_Final_Design_Plans
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheet M-601 HVAC SCHEDULES I (page 9) of the building 615 renovation, Fort Sam Houston TX (Kendall / FMI for the US Army Corps of Engineers), the tables the fourth tier's seed drew for its FCU, DOAS, AIR_COOLED_CHILLER, BOILER, FAN and UNIT_HEATER strata.
+EXCLUDES Unit types, fouling factors, sensible capacities, air temperatures, air-side pressure drops, efficiencies, MCA and MOCP, amps, NEMA sizes, dimensions, weights, sound ratings, manufacturers and models, clearances, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# CHILLED WATER FAN COIL UNIT SCHEDULE (page 9): 23 printed rows in two groups, FCC 1-1 to FCU 1-9
+# and FCU 2-1 to FCU 2-14; the marks print FCC for the ductless 4-way cassettes and FCU for the thin
+# line horizontal fan coils, all of them chilled-water fan coils in this FCU schedule, so all 23 are
+# keyed (the census claims 11). ROOM names the rooms each unit serves, keyed area_served as the
+# author's reading (as 093_ME's SPACE: NAME). SUPPLY FAN MAX. CFM keys cfm. COOLING COIL / TOT. MBH
+# keys chw_mbh, CHILLED WATER GPM chw_gpm, EWT/LWT (F) ("44/56") its EWT part chw_ewt_f and its LWT
+# part chw_lwt_f (as bldg5406), WATER SIDE PRESS. DROP (FT W.G.) chw_wpd_ft. HEATING COIL / TOTAL
+# MBH keys hw_mbh, HOT WATER GPM hw_gpm, EWT/LWT ("180/160") hw_ewt_f and hw_lwt_f, WATER SIDE
+# PRESS. DROP hw_wpd_ft. ELECTRICAL / VOLT-PH prints "208-230V 1ph" (FCU 2-1: "208-230V 3ph"): its
+# volts part is two voltages, not one value ("?", as 071_ME's 208/230), its phase part 1 or 3.
+# ELECTRICAL / HP keys motor_hp as printed: 0.125 for the cassettes, 8.0, 9.4 and 4.0 for the
+# horizontal units (beside an MCA of 0.63 or 0.74; the print says HP, the key types it), 5.0 for
+# FCU 2-1. Every row prints a chilled-water coil block and a hot-water coil block: cooling_type chw,
+# heating_type hw. Note 3 ("4-PIPE CONFIGURATION."), cited by every row's NOTES, keys pipes 4. Notes
+# 1, 2, 4 and 5 (condensate lift pump, Buy American, MERV 8 and 13 filters, clearance) key nothing
+# in the family's vocabulary. The print's own slips are typed as printed: FCC 1-1's heating TOTAL
+# MBH 29.3 beside its twin FCC 1-2's 13.0, and FCC 2-3's and FCC 2-4's EAT DB/WB 80/68, 80/69 and
+# hot-water EWT/LWT 180/161, 180/162.
+TABLE
+sheet: 028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9
+title: CHILLED WATER FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 9 overview at 40 dpi; crops 135,88,2200,330 and 135,405,2200,250 at 3x, each in 5 tiles (MARK column repeated), notes included; second read at 3x of every row in the text layer's order, every keyed cell
+rows: all 23 printed rows
+col: MARK => tag
+col: [ROOM: the rooms the unit serves] => area_served
+col: TYPE => -
+col: SUPPLY FAN MAX. CFM => cfm
+col: COIL FOULING FACTOR (HR-SQ. FT-F/BTU) => -
+col: COOLING COIL / TOT. MBH => chw_mbh
+col: COOLING COIL / SENS. MBH => -
+col: COOLING COIL / CHILLED WATER GPM => chw_gpm
+col: COOLING COIL / EAT DB/WB (F) => -
+col: COOLING COIL / LAT DB/WB (F) => -
+col: COOLING COIL / EWT/LWT (F) => -
+col: [COOLING COIL / EWT/LWT (F): EWT part] => chw_ewt_f
+col: [COOLING COIL / EWT/LWT (F): LWT part] => chw_lwt_f
+col: COOLING COIL / AIR SIDE PRESS. DROP (IN W.G.) => -
+col: COOLING COIL / WATER SIDE PRESS. DROP (FT W.G.) => chw_wpd_ft
+col: HEATING COIL / TOTAL MBH => hw_mbh
+col: HEATING COIL / HOT WATER GPM => hw_gpm
+col: HEATING COIL / EAT (F) => -
+col: HEATING COIL / LAT (F) => -
+col: HEATING COIL / EWT/LWT (F) => -
+col: [HEATING COIL / EWT/LWT (F): EWT part] => hw_ewt_f
+col: [HEATING COIL / EWT/LWT (F): LWT part] => hw_lwt_f
+col: HEATING COIL / AIR SIDE PRESS. DROP (IN W.G.) => -
+col: HEATING COIL / WATER SIDE PRESS. DROP (FT W.G.) => hw_wpd_ft
+col: ELECTRICAL / VOLT-PH => -
+col: [ELECTRICAL / VOLT-PH: volts part] => volts
+col: [ELECTRICAL / VOLT-PH: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / RPM => -
+col: ELECTRICAL / NEMA SIZE => -
+col: DIMENSIONS (IN) / L => -
+col: DIMENSIONS (IN) / W => -
+col: DIMENSIONS (IN) / H => -
+col: MANUFACTURER /MODEL => -
+col: NOTES => -
+derive: cooling_type = chw ; header=COOLING COIL / CHILLED WATER GPM ; note=every row prints the chilled-water coil block
+derive: heating_type = hw ; header=HEATING COIL / HOT WATER GPM ; note=every row prints the hot-water coil block
+derive: pipes = 4 ; header=NOTE 3 ; note=note 3: '4-PIPE CONFIGURATION.', cited by every row's NOTES (1,2,3,4,5)
+grid:
+FCC 1-1 | LIBRARY 101 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 29.3 | 3.1 | 70 | 106.8 | 180/160 | 180 | 160 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCC 1-2 | LIBRARY 101 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/160 | 180 | 160 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCU 1-3 | RESTROOM AREA: 103, 104, 105, 106 | Thin Line Horizontal Fan Coil | 600 | 0.001 | 20.4 | 15.4 | 4.3 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 8.8 | 20.5 | 1.8 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 5.7 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 8.0 | 1363 | 3 | 68.1 | 29.5 | 16.0 | DAIKIN/FCHC-206E | 1,2,3,4,5
+FCU 1-4 | CORRIDORS & STORAGE 107 | Thin Line Horizontal Fan Coil | 600 | 0.001 | 20.4 | 15.4 | 4.3 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 8.8 | 20.5 | 1.8 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 5.7 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 8.0 | 1363 | 3 | 68.1 | 29.5 | 16.0 | DAIKIN/FCHC-206E | 1,2,3,4,5
+FCU 1-5 | GROUP REHERSAL 1-3 | Thin Line Horizontal Fan Coil | 800 | 0.001 | 23.6 | 17.6 | 5.0 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 12.3 | 23.5 | 2.1 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 6.2 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 9.4 | 1456 | 3 | 74.6 | 29.5 | 16.0 | DAIKIN/FCHC-208E | 1,2,3,4,5
+FCU 1-6 | GROUP REHERSAL 4 & STORAGES | Thin Line Horizontal Fan Coil | 400 | 0.001 | 13.9 | 10.6 | 3.2 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 4.1 | 13.9 | 1.3 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 6.4 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 4.0 | 1269 | 2 | 57.1 | 29.5 | 16.0 | DAIKIN/FCHC-204E | 1,2,3,4,5
+FCU 1-7 | INSTR. ROOMS & MECH 116,117 & 119 | Thin Line Horizontal Fan Coil | 400 | 0.001 | 13.9 | 10.6 | 3.2 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 4.1 | 13.9 | 1.3 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 6.4 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 4.0 | 1269 | 2 | 57.1 | 29.5 | 16.0 | DAIKIN/FCHC-204E | 1,2,3,4,5
+FCU 1-8 | MENS 120, MEN SHOWER 121, & MEN LOCKER 122 | Thin Line Horizontal Fan Coil | 600 | 0.001 | 20.4 | 15.4 | 4.5 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 8.8 | 20.5 | 1.8 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 5.7 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 8.0 | 1363 | 3 | 68.1 | 29.5 | 16.0 | DAIKIN/FCHC-206E | 1,2,3,4,5
+FCU 1-9 | IND. PRACTICE ROOMS & CORRIDORS | Thin Line Horizontal Fan Coil | 600 | 0.001 | 20.4 | 15.4 | 4.5 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 8.8 | 20.5 | 1.8 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 5.7 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 8.0 | 1363 | 3 | 68.1 | 29.5 | 16.0 | DAIKIN/FCHC-206E | 1,2,3,4,5
+FCU 2-1 | PERFORMANCE/REHERSAL HALL 213 | Ductless 4-Way Discharge Cassette | 3810 | 0.001 | 170.1 | 114.9 | 28.1 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 1.02 | 15.34 | 162.0 | 16.6 | 70 | 106.8 | 180/160 | 180 | 160 | 1.02 | 22.04 | 208-230V 3ph | ?208-230V 3ph | 3 | 17.10 | 5.0 | 1106 | 1 | 41.0 | 54.0 | 30.0 | DAIKIN/BCHD0401 | 1,2,3,4,5
+FCC 2-2 | OPEN OFFICE 216 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/160 | 180 | 160 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCC 2-3 | OPEN OFFICE 216 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/68 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/161 | 180 | 161 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCC 2-4 | OPEN OFFICE 216 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/69 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/162 | 180 | 162 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCC 2-5 | OPEN OFFICE 216 | Ductless 4-Way Discharge Cassette | 700 | 0.001 | 28.0 | 23.1 | 6.1 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 12.93 | 46.6 | 4.9 | 70 | 106.8 | 180/160 | 180 | 160 | - | 6.93 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.40 | 0.125 | 1250 | 00 | 51.4 | 37.0 | 14.1 | MODINE/SCW033 | 1,2,3,4,5
+FCC 2-6 | ROCK REHERSAL 218 | Ductless 4-Way Discharge Cassette | 700 | 0.001 | 28.0 | 23.1 | 6.1 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 12.93 | 46.6 | 4.9 | 70 | 106.8 | 180/160 | 180 | 160 | - | 6.93 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.40 | 0.125 | 1250 | 00 | 51.4 | 37.0 | 14.1 | MODINE/SCW033 | 1,2,3,4,5
+FCC 2-7 | ROCK REHERSAL 218 | Ductless 4-Way Discharge Cassette | 700 | 0.001 | 28.0 | 23.1 | 6.1 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 12.93 | 46.6 | 4.9 | 70 | 106.8 | 180/160 | 180 | 160 | - | 6.93 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.40 | 0.125 | 1250 | 00 | 51.4 | 37.0 | 14.1 | MODINE/SCW033 | 1,2,3,4,5
+FCU 2-8 | CORRIDOR C206 & MECHANICAL 215 | Thin Line Horizontal Fan Coil | 800 | 0.001 | 23.6 | 17.6 | 5.0 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 12.3 | 20.3 | 2.1 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 6.2 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.74 | 9.4 | 1456 | 3 | 74.6 | 29.5 | 16.0 | DAIKIN/FCHC-208E | 1,2,3,4,5
+FCC 2-9 | BREAK/CONFERENCE 203 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/160 | 180 | 160 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCC 2-10 | BREAK/CONFERENCE 203 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/160 | 180 | 160 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCC 2-11 | BREAK/CONFERENCE 203 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/160 | 180 | 160 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCC 2-12 | BREAK/CONFERENCE 203 | Ductless 4-Way Discharge Cassette | 630 | 0.001 | 18.4 | 13.1 | 4.9 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | - | 7.16 | 13.0 | 3.1 | 70 | 106.8 | 180/160 | 180 | 160 | - | 5.54 | 208-230V 1ph | ?208-230V 1ph | 1 | 1.00 | 0.125 | 1250 | 00 | 37.0 | 37.0 | 12.1 | MODINE/SCW018 | 1,2,3,4,5
+FCU 2-13 | CORRIDORS ,STORAGES, 207, & 209 | Thin Line Horizontal Fan Coil | 800 | 0.001 | 23.6 | 17.6 | 5.0 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 12.3 | 23.5 | 2.1 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 6.2 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 9.4 | 1456 | 3 | 74.6 | 29.5 | 16.0 | DAIKIN/FCHC-208E | 1,2,3,4,5
+FCU 2-14 | WOMEN 204 & MEN 206 | Thin Line Horizontal Fan Coil | 400 | 0.001 | 13.9 | 10.6 | 3.2 | 80/67 | 56.3/56.2 | 44/56 | 44 | 56 | 0.05 | 4.1 | 13.9 | 1.3 | 70 | 106.8 | 180/160 | 180 | 160 | 0.05 | 6.4 | 208-230V 1ph | ?208-230V 1ph | 1 | 0.63 | 4.0 | 1269 | 2 | 57.1 | 29.5 | 16.0 | DAIKIN/FCHC-204E | 1,2,3,4,5
+END
+
+# DEDICATED OUTSIDE AIR SYSTEM SCHEDULE (page 9): three rows. MAX. CFM keys supply_cfm. The
+# COOLING COIL block is chilled water (EWT/LWT 42.0/56.0, a FLOW RATE (GPM) and a water-side
+# pressure drop): TOTAL CAP (MBH) keys cooling_mbh (an air handler's coil block keys the unit's
+# capacity), FLOW RATE chw_gpm, EWT/LWT its parts, WATER SIDE PRESS. DROP chw_wpd_ft. The HEATING
+# COIL block prints a flow and a water-side pressure drop, a hot-water coil: TOTAL HEAT CAP. (MBH)
+# keys heating_mbh, FLOW RATE (GPM) hw_gpm, WATER SIDE PRESS. DROP hw_wpd_ft; it prints no water
+# temperatures. VOLT/PH ("208/1", "208/3") keys its volts and phase parts. SUPPLY FAN MOTOR HP keys
+# supply_fan_hp ("3/4" printed as a fraction) and EXHAUST FAN MOTOR HP exhaust_fan_hp. Every row's
+# NOTES cites notes 1-10: note 1 ("PROVIDE WITH DIRECT DRIVE MOTORS ON SUPPLY AND CONDENSER FANS
+# WITH VFDS.") keys vfd yes, note 5 ("PROVIDE WITH FACTORY FURNISHED ONBOARD BACNET CONTROLLER.")
+# bas_interface BACNET, note 7 ("PROVIDE WITH MERV-8 PLEATED PRE- FILTER AND MERV-13 FINAL
+# FILTER.") filter_merv 13 (the final filter). Note 10's mixing box with return and outside air
+# dampers names no economizer. The E.S.P. columns, EER, air-side pressure drop, fan RPM and NEMA
+# sizes are not in the family's vocabulary. Two notes are printed as "3."; neither keys anything.
+TABLE
+sheet: 028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9
+title: DEDICATED OUTSIDE AIR SYSTEM SCHEDULE
+family: DOAS
+render: page 9 overview at 40 dpi; crop 135,682,2200,160 at 3x in 4 tiles (MARK column repeated), notes included; second read at 3x of all 3 rows in the text layer's order, every keyed cell
+rows: all 3 printed rows
+col: MARK => tag
+col: MAX. CFM => supply_cfm
+col: SUPPLY FAN E.S.P. (IN. W.G.) => -
+col: EXHAUST FAN E.S.P. (IN. W.G.) => -
+col: EER => -
+col: AIR SIDE PRESS. DROP (IN. W.G.) => -
+col: COIL FOULING FACTOR (HR-SQ. FT-F/BTU) => -
+col: COOLING COIL / EAT (°F) DB/WB => -
+col: COOLING COIL / LAT (°F) DB/WB => -
+col: COOLING COIL / EWT/LWT (0F) => -
+col: [COOLING COIL / EWT/LWT (0F): EWT part] => chw_ewt_f
+col: [COOLING COIL / EWT/LWT (0F): LWT part] => chw_lwt_f
+col: COOLING COIL / TOTAL CAP (MBH) => cooling_mbh
+col: COOLING COIL / SENSIBLE CAP (MBH) => -
+col: COOLING COIL / FLOW RATE (GPM) => chw_gpm
+col: COOLING COIL / WATER SIDE PRESS. DROP (FT. W.G.) => chw_wpd_ft
+col: HEATING COIL / EAT (°F) DB => -
+col: HEATING COIL / LAT (°F) DB => -
+col: HEATING COIL / TOTAL HEAT CAP. (MBH) => heating_mbh
+col: HEATING COIL / FLOW RATE (GPM) => hw_gpm
+col: HEATING COIL / WATER SIDE PRESS. DROP (FT. W.G.) => hw_wpd_ft
+col: ELECTRICAL CHARACTERISTICS / VOLT /PH => -
+col: [ELECTRICAL CHARACTERISTICS / VOLT /PH: volts part] => volts
+col: [ELECTRICAL CHARACTERISTICS / VOLT /PH: phase part] => phase
+col: ELECTRICAL CHARACTERISTICS / MCA => -
+col: ELECTRICAL CHARACTERISTICS / MOCP => -
+col: ELECTRICAL CHARACTERISTICS / SUPPLY FAN MOTOR HP => supply_fan_hp
+col: ELECTRICAL CHARACTERISTICS / EXHAUST FAN MOTOR HP => exhaust_fan_hp
+col: ELECTRICAL CHARACTERISTICS / FAN RPM => -
+col: ELECTRICAL CHARACTERISTICS / SUPPLY FAN NEMA SIZE => -
+col: ELECTRICAL CHARACTERISTICS / EXHAUST FAN NEMA SIZE => -
+col: DIMENSIONS (IN) / L => -
+col: DIMENSIONS (IN) / W => -
+col: DIMENSIONS (IN) / H => -
+col: MANUFACTURER / MODEL => -
+col: NOTES => -
+derive: cooling_type = chw ; header=COOLING COIL / FLOW RATE (GPM) ; note=every row prints a chilled-water cooling coil block (EWT/LWT 42.0/56.0, flow, water-side pressure drop)
+derive: heating_type = hw ; header=HEATING COIL / FLOW RATE (GPM) ; note=every row prints a water heating coil block (flow, water-side pressure drop)
+derive: vfd = yes ; header=NOTE 1 ; note=note 1: 'PROVIDE WITH DIRECT DRIVE MOTORS ON SUPPLY AND CONDENSER FANS WITH VFDS.', cited by every row's NOTES
+derive: bas_interface = BACNET ; header=NOTE 5 ; note=note 5: 'PROVIDE WITH FACTORY FURNISHED ONBOARD BACNET CONTROLLER.', cited by every row's NOTES
+derive: filter_merv = 13 ; header=NOTE 7 ; note=note 7: 'PROVIDE WITH MERV-8 PLEATED PRE- FILTER AND MERV-13 FINAL FILTER.', the final filter, cited by every row's NOTES
+grid:
+DOAS-1 | 1,200 | 0.4 | 0.8 | 11 | 0.48 | 0.001 | 101.5/73.9 | 51.3/51.1 | 42.0/56.0 | 42.0 | 56.0 | 88.5 | 65.8 | 12.6 | 12.24 | 33.8 | 109.1 | 51.3 | 5.2 | 10.77 | 208/1 | 208 | 1 | 13.4 | 15 | 3/4 | 3/4 | 1309 | 0 | 00 | 46.0 | 54.0 | 18.0 | DAIKIN/BCHD0181 | 1,2,3,4,5,6,7,8,9,10,12
+DOAS-2 | 1,850 | 0.9 | 1.1 | 11 | 0.91 | 0.001 | 101.5/73.9 | 54.8/53.2 | 42.0/56.0 | 42.0 | 56.0 | 126.0 | 95.6 | 18.0 | 22.16 | 33.8 | 108.4 | 77.7 | 7.9 | 15.58 | 208/1 | 208 | 1 | 10.3 | 15 | 1.0 | 1.0 | 1486 | 0 | 00 | 46.0 | 54.0 | 18.0 | DAIKIN/BCHD0201 | 1,2,3,4,5,6,7,8,9,10,12
+DOAS-3 | 2,550 | 0.3 | 0.9 | 11 | 0.6 | 0.001 | 101.5/73.9 | 52.2/51.9 | 42.0/56.0 | 42.0 | 56.0 | 137.5 | 182.9 | 28.0 | 11.50 | 33.8 | 100.8 | 40.4 | 2.6 | 0.90 | 208/3 | 208 | 3 | 5.9 | 15 | 2.0 | 2.0 | 2319 | 00 | 00 | 84.4 | 56.5 | 32.3 | DAIKIN/LAH007A | 1,2,3,4,5,6,7,8,9,10,11,13
+END
+
+# BOILER SCHEDULE (page 9): one row, B-1. INPUT MBH and OUTPUT MBH each print MIN. and MAX.: the
+# boiler modulates from 60 to 160 MBH input (55 to 146 output), so its rated input is the MAX.
+# (input_mbh 160) and its rated output the MAX. (output_mbh 146); the MIN. columns are its turndown
+# floor (the author's reading). HEATING CAP. (MBH) prints the same 146 and keys nothing (one printed
+# number, one key line). EWT (0F) 100 keys ewt_f, LWT(0F) 140 lwt_f, MAX. GPM 15.4 gpm. VOLT/PH/HZ
+# ("120/1/60") keys its volts and phase parts. Note 1 ("PROVIDE WITH BACNET MSTP."), cited by the
+# row, keys bas_interface BACNET MSTP (as 14_OR's note 5). The fuel is not printed: no column or
+# note names gas (notes 4 and 5 ask for a condensate neutralization kit and combustion control).
+TABLE
+sheet: 028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9
+title: BOILER SCHEDULE
+family: BOILER
+render: page 9 overview at 40 dpi; crop 135,944,1400,150 at 2.2x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every keyed cell
+rows: all 1 printed row
+col: MARK => tag
+col: INPUT MBH / MIN. => -
+col: INPUT MBH / MAX. => input_mbh
+col: OUTPUT MBH / MIN. => -
+col: OUTPUT MBH / MAX. => output_mbh
+col: HEATING CAP. (MBH) => -
+col: EFFICIENCY (AFUE) => -
+col: MAX. OPERATING PRESSURE (PSI) => -
+col: EWT (0F) => ewt_f
+col: LWT(0F) => lwt_f
+col: BOILER PREESURE DROP (FT) => -
+col: MAX. GPM => gpm
+col: VOLT/PH/HZ => -
+col: [VOLT/PH/HZ: volts part] => volts
+col: [VOLT/PH/HZ: phase part] => phase
+col: RATED CURRENT (A) => -
+col: TANK WEIGHT (LBS) => -
+col: FOULING FACTOR (HR-SQ. FT-0F/BTU) => -
+col: DIMENSIONS (IN) / L => -
+col: DIMENSIONS (IN) / W => -
+col: DIMENSIONS (IN) / H => -
+col: MANUFACTURER /MODEL => -
+col: NOTES => -
+derive: bas_interface = BACNET MSTP ; header=NOTE 1 ; note=note 1: 'PROVIDE WITH BACNET MSTP.', cited by the row's NOTES (1,2,3,4,5,6)
+grid:
+B-1 | 60 | 160 | 55 | 146 | 146 | 95% | 60 | 100 | 140 | 15.8 | 15.4 | 120/1/60 | 120 | 1 | 12 | 155 | 0.002 | 17.8 | 14.2 | 41.0 | VITODENS/200-W B2HA - 45 | 1,2,3,4,5,6
+END
+
+# UNIT HEATER SCHEDULE (page 9): one printed row whose MARK reads "UH-1 & UH-2": two units, keyed
+# as UH-1 and UH-2 with the row's values (as 21_VA keys "ACCU-1 AND ACCU-2"). SERVES keys
+# area_served. GAS TYPE prints NATURAL, and note 3 calls the units power vented gas-fired unit
+# heaters: heating_medium gas. HEAT INPUT (MBH) is the gas input, not the heater's output, so
+# heating_mbh is not printed (it is a heater's output) and the column keys nothing. VOLT/PH
+# ("115/1") keys its volts and phase parts. The notes (mounting, height, venting, condensate pump,
+# clearances) key nothing else.
+TABLE
+sheet: 028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9
+title: UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 9 overview at 40 dpi; crop 1545,944,790,160 at 2.2x, notes included; second read at 3x of the row, every keyed cell
+rows: the 1 printed row (its MARK "UH-1 & UH-2" names two units, keyed as UH-1 and UH-2)
+col: MARK => tag
+col: SERVES => area_served
+col: HEAT INPUT (MBH) => -
+col: GAS TYPE => heating_medium
+col: AMPS => -
+col: VOLT/PH => -
+col: [VOLT/PH: volts part] => volts
+col: [VOLT/PH: phase part] => phase
+col: MANUFACTURE /MODEL => -
+col: NOTES => -
+grid:
+UH-1 | MECHANICAL 108 | 24.9 | gas (NATURAL) | 1.80 | 115/1 | 115 | 1 | REZNOR/UDAS-300 | 1,2,3,4,5,6
+UH-2 | MECHANICAL 108 | 24.9 | gas (NATURAL) | 1.80 | 115/1 | 115 | 1 | REZNOR/UDAS-300 | 1,2,3,4,5,6
+END
+
+# AIR-COOLED CHILLER SCHEDULE (page 9): one row, CH-1. TYPE prints AIR-COOLED SCROLL: condenser
+# air. NOM SIZE (TONS) is the only tonnage printed (40.7), keyed tons. ELECTRICAL / VOLTS/PH/HZ
+# ("208/3/60") keys its volts and phase parts. EVAPORATOR / EWT 56 keys chw_ewt_f, LWT 44 chw_lwt_f,
+# GPM 78.5 chw_gpm (WPD FT.WG. is not in the family's vocabulary). Note 4 ("PROVIDE WITH CHILLER
+# CONTROLLER COMPATIBLE WITH BACnet DDC SYSTEM."), cited by the row, keys bas_interface BACNET. The
+# input power is not printed (MCA and MFS are currents).
+TABLE
+sheet: 028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9
+title: AIR-COOLED CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 9 overview at 40 dpi; crop 135,1170,1130,150 at 2.2x in 2 tiles (MARK column repeated), notes included; second read at 3x of the row, every keyed cell
+rows: all 1 printed row
+col: MARK => tag
+col: TYPE => condenser
+col: NOM SIZE (TONS) => tons
+col: ELECTRICAL / VOLTS/PH /HZ => -
+col: [ELECTRICAL / VOLTS/PH /HZ: volts part] => volts
+col: [ELECTRICAL / VOLTS/PH /HZ: phase part] => phase
+col: ELECTRICAL / MCA (A) => -
+col: ELECTRICAL / MFS (A) => -
+col: IPLV EER => -
+col: FOULING FACTOR (HR-SQ. FT-0F/BTU) => -
+col: EVAPORATOR / EWT => chw_ewt_f
+col: EVAPORATOR / LWT => chw_lwt_f
+col: EVAPORATOR / WPD FT.WG. => -
+col: EVAPORATOR / GPM => chw_gpm
+col: CONDENSER / AMBIENT AIR TEMP. => -
+col: CONDENSER / NO. OF FANS => -
+col: DIMENSIONS (IN) / L => -
+col: DIMENSIONS (IN) / W => -
+col: DIMENSIONS (IN) / H => -
+col: WEIGHT (LBS) => -
+col: MANUFACTURER /MODEL => -
+col: NOTES => -
+derive: bas_interface = BACNET ; header=NOTE 4 ; note=note 4: 'PROVIDE WITH CHILLER CONTROLLER COMPATIBLE WITH BACnet DDC SYSTEM.', cited by the row's NOTES (1,2,3,4,5)
+grid:
+CH-1 | air (AIR-COOLED SCROLL) | 40.7 | 208/3/60 | 208 | 3 | 184.5 | 200 | 17.3 | 0.0001 | 56 | 44 | 10.3 | 78.5 | 101.5 | 4 | 94.3 | 88 | 100.2 | 4,173 | DAIKIN / AGZ040E | 1,2,3,4,5
+END
+
+# EXHAUST FAN SCHEDULE (page 9): three rows. CFM keys cfm, EXT SP IN. WG esp_in, MOTOR DATA / HP
+# motor_hp (fractions as printed), MOTOR DATA / RPM rpm (as federal-mech's MOTOR DATA / RPM; the
+# only speed printed), MOTOR DATA / VOLT/PH ("115/1") its volts and phase parts. No column prints a
+# service, drive or control. Note 4 ("FAN SHALL RUN CONTINUOUSLY DURING OCCUPIED HOURS.") is an
+# operating schedule, not a control device or method such as the keys' control values (a toggle
+# switch, a speed controller, CV, duct static pressure), so control stays not printed; notes 1-3
+# and 5 (isolators, mounting, clearances) key nothing.
+TABLE
+sheet: 028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9
+title: EXHAUST FAN SCHEDULE
+family: FAN
+render: page 9 overview at 40 dpi; crop 1290,1170,1050,150 at 2.2x in 2 tiles (MARK column repeated), notes included; second read at 3x of EF-1, EF-2 and EF-3, every keyed cell
+rows: all 3 printed rows
+col: MARK => tag
+col: CFM => cfm
+col: EXT SP IN. WG => esp_in
+col: MOTOR DATA / HP => motor_hp
+col: MOTOR DATA / RPM => rpm
+col: MOTOR DATA / VOLT/PH => -
+col: [MOTOR DATA / VOLT/PH: volts part] => volts
+col: [MOTOR DATA / VOLT/PH: phase part] => phase
+col: MOTOR DATA / NEMA SIZE => -
+col: MAX. SONES => -
+col: MANUFACTURER / MODEL => -
+col: DIMENSIONS (IN) / L => -
+col: DIMENSIONS (IN) / W => -
+col: DIMENSIONS (IN) / H => -
+col: WEIGHTS (LBS) => -
+col: NOTES => -
+grid:
+EF-1 | 620 | 0.5 | 1/6 | 1,725 | 115/1 | 115 | 1 | 00 | 10 | GREENHECK / SQ-95-VG | 15.0 | 19.0 | 15.0 | 50 | 1,2,3,4,5
+EF-2 | 920 | 0.5 | 3/4 | 2,200 | 115/1 | 115 | 1 | 0 | 17 | GREENHECK / SQ-99-VG | 15.0 | 24.0 | 15.0 | 58 | 1,2,3,4,5
+EF-3 | 645 | 0.5 | 1/6 | 1725 | 115/1 | 115 | 1 | 00 | 10 | GREENHECK / SQ-95-VG | 15.0 | 19.0 | 15.0 | 50 | 1,2,3,4,5
+END

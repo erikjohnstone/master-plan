@@ -2193,11 +2193,17 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "takeoff.xlsx"
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/** Build takeoff PDF bytes. Compiled mode: one table per family with that family's columns. */
+/** Build takeoff PDF bytes. Compiled mode: one table per family with that family's columns.
+ * @param {any[]} linesOrRows
+ * @param {{ title?: string, projectName?: string, mode?: string, assembliesReport?: import("./assemblies/report").AssembliesReport | null }} [opts]
+ */
 export async function buildTakeoffPdfBytes(linesOrRows, {
   title = "Takeoff",
   projectName = "",
   mode = "compiled",
+  // The assemblies report (report.ts), when assemblies were applied: its
+  // section (assemblies/reportPdf.ts) follows the takeoff tables.
+  assembliesReport = null,
 } = {}) {
   const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
   const doc = await PDFDocument.create();
@@ -2297,16 +2303,25 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
     }
   }
 
+  if (assembliesReport) {
+    const { drawAssembliesSection } = await import("./assemblies/reportPdf.ts");
+    await drawAssembliesSection(doc, assembliesReport, { projectName });
+  }
   return doc.save();
 }
 
+/**
+ * @param {any[]} linesOrRows
+ * @param {{ filename?: string, title?: string, projectName?: string, mode?: string, assembliesReport?: import("./assemblies/report").AssembliesReport | null }} [opts]
+ */
 export async function downloadTakeoffPdf(linesOrRows, {
   filename = "takeoff.pdf",
   title = "Takeoff",
   projectName = "",
   mode = "compiled",
+  assembliesReport = null,
 } = {}) {
-  const bytes = await buildTakeoffPdfBytes(linesOrRows, { title, projectName, mode });
+  const bytes = await buildTakeoffPdfBytes(linesOrRows, { title, projectName, mode, assembliesReport });
   const blob = new Blob([bytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

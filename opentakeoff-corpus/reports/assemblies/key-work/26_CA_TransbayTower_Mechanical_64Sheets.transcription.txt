@@ -1,0 +1,69 @@
+# 26_CA_TransbayTower_Mechanical_64Sheets — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheet M0.11 MECHANICAL SCHEDULES (PDF page 11) and read from sheet M4.05
+# MECHANICAL WATER RISER DIAGRAM (PDF page 57) of the Transbay Tower (Salesforce Tower), San
+# Francisco CA (WSP, MEP/FP engineer; the 2018 ASC competition release), in the corpus's rejoined
+# 64-page PDF (bulk/HVAC_BAS_Plan_Sets/_rejoined; both sheets unrotated): an overview of each page
+# at 40 dpi, then the drawn table at 3.5x (252 dpi), rendered with MuPDF (pymupdf get_pixmap(clip))
+# and read by eye on 2026-09-26, with the PDF's own text layer (pymupdf words, row by row) as a
+# reading aid; second read of every row at 4.5x. The drawn title was found with the text layer
+# (pymupdf search_for). The pipeline's output for these tables was not consulted while keying
+# (AS-28, before the draw, read the column names the normalizer left unread across the unseen
+# corpus, this document's among them). The fourth tier keys the tables its seed drew
+# (tier4/01-split.md): one per keyed family.
+SET 26_CA_TransbayTower_Mechanical_64Sheets
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheets M0.11 MECHANICAL SCHEDULES (page 11) and M4.05 MECHANICAL WATER RISER DIAGRAM (page 57) of the Transbay Tower (Salesforce Tower), San Francisco CA (WSP, MEP/FP engineer), the tables the fourth tier's seed drew for its AHU and VAV strata.
+EXCLUDES The exhaust terminals' model, static pressure loss (printed #REF! on every row) and remarks, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# (untitled) (page 57, sheet M4.05 MECHANICAL WATER RISER DIAGRAM): the census claims 11 AHU rows in
+# a table it names no title. The page is a riser diagram: two stacks of air handler symbols, AHU
+# 22-1 to 46-1 and AHU 22-2 to 46-2, one of each per level (LEVEL 22 to LEVEL 47), on the chilled-
+# and hot-water risers, with pipe sizes and typical notes ('2" CHWS/R (TYPICAL 40 TONS / UNIT)',
+# '1-1/4" HWS/R (TYPICAL)'); no table on the page schedules an air handler. The document's air
+# handler schedules are sheet M0.09 SCHEDULES (page 9): CUSTOM FACTORY-BUILT TRI-PATH MULTI-ZONE
+# AIR HANDLING UNITS and AIR HANDLING UNIT (COOLING), which the census claims under no family
+# (catalogue). Every value a pipeline reports from this claim scores invented.
+TABLE
+sheet: 26_CA_TransbayTower_Mechanical_64Sheets.pdf#57
+title: (untitled)
+family: AHU
+render: page 57 overview at 40 dpi; the page's text layer read for its AHU marks (22-1 to 46-1, 22-2 to 46-2), levels (LEVEL 22 to LEVEL 47) and typical notes; the page's schedules searched for in the text layer of all 64 pages (SCHEDULE, AIR HANDLING)
+rows: none — a water riser diagram (M4.05): air handler symbols per level on the risers, with pipe sizes; no table on the page schedules an air handler
+grid:
+END
+
+# SINGLE DUCT CAV EXHAUST TERMINAL (page 11): seven rows, CAV-2-1 to CAV-X-3; a first ruled row
+# prints only "#REF!" (no designation, not an instance) and a last ruled row is empty. CFM SETTING /
+# MAXIMUM keys cfm_max and MINIMUM cfm_min (equal on every row: constant volume). INLET DUCT SIZE
+# (INCHES) keys inlet_size_in. TYPICAL FLOORS keys floor where it names one level (2 on CAV-2-1 to
+# CAV-2-3, 5 on CAV-5-1, typed in the canonical LEVEL form); CAV-X-1 and CAV-X-2 print "3-4, 6-34"
+# and CAV-X-3 "35-61", many levels, not one value ("?"). The title names an exhaust terminal of
+# single-duct construction: terminal_type exhaust (the author's reading). STATIC PRESSURE LOSS
+# ACROSS TERMINAL UNIT AT MAXIMUM CFM prints the spreadsheet error "#REF!" on every row. Note 1
+# (supply ducts matched to the box inlet size) keys nothing.
+TABLE
+sheet: 26_CA_TransbayTower_Mechanical_64Sheets.pdf#11
+title: SINGLE DUCT CAV EXHAUST TERMINAL
+family: VAV
+render: page 11 overview at 40 dpi; crop 2165,606,540,232 at 3.5x, the note included; second read at 4.5x (crop 2165,705,470,100) of all 7 rows, every cell
+rows: all 7 printed rows (a first ruled row prints only #REF!, a last one is empty)
+col: DESIGNATION => tag
+col: TITUS MODEL NUMBER => -
+col: TYPICAL FLOORS => -
+col: [TYPICAL FLOORS: names one level] => floor
+col: CFM SETTING / MAXIMUM => cfm_max
+col: CFM SETTING / MINIMUM => cfm_min
+col: STATIC PRESSURE LOSS ACROSS TERMINAL UNIT AT MAXIMUM CFM (IN WG) => -
+col: INLET DUCT SIZE (INCHES) => inlet_size_in
+col: REMARKS => -
+derive: terminal_type = exhaust ; header=TABLE TITLE ; note=title printed 'SINGLE DUCT CAV EXHAUST TERMINAL': an exhaust terminal of single-duct construction (the author's reading)
+grid:
+CAV-2-1 | DESV | 2 | =LEVEL 2 (2) | 450 | 450 | #REF! | 10 |
+CAV-2-2 | DESV | 2 | =LEVEL 2 (2) | 450 | 450 | #REF! | 10 |
+CAV-2-3 | DESV | 2 | =LEVEL 2 (2) | 1,070 | 1,070 | #REF! | 12 |
+CAV-5-1 | DESV | 5 | =LEVEL 5 (5) | 1,450 | 1,450 | #REF! | 12 |
+CAV-X-1 | DESV | 3-4, 6-34 | ?3-4, 6-34 | 450 | 450 | #REF! | 10 |
+CAV-X-2 | DESV | 3-4, 6-34 | ?3-4, 6-34 | 450 | 450 | #REF! | 10 |
+CAV-X-3 | DESV | 35-61 | ?35-61 | 900 | 900 | #REF! | 12 |
+END

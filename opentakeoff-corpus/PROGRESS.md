@@ -1,5 +1,1034 @@
 ## Active work
 
+### Active work: control intent (GOAL LOOP C, `goals/CONTROL_INTENT.md`) — started 2026-09-25
+
+The owner's go-ahead (2026-09-25) authorised executing this goal, with
+`qwen-3.8-27b` allowed, and set one hard constraint: schedule extraction and
+schedule↔tag reconciliation must not change. Work runs on
+`claude/affectionate-darwin-316fwo`. Bug catalogue:
+`CONTROL_INTENT_BUG_CATALOGUE.md`.
+
+Done so far (dev only; held-out keys not yet authored):
+- **WP0.2:** dev keys `keys/<set>.project.csv` and `keys/<set>.binding.csv`
+  for all 11 documents (`0aba993`).
+- **WP1.1–1.2:** question catalogue v1 and its effects on selection
+  (`9be31d6`). Row reader R0 (`662d4f4`). Typical eval with key answers:
+  171/244 exact (70.1%), 0 regressions against the 116 baseline.
+- **WP2 (2026-09-25), the control-evidence map:**
+  `web/src/lib/controlIntent/evidence.ts` finds packets and `binding.ts`
+  binds them. The map is built on the shared path (`compiledProjectOf` →
+  `CompiledProject.control`; `applyAssemblies` returns `control`) and is not
+  yet consumed by selection. The typical eval is unchanged at 171/244.
+  - Binding eval (`mcp/scripts/control-intent-binding-eval.mjs`,
+    `reports/control-intent/03-binding-eval-dev.md`):
+    - pair recall 92.9% (300/323), or 97.9% without the key's "semantic" pairs;
+    - confirmed precision 93.2% (317/340);
+    - unit recall 91.9%;
+    - tag, list/range and cross-reference pairs 100%; family details 96.8%.
+  - GATE B1 (95% / 98% / 95%) is not met as the keys stand. CI-1 lists the
+    key rows the printed drawings contradict (not edited; 21 of the 23 false
+    bindings). CI-2 covers the proposals the C5 qualifier rule makes; CI-3 the
+    bindings no structure reaches.
+- **WP3 (54f1cda, 2deed61 and the next commit), readers + combiner on the
+  shared path:** R0 (sourced term list v2, actors, lead-in subjects), R1
+  (`gpt-oss-120b`, v3), R2 (`qwen-3.8-27b`, two runs), the zone-plan reader
+  (`rp`), combine v4. Dev replay of the recorded runs, key answers:
+  - typical eval **227/244 exact (93.0%)**, 0 undisclosed. Up from 171 before
+    WP3; GATE C's 204 is met. The one "dishonest" row is AS-16.
+  - readings: 291 applied, **0 applied-wrong**, 0 INVENTED, 0 uncited; 43
+    absence decisions applied, 0 wrong. Class R (decided by the control
+    drawings) is 55/71; B2 asks for 57.
+  - federal-mech's zone plan: all 15 CO2 zones, 0 false.
+  - CI-4 to CI-8 hold the fixes; CI-9 the 17 misses left.
+- **WP1 Track A (next commit), project questions on both surfaces:**
+  - selection by exact effect (every choice applied);
+  - pre-fills quoted from printed text outside the schedule tables;
+  - an append-only fingerprinted answer journal saved with the project
+    (`AssembliesState.answer_journal`).
+  - The Takeoff panel's Project questions card records `operator_input`.
+    MCP's `project_questions` and `answer_project_question` record
+    `agent_proposal`. That follows the BAS journals' rule that no MCP write is
+    a human act. The answer applies, and every record it decides says who
+    recorded it.
+  - `export_takeoff` and `import_takeoff` carry the journal. The same journal
+    gives byte-identical records and lines on both surfaces
+    (`mcp/test/controlIntentQuestions.test.mjs`).
+  - Question eval (`mcp/scripts/control-intent-questions-eval.mjs`, dev):
+    - 27 questions across 11 projects, at most 4 in any one; 0 shown that
+      change nothing;
+    - pre-fills 8 right, 0 wrong, 1 moot;
+    - the key's answers fix 41 instances and break 0.
+    - **GATE A (dev) PASS.**
+- **Held-out keys** (`project.csv`, `binding.csv`, 6 documents, 197 binding
+  rows) are committed in 08ea06d, before any held-out control-intent run
+  (CI-10).
+- **UI proof of the questions card** (`web/scripts/playwright-questions.mjs`,
+  the 069 PDF): the card is `project_questions` over MCP question for
+  question. PQ3 = keep appends one `operator_input` event and changes exactly
+  the 56 lines and 6 records the choice showed. MCP imported the page's
+  project file and applied it: byte-identical records (24) and lines (71).
+- **Readings are taken before settings** on every surface: the MCP apply had
+  read them after the project's settings, the panel before. The top-up
+  recorded the 11 runs this asked for; the dev numbers above are unchanged.
+- **Robustness sweep (running, one worker):** every non-held-out corpus set
+  is snapshotted. First pass of the deterministic readers and zone plans over
+  the 33 sets snapshotted so far:
+  - 1,240 units, 446 read, 0 errors;
+  - 23 applied, all on dev documents or their duplicates (federal-mech's 15
+    CO2 zones; itd-d1-lab's 4 standalone roles, also printed in
+    062_ID_ITD, the same drawings under another corpus id). No unseen
+    document gets a deterministic application: those need two readers to
+    agree.
+  - One finder miss: 008_MO's "LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM."
+    ends in a period, so `packetKind` reads it as a sentence. Queued for the
+    next finder batch, with a dev re-snapshot and re-measure.
+  - Four snapshot children died (memory). 061_IA and tinker succeeded on
+    retry; 01_NY is being retried, and 07_MO will be retried after the sweep.
+- **Blind live audit (all three readers, live model calls, recorded) on
+  unseen sets never keyed or tuned on.** Every applied decision was checked
+  by hand against its cites and the drawing.
+  - 16_NV: 13 applied, 1 wrong. Furnace B1 took an exhaust fan's clause
+    through "EF-B1 CONTROL DIAGRAM". The binder fix (CI-11) makes it 12
+    applied, 0 wrong.
+  - 27_WA, 03_FL, 061_IA, 05_MO, 009_FL, 06_MO, 017_MD: 64 applied, 62
+    right. The 2 wrong (27_WA EF-1 and EF-2 motorized damper) come from two
+    sequences found as one packet (CI-12, open, next finder batch).
+- **CI-11, the binder (fixed):** a qualified tag ("EF-B1") is only its
+  kind's; a mark several kinds of unit share binds by the title's subject or
+  as a proposal; I/O point labels are no tags. The 11 dev documents' 657
+  pair and binding rows are identical before and after; among 35 swept sets,
+  3 change, as intended.
+- **Guard (this commit):**
+  - web: typecheck; 3,732 tests with only the 3 AS-1 failures; build.
+  - MCP: typecheck; test:bas 133/133, the 3 that timed out under memory
+    pressure green on a rerun; the assemblies and control-intent tests after
+    the binder fix.
+  - The full MCP suite passes but for two items. One is the AS-1
+    conformance test. The other is crossCorpusWorkflow's WP1 compile
+    acceptance, which now covers 117 keyed sets because the whole corpus is
+    staged. The memory cgroup killed it after 9. Of those 9, 3 pass; 2 fail
+    as in AS-1; 16_NV, 04_NV, 26_CA and 21_VA fail as newly staged sets.
+    `main` (5ab7ca8) gives byte-identical compile triplets and the same
+    outcomes for all 9. Their sheet graphs differ only in timing fields.
+- **Second robustness batch (next commit): CI-12, CI-13, CI-14.**
+  - Finder: two sequences printed one under the other are two packets; a
+    caption naming control evidence keeps its closing period; other trades'
+    "control" (seismic, vibration, noise, erosion) is no packet.
+  - Readers: in a packet titled for other units of a unit's family, only
+    its tag speaks for it.
+  - Combiner: a reading in only one of several equally bound packets is a
+    proposal.
+  - Dev: all 11 documents re-snapshotted. Extraction and packets are
+    byte-identical, and the replay is unchanged (227/244; 291 applied, 0
+    wrong; the same proposals).
+  - Unseen: 15 sets re-snapshotted, extraction byte-identical. The packet
+    changes are the intended ones (008_MO, 27_WA, and 06_MO's five erosion
+    details).
+- **Blind live audit, final code: 14 unseen sets, 127 applied, 127 right, 0
+  wrong.**
+  - Applied: 16_NV 12, 27_WA 8, 21_VA 57, 009_FL 19, 06_MO 16, 061_IA 12,
+    05_MO 2, 03_FL 1. The other six sets apply nothing.
+  - Corrected on 2026-09-26 (CI-16): the first tally, "15 sets, 157
+    applied", counted 001_NC. 001_NC is byte-identical to held-out
+    navfac-cherry-point-atc, so it is not unseen, and it is dropped here.
+  - Before this round's fixes, these sets had 4 wrong: 16_NV 1, 27_WA 2,
+    21_VA 1.
+  - Recall cost, taken on purpose: 21_VA's CO2 on its 56 reheat boxes is a
+    proposal until the binder can pair each box type with its own sequence
+    (CI-15).
+- **Corpus hygiene (CI-16, `reports/control-intent/00-corpus-hygiene.md`):**
+  the sweep and the audit excluded held-out documents by corpus id only.
+  - 001_NC is byte-identical to held-out navfac-cherry-point-atc. The sweep
+    and the audit read it as unseen, and its 30 applied decisions were
+    inspected. No fix came from it.
+  - 27_WA, which CI-12 and CI-13 came from, is by held-out 30_WA's drafter
+    (Coffman Engineers).
+  - The held-out keys predate all of it (08ea06d).
+  - Held-out control-intent results will be reported over all six and over
+    the three unexposed (018_GA, 024_MO, bessemer).
+  - From now on the robustness work skips held-out twins and held-out
+    drafters' sets, and counts copies of dev documents as dev.
+- **Third robustness batch (next commit): CI-15, CI-17, CI-18, CI-19, CI-20.**
+  - 12 new unseen sets audited live with 7200928: 27 applied, 26 right, 1
+    wrong. 015_VA's EF-7, a gatehouse toilet fan, took EF-1–5's intake
+    damper through a detail labelled "EXHAUST FAN (EF-1, 2, 3, 4, & 5)".
+  - **CI-17 (binder):** a detail's own label list binds the units it lists
+    (`label_list`), and no other unit of the family by family.
+  - **CI-15 (finder, binder):**
+    - "X WITH Y" is about X;
+    - a title's variant ("WITH HEATING COIL", "COOLING ONLY") is confirmed or
+      contradicted by the columns the row fills;
+    - of same-titled sequences, the one printed under the unit's diagram is
+      its.
+  - **CI-18 (readers):** a section headed for particular units ("(VAV-1-26 AND
+    VAV-1-29)") is theirs in any packet. CI-15's first live run had applied
+    CO2 to 54 VAV boxes that have none, and the audit caught it before any
+    commit.
+  - **CI-20 (R2):** a label the vision model reads across one row of a
+    points table ("BO-2 INTAKE DAMPER OPEN/CLOSE", two cells) is printed. A
+    label joined across two rows is not. Dev is unchanged.
+  - **CI-19 (eval harness):** a snapshot child's JSON was decoded per pipe
+    read, so a "°" on a 64 KiB boundary came back as two U+FFFD. The
+    assemblies scripts now decode one stream. Six other loops' eval scripts
+    have the same pattern and are noted for their owners.
+  - Dev: all 11 re-snapshotted. Extraction and packets are byte-identical;
+    the binding rows are identical but for itd-d1-lab EF-4 (two false
+    proposals fewer). The replay is unchanged: 227/244, 291 applied, 0 wrong,
+    class R 55/71, 0 calls unrecorded after a 3-call top-up.
+- **Blind live audit, final code: 25 unseen sets, 200 applied, 200 right, 0
+  wrong.**
+  - The sets: the 14 above minus 27_WA (a held-out drafter's, CI-16), plus
+    the 12 new ones.
+  - Applied: 21_VA 115, 009_FL 20, 014_MT 16, 06_MO 16, 16_NV 12, 015_VA 7,
+    021_XX 6, 061_IA 4, 05_MO 2, 03_FL 1, 14_OR 1. The other 14 apply
+    nothing.
+  - The same 25 sets with 7200928: 146 applied, 145 right.
+  - Extraction and packets are byte-identical on all 25 before and after.
+  - 10 right readings are proposals now:
+    - 014_MT's destratification fans (2) had rested on another unit's
+      detail;
+    - 061_IA's 8 are R1 answering changed prompts "not shown".
+  - Gains:
+    - 21_VA +58 (setpoint adjustment on 56 boxes, CO2 on its 2);
+    - 014_MT +6;
+    - 009_FL +1 (AHU-1's BAS role, from its points table's rows, CI-20).
+  - 015_VA's EF-6 keeps its 2, now from its own detail. Check: 145 + 58 + 6
+    + 1 − 10 = 200.
+- **Fourth robustness batch (next commit): CI-21, CI-22, and miss reasons in the binding eval.**
+  - The binding eval counts each missed pair by why: the key's packet not found, bound as a proposal only, bound to
+    another packet of that kind, to other kinds only, or no binding at all (the binder reads the unit's tag, or
+    not). Counts only; the held-out report prints no row.
+  - **CI-21 (binder):** words that say nothing about which unit a detail is for stop leaving family details as
+    proposals. A title naming two kinds of unit ("FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION") is each
+    one's. "VAV/CAV", "ROOF TOP", "(HP)", "ATU", bid alternates and "ON OFF" are no qualifiers. A detail for a
+    family's plain kind is not the special kind's the project schedules apart ("SMOKE EXHAUST FAN SCHEDULE").
+    Over the 46 non-held-out sets with packets, 143 bindings change, all checked; the dev documents' bindings and
+    evidence are byte-identical.
+  - **CI-22 (combiner):** an agreement needs two readers that read it in the unit's own packets. A reader whose
+    every cite lies in a proposal's packet (096_IN: a heat recovery chiller's schematic, "BO-1 HRC-1 START/STOP",
+    for the air-cooled chillers) casts no applying vote.
+  - Dev: the replay is unchanged. Typical eval 227/244; readings 291 applied, 0 wrong, 43 absence decisions, 0
+    wrong; class R 55/71. GATE A (dev) PASS; GATE B1 (dev) unchanged at 92.9% recall.
+- **Blind live audit, final code: 53 unseen sets, 338 applied, 338 right.**
+  - The 53 are every eligible unseen set (no dev, held-out, twin, near copy or held-out drafter's document) with
+    both scheduled units and control packets: of the 90 eligible, 35 have one without the other, and 2 have no
+    snapshot yet (01_NY, 058_CA).
+  - The 25 sets above: 236 applied (200, plus CI-21's 36: 16_NV's 21 furnaces' fan status, "AND THE SUPPLY FAN
+    STATUS IS ON.", and 03_FL's 15 terminal units' setpoint adjustment).
+  - 28 more sets (batch 5): 102 applied. 096_IN 66, 088_AZ 23, 077_MT 8, 083_MA 3, 043_FL 2; the other 23 apply
+    nothing. Before CI-22 there were 106: 096_IN's two chillers' role and isolation valve rested on a second vote
+    from another unit's schematic. The values were right; they are proposals now.
+  - Replayed without a model call, the 53 sets give 342 applied before CI-22 and 338 after; only those 4 change.
+- **Held-out gates (aggregates only).**
+  - GATE A (questions), six documents: PASS. 12 questions shown (at most 3 in a project), 0 zero-effect, pre-fills
+    3 of 3 right, and the key's answers fix 11 instances and break 0.
+  - GATE B1 (binding), six documents, at 1ae6d2b and unchanged after CI-21/CI-22: pair recall 10.5% (20/191)
+    ✗ (85%), precision 100% over 17 confirmed ✓, unit recall 18.8%. Of the 171 missed pairs: 60 bound as a
+    proposal only, 45 whose key packet the finder does not find, 45 with no binding at all (the binder reads
+    the unit's tag), 20 bound to packets of other kinds only, 1 whose tag the binder does not read.
+  - The three unexposed documents carry 2 of the 191 keyed pairs (both hit). The held-out binding measure is
+    therefore essentially navfac-cherry-point-atc, 060_XX (navfac's drafter) and 30_WA (27_WA's drafter): all
+    three exposed (CI-16).
+  - GATE B2 (readings, the reading part), six documents, live and recorded: PASS. 5 applied, 5 right (0% wrong),
+    0 INVENTED, 0 uncited; 13 proposals right, 6 wrong; 226 abstained. Per reader on keyed questions: R0 10 right,
+    0 wrong; R1 155 right, 3 wrong, 42 unverified; the two R2 runs 41 and 37 right, 9 and 6 wrong. The runs are
+    recorded under `reports/control-intent/runs/<held-out id>.jsonl` so the measure replays; the loop never reads
+    them.
+  - GATE C (end-to-end typicals), six documents, the key's answers and the recorded readings: FAIL. 33/91 exact
+    (36.3%) against at least 55; 5 dishonest (the same 5 as at GATE 5), 0 undisclosed. With the key's answers and
+    no readings: 32/91. With neither (the GATE 5 record): 21/91.
+  - The typical eval now counts its misses by why (aggregates; held-out prints no row). Held-out: of the wrong
+    options, 41 were bound and asked but nothing was read, 14 belong to units bound to no control packet, 8 had
+    no reading question, and 5 were read as proposals only; 6 records are unresolved. On these documents the
+    readers seldom reach the packet that governs a unit, as B1 shows.
+- **Found, not changed:**
+  - 096_IN: "SEQUENCE OF OPERATION - CAV BOXES:" is read as a caption with its text above it, by one pixel, and
+    swallows "SEQUENCE OF OPERATION - VAV BOXES:" printed above it. A heading ending in a colon introduces what
+    follows, but the same rule turns 040_IL's (dev) three "... TAB SEQUENCE OF OPERATION :" packets into sections,
+    and the boxes the VAV sequence would then bind are constant-volume boxes by their schedule (maximum and minimum
+    airflow equal), so it may not be theirs.
+  - 028_TX: "P&ID" is held back from CI-21 until titles read a mark printed with a space ("DOAS 3") as a tag.
+  - Compound tags ("PRV-25-2", "FCU-N1-1"): the binder reads 72% of scheduled tags over the non-held-out sets,
+    but no packet title and only 10 packet texts print an unread one. No change.
+- **Guard (next commit):**
+  - web: typecheck; lint (0 errors, the 3 known warnings); 3,741 tests with only the 3 AS-1 failures; build.
+  - MCP: typecheck; tool count 64; test:bas 133/133; the assemblies and control-intent tests 40/40.
+  - The assemblies MCP tests now give their whole-document calls a 10-minute request timeout: PARITY had failed
+    once on the SDK's 60 s default while the machine was loaded. Their assertions are unchanged.
+  - The navfac `sweep_schedule_row` conformance test (another loop's) runs one call near that 60 s default.
+    Alone, this branch passed 3 of 4 runs (107–108 s) and failed 1 on the timeout; `main` (5ab7ca8) passed 2 of 2
+    with the same warm ODL cache (110–111 s) and failed 2 of 2 with a cold one. It is timing, the same on both.
+- **Sweep, the last two sets:** 01_NY and 058_CA cannot be snapshotted. Their sheet graphs are not cached, and
+  the graph build (extraction, not this loop's code) runs out of memory: 058_CA after 219 s with the child's 8 GB
+  heap, and after 254 s with 12 GB, when the container's own limit (about 13 GB) kills the child. An extraction
+  ceiling on this machine, not a reading one. The eleven unseen sets with schedules but no control packets have no
+  zone-titled page either, so no reading can apply on them.
+- **GATE D, the robustness suite (dev; 96df544 and the next commit): the adversarial swap found CI-23; every item
+  now passes.** The suite is an instrument, `mcp/scripts/control-intent-robustness-eval.mjs` (report
+  `reports/control-intent/05-robustness-dev.{json,md}`). Its model runs are recorded under
+  `reports/control-intent/robustness-runs/`: the swap's 242 and the last live re-run's 181. So the whole suite
+  replays without calling a model; `--live` calls the models for what is not recorded, and re-runs afresh.
+  - **Negative controls** (004, baker-county-eoc). The gate's premise, no control packets, no longer holds: the
+    finder reads 5 and 3 packets (the rooftop units' sequences). Their readings apply 12 and 2 option decisions,
+    each what its sequence prints: 004's six RTUs' relief dampers ("THE BAROMETRIC RELIEF DAMPERS SHALL OPEN") and
+    economizer, baker's two RTUs' CO2 sensor ("THE RTU UNIT SHALL ADJUST ITS FRESH AIR FLOW BASED ON THE CO2
+    READING"). The keys give those RTUs no controls typical, so the options decide nothing in the takeoff (the
+    typical eval: 14/14 and 8/8). With PQ1 = no every unit's controls record is "none". What stays open is the
+    project's own records (building meters, the plants), which wait for other project questions. No reading puts
+    a unit back in scope.
+  - **Adversarial swap: FAIL, then PASS with CI-23.** Every dev packet the binder binds to a unit (confirmed) was
+    rebound, with the kind it has, to a unit of another family: 104 of the 217 decisions made through them applied
+    (84 absences). CI-23 makes the readers check a binding against the print. After it:
+    - another family: 74 packets on 71 units, 402 questions, **0 applied** through the swap; 55 of 55 reader
+      answers citing a swapped packet are unverified;
+    - another tag of the same family: 19 packets titled for units rebound to 18 units the title does not name, 72
+      questions, **0 applied**; 26 of 26 unverified.
+  - **Model-off** (R0 alone, `control-intent-reading-eval.mjs --r0`, new): 19 applied, **0 wrong**; 75 absences
+    left as proposals, 0 wrong. PASS.
+  - **Replay:** two replays byte-identical on all 11 documents. A live re-run (fresh model calls, an empty run
+    store) changes **7 of 491 decisions (1.4%)**, all federal-mech, all R1 answering a fresh call differently
+    (CI-24). Two new applied decisions are right by the key (AHU-1 freezestat to BAS false, EF-1 motorized damper
+    true); four right ones drop to proposal or unresolved; no wrong one appears. PASS.
+  - **Raster:** the corpus stages one rendition of a dev document, `itd-d1-lab-raster` (its M1.0 plan sheet,
+    flattened to an image). It compiles 0 items and 0 packets, so nothing applies: ⊆ the vector document's 38, 0
+    wrong. Two whole documents rendered in the scratchpad (baker-county-eoc, 65 pages, and bldg5406-hvac-demo, 22:
+    every page one 200 dpi image, no text layer) give the same. PASS, with a recall of zero: the vector pipeline
+    has no OCR fallback for schedules (the gap queued since 20_TX_JudsonISD).
+  - **Cost** (the live re-run, the platform endpoint): 181 model calls and 1.32 M tokens for the 11 documents;
+    wall time per document at most 109 s (federal-mech), 386 s for all. PASS (≤ 5 minutes each).
+- **CI-23 (readers, combiner):** a binding that makes a packet the unit's own is checked against the print. The
+  packet is about other units when:
+  - its title names scheduled units by tag and not the unit (a family's typical detail titled for an example unit
+    of the family aside);
+  - the subject its title's head names is another family, neither one of its subjects joined by AND nor a part the
+    row prints (a drive);
+  - it is a family detail the binder's own rule would not take.
+  Such a packet speaks for the unit only where it prints its tag; model evidence from it must print the tag or is
+  unverified; no absence is read through it. Over the 86 non-held-out sets with packets (1,969 bindings) the
+  check flags none. Dev replay unchanged (227/244; the report is identical); the 53 audited unseen sets replay to
+  the same 338 applied decisions, byte for byte.
+- **CI-25 (binder, next commit):** a unit's mark printed with a space ("DOAS 3 P&ID", "DOAS 1&2 P&ID") is its tag
+  when the letters and number make a scheduled unit's mark. A bare number in a title is confirmed only by the unit's
+  own mark, never by a digit its row prints elsewhere ("460/3/60"). "P&ID" is a drawing's kind, no qualifier (held
+  back from CI-21 until now). Over the 86 non-held-out sets only 028_TX's bindings change: its DOAS units take their
+  own P&IDs by tag and list, and its 11 fan coils "FCU P&ID". Read live: 0 → 25 applied there, all right; the
+  audit stands at 53 unseen sets, 363 applied, 363 right. Dev bindings are byte-identical.
+- **corpus-eval unchanged (cold, at 96df544):** over the 28 sets whose PDFs the baseline had, one child per scorer,
+  under the AS-15 reaper. Takeoff + reference, table recall and the tag census print every line the baseline prints
+  for them. The sheet graph matches too; baker-county-eoc's child was killed by the memory cgroup among four scorers,
+  exactly as at the baseline, and alone it gives the baseline's 78 right, 0 wrong, 13 missed. This had to be
+  measured: the scorers' import graph now reaches this loop's modules (174 modules, 16 changed since the baseline),
+  so the old argument from the import graph no longer holds. The graph scorer outlives corpus-eval.mjs's exit (tag-eval
+  exits 1 by design); the run's reaper must outlive it too, or its orphans run on.
+- **The corpus releases are covered.** The two releases (`corpus`, `corpus_2`) hold 257 PDFs on disk: the 121
+  sets' documents, 28 byte-identical copies, and 102 parts or pages of registered documents (the per-part splits
+  of the rejoined sets). What no set covers is one synthetic raster fixture (`federal-mech-legend-raster`) and one
+  real document, the Weld County mechanical permit set (8 pages, two copies). Its schedule sheets carry no text
+  layer, so the vector pipeline reads nothing there: the same OCR gap.
+- **Process notes:**
+  - A directory listing printed a scratch backup of one held-out key row (bessemer HP-1's attributes, from the
+    ASSEMBLIES key work). Nothing was changed from it; the CONTROL INTENT work does not touch attribute keys.
+  - A snapshot taken without `/root/.ot-env.sh` compiles fewer items: without the vector-grid sidecar's Python,
+    baker-county-eoc gives 3 instead of 13. Two negative-control runs were taken that way by mistake, spotted,
+    and re-run. Every number above is from a run with the environment.
+- **Next:** the robustness suite as a committed instrument, with its report; corpus-eval unchanged (cold); the
+  held-out shortfalls (B1, C) written up as ceilings with their aggregate miss reasons.
+
+The research that proposed the goal (2026-09-24):
+- **Research:** `plans/05-research/01–03`, the design plan
+  `plans/05-control-intent-plan.md`, and the goal `goals/CONTROL_INTENT.md`.
+  The pilot scripts and outputs are in `plans/05-research/pilot/`; dev
+  documents only.
+- **Dev misses by deciding evidence:** project fact 31, control drawings 71,
+  schedule 11, floor plan 15. Targeting today binds 18 of the 71. Ceiling for
+  the goal: 218/244.
+- **Pilot:**
+  - text model on the text layer: 4/4 presence options right with verified
+    quotes; abstained on 15/15 absences; 1 of 6 BAS roles wrong (quotes
+    paraphrased, so the check rejected it);
+  - vision model on one bound detail crop: absences right in 2/2 runs; one
+    run misread an economizer.
+- **Finding:** the configured vision model `gemma-4-31b` is no longer served
+  by the platform endpoint, which lists `qwen-3.8-27b` (accepts images) and
+  `gpt-oss-120b` (text only).
+- **Correction:** AS-24 restates AS-19's ceiling as specific to I/O-count
+  matching.
+
+### Active work: assemblies (GOAL LOOP S, `goals/ASSEMBLIES.md`) — started 2026-09-23
+
+Branch `claude/affectionate-darwin-316fwo` (the goal's BRANCH line names
+`assemblies`; the owner's `/goal` command named this branch, so the loop runs
+here). Coordinator only, one heavy job at a time. Bug catalogue:
+`ASSEMBLIES_BUG_CATALOGUE.md`. Reports: `reports/assemblies/`.
+
+**Gates passed:**
+- GATE 0 (2026-09-23; dev is below the TRUTH size target, a ceiling demonstrated in AS-7);
+- GATE 1 (2026-09-23);
+- GATE 3 (2026-09-24);
+- GATE 4 (2026-09-24; the partner review it requests is INPUT 4);
+- GATE 7 (2026-09-24): export validation green on dev and held-out; the coil-derived HIT rows reported against WP0 (161 = 161, 11 = 11); guard green;
+- GATE 8 (2026-09-24): the three persona scenarios pass, the library CSV round trip is lossless, the UI proof passes, guard green;
+- GATE 9 (2026-09-24): unit tests; the starter's grep test (c) is green.
+
+**GATE 6, measured 2026-09-24, not passed** (`reports/assemblies/06-points-compare-{dev,heldout}`):
+- dev has no evidence: no dev unit is named by a printed list (AS-22);
+- held-out navfac names 40 units, 0 agree by I/O type, and the 40 diffs stay unclassified, because classifying them would mean reading held-out.
+
+**GATE 2, measured 2026-09-24, not passed:**
+- dev fails on exact at a demonstrated extraction ceiling (AS-16);
+- held-out fails at 85.8% exact with 2 invented, and must pass at DONE
+  (AS-17; closing it needs more dev documents, AS-2).
+
+**GATE 5, measured 2026-09-24, not passed** (AS-19; `reports/assemblies/05-typical-eval-{dev,heldout}.{json,md}`):
+- Typical eval dev: 116/244 exact (47.5%; needs 98%). This is at the schedule-only ceiling AS-19 demonstrates (at most 123/244). Counting only the rows that reach every drawing-decided option without a library default: 43/244. Re-measured at the final HEAD with the same result.
+- The D6 census finds only 3 dev units with their own printed I/O, so the control drawings cannot close the gap here (AS-19: a demonstrated ceiling).
+  - Update 2026-09-24 (AS-24): that ceiling is for an I/O-count match. Reading options through evidence bound by tag lists, ranges, cross-references and typical details could settle 71 dev misses (`plans/05-research/01-dev-miss-evidence.md`), proposed as `goals/CONTROL_INTENT.md`.
+- Held-out: 21/91 exact (23.1%; needs 95%), reported with aggregates only.
+- Undisclosed: 0 on both sides (passes).
+- Parity: green on D04 (records, lines, report and the CSV set).
+- Guard (the working tree after WP7's first changes; logs in the session scratchpad `gate5/guard/`): no new failure against AS-1.
+  - web: typecheck, lint (0 errors, the 3 known warnings), the six BAS benches, bench, bench:linear and build exit 0. `npm test` shows only the 3 AS-1 failures.
+  - mcp: typecheck 0; the pretest suites pass. The main suite showed the 5 AS-1 failures and PARITY. PARITY's check of the PDF producer searched the raw bytes of a compressed PDF, a test bug; it now reads the producer with pdf-lib, and the rerun passes (below).
+  - The conformance worker hung on its idle sidecars again (AS-6); the run ended when the guard's own task was stopped.
+  - `check:tool-count` passes (62 tools). It failed at SETUP (60 vs 61), and WP5's tool-count edits fixed it.
+- NEW-DOCUMENT TEST #1: blocked on INPUT 5 (asked once in WP0, still open).
+- UI proof (a real PDF in the running app; details under WP8): **passes**, 10 checks. The browser's records and lines are byte-identical to `apply_assemblies` (214 records, 3,220 lines).
+
+**Now (2026-09-24): every gate the loop can move is either passed or stopped at a demonstrated ceiling.**
+- Passed: GATES 0, 1, 3, 4, 7, 8 and 9.
+- Not passed, with the evidence:
+  - GATE 2: extraction ceiling on dev (AS-16); held-out needs more dev documents (AS-17, AS-2).
+  - GATE 5: the schedule-only ceiling, and the D6 census (AS-19).
+  - GATE 6: no dev evidence (AS-22); held-out cannot be classified without reading it.
+- What would move them, all from the owner:
+  - dev documents whose control drawings or points lists bind one unit each (INPUT 5 partner jobs, or the goal's listed sets, AS-2);
+  - partner defaults and the reviewers' judgement (INPUT 4).
+- WP10 and the NEW-DOCUMENT tests wait on INPUT 5; the HIT and Desigo questions wait on INPUTs 2 and 3.
+- Corpus-eval is unchanged by construction; the linear bench changed timing only.
+- Final guard (below): no new failure.
+
+**Draft PR:** erikjohnstone/master-plan#108 (opened at the end of WP2 per the BRANCH line; never merged by the loop).
+
+**SETUP — environment (2026-09-23).** Node 24.21.0 unpacked from the npm
+`node-linux-x64` package (nvm and nodejs.org are unreachable); one root
+`npm ci` in `opentakeoff/` (npm workspaces — separate installs in web/ and
+mcp/ break module resolution); `.venv-sidecar` (sidecar/requirements.txt +
+pymupdf) and `.venv-bas`; Java 21 for OpenDataLoader. Every command runs
+after `source /root/.ot-env.sh` (PATH, CA bundle,
+`OPENTAKEOFF_VECTORGRID_PYTHON`, `OPENTAKEOFF_BAS_PYTHON`). Measurements
+additionally set `OPENTAKEOFF_TABLE_SIDECAR_PYTHON` to the same venv; the
+guard runs below did not, and later guard runs keep that environment so
+before/after stay comparable.
+
+**SETUP — the guard is red at HEAD (AS-1), so the rule is "no new failure".**
+Measured on `71fb4b9` (= `origin/main` `5ab7ca8` + goal documents only):
+- web `npm run check`: typecheck OK; lint 0 errors / 3 warnings; `npm test`
+  3527 tests, 3511 pass, **3 fail**, 13 skipped — `sheetgraph.test.ts`
+  "multi-building: qualified ROW keys ('A-134') carry their building; sheet
+  numbers never mint rooms" (line 947), `tableRecallGaps.test.ts` "B-11: a
+  block the finish pass never claims is not silently skipped for it" and
+  "B-12: single-data-row schedules drawn in a real grid are extracted".
+  `check` stops at the failing `npm test`, so the rest of its chain was run
+  one script at a time: bench:bas-sync, bench:bas-drawings,
+  bench:bas-revision-inventory, bench:bas-deliverable-scope,
+  bench:bas-scope-review, bench:bas-readiness, bench, bench:linear and build
+  all exit 0. bench:linear rewrote `bench/linear/results.json` with timing
+  fields only (no metric changed); the file was restored.
+- mcp: typecheck OK. `npm test` (its `pretest` runs `test:bas` and the
+  revision/issue/scope suites: 133 + 33 + 6 + 17 tests, all pass) then the
+  main suite: 433 tests, 314 pass, **5 fail**, 114 skipped —
+  `conformance.test.ts` "sheet graph (#87): index, resolve with citations,
+  refusal with reasons, find_schedule" and "sweep_schedule_row: a mark drawn
+  only on non-plan sheets discloses reference_tags instead of refusing (WP4,
+  real navfac data)"; `crossCorpusWorkflow.test.mjs` "WP1 keyed compile
+  acceptance on ≥2 non-NAVFAC sets" with its subtests
+  `bldg5406-hvac-demo.compile.json` and `federal-mech.compile.json`
+  (TAKEOFF_BUG_CATALOGUE B-44/B-45/B-46). `check:tool-count` **fails**:
+  README.md and docs/USER_GUIDE.md say 60 tools, the server registers 61.
+- The conformance worker did not exit after its 20 tests reported: two idle
+  VectorGrid sidecars kept its event loop open (AS-6). Stopping the two
+  idle sidecars let it exit; no test result changed.
+- Logs: this session's scratchpad `guard/` (web-check-baseline.log,
+  web-<script>.log, mcp-<script>.log, wedge-evidence-conformance.txt).
+
+**WP0.2 seed, fixed before the census finished (19:10 UTC): `20260923`.**
+The draw is `assemblies-baseline.mjs --split 20260923` over the census; the
+seed is written here before any real draw exists, so it cannot have been
+chosen for the outcome. (The only earlier `--split` runs were on a synthetic
+census in the scratchpad, to prove the mode is deterministic.)
+
+**Asked of the owner once (goal INPUTS; keep going meanwhile):** HIT owners'
+answers on CoilDP / BranchDP / Tolerance and row limits (INPUT 2); Desigo
+Select import format, field-equipment type list and license-point counting
+(INPUT 3); one controls integrator and one mechanical contractor to review
+the starter library (INPUT 4, due at GATE 4); 2–3 real partner jobs with what
+was entered downstream, plus unseen PDFs for the NEW-DOCUMENT TESTs (INPUT
+5); network access for `drive.google.com` / `drive.usercontent.google.com`
+so the bulk corpus can be staged (AS-2).
+
+**WP0.1 — census (9cc1dcf; `reports/assemblies/00-baseline.{json,md}`).** 23 of the
+121 registered sets are present here (AS-2); all 23 measured, 0 errored.
+Controls-relevant equipment: 19/23 sets, 783 schedule rows. Points-list rows:
+2/23 sets. Control-valve rows: 7/23 sets, 291 rows. Hydronic coils inside
+equipment schedules: 376, of them 183 with no scheduled valve. One command:
+`cd opentakeoff/mcp && node --import tsx scripts/assemblies-baseline.mjs ../../opentakeoff-corpus`.
+Reproducible: a no-cache re-run of bessemer, 024 and 094 at 63ad081 matched
+the committed census in every field except `ms`.
+
+**WP0.2 — frozen split (9cc1dcf; `reports/assemblies/01-split.{json,md}`),
+seed 20260923.** Dev 11 documents; held-out 6 documents and 26 drawn tables
+(≤30 rows each). Dev falls short of ≥12 documents / ≥300 instances: the
+present population cannot reach it without choosing the split by its outcome
+(AS-7, ceiling demonstrated).
+
+**WP0.3 — keys: all 17 documents keyed from renders, 89/89 required tables,
+every claimed row.** Each key's `#` header states its scope, the seed and
+what is not counted; each transcription (`reports/assemblies/key-work/`) is
+expanded mechanically by `mcp/scripts/assemblies-key-transcribe.mjs`, and
+every table has a second read (4x; independent MuPDF re-renders for the
+last four documents).
+
+| Side | Documents | Tables | Instances | Keyed values | Printed |
+|---|---|---|---|---|---|
+| dev | 11 | 63 | 244 | 5,280 | 2,053 |
+| held-out | 6 | 26 | 91 | 2,068 | 1,008 |
+
+Largest keys: federal-mech (dev, 96 instances), navfac (held-out, 74),
+itd-d1-lab (dev, 37), 031 (dev, 29). Dev covers every family group TRUTH
+names: VAV 71, AHU/DOAS/RTU 20, FCU 12, pump 30, fan 30, UH/CUH 22, boiler
+6, chiller 3, cooling tower 1, HX 2, ERV 2, humidifier 2 (thin for the last
+five). Held-out has no HX or ERV instance, a property of the frozen draw.
+Two claimed tables print no instance of their family and carry a
+table-level line (031's architectural EQUIPMENT SCHEDULE as FAN; 060's
+structural anchorage schedule as DUCT_MOUNTED_COIL; AS-9).
+`mcp/test/assembliesKeys.test.mjs` (in `npm test`, 10 tests) checks the
+helper, reproduces `01-split.json` from its seed, requires every committed
+key to equal its transcription's expansion byte for byte, and bounds every
+key to its frozen scope (table × family, the held-out row cap).
+
+**WP0.4 — HIT export (5bd74f2; report b09f8b7,
+`reports/assemblies/00-hit-export-before-after.{json,md}`).** CoilDP
+(column H) is now blank: navfac's 163 rows had it filled before and 0 after,
+with the valve's own (GPM/Cv)² reported in the notes as "valve Δp (derived)"
+on all 163. Tolerance accepts only {10,20,30,40,50}. Positioning Signal comes
+only from printed signal text: navfac and itd-d1-lab print none (163 and 10
+rows blank, disclosed). itd-d1-lab's 10 rows changed in no column. MCP 0.9.81.
+
+**Catalogue at GATE 0:** AS-7 (dev-size ceiling), AS-8 (printed keyed-family
+schedules the compile does not claim), AS-9 (claimed tables with no
+instance), AS-10 (printed titles not taken), AS-11 and AS-13 (drawing
+inconsistencies a join or normalizer must survive), AS-12 and AS-13
+(printed selectors the frozen key vocabulary cannot hold, for WP1).
+
+**Not done, on purpose:** redrawing or reordering the split to reach 12 dev
+documents (AS-7); keying printed schedules the compile does not claim (they
+are outside the population; AS-8 lists them); editing any committed key.
+
+**GATE 0 guard: no new failure (AS-1).**
+- web: nothing under `web/` changed after the post-WP0.4 run at 6e0e632.
+  That run: typecheck and lint exit 0 (0 errors, 3 warnings); `npm test`
+  3,529 tests, 3,513 pass, the same 3 failures as SETUP (the +2 are WP0.4's
+  export tests); every bench and the build exit 0.
+- mcp at 0b13beb: typecheck exit 0; `npm test` 443 tests, 324 pass, 5 fail,
+  114 skipped (SETUP: 433 / 314 / 5 / 114; the +10 are the key tests), and
+  the 5 failures are the SETUP five; `check:tool-count` passes (61 tools).
+  The AS-6 watchdog stopped the conformance worker's two idle sidecars after
+  its tests reported.
+- corpus-eval: WP0 changed `web/src/lib/valveSizeExport.ts` and description
+  text in `mcp/src/tools.ts` and `outputs.ts`. None of them is in the import
+  graph of any corpus-eval scorer (takeoff-eval, graph-eval,
+  table-recall-eval, tag-eval: 163 modules), so WP0 cannot have moved its
+  metrics.
+- **Corpus-eval baseline (instrument 1), the numbers WP1 and later compare
+  against:** cold cache, VectorGrid on, at `da7493d` (WP1; nothing in WP0 or
+  WP1 is in any scorer's import graph), 2026-09-23 23:12 to 2026-09-24 00:19,
+  saved as `reports/assemblies/00-corpus-eval-baseline.txt`. One child per
+  scorer (`OPENTAKEOFF_EVAL_CONCURRENCY=1`), 40-minute per-set timeout, under
+  the AS-15 orphan reaper (494 orphans stopped, one per set per scorer; no
+  scorer reads an orphan's output). 23 of the 121 sets have their PDFs in
+  this container (AS-2).
+  - takeoff: 541 keyed tags, 85.0% exact, Σ|Δqty| 192, missing 13,
+    false-add 59; applicable installed rows 423/499 (84.8%); expected honest
+    refusals 9/14.
+  - reference: 92/129 cells exact (71.3%): itd-d1-lab 0/34 (its lab
+    ventilation sequence table is missing), bessemer 9/12, federal-mech,
+    navfac and baker 100%.
+  - graph: cells 78 right, 0 wrong, 13 missed (P 100.0%, R 85.7%, every miss
+    a baker CEILING finish); row-symbol recall 100.0% (504); tag P/R 0.0%
+    (393 room tags reported; the HVAC tag keys have no is_room column). The
+    baker child ended without a result (a signal exit; the run's one OOM
+    kill, 23:44, came while four scorers ran at once); its numbers are from
+    a rerun alone at
+    `9f9de9a` (WP2's first commit; nothing it adds is in a scorer's import
+    graph), in the same file.
+  - table recall 46/51 (90.2%); tag census 1,354/1,850 (73.2%), 18 of 21
+    keyed sets below their floor, so tag-eval exits 1 by design and
+    corpus-eval.mjs exits 1 at 00:04 while the graph scorer runs on.
+  - Regressions against the last recorded full run (`2cd532b`, 2026-08-29,
+    "Final outcome/production batch"): reference 129/129 → 92/129 and graph
+    cells 91/91 → 78/91. Both predate this loop; none of its files is
+    imported by a scorer.
+
+**WP1 — canonical attribute schema; GATE 1 passed (2026-09-23).**
+`web/src/lib/assemblies/attributes.ts` is on the shared path: normalize.ts,
+the attribute eval, typical selection and every surface read this one
+schema.
+- **Scope:** 30 equipment families (the census's ATTR_KEY_FAMILIES) and 107
+  canonical attributes: 81 number, 19 enum, 6 text, 1 size.
+- **Keyed attributes:** each family lists exactly the frozen key vocabulary,
+  707 family × attribute pairs mapping by identity onto 97 canonical
+  attributes.
+- **Extensions:** 39 family pairs (10 new attributes) for printed selectors
+  that vocabulary cannot hold (AS-12, AS-13, AS-14). Today's keys do not
+  score them.
+- **Units:** one canonical unit per number attribute, and exact factors
+  within a dimension only (BTU/H→MBH, W→kW, W↔hp at 745.7, feet of water→in.
+  w.c. ×12). Temperatures accept °F only.
+- **Examples:** 83 are a key's printed source header and 10 a transcription
+  column typed "-". 14 attributes are printed in no keyed table; the schema
+  says so, and GATE 1 fails the day a key prints one.
+
+**GATE 1** (`mcp/test/assembliesSchema.test.mjs`, 4 tests, in `npm test`)
+checks:
+- the schema's families equal the vocabulary's;
+- every key attribute maps to exactly one canonical attribute of its family
+  (injective), with the same kind and enum values;
+- all 7,348 key lines, dev and held-out, map; every printed unit converts;
+  all 3,061 printed values are canonical;
+- every example is a real key header or transcription column.
+
+`web/test/assemblies/attributes.test.ts` (5 tests) checks the schema's shape,
+units and enums.
+
+Negative controls each fail the intended test:
+- dropping BTU/H from MBH;
+- a made-up example header;
+- removing VAV's `ecm`.
+
+Also: test globs were added (web `test/assemblies/*.test.ts`, mcp
+`test/assembliesSchema.test.mjs`); web tsc and the mcp typecheck exit 0 (web
+eslint covers .js/.jsx only). The full guard runs after the corpus-eval
+baseline, one heavy job at a time.
+
+
+**WP2 — structural normalizer; GATE 2 measured 2026-09-24: dev FAILS on exact, with the remaining ceiling demonstrated (AS-16).**
+Shared path: `web/src/lib/assemblies/normalize.ts` (compile row → canonical
+attributes, each with its cell cite and rule id) and `scheduleNotes.ts` (a
+table's notes, its legend, and the code legends its headers cite, all read
+from the page's text spans, the same spans and image-px space the sheet graph
+is built from). Instrument 2 is `mcp/scripts/assemblies-attr-eval.mjs`.
+
+- **GATE 2 (dev), `reports/assemblies/02-attr-eval-dev.{json,md}`:**
+  1,967 of 2,053 printed values exact (95.8%, need ≥ 98%) FAIL; wrong 2
+  (0.1%, need ≤ 0.5%) ok; invented 0 ok. By slice: grid 1,629/1,677
+  (97.1%), author's structural reading 278/316 (88.0%), table notes 60/60.
+  All 3,227 empty values are correctly unknown.
+- **Where the 86 non-exact values are:**
+  - 80 are bldg5406's rotated schedules. The sheet graph drops, merges and
+    reorders their columns (AS-16; evidence in
+    `reports/assemblies/02-bldg5406-ceiling.md`).
+  - 4 are 12_MT's cabinet unit heaters, whose drawing swaps its AIR SIDE and
+    LIQUID SIDE groups (AS-11). The normalizer refuses the contradiction
+    rather than reinterpret the headers.
+  - 2 are wrong: itd-d1-lab's BP-1/BP-2 AREA SERVED, where the graph joins
+    "( B-1" and ")" with no space and the key reads "( B-1 )".
+  - The other eight dev documents are 100% exact. Without bldg5406, dev is
+    1,902/1,908 (99.7%).
+- **The ceiling:** with bldg5406's 80 and 12_MT's 4 out of any normalizer's
+  reach, exact can reach at most 1,969/2,053 (95.9%). The fix belongs to
+  the graph's loop (rotated grids). No key, scorer or threshold was changed.
+- **GATE 2 (held-out), reported now, must pass at DONE:** 865 of 1,008
+  printed values exact (85.8%, need ≥ 95%) FAIL; wrong 4 (0.4%, need ≤ 1%)
+  ok; invented 2 (need 0) FAIL. `reports/assemblies/02-attr-eval-heldout.{json,md}`,
+  aggregates only (`--heldout`), with the normalizer of 3f836e9 (the
+  report's normalize.ts sha256 bb3ffecf804c matches the commit).
+  - By slice: grid 653/728 (89.7%), the author's structural reading
+    163/216 (75.5%), table notes 49/64 (76.6%; all 4 wrong values).
+    1,058 of 1,060 empty values are correctly unknown.
+  - By set: navfac-cherry-point-atc 730/835 (87.4%; the 2 invented),
+    024_MO 52/68 (76.5%; the 4 wrong), 30_WA_SpokaneTransit 38/47,
+    060_XX_ASC 26/30, 018_GA_USDA 11/15, bessemer 8/13.
+  - Dev outside its ceiling is 99.7%; held-out is 85.8%. The rules do not
+    yet carry to drafting they were not grown on (AS-17). No held-out
+    value, render or graph was opened. The only honest way to close the gap is more dev
+    documents, and the present population is exhausted: 11 dev + 6
+    held-out of the 17 that carry a keyed family (AS-7). The bulk corpus
+    needs network access (AS-2, already asked). Held-out is scored again
+    only at a gate.
+- **Guard after WP2 (run at e878025; 3f836e9's later changes touch only
+  `lib/assemblies/`, the eval script and their tests, so GATE 3's guard
+  re-ran the web half on them, and the mcp assemblies suites, 26 tests,
+  pass at HEAD):** web typecheck and lint
+  exit 0 (0 errors, the same 3 warnings as SETUP); `npm test` 3,570 tests,
+  3,554 pass, the same 3 fail as SETUP; the six bas benches, bench,
+  bench:linear and build exit 0. mcp typecheck exits 0; `npm test` runs
+  its pretest suites (133 + 33 + 6 + 17, all pass), then 459 tests: 339
+  pass, 114 skipped, 6 fail. Five are SETUP's; the sixth,
+  `detect_rooms assign mode`, timed out at 528 s while the machine was
+  loaded, then passed alone in 42 s (`guard-wp2/rerun-detect-rooms.log`).
+  `check:tool-count` exits 0 (0c26d0d synced the docs to 61 tools).
+- **corpus-eval unchanged:** since its baseline (1e8aae8) nothing it runs
+  has changed. Outside `lib/assemblies/` and the tests, the diff is the
+  attribute-eval script, the linear library's `kind` skip (byte-identical
+  goldens, WP3), store.js and profile.js. None of these is on the
+  corpus-eval path.
+- **What the normalizer reads:**
+  - Header words name each column's quantity and block (coil, fan,
+    electrical, heating), and the cell must validate as one value of it:
+    a unit the attribute accepts, a physical range.
+  - Unqualified water columns take the table's service, checked by
+    EWT/LWT physics and by the air entering the same coil.
+  - Split-system rows keep each half's columns.
+  - A NOMINAL size ranks below a capacity; OUTPUT and TOTAL rank first.
+  - Derived enumerations: coil blocks, named coils, titles (SPLIT,
+    PACKAGED AIR CONDITIONING), COOLING ONLY, gas inputs, a humidifier's
+    TYPE and SOURCE.
+  - A drive schedule's PURPOSE naming a unit gives that unit's VFD.
+- **What it reads from notes and legends:**
+  - The numbered notes printed with a table: several columns, a legend
+    beside them, a sub-list in another numbering style, a table or title
+    beside them.
+  - The notes a row's REMARKS cite, or every note when no row cites any.
+    A note naming services or other units speaks only for those.
+  - Values: VFD, ECM, BAS interface, glycol, economizer, gas heat, MERV,
+    and control devices.
+  - A table's legend, which gives a unit's sections from its component
+    codes.
+  - A cited lettered note's codes ("FV = FULL VOLTAGE").
+- **Tests:**
+  - `web/test/assemblies/normalize.test.ts` and `scheduleNotes.test.ts`
+    (47 tests, geometry and rows from the dev documents);
+  - `mcp/test/assembliesAttrEval.test.mjs` (12 tests).
+  - Every rule added from a measured miss has a test on the miss's own
+    shape and a negative control beside it (a disconnect switch is not a
+    control; points added to a DDC system are not an interface; two units
+    of one kind on a row are no split pair; a filter column's codes are
+    not a unit's sections).
+
+
+**WP3 — the assembly engine; GATE 3 passed (2026-09-24).**
+Shared path, `web/src/lib/assemblies/` (pure TS, zod): both surfaces choose,
+expand and roll up through these modules.
+- **expr.ts, the D8 language.** Numbers, text, true/false; attr./var./opt.
+  references; arithmetic, comparison, and/or/not; if, min, max, ceil,
+  floor, round, known.
+  - Parsed and never passed to eval; a test reads the source for eval and
+    Function.
+  - Unknown stays unknown and names the references it waits for. `and` is
+    false and `or` true whatever the unknown side holds; if() with an
+    unknown condition decides only when both branches agree.
+  - checkExpr refuses a reference the family's schema, or the assembly's
+    own variables and options, do not define, naming the token and its
+    position.
+  - A fuzz of 3,000 random token strings raises only ExprError.
+- **schema.ts.** Zod AssemblyDefinition (kinds equipment, project and part;
+  a part is a sub-assembly, never chosen on its own), ApplicationRecord and
+  ExpandedLine, per plan §8.2. The load gate refuses a record whose shape,
+  ids, expressions, references, a point's device, or sub-assembly
+  references (missing or cyclic) fail, with each reason.
+- **select.ts, plan §8.3 and D6/A4.**
+  - The highest-ranked true selector wins; a selector that reads an
+    unknown makes its assembly only possible. A possible assembly at least
+    as specific as the best true one, or a tie, leaves the unit
+    `unresolved` with its candidates and missing references.
+  - Options and variables take the user's value, then the attribute or
+    project variable, then a partner default (which the record names),
+    then the library default for a variable with no source.
+  - Overrides and exclusions carry a reason. Project assemblies apply once
+    per project.
+- **expand.ts, plan §8.4.** A hook-up profile switch that is off drops the
+  line, and one that is unset leaves it unresolved.
+  - `when` false drops the line; unknown leaves it unresolved.
+  - qty_base = qty × the unit's multiplier; waste is applied next, and
+    rounding is left to roll-up.
+  - Parameters carry their sources, and "<selection>" stays as is.
+  - A printed points list or a drawing-declared device replaces the
+    typical's lines of that role and never adds to them.
+  - A part expands under its parent's path and quantity; the container
+    line carries no quantity.
+- **rollup.ts.** Rows by building, floor, system and family × what is
+  bought. The order quantity is rounded here, after summing. Unresolved,
+  replaced and error lines are counted, never summed.
+- **The library home (WP3.1, D7):**
+  - `linear/assemblyLibrary.ts` skips records with a `kind`. Linear
+    records and their resolveLinearAssembly lines are byte-identical to a
+    golden captured before the change: 6 records (seeded, partner-edited,
+    malformed, duplicate), 48 resolutions over rect, round and pipe runs
+    and two settings. That holds with or without equipment assemblies in
+    the same array.
+  - `assemblies/library.ts` lets store.js and profile.js replace either
+    kind without dropping the other. Profile import and export carry
+    both.
+- **Tests:**
+  - web: `expr.test.ts` 8, `engine.test.ts` 12, `assemblyLibraryKind.test.ts` 3.
+  - Property: 40 seeds × 25 random VAV units expand without an exception.
+    Every roll-up (6 breakdowns) conserves qty_base and qty_with_waste and
+    holds every line exactly once.
+  - Determinism: 5 shuffles of units and library give byte-identical
+    output.
+  - Negative controls, each caught by its own test:
+    - a roll-up that drops half a unit (conservation, rounding);
+    - no instance sort (determinism);
+    - evidence that never replaces (precedence);
+    - an unknown condition treated as true (unknown propagation).
+- **GATE 3:**
+  - The tests above are green, the property tests raise nothing, and the
+    linear goldens are byte-identical.
+  - Guard: web typecheck and lint exit 0 (0 errors, the same 3 warnings as
+    SETUP). `npm test` ran 3,604 tests: 3,588 pass and the same 3 fail as
+    SETUP. The build exits 0.
+  - The guard's mcp half ran after WP2 (see WP2). The engine is web-only
+    until WP5: mcp imports nothing new (session.ts reads only
+    SEED_ASSEMBLIES).
+- **Layers (added after GATE 3, for WP4's hook-ups):**
+  - An assembly names its layer ("controls" by default; "hookup" for the
+    mechanical hook-up). A unit gets one assembly per layer the library
+    offers its family, each chosen by that layer's own selectors, and
+    every expanded line carries its layer.
+  - An override may name a layer. An exclusion without one covers every
+    layer.
+  - A unit whose selectors are all false is `no_assembly`; before this
+    change it was `unresolved`, with nothing left to resolve.
+  - Tests: `engine.test.ts` 14. web `npm test` ran 3,606 tests: 3,590 pass
+    and the same 3 fail as SETUP. tsc exits 0.
+- **Not done here, on purpose:**
+  - No surface uses the engine yet (WP5).
+  - The starter library is WP4.
+  - Profile import and export carry equipment assemblies from now on, so
+    the docs and CHANGELOG entry come with WP5's user-facing
+    behaviour.
+
+
+**WP4 — starter library v1; GATE 4 passed (2026-09-24).**
+The files are in `web/src/lib/assemblies/starter/`. They are generated by
+`web/scripts/assemblies-starter/*.mts`, and `web/test/assemblies/starter.test.ts`
+rebuilds them and requires identical bytes.
+- **What ships:**
+  - `us-typicals-v1.json`: 31 records, layer controls (28 equipment, 3 project), covering research 02 §3b's 26 typicals.
+    - Where a typical's lines differ by family, it splits: split DX indoor, heat pump, VRF indoor and VRF outdoor.
+    - A plant is a per-unit record plus a once-per-plant project record: boiler + `hw-plant`, chiller + `chw-plant`.
+    - Lines: 514 points, 331 devices, 52 labor hooks, 12 notes.
+  - `us-hookups-v1.json`: 16 records, layer hookup: 5 parts (hot- and chilled-water coil, terminal heater, steam coil, pump), 10 equipment hook-ups, and 1 project record for the closed-loop specialties.
+    - 85 component lines, each a role with size and end type; no product.
+    - No hook-up furnishes the control valve again: it is the typical's device, installed by the mechanical trade under the matrix.
+  - `responsibility-v1.json`: the one matrix both layers use, 41 rows.
+    - 29 rows are the VA 23 09 23 (03-01-23) table, with its cells kept verbatim.
+    - 12 rows are inferred, and say so.
+    - Roles map to rows (85 roles). The four coil-kit presets sit over the control-valve row.
+  - `hookup-profile-v1.json`: 9 switches and 11 project variables, each with a default and the sources that disagree about it. Plant, loop and building counts default to unset, so their lines stay unresolved rather than guessed.
+  - `coverage-ufc-3-410-01.json`, `coverage-g36-chiller-plant.json`, and `NOTICE.md` (sources, licenses, the partner-review list).
+- **Fixtures (`web/test/assemblies/fixtures/`), each written by a committed script from its primary source:**
+  - `mbl-g36-connectors.json` (by `mbl-g36-connectors.py`):
+    - Covers 15 files of the Modelica Buildings Library at a3cfdde4, each with its sha256.
+    - Records 578 connectors, each with its I/O class and the rule or explicit override that decided it (research 02 §1e).
+    - Defines 192 configurations, each with its parameters, its typical, attributes and options, and its field points by I/O type.
+  - `ufc-3-410-01-table-3-1.json` (by `ufc-3-410-01-table-3-1.py`): the 73 items of Table 3-1, verbatim, read from the PDF by position, with list and page.
+  - `s223-classes.json`: 149 classes of the 223P ontology, v1.0.0-2026.
+  - `xeto-ph-points.json`: 187 Haystack `ph.points` specs.
+- **Engine and schema, on the shared path:**
+  - `applies_to.family` may list several families, and an assembly's expressions may read only attributes every listed family has.
+  - A line may carry a `label`, which reaches the ExpandedLine.
+  - AHU-like families gain the extension attribute `terminals_served`, which WP5 derives from the terminal schedules. It tells a multizone VAV air handler from a single-zone one; until then such a unit is `unresolved` with both candidates.
+  - `engine.test.ts` now has 16 tests. GATE 1's schema tests still pass (4).
+- **GATE 4:**
+  - (a) UFC 3-410-01 Table 3-1: 72 of 73 items are covered by named lines. One is N/A with its reason: ads-26, smoke damper status. Smoke dampers are plan symbols, which the takeoff does not count.
+  - (b) G36: in all 192 configurations, each G36-derived typical's MBL-cited field points equal the controller's field connectors, name by name and by I/O type. The configurations span the six terminal typicals, the FCU, the single-zone AHU and the multizone AHU.
+    - Negative controls, each caught: a dropped zone temperature (3 of 3 configurations), a window switch without its option (2), a valve command typed BO (3).
+    - The chiller plant is plant-wide, so it is checked connector by connector. Of its 47 field connectors, 28 are cited by lines and 7 are covered by lines citing another source. The other 12 (waterside-economizer pump and valves, tower valve end switches, plant head-pressure temperatures) are left out of v1, each with its reason.
+  - (c) The scan of starter/ finds no maker, money, rate, hours, model or part number, or part-number-shaped token. Its controls catch 10 planted strings and pass 10 legitimate ones ("flow rate", "UF-6426", "§2.8 H.3").
+  - Every line is sourced:
+    - 335 MBL locators and 134 UFC Table 3-1 quotations are checked against the fixtures.
+    - The licenses are BSD-3-Clause-LBNL, US Government work, and Apache-2.0 for OpenTakeoff's own inferences, which are marked `[inferred]`.
+    - Every Xeto function is a `ph.points` spec, and every `s223_class` is a 223P class.
+  - Every device and component line's responsibility is its role's matrix row, and every point's is "program, test: controls". No partner field ships.
+  - Property test: 12 random attribute sets for each typical and family (more than 400 expansions) raise no error line.
+  - Typical ids and options are frozen for v1 (`FROZEN` in `starter.test.ts`). This unblocks `*.typicals.csv`.
+  - The review request went to the owner with the partner-review list (INPUT 4, asked once in WP0).
+  - Guard (run at 11dd96b plus these changes):
+    - web: typecheck exits 0; lint 0 errors, with SETUP's 3 warnings; `npm test` 3,621 tests, 3,605 pass, SETUP's same 3 fail; build exits 0.
+    - mcp: typecheck exits 0; the assemblies suites pass (26).
+    - The assemblies tests: 92 pass.
+    - GATE 2's numbers stand. normalize.ts is untouched, and the one attribute added (`terminals_served`) is an extension no key scores.
+- **Not done here, on purpose:**
+  - Measuring how well typicals are selected on the keys: WP5 (`*.typicals.csv`, GATE 5).
+  - Deriving `terminals_served`: WP5.
+  - Loading the starter into a profile or a project: WP5.
+  - Exports: WP7.
+
+
+**Instrument 1 after WP2–WP4 (2026-09-24, `reports/assemblies/04-corpus-eval-wp4.txt`): UNCHANGED.**
+Cold corpus-eval at 58512fa, same settings as the baseline:
+- takeoff 541 keyed tags, 85.0% exact, Σ|Δqty| 192, missing 13, false-add 59; applicable installed rows 423/499; honest refusals 9/14;
+- reference 92/129 cells exact;
+- table recall and tag census identical per set;
+- sheet graph cells 78 right, 0 wrong, 13 missed (P 100.0%, R 85.7%); 393 tags reported; 504 row symbols found.
+
+That matches the baseline's corpus figures with baker included; this run scored baker in-run, where the baseline needed a rerun after an OOM.
+
+Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Both sets are absent here and unscored in both runs. graph-eval has no per-set timeout, so its child was killed by hand; the drain loop was stopped by hand once every scorer had exited.
+
+**WP5 — apply on the shared path (in progress, 2026-09-24).**
+- **WP5.5, the truth (be676b3, d74abaf):**
+  - `keys/<set>.typicals.csv` for all 11 dev documents: 244 instances, 142 with a typical and 102 `none`.
+  - The same for all 6 held-out documents: 91 instances, 79 with a typical and 12 `none`.
+  - Written from renders and the controls sheets (sequences, schematics, points lists); the pipeline was not consulted.
+  - Each row's basis note cites its evidence. The conventions are in AS-18.
+- **Instrument 3** (`mcp/scripts/assemblies-typical-eval.mjs`):
+  - It takes its snapshots from the attribute eval's child, so both instruments score one compile.
+  - It scores one outcome per keyed instance: exact, option_wrong, wrong_typical, unresolved or unmatched. Options the key leaves open are scored apart.
+  - Each unresolved record's missing attributes are checked against `*.attrs.csv`.
+  - GATE 5's "undisclosed" check fails a decided record that rests on a value the attribute key says is not printed.
+  - `--heldout` prints aggregates only; `--detail` is dev-only.
+- **WP5.1, the shared apply path** (`web/src/lib/assemblies/apply.ts`):
+  - The table context the normalizer reads moved here from the attribute eval, so UI, MCP and both evals feed the normalizer the same way. The attribute eval's dev output is byte-identical before and after.
+  - Instances carry their cites, scope (the serving air handler is the system) and multiplier (a printed QTY).
+  - Derived with a rule and basis:
+    - the applied family: a 100% outdoor-air air handler is a DOAS, a gas-fired fan coil a furnace;
+    - `terminals_served`: from terminal rows naming the air handler, from the project's only AHU/RTU, or 0 when no terminal unit or duct-mounted coil is scheduled.
+  - `web/test/assemblies/apply.test.ts`: 7 tests. All 99 assemblies tests pass; web tsc exits 0.
+- **Library fix AS-20:** a hardwired interface is no longer a network interface (chiller, boiler, rtu-networked). The JSON was rebuilt by the builder.
+- **Typical eval, dev** (`reports/assemblies/05-typical-eval-dev.{json,md}`):
+  - 116 of 244 exact (47.5%; GATE 5 needs 98%): 44 option_wrong, 21 wrong_typical, 63 unresolved.
+  - One unresolved record names a printed value the normalizer misses (bldg5406 AHU-1, AS-16).
+  - Undisclosed: 0. 73 exact rows reach a drawing-decided option through the library default.
+  - AS-19 breaks the misses down by cause. A schedule-only proposal is capped at 123 of 244, because the rest of the truth is on the control drawings (D6).
+  - Held-out is not run; it is scored at the gate.
+- **WP5.3, MCP (0.9.82, 62 tools):** `apply_assemblies` (`mcp/src/assemblies.ts`, registered in tools.ts).
+  - `sessionAssembliesProject` builds the project from the Session's hvac_equipment compile and its pages' spans (`Session.sheetTextSpans`, read-only), through the shared `compiledProjectOf` (apply.ts). The attribute eval's snapshot uses the same builder; its dev output is byte-identical.
+  - The library loads by path: an assemblies file or an estimator profile, through the load gate; a rejected record fails the call.
+  - `report.ts` (shared) shapes the reply: exceptions first, per-family table, unit rows with cites.
+  - The docs synced by AGENTS.md's list: staging row (measure), the finish-step instruction in server.ts, mcp/README table row, docs/MCP.md, AGENT_GUIDE, the tool-count markers, CHANGELOG, and the version on its three surfaces.
+  - Parity test `mcp/test/assembliesApply.test.mjs`: the tool's records and lines against the browser's apply of the JSON-transported project, on D04 (federal-mech, dev). It runs after the heavy corpus-eval job.
+- **WP5.2, persistence** (`web/src/lib/assemblies/projectState.ts`):
+  - The project file's additive `assemblies` block pins every definition the records used, with sub-assemblies transitively, plus settings and overrides with reasons.
+  - Its sanitize gate names everything it drops.
+  - A library edit never changes a saved project (A5, tested). "Update to latest" is a per-option/variable/line diff; only `adoptUpdate` moves a pin.
+  - The canvas saves and hydrates the block like `stitches`.
+- **WP5.4, UI:** a **Takeoff → Assemblies** tab (`web/src/components/AssembliesPanel.jsx`).
+  - Units view: exceptions first with "Use <typical>" and details, a family table, unit rows with cites, options, derived facts and lines, and overrides that ask for a reason.
+  - Library view: the starter is read-only; **Clone to edit** (`libraryEdit.ts`) makes the next version with live validation against the whole library and an amber tint on its overrides; "Update to latest" has Adopt.
+  - The project comes from `/__ot/assemblies-project` (production-graph-cli `--mode assemblies_project`, the MCP builder), with sheet keys remapped. The starter JSON loads on demand, and the partner library lives in the profile store.
+- **Tests:** web assemblies 107 pass (apply 7, report 1, projectState 3, libraryEdit 4 among them). mcp: the typical-eval suite (4) and the library-load test pass. Web and mcp tsc exit 0. eslint shows 0 errors and the same 3 pre-existing warnings.
+- **Heavy-job note:**
+  - The sheet-graph cache key hashes all of `mcp/src` and `mcp/package.json`, so WP5.3 invalidates every cached graph once.
+  - The parity test, the evals at the new HEAD and the guard rebuild them, one heavy job at a time, after the WP4 corpus-eval run.
+- **Next:**
+  - Parity test and guard at the new HEAD; GATE 5 measured (dev and held-out).
+  - NEW-DOCUMENT TEST #1 waits on INPUT 5 (a partner job PDF).
+  - Then D6 evidence (control schematics, points lists and sequences bound to units) and the project settings AS-19 names.
+
+**WP5 continued, and GATE 5 (2026-09-24, later).**
+- **D6, printed points lists (6bfa8be).** The project now carries the rows the BAS points compile maps to units (`printed_points`, `corpusTakeoff.mjs` served-equipment logic, read-only). A unit a list names has its typical's point lines marked `replaced`.
+  - Matching: one spelling of the mark; a dashless spelling only when one scheduled unit reads that way; a dot is part of the number.
+  - A served-equipment mark with no letter is a row number (AS-22: federal-mech's four numbered BMS point schedules map to no unit).
+  - The typical eval does not move, by design: a printed list decides no typical or option.
+- **Register-declared components (the other half of D6) are not read** (AS-21). The register is incomplete by design, and the starter's roles are coarse (three VFD lines on an AHU), so a role match would drop lines. It needs a line identity, and WP6's point matching needs the same. The UI note and the MCP description said otherwise; both were corrected.
+- **Parity** (`mcp/test/assembliesApply.test.mjs`, D04): records, lines and report byte-identical between MCP and the browser's apply of the wire project, and now the CSV set too. The old "every line cites its row" check was wrong for the project assembly's lines (building meters), which cite their rule and no row; it now says so.
+- **GATE 5 measured:** see the GATE 5 block at the top. The held-out run was the first and only look at those documents' typicals (aggregates).
+- **The Takeoff → Assemblies panel:**
+  - it gets accessible names (regions, tables, pressed and expanded states), a keyboard **Details** button per unit and scroll containers for wide tables;
+  - the canvas probe exposes the assemblies project and state, so a browser run can recompute in-page and compare bytes;
+  - `web/scripts/playwright-assemblies.mjs` is the UI proof (it passes; see WP8 below).
+- **WP6 instrument 4** (`mcp/scripts/assemblies-points-compare.mjs`, 2 unit tests): per unit a printed list names, the typical's point lines against the printed rows by I/O type. Every diff needs a class and evidence in `reports/assemblies/06-points-diffs.csv`.
+  - Documents: the WP0.1 census's sets with mapped rows (federal-mech; navfac is held-out, aggregates only).
+  - The goal's other named sets (Eglin, Albany, USDA, Orange County 21) are not staged here (AS-2).
+- **WP7 (in part), MCP 0.9.83:**
+  - `exportSet.ts` builds the CSV set (equipment, lines, roll-up, points, valves, damper actuators, sensors, Desigo Select worksheet). Every engineering field has a `*_source` from one closed list, and a test fails on an undocumented column (`docs/ASSEMBLIES_CSV.md`).
+  - `reportPdf.ts` draws the report's PDF section: the takeoff PDF carries it, and the CSV zip and `export_dir` hold it as `assemblies.pdf`.
+  - `apply_assemblies` `export_dir` writes the same bytes the panel's Download CSV set zips. `safewrite` recognizes its own CSV by the header row.
+  - The HIT export adds coil-derived rows from the embedded-coil compile (flagged; GPM printed, System only from printed text, CoilDP blank) and splits past 195 valves, so every row keeps its dropdowns. This applies in the UI, MCP and the CLI script.
+- **Tests:** web assemblies and HIT 141 pass (exportSet 6, reportPdf 2 new). Web and mcp tsc exit 0. The mcp PARITY run with `export_dir` failed in the guard on a test bug (see the GATE 5 block) and passes after the fix.
+
+**WP8 and WP9 (2026-09-24, later; still MCP 0.9.83).**
+- **Library CSV (WP8.1, `libraryCsv.ts`).** One row per record, option, variable and line. Typed cells are encoded so they read back exactly. The same parse and gate as a profile's library, with every problem reported by row and column.
+  - Takeoff → Assemblies → Library has **Export CSV** and **Import CSV…**. A starter row is read-only: an unchanged copy is skipped, and a changed one is refused.
+  - `apply_assemblies` `library_path` takes the CSV; the file is the library.
+  - Lossless: the whole starter through the CSV and back is byte-identical after the gate (mcp library-load test), plus libraryCsv's own 4 tests.
+- **Project settings (`presets.ts`).** The starter's hook-up profile (switches and variables, each with the specifications that make it a choice) and its responsibility presets become project settings. `settingsWithPresets` lays the project's own settings over the defaults and a preset.
+  - The Assemblies view's **Project settings** section sets them, saved with the project.
+  - Over MCP: `settings.hookup_defaults` and `settings.responsibility_preset`.
+- **Scope (`exportSet.ts` `scope`).** `lines.csv` and `lines_rollup.csv` narrow to one party's lines: its trade, or any activity it does. The other files stay whole. The panel's **Scope** menu and `export_scope` set it.
+- **WP9, partner-entered (`partner.ts`).**
+  - A partner line's part number, unit cost, hours and labor category ride on `ExpandedLine.partner` (absent on every starter line) into `lines.csv` and the device files, with `partner_fields` = `partner-entered`.
+  - `lines.csv` extends them: `extended_cost` = `qty_with_waste` × `unit_cost` (the material bought), `extended_hours` = `qty` × `hours` (the installed quantity).
+  - `report.partner` sums the cost, and the hours by labor category. The PDF section prints them under "Partner-entered cost and labor".
+  - Nothing ships with numbers: the starter's grep test (c) passes.
+- **Persona scenarios (WP8.2, `web/test/assemblies/personas.test.ts`).**
+  - (a) The integrator clones the VAV typical, adds a part number, cost and hours, and sends the copy through the CSV gate. It applies and exports points, the Desigo worksheet and HIT, and the figures come back extended and labelled.
+  - (b) The mechanical contractor sets the hook-up profile (kits at 1 in. and below, no hoses, manual balancing), the kit-maker preset and the mechanical scope. Results:
+    - kits are sized from the schedule, with the end type left for selection;
+    - above 1 in. there are loose valves, with unions below 2 in. and flanges at 2 in. and above;
+    - `valves.csv` reads furnish `controls`, install `factory`;
+    - HIT is produced.
+  - (c) The distributor takes the device CSVs, with nothing priced.
+  - (b)'s fixture first left the air handler's coil connection sizes out, so its kit and valve lines were rightly unresolved. The fixture now prints them.
+- **Parity (D04).** The scoped CSV set under the presets, over MCP, is the browser builder's bytes. `export_scope` without `export_dir`, and an unknown preset, are refused. mcp assemblies apply and points compare: 4/4 pass (PARITY 151 s).
+- **Tests:** web assemblies and HIT 158 pass (among them partner 2, presets 3, scope 1, the PDF's partner section 1, personas 3). Web and mcp tsc exit 0. eslint: 0 errors (the 3 known warnings). The full web `npm test` has 3665 tests: 3649 pass, the 3 AS-1 failures, 13 skipped. `npm run build` exits 0.
+- **GATE 9** (unit tests; grep test (c) still green): **passes**. `partner.test.ts`, persona (a) and the PDF test assert the extension and the label; starter.test.ts's grep test (c) is green.
+- **GATE 8** (all three scenarios pass; round-trips lossless; guard green): **passes.** The scenarios pass, the library round trip is lossless, the UI proof passes, and the final guard shows no new failure.
+- **Final guard** (after every edit of this session; logs in the session scratchpad `guard2/`): no new failure against AS-1.
+  - web:
+    - typecheck and lint pass (0 errors, the 3 known warnings);
+    - `npm test`: 3,669 tests, 3,653 pass, only the 3 AS-1 failures, 13 skipped;
+    - the six BAS benches, bench, bench:linear and build exit 0. bench:linear rewrote only its timing fields, and the file was restored.
+  - mcp:
+    - typecheck 0;
+    - pretest chain 133 + 33 + 6 + 17, all pass;
+    - main suite: 470 tests, 351 pass, only the 5 AS-1 failures, 114 skipped, 0 cancelled, 12 minutes;
+    - `check:tool-count` passes.
+  - The main suite ran as `node --import tsx --test --test-force-exit <package.json's files>`. Each worker now exits when its tests end, and the idle table sidecars exit on stdin EOF. AS-6 no longer needs a process stopped, and none was left running.
+- **UI proof** (`web/scripts/playwright-assemblies.mjs`, `raw/federal-attachment4-mechanical.pdf`, the Vite dev server, headless Chromium): **10 checks pass.**
+  - Reference: `mcp/scripts/assemblies-apply.mjs`, through the real MCP tool on a Session: 128 units, 214 records, 3,220 lines in 144 s. A second call set `hookup_defaults`, the kit-maker preset and `export_scope: mechanical` (2,661 lines).
+  - The checks:
+    - the real `/__ot/assemblies-project` response;
+    - the browser's own records, lines and report, recomputed in the page, byte-identical to MCP's;
+    - the on-screen totals, exceptions and unit rows are that report;
+    - Download CSV set = `export_dir`, byte for byte (8 CSV files; `assemblies.pdf` in both);
+    - project settings from the panel (starter defaults, kit-maker preset), saved with the project; the mechanical-scope download = MCP with the same settings and `export_scope`, byte for byte; cleared again;
+    - a unit's details from the keyboard;
+    - an override with its reason;
+    - library clone, live validation, an update offered and not applied (A5), withdrawn on delete;
+    - both themes at 1280, 1440 and 1920 px with no horizontal page scroll;
+    - IndexedDB autosave, and a reload that keeps the pins and the override.
+  - Found on the way: **AS-23**. The panel's starter library never loaded under the dev server, because a dynamic JSON import passed import attributes. It is fixed and guarded by a test.
+  - Two test-script bugs were fixed:
+    - the MCP client's default 60 s request timeout now covers a real graph build;
+    - the header check read `textContent`, where "Library" runs into the count; it now uses a data attribute.
+  - The first run also met Vite's one-time dependency re-optimization, which reloads the page.
+  - Logs and screenshots: the session scratchpad's `uiproof/`.
+
+**WP7 GATE 7, WP6 GATE 6 and the D6 census (2026-09-24, later).**
+- **Instrument 5** (`mcp/scripts/assemblies-export-validate.mjs`, and `exportSet.ts` `csvSetProblems`, which the unit tests run too). For each document of the frozen split:
+  - the starter is applied to the compile;
+  - the CSV set is checked: documented headers, whole CRLF rows, closed-list sources, values consistent with their source, numbers in number columns, partner columns only when labelled;
+  - the HIT rows, coil-derived included, are filled into the template and each workbook read back.
+- **GATE 7 dev: green** (`reports/assemblies/07-export-validation-dev.{json,md}`):
+  - 11 documents, 0 errors, 0 CSV problems, 0 HIT problems;
+  - 471 units and 5,734 lines;
+  - HIT: 33 scheduled valves and 161 coil-derived rows. All 161 have their printed GPM; 60 have a System from printed text, and the rest leave System blank rather than guess;
+  - the coil-derived rows equal the WP0.1 census's 161 coils without a scheduled valve, with no document differing;
+  - one workbook each (no document passes 195 valves).
+- **GATE 7 held-out: green** (aggregates, `07-export-validation-heldout.{json,md}`):
+  - 6 documents, 0 errors, 0 CSV problems, 0 HIT problems;
+  - 438 units and 6,677 lines;
+  - HIT: 163 scheduled plus 11 coil-derived rows, equal to WP0's 11.
+  - GATE 7 also needs the guard at this state, which runs next.
+- **Instrument 4 bug, fixed before its first run:** the points compare picked documents from a census field the census never wrote, so it would have compared nothing and passed GATE 6. `documentsToCompare()` is now tested against the real census. A run with no unit to compare now reports "no evidence", not PASS.
+- **GATE 6 dev: no evidence.** federal-mech maps 0 printed rows to units (AS-22), and the goal's other listed documents are not staged (AS-2). So there is no diff to classify, and GATE 6 is not passed (`reports/assemblies/06-points-compare-dev.{json,md}`).
+- **GATE 6 held-out: fails** (aggregates, `06-points-compare-heldout.{json,md}`).
+  - navfac's printed lists name 40 units, by family: pump 22, boiler 6, fan 3, air handler 2, air-cooled chiller 2, heat-recovery chiller 2, unit heater 2, DOAS 1. 0 of the 40 agree with their typical by I/O type.
+  - None of the 40 diffs is classified, because classifying means reading a held-out document unit by unit, and the split forbids that (never tune on held-out).
+  - WP6 is therefore blocked: its only unit-level printed lists are held-out. What it needs is a dev document with unit-level lists (INPUT 5 partner jobs, or the goal's named sets, AS-2).
+- **Instrument 1 (corpus-eval), unchanged by construction since its last measured run** (`58512fa`, UNCHANGED against the baseline). Checked with `mcp/scripts/assemblies-scorer-imports.mjs 58512fa`, esbuild's metafile of the scorers' entry points:
+  - the scorers import 166 local modules;
+  - of the 70 files changed since, 3 are among them, and each change is inert for scoring:
+    - `mcp/src/session.ts` adds `sheetTextSpans`, which only `mcp/src/assemblies.ts` calls;
+    - `web/src/lib/csv.js` adds `parseCsvRows` (`csvEsc` is unchanged);
+    - `assemblies/schema.ts` adds one interface field, a type erased at run time.
+  - No scorer module mentions either new function.
+  - Not rerun: the scorers' children spawn orphans that re-score forever (AS-15). The per-run workaround stops them by PID, and this session's permission check refused stopping test processes (AS-6). An unreaped run would stall the container.
+- **D6 census** (`reports/assemblies/05b-schematic-census-dev.txt`): 30 control schematics on dev, 15 with I/O tokens. Only 3 bind one unit and print I/O: itd-d1-lab EF-5, LEF-1 and EH-5. The I/O-count match (`ioMatch.ts`) could decide options on at most 3 of 244 rows, and it would be unsafe on system diagrams, so it stays unwired. AS-19 records the demonstrated ceiling: GATE 5 cannot pass on the documents this environment stages.
+
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered
 only four hand-keyed sets. `sets.json` now registers 121 sets total (108

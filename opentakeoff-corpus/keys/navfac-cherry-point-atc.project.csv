@@ -1,0 +1,13 @@
+# navfac-cherry-point-atc.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-25 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output: no control-intent code had run on this held-out document. What an estimator would answer.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,navfac-cherry-point-atc-mechanical.pdf#67,INSTALL DDC HARDWARE TO PERFORM THIS SEQUENCE OF OPERATION AND TO PROVIDE INPUTS AND OUTPUTS AS,"MI700-series DDC schematics, points lists and sequences for every system"
+PQ2,dod,navfac-cherry-point-atc-mechanical.pdf#1,"LOCATION: MCAS CHERRY POINT, NC","NAVFAC project at Marine Corps Air Station Cherry Point; the controls package follows the UFC 3-410-02 sequence and points-list format"
+PQ3,n/a,,,no keyed unit is flagged existing
+PQ4,constant,navfac-cherry-point-atc-mechanical.pdf#69,"3.3.9   UPS BATTERY EXHAUST FAN CONTROLS (EF-A2, EF-A3, EF-M1)","the fan schedule prints no speed or VFD column for EF-A1..A3; their sequences give the BAS start/stop and status only"
+PQ5,n/a,,,"the keyed pumps are heating hot water, chilled water, heat recovery and DOAH circulator pumps (HVAC service)"

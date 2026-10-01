@@ -1,0 +1,301 @@
+# 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M601 (page 19) of the Center for Behavioral Medicine chiller system upgrade, Kansas City MO (InSite Group), the tables the third tier's seed drew for its AIR_COOLED_CHILLER, PUMP and COOLING_TOWER strata.
+#   012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19 | WATER-COOLED CHILLER SCHEDULE: | AIR_COOLED_CHILLER | all 3 printed rows | render: page 19 overview at 40 dpi; crop 555,150,1720,112 at 3x in 3 tiles (TAG NO. column repeated), notes cropped at 3x (crops 555,255,800,120 and 1340,255,935,120); second read at 4x (crops 555,200,650,52 and 2020,200,255,52) of CH-1, CH-2 and CH-3, capacity through the evaporator block and the electrical block
+#   012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19 | PUMP SCHEDULE: | PUMP | all 13 printed rows | render: page 19 overview at 40 dpi; crop 1438,1060,837,480 at 3x in 2 tiles (TAG NO. column repeated), notes cropped at 3x (crop 1438,1535,837,70); second read at 4x (crops 1438,1142,837,30 and 1438,1322,837,30 and 1438,1502,837,30) of CWP-1, SCHP-1 and SHWP-2, every cell
+#   012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19 | COOLING TOWER SCHEDULE: | COOLING_TOWER | all 3 printed rows | render: page 19 overview at 40 dpi; crop 1178,412,1097,188 at 3x in 2 tiles (TAG NO. column repeated), notes cropped at 2.5x (crop 1178,598,1097,242); second read at 4x (crops 1178,505,562,95 and 1780,505,240,95) of CT-1, CT-2 and CT-3, cells through LWT and the electrical and fan cells
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and models, compressor type, minimum flows, pressure drops, fouling factors, the condenser water side of the chillers, refrigerant, efficiencies, dimensions and weights, SCCR, MCA and overcurrent protection, fan and motor counts, basin heaters, air wet-bulb, pump type, discharge sizes and FLA, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral: 3 table(s), 19 instance(s), 282 keyed attribute value(s) (155 printed, 127 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,condenser,water,,TABLE TITLE,title printed 'WATER-COOLED CHILLER SCHEDULE:'; the CONDENSER DATA block's FLUID TYPE prints WATER
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,tons,300,tons,"NET CAPACITY: tons, the unit the evaporator's design flow carries (598.5 GPM x (56 - 44) F / 24 = 299)",printed '300.0'; author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,chw_gpm,598.5,gpm,EVAPORATOR DATA / DESIGN GPM,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,56,F,EVAPORATOR DATA / ENTERING TEMP (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,44,F,EVAPORATOR DATA / LEAVING TEMP (°F),printed '44.0'
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,bas_interface,BACNET MS/TP,,NOTE 6,"note 6, cited by every row ('1-9'): 'PROVIDE UNIT WITH BACnet MS/TP COMMUNICATION INTERFACE.'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,volts,480,V,ELECTRICAL / VOLT / PH: volts part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-1,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL / VOLT / PH: phase part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,condenser,water,,TABLE TITLE,title printed 'WATER-COOLED CHILLER SCHEDULE:'; the CONDENSER DATA block's FLUID TYPE prints WATER
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,tons,300,tons,"NET CAPACITY: tons, the unit the evaporator's design flow carries (598.5 GPM x (56 - 44) F / 24 = 299)",printed '300.0'; author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,chw_gpm,598.5,gpm,EVAPORATOR DATA / DESIGN GPM,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,chw_ewt_f,56,F,EVAPORATOR DATA / ENTERING TEMP (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,chw_lwt_f,44,F,EVAPORATOR DATA / LEAVING TEMP (°F),printed '44.0'
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,bas_interface,BACNET MS/TP,,NOTE 6,"note 6, cited by every row ('1-9'): 'PROVIDE UNIT WITH BACnet MS/TP COMMUNICATION INTERFACE.'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,volts,480,V,ELECTRICAL / VOLT / PH: volts part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-2,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL / VOLT / PH: phase part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,condenser,water,,TABLE TITLE,title printed 'WATER-COOLED CHILLER SCHEDULE:'; the CONDENSER DATA block's FLUID TYPE prints WATER
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,tons,300,tons,"NET CAPACITY: tons, the unit the evaporator's design flow carries (598.5 GPM x (56 - 44) F / 24 = 299)",printed '300.0'; author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,chw_gpm,598.5,gpm,EVAPORATOR DATA / DESIGN GPM,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,chw_ewt_f,56,F,EVAPORATOR DATA / ENTERING TEMP (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,chw_lwt_f,44,F,EVAPORATOR DATA / LEAVING TEMP (°F),printed '44.0'
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,bas_interface,BACNET MS/TP,,NOTE 6,"note 6, cited by every row ('1-9'): 'PROVIDE UNIT WITH BACnet MS/TP COMMUNICATION INTERFACE.'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,volts,480,V,ELECTRICAL / VOLT / PH: volts part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,WATER-COOLED CHILLER SCHEDULE:,CH-3,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL / VOLT / PH: phase part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,service,CONDENSER WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,gpm,900,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,head_ft,80,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,motor_hp,30,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,rpm,1698,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,conn_in,6,in,PUMP DATA / SUCTION SIZE (in.),"printed '6""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-1,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,service,CONDENSER WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,gpm,900,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,head_ft,80,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,motor_hp,30,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,rpm,1698,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,conn_in,6,in,PUMP DATA / SUCTION SIZE (in.),"printed '6""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-2,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,service,CONDENSER WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,gpm,900,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,head_ft,80,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,motor_hp,30,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,rpm,1698,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,conn_in,6,in,PUMP DATA / SUCTION SIZE (in.),"printed '6""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,CWP-3,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,service,PRIMARY - CHILLED WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,gpm,600,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,head_ft,45,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,motor_hp,10,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,rpm,1650,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,conn_in,5,in,PUMP DATA / SUCTION SIZE (in.),"printed '5""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-1,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,service,PRIMARY - CHILLED WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,gpm,600,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,head_ft,45,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,motor_hp,10,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,rpm,1650,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,conn_in,5,in,PUMP DATA / SUCTION SIZE (in.),"printed '5""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-2,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,service,PRIMARY - CHILLED WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,gpm,600,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,head_ft,45,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,motor_hp,10,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,rpm,1650,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,conn_in,5,in,PUMP DATA / SUCTION SIZE (in.),"printed '5""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PCHP-3,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,service,SECONDARY - CHILLED WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,gpm,1200,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,head_ft,100,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,motor_hp,50,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,rpm,1645,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,conn_in,6,in,PUMP DATA / SUCTION SIZE (in.),"printed '6""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-1,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,service,SECONDARY - CHILLED WATER,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,gpm,1200,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,head_ft,100,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,motor_hp,50,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,rpm,1645,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,conn_in,6,in,PUMP DATA / SUCTION SIZE (in.),"printed '6""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SCHP-2,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,service,PRIMARY - HEATING HW,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,gpm,340,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,head_ft,45,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,motor_hp,7.5,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,rpm,1615,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,conn_in,4,in,PUMP DATA / SUCTION SIZE (in.),"printed '4""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-1,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,service,PRIMARY - HEATING HW,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,gpm,340,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,head_ft,45,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,motor_hp,7.5,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,rpm,1615,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,conn_in,4,in,PUMP DATA / SUCTION SIZE (in.),"printed '4""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-2,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,service,PRIMARY - HEATING HW,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,gpm,340,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,head_ft,45,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,motor_hp,7.5,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,rpm,1615,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,conn_in,4,in,PUMP DATA / SUCTION SIZE (in.),"printed '4""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,PHWP-3,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,service,SECONDARY - HEATING HW,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,gpm,1000,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,head_ft,100,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,motor_hp,40,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,rpm,1680,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,conn_in,6,in,PUMP DATA / SUCTION SIZE (in.),"printed '6""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-1,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,service,SECONDARY - HEATING HW,,SERVICE,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,gpm,1000,gpm,PUMP DATA / WATER FLOW (gpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,head_ft,100,ft,PUMP DATA / HEAD LOSS (ft.),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,motor_hp,40,hp,MOTOR DATA / H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,rpm,1680,rpm,PUMP DATA / PUMP SPEED (rpm),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,vfd,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,pump_arrangement,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,glycol_pct,,%,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,conn_in,6,in,PUMP DATA / SUCTION SIZE (in.),"printed '6""'"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,volts,480,V,MOTOR DATA / VOLTS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PUMP SCHEDULE:,SHWP-2,PUMP,phase,3,,MOTOR DATA / PH,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,cells,1,,CELLS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,tons,300,tons,"NOMINAL CAPACITY: nominal tons, the unit the tower's 900 GPM gives at 3 GPM per nominal ton (900 / 3 = 300)",author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,gpm,900,gpm,PERFORMANCE / FLOW (GPM),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,ewt_f,95,F,PERFORMANCE / EWT (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,lwt_f,85,F,PERFORMANCE / LWT (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,fan_hp,25,hp,ELECTRICAL / FANS / TOTAL H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,vfd,yes,,NOTE 14,"note 14, cited by every row ('1-14'): 'EXISTING VFDs ARE TO BE REUSED FOR CONTROL OF NEW TOWERS.' (note 2: 'PROVIDE UNIT WITH VFD RATED MOTOR WITH SHAFT GROUNDING.')"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,conn_in,,in,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,bas_interface,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,volts,480,V,ELECTRICAL / VOLTS / PH / HZ: volts part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-1,COOLING_TOWER,phase,3,,ELECTRICAL / VOLTS / PH / HZ: phase part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,cells,1,,CELLS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,tons,300,tons,"NOMINAL CAPACITY: nominal tons, the unit the tower's 900 GPM gives at 3 GPM per nominal ton (900 / 3 = 300)",author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,gpm,900,gpm,PERFORMANCE / FLOW (GPM),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,ewt_f,95,F,PERFORMANCE / EWT (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,lwt_f,85,F,PERFORMANCE / LWT (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,fan_hp,25,hp,ELECTRICAL / FANS / TOTAL H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,vfd,yes,,NOTE 14,"note 14, cited by every row ('1-14'): 'EXISTING VFDs ARE TO BE REUSED FOR CONTROL OF NEW TOWERS.' (note 2: 'PROVIDE UNIT WITH VFD RATED MOTOR WITH SHAFT GROUNDING.')"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,conn_in,,in,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,bas_interface,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,volts,480,V,ELECTRICAL / VOLTS / PH / HZ: volts part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-2,COOLING_TOWER,phase,3,,ELECTRICAL / VOLTS / PH / HZ: phase part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,building,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,floor,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,area_served,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,qty,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,cells,1,,CELLS,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,tons,300,tons,"NOMINAL CAPACITY: nominal tons, the unit the tower's 900 GPM gives at 3 GPM per nominal ton (900 / 3 = 300)",author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,gpm,900,gpm,PERFORMANCE / FLOW (GPM),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,ewt_f,95,F,PERFORMANCE / EWT (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,lwt_f,85,F,PERFORMANCE / LWT (°F),
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,fan_hp,25,hp,ELECTRICAL / FANS / TOTAL H.P.,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,vfd,yes,,NOTE 14,"note 14, cited by every row ('1-14'): 'EXISTING VFDs ARE TO BE REUSED FOR CONTROL OF NEW TOWERS.' (note 2: 'PROVIDE UNIT WITH VFD RATED MOTOR WITH SHAFT GROUNDING.')"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,conn_in,,in,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,bas_interface,,,,not printed
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,volts,480,V,ELECTRICAL / VOLTS / PH / HZ: volts part,author's reading of the printed row
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,COOLING TOWER SCHEDULE:,CT-3,COOLING_TOWER,phase,3,,ELECTRICAL / VOLTS / PH / HZ: phase part,author's reading of the printed row

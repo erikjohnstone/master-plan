@@ -3,7 +3,7 @@
 // as much as the translation, what it must NOT touch.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { remapKey, remapGraphSheetKeys } from "../src/lib/graphKeys.js";
+import { remapKey, remapGraphSheetKeys, remapPacketId } from "../src/lib/graphKeys.js";
 
 const SHA = "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1";
 const map = new Map([[SHA, "05__USDA_APHIS.pdf"]]);
@@ -82,4 +82,29 @@ test("no map, empty map, or a cyclic graph are all safe", () => {
   cyc.self = cyc;
   remapGraphSheetKeys(cyc, map);
   assert.equal(cyc.tables[0].sheet, "05__USDA_APHIS.pdf#1");
+});
+
+test("a control packet's id is rekeyed where the readings cite it; drawing text and other ids are not", () => {
+  // 096_IN through the Takeoff panel: the readings' cites carried
+  // "<sha>.pdf#36#p8", and the panel printed "(control packet <sha>…)" beside
+  // a sheet already named for the file.
+  assert.equal(remapPacketId(`${SHA}.pdf#36#p8`, map), "05__USDA_APHIS.pdf#36#p8");
+  assert.equal(remapPacketId("plans.pdf#36#p8", map), "plans.pdf#36#p8");
+  assert.equal(remapPacketId(`${"a".repeat(64)}.pdf#36#p8`, map), `${"a".repeat(64)}.pdf#36#p8`, "a sha we did not upload stays");
+  // federal-mech through the Takeoff panel: a zone plan's readings cite
+  // "<sha>.pdf#2#zones" (the VAV boxes' CO2 sensors drawn in their zones).
+  assert.equal(remapPacketId(`${SHA}.pdf#2#zones`, map), "05__USDA_APHIS.pdf#2#zones");
+  assert.equal(remapPacketId(`${SHA}.pdf#2#zonesX`, map), `${SHA}.pdf#2#zonesX`, "only the zone plan's own suffix");
+  assert.equal(remapPacketId(`${SHA}.pdf#2`, map), `${SHA}.pdf#2`, "a sheet key is remapKey's");
+  const g: any = {
+    control: { packets: [{ id: `${SHA}.pdf#36#p8`, sheet: `${SHA}.pdf#36` }] },
+    control_readings: { units: [{ item: 3, decisions: [{ cites: [{ packet: `${SHA}.pdf#36#p8`, sheet: `${SHA}.pdf#36`, text: `${SHA}.pdf#36#p8` }] }] }] },
+    items: [{ id: "row-7", sheet_id: `${SHA}.pdf#36` }],
+  };
+  remapGraphSheetKeys(g, map);
+  assert.equal(g.control.packets[0].id, "05__USDA_APHIS.pdf#36#p8");
+  const cite = g.control_readings.units[0].decisions[0].cites[0];
+  assert.deepEqual([cite.packet, cite.sheet], ["05__USDA_APHIS.pdf#36#p8", "05__USDA_APHIS.pdf#36"]);
+  assert.equal(cite.text, `${SHA}.pdf#36#p8`, "quoted drawing text is never rewritten");
+  assert.equal(g.items[0].id, "row-7");
 });

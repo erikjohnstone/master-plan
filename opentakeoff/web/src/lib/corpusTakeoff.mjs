@@ -6,7 +6,7 @@
  * Versioned: changing family rules after VALIDATING starts requires a truth
  * CHANGELOG + reset to 0/5.
  */
-import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
+import { scheduleTitleMatches, familyRuleTitle } from "./scheduleTitleMatch.mjs";
 import { scheduledQtyStatusFromRow } from "./schedulePlanReconcile.mjs";
 import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
 import { disciplineOfSheetNumber } from "./symbolsweep.ts";
@@ -56,16 +56,82 @@ const VALVE_DAMPER_TAG_PREFIXES = [...VALVES, ...ACTUATORS, ...DAMPERS]
   .flatMap((c) => c.tagPrefixes)
   .filter(Boolean);
 
-/** True when at least one row's own key starts with a real, hand-verified
+// A row's mark columns (AS-79): the takeoff's and the reconcile's identity,
+// and the valve's own where a row prints a UNIT MARK beside its VALVE MARK.
+// Read by the header's name (headerName: UNIT NO. is UNIT NO; AS-84).
+const MARK_HEADER_RE = /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i;
+// The same column under the other names drafters print (AS-84): a bare TAG,
+// TAG NO., EQUIPMENT TAG, EQUIP NO, PLAN MARK, PLAN CODE, ID, OUTDOOR UNIT
+// MARK... Read only where the family reads no mark in the row's name and does
+// in the cell (rowIdentityText): a TAG column can hold a grille's type code
+// (1S, 2R) beside a row keyed by its fan's mark, and the extraction's key is
+// the cleaner where both print one (013_MO's TAG cell runs two rows' ranges
+// together).
+const MARK_HEADER_SYNONYM_RE = /^(?:TAG(?:\s*(?:NO|NUMBER|NAME))?|ID\s*TAG|EQUIP(?:MENT)?\.?\s*(?:TAG|NO|NUMBER|MARK|ID|DESIGNATION)|UNIT\s*(?:NUMBER|ID)|ITEM(?:\s*NUMBER)?|MARK\s*(?:NO|NUMBER)|PLAN\s*(?:MARK|CODE)|(?:INDOOR|OUTDOOR)\s*UNIT\s*MARK|ID|IDENTIFICATION)$/i;
+// The same column under a group heading (AS-95): the extraction joins a
+// two-row header, so 12_MT's split system schedule prints its outdoor and
+// indoor units' marks under OUTDOOR UNIT DATA PLAN CODE and INDOOR UNIT DATA
+// PLAN CODE (and keys each row by its MANUF. cell, DAIKIN), and 18_OR's
+// indoor fan coil units under HEAT PUMP SYMBOL and FAN COIL SYMBOL. Read as a
+// synonym is read, and as the reconcile's row identity only where the key
+// prints no mark at all (rowIdentityTag).
+const GROUPED_MARK_HEADER_RE = /^\S.*\s(?:PLAN\s*(?:MARK|CODE)|(?:UNIT|EQUIP(?:MENT)?\.?)\s*(?:MARK|TAG)|MARK|SYMBOL|TAG|DESIGNATION)$/i;
+// A header word naming a table's identity column, for the header shapes that
+// tell a family's valve or damper table where no title names its family
+// (blankHeaderRes; AS-84): its MARK or TAG, SYMBOL, DESIGNATION, or a unit's,
+// item's or equipment's NO. or ID. isControlValveHeaderShape keeps its own
+// words: classifyGrid labels tables by it, and the sheet graph's gap recovery
+// reads that label (pillarGapRecovery.ts), so it is the extraction's.
+const IDENTITY_HEADER_WORD_RE = /\b(?:TAG|MARK|VALVE\s*MARK|SYMBOL|DESIGNATION|(?:UNIT|ITEM|EQUIP(?:MENT)?\.?)\s*(?:NO|NUMBER|ID)|ID|IDENTIFICATION)\b/;
+/** A header's name as the mark rules read it: its spacing collapsed and a
+ * trailing period or colon dropped (UNIT NO.). A number sign stays: 05_MO
+ * prints its fan coils' marks in two columns, MARK ID (FCUC) and MARK # (A). */
+const headerName = (header) => String(header || "").replace(/\s+/g, " ").trim().replace(/\s*[.:]+$/, "");
+/** A mark column's name under a group heading (AS-95): OUTDOOR UNIT DATA
+ * PLAN CODE, FAN COIL SYMBOL — never a mark column's own name or synonym.
+ * @param {string} header */
+export function isGroupedMarkHeader(header) {
+  const name = headerName(header);
+  return GROUPED_MARK_HEADER_RE.test(name) && !MARK_HEADER_RE.test(name) && !MARK_HEADER_SYNONYM_RE.test(name);
+}
+// A split system's two halves by the group heading over each one's mark
+// column (AS-144): the indoor unit's (26_CA's EVAPORATOR DESIGNATION, 22_GA's
+// INDOOR UNIT MARK, 18_OR's FAN COIL SYMBOL) and the outdoor unit's
+// (CONDENSER DESIGNATION, OUTDOOR UNIT MARK, HEAT PUMP SYMBOL).
+const SPLIT_MARK_TAIL = String.raw`\s(?:PLAN\s*(?:MARK|CODE)|(?:UNIT|EQUIP(?:MENT)?\.?)\s*(?:MARK|TAG)|MARK|SYMBOL|TAG|DESIGNATION)\.?$`;
+const SPLIT_SIDE_MARK_HEADER_RES = {
+  indoor: new RegExp(String.raw`^(?:EVAP(?:ORATOR)?|INDOOR\s+UNIT|FAN[\s\-]*COIL|AIR[\s\-]*HANDL(?:ER|ING\s+UNIT))\b.*` + SPLIT_MARK_TAIL, "i"),
+  outdoor: new RegExp(String.raw`^(?:CONDENS(?:ER|ING\s+UNIT)|OUTDOOR\s+UNIT|HEAT[\s\-]*PUMP)\b.*` + SPLIT_MARK_TAIL, "i"),
+};
+/**
+ * Whether a table's header prints a split system's two mark columns, one
+ * under each half's group heading (AS-144): a schedule of indoor units each
+ * beside its outdoor unit, whatever its title calls them.
+ * @param {object} table a schedule table, as scheduleTableView gives it
+ */
+export function isSplitPairHeaderShape(table) {
+  const names = (table?.headers || []).map((header) => headerName(header));
+  return names.some((name) => SPLIT_SIDE_MARK_HEADER_RES.indoor.test(name))
+    && names.some((name) => SPLIT_SIDE_MARK_HEADER_RES.outdoor.test(name));
+}
+/** A name's letters and digits, as the extraction runs a row's key together. */
+const lettersAndDigits = (text) => String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const UNIT_MARK_HEADER_RE = /^UNIT\s*MARK$/i;
+const VALVE_MARK_HEADER_RE = /^VALVE\s*MARK$/i;
+
+/** True when at least one row's own mark (its key, or the VALVE MARK it
+ * prints, whichever column leads the row) starts with a real, hand-verified
  * valve/damper/actuator tag prefix — mark-SHAPE corroboration, not a title
  * string match. This is what actually distinguishes "CV-7" (a real control
  * valve mark) from "RTU-1" (a rooftop unit that merely shares the same
  * generic TAG/GPM/SIZE/MODEL header columns). */
 export function hasValveOrDamperMark(table) {
   for (const row of table?.rows || []) {
-    const key = String(row?.key || "").trim().toUpperCase();
-    if (!key) continue;
-    if (VALVE_DAMPER_TAG_PREFIXES.some((p) => key.startsWith(p.toUpperCase()))) return true;
+    for (const mark of [row?.key, cellText(row, VALVE_MARK_HEADER_RE)]) {
+      const key = String(mark || "").trim().toUpperCase();
+      if (!key) continue;
+      if (VALVE_DAMPER_TAG_PREFIXES.some((p) => key.startsWith(p.toUpperCase()))) return true;
+    }
   }
   return false;
 }
@@ -329,12 +395,44 @@ function buildingLetter(tag) {
 }
 
 /**
+ * A row's name in plain type (AS-85): a dash printed as another glyph (a
+ * hyphen, non-breaking hyphen, figure dash, en or em dash, horizontal bar,
+ * minus or fullwidth hyphen) is a hyphen, a no-break or other wide space a
+ * space, and a zero-width character or soft hyphen nothing. A word
+ * processor or PDF writer prints AHU‐1 or EF–1 for AHU-1 and EF-1, and the
+ * mark rules read the hyphen.
+ */
+export function plainMarkText(raw) {
+  return String(raw || "")
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-")
+    .replace(/[\u00A0\u2002-\u200A\u202F\u205F\u3000]/g, " ")
+    .replace(/[\u00AD\u200B-\u200D\u2060\uFEFF]/g, "")
+    .trim();
+}
+
+/**
+ * A mark as the mark rules read it (AS-85): in plain type (plainMarkText),
+ * and without the footnote mark printed with it. A star, dagger or
+ * superscript number before or after it (AHU-1*, *AHU-1, EF-2†, P-1¹) or a
+ * period after its number (AHU-1.) refers to a note and names no other unit.
+ * A status or number in parentheses (069_ID's AHU-1(E), P-1(1)) is not one
+ * and stays: it can tell two units of one mark apart (088_AZ's (E)FC-1
+ * beside FC-1).
+ */
+export function plainMark(raw) {
+  return plainMarkText(raw)
+    .replace(/^[*\u2020\u2021]+\s*(?=[A-Za-z(])/, "")
+    .replace(/(?<=[A-Za-z0-9])\s*(?:[*\u2020\u2021]+|[\u00B9\u00B2\u00B3\u2070\u2074-\u2079]+)$/, "")
+    .replace(/(?<=\d[A-Za-z]?)\.$/, "");
+}
+
+/**
  * Drawing revision prefixes — "(N)" new, "(E)" existing, "(R)" relocated —
  * often glue into extractor keys (NACC-2 from "(N)ACC-2"). Strip them so
  * family keyRe matches set-agnostic ACC-/ATU-/AHU- marks.
  */
 export function normalizeEquipMark(raw) {
-  let t = String(raw || "").trim();
+  let t = plainMark(raw);
   if (!t) return t;
   t = t.replace(/^\(([NER])\)\s*/i, "");
   // Glued forms when parentheses were dropped: NACC-2, NATUK1, NAHU-1.
@@ -361,34 +459,304 @@ export function normalizeEquipMark(raw) {
  * Digits-only right half reuses the left prefix. Prose ("B & G MODEL") is unchanged.
  */
 
+/** A short equipment mark: a family token, optional lettered segments, a
+ * number of at most four digits and one short trailing segment of up to six
+ * letters and digits, such as a room code (ET-1, SH1, CC-15-6, S-A-1,
+ * TU-28-1, AHU-3001, 030_NY's FCU-01-CG06A; AS-63) — never a catalog model. */
+const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,6})?$/;
+
 /**
- * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1). Strip one
- * leading TOKEN- when the remainder still looks like an equipment mark so
- * family keyRe stays set-agnostic across multi-building schedules.
+ * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1), including
+ * a numbered or coded building or area (1-VAV-1, 40-AHU-2, W05-TU-01,
+ * B950-AHU-3001: 05_MO, 041_IL, 031_MO and 067_CA print their marks so, AS-62),
+ * and a numbered or coded building followed by its floor or wing (01-1-DAC-1,
+ * 05-B-DAC-1, 07-A-CU-1: 036_LA prints its marks so, AS-64).
+ * Strip the leading TOKEN- (or building and floor) when the remainder still
+ * looks like an equipment mark so family keyRe stays set-agnostic across
+ * multi-building schedules.
  */
 export function markCoreForKeyRe(tag) {
   const canon = String(tag || "").toUpperCase().replace(/\s+/g, "");
   if (!canon) return canon;
-  // WHSE-ET-1 → ET-1; WHSE-SH1 → SH1. Remainder must start with a ≥2-letter
-  // family token so steam-trap ST-H-3 is NOT stripped to H-3 (false humidifier).
-  const stripped = canon.replace(/^[A-Z]{2,8}-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  // WHSE-ET-1 → ET-1; WHSE-SH1 → SH1; 1-VAV-1 → VAV-1; W05-TU-01 → TU-01.
+  // The token is letters, a number of at most three digits, or a short code
+  // of letters and digits. Remainder must start with a ≥2-letter family
+  // token so steam-trap ST-H-3 is NOT stripped to H-3 (false humidifier).
+  // A numbered or coded building may be followed by its floor (a number of
+  // at most two digits) or wing (one letter): 01-1-DAC-1 → DAC-1,
+  // 05-B-DAC-1 → DAC-1 (AS-64). A lettered token is never a building there,
+  // so a unit's own mark (AHU-1-SF-1) keeps the reading it had.
+  const building = canon.replace(/^(?:[A-Z]{2,8}|\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  const stripped = building !== canon ? building
+    : canon.replace(/^(?:\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?:\d{1,2}|[A-Z])-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
   if (stripped === canon) return canon;
   // Only accept building-prefix strip when the remainder is a short equip mark
   // (ET-1, SH1, CC-15-6, S-A-1) — not catalog models (TPLFY-EP15NEM4 → EP15NEM4
   // falsely matching PUMP blankKeyRe /^EP/).
-  if (/^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,4})?$/.test(stripped)) {
+  if (SHORT_EQUIP_MARK_RE.test(stripped)) {
     return stripped;
   }
   return canon;
 }
 
-function markMatchesKeyRe(re, one, canon) {
+/**
+ * The forms of a mark a family keyRe reads: the mark, its core without a
+ * building prefix (markCoreForKeyRe), and either without a building letter
+ * printed between the family token and the number (074_CA's FC-A-2,
+ * FC-A-13-1 → FC-2, FC-13-1; the letter buildingCodeFromTag reads in
+ * AHU-A1), when what is left is still a short equipment mark (AS-62).
+ */
+export function markFormsForKeyRe(tag) {
+  const canon = String(tag || "").toUpperCase().replace(/\s+/g, "");
+  if (!canon) return [];
+  const forms = [canon];
+  const core = markCoreForKeyRe(canon);
+  if (core !== canon) forms.push(core);
+  for (const f of [...forms]) {
+    const lettered = f.replace(/^([A-Z]{2,8})-[A-Z]-(?=\d)/, "$1-");
+    if (lettered !== f && SHORT_EQUIP_MARK_RE.test(lettered) && !forms.includes(lettered)) forms.push(lettered);
+  }
+  return forms;
+}
+
+/** Whether a family's mark rule reads a mark, in any of its forms
+ * (markFormsForKeyRe). The compile and the reconcile scaffold both gate rows
+ * through it (AS-62), so a unit the takeoff counts has its reconcile row. */
+export function markMatchesKeyRe(re, one, canon) {
   if (!re) return false;
   if (re.test(canon) || re.test(one)) return true;
-  const core = markCoreForKeyRe(canon);
-  // Building-prefix strip (WHSE-ET-1 → ET-1) keeps family keyRe set-agnostic.
-  if (core !== canon && re.test(core)) return true;
-  return false;
+  // Building-prefix strip (WHSE-ET-1 → ET-1, 1-VAV-1 → VAV-1) and a building
+  // letter between the family token and the number (FC-A-2 → FC-2) keep
+  // family keyRe set-agnostic.
+  return markFormsForKeyRe(canon).slice(1).some((f) => re.test(f));
+}
+
+/**
+ * A transposed schedule runs its units across the columns and its attributes
+ * down the rows. Its corner prints the label of the header row of marks
+ * (21_VA's DESIGNATION, 071_ME's UNIT and UNIT NO., 040_IL's SYMBOL); each
+ * later header names a unit (AHU-1, "EF-2, EF-5, EF-7, EF-9", "CHWP-1 AND
+ * CHWP-2", "ACU-1 / ACCU-3") and each row is one attribute. Read row by row,
+ * its attribute names were units (21_VA's "MANUFACTURER" as a condensing unit,
+ * 071_ME's "24%" as a rooftop unit) and its units none (AS-65).
+ */
+const MARK_ROW_LABEL_RE = /^(?:DESIGNATION\b.*|SYMBOL|MARK|TAG|UNIT(?:\s*(?:NO\.?|NUMBER|TAG|MARK|ID))?|EQUIP(?:MENT)?(?:\s*(?:NO\.?|TAG|MARK|ID))?|ITEM(?:\s*NO\.?)?)$/i;
+
+/** A row label that names an identity, not an attribute: the row of marks
+ * printed again, or a column a reader takes a unit's mark from. Read as a
+ * unit's attribute, it would stand beside, or for, the unit's own mark. */
+const IDENTITY_LABEL_RE = /^(?:VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|ID|KEY)$/i;
+
+const markCanon = (s) => String(s || "").toUpperCase().replace(/\s+/g, "");
+/** A mark with a number, in any form the family rules read (AHU-1, 1-VAV-1). */
+const numberedMark = (s) => SHORT_EQUIP_MARK_RE.test(markCoreForKeyRe(markCanon(s)));
+/** A unit a letter names beside its numbered siblings (071_ME's RTU-G). */
+const letteredMark = (s) => /^[A-Z]{2,8}-[A-Z]{1,2}$/.test(markCanon(s));
+
+/**
+ * A table no title vouches for (untitled, or a general MISCELLANEOUS,
+ * EQUIPMENT, SPECIALTY EQUIPMENT or HYDRONIC ACCESSORIES schedule) names a
+ * family's units only by the marks its rows print. One the sheet graph
+ * classes as a reference or room/finish table holds none: a notes list, a
+ * drawing index, a furnishings list, an occupant-load table. Read by mark
+ * alone, 061_IA's STEEL FRAMING NOTES (SF1 to SF10) and SPECIAL INSPECTION
+ * notes (SP1 to SP5) were fans and pumps, 08_ME's drawing index (P101 to
+ * P103) pumps, 23_GA's architectural SPECIALTY EQUIPMENT SCHEDULE (toilet
+ * accessories T1 to T24) ERVs, and 031_MO's JSN list (RF-2, a refrigerator)
+ * and occupant loads (WH 1ST FLR) a fan and a water heater (AS-66). A titled
+ * table is read as its title says, whatever its kind.
+ */
+export function unvouchedTableHoldsUnits(table) {
+  return !["reference", "room-finish", "finish"].includes(table?.kind);
+}
+
+/**
+ * In a table no title vouches for, a mark of letters alone is a word, not a
+ * unit: 02_UT's SPF and 19_CA's SFD, from abbreviation lists, were fans
+ * (AS-66). A unit's mark carries its number, a letter beside its family token
+ * (061_IA's WWHP-A) or a code (NAVFAC's CV-CHW-BP-A).
+ */
+export function unvouchedMarkNamesUnit(mark) {
+  return !/^[A-Z]+$/i.test(String(mark ?? "").trim());
+}
+
+/** The units a transposed schedule's column header names, as the row keys the
+ * takeoff reads: one per mark of a list, of an AND pair or of a range ("UH-1
+ * THRU UH-3"), and an indoor/outdoor "/" pair kept as one key, as a row
+ * printing it is read. Trailing words after a mark (071_ME's "RTU-1 (ALT#2)",
+ * a chiller's model or a unit heater's ratings run into its header) are
+ * dropped by the compile's own normalization. Null when any part is no mark. */
+function transposedHeaderKeys(header) {
+  let s = String(header || "").toUpperCase().replace(/\s+/g, " ").trim();
+  if (!s) return null;
+  s = s.replace(/\b([A-Z]{1,8})([\s\-]?)(\d{1,4})\s+(?:THRU|THROUGH|TO)\s+(?:\1[\s\-]?)?(\d{1,4})\b/g, (m, p, sep, a, b) => {
+    const lo = Number(a), hi = Number(b);
+    if (!(hi > lo && hi - lo <= 50)) return m;
+    return Array.from({ length: hi - lo + 1 }, (_, i) => `${p}${sep || "-"}${lo + i}`).join(" & ");
+  });
+  const keys = [];
+  for (const group of s.split(/\s*(?:,|&|\bAND\b)\s*/).filter(Boolean)) {
+    // A range the expansion above did not read (too long, backwards, dashed,
+    // between two families' marks) would read as its first mark alone.
+    if (/^\S+\s+(?:[-\u2013\u2014]|THRU|THROUGH|TO)\s+(?:[A-Z]{1,8}[\s\-]?)?\d/.test(group)) return null;
+    // The words after a mark first, so a rating run into the header (21_VA's
+    // "UH-1 THRU UH-3 ... 1/20 115/1 DIRECT") is no pair.
+    const pair = normalizeEquipMark(group).split(/\s*\/\s*/).filter(Boolean).map((p) => normalizeEquipMark(p).trim());
+    if (!pair.length || !pair.every((p) => numberedMark(p) || letteredMark(p))) return null;
+    keys.push(pair.join(" / "));
+  }
+  return keys.length ? keys : null;
+}
+
+/** The box a column's cells share, without a cell the extraction placed off
+ * its column. */
+function columnBox(boxes) {
+  const ok = boxes.filter((b) => Array.isArray(b) && b.length === 4);
+  if (!ok.length) return null;
+  const mid = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
+  const cx = mid(ok.map((b) => (b[0] + b[2]) / 2));
+  const w = mid(ok.map((b) => b[2] - b[0]));
+  const inCol = ok.filter((b) => Math.abs((b[0] + b[2]) / 2 - cx) <= Math.max(w, 1));
+  const use = inCol.length ? inCol : ok;
+  return [Math.min(...use.map((b) => b[0])), Math.min(...use.map((b) => b[1])), Math.max(...use.map((b) => b[2])), Math.max(...use.map((b) => b[3]))];
+}
+
+/**
+ * A transposed family schedule read as one row per unit (AS-65), or null
+ * when the table is no such schedule. It is one when its title names a family
+ * the takeoff reads, a column's header labels the header row as marks
+ * (MARK_ROW_LABEL_RE) and every later header names units, and its rows are
+ * attributes, not marks. Each unit's row carries the unit's mark (MARK) and
+ * one cell per attribute, named by the attribute's printed label; the columns
+ * before the label column name sections ("SUPPLY FAN", "SECONDARY HEAT"),
+ * joined to the labels they cover where each sits on its section's first row
+ * (071_ME). Where a section label is drawn down a merged cell beside its rows
+ * (21_VA's air handlers) no row says which section it is in, so only the rows
+ * whose own label spans the section column are read. A label printed twice
+ * (a supply and a return fan's CFM) is ambiguous and read for neither.
+ */
+function transposedScheduleView(table) {
+  const headers = (table?.headers || []).map((h) => String(h ?? ""));
+  const rows = table?.rows || [];
+  if (headers.length < 2 || !rows.length) return null;
+  const title = String(table.title?.text || "");
+  // Its title read as the family gate reads it (AS-83): without a status,
+  // discipline, continuation or sheet count, and in its soft form, so an
+  // AIR-HANDLING UNIT SCHEDULE printed on its side is read one unit a column.
+  const ruleTitle = familyRuleTitle(title);
+  if (!Object.values(HVAC_FAMILY_SPECS).some((s) => scheduleTitleMatches(ruleTitle, s.titleRe, s.exclude))) return null;
+  // A points list is never a schedule of units, however it is laid out.
+  if (isBasPointsListTitle(title) || isBasPointsListTable(table)) return null;
+  let L = -1;
+  for (let i = 0; i < headers.length - 1; i++) if (MARK_ROW_LABEL_RE.test(headers[i].trim())) L = i;
+  if (L < 0) return null;
+  const unitHeaders = headers.slice(L + 1);
+  const unitKeys = unitHeaders.map(transposedHeaderKeys);
+  if (unitKeys.some((k) => !k) || !unitKeys.flat().some((k) => k.split(" / ").some(numberedMark))) return null;
+  const labelHeader = headers[L];
+  const labelOf = (row) => String(row.cells?.[labelHeader]?.text ?? row.key ?? "").replace(/\s+/g, " ").trim();
+  const labels = rows.map(labelOf).filter(Boolean);
+  if (!labels.length || labels.filter((l) => numberedMark(normalizeEquipMark(l))).length > 0.3 * labels.length) return null;
+
+  const sectionHeaders = headers.slice(0, L);
+  const top = (row) => {
+    const b = row.cells?.[labelHeader]?.bbox;
+    return Array.isArray(b) ? b[1] : Math.min(...Object.values(row.cells || {}).map((c) => (Array.isArray(c?.bbox) ? c.bbox[1] : Infinity)));
+  };
+  const ordered = rows.map((row, i) => ({ row, i, y: top(row) })).sort((a, b) => a.y - b.y || a.i - b.i);
+  const sectionCells = (row) => sectionHeaders.map((h) => row.cells?.[h]).filter((c) => String(c?.text ?? "").trim());
+  // Sections sit on their first row (071_ME) or are drawn down merged cells
+  // (21_VA): a section cell no taller than its row and level with its label.
+  let firstRow = true;
+  for (const { row } of ordered) {
+    const label = row.cells?.[labelHeader];
+    const lb = label?.bbox;
+    for (const c of sectionCells(row)) {
+      if (String(c.text).trim() === labelOf(row)) continue;
+      const cb = c.bbox;
+      const lh = Array.isArray(lb) ? lb[3] - lb[1] : 0;
+      if (!(Array.isArray(cb) && lh > 0 && cb[3] - cb[1] <= 1.5 * lh && Math.abs(cb[1] - lb[1]) <= 0.3 * lh)) firstRow = false;
+    }
+  }
+  // A heading printed across the unit columns with no value names a section
+  // whose end is not drawn (040_IL's air handler prints SUPPLY FAN so, its
+  // fan's rows indented under it and OUTSIDE AIR CFM after them): the rows
+  // after it are read for no unit.
+  const unitX0 = Math.min(...unitHeaders.map((h) => columnBox(ordered.map(({ row }) => row.cells?.[h]?.bbox))?.[0] ?? Infinity));
+  const heading = (row) => {
+    const b = row.cells?.[labelHeader]?.bbox;
+    return Array.isArray(b) && b[2] > unitX0 + 1 && unitHeaders.every((h) => !String(row.cells?.[h]?.text ?? "").trim());
+  };
+  const composed = [];
+  let section = "";
+  let unbounded = false;
+  for (const { row } of ordered) {
+    const label = labelOf(row);
+    if (!label) continue;
+    if (unbounded || heading(row)) { unbounded = true; continue; }
+    const texts = sectionCells(row).map((c) => String(c.text).replace(/\s+/g, " ").trim());
+    const spans = texts.length > 0 && texts.every((t) => t === label);
+    const named = texts.find((t) => t !== label);
+    if (!sectionHeaders.length) composed.push({ row, label });
+    else if (firstRow) {
+      if (spans) section = "";
+      else if (named) section = named;
+      composed.push({ row, label: section ? `${section} ${label}` : label });
+    } else if (spans) composed.push({ row, label });
+  }
+  const seen = new Map();
+  for (const c of composed) seen.set(c.label, (seen.get(c.label) || 0) + 1);
+  const usable = composed.filter((c) => seen.get(c.label) === 1 && !MARK_ROW_LABEL_RE.test(c.label) && !IDENTITY_LABEL_RE.test(c.label));
+  const usableRows = new Set(usable.map((u) => u.row));
+
+  const out = [];
+  unitHeaders.forEach((h, j) => {
+    const cells = {};
+    const boxes = [];
+    for (const { row } of ordered) if (Array.isArray(row.cells?.[h]?.bbox)) boxes.push(row.cells[h].bbox);
+    for (const { row, label } of usable) {
+      const c = row.cells?.[h];
+      const text = String(c?.text ?? "").trim();
+      if (text) cells[label] = { text, bbox: Array.isArray(c?.bbox) ? c.bbox : null };
+    }
+    const box = columnBox(boxes);
+    for (const key of unitKeys[j]) {
+      out.push({ key, cells: { MARK: { text: key, bbox: box }, ...cells }, identity: { text: key, bbox: box }, transposed: true });
+    }
+  });
+  return {
+    ...table,
+    headers: ["MARK", ...usable.map((u) => u.label)],
+    rows: out,
+    transposed: {
+      label_header: labelHeader,
+      unit_headers: unitHeaders,
+      sections: !sectionHeaders.length ? "none" : firstRow ? "first_row" : "merged",
+      // The labels read for no unit: one printed twice, one a merged section
+      // cell covers, one under a heading whose section's end is not drawn,
+      // or one naming an identity.
+      unread_labels: [...new Set(ordered.filter(({ row }) => labelOf(row) && !usableRows.has(row)).map(({ row }) => labelOf(row)))],
+    },
+  };
+}
+
+const scheduleViews = new WeakMap();
+/**
+ * The table the takeoff, the reconcile scaffold and the notice of rows read
+ * as no unit all read: a transposed family schedule as one row per unit
+ * (transposedScheduleView), any other table as extracted. One view for every
+ * reader, so a unit the takeoff counts has its reconcile row and its notice
+ * line (AS-65). A table is not edited once the sheet graph holds it, so its
+ * view is made once.
+ */
+export function scheduleTableView(table) {
+  if (!table || typeof table !== "object") return table;
+  let view = scheduleViews.get(table);
+  if (!view) {
+    view = transposedScheduleView(table) || table;
+    scheduleViews.set(table, view);
+  }
+  return view;
 }
 
 /**
@@ -635,22 +1003,71 @@ export function extractEmbeddedCoils(table) {
   return results;
 }
 
+const VALVE_HOT_HEADER_RE = /\b(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT|STEAM)\b/;
+const VALVE_COLD_HEADER_RE = /\b(?:CHW|CHILLED\s*WATER|COOLING\s*WATER)\b/;
+
 /** Infer schedule service from header blob + sample marks on untitled valve tables. */
 export function inferValveServiceFromTable(table) {
   const blob = tableHeaderBlob(table);
-  if (/\b(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT|STEAM)\b/.test(blob)) return "HHW";
-  if (/\b(?:CHW|CHILLED\s*WATER|COOLING\s*WATER)\b/.test(blob)) return "CHW";
+  if (VALVE_HOT_HEADER_RE.test(blob)) return "HHW";
+  if (VALVE_COLD_HEADER_RE.test(blob)) return "CHW";
   // Real bug, found and fixed 2026-09-02 in self-review: bare /HW/i tested
   // against a real row tag like "CHW-1" matches — "CHW-1" contains "HW" as
   // a substring — so a genuinely chilled-water valve fell through to the
   // HHW bucket, exactly backwards. Word boundaries, and the more specific
   // CHW/CW check tried first as defense in depth.
+  // A row's own mark: the VALVE MARK it prints, whichever column leads the
+  // row (a UNIT MARK names the unit the valve serves), then its key (AS-79).
   for (const row of table?.rows || []) {
-    const tag = String(row.key || cellText(row, /^(?:TAG|MARK|VALVE\s*MARK)$/i) || "").trim();
+    const tag = String(cellText(row, VALVE_MARK_HEADER_RE) || row.key || cellText(row, /^(?:TAG|MARK)$/i) || "").trim();
     if (/\bCHW\b|\bCW\b/i.test(tag)) return "CHW";
     if (/\bHHW\b|REHEAT|\bHW\b/i.test(tag)) return "HHW";
   }
   return "CHW";
+}
+
+// The columns a valve row names its water in: SERVICE "CHW, FC-A-2" (072_CA's
+// and 074_CA's EQUIPMENT CONTROL VALVES), SERVED "CROSS-TIE HHWS/R" (013_MO's
+// CONTROL VALVES), a SYSTEM or FLUID.
+const VALVE_ROW_SERVICE_HEADER_RE = /\b(?:SERVICE|SYSTEM|FLUID|MEDI(?:UM|A)|PIPING|SERVED|SERVES)\b/i;
+// A water named outright, with its supply and return spellings; a pump's or a
+// unit's mark (CHWP-1, HWP-1) names none.
+const VALVE_ROW_HOT_RE = /\b(?:H?HW[SR]?|HOT\s*WATER|HEATING\s*(?:HOT\s*)?WATER|REHEAT|STEAM)\b/i;
+const VALVE_ROW_COLD_RE = /\b(?:CHW[SR]?|CHILLED\s*WATER|COOLING\s*WATER)\b/i;
+
+/**
+ * The water a valve schedule's row names in its own service, system, fluid
+ * or served cell (AS-78): "HHW", "CHW", or null where it names none, or both.
+ */
+export function valveRowService(row) {
+  let hot = false;
+  let cold = false;
+  for (const [header, cell] of Object.entries(row?.cells || {})) {
+    if (!VALVE_ROW_SERVICE_HEADER_RE.test(String(header || ""))) continue;
+    const text = String(cell?.text ?? (typeof cell === "string" ? cell : ""));
+    if (VALVE_ROW_HOT_RE.test(text)) hot = true;
+    if (VALVE_ROW_COLD_RE.test(text)) cold = true;
+  }
+  return hot === cold ? null : hot ? "HHW" : "CHW";
+}
+
+/**
+ * The water of a valve table whose title names none (AS-78): its headers',
+ * as before; else the one its rows' service cells name, or "MIXED" where
+ * they name both (072_CA's EQUIPMENT CONTROL VALVES: SERVICE "CHW, FC-A-2"
+ * and "HHW, FC-A-2" row by row), each row then its own; else its marks', or
+ * chilled water (inferValveServiceFromTable). The takeoff had read the whole
+ * table as the headers' or marks' water, so 072_CA's and 074_CA's heating
+ * valves were chilled water's, and 013_MO's boiler valves too.
+ */
+export function valveTableService(table) {
+  const blob = tableHeaderBlob(table);
+  if (!VALVE_HOT_HEADER_RE.test(blob) && !VALVE_COLD_HEADER_RE.test(blob)) {
+    const named = new Set((table?.rows || []).map((row) => valveRowService(row)).filter(Boolean));
+    if (named.size > 1) return "MIXED";
+    if (named.size === 1) return [...named][0];
+  }
+  return inferValveServiceFromTable(table);
 }
 
 // Real, found-live gap (2026-09-02, 074_CA_West_Valley_College_STEM_Classroom_HVAC):
@@ -677,7 +1094,15 @@ export function expandAmpersandEquipMarks(raw) {
   const m = s.match(
     /^([A-Za-z]{1,8})([\s\-]?)(\d+[A-Za-z]?)\s*&\s*(?:([A-Za-z]{1,8})([\s\-]?)?)?(\d+[A-Za-z]?)$/,
   );
-  if (!m) return [s];
+  if (!m) {
+    // A mark with a qualifier before its number (26_CA's "SF-P2-1 & 2",
+    // "EF-P1-1 & EF-P1-2"; AS-75): the right half is the same mark with
+    // another number, printing the prefix again, a trailing part of it, or
+    // the number alone.
+    const q = s.match(/^(.*?[\s\-])(\d{1,4}[A-Za-z]?)\s*&\s*(.*?)(\d{1,4}[A-Za-z]?)$/);
+    if (!q || !q[1].includes("-") || !isMarkPrefix(q[1]) || !prefixRepeats(q[1], q[3])) return [s];
+    return [`${q[1]}${q[2]}`, `${q[1]}${q[4]}`].map((t) => t.replace(/\s+/g, ""));
+  }
   const [, p1, sep1, n1, p2, sep2, n2] = m;
   const leftSep = sep1 || "-";
   const left = `${p1}${leftSep}${n1}`.replace(/\s+/g, "");
@@ -685,6 +1110,190 @@ export function expandAmpersandEquipMarks(raw) {
     ? `${p2}${sep2 || "-"}${n2}`.replace(/\s+/g, "")
     : `${p1}${leftSep}${n2}`.replace(/\s+/g, "");
   return [left, right];
+}
+
+/** Whether the text before a mark's number is a mark's prefix: a family's
+ * letters, with any lettered or numbered qualifiers, ending in a separator or
+ * a letter ("EF-", "SF-P1-", "VAV-1-", "1-VAV-", "AHU"). */
+function isMarkPrefix(pre) {
+  const p = String(pre || "").toUpperCase();
+  return /[A-Z]/.test(p) && !/\d$/.test(p) && /^[A-Z0-9]+(?:[\s-][A-Z0-9]+)*[\s-]?$/.test(p);
+}
+
+/** Whether a range's or pair's right end repeats the left mark's prefix: in
+ * full, as its trailing tokens ("1-" of "VAV-1-"), or not at all. */
+function prefixRepeats(pre, tail) {
+  const toks = (x) => String(x || "").toUpperCase().split(/[\s-]+/).filter(Boolean);
+  const p = toks(pre), t = toks(tail);
+  return t.length <= p.length && t.every((x, i) => x === p[p.length - t.length + i]);
+}
+
+/**
+ * The marks a range printed in one mark cell names: one row scheduling
+ * several units of one kind alike ("EF-1 THRU EF-4", "EF-1 THRU 4",
+ * "VAV-1-1 THRU 1-12", "EF-1 ~ 4"; 26_CA's "SF-P1-4 THRU 11" and
+ * "ST-3-1A THRU 12A", 013_MO's "CV-7-CV-10"; AS-75). The right end is the
+ * left mark with a higher number: it prints the mark's prefix again, its
+ * trailing tokens, or the number alone, and the letter after the number
+ * alike. Between two marks a dash is a range only where the right end
+ * prints the whole prefix again, since "AHU-1-2" is one mark. Null for any
+ * other text: two kinds of mark, a backwards range, or more than 100 units.
+ */
+export function expandEquipMarkRange(raw) {
+  const s = String(raw || "").toUpperCase().replace(/[\u2013\u2014]/g, "-").replace(/\s+/g, " ").trim();
+  if (!s || s.length > 48) return null;
+  const splits = [];
+  const word = s.match(/^(.+?)\s+(?:THRU|THROUGH|TO)\s+(.+)$/);
+  if (word) splits.push([word[1], word[2], false]);
+  const tilde = s.match(/^(.+?)\s*~\s*(.+)$/);
+  if (tilde) splits.push([tilde[1], tilde[2], false]);
+  for (let i = s.indexOf("-"); i > 0; i = s.indexOf("-", i + 1)) splits.push([s.slice(0, i).trim(), s.slice(i + 1).trim(), true]);
+  for (const [left, right, dash] of splits) {
+    const l = left.match(/^(.*?)(\d{1,4})([A-Z]?)$/);
+    const r = right.match(/^(.*?)(\d{1,4})([A-Z]?)$/);
+    if (!l || !r) continue;
+    const [, pre, a, sa] = l;
+    const [, tail, b, sb] = r;
+    if (!isMarkPrefix(pre) || sa !== sb || /\d$/.test(tail) || !prefixRepeats(pre, tail)) continue;
+    if (dash && !(tail && prefixRepeats(tail, pre))) continue;
+    const lo = Number(a), hi = Number(b);
+    if (!(hi > lo && hi - lo < 100)) continue;
+    const width = /^0\d/.test(a) ? a.length : 0;
+    return Array.from({ length: hi - lo + 1 }, (_, i) => `${pre}${String(lo + i).padStart(width, "0")}${sa}`);
+  }
+  return null;
+}
+
+/** The marks one printed mark cell names (after its "/" or "," split): a
+ * range's every mark, a list's (AS-86), an "&" pair's two, else the mark
+ * itself. */
+export function expandEquipMarks(raw) {
+  return expandEquipMarkRange(raw) ?? expandMarkList(raw) ?? runTogetherMarks(raw) ?? expandAmpersandEquipMarks(raw);
+}
+
+/** The marks a set draws whole outside every table (the sheet graph's
+ * drawn-tag census, graph.tags), hyphen- and space-insensitive: the evidence
+ * a row mark "X N-M" is read by (setRangeMarks, AS-116). Null where the graph
+ * carries no census, so a table read alone reads as before. */
+const drawnMarksByGraph = new WeakMap();
+export function setDrawnMarks(graph) {
+  if (!graph || !Array.isArray(graph.tags)) return null;
+  let marks = drawnMarksByGraph.get(graph);
+  if (!marks) {
+    marks = new Set(graph.tags.filter((t) => !t.in_table && !t.sheet_callout)
+      .map((t) => String(t.text || "").toUpperCase().replace(/[\s-]+/g, "")).filter(Boolean));
+    drawnMarksByGraph.set(graph, marks);
+  }
+  return marks;
+}
+
+/** A row mark printed "X N-M" (043_FL's "HWP 1-2" and "CWP 9-10") names X-N
+ * to X-M when the set draws every one of them whole outside its tables and
+ * never X-N-M (AS-116). By its shape alone it is one mark: 26_CA's AHU 2-1 is
+ * level 2's unit 1, and its plans draw AHU 2-1, never AHU-2 and AHU-1. */
+export function setRangeMarks(raw, drawn) {
+  if (!drawn || !drawn.size) return null;
+  const m = String(raw || "").toUpperCase().replace(/[\u2013\u2014]/g, "-").trim()
+    .match(/^([A-Z]{1,8})[\s-]?(\d{1,3})\s*-\s*(\d{1,3})$/);
+  if (!m) return null;
+  const [, pre, a, b] = m;
+  const lo = Number(a), hi = Number(b);
+  if (!(hi > lo && hi - lo <= 20) || /^0/.test(a) || /^0/.test(b)) return null;
+  if (drawn.has(`${pre}${a}${b}`)) return null;
+  const marks = Array.from({ length: hi - lo + 1 }, (_, i) => `${pre}-${lo + i}`);
+  return marks.every((x) => drawn.has(x.replace(/-/g, ""))) ? marks : null;
+}
+
+/** The set's drawn marks as a table's rows may read them (AS-116): null when
+ * the table's "X N-M" rows, read as ranges, would name a unit twice (two rows
+ * whose ranges overlap, or one whose range holds another row's own mark).
+ * Each unit is scheduled once, so overlapping ranges are type codes: 019_FL's
+ * diffusers S1-2, S1-3, S1-4 and S2-4 are four types, not S-1 to S-4. */
+export function tableRangeEvidence(table, drawn) {
+  if (!drawn || !drawn.size) return null;
+  const own = new Set();
+  const ranges = [];
+  for (const row of table?.rows || []) {
+    const key = String(row?.key || "").trim();
+    if (!key) continue;
+    const marks = setRangeMarks(key, drawn);
+    if (marks) ranges.push(marks.map((m) => m.replace(/-/g, "")));
+    else own.add(key.toUpperCase().replace(/[\s-]+/g, ""));
+  }
+  const seen = new Set();
+  for (const marks of ranges) {
+    for (const m of marks) {
+      if (seen.has(m) || own.has(m)) return null;
+      seen.add(m);
+    }
+  }
+  return drawn;
+}
+
+/** Two marks of one family the extraction's key ran together (AS-86): it
+ * keys "CH-1 & CH-2" and "CH-1, CH-2" as CH-1CH-2, "B1, B2" as B1B2. Where
+ * no cell prints the row's name (itd-d1-lab's canopy hoods print theirs in
+ * the key alone), the key is all there is. The family letters and separator
+ * printed twice are two marks; a mark printing them once (B12, AHU-1A) is
+ * one. */
+function runTogetherMarks(raw) {
+  const m = String(raw || "").trim().match(/^([A-Z]{1,8})([\s-]?)(\d{1,4}[A-Z]?)\1\2(\d{1,4}[A-Z]?)$/i);
+  return m ? [`${m[1]}${m[2]}${m[3]}`, `${m[1]}${m[2]}${m[4]}`] : null;
+}
+
+/** A mark printed as one token (markToken), or one with a letter after its
+ * number (044_NY's FOP-8A), as a list prints it (AS-86). */
+function listMark(piece) {
+  const t = plainMark(piece);
+  return markToken(t) || (/\d[A-Z]$/i.test(t) && markToken(t.slice(0, -1)));
+}
+
+/** The mark a list continues after `prev` (AS-86): a bare number is `prev`
+ * with that number ("EF-1", "2": EF-2), a bare letter `prev` with that letter
+ * where it prints one ("FOP-8A", "B": FOP-8B). Null unless `prev` is a mark
+ * printed as one token (listMark) and the piece a bare number or letter. */
+function continuedMark(prev, piece) {
+  const t = plainMark(piece).toUpperCase();
+  if (!t || !listMark(prev)) return null;
+  const m = plainMark(prev).toUpperCase().match(/^(.*?)(\d{1,4})([A-Z]?)$/);
+  if (!m || !isMarkPrefix(m[1])) return null;
+  if (/^\d{1,4}[A-Z]?$/.test(t)) return `${m[1]}${t}`;
+  if (m[3] && /^[A-Z]$/.test(t)) return `${m[1]}${m[2]}${t}`;
+  return null;
+}
+
+/** The marks a list of one family's units names (AS-86): "EF-1, 2", "EF-1,2",
+ * "EF-1, EF-2", "EF-1 AND 2", "FOP-8A & B". Each after the first continues
+ * the one before it (continuedMark) or is a mark of the first's family
+ * letters. Null for anything else: one mark, two families' marks (a row
+ * naming its air handler and heat pump, "AHU-1, HP-1"), words. */
+export function expandMarkList(raw) {
+  const parts = String(raw || "").trim().split(/\s*(?:,|&|\bAND\b)\s*/i);
+  if (parts.length < 2 || parts.some((part) => !part) || !listMark(parts[0])) return null;
+  const letters = markLetters(normalizeEquipMark(parts[0]));
+  const out = [parts[0].trim()];
+  for (const part of parts.slice(1)) {
+    const next = continuedMark(out[out.length - 1], part)
+      ?? (listMark(part) && markLetters(normalizeEquipMark(part)) === letters ? part.trim() : null);
+    if (!next) return null;
+    out.push(next);
+  }
+  return out;
+}
+
+/** A mark's family letters: its first run of two or more letters (SF-P1-4 →
+ * SF, B950-AHU-3001 → AHU), else its letters (B-1 → B). */
+export function markLetters(mark) {
+  const s = String(mark || "").toUpperCase();
+  return (s.match(/[A-Z]{2,}/) ?? s.match(/[A-Z]+/))?.[0] ?? "";
+}
+
+/** How many units of one mark's kind the row's mark cell names (AS-75): the
+ * row's printed QTY counts them, never each. "EF-1 THRU EF-4" names four
+ * fans; "FC-1 , HP-1" one fan coil and one heat pump. */
+export function sameKindMarks(tagList, one) {
+  const k = markLetters(one);
+  return Math.max(1, tagList.filter((t) => markLetters(normalizeEquipMark(t)) === k).length);
 }
 
 /** B-3: does this table's row-key column actually IDENTIFY its rows, or is it
@@ -747,80 +1356,554 @@ function identifierColumnByCardinality(table) {
   return null;
 }
 
-function uniqueFamily(graph, {
-  titleRe, exclude, keyRe, blankKeyRe, blankHeaderRes, blankServiceHint,
-  identityHeaderRe, titledOnly,
-  // Secondary titles that need a stricter key filter than the primary titleRe
-  // (e.g. SPLIT SYSTEM SYMBOL "F-1 , CU-1" → only CU-* for CONDENSING_UNIT,
-  // while titled CONDENSING UNIT SCHEDULE keeps set-local B1/B2 with no keyRe).
-  altTitleRe, altKeyRe,
-}) {
+// MISCELLANEOUS / bare EQUIPMENT / SPECIALTY EQUIPMENT / HYDRONIC ACCESSORIES:
+// a general schedule, where only a family's mark rule may claim a row.
+const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i;
+
+/**
+ * How a family reads one schedule table, or null when it reads no unit there:
+ * the one gate the takeoff (uniqueFamily) and the schedule↔plan reconcile
+ * scaffold share (AS-77), so each reads the tables the other does. The
+ * reconcile kept a copy of it that drifted: it read no CONTROL VALVES table
+ * that names no water (013_MO's, 072_CA's and 074_CA's), never checked an
+ * untitled table's header shape or valve service, and in a general schedule
+ * read a family's alternate marks (25_WA's electric heaters EH-20 and EH-30
+ * as humidifiers, 043_FL's air handler ED 203 as a damper).
+ *
+ * `pass` 1 is a table titled as the family, read first so a unit cites its
+ * own schedule; 2 another family's schedule that lists the family's units, an
+ * untitled table or a general one. `filterRe` picks the family's marks from
+ * the table's rows (none: every row), `titledAlso` the marks a title also
+ * vouches for; `unvouched` says no title vouches for the family here.
+ * `coTitled` are the other families a title names too, with their mark
+ * rules, where the family reads every row by its title alone (AS-80);
+ * `wordsNamed` says the rows it reads so are named by words, each one line
+ * (AS-81); and `identity` is how it reads the name of a row's unit, the
+ * options rowIdentityText takes (AS-79).
+ * @param {object} table a schedule table, as scheduleTableView gives it
+ * @param {object} spec an HVAC_FAMILY_SPECS entry, or a reconcile needle
+ *   (whose `title` stands in for a titleRe)
+ * @param {string|null} [family] the spec's HVAC_FAMILY_SPECS key
+ */
+export function familyTableGate(table, spec, family = null) {
+  const {
+    exclude, keyRe = null, blankKeyRe = null, blankHeaderRes = null, blankServiceHint = null,
+    titledOnly = false, altTitleRe = null, altKeyRe = null, titledKeyRe = null, host = null, splitKeyRe = null,
+  } = spec || {};
+  const titleRe = spec?.titleRe || spec?.title || null;
+  const title = String(table?.title?.text || "");
+  // A points-list caption can legitimately name its served equipment family
+  // (for example CRAH DDC POINTS LIST). It is still an I/O inventory, never
+  // an equipment schedule. Apply this boundary once for every HVAC family
+  // instead of relying on dozens of family-specific exclude regexes to stay
+  // perfectly synchronized with the BAS title/table grammar.
+  if (isBasPointsListTitle(title) || isBasPointsListTable(table)) return null;
+  // Soft title match: exact regex first, then compact (no-space) form so
+  // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
+  // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
+  // (Transbay RAH-/WFU- tables extract without a recoverable caption).
+  // General schedules: same gate — only families with keyRe may claim rows.
+  // titledOnly: skip blank/catch-all entirely (FIN_TUBE FTR vs filter panels).
+  // The title the family's rules read, without a status, discipline,
+  // continuation or sheet count (AS-83); the table shows and cites its own.
+  const ruleTitle = familyRuleTitle(title);
+  const titleOk = Boolean(titleRe) && scheduleTitleMatches(ruleTitle, titleRe, exclude);
+  const altOk = Boolean(altTitleRe) && scheduleTitleMatches(ruleTitle, altTitleRe, exclude);
+  // A TITLE WHOSE FAMILY WORD LOST ITS GLYPHS NAMES NO FAMILY (AS-148).
+  // bldg5406's text layer has no M, V or X ("LOU ER SCHEDULE", "E PANSION
+  // AND CO PRESSION TANK"), so its PUMP SCHEDULE reads "P SCHEDULE": a
+  // one- or two-letter fragment and SCHEDULE. Such a title is read as an
+  // untitled schedule, its rows gated by each family's own marks (CWP-1 is
+  // a pump's). A bare "SCHEDULE" is not one: 017_MD's occupancy schedule
+  // (M-F, SAT, SUN) and 054_NV's hanger sizes print it as their whole title.
+  const blankTitle = !title.trim() || /^(?:[A-Z]{1,2}\s+)+SCHEDULES?$/i.test(title.trim());
+  // A titled-but-service-unqualified "CONTROL VALVE(S)" table is the same
+  // problem as a blank title for CHW_CONTROL_VALVE/HHW_CONTROL_VALVE
+  // specifically (blankServiceHint set) — service still has to come from
+  // header/mark content either way, never invented from a title that
+  // doesn't state it. Scoped to blankServiceHint families only so no other
+  // family's blank-title handling (LOUVER, FIN_TUBE, etc.) is touched.
+  const genericValveTitle = Boolean(blankServiceHint) && !blankTitle
+    && isGenericControlValveTitle(ruleTitle);
+  const catchAll = CATCH_ALL_SCHEDULE_RE.test(ruleTitle);
+  const blankGate = blankKeyRe || keyRe;
+  const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
+  const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
+  const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
+    && scheduleTitleMatches(ruleTitle, host.titleRe, host.exclude);
+  // A split system's schedule its title does not name (AS-144): 26_CA's AIR
+  // CONDITIONING UNITS - AIR COOLED SYSTEMS prints each evaporator's mark
+  // (AC-P3-1) under EVAPORATOR DESIGNATION beside its condenser's (ACCU-P3-1)
+  // under CONDENSER DESIGNATION, and no family's title rule reads it. Its
+  // header shape vouches for each half's family as a host title does: the
+  // marks its split rule reads (an evaporator's AC-*, a condenser's ACCU-*),
+  // each in its own half's column (rowIdentityText reads a grouped mark
+  // column for the family that reads it; AS-95), after the schedules titled
+  // as its own. A title that names any family keeps its own reading.
+  const splitOk = Boolean(splitKeyRe) && !blankTitle && !catchAll && !titleNamesFamily(ruleTitle)
+    && isSplitPairHeaderShape(table);
+  // Read by its marks alone: no title vouches for the family here (AS-66).
+  const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAll);
+  let pass = 2;
+  // A valve table whose rows name both waters is read row by row (AS-78).
+  let rowService = null;
+  if (titleOk || altOk) {
+    pass = 1;
+  } else if (!hostOk && !splitOk) {
+    // A family's own schedules, then another's that lists its units, then
+    // the rest, so a unit they define cites them.
+    if (titledOnly) return null;
+    const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
+    if ((blankTitle || genericValveTitle) && blankGate) {
+      if (!blankHeaderOk) return null;
+      // Each valve is one water's, whatever the shape of its mark: a space
+      // hid 009_FL's CV 1 from the valve shape, and chilled and hot water
+      // both counted it (AS-82).
+      if (blankServiceHint) {
+        const service = valveTableService(table);
+        if (service === "MIXED") rowService = blankServiceHint;
+        else if (blankServiceHint === "CHW" && service === "HHW") return null;
+        else if (blankServiceHint === "HHW" && service !== "HHW") return null;
+      }
+    } else if (!(catchAll && keyGated)) {
+      return null;
+    }
+    // Notes, a drawing index or a furnishings list hold no unit (AS-66); an
+    // untitled grid of valve marks keeps the word of its header shape.
+    if (unvouched && !headerValveShape && !unvouchedTableHoldsUnits(table)) return null;
+  }
+  // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
+  // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
+  // altTitleRe hits use altKeyRe so split outdoor CU/DCU can join without
+  // forcing a CU filter onto primary CONDENSING UNIT schedules.
+  // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
+  // does not shadow WSHP/GSHP matches that only keyRe accepts.
+  // Prefer altKeyRe whenever altTitleRe matched (ELECTRIC HUMIDIFIER EH-*,
+  // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
+  // because altOk is false there.
+  const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
+  const filterRe = hostOk ? host.keyRe : splitOk ? splitKeyRe
+    : (blankTitle || genericValveTitle) ? blankGate : catchAll ? null : titledFilter;
+  // In a table titled as the family, a mark its untitled rule reads
+  // (blankKeyRe: a CONTROL DAMPER SCHEDULE's CD-1) or its title vouches for
+  // (titledKeyRe) is read too (AS-63): a title never reads less than none.
+  const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
+  // A title that names another family too, whose own mark rule reads its
+  // rows ("OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE"; AS-80).
+  const coTitled = (titleOk || altOk) && !filterRe && family && HVAC_FAMILY_SPECS[family]
+    ? titleFamilies(ruleTitle).filter((named) => named.family !== family)
+    : [];
+  // How the family reads the name of a row's unit (rowIdentityText): its own
+  // identity column, and a row's UNIT MARK or VALVE MARK where it prints both
+  // (AS-79). The takeoff and the reconcile read each row by it.
+  /** @type {{ identityHeaderRe: RegExp|null, unitMark: boolean, marksRead?: (text: string) => string[] }} */
+  const identity = {
+    identityHeaderRe: spec?.identityHeaderRe || null,
+    unitMark: familyReadsUnitMark({ titleOk, altOk, hostOk }, family),
+  };
+  // Rows read with no mark rule picking them, as a title alone vouches for
+  // them, most of them named by words (028_TX's silencers, by the room and
+  // the air they serve): each is one line (AS-81), as splitRowMarks reads.
+  const wordsNamed = !filterRe && !catchAll && tableNamedByWords(table, identity);
+  const gate = {
+    pass, title, titleOk, altOk, hostOk, splitOk, blankTitle, genericValveTitle,
+    catchAll, unvouched, filterRe, titledAlso, rowService, coTitled, wordsNamed, identity,
+  };
+  // The marks the family reads in a row's name, as it reads the row's marks
+  // (AS-84): the name split as the takeoff splits it, each mark read by
+  // familyMarkRead, in its letters and digits.
+  identity.marksRead = (text) => splitRowMarks(String(text || ""), Boolean(catchAll || filterRe), wordsNamed)
+    .map((one) => normalizeEquipMark(one)).filter(Boolean)
+    .filter((one) => familyMarkRead(gate, spec, one, markCanon(one)) > 0)
+    .map((one) => lettersAndDigits(one));
+  return gate;
+}
+
+/**
+ * Whether most of a table's rows are named by words, not marks (AS-81): more
+ * than half of the rows that name a unit do so by words before any slash
+ * (namedByWords), each name read as the family reads it (rowIdentityText,
+ * rowMarkText), the text its marks are split from. A table keyed by its rooms
+ * whose MARK column lists marks is no table named by words, and one row
+ * named by words among one of marks is no majority.
+ */
+function tableNamedByWords(table, identity) {
+  const firsts = (table?.rows || []).map((row) => {
+    const rowKey = String(row.key || "").trim().replace(QUOTES_RE, "");
+    return rowMarkPieces(rowMarkText(rowIdentityText(row, identity), rowKey, false), false)[0];
+  }).filter(Boolean);
+  return firsts.filter((first) => namedByWords(first)).length * 2 > firsts.length;
+}
+
+// Whether any family's title rule names each title (AS-144).
+const TITLE_NAMES_FAMILY = new Map();
+
+/**
+ * Whether a schedule title names any family (AS-144): its own title, its
+ * other title or a host title, as familyTableGate reads each. A split
+ * system's header shape vouches only for a table whose title names none.
+ * @param {string} title the title the family rules read (familyRuleTitle)
+ */
+function titleNamesFamily(title) {
+  let named = TITLE_NAMES_FAMILY.get(title);
+  if (named !== undefined) return named;
+  named = Object.values(HVAC_FAMILY_SPECS).some((spec) => [
+    [spec.titleRe || spec.title, spec.exclude],
+    [spec.altTitleRe, spec.exclude],
+    [spec.host?.titleRe, spec.host?.exclude],
+  ].some(([re, exclude]) => Boolean(re) && scheduleTitleMatches(title, re, exclude)));
+  TITLE_NAMES_FAMILY.set(title, named);
+  return named;
+}
+
+// The families each title names, with the mark rule each reads its rows by.
+const TITLE_FAMILIES = new Map();
+
+/**
+ * The families a schedule title names, each with the mark rule it reads the
+ * table's rows by (its other title's where that is what matched) and the
+ * marks it reads under its own title only: a title can name two, as 089_FL's
+ * HEAT PUMP OR CONDENSING UNIT SCHEDULE does (AS-80). A family with no mark
+ * rule of its own for the title is left out.
+ * @param {string} title
+ * @returns {Array<{ family: string, markRe: RegExp, titledOnlyRe: RegExp|null }>}
+ */
+function titleFamilies(title) {
+  let named = TITLE_FAMILIES.get(title);
+  if (named) return named;
+  named = [];
+  for (const [family, spec] of Object.entries(HVAC_FAMILY_SPECS)) {
+    const titleRe = spec.titleRe || spec.title || null;
+    const titleOk = Boolean(titleRe) && scheduleTitleMatches(title, titleRe, spec.exclude);
+    const altOk = Boolean(spec.altTitleRe) && scheduleTitleMatches(title, spec.altTitleRe, spec.exclude);
+    if (!titleOk && !altOk) continue;
+    const markRe = (altOk && spec.altKeyRe) ? spec.altKeyRe : spec.keyRe;
+    if (markRe) named.push({ family, markRe, titledOnlyRe: spec.titledOnlyRe || null });
+  }
+  TITLE_FAMILIES.set(title, named);
+  return named;
+}
+
+/**
+ * Whether a family's gate reads a row of its table (AS-78, for the takeoff
+ * and the reconcile alike): in a valve table whose rows name both waters, a
+ * row is the family's its own cell names, and one that names none the
+ * table's, by its headers and marks.
+ */
+export function familyRowRead(gate, row, table) {
+  if (!gate.rowService) return true;
+  return (valveRowService(row) || inferValveServiceFromTable(table)) === gate.rowService;
+}
+
+/**
+ * How a family's table gate reads one of a row's marks (AS-77), for the
+ * takeoff and the reconcile alike: 0 not as the family's; 2 as printed, by
+ * the rule that gates the table; 1 only in one of the mark's forms (AS-62),
+ * through a title's vouching or in another family's schedule (AS-63), a
+ * widened reading that never takes a unit a printed one holds. In a general
+ * schedule only the family's own mark rules read (never its alternate
+ * title's), and read by its mark alone a word, or a mark only a title
+ * vouches for, is no unit (AS-66).
+ * @param {object} gate familyTableGate's reading of the row's table
+ * @param {object} spec the family's spec or needle
+ * @param {string} one the mark, normalized
+ * @param {string} canon the mark upper-cased without spaces
+ * @param {{ countKeyed?: boolean }} [opts] countKeyed: the row is named by
+ *   a count-keyed table's identifier column (B-3), not a mark
+ */
+export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = {}) {
+  const { keyRe = null, blankKeyRe = null, titledOnlyRe = null } = spec || {};
+  const reads = (re) => (!re ? 0
+    : re.test(canon) || re.test(one) ? 2
+      : markMatchesKeyRe(re, one, canon) ? 1 : 0);
+  let read = 2;
+  if (gate.catchAll) {
+    read = Math.max(reads(blankKeyRe), reads(keyRe));
+    // A general schedule lists equipment: its marks in any spelling of the
+    // separator between their letters and their number, as below (AS-82).
+    if (!read) read = Math.max(markSpelledRead(blankKeyRe, one), markSpelledRead(keyRe, one));
+  } else if (gate.filterRe) {
+    read = reads(gate.filterRe);
+    if (!read && gate.titledAlso.some((re) => markMatchesKeyRe(re, one, canon))) read = 1;
+    // Under a title that vouches for the family (its own, its other title, a
+    // control valve schedule's), a mark its rules read in another spelling of
+    // the separator between its letters and its number is its too (AS-82):
+    // AHU1 as AHU-1, 066_MT's H 1 as H-1, 16_NV's C-1 as C1. An untitled
+    // table's marks are read as printed (a short glued mark there may be a
+    // level, a hardware set or a sensor).
+    if (!read && (gate.titleOk || gate.altOk || gate.genericValveTitle)) {
+      read = Math.max(markSpelledRead(gate.filterRe, one),
+        gate.titledAlso.some((re) => markSpelledRead(re, one)) ? 1 : 0);
+    }
+  } else if (gate.coTitled?.some((named) => spelledRead(named.markRe, one, canon)
+      && !spelledRead(named.titledOnlyRe, one, canon))
+    && ![keyRe, blankKeyRe, spec?.altKeyRe, spec?.titledKeyRe].some((re) => markMatchesKeyRe(re, one, canon))) {
+    // Another family the title names reads the mark by its own rule (as
+    // printed or in one of its forms, 1-FCU-1, or in another spelling of its
+    // separator, SCU1, as it reads it under that title: AS-82), not one only
+    // its own title reads (FCU's F-1), and none of this family's own rules
+    // reads it: it is that family's unit (AS-80).
+    return 0;
+  }
+  if (!read) return 0;
+  if (gate.unvouched && ((!countKeyed && !unvouchedMarkNamesUnit(one))
+    || spelledRead(titledOnlyRe, one, canon))) return 0;
+  return gate.hostOk || gate.splitOk ? 1 : read;
+}
+
+/**
+ * A mark in each spelling of the separator between its letters and its number
+ * (AS-82): AHU-1, AHU 1 and AHU1, as drafters print one mark. None where the
+ * mark does not begin with letters and a number.
+ */
+export function markSpellings(mark) {
+  const m = String(mark || "").trim().match(/^([A-Z]{1,8})[\s\-]?(\d.*)$/i);
+  return m ? [`${m[1]}-${m[2]}`, `${m[1]} ${m[2]}`, `${m[1]}${m[2]}`] : [];
+}
+
+/** How a mark rule reads a mark in another spelling of the separator after
+ * its letters (AS-82): 2 as printed but for that separator, 1 only in one of
+ * the mark's forms (markFormsForKeyRe), 0 not at all. */
+function markSpelledRead(re, one) {
+  if (!re) return 0;
+  const [printed = "", ...forms] = markFormsForKeyRe(markCanon(one));
+  if (markSpellings(printed).some((s) => re.test(s))) return 2;
+  return forms.some((form) => markSpellings(form).some((s) => re.test(s))) ? 1 : 0;
+}
+
+/** A mark rule's reading of a mark as printed, in its forms or in another
+ * spelling of its separator (AS-82). */
+function spelledRead(re, one, canon) {
+  return markMatchesKeyRe(re, one, canon) || markSpelledRead(re, one) > 0;
+}
+
+/** A unit's key across the tables that list it (AS-82): its mark, upper-cased
+ * without spaces, with the separator between its letters and its number
+ * spelled one way (ET35-1 and ET-35-1 are ET-35-1; AHU-11 and AHU1-1 stay
+ * two). */
+export function unitMarkKey(canon) {
+  return String(canon || "").toUpperCase().replace(/\s+/g, "").replace(/^([A-Z]{1,8})-?(?=\d)/, "$1-");
+}
+
+const QUOTES_RE = /^["'\s]+|["'\s]+$/g;
+
+/**
+ * Whether a row printing both a UNIT MARK and a VALVE MARK is, to a family,
+ * its UNIT MARK's unit beside that unit's valve (AS-79): in a table titled as
+ * a family of units, or another family's schedule that lists them. To a
+ * valve's, a damper's or an air valve's family the row is the valve its
+ * VALVE MARK names, and anywhere no title vouches for a family of units it is
+ * a valve's too, its UNIT MARK the unit the valve serves.
+ * @param {object} gate the family's familyTableGate reading of the table
+ * @param {string} family the family's HVAC_FAMILY_SPECS key
+ */
+export function familyReadsUnitMark(gate, family) {
+  return Boolean(gate?.titleOk || gate?.altOk || gate?.hostOk) && !CONTROL_VALVE_FAMILIES.includes(family);
+}
+
+/**
+ * The text a row names its unit by, for the takeoff and the reconcile alike
+ * (AS-79): its key; a count-keyed table's identifier column (B-3); its mark
+ * column (MARK, SYMBOL, EQUIP. TAG, DESIGNATION, UNIT NO, UNIT TAG, ITEM NO,
+ * or a UNIT or VALVE MARK), whichever the row prints first; a TAG that pairs
+ * marks ("RF-1 & 2" beats a glued key "RF-12"; a bare TAG is often a grille's
+ * type code, 1S or 2R); and the family's own identity column (a control
+ * valve's VALVE MARK). A row printing both a UNIT MARK and a VALVE MARK is
+ * read by the family, never by their column order (familyReadsUnitMark).
+ * With the family's reading (the gate's marksRead), a mark column under
+ * another name (TAG, EQUIPMENT TAG, ID, OUTDOOR UNIT MARK...) names the row
+ * where the family reads no mark in its name, or prints the key as printed
+ * (AS-84).
+ * @param {object} row a schedule table's row
+ * @param {{ countKeyedIdentCol?: string|null, identityHeaderRe?: RegExp|null, unitMark?: boolean, marksRead?: ((text: string) => string[])|null }} [opts]
+ */
+export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeaderRe = null, unitMark = false, marksRead = null } = {}) {
+  let tag = String(row.key || "").trim().replace(QUOTES_RE, "");
+  // Whether the name is still the extraction's key, not a cell as printed.
+  let keyed = true;
+  if (countKeyedIdentCol) {
+    const ident = String(row.cells?.[countKeyedIdentCol]?.text || "").trim();
+    if (ident) { tag = ident; keyed = false; }
+  }
+  // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
+  // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
+  // while row.key correctly holds EF-1.
+  const headers = Object.keys(row.cells || {});
+  let markHeader = headers.find((header) => MARK_HEADER_RE.test(headerName(header)));
+  if (markHeader && (UNIT_MARK_HEADER_RE.test(markHeader) || VALVE_MARK_HEADER_RE.test(markHeader))) {
+    const own = unitMark ? UNIT_MARK_HEADER_RE : VALVE_MARK_HEADER_RE;
+    markHeader = headers.find((header) => own.test(header)) || markHeader;
+  }
+  const markCell = markHeader ? String(row.cells[markHeader]?.text || "").trim() : "";
+  if (markCell) { tag = markCell.replace(QUOTES_RE, "").trim(); keyed = false; }
+  // Where the family reads no mark in the row's name, a mark column by another
+  // name whose cell prints one it reads names its unit (AS-84): 03_FL's and
+  // 22_GA's split systems print the outdoor unit's mark (OUTDOOR UNIT MARK
+  // DCU-1) beside the indoor unit's; a mark column under TAG would name 03_FL's
+  // ATU A beside its row key EATUA. The family's own reading decides (the
+  // gate's marksRead), in the takeoff and the reconcile alike; a name it
+  // reads stays. So does a key it reads, unless such a column prints the
+  // key's own letters and digits and the family reads other marks there: the
+  // extraction's key drops what a cell prints around them, a status before
+  // the mark (063_MT's (E) EF- 4 is keyed EEF-4, 067_CA's (N) B950A-AS-1001
+  // NB950A-AS-1001) or the ampersand between two (028_TX's UH-1 & UH-2,
+  // UH-1UH-2), and the cell is the key as printed. Where it only spaces them
+  // otherwise (09_ME's SAC - 1, keyed SAC-1), the key stays.
+  if (marksRead) {
+    const synonyms = headers.filter((header) => header !== markHeader && (MARK_HEADER_SYNONYM_RE.test(headerName(header)) || isGroupedMarkHeader(header)));
+    const printed = (header) => String(row.cells[header]?.text || "").replace(QUOTES_RE, "").trim();
+    const reads = (text) => marksRead(text).length > 0;
+    const keyMarks = marksRead(tag).join(" ");
+    // The cell a key was read from is the key as printed under any header
+    // (AS-86): 16_NV prints its furnaces' marks under GENERAL UNIT DATA F ~.
+    const asPrinted = keyed && headers.find((header) => header !== markHeader && lettersAndDigits(printed(header)) === lettersAndDigits(tag)
+      && reads(printed(header)) && marksRead(printed(header)).join(" ") !== keyMarks);
+    if (asPrinted) {
+      tag = printed(asPrinted);
+    } else if (synonyms.length && !keyMarks) {
+      const other = synonyms.find((header) => reads(printed(header)));
+      if (other) tag = printed(other);
+    }
+  }
+  // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12") — Northport
+  // blank return-fan schedule. Still never prefer bare grille-type TAG codes.
+  const tagCell = cellText(row, /^TAG$/i);
+  if (tagCell && /&/.test(tagCell) && /^[A-Za-z]{1,8}[\s\-]?\d/i.test(tagCell.trim())) {
+    tag = String(tagCell).replace(QUOTES_RE, "").trim();
+  }
+  if (identityHeaderRe) {
+    const ident = cellText(row, identityHeaderRe);
+    if (ident) tag = String(ident).replace(QUOTES_RE, "").trim();
+  }
+  return tag;
+}
+
+/**
+ * The text a row's marks are split from (AS-77, the takeoff's rule the
+ * reconcile shares): a mark cell printing a comma list of two families'
+ * marks, in a table no key filter reads, gives way to a row key that prints
+ * none (Baker's SYMBOL "ERU-1, HP-4" beside ERU-1). A list of one family's
+ * marks is read as printed (AS-86): the extraction keys 044_NY's "FOP-1, 2"
+ * FOP-1/FOP-2, but runs "EF-1, EF-2" together as EF-1EF-2.
+ */
+export function rowMarkText(text, rowKey, willFilter) {
+  return !willFilter && /,/.test(text) && rowKey && !/,/.test(rowKey) && !expandMarkList(text) ? rowKey : text;
+}
+
+/**
+ * A row's marks, before each is normalized (AS-77, shared by the takeoff and
+ * the reconcile): split on "/" always and on "," only where a key filter
+ * picks the family's marks from a list (DFC-1 , DCU-1), each range or pair
+ * expanded (AS-75). A row a title alone vouches for that is named by words,
+ * not marks, or that sits among rows so named (`wordsNamed`, a table's
+ * familyTableGate reading), is one line: its slash lists no marks (AS-81).
+ * A slash beside a mark printed as one token (GENERAL EXHAUST/EF-1), or
+ * between bare marks (AHU 1/AHU 2), lists marks wherever it is printed, so
+ * a printed mark always keeps its own tag. With the set's drawn marks
+ * (`drawn`, setDrawnMarks), a mark "X N-M" the set draws as X-N to X-M names
+ * them (AS-116).
+ */
+export function splitRowMarks(text, willFilter, wordsNamed = false, drawn = null) {
+  // In plain type (AS-85), so a range or list printed with another dash
+  // glyph reads as one printed with a hyphen.
+  text = plainMarkText(text);
+  const pieces = rowMarkPieces(text, willFilter);
+  if (!willFilter && pieces.length > 1 && !pieces.some((piece) => markToken(piece))
+    && !pieces.every((piece) => bareMark(piece)) && (wordsNamed || namedByWords(pieces[0]))) {
+    return [String(text).trim().replace(QUOTES_RE, "")];
+  }
+  // A bare number or letter after a mark continues it (AS-86): "EF-1/2" and,
+  // split for a key filter, "EF-1, 2" name EF-1 and EF-2.
+  const continued = [];
+  for (const piece of pieces) continued.push(continuedMark(continued[continued.length - 1], piece) ?? piece);
+  return continued.flatMap((t) => setRangeMarks(t, drawn) ?? expandEquipMarks(t));
+}
+
+/** A row's text in the pieces its marks are split from (splitRowMarks), on
+ * a separator outside parentheses only: 26_CA's "AHU-(34,35)-1" is the air
+ * handler of typical levels 34 and 35, one mark (AS-138). */
+function rowMarkPieces(text, willFilter) {
+  const pieces = [];
+  let depth = 0;
+  let piece = "";
+  for (const ch of String(text)) {
+    if (ch === "(") depth++;
+    else if (ch === ")") depth = Math.max(0, depth - 1);
+    if (!depth && (ch === "/" || (willFilter && ch === ","))) {
+      pieces.push(piece);
+      piece = "";
+      continue;
+    }
+    piece += ch;
+  }
+  pieces.push(piece);
+  return pieces.map((t) => t.trim().replace(QUOTES_RE, "")).filter(Boolean);
+}
+
+/**
+ * Whether a piece of a row's name is a unit's mark printed as one token
+ * (AS-81): EF-1, CU-5, B1, 1-VAV-1, (N)AHU-1, never a room's number (101A)
+ * or words with a number after them (RETURN 535).
+ */
+function markToken(piece) {
+  const text = String(piece || "").trim();
+  return Boolean(text) && !/\s/.test(text) && numberedMark(normalizeEquipMark(text));
+}
+
+/**
+ * Whether a piece of a row's name is a mark and nothing else (AS-81): one
+ * token once a family token is joined to its number (AHU 1), no words after
+ * it, with a number (EF-1, B1, 1-VAV-1, (N)AHU-1) or a lettered code (RTU-G,
+ * CV-CHW-BP-A). A room printed as a mark is one too (VEST 212).
+ */
+function bareMark(piece) {
+  const joined = String(piece || "").trim().replace(/^([A-Za-z]{1,8})\s+(?=\d)/, "$1");
+  return Boolean(joined) && !/\s/.test(joined)
+    && (/\d/.test(joined) || /^[A-Z]{1,8}(?:-[A-Z0-9]{1,8})+$/i.test(joined));
+}
+
+/**
+ * Whether a row's name before its first slash is words, not a mark (AS-81):
+ * two words of three letters or more, apart, once a mark's own trailing words
+ * are dropped (normalizeEquipMark), as 028_TX's silencer rows are named by the
+ * room and the air they serve ("GROUP REHEARSAL 112/111 - SUPPLY/RETURN", four
+ * silencers on one row). Split on its slashes, each piece was a silencer of
+ * its own ("111 - SUPPLY", "RETURN 535"). A mark with words after it
+ * (RTU-1 (ALT#2)), a building's (1-VAV-1) and a coded one (CV-CHW-BP-A,
+ * HHW-PUMP-1) are marks.
+ */
+function namedByWords(piece) {
+  const mark = normalizeEquipMark(piece);
+  return /\s/.test(mark) && (mark.match(/\b[A-Za-z]{3,}\b/g) || []).length >= 2;
+}
+
+function uniqueFamily(graph, spec, family, onEmit = null) {
+  const { identityHeaderRe } = spec;
   const keys = new Set();
   const items = [];
+  // A reading of the mark as printed, by the rule that gates its table, ranks
+  // above a widened one: through one of the mark's forms (AS-62), a title that
+  // vouches for it or another family's schedule (AS-63). The scan finds every
+  // unit a printed reading holds, so a widened reading only adds units, and
+  // never takes a unit's row from its printed listing, whatever the table order.
+  const printedCanons = new Set();
+  // Each table's reading by the family, the gate the reconcile scaffold shares
+  // (AS-77). A transposed schedule is read one row per unit (AS-65).
+  const gated = [];
+  for (const printed of graph.tables || []) {
+    const table = scheduleTableView(printed);
+    const gate = familyTableGate(table, spec, family);
+    if (gate) gated.push({ table, gate });
+  }
+  for (const mode of ["scan", "emit"]) {
   // Two passes: titled family schedules first, then blank/catch-all fallbacks.
   // Same mark on a blank seismic summary and a titled ERV schedule (Colville)
   // must cite the titled device definition — blank-first walk poisoned
   // prefer-schedule sweeps.
   for (const pass of [1, 2]) {
-  for (const table of graph.tables || []) {
-    const title = String(table.title?.text || "");
-    // A points-list caption can legitimately name its served equipment family
-    // (for example CRAH DDC POINTS LIST). It is still an I/O inventory, never
-    // an equipment schedule. Apply this boundary once for every HVAC family
-    // instead of relying on dozens of family-specific exclude regexes to stay
-    // perfectly synchronized with the BAS title/table grammar.
-    if (isBasPointsListTitle(title) || isBasPointsListTable(table)) continue;
-    // Soft title match: exact regex first, then compact (no-space) form so
-    // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
-    // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
-    // (Transbay RAH-/WFU- tables extract without a recoverable caption).
-    // MISCELLANEOUS / bare EQUIPMENT / SPECIALTY EQUIPMENT / HYDRONIC
-    // ACCESSORIES: same gate — only families with keyRe may claim rows.
-    // titledOnly: skip blank/catch-all entirely (FIN_TUBE FTR vs filter panels).
-    const titleOk = scheduleTitleMatches(title, titleRe, exclude);
-    const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, exclude);
-    const blankTitle = !title.trim();
-    // A titled-but-service-unqualified "CONTROL VALVE(S)" table is the same
-    // problem as a blank title for CHW_CONTROL_VALVE/HHW_CONTROL_VALVE
-    // specifically (blankServiceHint set) — service still has to come from
-    // header/mark content either way, never invented from a title that
-    // doesn't state it. Scoped to blankServiceHint families only so no other
-    // family's blank-title handling (LOUVER, FIN_TUBE, etc.) is touched.
-    const genericValveTitle = Boolean(blankServiceHint) && !blankTitle
-      && isGenericControlValveTitle(title);
-    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
-    const blankGate = blankKeyRe || keyRe;
-    const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
-    const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
-    if (titleOk || altOk) {
-      if (pass !== 1) continue;
-    } else {
-      if (pass !== 2) continue;
-      if (titledOnly) continue;
-      const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
-      if ((blankTitle || genericValveTitle) && blankGate) {
-        if (!blankHeaderOk) continue;
-        if (blankServiceHint && headerValveShape) {
-          const inferred = inferValveServiceFromTable(table);
-          if (blankServiceHint === "CHW" && inferred === "HHW") continue;
-          if (blankServiceHint === "HHW" && inferred !== "HHW") continue;
-        }
-      } else if (!(catchAllSchedule && keyGated)) {
-        continue;
-      }
-    }
-    // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
-    // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
-    // altTitleRe hits use altKeyRe so split outdoor CU/DCU can join without
-    // forcing a CU filter onto primary CONDENSING UNIT schedules.
-    // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
-    // does not shadow WSHP/GSHP matches that only keyRe accepts.
-    // Prefer altKeyRe whenever altTitleRe matched (ELECTRIC HUMIDIFIER EH-*,
-    // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
-    // because altOk is false there.
-    const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-    const filterRe = (blankTitle || genericValveTitle) ? blankGate : catchAllSchedule ? null : titledFilter;
-    const catchAllFilter = catchAllSchedule;
+  for (const { table, gate } of gated) {
+    if (gate.pass !== pass) continue;
+    const { title, filterRe, catchAll: catchAllFilter } = gate;
     // B-3: when the key column is a COUNT column, identify rows by the
     // highest-cardinality column instead, and never dedupe on the count —
     // two rows both reading "1" are two physical silencers, not one tag
@@ -830,39 +1913,16 @@ function uniqueFamily(graph, {
     let rowIdx = -1;
     for (const row of table.rows || []) {
       rowIdx++;
+      // In a valve table whose rows name both waters, the row's own (AS-78).
+      if (!familyRowRead(gate, row, table)) continue;
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
-      let tag = rowKey;
-      if (countKeyedIdentCol) {
-        const ident = String(row.cells?.[countKeyedIdentCol]?.text || "").trim();
-        if (ident) tag = ident;
-      }
-      // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
-      // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
-      // while row.key correctly holds EF-1.
-      const markCell = cellText(row, /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i);
-      if (markCell) tag = String(markCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12") — Northport
-      // blank return-fan schedule. Still never prefer bare grille-type TAG codes.
-      const tagCell = cellText(row, /^TAG$/i);
-      if (
-        tagCell
-        && /&/.test(tagCell)
-        && /^[A-Za-z]{1,8}[\s\-]?\d/i.test(tagCell.trim())
-      ) {
-        tag = String(tagCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      }
-      if (identityHeaderRe) {
-        const ident = cellText(row, identityHeaderRe);
-        if (ident) tag = String(ident).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      }
+      // The text the row names its unit by, as the reconcile reads it (AS-79).
+      const tag = rowIdentityText(row, { countKeyedIdentCol, ...gate.identity });
       // Always expand slash compounds (CWP-1/CWP-2). Comma-split only when a
       // key filter can pick family marks (DFC-1 , DCU-1). Untagged titled
       // families keep row.key when SYMBOL is a comma list (Baker ERU-1, HP-4).
       const willFilter = Boolean(catchAllFilter || filterRe);
-      let working = tag;
-      if (!willFilter && /,/.test(tag) && rowKey && !/,/.test(rowKey)) {
-        working = rowKey;
-      }
+      const working = rowMarkText(tag, rowKey, willFilter);
       // A count-keyed table's identifier is a descriptive NOUN PHRASE
       // ("GROUP REHEARSAL 123 - SUPPLY/RETURN"), never a compound tag list —
       // splitting it on "/" the way CWP-1/CWP-2 is split shreds one real
@@ -870,13 +1930,13 @@ function uniqueFamily(graph, {
       // "RETURN"), measured: 16 real rows became 31 items.
       const tagList = countKeyedIdentCol
         ? [String(working).trim()].filter(Boolean)
-        : String(working)
-        .split(willFilter ? /[/,]/ : "/")
-        .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
-        .filter(Boolean)
-        .flatMap((t) => expandAmpersandEquipMarks(t));
+        : splitRowMarks(working, willFilter, gate.wordsNamed, tableRangeEvidence(table, setDrawnMarks(graph)));
       for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
+        // The mark as printed when a status is printed with it, which the
+        // unit's name drops (AS-137): 063_MT's "(E) EF- 4" is EF- 4, and
+        // existing (controlIntent/catalogue.ts existingFlag).
+        const printedMark = /^\s*\(\s*[ENR]\s*\)|\(\s*[ENR]\s*\)\s*$/i.test(String(rawOne)) ? String(rawOne).replace(/\s+/g, " ").trim() : null;
         const canon = one.toUpperCase().replace(/\s+/g, "");
         if (!canon) continue;
         // Footnote / notes rows that leaked into the key column.
@@ -885,13 +1945,16 @@ function uniqueFamily(graph, {
         // Do NOT require a digit here — NAVFAC valve marks like CV-CHW-BP-A are
         // letter-suffixed building tags with no digits.
         if (isScheduleHeaderJunkMark(canon)) continue;
-        if (catchAllFilter) {
-          const okBlank = blankKeyRe && markMatchesKeyRe(blankKeyRe, one, canon);
-          const okKey = keyRe && markMatchesKeyRe(keyRe, one, canon);
-          if (!(okBlank || okKey)) continue;
-        } else if (filterRe && !markMatchesKeyRe(filterRe, one, canon)) {
+        // The family's mark rules, and read by its mark alone a mark is a word
+        // or another thing's (AS-66), as the reconcile reads it (AS-77).
+        const read = familyMarkRead(gate, spec, one, canon, { countKeyed: Boolean(countKeyedIdentCol) });
+        if (!read) continue;
+        const widened = read === 1;
+        if (mode === "scan") {
+          if (!widened && !countKeyedIdentCol) printedCanons.add(unitMarkKey(canon));
           continue;
         }
+        if (widened && printedCanons.has(unitMarkKey(canon))) continue;
         // B-3: a count-keyed table emits one line per PHYSICAL ROW. Its rows
         // are not tag-identified, so cross-row dedupe would collapse real,
         // distinct pieces of equipment (16 real silencers -> 2). Ordinary
@@ -902,8 +1965,10 @@ function uniqueFamily(graph, {
           // silencers instead of collapsing into one.
           keys.add(`${canon}#${table.sheet}#${rowIdx}`);
         } else {
-          if (keys.has(canon)) continue;
-          keys.add(canon);
+          // One unit however the separator after its letters is spelled in
+          // each table that lists it (AS-82: 26_CA's ET-35-1 and ET 35-1).
+          if (keys.has(unitMarkKey(canon))) continue;
+          keys.add(unitMarkKey(canon));
         }
         const bbox = identityHeaderRe
           ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)
@@ -931,7 +1996,9 @@ function uniqueFamily(graph, {
         // merges plan-drawn counts onto this same tag — status here is a
         // compile-time-only disclosure (not a ReconcileStatus value) and is
         // superseded once that merge happens.
-        const qtyStatus = scheduledQtyStatusFromRow(row);
+        const qtyStatus = scheduledQtyStatusFromRow(row, { marks: sameKindMarks(tagList, one) });
+        // A count-keyed table's rows are pieces named by where they are, no unit's mark.
+        if (!countKeyedIdentCol) onEmit?.(row, one, sameKindMarks(tagList, one));
         items.push({
           tag: one,
           quantity: 1,
@@ -946,6 +2013,9 @@ function uniqueFamily(graph, {
           unit: "EA",
           sheet_id: table.sheet,
           table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
+          // A schedule read from a picture by OCR (AS-153) says so on each unit.
+          ...(table.read_from_picture ? { read_from_picture: true } : {}),
+          ...(printedMark ? { printed_mark: printedMark } : {}),
           bbox_px: bbox || null,
           // Whole schedule row for cite paints — not just the MARK cell.
           row_bbox_px: rowBbox || bbox || null,
@@ -960,6 +2030,7 @@ function uniqueFamily(graph, {
     }
   }
   } // end titled-first / blank-fallback passes
+  } // end scan / emit
   const building = { other: 0 };
   for (const item of items) {
     const code = item.building || buildingLetter(item.tag);
@@ -1002,6 +2073,13 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /DOAS\s+UNIT|\bDOAS\b|DEDICATED\s+OUTDOORS?\s+AIR\s+SYSTEM|DEDICATED\s+OUTSIDE\s+AIR\s+SYSTEM/i,
     exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR\s+HANDLING|DEDICATED\s+OUTDOOR\s+AIR\s+UNIT/i,
     keyRe: /^DOAS/i,
+    // A DOAS listed in an air handling unit schedule is a DOAS (096_IN's
+    // AIR HANDLING UNIT SYSTEM INDEX SCHEDULE: DOAS-1 to DOAS-3, AHU-4).
+    host: {
+      titleRe: /AIR HANDLING UNIT|AIR\s+HANDLER/i,
+      exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR/i,
+      keyRe: /^DOAS[\s\-]?\d/i,
+    },
   },
   // Common US school / light-commercial phrasing (not always "DOAH").
   OUTDOOR_AIR_UNIT: {
@@ -1015,15 +2093,51 @@ export const HVAC_FAMILY_SPECS = {
   // Split-system indoor AC-* (bldg5406 AC-1/ACCU-1) — not AHU (AHU titles differ).
   // "SPLIT SYSTEM HEAT PUMPS" (Klamath) lists indoor FC-* beside outdoor HP-*.
   FCU: {
-    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|DUCTLESS\s+SPLIT/i,
+    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
+    // Under a split or ductless title: DAC-* ductless units, SS-* split
+    // systems (03_FL, 22_GA, 040_IL; AS-63). Under a fan coil title, FCC-*
+    // fan coils (028_TX's CHILLED WATER FAN COIL UNIT SCHEDULE lists FCC1-1
+    // beside FCU1-3; AS-64), and BCU-* blower coils (26_CA's FAN COIL schedule
+    // lists BCU-P3-1 and BCU-2-1 beside FCU-P2-2; AS-141). And an air
+    // conditioning unit, the indoor half
+    // a split system's title pairs with its outdoor unit (21_VA's DUCTLESS
+    // SPLIT SYSTEM UNIT SCHEDULE's ACU-1 / ACCU-3; AS-145).
+    titledKeyRe: /^(?:(?:DAC|SS|FCC|ACU)[\s\-]?\d|BCU[\s\-]?(?:[A-Z]{1,2})?\d)/i,
+    // A bare F-* is a fan coil under the family's title only: 016_NY's fans
+    // F-1 and F-2, in an untitled panel schedule, and 041_IL's F0535, a
+    // utility cart in an architectural list, were fan coils too (AS-66).
+    titledOnlyRe: /^F[\s\-]?\d/i,
+    // A split system air handler schedule's indoor FCU-* (22_GA's
+    // "FCU-1/HP-1" rows; its HP-* are HEAT_PUMP's).
+    host: {
+      titleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+HANDLER/i,
+      exclude: /POINTS\s*LIST|DDC/i,
+      keyRe: /^FCU[\s\-]?\d/i,
+    },
+    // A split system's indoor units by its header shape (AS-144): 26_CA's
+    // AC-P3-1 under EVAPORATOR DESIGNATION.
+    splitKeyRe: /^(?:(?:FCU|FC|EV|DFC|DAC|SS)[\s\-]?\d|AC[\s\-])/i,
   },
   VAV: {
-    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,
+    // A VAV box or terminal schedule (009_FL's VAV TERMINAL SCHEDULE, 033_MN's
+    // VAV BOX WITH HOT WATER REHEAT SCHEDULE) and a variable volume terminal
+    // (061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE; AS-68), and a
+    // title that begins with a fan-powered terminal, box or unit (26_CA's FAN
+    // POWERED TERMINAL UNIT SCHEDULE; AS-69), or a terminal air box (040_IL's
+    // TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2, AIR TERMINAL BOX in
+    // the other order; AS-96), never a box's connections, wiring, points or
+    // details.
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|\bTERMINAL\s+AIR\s+BOX(?:ES)?\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL|^\s*(?:(?:SERIES|PARALLEL|VAV|HOT\s+WATER|ELECTRIC)\s+){0,2}FAN[\s\-]*POWERED\s+(?:VAV\s+|AIR\s+)?(?:TERMINAL(?:\s+UNITS?)?|BOX(?:ES)?|UNITS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor.
-    keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU)/i,
+    // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor;
+    // TU-* terminal units numbered under an AIR TERMINAL UNIT title (AS-62).
+    keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU|TU(?=[\s\-]?\d))/i,
+    // Under the family's own title, a fan-powered box (26_CA's FPB-3-11 under
+    // FAN POWERED TERMINAL UNIT SCHEDULE; AS-69) and a terminal air box
+    // (040_IL's TAB-101, TAB-101E; AS-96).
+    titledKeyRe: /^(?:FPB|FPTU|FPVAV|FPV|FPU|FP|[SP]FPB|[SP]FP|[SP]FTU|TAB)(?=[\s\-]?\d)/i,
   },
   RTU: {
     // PACKAGED EQUIPMENT SCHEDULE (RTU) — common finish/replacement sheets.
@@ -1039,6 +2153,9 @@ export const HVAC_FAMILY_SPECS = {
     // Blank: only ERU/ERV — letter+digit blank gates steal finish A1/B1 (Johnson).
     keyRe: /^(?:ERU|ERV)[\s\-]|^[A-Z]\d{1,3}$/i,
     blankKeyRe: /^(?:ERU|ERV)[\s\-]/i,
+    // A letter and a number are an ERV's mark under its title only: a general
+    // schedule's T1 is a toilet accessory (23_GA; AS-66).
+    titledOnlyRe: /^[A-Z]\d{1,3}$/i,
   },
   FURNACE: {
     titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i,
@@ -1052,8 +2169,12 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^(?:CU|ACC)[\s\-]/i,
     // Split indoor/outdoor SYMBOL columns ("F-1 , CU-1" / "DFC-1 , DCU-1"):
     // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
-    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
-    altKeyRe: /^(?:CU|DCU|ACCU)[\s\-]/i,
+    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63).
+    altKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
+    // A split system's outdoor units by its header shape (AS-144): 26_CA's
+    // ACCU-P3-1 under CONDENSER DESIGNATION.
+    splitKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
@@ -1064,6 +2185,20 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /(?<![C])HP|^(?:SCU|SAC|CC|AH)[\s\-]/i,
     // Blank-title: only strong HP-* marks (Colville blank WSHP-1 is a chiller nameplate).
     blankKeyRe: /^HP[\s\-]/i,
+    // A split system air handler schedule's outdoor HP-* (22_GA; AS-63).
+    host: {
+      titleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+HANDLER/i,
+      exclude: /POINTS\s*LIST|DDC/i,
+      keyRe: /^HP[\s\-]?\d/i,
+    },
+    // A split or ductless system's outdoor HP-*, the heat pump its title pairs
+    // with an indoor unit (098_ID's DUCTLESS SPLIT HIGH WALL COOLING & HEATING
+    // UNIT SCHEDULE's "FC-1 , HP-1"; AS-145), as CONDENSING_UNIT reads its
+    // outdoor CU-* there.
+    altTitleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    altKeyRe: /^HP[\s\-]?\d/i,
+    // A split system's outdoor heat pumps by its header shape (AS-144).
+    splitKeyRe: /^HP[\s\-]?\d/i,
   },
   // Return / exhaust air handlers often titled RAH / without "AIR HANDLING UNIT".
   // VRF split indoor/outdoor unit schedules (IDU-*/ODU-* / IU-*/OU-*).
@@ -1073,10 +2208,14 @@ export const HVAC_FAMILY_SPECS = {
   // tables — titleRe alone can't reach it (no "INDOOR"/"OUTDOOR" in the
   // title), so it needs its own altTitleRe/altKeyRe path, same mechanism
   // already proven for CONDENSING_UNIT's split CU/DCU marks (GOAL.md rule 39).
+  // Or its terminal units (22_GA's VARIABLE REFRIGERANT FLOW TERMINAL DEVICE
+  // SCHEDULE, VRFC-1 to VRFC-13; AS-145).
   VRF_INDOOR: {
-    titleRe: /VRF\s+INDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+INDOOR/i,
+    titleRe: /VRF\s+(?:INDOOR|TERMINAL)(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+(?:INDOOR|TERMINAL)/i,
     exclude: /POINTS\s*LIST|DDC|OUTDOOR/i,
     keyRe: /^(?:IDU|IU|VI)[\s\-]?/i,
+    // Under its own title, a VRF unit's mark (VRFC-1, a cassette; AS-145).
+    titledKeyRe: /^VRF[A-Z]{0,2}[\s\-]?\d/i,
     altTitleRe: /VRF\s+SYSTEM\s+SCHEDULE/i,
     altKeyRe: /^AC[\s\-]/i,
     titledOnly: true,
@@ -1093,22 +2232,41 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^RAH[\s\-]/i,
   },
-  // Wash / water filter units (Transbay blank-title WFU-* rows).
+  // Wash / water filter units (Transbay blank-title WFU-* rows), under a
+  // title naming a filtration unit too (26_CA's WATER FILTRATION UNIT, the
+  // title its table reads since AS-142).
   WFU: {
-    titleRe: /WATER\s+FILTER|WASHER\s+FILTER|\bWFU\b.*SCHEDULE/i,
+    titleRe: /WATER\s+FILT(?:ER|RATION)|WASHER\s+FILTER|\bWFU\b.*SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^WFU[\s\-]/i,
   },
   AIR_COOLED_CHILLER: {
-    titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
+    // Or a title that is the word alone, without the section it cites
+    // (26_CA's CHILLER (SPECIFICATION SECTION 23 64 16); AS-141).
+    titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE|^\s*(?:WATER[\s\-]*COOLED\s+)?CHILLERS?\s*$/i,
     exclude: /HEAT RECOVERY/i,
     // CH-/PAC- only — ACC-* is air-cooled condenser (CONDENSING_UNIT blankKeyRe).
     keyRe: /^(?:CH|PAC)[\s\-]/i,
+    // Under an AIR COOLED CHILLER title, ACC-* and ACCH-* are the chiller
+    // (03_FL, AS-63; 087_US, AS-64); under a chiller title, a water-cooled
+    // unit WCU-* or WCC-* is (26_CA's WCU-2-1 to WCU-2-4; AS-141).
+    titledKeyRe: /^(?:ACCH?|WCU|WCC)[\s\-]?\d/i,
   },
   HEAT_RECOVERY_CHILLER: {
     titleRe: /HEAT RECOVERY CHILLER/i,
     // Require separator after CH so blank-title CHECK:/CHP-* junk is not stolen.
     keyRe: /^(?:CH[\s\-]|HRC)/i,
+    // CH-* is this family's under its own title only; read by its mark alone
+    // it is any chiller (047_NC's electrical EQUIPMENT SCHEDULE lists its
+    // air-cooled chillers CH-1 and CH-2; AS-66).
+    titledOnlyRe: /^CH[\s\-]/i,
+    // HRC-* listed in a chiller schedule (096_IN's AIR COOLED CHILLER
+    // SCHEDULE: HRC-1, HRC-2 beside CH-1, CH-2; AS-63).
+    host: {
+      titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
+      exclude: /POINTS\s*LIST|DDC/i,
+      keyRe: /^HRC[\s\-]?\d/i,
+    },
   },
   // Prefer boiler equipment captions over bare /BOILER/ so "BOILER PLANT ·
   // ISOLATION VALVE SCHEDULE" and pump boards do not claim B-* / "B GV-*"
@@ -1124,7 +2282,10 @@ export const HVAC_FAMILY_SPECS = {
   // without filtering titled PUMP SCHEDULE rows. PUPSCHEDULE = common OCR miss.
   PUMP: {
     // Also match untitled-suffix hydronic pump boards (HEATING HOT WATER PUMP).
-    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP/i,
+    // Or a condensate pump's own title, no SCHEDULE printed (044_NY's
+    // CONDENSATE PUMP; AS-68).
+    // Or PUMPS alone, without the section it cites (26_CA; AS-141).
+    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP|^\s*(?:STEAM\s+)?CONDENSATE\s+(?:RETURN\s+)?PUMPS?(?:\s+SCHEDULE)?\s*$|^\s*PUMPS?\s*$/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i,
     // BS-* = packaged booster pump systems on EQUIPMENT catch-all lists.
     blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
@@ -1138,7 +2299,8 @@ export const HVAC_FAMILY_SPECS = {
     titledOnly: true,
   },
   COOLING_TOWER: {
-    titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
+    // Or the word alone, without the section it cites (26_CA; AS-141).
+    titleRe: /COOLING\s+TOWER\s+SCHEDULE|^\s*COOLING\s+TOWERS?\s*$/i,
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^CT[\s\-]/i,
   },
@@ -1161,13 +2323,29 @@ export const HVAC_FAMILY_SPECS = {
     titledOnly: true,
   },
   FAN: {
-    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+|KITCHEN\s+EXHAUST\s+)?FAN SCHEDULE/i,
+    // Or a title that is the fans' own name, no SCHEDULE printed: 23_GA's and
+    // 14_OR's EXHAUST FANS, 072_CA's and 074_CA's SUPPLY FANS, 097_UT's
+    // VENTILATION FANS, 26_CA's "FANS (SPECIFICATION SECTION 23 34 00)"
+    // (AS-68). The whole title names them, from its first word to its last, so
+    // an electrical list ending "- EXHAUST FANS" is not theirs.
+    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+|KITCHEN\s+EXHAUST\s+)?FAN SCHEDULE|^\s*(?:(?:EXHAUST|SUPPLY|RETURN|RELIEF|VENTILATION|VENTILATING|TRANSFER|TOILET|KITCHEN|ROOF|INLINE|UTILITY|GENERAL|SMOKE|STAIR|STAIRWELL|GARAGE|LAB|LABORATORY|PROPELLER|CENTRIFUGAL)\s+){0,3}FANS?(?:\s*\([^)]*\))?\s*$/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE|CEILING\s+FAN/i,
     // REF-* = relief; TEF-* toilet/transfer; GX-* general exhaust (lab);
     // KEF-* kitchen exhaust (blank-title hydronic/exhaust summaries — Klamath).
     // S-A-* / R-A-* = supply/return fans on zone-lettered SUPPLY/RETURN FAN schedules
     // (NIST-style); DSF-* = duct supply fans; EG-* = general exhaust; SEF-* = stair/smoke exhaust on HVAC FAN schedules.
-    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-)[\s\-]?/i,
+    // Any exhaust fan named by a one- or two-letter qualifier before EF and a
+    // number (the KEF/GEF/TEF/LEF/SEF convention: 096_IN's pod and jail
+    // exhaust fans PEF-1, JEF-1; AS-62).
+    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-|[A-Z]{1,2}EF(?=[\s\-]?\d))[\s\-]?/i,
+    // Under a FAN SCHEDULE title: E-A-* zone-lettered fans (017_MD's RETURN
+    // FAN SCHEDULE), bare F-* (016_NY) and BF-* (096_IN; AS-63); EXF-* (097_UT's
+    // VENTILATION FANS) and transfer fans TF-* (26_CA's TF-P2-1; AS-68);
+    // relief fans RLF-* (07_MO's FAN SCHEDULE, RLF 1 beside EXF 1-3; AS-155).
+    titledKeyRe: /^(?:(?:E-[A-Z]-|F|BF|EXF|RLF)[\s\-]?\d|TF[\s\-])/i,
+    // Read by its mark alone, EG-* is an exhaust grille (096_IN's untitled
+    // diffuser and grille schedule lists EG2 and EG3; AS-66).
+    titledOnlyRe: /^EG[\s\-]?\d/i,
   },
   // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
   // — FAN titleRe already excludes CEILING FAN so these do not double-count.
@@ -1185,6 +2363,9 @@ export const HVAC_FAMILY_SPECS = {
     // UH/CUH/EH room heaters; EDH-* duct-mounted electric; ECUH-* electric
     // cabinet/unit; HWUH-* hot-water; GUH/NUH-* gas/natural unit heaters.
     keyRe: /^(?:UH|CUH|EH|EDH|ECUH|HWUH|HUH|EUH|GUH|NUH)[\s\-]?/i,
+    // Under a unit heater title: EWH-* electric wall heaters (baker-county-eoc;
+    // a water heater anywhere else) and SUH-* suspended (033_MN; AS-63).
+    titledKeyRe: /^(?:EWH|SUH)[\s\-]?\d/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {
@@ -1222,14 +2403,23 @@ export const HVAC_FAMILY_SPECS = {
     // "SHT. NO." never match. Bare H-* still requires hyphen (H-A-3) so
     // HC-/HP-/HWC-* coils are not stolen. WHSE-SH1 works via markCoreForKeyRe.
     keyRe: /^(?:(?:HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
+    // HF-* under a humidifier title (094_FL; AS-63), and HUM with one
+    // letter for its number (061_IA's HUM-A; AS-64): the digit keyRe asks for
+    // keeps sheet headers out, which a humidifier title already does.
+    titledKeyRe: /^(?:HF[\s\-]?\d|HUM[\s\-]?[A-Z]$)/i,
     altTitleRe: /ELECTRIC\s+HUMIDIFI?ER/i,
     altKeyRe: /^(?:(?:EH|HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
   },
   AIR_SEPARATOR: {
     // Hydraulic separators (HS-*); "AIR SEPARATORS" boards without SCHEDULE.
-    titleRe: /AIR\s+SEPARATORS?(?:\s+SCHEDULE)?|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?/i,
+    // An air and dirt separator (014_MT's and 061_IA's AIR/DIRT SEPARATOR
+    // SCHEDULE; AS-68) or a dirt separator.
+    titleRe: /AIR\s+SEPARATORS?(?:\s+SCHEDULE)?|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?|\bAIR\s*(?:\/|&|AND)\s*DIRT\s+SEPARATORS?|\bDIRT\s+SEPARATORS?\b/i,
     // AS-/IAS-/HS- — digit required (not prose); optional zone letter.
     keyRe: /^(?:I?AS|HS)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
+    // Under its own title, a separator lettered for its system (061_IA's
+    // AS-A to AS-C; AS-68).
+    titledKeyRe: /^(?:I?AS|HS)[\s\-]?[A-Z]$/i,
   },
   EXPANSION_TANK: {
     // OCR: EPANSIONANDCOPRESSIONTANKSCHEDULE (bldg5406) — expansion + compression.
@@ -1263,6 +2453,9 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE|DUCT\s+HEATER/i,
     // CC/HC/RC coils; HWC-* hot-water; PHC/RHC preheat/reheat; DH-* electric duct coil.
     keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC|DH)[\s\-]?/i,
+    // Under a coil schedule title: RH-* reheat, SHC-* steam heating and DXC-*
+    // direct expansion coils (05_MO; AS-63).
+    titledKeyRe: /^(?:RH|SHC|DXC)[\s\-]?\d/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,
@@ -1318,7 +2511,7 @@ export const HVAC_FAMILY_SPECS = {
     altKeyRe: /^[A-Z]{1,3}D[\s\-]?\d/i,
     blankKeyRe: /^(?:MD|CD|DMP|OA|RA|EA|SA)[\s\-]/i,
     blankHeaderRes: [
-      /\b(?:TAG|MARK|SYMBOL)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:DAMPER|ACTUATOR|SIZE|AIRFLOW|CFM)\b/,
     ],
   },
@@ -1332,7 +2525,7 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
     blankKeyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:SIZE|MANUFACTURER|MODEL|SERVICE)\b/,
     ],
   },
@@ -1357,7 +2550,7 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:MX|MV|TMV)[\s\-]/i,
     blankKeyRe: /^(?:MX|MV|TMV)[\s\-]/i,
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:SIZE|MANUFACTURER|MODEL|MIXING)\b/,
     ],
   },
@@ -1380,7 +2573,7 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^CV[\s\-]/i,
     blankServiceHint: "CHW",
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW)\b/,
     ],
   },
@@ -1393,7 +2586,7 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^CV[\s\-]/i,
     blankServiceHint: "HHW",
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW|HHW|REHEAT|HOT\s*WATER)\b/,
     ],
   },
@@ -1521,7 +2714,8 @@ function preferScheduleHintForEquipmentTag(graph, tag, fallbackTitle = null) {
   const want = String(tag || "").trim().toUpperCase();
   if (!want || !graph?.tables?.length) return { title: null, sheet_id: null };
   let generic = null;
-  for (const table of graph.tables) {
+  for (const printed of graph.tables) {
+    const table = scheduleTableView(printed);
     const title = String(table.title?.text || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
     if (!title || isBasPointsListTitle(title)) continue;
     for (const row of table.rows || []) {
@@ -2087,7 +3281,14 @@ function basPointTypeEvidence(row, tag) {
 export function isScheduleHeaderJunkMark(canon) {
   return /^(MODEL|TAG|MARK|TYPE|SYMBOL|DESCRIPTION|REMARKS?|NOTES?|SIZE|CAPACITY|MANUFACTURER|MANUF|QTY|QUANTITY|UNITS?|SERVICE|DESIGNATION|LOCATION|AREA|FLOOR|SHEET|HEADER|MIN\.?|MAX\.?)$/i.test(
     String(canon || ""),
-  );
+  )
+    // A legend's heading: 047_NC's "PIPING LEGEND", under a legend sheet's
+    // "-CONDENSING UNIT" read as a title, was a condensing unit (AS-66).
+    || /LEGEND$/i.test(String(canon || ""))
+    // A totals row: TOTAL, TOTALS, PANEL TOTALS, and a unit's subtotal OCR
+    // ran together, 082_OR's pictured "DOAS-3TOTAL:" (AS-156). No equipment
+    // mark ends in the word.
+    || /TOTALS?:?$/i.test(String(canon || ""));
 }
 
 function sheetRecords(sessionOrSheets, graph) {
@@ -2102,11 +3303,34 @@ function sheetRecords(sessionOrSheets, graph) {
   }));
 }
 
+/**
+ * The units the takeoff counts from each schedule row (AS-99): every HVAC
+ * family's reading, as compileHvacTakeoff counts it (uniqueFamily, with its
+ * gates, row readings, mark rules and dedupe across tables), keyed by the
+ * row it reads. A row naming a split system's indoor and outdoor units
+ * (12_MT's HP-1 beside FC-1A; "F-1 , CU-1") or a pair of one family's units
+ * ("B-1 & 2") names each; a unit counted from another table first is not
+ * this row's. The whole-set reconcile names a row's units by it
+ * (rowReconcileUnits).
+ * @param {{ tables?: object[] }} graph
+ * @returns {Map<object, Array<{ tag: string, family: string, marks: number }>>}
+ */
+export function takeoffUnitsByRow(graph) {
+  const byRow = new Map();
+  for (const [name, spec] of Object.entries(HVAC_FAMILY_SPECS)) {
+    uniqueFamily(graph, spec, name, (row, tag, marks) => {
+      if (!byRow.has(row)) byRow.set(row, []);
+      byRow.get(row).push({ tag, family: name, marks });
+    });
+  }
+  return byRow;
+}
+
 export function compileHvacTakeoff(sessionOrSheets, graph) {
   const sheets = sheetRecords(sessionOrSheets, graph);
   const categories = {};
   for (const [name, spec] of Object.entries(HVAC_FAMILY_SPECS)) {
-    const fam = uniqueFamily(graph, spec);
+    const fam = uniqueFamily(graph, spec, name);
     categories[name] = {
       count: fam.count,
       tolerance: 0,
@@ -2231,6 +3455,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         unit: "EA",
         sheet_id: table.sheet,
         table_title: title,
+        ...(table.read_from_picture ? { read_from_picture: true } : {}),
         bbox_px: cellBbox(row, /^MARK/i) || row.identity?.bbox || null,
         table_bbox_px: tableBbox,
         title_bbox_px: titleBbox,
@@ -2386,6 +3611,9 @@ export const CONTROL_VALVE_FAMILIES = [
   "FUME_HOOD_DAMPER",
   "LAB_AIR_VALVE",
 ];
+
+/** The valve takeoff's air-side families: they control air, never a coil's water. */
+const AIR_SIDE_VALVE_FAMILIES = new Set(["CONTROL_DAMPER", "FUME_HOOD_DAMPER", "LAB_AIR_VALVE"]);
 
 /**
  * Contractor-facing valve row fields from a schedule row's cells.
@@ -2682,7 +3910,11 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
 export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
   const valveCompile = compileControlValveTakeoff(sessionOrSheets, graph);
   const scheduledValveText = new Set();
-  for (const cat of Object.values(valveCompile.categories || {})) {
+  for (const [family, cat] of Object.entries(valveCompile.categories || {})) {
+    // A damper or air valve that serves a unit never controls its coil's
+    // water (AS-63): 016_NY's CONTROL DAMPER SCHEDULE lists CD rows serving
+    // AHU-1, whose heating coil still has no scheduled valve.
+    if (AIR_SIDE_VALVE_FAMILIES.has(family)) continue;
     for (const item of cat.items || []) {
       if (item.tag) scheduledValveText.add(String(item.tag).toUpperCase());
       const served = item.cells?.["Served equipment"]?.text || item.description || "";

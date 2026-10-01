@@ -1,0 +1,206 @@
+{
+ "generated_at": "2026-09-23T19:51:08.842Z",
+ "base_revision": "9985b36471936799d4b2dd728be3a7b3032896b1",
+ "vectorgrid_mode": "on",
+ "vectorgrid_python": "/home/user/master-plan/opentakeoff/.venv-sidecar/bin/python",
+ "table_sidecar_python": "/home/user/master-plan/opentakeoff/.venv-sidecar/bin/python",
+ "results": [
+  {
+   "set": "navfac-cherry-point-atc",
+   "ms": 157466,
+   "rows_before": 163,
+   "rows_after": 163,
+   "rows_only_before": 0,
+   "rows_only_after": 0,
+   "columns": {
+    "unitNo": {
+     "filled_before": 163,
+     "filled_after": 163,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "location": {
+     "filled_before": 159,
+     "filled_after": 159,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "system": {
+     "filled_before": 163,
+     "filled_after": 163,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "ports": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "pnClass": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "lineSizeIn": {
+     "filled_before": 163,
+     "filled_after": 163,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "designFlowRateGpm": {
+     "filled_before": 163,
+     "filled_after": 163,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "consumerDpPsi": {
+     "filled_before": 163,
+     "filled_after": 0,
+     "rows_changed": 163,
+     "transitions": {
+      "37 distinct value changes": 163
+     }
+    },
+    "branchDpPsi": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "tolerancePct": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "positioningSignal": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "operatingVoltage": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    }
+   },
+   "valve_dp_derived_after": 163,
+   "positioning_signal_after": {
+    "blank: no_signal_printed": 163
+   },
+   "blank_with_printed_text_after": {},
+   "notes_after": [
+    "System uses the \"secondary\" hydronic tier for every row (P/S is never distinguishable from a valve schedule alone) — pass hydronicTier to change it.",
+    "PN class and Branch Δp have no source in any compiled valve/equipment schedule — always blank here; only a project spec section carries them (spec ingestion, not yet built).",
+    "Consumer Δp (column H) is always blank. The template names that column CoilDP — the coil's own pressure drop, which the compiled valve rows do not carry. It stays blank until the HIT owners confirm what CoilDP expects.",
+    "Valve Δp (derived) = (GPM / Cv)^2 from the schedule's own printed flow and Cv: computed for 163 of 163 row(s) and reported only (each row's _derived.valveDpPsi) — it is the valve's drop, not the coil's, so it is never written to column H.",
+    "Tolerance is a project design parameter, never printed per-valve — blank unless toleranceOverridePct was passed (10, 20, 30, 40 or 50, the template's own list).",
+    "Positioning Signal comes only from printed signal text: 0–10 V → \"0...10 Vdc\"; floating, tri-state or 3-point → \"Floating control\". \"Modulating\" alone names no signal type (it may be 0–10 V, 2–10 V, 4–20 mA or floating) and is never defaulted. This run: 0 from a Control signal cell; 0 from an Actuator cell that names the signal type; 163 blank with no signal printed.",
+    "Operating Voltage defaults to the template's only defined value (24 VAC) on rows where a Positioning Signal was also resolved — set fillOperatingVoltageDefault:false to leave it blank instead.",
+    "Ports needs BOTH a 2-way/3-way Configuration cell and (for 2-way only) a Fail position cell to resolve Normally Open vs Closed — printed schedules without a Fail position column leave 2-way rows blank rather than guess."
+   ]
+  },
+  {
+   "set": "itd-d1-lab",
+   "ms": 64111,
+   "rows_before": 10,
+   "rows_after": 10,
+   "rows_only_before": 0,
+   "rows_only_after": 0,
+   "columns": {
+    "unitNo": {
+     "filled_before": 10,
+     "filled_after": 10,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "location": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "system": {
+     "filled_before": 9,
+     "filled_after": 9,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "ports": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "pnClass": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "lineSizeIn": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "designFlowRateGpm": {
+     "filled_before": 10,
+     "filled_after": 10,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "consumerDpPsi": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "branchDpPsi": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "tolerancePct": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "positioningSignal": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    },
+    "operatingVoltage": {
+     "filled_before": 0,
+     "filled_after": 0,
+     "rows_changed": 0,
+     "transitions": {}
+    }
+   },
+   "valve_dp_derived_after": 0,
+   "positioning_signal_after": {
+    "blank: no_signal_printed": 10
+   },
+   "blank_with_printed_text_after": {},
+   "notes_after": [
+    "System uses the \"secondary\" hydronic tier for every row (P/S is never distinguishable from a valve schedule alone) — pass hydronicTier to change it.",
+    "PN class and Branch Δp have no source in any compiled valve/equipment schedule — always blank here; only a project spec section carries them (spec ingestion, not yet built).",
+    "Consumer Δp (column H) is always blank. The template names that column CoilDP — the coil's own pressure drop, which the compiled valve rows do not carry. It stays blank until the HIT owners confirm what CoilDP expects.",
+    "Valve Δp (derived) = (GPM / Cv)^2 from the schedule's own printed flow and Cv: computed for 0 of 10 row(s) and reported only (each row's _derived.valveDpPsi) — it is the valve's drop, not the coil's, so it is never written to column H.",
+    "Tolerance is a project design parameter, never printed per-valve — blank unless toleranceOverridePct was passed (10, 20, 30, 40 or 50, the template's own list).",
+    "Positioning Signal comes only from printed signal text: 0–10 V → \"0...10 Vdc\"; floating, tri-state or 3-point → \"Floating control\". \"Modulating\" alone names no signal type (it may be 0–10 V, 2–10 V, 4–20 mA or floating) and is never defaulted. This run: 0 from a Control signal cell; 0 from an Actuator cell that names the signal type; 10 blank with no signal printed.",
+    "Operating Voltage defaults to the template's only defined value (24 VAC) on rows where a Positioning Signal was also resolved — set fillOperatingVoltageDefault:false to leave it blank instead.",
+    "Ports needs BOTH a 2-way/3-way Configuration cell and (for 2-way only) a Fail position cell to resolve Normally Open vs Closed — printed schedules without a Fail position column leave 2-way rows blank rather than guess.",
+    "21 schedule row(s) excluded as out of this template's scope: LAB_AIR_VALVE (21) — air-side family — this template is liquid valves only (GPM/psi, no CFM)."
+   ]
+  }
+ ]
+}

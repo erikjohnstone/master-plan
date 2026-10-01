@@ -97,8 +97,25 @@ def normalized_header(value: str) -> str:
     return re.sub(r"\s+", " ", value.upper().replace("_", " ")).strip()
 
 
+# Point-list interpretation rules. A saved result names the rule that made it,
+# and is checked again under that rule, never under a later one. Version 2
+# reads filled-square marks and the printed I/O direction/signal headers below;
+# version 1 results stay verifiable byte for byte.
+PointRule = Literal["point_observations_1", "point_observations_2"]
+POINT_RULE_V1: PointRule = "point_observations_1"
+POINT_RULE_V2: PointRule = "point_observations_2"
+CURRENT_POINT_RULE: PointRule = POINT_RULE_V2
+
+
 PHYSICAL_COLUMN_SCOPE = re.compile(r"\b(?:HARDWARE|HARDWIRED|HARD WIRED|PHYSICAL)\b")
 SOFTWARE_COLUMN_SCOPE = re.compile(r"\b(?:SOFTWARE|INTEGRATION|SOFT|NETWORK|BACNET|MODBUS|KNX)\b")
+# Version 2: a column printed under a direction and a signal kind, in either
+# order ("SYSTEM INPUTS ANALOG TEMPERATURE", "BINARY OUTPUTS START/STOP"), is
+# that physical channel. Values, variables and any software or network scope
+# are never physical, and two directions or two signal kinds decide nothing.
+IO_DIRECTION = re.compile(r"\b(INPUT|OUTPUT)S?\b")
+IO_SIGNAL = re.compile(r"\b(ANALOG|BINARY|DIGITAL)\b")
+NOT_PHYSICAL_IO = re.compile(r"\b(?:VALUES?|VARIABLES?|VIRTUAL|CALCULATED|PSEUDO)\b")
 POINT_TYPE_HEADERS = {"POINT TYPE", "I/O TYPE", "IO TYPE"}
 POINT_TYPE_CHANNELS = {
     "AI": "AI", "ANALOG INPUT": "AI",
@@ -117,7 +134,23 @@ POINT_MARK = re.compile(
 )
 
 
-def column_type(header: str) -> tuple[Literal["physical", "soft"], str] | None:
+def column_type(header: str, rule: PointRule = CURRENT_POINT_RULE) -> tuple[Literal["physical", "soft"], str] | None:
+    typed = column_type_v1(header)
+    if typed is not None or rule == POINT_RULE_V1:
+        return typed
+    h = normalized_header(header)
+    if SOFTWARE_COLUMN_SCOPE.search(h) or NOT_PHYSICAL_IO.search(h):
+        return None
+    directions = {match[1] for match in IO_DIRECTION.finditer(h)}
+    signals = {"ANALOG" if match[1] == "ANALOG" else "BINARY" for match in IO_SIGNAL.finditer(h)}
+    if len(directions) != 1 or len(signals) != 1:
+        return None
+    channel = {("INPUT", "ANALOG"): "AI", ("INPUT", "BINARY"): "DI",
+               ("OUTPUT", "ANALOG"): "AO", ("OUTPUT", "BINARY"): "DO"}[(directions.pop(), signals.pop())]
+    return "physical", channel
+
+
+def column_type_v1(header: str) -> tuple[Literal["physical", "soft"], str] | None:
     h = normalized_header(header)
     aliases = {"AI": "AI", "AO": "AO", "DI": "DI", "DO": "DO", "BI": "DI", "BO": "DO",
                "ANALOG INPUT": "AI", "ANALOG INPUTS": "AI", "ANALOG OUTPUT": "AO", "ANALOG OUTPUTS": "AO",
@@ -146,7 +179,8 @@ def column_type(header: str) -> tuple[Literal["physical", "soft"], str] | None:
     return None
 
 
-def indexed_columns(table: IndexedTable) -> tuple[dict[str, tuple[Literal["physical", "soft"], str]], list[Evidence], int]:
+def indexed_columns(table: IndexedTable, rule: PointRule = CURRENT_POINT_RULE,
+                    ) -> tuple[dict[str, tuple[Literal["physical", "soft"], str]], list[Evidence], int]:
     """Consume an explicit first-row subheader without modifying the graph.
 
     Recognition requires a header identity and at least two typed subheadings
@@ -154,7 +188,7 @@ def indexed_columns(table: IndexedTable) -> tuple[dict[str, tuple[Literal["physi
     a generic ANALOG/DIGITAL heading cannot establish terminal direction.
     """
     headers = list(dict.fromkeys([*table.headers, *(h for r in table.rows for h in r.cells)]))
-    typed = {h: detected for h in headers if (detected := column_type(h)) is not None}
+    typed = {h: detected for h in headers if (detected := column_type(h, rule)) is not None}
     if not table.rows:
         return typed, [], 0
     first = table.rows[0]
@@ -167,7 +201,7 @@ def indexed_columns(table: IndexedTable) -> tuple[dict[str, tuple[Literal["physi
         parent = re.sub(r"\s+\d+$", "", normalized_header(h))
         if not (PHYSICAL_COLUMN_SCOPE.search(parent) or SOFTWARE_COLUMN_SCOPE.search(parent)):
             continue
-        detected = column_type(parent + " " + cell.text)
+        detected = column_type(parent + " " + cell.text, rule)
         if detected is not None:
             children[h] = detected
             cites.append(Evidence(sheet_id=table.sheet, table_title=table.title.text if table.title else None,
@@ -177,11 +211,60 @@ def indexed_columns(table: IndexedTable) -> tuple[dict[str, tuple[Literal["physi
     return {**typed, **children}, cites, 1
 
 
-def printed_count(text: str) -> int | None:
+# Version 2: a filled square or large dot marks a cell as a filled circle does.
+# Hollow shapes stay unread: drafters use them for "optional" or "by others".
+FILLED_MARKS = ("■", "▪", "◼", "◾", "⬛", "⬤")
+
+
+def alarm_headed_columns(table: IndexedTable, typed: dict[str, tuple[Literal["physical", "soft"], str]],
+                         start: int, rule: PointRule = CURRENT_POINT_RULE) -> set[str]:
+    """Version 2: physical columns headed only ALARM under their I/O group
+    ("SYSTEM INPUTS BINARY ALARM"). Drafters mark such a column on an analog
+    sensor's row for that reading's alarm, and on a row of its own for a
+    binary alarm input; alarm_cell_roles reads which, row by row."""
+    if rule == POINT_RULE_V1:
+        return set()
+    first = table.rows[0] if start and table.rows else None
+    headed = set()
+    for h, (kind, _channel) in typed.items():
+        if kind != "physical":
+            continue
+        label = normalized_header(h + (" " + first.cells[h].text if first is not None and h in first.cells else ""))
+        own = re.split(r"\b(?:INPUTS?|OUTPUTS?|ANALOG|BINARY|DIGITAL)\b", label)[-1]
+        if re.fullmatch(r"\W*ALARMS?\W*", own):
+            headed.add(h)
+    return headed
+
+
+def alarm_cell_roles(row: IndexedRow, typed: dict[str, tuple[Literal["physical", "soft"], str]],
+                     alarm_headed: set[str], rule: PointRule = CURRENT_POINT_RULE,
+                     ) -> dict[str, Literal["flag", "ambiguous"]]:
+    """One row is one point. An alarm-headed mark beside the row's own physical
+    mark is that point's alarm, not a second input: certainly so beside an
+    analog input ("flag"), unresolved beside any other channel ("ambiguous",
+    left for review and never counted). Alone, it is the row's binary input."""
+    def marked(h: str) -> bool:
+        return h in row.cells and bool(printed_count(row.cells[h].text, rule))
+    others = [typed[h][1] for h in typed if h not in alarm_headed and typed[h][0] == "physical" and marked(h)]
+    if not others:
+        return {}
+    role: Literal["flag", "ambiguous"] = "flag" if "AI" in others else "ambiguous"
+    return {h: role for h in alarm_headed if marked(h)}
+
+
+def point_columns(table: IndexedTable, rule: PointRule = CURRENT_POINT_RULE,
+                  ) -> tuple[dict[str, tuple[Literal["physical", "soft"], str]], list[Evidence], int, set[str]]:
+    """The typed I/O columns every reader counts, with the alarm-headed ones
+    (version 2) whose marks alarm_cell_roles reads row by row."""
+    typed, cites, start = indexed_columns(table, rule)
+    return typed, cites, start, alarm_headed_columns(table, typed, start, rule)
+
+
+def printed_count(text: str, rule: PointRule = CURRENT_POINT_RULE) -> int | None:
     token = text.strip().upper()
     if token in ("", "-", "—", "–", "N/A", "NA", "NO", "N", "FALSE"):
         return 0
-    if token in ("X", "✓", "✔", "●", "•", "YES", "Y", "TRUE"):
+    if token in ("X", "✓", "✔", "●", "•", "YES", "Y", "TRUE") or (rule != POINT_RULE_V1 and token in FILLED_MARKS):
         return 1
     if re.fullmatch(r"\d+", token):
         return int(token)
@@ -233,15 +316,23 @@ def point_mark_kind(text: str) -> tuple[Literal["physical", "soft"], str] | None
 
 
 def indexed_request(payload: BlueprintInput) -> EngineRequest:
+    # Math reads a matrix's header (I/O columns, name, per-row point type) and
+    # its printed totals rows with the point lists' own reader under the
+    # current rule, so a drawing gives one listed-point truth. Imported here
+    # because the point-list module builds on this one.
+    from .point_lists import printed_total_row, read_matrix
     groups: list[EquipmentGroup] = []
     points: list[PointRequirement] = []
     diagnostics: list[Diagnostic] = []
     for table in payload.tables:
         title = table.title.text if table.title else ""
-        typed, column_evidence, data_start = indexed_columns(table)
+        reading = read_matrix(table)
+        typed, column_evidence, data_start = reading.typed, reading.header_evidence, reading.start
+        alarm_headed = set(reading.alarm_headed)
         is_bas = bool(re.search(r"\b(?:BAS|DDC|POINTS?\s+(?:LIST|SCHEDULE)|POINT\s+FUNCTION\s+SCHEDULE|BACNET\s+INTERFACE\s+SCHEDULE|I\s*/\s*O)\b", title, re.I))
-        has_point_identity = any(normalized_header(h) in {"POINT NAME", "POINT DESCRIPTION", "CONTROL POINTS", "DESCRIPTION"} for h in table.headers)
-        row_type_headers = [header for header in table.headers if point_type_header(header)]
+        has_point_identity = bool(reading.names) or any(
+            normalized_header(h) in {"POINT NAME", "POINT DESCRIPTION", "CONTROL POINTS", "DESCRIPTION"} for h in table.headers)
+        row_type_headers = reading.row_type_headers
         has_marked_rows = any(sum(point_mark_kind(cell.text) is not None for cell in row.cells.values()) == 1
                               for row in table.rows[data_start:])
         # A directional point matrix establishes scope even when its title is
@@ -272,7 +363,8 @@ def indexed_request(payload: BlueprintInput) -> EngineRequest:
         seen: set[str] = set()
         for row in table.rows[data_start:]:
             key = row.key.strip()
-            if not key or normalized_header(key) in ("TAG", "MARK", "POINT", "TOTAL", "TOTALS", "DESCRIPTION"):
+            if (not key or normalized_header(key) in ("TAG", "MARK", "POINT", "TOTAL", "TOTALS", "DESCRIPTION")
+                    or printed_total_row(reading, row)):
                 continue
             identity = row.cells.get("POINT NAME") or row.cells.get("DESCRIPTION") or row.cells.get("TAG") or row.cells.get("MARK")
             if identity is None:
@@ -326,9 +418,18 @@ def indexed_request(payload: BlueprintInput) -> EngineRequest:
                         channels_seen.add(type_channel)
                         physical[type_channel] = 1
                         evidence.append(cite)
+            alarm_roles = alarm_cell_roles(row, typed, alarm_headed)
             for typed_header, (kind, typed_channel) in typed.items():
                 typed_cell = row.cells.get(typed_header)
                 if typed_cell is None:
+                    continue
+                if typed_header in alarm_roles:
+                    if alarm_roles[typed_header] == "ambiguous":
+                        diagnostics.append(Diagnostic(code="INDEX_ALARM_CHANNEL_AMBIGUOUS", severity="warning",
+                            group_id=group_id, point_id=key,
+                            message="An alarm column is marked beside this row's own output or status; its alarm is not counted as a separate input until reviewed.",
+                            evidence=[Evidence(sheet_id=table.sheet, table_title=title, row_key=key, column=typed_header,
+                                               text=typed_cell.text, bbox_px=typed_cell.bbox, origin="blueprint_index")]))
                     continue
                 count = printed_count(typed_cell.text)
                 cite = Evidence(sheet_id=table.sheet, table_title=title, row_key=key, column=typed_header,

@@ -26,15 +26,21 @@ import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../
 import {
   reconcileRowsFromTakeoffItems,
   unscheduledTagsAndAliasCandidates,
+  unscheduledUnitCandidates,
+  planOtherCites,
   summarizeReconcile,
   reconcileScheduleFamilyWithSweeps,
   attachDiagramCorroboration,
   familyNeedleFromSpecs,
   rowIdentityTag,
+  rowReconcileUnits,
+  rowUnitMarks,
+  reconcileUnitKey,
   servedEquipmentTag,
+  isUnitFamilyTable,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
-import { HVAC_FAMILY_SPECS, isBasPointsListTable } from "../../web/src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, isBasPointsListTable, scheduleTableView, takeoffUnitsByRow } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -99,6 +105,9 @@ export interface TakeoffItem {
     attachment_distance_px?: number;
     counted_from?: "explicit_label";
   }>;
+  /** How many units the schedule row names when it names several by a range
+   * or a list (AS-98: "SF-P1-4 THRU 11"); its printed QTY counts them all. */
+  row_marks?: number;
   plan_tag_locations?: Array<{
     sheet: string;
     at: [number, number];
@@ -110,6 +119,17 @@ export interface TakeoffItem {
     score?: number;
     reason?: string;
     hold?: unknown;
+  }>;
+  /** The row's own mark drawn again on plan-like sheets and not counted
+   * (planOtherCites, AS-92): a repeat view of the counted unit, unattached
+   * tag text, a demolition plan, and the set's other drawing sheets (AS-109).
+   * Links only, never installed evidence. */
+  plan_other_locations?: Array<{
+    sheet: string;
+    at: [number, number];
+    bbox?: { x0: number; y0: number; x1: number; y1: number };
+    reason: "repeat_view" | "unattached_tag" | "demolition_view" | "reference_view";
+    counted_on?: string;
   }>;
   /** Every non-plan drawn occurrence of this tag (schematic/legend/detail/
    * etc) — a citation only, never installed evidence. Present only when
@@ -440,7 +460,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   // since sweep_schedule_row's occurrences and corroboration never read a
   // legend/detail/schedule sheet's geometry — not a copy of
   // buildLegendTakeoff's legend+plan set.
-  const planSheetKeysForScale = graph.sheets.filter((s) => s.role === "plan").map((s) => s.key);
+  const planSheetKeysForScale = [...session.planViewSheetKeys(graph)];
   await commitDetectedScale(session, planSheetKeysForScale);
 
   const index = taxonomyPrefixIndex(categories);
@@ -465,7 +485,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   // table `kind` it came from. Pulled out so the "reference"-kind pass below
   // (deferredReferenceRows) can reuse it verbatim instead of re-deriving the
   // same try/catch/classifyError bookkeeping a second time.
-  async function resolveRow(tb: ScheduleTable, row: TableRow, tag: string, cls: HvacComponent | null): Promise<void> {
+  async function resolveRow(tb: ScheduleTable, row: TableRow, tag: string, cls: HvacComponent | null, rowMarks = 1): Promise<void> {
     const started = performance.now();
     opts.onProgress?.({ phase: "reconcile_row", state: "start", tag, processed: processedRows });
     out.stats.schedule_rows_total++;
@@ -481,6 +501,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         ...(tb.drawing_group ? { drawing_group: tb.drawing_group } : {}),
       },
       schedule_row: cellsRaw,
+      ...(rowMarks > 1 ? { row_marks: rowMarks } : {}),
       quantity: 0,
       drawing_locations: [],
       siblings_excluded: [],
@@ -542,6 +563,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         item.search_scope = r.search_scope === "tagged_only" ? "tagged_only" : r.search_scope === "exhaustive" ? "exhaustive" : null;
         item.unlabeled_audit_complete = r.unlabeled_audit_complete ?? null;
         item.plan_search_complete = r.complete !== false;
+        item.plan_other_locations = planOtherCites(null, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag), session.referenceTagOccurrences(graph, item.tag));
         out.stats.refused++;
         out.items.push(item);
         processedRows++;
@@ -584,6 +606,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
           ...(candidate.reason ? { reason: candidate.reason } : {}),
           ...(candidate.hold ? { hold: candidate.hold } : {}),
         })));
+      item.plan_other_locations = planOtherCites(r, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag), session.referenceTagOccurrences(graph, item.tag));
       item.quantity_basis = quantityBasis;
       item.installed_evidence_grade = geometryLocations.length && planTagLocations.length
         ? "mixed_geometry_and_tag_text"
@@ -615,6 +638,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       }
     } catch (e: any) {
       const msg = e?.message || String(e);
+      item.plan_other_locations = planOtherCites(null, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag), session.referenceTagOccurrences(graph, item.tag));
       const installationNotes = await session.explicitInstallationNotes(tag);
       if (installationNotes.length === 1) {
         item.quantity = 1;
@@ -716,6 +740,15 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   // every one of those would just manufacture noise, not real evidence.
   const deferredReferenceRows: { tb: ScheduleTable; row: TableRow; tag: string; cls: HvacComponent }[] = [];
 
+  // The units the takeoff counts from each schedule row (AS-99), read once,
+  // and every unit a row of an installed-equipment table names: a unit the
+  // takeoff counts from another row than the one naming it keeps that row.
+  const countedByRow = takeoffUnitsByRow(graph);
+  const namedUnits = new Set<string>();
+  for (const tb of graph.tables) {
+    if (tb.kind === "reference" || !isInstalledEquipmentTakeoffTable(tb)) continue;
+    for (const row of scheduleTableView(tb).rows) for (const { tag } of rowUnitMarks(String(rowIdentityTag(row) || "").trim())) namedUnits.add(reconcileUnitKey(tag));
+  }
   for (const tb of graph.tables) {
     out.tables_seen.push({
       sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null, rows: tb.rows.length,
@@ -742,7 +775,9 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       // rollups. Keep them in reference_tables[] for disclosure; do not resolve.
       if (isReferenceCrossTable(tb.title?.text || "", tb.headers || [])
           || !hasAuthoredReconciliationStructure(tb)) continue;
-      for (const row of tb.rows) {
+      // A schedule printed on its side is read one row per unit, as the
+      // takeoff's family reading reads it (scheduleTableView, AS-65; AS-114).
+      for (const row of scheduleTableView(tb).rows) {
         const tag = String(rowIdentityTag(row) || "").trim();
         if (!tag) continue;
         const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null), tb.title?.text);
@@ -753,21 +788,33 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       continue;
     }
     if (!isInstalledEquipmentTakeoffTable(tb)) continue;
-    for (const row of tb.rows) {
-      const tag = String(rowIdentityTag(row) || "").trim();
-      if (!tag) continue;
-      const canon = tag.toUpperCase().replace(/\s+/g, "");
-      const scopeIdentity = rowScopeIdentity(tb, tag);
-      if (seenRowScopes.has(scopeIdentity)) continue;
-      seenRowScopes.add(scopeIdentity);
-      seenTags.add(canon);
+    for (const row of scheduleTableView(tb).rows) {
+      // A row naming several units by a range or a list reconciles each by
+      // its own mark (AS-98), as the family reconcile and the takeoff count
+      // them: 26_CA's "SF-P1-4 THRU 11" is eight fans, each tagged on its
+      // own, never one unit "SF-P1-4THRU11" drawn nowhere. So does every
+      // other unit the takeoff counts from the row (AS-99): a split system's
+      // indoor unit beside its outdoor unit (12_MT's FC-1A on HP-1's row),
+      // each unit of "F-1 , CU-1" or "B-1 & 2".
+      for (const { tag, marks } of rowReconcileUnits(String(rowIdentityTag(row) || "").trim(), countedByRow.get(row) ?? [], namedUnits)) {
+        const canon = tag.toUpperCase().replace(/\s+/g, "");
+        const scopeIdentity = rowScopeIdentity(tb, tag);
+        if (seenRowScopes.has(scopeIdentity)) continue;
+        seenRowScopes.add(scopeIdentity);
+        seenTags.add(canon);
 
-      const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null), tb.title?.text);
-      if (categories && (!cls || !categories.includes(cls.category))) continue; // out of this run's own declared scope — not a failure, just not requested; not counted in stats either
-      await resolveRow(tb, row, tag, cls);
+        const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null), tb.title?.text);
+        if (categories && (!cls || !categories.includes(cls.category))) continue; // out of this run's own declared scope — not a failure, just not requested; not counted in stats either
+        await resolveRow(tb, row, tag, cls, marks);
+      }
     }
   }
 
+  // A unit's own family schedule answers for it before a table that only
+  // names it (AS-114): 040_IL prints its AIR HANDLING UNIT SCHEDULE on its
+  // side, read as a reference table, and names AHU-15 first in its FAN
+  // INTERLOCK SCHEDULE. The sort is stable: graph order otherwise.
+  deferredReferenceRows.sort((a, b) => Number(isUnitFamilyTable(b.tb)) - Number(isUnitFamilyTable(a.tb)));
   for (const { tb, row, tag, cls } of deferredReferenceRows) {
     const canon = tag.toUpperCase().replace(/\s+/g, "");
     if (seenTags.has(canon)) continue; // a real "equipment"-kind schedule elsewhere already answered for this exact tag — never shadow or double-count it
@@ -959,7 +1006,7 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
   if (!graph.available) return result;
 
   const legendSheetKeys = graph.sheets.filter((s) => s.role === "legend").map((s) => s.key);
-  const planSheetKeys = graph.sheets.filter((s) => s.role === "plan").map((s) => s.key);
+  const planSheetKeys = [...session.planViewSheetKeys(graph)];
 
   // Auto-commit scale ONLY from each sheet's own detected title-block note —
   // shared with buildPlanSetTakeoff's own pass (commitDetectedScale above),
@@ -1095,6 +1142,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   takeoff_stats: PlanSetTakeoff["stats"];
   family_filter: string | null;
   unscheduled_tags: ReturnType<typeof unscheduledTagsAndAliasCandidates>["unscheduled_tags"];
+  unscheduled_units: ReturnType<typeof unscheduledTagsAndAliasCandidates>["unscheduled_tags"];
   alias_candidates: ReturnType<typeof unscheduledTagsAndAliasCandidates>["alias_candidates"];
 }> {
   const family = opts.family ? String(opts.family).trim() : null;
@@ -1108,6 +1156,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     // WP6: two review lists, whole-set regardless of family scope — neither
     // changes any quantity.
     const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
+    const unscheduled_units = unscheduledUnitCandidates(graph, unscheduled_tags);
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
     // takeoff_stats is whole-set-sweep bookkeeping (buildPlanSetTakeoff's own
     // stats) that a family-scoped reconcile never computes — declared
@@ -1124,6 +1173,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
         family_filter: family,
         takeoff_stats: emptyStats,
         unscheduled_tags,
+        unscheduled_units,
         alias_candidates,
       };
     }
@@ -1137,12 +1187,13 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     const rows = attachDiagramCorroboration(scoped.rows, graph.control_schematics || await session.controlSchematics());
     return {
       ...scoped, rows, summary: summarizeReconcile(rows), takeoff_stats: emptyStats,
-      unscheduled_tags, alias_candidates,
+      unscheduled_tags, unscheduled_units, alias_candidates,
     };
   }
 
   const graph = await session.graphForPipeline();
   const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
+  const unscheduled_units = unscheduledUnitCandidates(graph, unscheduled_tags);
   const takeoff = await buildPlanSetTakeoff(session, {
     categories: opts.categories ?? null,
     evaluationFast: opts.evaluationFast,
@@ -1166,8 +1217,10 @@ export async function reconcileSchedulePlan(session: Session, opts: {
         || (famU === "AHU" && /AIR HANDLING/i.test(title));
     });
   }
+  // A plan sheet's title, for a typical-level row's placements (AS-139).
+  const sheetTitles = new Map(graph.sheets.map((s) => [s.key, String(s.evidence?.text || "")]));
   const rows = attachDiagramCorroboration(
-    reconcileRowsFromTakeoffItems(items, takeoff.failures),
+    reconcileRowsFromTakeoffItems(items, takeoff.failures, { sheetTitleOf: (key: string) => sheetTitles.get(key) || "" }),
     await session.controlSchematics(),
   );
   return {
@@ -1176,6 +1229,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     takeoff_stats: takeoff.stats,
     family_filter: familyFilter,
     unscheduled_tags,
+    unscheduled_units,
     alias_candidates,
   };
 }

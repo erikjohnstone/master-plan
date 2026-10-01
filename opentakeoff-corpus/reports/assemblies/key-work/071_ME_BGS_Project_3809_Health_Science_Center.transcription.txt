@@ -1,0 +1,198 @@
+# 071_ME_BGS_Project_3809_Health_Science_Center — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheet M6.0 MECHANICAL SCHEDULES (PDF page 44, a 90-degree-rotated sheet
+# read in its displayed orientation) of the Southern Maine Community College Health Science
+# Center, BGS project 3809 (Lavallee Brensinger Architects; Allied Engineering): an overview of
+# the page at 40 dpi, then each table at 3x (216 dpi), in tiles with the TAG column repeated
+# where it is wide, rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on
+# 2026-09-26; second read at 4x of the first, a middle and the last row (for the transposed
+# rooftop unit schedule, every unit column). Each drawn title was found with the PDF's own
+# text layer (pymupdf search_for). The pipeline's output for this sheet was not consulted
+# while keying (AS-28, before the draw, read the column names the normalizer left unread
+# across the unseen corpus, this document's among them). The third tier keys the tables its
+# seed drew (tier3/01-split.md): one per keyed family.
+SET 071_ME_BGS_Project_3809_Health_Science_Center
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheet M6.0 (page 44) of the SMCC Health Science Center, South Portland ME (Lavallee Brensinger Architects, Allied Engineering), the tables the third tier's seed drew for its VAV, RTU and FAN strata.
+EXCLUDES Manufacturers and models, discharge orientation, weights, MCA/MFS, smoke detector responsibilities, peak outside airflow, static pressures and brake horsepower, exhaust airflow, voltage and FLA, coil air temperatures, sensible capacity, face area and velocity, refrigerant, fins and rows, heat pump input kW, air temperatures and COP, secondary heat stages, outlet sizes, NC, air pressure drop, VAV coil and room heat loads, SCR modulation, room temperature, sones, dampers, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# PACKAGED ROOF TOP UNIT SCHEDULE (page 44): a transposed schedule, one column per unit (RTU-G,
+# RTU-1 (ALT#2), RTU-2), its row labels the headers, grouped by the block names printed at the
+# left (GENERAL, ELECTRICAL, SUPPLY FAN, EXHAUST FAN, COOLING COIL, PRIMARY HEAT, SECONDARY
+# HEAT, FILTERS (SUPPLY)). The census claims 42 rows (its row labels); three units print. The
+# unit numbers are typed as printed, "(ALT#2)" and all. SERVICE names the level each unit
+# serves (GROUND LEVEL, FIRST FLOOR, SECOND FLOOR), keyed area_served as the author's reading;
+# LOCATION ROOF names a level: floor. ELECTRICAL / VOLTAGE prints "208/230-3-60": its volts
+# part is two voltages, not one value ("?"), its phase part 3. The supply fan prints "ECM,
+# DIRECT DRIVE" while ELECTRICAL prints "VFD'S FURNISHED BY: MANUFACTURER": the unit names an
+# EC fan motor and drives the maker furnishes without saying which motor they run, so vfd is
+# not one value ("?", as 14_OR's ECM pumps citing a VFD note). EXHAUST FAN / HP prints "-" for
+# RTU-G and "(2)@1.5" (two fans at 1.5 hp) for RTU-1 and RTU-2, keyed exhaust_fan_hp as each
+# fan's motor. COOLING COIL / GROSS / NET TOTAL MBH prints one number, keyed cooling_mbh; the
+# coil's FLUID is a refrigerant (R-454B): cooling_type dx, the author's reading. PRIMARY HEAT
+# TYPE HEAT PUMP keys heating_type; its TOTAL CAPACITY, MBH @ 47°F... prints the 47 F and 17 F
+# ratings ("105.7 / 60.0", as COP @ 47°F / 17°F does), keyed heating_mbh as the 47 F part.
+# SECONDARY HEAT / KW keys eh_kw. FILTERS (SUPPLY) TYPE prints MERV8; the MERV is keyed from it (filter_merv 8, as 004_MO's). The five
+# "PROVIDE THE FOLLOWING" notes (disconnect, curb, outlet, coated coils, powered exhaust) key
+# nothing.
+TABLE
+sheet: 071_ME_BGS_Project_3809_Health_Science_Center.pdf#44
+title: PACKAGED ROOF TOP UNIT SCHEDULE
+family: RTU
+render: page 44 overview at 40 dpi; crops 226,92,690,300 and 226,385,690,300 and 226,680,690,280 at 3x (the whole table and its notes); second read at 4x (crops 326,92,590,300 and 326,385,590,300 and 326,680,590,170) of all three unit columns, every cell
+rows: all 3 printed unit columns (a transposed schedule)
+col: GENERAL / UNIT NO. => tag
+col: [GENERAL / SERVICE: the level the unit serves] => area_served
+col: [GENERAL / LOCATION names a level] => floor
+col: GENERAL / MANUFACTURER => -
+col: GENERAL / MODEL => -
+col: GENERAL / TYPE => -
+col: GENERAL / DISCHARGE ORIENTATION => -
+col: GENERAL / WEIGHT (LBS) W/CURB => -
+col: ELECTRICAL / VOLTAGE => -
+col: [ELECTRICAL / VOLTAGE: volts part] => volts
+col: [ELECTRICAL / VOLTAGE: phase part] => phase
+col: ELECTRICAL / UNIT MCA / MFS => -
+col: ELECTRICAL / VFD'S FURNISHED BY => -
+col: ELECTRICAL / SD INSTALLED IN DUCT BY => -
+col: ELECTRICAL / SD WIRED TO HVAC CONTROLS BY => -
+col: ELECTRICAL / SD WIRED TO FIRE ALARM BY => -
+col: SUPPLY FAN / SUPPLY AIRFLOW, CFM => supply_cfm
+col: SUPPLY FAN / PEAK OUTSIDE AIRFLOW, cfm => -
+col: SUPPLY FAN / % OA => outdoor_air_pct
+col: SUPPLY FAN / ESP, in.wc. => -
+col: SUPPLY FAN / MAX-BHP => -
+col: SUPPLY FAN / MOTOR HP => supply_fan_hp
+col: SUPPLY FAN / TYPE => -
+col: [SUPPLY FAN / TYPE and ELECTRICAL / VFD'S FURNISHED BY: an ECM fan motor, and drives the maker furnishes] => vfd
+col: EXHAUST FAN / EXHAUST AIRFLOW, CFM => -
+col: EXHAUST FAN / ESP, in.wc. => -
+col: EXHAUST FAN / VOLTAGE => -
+col: EXHAUST FAN / HP => -
+col: [EXHAUST FAN / HP: each fan's motor ("(2)@1.5": two fans at 1.5 hp)] => exhaust_fan_hp
+col: EXHAUST FAN / FLA => -
+col: COOLING COIL / ENT. AIR, DB/WB => -
+col: COOLING COIL / LVG. AIR, DB/WB => -
+col: COOLING COIL / GROSS / NET TOTAL MBH => cooling_mbh
+col: COOLING COIL / GROSS / NET SENSIBLE MBH => -
+col: COOLING COIL / FACE AREA, SQ FT => -
+col: COOLING COIL / COIL FACE VELOCITY FPM => -
+col: COOLING COIL / FLUID => -
+col: [COOLING COIL / FLUID: a refrigerant, a DX coil] => cooling_type
+col: COOLING COIL / FINS PER INCH => -
+col: COOLING COIL / ROWS => -
+col: PRIMARY HEAT / TYPE => heating_type
+col: PRIMARY HEAT / TOTAL CAPACITY, MBH @ 47°F... => -
+col: [PRIMARY HEAT / TOTAL CAPACITY, MBH @ 47°F...: the 47 F part] => heating_mbh
+col: PRIMARY HEAT / KW => -
+col: PRIMARY HEAT / EAT °F => -
+col: PRIMARY HEAT / LAT °F => -
+col: PRIMARY HEAT / COP @ 47°F / 17°F => -
+col: SECONDARY HEAT / TYPE => -
+col: SECONDARY HEAT / KW => eh_kw
+col: SECONDARY HEAT / STAGES => -
+col: SECONDARY HEAT / EAT °F => -
+col: SECONDARY HEAT / LAT °F => -
+col: FILTERS (SUPPLY) / TYPE => -
+col: [FILTERS (SUPPLY) / TYPE: MERV] => filter_merv
+grid:
+RTU-G | GROUND LEVEL | =ROOF (ROOF) | TEMPMASTER | WP120E36R2ABBCFXB1 | PACKAGED UNIT HEAT PUMP | HORIZONTAL SUPPLY & RETURN | 1,180 | 208/230-3-60 | ?208/230 | 3 | 146.5 / 150 | MANUFACTURER | DIV 23 | DIV 23 | DIV 26 | 4,235 | 1,000 | 24% | 1.16 | 2.99 | 3 | ECM, DIRECT DRIVE | ?ECM, DIRECT DRIVE; VFD'S FURNISHED BY MANUFACTURER | 4,235 | 1 | 208-1-60 | - | - | 5.5 | 80.0/67.0 | 61.1/57.6 | 128.7 | 91.3 | - | - | R-454B | dx (R-454B) | - | - | heat_pump (HEAT PUMP) | 105.7 / 60.0 | 105.7 | 6.59 | 60 | 84.5 | 3.5 / 2.25 | ELECTRIC | 36 | 2 | 60 | 80.1 | MERV8 | 8
+RTU-1 (ALT#2) | FIRST FLOOR | =ROOF (ROOF) | TEMPMASTER | MV20E3EP2T4CBHP6F1 | PACKAGED UNIT HEAT PUMP | VERTICAL SUPPLY & RETURN | 2,834 | 208/230-3-60 | ?208/230 | 3 | 211 / 225 | MANUFACTURER | DIV 23 | DIV 23 | DIV 26 | 7,000 | 1,750 | 25% | 2 | 6.80 | 7.5 | ECM, DIRECT DRIVE | ?ECM, DIRECT DRIVE; VFD'S FURNISHED BY MANUFACTURER | (2)@3000 | 0.25 | 208-1-60 | (2)@1.5 | 1.5 | (2)@2 | 80.0/67.0 | 60.4/57.9 | 251.2 | 188.4 | - | - | R-454B | dx (R-454B) | - | - | heat_pump (HEAT PUMP) | 218.0/126.0 | 218.0 | 15.53 | 60 | 85 | 3.2/2.05 | ELECTRIC | 75 | 2 | 60 | 82.2 | MERV8 | 8
+RTU-2 | SECOND FLOOR | =ROOF (ROOF) | TEMPMASTER | MV25E3FP2T4CBH86F1 | PACKAGED UNIT HEAT PUMP | HORIZONTAL SUPPLY & RETURN | 3,039 | 208/230-3-60 | ?208/230 | 3 | 235.5 / 250 | MANUFACTURER | DIV 23 | DIV 23 | DIV 26 | 9,400 | 2,100 | 22% | 1.5 | 9.08 | 10.0 | ECM, DIRECT DRIVE | ?ECM, DIRECT DRIVE; VFD'S FURNISHED BY MANUFACTURER | (2)@3000 | 0.25 | 208-1-60 | (2)@1.5 | 1.5 | (2)@2 | 80.0/67.0 | 61.5/58.7 | 293.3 | 225.8 | - | - | R-454B | dx (R-454B) | - | - | heat_pump (HEAT PUMP) | 278.0/162.0 | 278.0 | 17.87 | 60 | 85.5 | 3.20/2.05 | ELECTRIC | 75 | 2 | 60 | 77.8 | MERV8 | 8
+END
+
+# SINGLE DUCT AIR TERMINAL SCHEDULE (page 44): twenty rows in two groups (VAV-G-1 to G-10 and
+# VAV-2-1 to 2-10), each group followed by a line printing only its CFM MAX total (4335, 9400):
+# totals, not terminals. The title names the terminal: single_duct. SERVES keys area_served,
+# INLET SIZE inlet_size_in, CFM MIN cfm_min, HEATC FM (HEAT CFM wrapped mid-word) cfm_heat,
+# CFM MAX cfm_max, KW eh_kw. Every row prints a KW and SCR modulation, and note 1 (the table's
+# notes are cited by no row, so they apply to every terminal) reads "VAV BOX MANUFACTURER: BOX,
+# AIRFLOW PICKUP, AND ELECTRIC COIL.": heat_type electric. COIL MBH prints the electric coil's
+# output (3412.0 for 1.0 kW: BTU/H under an MBH header); the family keys no electric-coil
+# capacity but eh_kw, so it is typed for audit. ROOM HEAT MBH prints one cell for VAV-2-1 and
+# 2-2 (23.2), 2-3 and 2-4 (54.6), and 2-9 and 2-10 (21.5), typed in both rows. ELEC prints
+# "208/3", keyed as its volts part and its phase part. Notes 2 and 3 (who furnishes and wires
+# what) key nothing.
+TABLE
+sheet: 071_ME_BGS_Project_3809_Health_Science_Center.pdf#44
+title: SINGLE DUCT AIR TERMINAL SCHEDULE
+family: VAV
+render: page 44 overview at 40 dpi; crop 1375,282,1220,403 at 3x in 2 tiles (TAG column repeated), notes cropped at 3x (crop 1375,680,1220,80); second read at 4x (crops 1375,349,610,16 and 1985,349,610,16; 1375,483,610,16 and 1985,483,610,16; 1375,513,610,16 and 1985,513,610,16; 1375,648,610,16 and 1985,648,610,16) of VAV-G-1, VAV-G-10, VAV-2-1 and VAV-2-10, every cell
+rows: all 20 printed rows
+col: TAG => tag
+col: SERVES => area_served
+col: Price Model No. => -
+col: INLET SIZE => inlet_size_in
+col: CFM MIN => cfm_min
+col: HEATC FM => cfm_heat
+col: CFM MAX => cfm_max
+col: OUTLET SIZE => -
+col: MAX RAD. & DISCH. NC => -
+col: A.P.D. AT MAX. COOLING => -
+col: COIL MBH => -
+col: ROOM HEAT MBH => -
+col: KW => eh_kw
+col: MODULATI NG => -
+col: ELEC => -
+col: [ELEC: volts part] => volts
+col: [ELEC: phase part] => phase
+col: ROOM TEMP => -
+col: LAT => -
+derive: terminal_type = single_duct ; header=TABLE TITLE ; note=title printed 'SINGLE DUCT AIR TERMINAL SCHEDULE'
+derive: heat_type = electric ; header=NOTE 1 ; note=note 1, a table note no row cites, so it applies to every terminal: 'VAV BOX MANUFACTURER: BOX, AIRFLOW PICKUP, AND ELECTRIC COIL.'; every row prints KW and SCR modulation
+grid:
+VAV-G-1 | DEBRIEF G05 | SDV06 | 6 | 180 | 100 | 300 | 12"x 8" | 30 | .08" | 3412.0 | 2.0 | 1.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-2 | PATIENT RM SIM LAB G01A | SDV07 | 7 | 300 | 300 | 500 | 12"x 10" | 30 | .07" | 8530.0 | 6.1 | 2.5 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-3 | DEBRIEF G03 | SDV06 | 6 | 180 | 100 | 300 | 12"x 8" | 30 | .08" | 3412.0 | 2.0 | 1.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-4 | CONTROL RM G01B | SDV05 | 5 | 160 | 160 | 260 | 12"x 8" | 30 | .08" | 5118.0 | 4.6 | 1.5 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-5 | CONTROL RM G01C | SDV05 | 5 | 160 | 160 | 260 | 12"x 8" | 30 | .08" | 5118.0 | 4.6 | 1.5 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-6 | PATIENT RM SIM LAB G01D | SDV8 | 8 | 300 | 300 | 500 | 12"x 10" | 30 | .07" | 8530.0 | 6.4 | 2.5 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-7 | CONTROL RM G01E | SDV05 | 5 | 165 | 165 | 275 | 12"x 8" | 30 | .08" | 5118.0 | 4.6 | 1.5 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-8 | PATIENT RM SIM LAB G01F | SDV8 | 8 | 360 | 360 | 600 | 12"x 10" | 30 | .07" | 8530.0 | 7.6 | 2.5 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-9 | MOULAGE PREP/STOR/STAFF G01G | SDV06 | 6 | 200 | 150 | 350 | 12"x 8" | 30 | .07" | 6824.0 | 4.0 | 2.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-G-10 | NURSING LAB G18 | SDV10 | 10 | 600 | 600 | 990 | 14"x 12" | 30 | .19" | 20472.0 | 17.3 | 6.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-1 | RADIATION TECH SIM LAB 221 | SDV09 | 9 | 525 | 100 | 855 | 14"x 12" | 30 | .17" | 17060.0 | 23.2 | 5.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-2 | RADIATION TECH SIM LAB 221 | SDV09 | 9 | 525 | 100 | 855 | 14"x 12" | 30 | .17" | 17060.0 | 23.2 | 5.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-3 | COMPUTER LAB 216 | SDV12 | 12 | 840 | 100 | 1400 | 16"X15" | 30 | .27" | 34120.0 | 54.6 | 10.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-4 | COMPUTER LAB 216 | SDV12 | 12 | 840 | 100 | 1400 | 16"X15" | 30 | .27" | 34120.0 | 54.6 | 10.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-5 | MA LAB 206 | SDV10 | 10 | 720 | 100 | 1200 | 14"x 12" | 30 | .24" | 17060.0 | 11.5 | 5.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-6 | OFFICE 212C & NURSING OFFICE 212A | SDV06 | 6 | 210 | 100 | 350 | 12"x 8" | 30 | .08" | 3412.0 | 1.8 | 1.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-7 | OFFICE 212E | SDV06 | 6 | 220 | 100 | 360 | 12"x 8" | 30 | .08" | 5118.0 | 3.4 | 1.5 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-8 | OFFICE 212E, 212F, 212G, & 212H | SDV8 | 8 | 420 | 100 | 700 | 12"x 10" | 30 | .21" | 17060.0 | 11.6 | 5.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-9 | CLASS ROOM 217 | SDV10 | 10 | 700 | 100 | 1140 | 14"x 12" | 30 | .24" | 17060.0 | 21.5 | 5.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+VAV-2-10 | CLASS ROOM 217 | SDV10 | 10 | 700 | 100 | 1140 | 14"x 12" | 30 | .24" | 17060.0 | 21.5 | 5.0 | SCR | 208/3 | 208 | 3 | 70 | 95
+END
+
+# FAN SCHEDULE (page 44): one row, EF-1. SERVES keys area_served, DRIVE drive, CFM cfm, SP
+# (IN. WC.) esp_in (as 040_IL's S.P. IN. W.C.), MOTOR WATTS motor_watts, MOTOR TYPE ecm, and
+# STARTER / CONTROLLER TYPE "ECM - FAN MFR" keys vfd no (as 040_IL's CONTROLLER/ STARTER TYPE:
+# ECM, no VFD). VOLTS / PH prints "120/1/60", keyed as its volts part and its phase part. The
+# NOTES cell is blank.
+TABLE
+sheet: 071_ME_BGS_Project_3809_Health_Science_Center.pdf#44
+title: FAN SCHEDULE
+family: FAN
+render: page 44 overview at 40 dpi; crop 1280,92,1330,133 at 3x in 2 tiles (TAG column repeated); second read at 4x (crops 1280,181,665,16 and 1945,181,665,16) of EF-1, every cell
+rows: all 1 printed row
+col: TAG => tag
+col: SERVES => area_served
+col: MFR. => -
+col: MODEL => -
+col: TYPE => -
+col: DRIVE => drive
+col: CFM => cfm
+col: SP (IN. WC.) => esp_in
+col: ELECTRICAL / MOTOR WATTS => motor_watts
+col: ELECTRICAL / MOTOR TYPE => ecm
+col: ELECTRICAL / STARTER / CONTROLLER TYPE => vfd
+col: ELECTRICAL / DISC. SWITCH FURN BY => -
+col: ELECTRICAL / VOLTS / PH => -
+col: [ELECTRICAL / VOLTS / PH: volts part] => volts
+col: [ELECTRICAL / VOLTS / PH: phase part] => phase
+col: MAX SONES => -
+col: WEIGHT (LBS.) => -
+col: DAMPER => -
+col: NOTES => -
+grid:
+EF-1 | REST ROOMS JANITORS CLOSET | GREENHECK | CSP-A00-VG | INLINE | direct (DIRECT) | 450 | 0.5" | 115 | yes (ECM) | no (ECM - FAN MFR) | FAN MFR | 120/1/60 | 120 | 1 | 1.9 | 39 | BDD |
+END
