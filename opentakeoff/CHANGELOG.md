@@ -1,5 +1,35 @@
 # Changelog
 
+- **Schedule ↔ plan reconcile: a unit's mark on a zone plan, a detail or a
+  diagram links to its row, and the review lists stop calling scheduled
+  units unscheduled.** Measured on the twelve keyed dev documents (8d46f5c →
+  this commit):
+  - Drawn tags linked to their row: 80.9% → 86.7% (983 → 1053 of 1215).
+    Units with no reconcile row 72 → 71; unit counts exact 439/462 →
+    440/463. Check side (eight documents never tuned on, aggregates only):
+    links 77.4% → 78.1%, nothing else changes but one unit more with a row.
+  - A row's mark on the set's other drawing sheets (a zone plan titled by
+    its legend, a detail, a diagram, an elevation) links to the row as a
+    reference view, never as installed quantity. Only the unit's whole,
+    legible mark is read there: never a drawing shrunk into a sheet, a
+    legend's abbreviation, a column grid's label, a title block, or a
+    one-letter mark on another trade's sheet.
+  - A tag a row names in a pair or list ("F-1 , CU-1", "FCU-17-1&2"), or a
+    mark drawn with its zero dropped or added (EF-01 for EF-1), is a
+    scheduled unit's, on the review lists and in the demolition and
+    reference views alike. Likely-units list precision 54.8% → 85.2%.
+  - The whole-set takeoff (`project_takeoff`, and the whole-set reconcile
+    built on it) reads a family schedule printed on its side one row per
+    unit, and cites it before a table that only names the unit. The
+    schedule-mark takeoff (`compile_corpus_takeoff`, assemblies) is
+    unchanged.
+  - Nothing a schedule is read from changes: table extraction and sheet
+    roles are untouched.
+  (`mcp/src/session.ts`, `takeoff.ts`, `outputs.ts`;
+  `web/src/lib/schedulePlanReconcile.mjs`; ASSEMBLIES_BUG_CATALOGUE AS-109,
+  AS-111 to AS-114, AS-119, AS-120 and AS-126;
+  `opentakeoff-corpus/reports/reconcile/`.)
+
 - **Assemblies on eight new documents: typicals tier 2 keyed, measured, and
   their general misses fixed.** Typicals and project-question keys for the
   binding tier 2's dev documents (202 units). With the model readers, units

@@ -2373,6 +2373,36 @@ test("unscheduledUnitCandidates: the likely units are a takeoff family's own mar
   assert.deepEqual(unscheduledUnitCandidates(graph).map((t: any) => t.text), ["EF-25", "EF 30", "P-9"]);
 });
 
+test("unscheduledTagsAndAliasCandidates: a unit a row lists, or its mark with its zero dropped or added, is scheduled (AS-111)", () => {
+  const row = (mark: string) => ({ key: mark, cells: { MARK: { text: mark } } });
+  const table = (title: string, marks: string[]) => ({ kind: "equipment", title: { text: title }, rows: marks.map(row) });
+  const graph = {
+    tables: [
+      table("SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE", ["F-1 , CU-1"]),
+      table("FAN COIL UNIT SCHEDULE", ["FCU-17-1&2", "FCU-20-1 THRU 3"]),
+      table("FAN SCHEDULE", ["EF-1", "EF-2", "EF-12"]),
+      table("HEAT PUMP SCHEDULE", ["HP-02"]),
+      table("AIR HANDLING UNIT SCHEDULE", ["AHU 50-2"]),
+      table("DOOR SCHEDULE", ["D03"]),
+    ],
+    tags: [
+      tagFixture({ text: "F-1", key: "F1" }), // the furnace of "F-1 , CU-1"
+      tagFixture({ text: "CU-1", key: "CU1" }), // and its condensing unit
+      tagFixture({ text: "FCU-17-2", key: "FCU172" }), // the second of "FCU-17-1&2"
+      tagFixture({ text: "FCU-20-2", key: "FCU202" }), // within a range
+      tagFixture({ text: "EF-01", key: "EF01", role: "demolition" }), // EF-1 with its zero added
+      tagFixture({ text: "HP-2", key: "HP2" }), // HP-02 with its zero dropped
+      tagFixture({ text: "EF-25", key: "EF25" }), // a fan no row lists
+      tagFixture({ text: "AHU-5-2", key: "AHU52" }), // not AHU 50-2: its number groups differ
+      tagFixture({ text: "D3", key: "D3" }), // a diffuser type, not the door D03: no separator to read a padded number by
+    ],
+  };
+  const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
+  assert.deepEqual(unscheduled_tags.map((t: any) => t.text), ["EF-25", "AHU-5-2", "D3"]);
+  assert.deepEqual(unscheduledUnitCandidates(graph).map((t: any) => t.text), ["EF-25", "AHU-5-2"]);
+  assert.ok(!alias_candidates.some((c: any) => c.drawn === "CU1"), "a unit a row lists is no spelling drift of another row's mark (DCU-1-like neighbours stay as before)");
+});
+
 test("planOtherCites: a row's mark on a repeat view, as unattached text, and on a demolition plan links to it, never counts (AS-92)", () => {
   const sweep = {
     sheets: [
@@ -2403,6 +2433,29 @@ test("planOtherCites: a row's mark on a repeat view, as unattached text, and on 
   assert.equal(row.installed_qty, 1);
   assert.deepEqual(row.plan_cites.map((c: any) => c.sheet), ["set.pdf#4"]);
   assert.deepEqual(row.plan_other_cites.map((c: any) => c.reason), ["unattached_tag", "repeat_view", "demolition_view"]);
+});
+
+test("planOtherCites: a row's mark on a zone plan titled by its legend, a detail or a diagram links to it as a reference view, never counts (AS-109)", () => {
+  // federal-mech's ground floor HVAC zone plan, titled HVAC ZONE LEGEND, labels
+  // each zone with the unit serving it; the box itself is counted on the duct plan
+  const sweep = { sheets: [{ sheet: "set.pdf#4", matches: [{ at: [10, 10] }], redundant_view: [], text_only: [] }] };
+  const reference = [{ sheet: "set.pdf#2", at: [300, 200] as [number, number], bbox: { x0: 290, y0: 196, x1: 310, y1: 204 } }];
+  assert.deepEqual(planOtherCites(sweep, { tags: [] }, "VAV-1", [], reference), [
+    { sheet: "set.pdf#2", at: [300, 200], bbox: { x0: 290, y0: 196, x1: 310, y1: 204 }, reason: "reference_view" },
+  ]);
+  // a sweep that threw still links it; with none read, nothing is added
+  assert.deepEqual(planOtherCites(null, { tags: [] }, "VAV-1", [], reference).map((c) => c.reason), ["reference_view"]);
+  assert.deepEqual(planOtherCites(sweep, { tags: [] }, "VAV-1"), []);
+  const [row] = reconcileRowsFromTakeoffItems([{
+    tag: "VAV-1", equipment_type: "VAV", category: "equipment", schedule: { sheet: "set.pdf#16", kind: "equipment", title: "VOLUME CONTROL BOX SCHEDULE" },
+    schedule_row: { MARK: "VAV-1" }, quantity: 1, drawing_locations: [{ sheet: "set.pdf#4", at: [10, 10] }], siblings_excluded: [],
+    corroborated: false, status: "resolved", source: "schedule_row", quantity_basis: "tag_attached_vector",
+    plan_other_locations: planOtherCites(sweep, { tags: [] }, "VAV-1", [], reference),
+  }] as any);
+  assert.equal(row.status, "MATCH");
+  assert.equal(row.installed_qty, 1);
+  assert.deepEqual(row.plan_cites.map((c: any) => c.sheet), ["set.pdf#4"]);
+  assert.deepEqual(row.plan_other_cites.map((c: any) => [c.sheet, c.reason]), [["set.pdf#2", "reference_view"]]);
 });
 
 // AS-101: a mark on a demolition plan read as the sweep reads it (011_IL's

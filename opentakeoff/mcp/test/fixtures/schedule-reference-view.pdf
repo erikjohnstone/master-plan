@@ -1,0 +1,90 @@
+%PDF-1.5
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 439 >>
+stream
+BT /F1 14 Tf 40 580 Td (LEVEL 1 - MECHANICAL HVAC DUCT PLAN) Tj ET
+1 w
+30 30 552 540 re S
+0.5 w
+156 400 m 168 400 l S
+168 400 m 174 410 l S
+174 410 m 168 420 l S
+168 420 m 156 420 l S
+156 420 m 150 410 l S
+150 410 m 156 400 l S
+BT /F1 10 Tf 156.2 384 Td (VAV-1) Tj ET
+356 400 m 368 400 l S
+368 400 m 374 410 l S
+374 410 m 368 420 l S
+368 420 m 356 420 l S
+356 420 m 350 410 l S
+350 410 m 356 400 l S
+BT /F1 10 Tf 356.2 384 Td (VAV-2) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 191 >>
+stream
+BT /F1 14 Tf 40 580 Td (HVAC ZONE LEGEND) Tj ET
+1 w
+30 30 552 540 re S
+0.5 w
+60 200 240 280 re S
+320 200 240 280 re S
+BT /F1 9 Tf 160 340 Td (VAV-1) Tj ET
+BT /F1 9 Tf 420 340 Td (VAV-2) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 9 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 482 >>
+stream
+BT /F1 14 Tf 40 580 Td (VAV BOX SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 200 540 Td (CFM) Tj ET
+BT /F1 9 Tf 280 540 Td (INLET) Tj ET
+BT /F1 9 Tf 360 540 Td (SERVICE) Tj ET
+BT /F1 9 Tf 50 515 Td (VAV-1) Tj ET
+BT /F1 9 Tf 200 515 Td (400) Tj ET
+BT /F1 9 Tf 280 515 Td (8) Tj ET
+BT /F1 9 Tf 360 515 Td (OFFICE) Tj ET
+BT /F1 9 Tf 50 490 Td (VAV-2) Tj ET
+BT /F1 9 Tf 200 490 Td (600) Tj ET
+BT /F1 9 Tf 280 490 Td (10) Tj ET
+BT /F1 9 Tf 360 490 Td (CONFERENCE) Tj ET
+endstream
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000000323 00000 n 
+0000000813 00000 n 
+0000000939 00000 n 
+0000001181 00000 n 
+0000001307 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+1840
+%%EOF

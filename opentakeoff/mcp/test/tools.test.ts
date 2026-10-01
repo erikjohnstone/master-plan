@@ -3670,3 +3670,119 @@ test("a mark printed with a word space and lettered in runs is its row's view, c
   assert.equal(repeats?.length, 1);
   assert.equal(repeats?.[0].kept_sheet, duct.sheet);
 });
+
+// A zone plan titled by its zone legend (AS-109): federal-mech's M2.1 "HVAC ZONE
+// LEGEND" labels each zone with the box serving it; the box counts on the duct plan.
+const REFERENCE = fileURLToPath(new URL("./fixtures/schedule-reference-view.pdf", import.meta.url));
+test("reconcile_schedule_plan links a unit's mark on a zone plan titled by its legend as a reference view, never counted (AS-109)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: REFERENCE });
+  const all = await call(client, "reconcile_schedule_plan", {});
+  assert.equal(all.isError, false);
+  assert.deepEqual(all.data.rows.map((r: any) => [r.tag, r.status, r.installed_qty, (r.plan_cites ?? []).map((c: any) => c.sheet.replace(/^.*#/, "#"))]), [
+    ["VAV-1", "MATCH", 1, ["schedule-reference-view.pdf"]],
+    ["VAV-2", "MATCH", 1, ["schedule-reference-view.pdf"]],
+  ]);
+  for (const r of all.data.rows) {
+    assert.deepEqual((r.plan_other_cites ?? []).map((c: any) => [c.sheet.replace(/^.*#/, "#"), c.reason]), [["#2", "reference_view"]], r.tag);
+  }
+});
+
+// A view reads a unit's whole, legible mark (AS-119). The fixture's duct plan
+// counts AHU-1, EF-1, B-1 and B-2; its detail and legend sheets also print what
+// is no view of them: the fan's mark a fifth of a point tall (26_CA's corridor
+// plan carries a whole floor shrunk so), a column grid's B2 (federal-mech's,
+// beside A.7 and A.9), a legend's abbreviations AHU and EF (016_NY's), and a
+// title block naming B-1 on three sheets (itd-d1-lab's "D-1 Testing
+// Laboratory"). Only the details' own AHU-1, B-1 and B-2 link.
+const VIEW_GATES = fileURLToPath(new URL("./fixtures/schedule-view-gates.pdf", import.meta.url));
+test("reconcile_schedule_plan links only a unit's whole, legible mark on a view sheet: never a shrunken drawing, a grid label, a legend's abbreviation or a title block (AS-119)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VIEW_GATES });
+  const all = await call(client, "reconcile_schedule_plan", {});
+  assert.equal(all.isError, false);
+  assert.deepEqual(all.data.rows.map((r: any) => [r.tag, r.status, r.installed_qty]), [["AHU-1", "MATCH", 1], ["EF-1", "MATCH", 1], ["B-1", "MATCH", 1], ["B-2", "MATCH", 1]]);
+  const views = Object.fromEntries(all.data.rows.map((r: any) => [r.tag, (r.plan_other_cites ?? []).map((c: any) => [c.sheet.replace(/^.*#/, "#"), c.reason])]));
+  assert.deepEqual(views, {
+    "AHU-1": [["#2", "reference_view"]],
+    "EF-1": [],
+    "B-1": [["#4", "reference_view"]],
+    "B-2": [["#4", "reference_view"]],
+  });
+});
+
+// A mark of one letter is another trade's code as often as a unit's (AS-120):
+// 004_MO's code data sheet prints the occupancy group S-2 beside its air
+// device schedule's S-2, itd-d1-lab's sequence names its project "D-1 LAB 123"
+// beside its plumbing fixture D-1. The fixture's architectural wall details
+// (A-501) print the wall type B-1; its boiler piping details (M-501) the boiler
+// B-1 the equipment schedule (M-601) lists. Only the mechanical detail links.
+const VIEW_TRADE = fileURLToPath(new URL("./fixtures/schedule-view-trade.pdf", import.meta.url));
+test("reconcile_schedule_plan links a one-letter mark as a view only on a sheet of the trade whose schedule lists it (AS-120)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VIEW_TRADE });
+  const all = await call(client, "reconcile_schedule_plan", {});
+  assert.equal(all.isError, false);
+  const views = Object.fromEntries(all.data.rows.map((r: any) => [r.tag, (r.plan_other_cites ?? []).filter((c: any) => c.reason === "reference_view").map((c: any) => c.sheet.replace(/^.*#/, "#"))]));
+  assert.deepEqual(all.data.rows.map((r: any) => [r.tag, r.status, r.installed_qty]), [["B-1", "MATCH", 1], ["B-2", "MATCH", 1]]);
+  assert.deepEqual(views, { "B-1": ["#3"], "B-2": [] });
+});
+
+// A mark a demolition plan prints with its number zero-padded (AS-111, AS-113):
+// 009_FL's electrical demolition plan tags its fan schedule's EF-1 to EF-3 as
+// EF-01 to EF-03. The row links each as a demolition view, and the review lists
+// never call the drawn mark unscheduled: both directions read one respelling.
+const PADDED = fileURLToPath(new URL("./fixtures/schedule-padded-mark.pdf", import.meta.url));
+test("reconcile_schedule_plan reads a mark a demolition plan zero-pads as its row's, in both directions (AS-111, AS-113)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PADDED });
+  const all = await call(client, "reconcile_schedule_plan", {});
+  assert.equal(all.isError, false);
+  assert.deepEqual(all.data.rows.map((r: any) => [r.tag, r.status, r.installed_qty]), [["EF-1", "MATCH", 1], ["EF-2", "MATCH", 1]]);
+  for (const r of all.data.rows) {
+    assert.deepEqual((r.plan_other_cites ?? []).map((c: any) => [c.sheet.replace(/^.*#/, "#"), c.reason]), [["#2", "demolition_view"]], r.tag);
+  }
+  const drawn = (all.data.unscheduled_tags ?? []).map((t: any) => t.text);
+  assert.ok(!drawn.some((text: string) => /^EF-0\d$/.test(text)), `the review list never calls a respelled mark unscheduled: ${drawn.join(", ")}`);
+});
+
+// A unit family's schedule printed on its side, read as a reference table, and
+// a table that only names one of its units printed before it (AS-114): 040_IL's
+// AIR HANDLING UNIT SCHEDULE lists AHU-15 in a column, and its FAN INTERLOCK
+// SCHEDULE names AHU-15 first. The whole-set reconcile reads the family's
+// schedule one row per unit and cites it. The fixture's fans are seeded so.
+test("the whole-set reconcile reads a family schedule printed on its side, and cites it before a table that only names its unit (AS-114)", async () => {
+  const session = new Session();
+  const [ct, st] = InMemoryTransport.createLinkedPair();
+  await buildServer(session).connect(st);
+  const client = new Client({ name: "test-client", version: "0.0.0" });
+  await client.connect(ct);
+  await call(client, "load_plan", { path: PADDED });
+  const graph = await session.graphForPipeline();
+  const byRows = graph.tables.findIndex((tb) => tb.title?.text === "FAN SCHEDULE");
+  assert.ok(byRows >= 0);
+  const sheet = graph.tables[byRows].sheet;
+  graph.tables.splice(byRows, 1);
+  const box = (text: string, x0: number, y0: number, x1: number, y1: number) => ({ text, bbox: [x0, y0, x1, y1] as [number, number, number, number] });
+  graph.tables.push({
+    kind: "reference", sheet, title: { text: "EXHAUST FAN INTERLOCK SCHEDULE", bbox: [50, 20, 300, 40] },
+    headers: ["SYSTEM", "INTERLOCKED WITH"],
+    rows: [{ key: "EF-1", cells: { SYSTEM: box("EF-1", 50, 50, 150, 70), "INTERLOCKED WITH": box("AHU-1", 150, 50, 300, 70) } }],
+  } as any);
+  const units = ["EF-1", "EF-2"];
+  const attrs: Array<[string, string[]]> = [["CFM", ["400", "600"]], ["HP", ["1/4", "1/3"]], ["SERVICE", ["TOILET", "JANITOR"]]];
+  graph.tables.push({
+    kind: "reference", sheet, title: { text: "FAN SCHEDULE", bbox: [100, 60, 400, 80] },
+    headers: ["MARK", ...units],
+    rows: attrs.map(([label, values], i) => ({
+      key: label,
+      cells: Object.fromEntries([["MARK", box(label, 100, 100 + 30 * i, 300, 130 + 30 * i)], ...values.map((v, j) => [units[j], box(v, 300 + 100 * j, 100 + 30 * i, 400 + 100 * j, 130 + 30 * i)])]),
+    })),
+  } as any);
+  const all = await call(client, "reconcile_schedule_plan", {});
+  assert.equal(all.isError, false);
+  assert.deepEqual(all.data.rows.map((r: any) => [r.tag, r.schedule_cite?.title, r.status, r.installed_qty]), [
+    ["EF-1", "FAN SCHEDULE", "MATCH", 1],
+    ["EF-2", "FAN SCHEDULE", "MATCH", 1],
+  ]);
+});

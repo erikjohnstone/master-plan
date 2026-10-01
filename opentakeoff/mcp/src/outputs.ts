@@ -481,9 +481,9 @@ export const reconcileSchedulePlanOutput = {
       sheet: z.string(),
       at: z.array(z.number()).optional(),
       bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
-      reason: z.enum(["repeat_view", "unattached_tag", "demolition_view"]),
+      reason: z.enum(["repeat_view", "unattached_tag", "demolition_view", "reference_view"]),
       counted_on: z.string().optional(),
-    })).optional().describe("AS-92: every other drawn occurrence of this row's own mark on a plan-like sheet that the row does not count — the same unit on another plan view (repeat_view; counted_on names the sheet that counts it), the mark's text with no attached symbol (unattached_tag), the mark on a demolition plan (demolition_view). Links from a drawn tag to its row, never installed quantity"),
+    })).optional().describe("AS-92: every other drawn occurrence of this row's own mark on a plan-like sheet that the row does not count — the same unit on another plan view (repeat_view; counted_on names the sheet that counts it), the mark's text with no attached symbol (unattached_tag), the mark on a demolition plan (demolition_view), the mark on a zone plan titled by its legend, a detail, a diagram or an elevation (reference_view, AS-109). Links from a drawn tag to its row, never installed quantity"),
     reference_tag_cites: z.array(z.object({
       sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }), text: z.string(),
     })).optional().describe("Every non-plan drawn occurrence of this row's mark (schematic/legend/detail/etc) — a citation, never installed evidence; present only when sweep_schedule_row returned status: reference_only"),

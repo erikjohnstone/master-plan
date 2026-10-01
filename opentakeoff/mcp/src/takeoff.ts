@@ -37,9 +37,10 @@ import {
   rowUnitMarks,
   reconcileUnitKey,
   servedEquipmentTag,
+  isUnitFamilyTable,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
-import { HVAC_FAMILY_SPECS, isBasPointsListTable, takeoffUnitsByRow } from "../../web/src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, isBasPointsListTable, scheduleTableView, takeoffUnitsByRow } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -121,12 +122,13 @@ export interface TakeoffItem {
   }>;
   /** The row's own mark drawn again on plan-like sheets and not counted
    * (planOtherCites, AS-92): a repeat view of the counted unit, unattached
-   * tag text, a demolition plan. Links only, never installed evidence. */
+   * tag text, a demolition plan, and the set's other drawing sheets (AS-109).
+   * Links only, never installed evidence. */
   plan_other_locations?: Array<{
     sheet: string;
     at: [number, number];
     bbox?: { x0: number; y0: number; x1: number; y1: number };
-    reason: "repeat_view" | "unattached_tag" | "demolition_view";
+    reason: "repeat_view" | "unattached_tag" | "demolition_view" | "reference_view";
     counted_on?: string;
   }>;
   /** Every non-plan drawn occurrence of this tag (schematic/legend/detail/
@@ -561,7 +563,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         item.search_scope = r.search_scope === "tagged_only" ? "tagged_only" : r.search_scope === "exhaustive" ? "exhaustive" : null;
         item.unlabeled_audit_complete = r.unlabeled_audit_complete ?? null;
         item.plan_search_complete = r.complete !== false;
-        item.plan_other_locations = planOtherCites(null, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag));
+        item.plan_other_locations = planOtherCites(null, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag), session.referenceTagOccurrences(graph, item.tag));
         out.stats.refused++;
         out.items.push(item);
         processedRows++;
@@ -604,7 +606,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
           ...(candidate.reason ? { reason: candidate.reason } : {}),
           ...(candidate.hold ? { hold: candidate.hold } : {}),
         })));
-      item.plan_other_locations = planOtherCites(r, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag));
+      item.plan_other_locations = planOtherCites(r, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag), session.referenceTagOccurrences(graph, item.tag));
       item.quantity_basis = quantityBasis;
       item.installed_evidence_grade = geometryLocations.length && planTagLocations.length
         ? "mixed_geometry_and_tag_text"
@@ -636,7 +638,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       }
     } catch (e: any) {
       const msg = e?.message || String(e);
-      item.plan_other_locations = planOtherCites(null, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag));
+      item.plan_other_locations = planOtherCites(null, graph, item.tag, session.demolitionTagOccurrences(graph, item.tag), session.referenceTagOccurrences(graph, item.tag));
       const installationNotes = await session.explicitInstallationNotes(tag);
       if (installationNotes.length === 1) {
         item.quantity = 1;
@@ -745,7 +747,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
   const namedUnits = new Set<string>();
   for (const tb of graph.tables) {
     if (tb.kind === "reference" || !isInstalledEquipmentTakeoffTable(tb)) continue;
-    for (const row of tb.rows) for (const { tag } of rowUnitMarks(String(rowIdentityTag(row) || "").trim())) namedUnits.add(reconcileUnitKey(tag));
+    for (const row of scheduleTableView(tb).rows) for (const { tag } of rowUnitMarks(String(rowIdentityTag(row) || "").trim())) namedUnits.add(reconcileUnitKey(tag));
   }
   for (const tb of graph.tables) {
     out.tables_seen.push({
@@ -773,7 +775,9 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       // rollups. Keep them in reference_tables[] for disclosure; do not resolve.
       if (isReferenceCrossTable(tb.title?.text || "", tb.headers || [])
           || !hasAuthoredReconciliationStructure(tb)) continue;
-      for (const row of tb.rows) {
+      // A schedule printed on its side is read one row per unit, as the
+      // takeoff's family reading reads it (scheduleTableView, AS-65; AS-114).
+      for (const row of scheduleTableView(tb).rows) {
         const tag = String(rowIdentityTag(row) || "").trim();
         if (!tag) continue;
         const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null), tb.title?.text);
@@ -784,7 +788,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       continue;
     }
     if (!isInstalledEquipmentTakeoffTable(tb)) continue;
-    for (const row of tb.rows) {
+    for (const row of scheduleTableView(tb).rows) {
       // A row naming several units by a range or a list reconciles each by
       // its own mark (AS-98), as the family reconcile and the takeoff count
       // them: 26_CA's "SF-P1-4 THRU 11" is eight fans, each tagged on its
@@ -806,6 +810,11 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
     }
   }
 
+  // A unit's own family schedule answers for it before a table that only
+  // names it (AS-114): 040_IL prints its AIR HANDLING UNIT SCHEDULE on its
+  // side, read as a reference table, and names AHU-15 first in its FAN
+  // INTERLOCK SCHEDULE. The sort is stable: graph order otherwise.
+  deferredReferenceRows.sort((a, b) => Number(isUnitFamilyTable(b.tb)) - Number(isUnitFamilyTable(a.tb)));
   for (const { tb, row, tag, cls } of deferredReferenceRows) {
     const canon = tag.toUpperCase().replace(/\s+/g, "");
     if (seenTags.has(canon)) continue; // a real "equipment"-kind schedule elsewhere already answered for this exact tag — never shadow or double-count it

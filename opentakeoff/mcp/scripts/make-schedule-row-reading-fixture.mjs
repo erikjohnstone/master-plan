@@ -67,6 +67,10 @@ const OUT_LANDMARKS = join(FIXTURES, "schedule-bare-landmarks.pdf");
 const OUT_PLANVIEW = join(FIXTURES, "schedule-plan-view.pdf");
 const OUT_RANGE = join(FIXTURES, "schedule-range-row.pdf");
 const OUT_SPACED = join(FIXTURES, "schedule-spaced-mark.pdf");
+const OUT_REFERENCE = join(FIXTURES, "schedule-reference-view.pdf");
+const OUT_PADDED = join(FIXTURES, "schedule-padded-mark.pdf");
+const OUT_VIEW_GATES = join(FIXTURES, "schedule-view-gates.pdf");
+const OUT_VIEW_TRADE = join(FIXTURES, "schedule-view-trade.pdf");
 
 const fmt = (v) => (Math.round(v * 100) / 100).toString();
 function place(segs, [px, py]) {
@@ -343,3 +347,150 @@ const SPACED_PAGES = [
   ],
 ];
 writePdf(OUT_SPACED, SPACED_PAGES, { secondFont: true });
+
+// A zone plan titled by its zone legend (AS-109): federal-mech's M2.1 "HVAC
+// ZONE LEGEND" labels each zone with the terminal box serving it, the boxes
+// themselves drawn on the duct plan. The labels are views of the units, never
+// where they are counted.
+const REFERENCE_PAGES = [
+  [
+    title("LEVEL 1 - MECHANICAL HVAC DUCT PLAN"),
+    "1 w",
+    "30 30 552 540 re S",
+    "0.5 w",
+    ...place(HEXAGON, [150, 400]), tagText("VAV-1", [162, 400]),
+    ...place(HEXAGON, [350, 400]), tagText("VAV-2", [362, 400]),
+  ],
+  [
+    title("HVAC ZONE LEGEND"),
+    "1 w",
+    "30 30 552 540 re S",
+    "0.5 w",
+    "60 200 240 280 re S", "320 200 240 280 re S",
+    cell("VAV-1", 160, 340), cell("VAV-2", 420, 340),
+  ],
+  [
+    title("VAV BOX SCHEDULE"),
+    cell("MARK", 50, 540), cell("CFM", 200, 540), cell("INLET", 280, 540), cell("SERVICE", 360, 540),
+    cell("VAV-1", 50, 515), cell("400", 200, 515), cell("8", 280, 515), cell("OFFICE", 360, 515),
+    cell("VAV-2", 50, 490), cell("600", 200, 490), cell("10", 280, 490), cell("CONFERENCE", 360, 490),
+  ],
+];
+writePdf(OUT_REFERENCE, REFERENCE_PAGES);
+
+// A mark a demolition plan prints with its number zero-padded (AS-111,
+// AS-113): 009_FL's electrical demolition plan tags the exhaust fans its fan
+// schedule marks EF-1 to EF-3 as EF-01 to EF-03. The fans count on the duct
+// plan; the demolition plan's marks are views of them.
+const fanPlan = (planTitle, marks) => [
+  title(planTitle),
+  "1 w",
+  "30 30 552 540 re S",
+  "0.5 w",
+  ...place(HEXAGON, [150, 400]), tagText(marks[0], [162, 400]),
+  ...place(HEXAGON, [350, 400]), tagText(marks[1], [362, 400]),
+];
+const PADDED_PAGES = [
+  fanPlan("LEVEL 1 - MECHANICAL HVAC DUCT PLAN", ["EF-1", "EF-2"]),
+  fanPlan("LEVEL 1 - MECHANICAL DEMOLITION PLAN", ["EF-01", "EF-02"]),
+  [
+    title("FAN SCHEDULE"),
+    cell("MARK", 50, 540), cell("CFM", 200, 540), cell("HP", 280, 540), cell("SERVICE", 360, 540),
+    cell("EF-1", 50, 515), cell("400", 200, 515), cell("1/4", 280, 515), cell("TOILET", 360, 515),
+    cell("EF-2", 50, 490), cell("600", 200, 490), cell("1/3", 280, 490), cell("JANITOR", 360, 490),
+  ],
+];
+writePdf(OUT_PADDED, PADDED_PAGES);
+
+// A view reads a unit's whole mark (AS-119). The duct plan counts AHU-1, EF-1,
+// B-1 and B-2; the detail and legend sheets print what is no view of them: the
+// fan's mark a fifth of a point tall (a drawing shrunk into the sheet, 26_CA's
+// corridor plan), a column grid's B2 (federal-mech's, beside A.7 and A.9), a
+// legend's abbreviation AHU (016_NY's), and a title block naming B-1 on every
+// sheet (itd-d1-lab's "D-1 Testing Laboratory"). The details' own AHU-1, B-1
+// and B-2 are views.
+const titleBlock = cell("B-1 ANNEX", 470, 40);
+const VIEW_GATE_PAGES = [
+  [
+    title("LEVEL 1 - MECHANICAL HVAC DUCT PLAN"),
+    "1 w",
+    "30 30 552 540 re S",
+    "0.5 w",
+    ...place(HEXAGON, [120, 400]), tagText("AHU-1", [132, 400]),
+    ...place(HEXAGON, [240, 400]), tagText("EF-1", [252, 400]),
+    ...place(HEXAGON, [360, 400]), tagText("B-1", [372, 400]),
+    ...place(HEXAGON, [480, 400]), tagText("B-2", [492, 400]),
+  ],
+  [
+    title("AIR HANDLING UNIT DETAILS"),
+    "1 w",
+    "30 30 552 540 re S",
+    cell("AHU-1", 150, 400),
+    "BT /F1 0.2 Tf 300 300 Td (EF-1) Tj ET",
+    cell("A.9", 40, 360), cell("B2", 40, 300), cell("C.1", 40, 240),
+    titleBlock,
+  ],
+  [
+    title("MECHANICAL LEGEND"),
+    cell("AHU", 60, 400), cell("AIR HANDLING UNIT", 120, 400),
+    cell("EF", 60, 380), cell("EXHAUST FAN", 120, 380),
+    titleBlock,
+  ],
+  [
+    title("BOILER PIPING DETAILS"),
+    "1 w",
+    "30 30 552 540 re S",
+    cell("B-1", 200, 250), cell("B-2", 320, 250),
+    titleBlock,
+  ],
+  [
+    title("MECHANICAL EQUIPMENT SCHEDULE"),
+    cell("MARK", 50, 540), cell("CFM", 200, 540), cell("MBH", 280, 540), cell("SERVICE", 360, 540),
+    cell("AHU-1", 50, 515), cell("2000", 200, 515), cell("-", 280, 515), cell("OFFICES", 360, 515),
+    cell("EF-1", 50, 490), cell("400", 200, 490), cell("-", 280, 490), cell("TOILET", 360, 490),
+    cell("B-1", 50, 465), cell("-", 200, 465), cell("500", 280, 465), cell("HEATING", 360, 465),
+    cell("B-2", 50, 440), cell("-", 200, 440), cell("500", 280, 440), cell("HEATING", 360, 440),
+  ],
+];
+writePdf(OUT_VIEW_GATES, VIEW_GATE_PAGES);
+
+// A mark of one letter is another trade's code as often as a unit's (AS-120).
+// The equipment schedule (M-601) lists the boilers B-1 and B-2; the boiler
+// piping details (M-501) print B-1; the architectural wall details (A-501)
+// print the wall type B-1, as 004_MO's code data sheet prints the occupancy
+// group S-2 beside its air device S-2. Only the mechanical detail's B-1 is a
+// view of the boiler.
+const sheetNo = (no) => `BT /F1 18 Tf 520 40 Td (${no}) Tj ET`;
+const VIEW_TRADE_PAGES = [
+  [
+    title("LEVEL 1 - MECHANICAL HVAC DUCT PLAN"),
+    "1 w",
+    "30 30 552 540 re S",
+    "0.5 w",
+    ...place(HEXAGON, [120, 400]), tagText("B-1", [132, 400]),
+    ...place(HEXAGON, [300, 400]), tagText("B-2", [312, 400]),
+    sheetNo("M-101"),
+  ],
+  [
+    title("ARCHITECTURAL WALL DETAILS"),
+    "1 w",
+    "30 30 552 540 re S",
+    cell("WALL TYPE", 150, 420), cell("B-1", 150, 400), cell("5/8 IN GYPSUM BOARD EACH SIDE", 200, 400),
+    sheetNo("A-501"),
+  ],
+  [
+    title("BOILER PIPING DETAILS"),
+    "1 w",
+    "30 30 552 540 re S",
+    cell("B-1", 200, 250),
+    sheetNo("M-501"),
+  ],
+  [
+    title("MECHANICAL EQUIPMENT SCHEDULE"),
+    cell("MARK", 50, 540), cell("CFM", 200, 540), cell("MBH", 280, 540), cell("SERVICE", 360, 540),
+    cell("B-1", 50, 515), cell("-", 200, 515), cell("500", 280, 515), cell("HEATING", 360, 515),
+    cell("B-2", 50, 490), cell("-", 200, 490), cell("500", 280, 490), cell("HEATING", 360, 490),
+    sheetNo("M-601"),
+  ],
+];
+writePdf(OUT_VIEW_TRADE, VIEW_TRADE_PAGES);

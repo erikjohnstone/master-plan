@@ -381,6 +381,60 @@ import { conditionTotals, grandTotals, sheetTotals, reportJson, linearRunRows, f
 import { hasRollSetup, mintRollSetup, computeRollTakeoff, rollReportRows, seamLfByShape } from "../../web/src/lib/rollTakeoff.js";
 import { gridPxPerFoot, drawGrid, drawShapes, drawMarks, type Ctx2D, type ToCanvas, type ViewMarks } from "./view.ts";
 
+/** Drawing sheets that show a unit without being where it is counted: a zone
+ * plan titled by its legend, a detail, a diagram, an elevation (AS-109). */
+const REFERENCE_VIEW_ROLES: ReadonlySet<string> = new Set(["legend", "detail", "schematic", "elevation"]);
+
+/** The view readers' floor for type a sheet shows (AS-119): under three
+ * quarters of a point, its glyphs or its run per character, it is a drawing
+ * shrunk into a sheet (26_CA's corridor plan carries a whole floor's tags a
+ * fifth of a point tall), never a view anyone reads. */
+const VIEW_MARK_MIN_PX = 0.75 * RENDER_SCALE;
+
+/** The same mark within two points of the same place on three or more view
+ * sheets is the sheets' own furniture (AS-119): a title block's project name
+ * (itd-d1-lab's "D-1 Testing Laboratory"), never a view of the unit. */
+const VIEW_MARK_FURNITURE_PX = 2 * RENDER_SCALE;
+const VIEW_MARK_FURNITURE_SHEETS = 3;
+
+/** The text spans a view reader's occurrence covers. */
+function spansAt(spans: readonly TextSpan[], bbox: readonly [number, number, number, number]): TextSpan[] {
+  return spans.filter((sp) => sp.x1 >= bbox[0] - 1 && sp.x0 <= bbox[2] + 1 && sp.y1 >= bbox[1] - 1 && sp.y0 <= bbox[3] + 1);
+}
+
+/** Whether a view reader's occurrence of a mark of `chars` characters is
+ * type anyone reads (AS-119, VIEW_MARK_MIN_PX): its run, and the glyphs of the
+ * spans it covers (their median, so one full-size neighbour cannot vouch for
+ * fragments read out of a shrunken drawing). */
+function viewLegible(spans: readonly TextSpan[], bbox: readonly [number, number, number, number], chars: number): boolean {
+  if (Math.max(bbox[2] - bbox[0], bbox[3] - bbox[1]) < chars * VIEW_MARK_MIN_PX) return false;
+  const glyphs = spansAt(spans, bbox)
+    .map((sp) => (sp.rot ? Math.min(sp.x1 - sp.x0, sp.y1 - sp.y0) : sp.y1 - sp.y0))
+    .sort((a, b) => a - b);
+  return !glyphs.length || glyphs[glyphs.length >> 1] >= VIEW_MARK_MIN_PX;
+}
+
+/** Whether the text a sheet prints at a view reader's occurrence spells a
+ * one-letter mark as its row does (AS-119): a separator where the row prints
+ * one, none where it runs the letter into the number. A letter and a number
+ * are many things on a drawing. Printed "B2" beside a row's B-2 it is a
+ * column grid's label (federal-mech's B2 beside A.7 and A.9) or a keynote
+ * (24_IA's demolition plan's D1); read out of "S1-1" it is a diffuser's
+ * mark; printed "B-1" beside a luminaire schedule's B1 it is a casework
+ * elevation's base cabinet (12_MT's "B-1 (BASE UNIT DOOR/DRAWER COMBO)").
+ * A letter run into one digit (C1, D1) is a two-character code however it
+ * is printed: 12_MT's elevation prints C1 among its finish codes F1, S0 and
+ * C0. Two or more letters are the unit's mark however the sheet spaces them
+ * (AHU1, AS-82). */
+function viewPrintsMarkAsRow(spans: readonly TextSpan[], bbox: readonly [number, number, number, number], mark: string): boolean {
+  const up = mark.toUpperCase().trim();
+  if (!/^[A-Z](?![A-Z])/.test(up)) return true;
+  if (/^[A-Z]\d$/.test(up)) return false;
+  const pattern = (up.match(/[A-Z]+|[0-9]+|[^A-Z0-9]+/g) ?? []).map((part) => (/^[^A-Z0-9]+$/.test(part) ? "[^A-Z0-9]+" : part)).join("");
+  const printed = spansAt(spans, bbox).map((sp) => sp.str.toUpperCase()).join(" ");
+  return new RegExp(`(?<![A-Z0-9])${pattern}(?![0-9])`).test(printed);
+}
+
 // Copied from the canvas (web/src/pages/TakeoffCanvas.jsx) so conditions and
 // snap behavior minted here are identical to the browser's. PALETTE/HATCH_IDS
 // are user data — never re-theme them.
@@ -4186,23 +4240,101 @@ export class Session {
    * number, a word (LIGHTING, RETURN) or a cleanout's CO names no unit
    * drawn for demolition. */
   demolitionTagOccurrences(graph: SheetGraph, tag: string): Array<{ sheet: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }> {
+    return this.viewTagOccurrences(graph, tag).filter((o) => o.role === "demolition").map(({ role: _role, ...o }) => o);
+  }
+
+  /** A unit's mark drawn on the set's other drawing sheets (AS-109): a zone
+   * plan titled by its zone legend (federal-mech's M2.1 "HVAC ZONE LEGEND"
+   * labels each zone with the unit serving it), a detail, a diagram, an
+   * elevation. Read as the sweep reads a plan's tags, outside every schedule
+   * and sheet number, and linked to its row as a reference view
+   * (planOtherCites), never as installed quantity. */
+  referenceTagOccurrences(graph: SheetGraph, tag: string): Array<{ sheet: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }> {
+    return this.viewTagOccurrences(graph, tag).filter((o) => REFERENCE_VIEW_ROLES.has(o.role)).map(({ role: _role, ...o }) => o);
+  }
+
+  private viewOccurrenceCache = new WeakMap<SheetGraph, { stamp: string; byTag: Map<string, Array<{ sheet: string; role: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }>> }>();
+
+  /** Both view readers' occurrences of a mark, read once over every view
+   * sheet (demolition and reference roles). A view reads the unit's whole
+   * mark (AS-119): never its family's bare letters, the sweep's shorthand
+   * for a unit symbol drawn where it stands (a legend's AHU is its
+   * abbreviation list, a demolition plan's RG an existing grille, a detail's
+   * ET any expansion tank); never a mark too small to read
+   * (viewLegible), nor one letter run into its number
+   * (viewPrintsMarkAsRow), nor the sheets' furniture (VIEW_MARK_FURNITURE_PX). */
+  private viewTagOccurrences(graph: SheetGraph, tag: string): Array<{ sheet: string; role: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }> {
     const key = String(tag || "").trim();
-    if (!/[A-Z]/i.test(key) || !/\d/.test(key)) return [];
-    const demolition = new Set(graph.sheets.filter((g) => g.role === "demolition").map((g) => g.key));
-    if (!demolition.size) return [];
+    // A mark prints a letter and a digit; one carrying an inch or foot mark
+    // is a dimension read into a mark column (26_CA's 18" CW/R), no unit.
+    if (!/[A-Z]/i.test(key) || !/\d/.test(key) || /["']/.test(key)) return [];
+    // Read once per graph and mark, again when the graph has changed in place
+    // since (a sheet given another role, its tables read again).
+    const stamp = `${graph.tables.length}|${graph.sheets.filter((g) => g.role === "demolition" || REFERENCE_VIEW_ROLES.has(g.role)).map((g) => `${g.key}:${g.role}`).join(",")}`;
+    let entry = this.viewOccurrenceCache.get(graph);
+    if (!entry || entry.stamp !== stamp) {
+      entry = { stamp, byTag: new Map() };
+      this.viewOccurrenceCache.set(graph, entry);
+    }
+    const byTag = entry.byTag;
+    const cached = byTag.get(key);
+    if (cached) return cached;
+    const roleOf = new Map(graph.sheets.filter((g) => g.role === "demolition" || REFERENCE_VIEW_ROLES.has(g.role)).map((g) => [g.key, g.role] as const));
+    const out: Array<{ sheet: string; role: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }> = [];
+    if (!roleOf.size) {
+      byTag.set(key, out);
+      return out;
+    }
     const marks = scheduleMarkVocabulary(graph);
-    const setVocab = { marks, id: this.vocabularyId(marks) };
-    const callouts = (graph.tags ?? []).filter((t) => t.sheet_callout && demolition.has(t.sheet));
-    const out: Array<{ sheet: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }> = [];
+    const callouts = (graph.tags ?? []).filter((t) => t.sheet_callout && roleOf.has(t.sheet));
+    // A mark of one letter (S-2, D-1, B1) is another trade's code as often as
+    // a unit's: it is read as a view only on a sheet of a trade whose schedule
+    // names it, when both sheets print their number (AS-120). 004_MO's code
+    // data sheet prints the occupancy group S-2 beside its air device S-2;
+    // itd-d1-lab's sequence names its project "D-1 LAB 123" beside its
+    // plumbing fixture D-1.
+    const canonMark = (s: string) => s.trim().toUpperCase().replace(/\s+/g, "");
+    const trades = /^[A-Z](?![A-Z])/.test(key.toUpperCase())
+      ? new Set(graph.tables.filter((tb) => tb.rows.some((row) => canonMark(String(rowIdentityTag(row) || row.key || "")) === canonMark(key)))
+        .map((tb) => disciplineOfSheetNumber(this.sheets.get(tb.sheet)?.sheetNumber)?.[0]).filter((d): d is string => Boolean(d)))
+      : new Set<string>();
+    // The mark with the zero its number is padded with dropped or added, on a
+    // sheet that prints it no other way (009_FL's electrical demolition plan
+    // tags EF-1 to EF-3 as EF-01 to EF-03): where the mark is a unit a
+    // family's schedule lists (scheduleRowsReadingMark; never a sheet index's
+    // entry, 004_MO's P-001), prints its letters, a separator and its number,
+    // and no row of the set is named so, as the sweep reads a plan's mark
+    // (AS-97) and the review lists a drawn one (AS-111; AS-113).
+    const named = new Set(graph.tables.flatMap((tb) => tb.rows.map((row) => String(rowIdentityTag(row) || row.key || "").trim().toUpperCase().replace(/\s+/g, ""))));
+    const respellings = /^[A-Z]+[\s-]+\d/i.test(key) && scheduleRowsReadingMark(graph, key).length
+      ? markZeroRespellings(key).filter((variant) => !named.has(variant.trim().toUpperCase().replace(/\s+/g, "")))
+      : [];
     for (const sh of this.sheetList()) {
-      if (!demolition.has(sh.key)) continue;
+      const role = roleOf.get(sh.key);
+      if (!role) continue;
+      const trade = trades.size ? disciplineOfSheetNumber(sh.sheetNumber)?.[0] : undefined;
+      if (trade && !trades.has(trade)) continue;
       const regions = [...this.scheduleRegionsOn(graph, sh.key), ...callouts.filter((t) => t.sheet === sh.key).map((t) => t.bbox)];
-      for (const o of this.tagOccurrencesOnSheet(sh, key, false, marks, setVocab)) {
+      let printed = key;
+      let found = this.tagOccurrencesOnSheet(sh, key, false, marks, "never");
+      for (const variant of respellings) {
+        if (found.length) break;
+        printed = variant;
+        found = this.tagOccurrencesOnSheet(sh, variant, false, marks, "never");
+      }
+      const chars = printed.replace(/[^A-Z0-9]/gi, "").length;
+      for (const o of found) {
         if (regions.some((r) => o.cx >= r[0] && o.cx <= r[2] && o.cy >= r[1] && o.cy <= r[3])) continue;
-        out.push({ sheet: sh.key, at: [round1(o.cx), round1(o.cy)], bbox: Session.wireBox(o.bbox) });
+        if (!viewLegible(sh.spans ?? [], o.bbox, chars)) continue;
+        if (!viewPrintsMarkAsRow(sh.spans ?? [], o.bbox, printed)) continue;
+        out.push({ sheet: sh.key, role, at: [round1(o.cx), round1(o.cy)], bbox: Session.wireBox(o.bbox) });
       }
     }
-    return out;
+    const kept = out.filter((o) => new Set(out
+      .filter((p) => Math.abs(p.at[0] - o.at[0]) <= VIEW_MARK_FURNITURE_PX && Math.abs(p.at[1] - o.at[1]) <= VIEW_MARK_FURNITURE_PX)
+      .map((p) => p.sheet)).size < VIEW_MARK_FURNITURE_SHEETS);
+    byTag.set(key, kept);
+    return kept;
   }
 
   /** The regions of the schedules on a sheet, continuation parts included: a

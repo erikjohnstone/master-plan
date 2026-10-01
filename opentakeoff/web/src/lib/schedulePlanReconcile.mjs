@@ -524,6 +524,18 @@ export function markZeroRespellings(mark) {
 }
 
 /**
+ * A mark's letter and number groups, joined by hyphens (AS-111): the form two
+ * spellings of one mark share where only their separators differ (EF-1, EF 1
+ * and EF1 read EF-1), never where a number group does, as the run-together
+ * markKey would (AHU-5-02 reads AHU-5-02, AHU 50-2 AHU-50-2).
+ * @param {string} mark
+ * @returns {string}
+ */
+function markGroups(mark) {
+  return (plainMark(String(mark || "")).toUpperCase().match(/[A-Z]+|\d+/g) || []).join("-");
+}
+
+/**
  * The unit a row's own device SERVES (or is served BY), when the schedule
  * names it in a separate column — a valve row's own identity is the VALVE
  * MARK, but UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED name the
@@ -590,7 +602,17 @@ function letterEditDistanceOne(a, b) {
  * callouts excluded) whose key never appears as any schedule row's own
  * identity anywhere in the set (row.key and rowIdentityTag(row), each
  * split on compound "/" marks, the same way countMarks and the family
- * reconcile builder already split them).
+ * reconcile builder already split them), nor as a unit a row lists (AS-111):
+ * each mark of a pair, list or range a row's name prints, as the takeoff
+ * splits a row's marks for a family (splitRowMarks: itd-d1-lab's furnace and
+ * condensing unit "F-1 , CU-1", 26_CA's "FCU-17-1&2"), and a row's mark with
+ * the zero its number is padded with dropped or added (markZeroRespellings,
+ * the sweep's own respelling: 009_FL's electrical demolition plan tags its
+ * exhaust fans EF-01 to EF-03, scheduled EF-1 to EF-3). A tag no row names
+ * as drawn is the respelling of a unit a family's schedule lists, as the sweep
+ * reads it, where it prints its letters, a separator and its number, and only
+ * its zero differs: 011_IL's diffuser type D3 is not its door D03, nor 26_CA's
+ * AHU-5-2 its AHU 50-2 (the letter and number groups, markGroups).
  * `alias_candidates` — for every distinct drawn key, the nearest distinct
  * schedule-row key at letterEditDistanceOne, if any — a likely typo/OCR
  * spelling drift between the schedule and the drawing, or between two
@@ -600,6 +622,7 @@ function letterEditDistanceOne(a, b) {
  */
 export function unscheduledTagsAndAliasCandidates(graph) {
   const rowKeys = new Set();
+  const unitKeys = new Set();
   for (const printed of graph?.tables || []) {
     // A transposed schedule's units are its column headers (AS-65).
     const table = scheduleTableView(printed);
@@ -607,13 +630,25 @@ export function unscheduledTagsAndAliasCandidates(graph) {
       for (const raw of [row?.key, rowIdentityTag(row)]) {
         if (!raw) continue;
         for (const part of markKey(raw).split("/").filter(Boolean)) rowKeys.add(part);
+        for (const mark of splitRowMarks(String(raw), true)) {
+          const key = markKey(mark);
+          if (key) unitKeys.add(key);
+        }
       }
     }
   }
+  // A respelling reads as a unit a family's schedule lists (scheduleMarksRead),
+  // never a sheet index's or a note's entry (004_MO's P-001, a plumbing sheet).
+  const unitGroups = new Set(scheduleMarksRead(graph).map(markGroups).filter(Boolean));
+  const respelled = (t) => {
+    const text = plainMark(String(t.text || "")).trim();
+    return /^[A-Z]+[\s-]+\d/i.test(text) && markZeroRespellings(text).some((variant) => unitGroups.has(markGroups(variant)));
+  };
+  const scheduled = (t) => rowKeys.has(t.key) || unitKeys.has(t.key) || respelled(t);
   const drawnTags = (graph?.tags || []).filter((t) => !t.sheet_callout);
   // Wire shape (bbox tuple → object, optional fields omitted rather than
   // null) matches Session.listTags exactly, so both surfaces agree.
-  const unscheduled_tags = drawnTags.filter((t) => !rowKeys.has(t.key)).map((t) => ({
+  const unscheduled_tags = drawnTags.filter((t) => !scheduled(t)).map((t) => ({
     sheet: t.sheet, role: t.role, text: t.text, key: t.key, family: t.family,
     bbox: { x0: t.bbox[0], y0: t.bbox[1], x1: t.bbox[2], y1: t.bbox[3] },
     ...(t.rot ? { rot: t.rot } : {}),
@@ -770,7 +805,7 @@ export function unscheduledUnitCandidates(graph, unscheduledTags = unscheduledTa
   });
 }
 
-/** @typedef {{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number }, reason: "repeat_view" | "unattached_tag" | "demolition_view", counted_on?: string }} PlanOtherCite */
+/** @typedef {{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number }, reason: "repeat_view" | "unattached_tag" | "demolition_view" | "reference_view", counted_on?: string }} PlanOtherCite */
 
 /**
  * Every other drawn occurrence of a row's own mark on a plan-like sheet that
@@ -781,14 +816,17 @@ export function unscheduledUnitCandidates(graph, unscheduledTags = unscheduledTa
  * symbol beside counted ones, and the mark on a demolition plan. Links only,
  * never installed quantity. On a demolition plan the mark is read as the
  * sweep reads it (Session.demolitionTagOccurrences, AS-101) where the caller
- * has a session, and as the graph's tag index reads it besides.
+ * has a session, and as the graph's tag index reads it besides. And the mark
+ * on the set's other drawing sheets, a zone plan titled by its legend, a
+ * detail, a diagram, an elevation (AS-109): a reference view.
  * @param {object|null} sweep sweep_schedule_row's result (null when it threw)
  * @param {{tags?: object[]}} graph
  * @param {string} tag the row's mark as swept
  * @param {Array<{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number } }>} [demolitionOccurrences]
+ * @param {Array<{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number } }>} [referenceOccurrences]
  * @returns {PlanOtherCite[]}
  */
-export function planOtherCites(sweep, graph, tag, demolitionOccurrences = []) {
+export function planOtherCites(sweep, graph, tag, demolitionOccurrences = [], referenceOccurrences = []) {
   /** @type {PlanOtherCite[]} */
   const out = [];
   for (const ps of sweep?.sheets || []) {
@@ -807,7 +845,8 @@ export function planOtherCites(sweep, graph, tag, demolitionOccurrences = []) {
     if (seen(dt.sheet, at)) continue;
     demolition.push({ sheet: dt.sheet, at, bbox: { x0: dt.bbox[0], y0: dt.bbox[1], x1: dt.bbox[2], y1: dt.bbox[3] }, reason: "demolition_view" });
   }
-  return [...out, ...demolition];
+  const reference = (referenceOccurrences || []).map((o) => ({ sheet: o.sheet, at: o.at, ...(o.bbox ? { bbox: o.bbox } : {}), reason: "reference_view" }));
+  return [...out, ...demolition, ...reference];
 }
 
 /**
@@ -1498,7 +1537,7 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
           referenceTagCites: (r.reference_tags || []).map((rt) => ({
             sheet: rt.sheet, role: rt.role, bbox: rt.bbox, text: rt.text,
           })),
-          planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? []),
+          planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? [], session?.referenceTagOccurrences?.(graph, row.tag) ?? []),
         });
         processed++;
         opts.onProgress?.({
@@ -1570,14 +1609,14 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         planCites: geometryCites,
         planTagCites,
         planCandidateCites: candidateCites,
-        planOtherCites: planOtherCites(r, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? []),
+        planOtherCites: planOtherCites(r, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? [], session?.referenceTagOccurrences?.(graph, row.tag) ?? []),
       });
     } catch (e) {
       sweepByTag.set(row.row_id || row.tag, {
         installedQty: null,
         itemStatus: "refused",
         reason: e?.message || String(e),
-        planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? []),
+        planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? [], session?.referenceTagOccurrences?.(graph, row.tag) ?? []),
       });
     }
     processed++;

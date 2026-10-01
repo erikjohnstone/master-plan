@@ -1,0 +1,106 @@
+%PDF-1.5
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 472 >>
+stream
+BT /F1 14 Tf 40 580 Td (LEVEL 1 - MECHANICAL HVAC DUCT PLAN) Tj ET
+1 w
+30 30 552 540 re S
+0.5 w
+126 400 m 138 400 l S
+138 400 m 144 410 l S
+144 410 m 138 420 l S
+138 420 m 126 420 l S
+126 420 m 120 410 l S
+120 410 m 126 400 l S
+BT /F1 10 Tf 126.2 384 Td (B-1) Tj ET
+306 400 m 318 400 l S
+318 400 m 324 410 l S
+324 410 m 318 420 l S
+318 420 m 306 420 l S
+306 420 m 300 410 l S
+300 410 m 306 400 l S
+BT /F1 10 Tf 306.2 384 Td (B-2) Tj ET
+BT /F1 18 Tf 520 40 Td (M-101) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 254 >>
+stream
+BT /F1 14 Tf 40 580 Td (ARCHITECTURAL WALL DETAILS) Tj ET
+1 w
+30 30 552 540 re S
+BT /F1 9 Tf 150 420 Td (WALL TYPE) Tj ET
+BT /F1 9 Tf 150 400 Td (B-1) Tj ET
+BT /F1 9 Tf 200 400 Td (5/8 IN GYPSUM BOARD EACH SIDE) Tj ET
+BT /F1 18 Tf 520 40 Td (A-501) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 9 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 147 >>
+stream
+BT /F1 14 Tf 40 580 Td (BOILER PIPING DETAILS) Tj ET
+1 w
+30 30 552 540 re S
+BT /F1 9 Tf 200 250 Td (B-1) Tj ET
+BT /F1 18 Tf 520 40 Td (M-501) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 11 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+11 0 obj
+<< /Length 523 >>
+stream
+BT /F1 14 Tf 40 580 Td (MECHANICAL EQUIPMENT SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 200 540 Td (CFM) Tj ET
+BT /F1 9 Tf 280 540 Td (MBH) Tj ET
+BT /F1 9 Tf 360 540 Td (SERVICE) Tj ET
+BT /F1 9 Tf 50 515 Td (B-1) Tj ET
+BT /F1 9 Tf 200 515 Td (-) Tj ET
+BT /F1 9 Tf 280 515 Td (500) Tj ET
+BT /F1 9 Tf 360 515 Td (HEATING) Tj ET
+BT /F1 9 Tf 50 490 Td (B-2) Tj ET
+BT /F1 9 Tf 200 490 Td (-) Tj ET
+BT /F1 9 Tf 280 490 Td (500) Tj ET
+BT /F1 9 Tf 360 490 Td (HEATING) Tj ET
+BT /F1 18 Tf 520 40 Td (M-601) Tj ET
+endstream
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000134 00000 n 
+0000000204 00000 n 
+0000000330 00000 n 
+0000000853 00000 n 
+0000000979 00000 n 
+0000001284 00000 n 
+0000001410 00000 n 
+0000001608 00000 n 
+0000001736 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+2311
+%%EOF

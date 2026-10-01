@@ -7232,3 +7232,233 @@ Census over the 56 open documents: 061_IA's 10 fans only. Tests and mutations as
 control drawings, which do not say. **Change:** `row.scr_heat`: a VAV box's or fan coil's own note or REMARK /
 CONTROL cell printing an SCR (never "NO SCR"). Dev 2: +7 exact. Recording note: a decided option drops its reading
 question, which changes those units' model requests; the 3 new requests were recorded live.
+
+## AS-109 — a unit's mark on a zone plan titled by its legend, a detail or a diagram never linked to its row: federal-mech's 60 zone labels (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the dev link misses after AS-107. federal-mech's ground floor HVAC zone plan (M2.1) is
+titled by its zone legend, "HVAC ZONE LEGEND", and reads the legend role. It labels each zone with the unit that
+serves it (58 terminal boxes, a fan coil, a unit heater, 6 split systems). The sweep reads a row's mark on plan views
+and demolition plans only, so none of the 66 labels linked to its row, though the key links each as a view of its
+unit (the box itself counted on the duct plan).
+
+**Fix (the shared path: `session.ts`, `schedulePlanReconcile.mjs`, `takeoff.ts`, `outputs.ts`):** a row's mark on the
+set's other drawing sheets, a zone plan titled by its legend, a detail, a diagram, an elevation, is read as the sweep
+reads a plan's tags (`referenceTagOccurrences`, the demolition reader generalized), outside every schedule and sheet
+number. `planOtherCites` links each to its row as a `reference_view`, never as installed quantity. A schedule sheet's
+own text, a title or notes sheet with no role, is never read so.
+
+**Not linked, by design:** the 6 labels naming the zone's split system by its system name (DX-1 to DX-5/6) where the
+schedule names the evaporator (EV-1 to EV-6): the key relates them by what serves the zone, not by the mark.
+
+**Measured:** with the package, AS-126 below: federal-mech's links 177/243 → 237/243 on the dev documents.
+
+**Tests:** MCP `reconcile_schedule_plan links a unit's mark on a zone plan titled by its legend as a reference view,
+never counted (AS-109)`, on a new fixture (`schedule-reference-view.pdf`); web `planOtherCites: a row's mark on a zone
+plan titled by its legend, a detail or a diagram links to it as a reference view, never counts (AS-109)`.
+
+## AS-111 — the review lists called a scheduled unit's tag unscheduled: a pair or list a row names, and a mark drawn with its zero dropped or added (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the dev review lists entry by entry. 16 of the 42 likely-unit entries on examined sheets
+were tags of units a row schedules. itd-d1-lab's split systems are scheduled one row a pair, "F-1 , CU-1" and
+"DFC-1 , DCU-1". The lists split a row's name only on "/", so the furnace, the fan coil and their condensing units were
+listed as unscheduled on all four plans that draw them. 26_CA's "FCU-17-1&2" rows did the same. 009_FL's electrical
+demolition plan tags EF-1 to EF-3 as EF-01 to EF-03. 14_OR's plans tag HP-02 as HP-2. The sweep already read that
+respelling (AS-97), so for 14_OR the two directions disagreed: the row cited the tag, and the list called it
+unscheduled.
+
+**Fix (the shared path: `schedulePlanReconcile.mjs`, which the MCP reconcile's review lists read):**
+- A drawn tag is scheduled when a row's name lists it, split as the takeoff splits a row's marks for a family
+  (`splitRowMarks`). That covers each mark of a comma or ampersand pair, a list, a range, and a bare number continuing
+  a mark.
+- A tag no row names as drawn is also scheduled when it is a row's mark with the zero its number is padded with dropped
+  or added (`markZeroRespellings`, the sweep's own respelling). This applies only where the drawn tag prints its
+  letters, a separator and its number, and only its zero differs. The comparison is by the mark's letter and number
+  groups (`markGroups`), never by the run-together key. So 011_IL's diffuser type D3 stays apart from its door D03, and
+  26_CA's AHU-5-2 from its AHU 50-2.
+- The alias list keeps its keys as before.
+
+**Measured (dev, the graphs the runs read, re-roled as the runs read them; lists spliced into exp17's outputs):**
+- Review list, entries on examined sheets: 3210 → 3190.
+  - Scheduled units' tags: 64 → 49.
+  - No-unit entries: 3113 → 3108. These are 26_CA's dampers FSD-2-04/05, scheduled FSD-2-4/5, and its sound traps
+    ST-3-1A to 1C, which a range row lists.
+  - Unscheduled units' tags named: 33 of 47, unchanged.
+- Likely-units list: scheduled units' tags 16 → 1. Unscheduled units' tags: 23, unchanged.
+- Alias lists: byte-identical on all 12 documents.
+
+**Disclosed:** 14_OR's enlarged boiler room plan (M320) tags its secondary hot water pumps HWP-1 and HWP-2 as "HP-1" and "HP-2". The
+lists now read those as the heat pumps HP-01 and HP-02 respelled. They are scheduled units either way, so the lists are
+right not to call them unscheduled. But the unit read is not the key's.
+
+**Tests:** web `unscheduledTagsAndAliasCandidates: a unit a row lists, or its mark with its zero dropped or added, is
+scheduled (AS-111)`, which fails on the code before. MCP `reconcile_schedule_plan reads a mark a demolition plan zero-pads
+as its row's, in both directions (AS-111, AS-113)`, on a new fixture (`schedule-padded-mark.pdf`). Without this fix the
+review list names EF-01 and EF-02.
+
+## AS-112 — the likely-units list missed a family's marks printed without the letter its pairs end in (040_IL's existing roof fans) (MEASURED; NOT ADOPTED)
+
+**Found:** 2026-09-30, reading the keyed unscheduled units the likely-units list does not name. 040_IL's fan schedule
+marks its fans by pairs: EF-1A and EF-1B, EF-2A and EF-2B. Its roof demolition plan draws the existing fans EF-13,
+EF-14, EF-25, EF-26, EF-33 and EF-35, which no row schedules. The list reads a unit by the letters and form its
+family's schedule prints (AS-93). No EF mark printed without a letter, so none of the six was listed.
+
+**Tried (`schedulePlanReconcile.mjs`, `unscheduledUnitCandidates`):** a family whose marks end in a letter after their
+number prints its marks without one too. On dev the list named 29 of 47 keyed unscheduled tags (from 23), 35 entries
+at 82.9% precision (from 27 at 85.2%). On the check side, never tuned on, it named none more (9 of 72) and added 12
+entries that are no unit (26 → 38 entries, precision 34.6% → 23.7%). **Not adopted:** what it finds is one drafter's
+pairing convention, and its noise is general.
+
+**Also not adopted: reading a tag by the key rule of a family the set schedules.** For example, the FAN family reads
+009_FL's existing supply fans SF-1 and SF-2 beside its EF-1 to EF-6. On dev that added 78 entries: 14_OR's 47 exhaust
+grille labels EG-1, 26_CA's misprinted VAV-X-1, and its unread FCU rows. It found only 4 more unscheduled tags.
+
+## AS-113 — a row's mark a demolition or reference view prints with its zero dropped or added never linked (009_FL's EF-01 to EF-03) (FIXED — guarded by the evals)
+
+**Found:** with AS-111. The review list now reads 009_FL's electrical demolition plan tags EF-01 to EF-03 as EF-1 to
+EF-3. The rows did not cite them: the demolition reader read each row's mark only as the schedule prints it.
+
+**Fix (`session.ts`, `roleTagOccurrences`, behind `demolitionTagOccurrences` and `referenceTagOccurrences`):** on a
+sheet that prints a row's mark no other way, the reader reads the mark with the zero its number is padded with dropped
+or added. It does so only where the mark prints its letters, a separator and its number, and no row of the set is named
+by the respelling. This is the sweep's rule for a plan (AS-97) and the review lists' rule for a drawn tag (AS-111), so
+both directions now read the same tag as the same unit's.
+
+**Measured (dev, the 11 documents but 26_CA, exp19 → exp21, AS-112 then aside):** two links more, 009_FL's EF-01 and
+EF-03 on its electrical demolition plan (p24), each to its row EF-1 and EF-3 as a demolition view; no count and no
+other row changes. The first cut, which read the respelling for any row, added 28 links to 004_MO's SHEET INDEX row P-001, a
+plumbing sheet number the index lists: a respelling is now read only for a mark a family's schedule reads. 26_CA: below.
+
+**Tests:** the MCP test above. Without this fix EF-1 and EF-2 cite no demolition view.
+
+## AS-114 — the whole-set reconcile never read a family schedule printed on its side, and a table that only named the unit answered for it (040_IL's AHU-15) (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the dev links the reconcile misses. 040_IL's AHU-15 is drawn on six sheets. The
+reconcile's row for it matched, counted and linked every one. But its schedule cite was the FAN INTERLOCK SCHEDULE (M600
+p43), which names AHU-15 beside the exhaust fans interlocked with it. The AIR HANDLING UNIT SCHEDULE (p47), which
+schedules AHU-15, was never read.
+
+That schedule is printed on its side, units across the columns, and extracted as a reference table. The plan-set
+takeoff, which the whole-set reconcile reads its rows from, walked each table's rows as extracted. A transposed
+schedule's extracted rows are its attributes (SERVICE, OUTSIDE AIR CFM, …), so AHU-15 was read from the interlock table
+alone. So the key's unit had no row. The takeoff's family reading and the family reconcile read that schedule one row
+per unit (`scheduleTableView`, AS-65); the whole-set reconcile did not.
+
+**Fix (the shared path: `takeoff.ts` `buildPlanSetTakeoff`, behind reconcile_schedule_plan, which the Takeoff canvas
+calls too):**
+- Every table is read through its schedule view, so a transposed schedule gives one row per unit.
+- In the reference-table pass, a table a unit family reads by its own title (`isUnitFamilyTable`) answers for its units
+  before a table that only names them. The sort is stable, so graph order holds otherwise.
+
+**Measured (dev, the 11 documents but 26_CA, exp21 → exp22):** one row changes: 040_IL's AHU-15 now cites p47. The key's
+unit has its row: its count is exact (1 of 1, p24), and its 6 drawn tags link (p24, p25, p26, p33, p34, p8). No other
+row on the 11 documents changes. The set also draws an existing, unscheduled unit printed AHU-15 in its old
+first-floor mechanical room (p24 to p26, p33, p34, and the demolition plans p7 and p8). The reconcile cannot tell
+two units printed with one mark apart, so that unit's tag on p24 was taken for a row before AS-114 (the interlock
+table's) and still is (the schedule's): the review list's one "taken for a row", unchanged. 26_CA: below.
+
+**Tests:** MCP `the whole-set reconcile reads a family schedule printed on its side, and cites it before a table that
+only names its unit (AS-114)`. It seeds a transposed FAN SCHEDULE and an interlock table naming EF-1 first. Before the
+fix, EF-1 cites the interlock table and EF-2 has no row.
+
+## AS-119 — the view readers linked what is no view of a unit: a drawing shrunk into a sheet, a legend's abbreviation, a grid label, a title block (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the printed text under every cite AS-109 added on the 12 keyed dev
+documents before committing it. The scorer counts a link wherever a row cites a sheet the key draws its
+tag on, so a false view never lowers a score; the text under each cite was read instead. Of the
+2,023 occurrences the two view readers returned (AS-101's demolition views and AS-109's reference
+views), 1,278 were no view of the unit:
+
+- 822 inside 26_CA's multi-tenant corridor plan, which carries a whole floor plan shrunk
+  into the sheet, its text a fifth of a point tall. The sweep's fragment readers join glyphs by gaps in
+  image pixels, so at that size they assemble marks out of unrelated notes (FSD-X-10 out of "EXTEND
+  UNDER FLOOR PLENUM ..."). The key calls the sheet an enlarged corridor plan with no unit tags.
+- 209 read by the plan sweep's shorthand, a family's bare letters answering for its
+  one unit: a legend's abbreviation list (016_NY's AHU, ACCU and ET; 004_MO's EWC, FD and FS), 040_IL's
+  demolition plans labelling each existing return grille RG (185 of them read as the new RG-1), a
+  detail's ET or ST.
+- 235 marks of one letter: 168 printed otherwise than their row prints them,
+  federal-mech's diffuser tags S1-1 and S2-1 read in part as the rows S-1 and S-2 (146), its column
+  grid's B2 (beside A.7 and A.9) as the boiler B-2 (4), 011_IL's fire protection plan's F1 as its
+  furniture schedule's F-1 (8), 24_IA's demolition keynotes D1 as D-1 (9), 004_MO's S4 as S-4; and 67
+  of one letter run into one digit: 12_MT's casework elevations' "B-1 (BASE UNIT DOOR/DRAWER
+  COMBO)" read as its luminaire B1 (19) and its finish code C1 as luminaire C1 (2), 011_IL's light
+  fixture types D1 and D2 on an electrical demolition plan (45), 016_NY's legend's S1.
+- 10 of a title block: itd-d1-lab's project name "D-1 Testing Laboratory" at the same
+  place on every sheet, read as its unit D-1.
+- 2 of a dimension read into a mark column: 26_CA's row 18" CW/R, matched on an elevation.
+
+**Fix (the shared path: `session.ts`):** both view readers read one gated pass over every view sheet
+(`viewTagOccurrences`, demolition and reference roles together, cached per graph and mark). A view reads
+the unit's whole, legible mark: never the family's bare letters (the plan sweep's shorthand for a unit
+symbol drawn where it stands); never type under three quarters of a point, by its run per character or
+by the median glyph height of the spans it covers (`viewLegible`); a one-letter mark only as its row
+prints it, a separator where the row prints one and none where it runs the letter into the number, and
+never one letter run into one digit (`viewPrintsMarkAsRow`); never the same mark within two points of the
+same place on three or more view sheets (the sheets' furniture); never a mark carrying an inch or foot
+mark. The pass is read once per graph and mark, and again when the graph has changed in place since (its
+view sheets' roles or its table count): the full MCP suite's AS-94/AS-101 test re-roles its roof plan as a
+demolition plan after a reconcile, and a cache keyed on the graph alone answered from before.
+
+**Kept, read by hand:** the 745 occurrences left, grouped by sheet and printed text: zone labels (federal-mech's
+116 VAV labels on its zone plan), control diagrams and sequences naming their unit (itd-d1-lab's SAV,
+GEV, SEV, HC and CV boxes; 004_MO's "EF-1 CONTROL SEQUENCE"; 009_FL's "AHU-1 CONTROLS"), P&IDs (028_TX's
+"DOAS 3 VAV BOX P&ID"), piping schematics and equipment details (federal-mech's B-1, B-2, CH-1, AHU-1;
+14_OR's boiler and pump labels), the air terminal plan's diffuser marks (federal-mech's S1-1 printed
+"S1 - 1"), door elevations (011_IL's D02 to D10), and demolition plans' whole marks (040_IL's TAB-101,
+011_IL's HP 12-1, 009_FL's EF-01 to EF-03).
+
+**Not changed:** the plan sweep. It still reads a column grid's B2 and a title block's D-1 on plan sheets
+as unattached tags (`plan_other_cites`, reason `unattached_tag`, never counted), as it did before AS-109. That
+stays open; AS-120 gates the view readers only.
+
+**Measured:** see AS-126: the text under every cite read by hand (the scorer never counts a false link against a
+row); dev links 1053/1215 with the gates, as without them.
+
+**Tests:** MCP `reconcile_schedule_plan links only a unit's whole, legible mark on a view sheet: never a
+shrunken drawing, a grid label, a legend's abbreviation or a title block (AS-119)`, on a new fixture
+(`schedule-view-gates.pdf`): a duct plan counting AHU-1, EF-1, B-1 and B-2, a detail sheet with the air
+handler's own label, the fan's mark a fifth of a point tall, a grid's B2 and a title block naming B-1, a
+legend with the abbreviations AHU and EF, and a boiler detail with B-1 and B-2. It fails on the code
+before (the legend's AHU and EF, the shrunken EF-1, the three title blocks and the grid's B2 all link);
+each gate owns one of those cites.
+
+## AS-120 — a mark of one letter read as a view on another trade's sheet: an occupancy group, a project name (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the view cites left after AS-119. A mark of one letter and a number (S-2, D-1, B-1) is
+another trade's code as often as a unit's. 004_MO's code data sheet prints the occupancy group S-2 beside its air
+device S-2. itd-d1-lab's sequence names its project "D-1 LAB 123" beside its plumbing fixture D-1. Both linked to the
+row as reference views.
+
+**Fix (`session.ts`, `viewTagOccurrences`):** a one-letter mark is read as a view only on a sheet of a trade whose
+schedule names it (the discipline letter of the sheet numbers of the tables that list it), where both sheets print
+their number. Marks of two or more letters are unchanged, as is the plan sweep.
+
+**Measured:** with AS-119, by reading the text under the cites (the scorer never counts a false link against a
+row): the code data sheet's S-2 and the sequence's D-1 no longer link; no link the key records is lost (dev links
+1053/1215 before and after).
+
+**Tests:** MCP `reconcile_schedule_plan links a one-letter mark as a view only on a sheet of the trade whose schedule
+lists it (AS-120)`, on a new fixture (`schedule-view-trade.pdf`).
+
+## AS-126: the reconcile package AS-109, AS-111, AS-113, AS-114, AS-119 and AS-120 (MEASURE NOTE)
+
+**Dev** (the 12 keyed documents, `reports/reconcile/02-reconcile-eval-dev.md`; 8d46f5c → this commit, each document
+on its seeded graph, the tables byte-identical to a fresh build's):
+- A scheduled unit's tag linked to its row on its sheet: 983/1215 (80.9%) → 1053/1215 (86.7%): federal-mech +60 (its
+  zone plan's labels, AS-109), 040_IL +6 (AHU-15's schedule, AS-114), 009_FL +2 (EF-01, EF-03, AS-113), 26_CA +2.
+- Units with no reconcile row 72 → 71 (040_IL's AHU-15); drawn units found 407 → 408; unit counts exact 439/462 →
+  440/463; placements agreeing 401 → 402.
+- Review list entries on examined sheets 3210 → 3192; a scheduled unit's tag on it 64 → 49 (AS-111).
+- Likely-units list: 42 entries at 54.8% precision → 27 at 85.2%; unscheduled units named 23 of 47, unchanged.
+- Alias lists byte-identical.
+
+**Check side** (8 documents keyed before any score, never tuned on; aggregates only, `02-reconcile-eval-check.md`,
+the previous revision `02-reconcile-eval-check-8d46f5c.md`): links 466/602 (77.4%) → 470/602 (78.1%). One unit more
+has a reconcile row (no row 6 → 5); it is drawn and found by its tag text only (by its tag 209 → 210), not verified,
+so drawn units missed 16 → 17 and unit counts exact 257 of 282 → 257 of 283. Placements agreeing 198, unchanged; the
+review and likely-units lists unchanged (9 of 72 unscheduled units named, 26 entries).
+
+**Not in this package:** AS-108 (a specification section reference read as a section drawing, 26_CA), AS-116 (a row
+mark "X N-M" as a pair), AS-117 (the canvas's SLA fallback reconcile) stay open. AS-110, AS-115 and AS-118 were
+numbers given to candidates in this round's working notes that did not land (AS-110, a thermostat-label rule for the
+plan sweep, fixed 004_MO's DOAS-1 and broke 040_IL's UH-2, so it was reverted).
