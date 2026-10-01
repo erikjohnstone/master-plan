@@ -1972,8 +1972,9 @@ export const HVAC_FAMILY_SPECS = {
     // Under a split or ductless title: DAC-* ductless units, SS-* split
     // systems (03_FL, 22_GA, 040_IL; AS-63). Under a fan coil title, FCC-*
     // fan coils (028_TX's CHILLED WATER FAN COIL UNIT SCHEDULE lists FCC1-1
-    // beside FCU1-3; AS-64).
-    titledKeyRe: /^(?:DAC|SS|FCC)[\s\-]?\d/i,
+    // beside FCU1-3; AS-64), and BCU-* blower coils (26_CA's FAN COIL schedule
+    // lists BCU-P3-1 and BCU-2-1 beside FCU-P2-2; AS-141).
+    titledKeyRe: /^(?:(?:DAC|SS|FCC)[\s\-]?\d|BCU[\s\-]?(?:[A-Z]{1,2})?\d)/i,
     // A bare F-* is a fan coil under the family's title only: 016_NY's fans
     // F-1 and F-2, in an untitled panel schedule, and 041_IL's F0535, a
     // utility cart in an architectural list, were fan coils too (AS-66).
@@ -2090,13 +2091,16 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^WFU[\s\-]/i,
   },
   AIR_COOLED_CHILLER: {
-    titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
+    // Or a title that is the word alone, without the section it cites
+    // (26_CA's CHILLER (SPECIFICATION SECTION 23 64 16); AS-141).
+    titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE|^\s*(?:WATER[\s\-]*COOLED\s+)?CHILLERS?\s*$/i,
     exclude: /HEAT RECOVERY/i,
     // CH-/PAC- only — ACC-* is air-cooled condenser (CONDENSING_UNIT blankKeyRe).
     keyRe: /^(?:CH|PAC)[\s\-]/i,
     // Under an AIR COOLED CHILLER title, ACC-* and ACCH-* are the chiller
-    // (03_FL, AS-63; 087_US, AS-64).
-    titledKeyRe: /^ACCH?[\s\-]?\d/i,
+    // (03_FL, AS-63; 087_US, AS-64); under a chiller title, a water-cooled
+    // unit WCU-* or WCC-* is (26_CA's WCU-2-1 to WCU-2-4; AS-141).
+    titledKeyRe: /^(?:ACCH?|WCU|WCC)[\s\-]?\d/i,
   },
   HEAT_RECOVERY_CHILLER: {
     titleRe: /HEAT RECOVERY CHILLER/i,
@@ -2130,7 +2134,8 @@ export const HVAC_FAMILY_SPECS = {
     // Also match untitled-suffix hydronic pump boards (HEATING HOT WATER PUMP).
     // Or a condensate pump's own title, no SCHEDULE printed (044_NY's
     // CONDENSATE PUMP; AS-68).
-    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP|^\s*(?:STEAM\s+)?CONDENSATE\s+(?:RETURN\s+)?PUMPS?(?:\s+SCHEDULE)?\s*$/i,
+    // Or PUMPS alone, without the section it cites (26_CA; AS-141).
+    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP|^\s*(?:STEAM\s+)?CONDENSATE\s+(?:RETURN\s+)?PUMPS?(?:\s+SCHEDULE)?\s*$|^\s*PUMPS?\s*$/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i,
     // BS-* = packaged booster pump systems on EQUIPMENT catch-all lists.
     blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
@@ -2144,7 +2149,8 @@ export const HVAC_FAMILY_SPECS = {
     titledOnly: true,
   },
   COOLING_TOWER: {
-    titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
+    // Or the word alone, without the section it cites (26_CA; AS-141).
+    titleRe: /COOLING\s+TOWER\s+SCHEDULE|^\s*COOLING\s+TOWERS?\s*$/i,
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^CT[\s\-]/i,
   },

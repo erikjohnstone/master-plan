@@ -40,6 +40,12 @@ export function compactScheduleTitleRe(re) {
   return new RegExp(src, flags);
 }
 
+/** A title's closing reference to the specification section that specifies
+ * its equipment, or the start of one the extraction cut short (AS-141):
+ * "(SPECIFICATION SECTION 23 21 23)", "(SECTION 23 36 00)",
+ * "(SPECIFICATION 23 73 23)", "(SPEC SECTION 230513)", "(SPECIFICATION". */
+const SPEC_REFERENCE_TAIL_RE = /\s*\(\s*(?:(?:SPEC(?:IFICATION)?S?\.?\s*)?(?:SECTION\s*)?(?:\d{2}\s?\d{2}\s?\d{2}(?:\.\d{1,2})?|\d{5})\s*\)|SPEC(?:IFICATION)?S?\.?(?:\s+SECTION)?\s*)$/i;
+
 /**
  * A schedule's title as a family's title rules read it (AS-83): without the
  * marks a drafter adds to any title, a status ((N), (E), NEW, EXISTING), a
@@ -50,7 +56,10 @@ export function compactScheduleTitleRe(re) {
  * EXHAUST FANS - 2 OF 3" as it reads "EXHAUST FANS", and an exclude written
  * with a space (AIR\s+HANDLING) reads a hyphenated title too. No title rule
  * needs a hyphen there. An (R) stays: drafters print it for removed and for
- * relocated. The title a table shows and cites is its own.
+ * relocated. The title a table shows and cites is its own. Nor does it read
+ * the specification section a title cites ("PUMPS (SPECIFICATION SECTION 23
+ * 21 23)" reads as "PUMPS"), or a reference the extraction cut short
+ * ("COOLING TOWER (SPECIFICATION"; AS-141).
  * @param {string} rawTitle
  */
 export function familyRuleTitle(rawTitle) {
@@ -65,6 +74,7 @@ export function familyRuleTitle(rawTitle) {
       .replace(/\s*[-\u2013\u2014:,]\s*CONT(?:INUED|'D|D|\.)?\.?\s*$/i, "")
       .replace(/\s+CONTINUED\s*$/i, "")
       .replace(/\s*[-\u2013\u2014:,]?\s*\(?\s*(?:SHEET\s+)?\d{1,2}\s+OF\s+\d{1,2}\s*\)?\s*$/i, "")
+      .replace(SPEC_REFERENCE_TAIL_RE, "")
       .trim();
     if (t === before) break;
   }

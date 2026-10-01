@@ -7944,3 +7944,46 @@ reconcile and the family gate.
 
 Tests: `web/test/rowMarkPieces.test.ts` (2: the split itself; 26_CA's four air handler rows compiled). 2 mutations each
 fail them: the old split; commas splitting inside parentheses.
+
+## AS-141 — a schedule titled with its specification section or a bare family noun named no family: 26_CA's four water-cooled chillers were never read (FIXED, this commit)
+
+**Found:** reading the tables AS-108 recovered on 26_CA's M0.09. Its plant schedules are titled by the family noun and
+the specification section that specifies them: "CHILLER (SPECIFICATION SECTION 23 64 16)", "PUMPS (SPECIFICATION
+SECTION 23 21 23)", "COOLING TOWER (SPECIFICATION SECTION 23 65 13)", "FAN COIL (SPECIFICATION SECTION 23 82 19)". A
+family's title rules read the whole title: no rule names a chiller "CHILLER" alone (only AIR COOLED CHILLER or CHILLER
+SCHEDULE), a pump schedule "PUMPS", or a cooling tower schedule "COOLING TOWER", and the gate gives a titled table that
+names no family to no family. The chiller table, titled so since AS-108, was read by none: WCU-2-1 to WCU-2-4, four
+centrifugal water-cooled chillers, were no unit. Its marks were unread too: the chiller rule reads CH-* and PAC-*
+(ACC-*/ACCH-* under its title), not a water-cooled unit's WCU-*; the fan coil rule reads no blower coil BCU-*.
+
+**Change:**
+- `familyRuleTitle` (`scheduleTitleMatch.mjs`) reads a title without the specification section it cites, closing
+  "(SPECIFICATION SECTION 23 21 23)", "(SECTION 23 36 00)", "(SPECIFICATION 23 73 23)", "(SPEC SECTION 230513)", or a
+  reference the extraction cut short ("(SPECIFICATION"). Other parentheticals stay ("(COOLING)", "(BASE BID)").
+- The chiller, pump and cooling tower families read their noun alone as a title: CHILLER(S) (or WATER-COOLED
+  CHILLER(S)), PUMP(S), COOLING TOWER(S), the whole title, so "PUMPS AND ACCESSORIES" and "HEAT PUMPS" do not.
+- Under a chiller title a water-cooled WCU-* or WCC-* is the chiller; under a fan coil title a blower coil BCU-* is the
+  fan coil. Neither is read in an untitled table.
+
+**Measured:** 26_CA, the takeoff on its graph after AS-108: 248 → 252 units, AIR_COOLED_CHILLER +4 (WCU-2-1
+and WCU-2-2 from the row "WCU-2-1 ,2", WCU-2-3, WCU-2-4), nothing removed. Its reconcile eval (production lane, 26_CA's
+key): identical, every number and every unit's line. The whole-set reconcile already held a row for each WCU (it reads
+every equipment row); AS-141 decides which family claims them. They read SCHEDULE_ONLY on sheet 43, where the key has
+them drawn: a sweep miss, not this change's (catalogued with AS-139's follow-ups). Attribute eval (dev 4): identical,
+GATE 2 passes.
+
+Census, the HVAC compile of the 98 cached graphs (and 26_CA's after AS-108) with the old rules and the new: two open
+documents change, nothing removed anywhere, no walled document changes. 26_CA: +4 (WCU-2-1 to WCU-2-4, under CHILLER
+(SPECIFICATION SECTION 23 64 16)). 01_NY: +1, P-1 on sheet 88 under PUMPS, an inline circulator for the chilled water
+coil's freeze protection, 8 GPM, that the takeoff missed.
+
+The pump, cooling tower and fan coil tables on M0.09 are read untitled today (their titles are folded into their
+headings); they take these rules when AS-142 reads their titles.
+
+**Should this be on the shared path? Yes.** The family title rules are the one gate the takeoff, the reconcile and the
+assemblies read a table by.
+
+Tests: `web/test/familyTitles.test.ts` (3: titles without their section; M0.09's chillers, pumps, cooling towers and
+blower coils compiled; a blower coil and a WCU mark untitled, PUMPS AND ACCESSORIES and HEAT PUMPS, no unit). 8
+mutations each fail them: the section kept; no bare CHILLER, PUMPS or COOLING TOWER title; PUMPS unanchored; no WCU or
+BCU under its title; WCU read untitled.

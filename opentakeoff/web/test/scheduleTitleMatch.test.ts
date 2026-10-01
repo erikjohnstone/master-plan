@@ -1634,7 +1634,8 @@ test("a title as the family rules read it: no status, discipline, continuation o
     ["EXISTING LOU ER SCHEDULE", "LOU ER SCHEDULE"],
     ["MECHANICAL VALVE SCHEDULE", "VALVE SCHEDULE"],
     ["HVAC EQUIPMENT SCHEDULE", "EQUIPMENT SCHEDULE"],
-    ["FANS (SPECIFICATION SECTION 23 34 00) (CONT.)", "FANS (SPECIFICATION SECTION 23 34 00)"],
+    // …nor the specification section the title cites (AS-141).
+    ["FANS (SPECIFICATION SECTION 23 34 00) (CONT.)", "FANS"],
     ["EXHAUST FANS (CONTINUED)", "EXHAUST FANS"],
     ["EXHAUST FANS - CONT'D", "EXHAUST FANS"],
     ["SUPPLY FANS CONTINUED", "SUPPLY FANS"],

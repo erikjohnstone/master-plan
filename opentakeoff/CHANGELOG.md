@@ -1,5 +1,20 @@
 # Changelog
 
+- **A schedule titled with its specification section, or by its family's
+  noun alone, is read as its family's.**
+  - "CHILLER (SPECIFICATION SECTION 23 64 16)" named no family: no rule
+    reads a chiller schedule titled CHILLER alone, and the section number
+    stayed part of the title. 26_CA's four water-cooled chillers (WCU-2-1
+    to WCU-2-4) were never counted. A family's title rules now read a
+    title without the section it cites, CHILLER, PUMPS and COOLING TOWER
+    alone are their families' titles, and under those titles a
+    water-cooled chiller's WCU-* and a fan coil schedule's blower coils
+    (BCU-*) are read.
+  - Across the cached corpus: 26_CA +4 chillers, 01_NY +1 pump (an inline
+    circulator under PUMPS); nothing else changes.
+  (`web/src/lib/scheduleTitleMatch.mjs` `familyRuleTitle`,
+  `web/src/lib/corpusTakeoff.mjs` family specs; ASSEMBLIES_BUG_CATALOGUE
+  AS-141.)
 - **Schedules titled with their specification section are read.**
   - A sheet whose tables are titled "CHILLER (SPECIFICATION SECTION
     23 64 16)" or "PUMPS (SPECIFICATION SECTION 23 21 23)", with SCHEDULES
