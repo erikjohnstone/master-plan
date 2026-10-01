@@ -4045,6 +4045,39 @@ const isTitleBlockRowLabel = (key: string): boolean => {
 const isTitleBlockTable = (rows: TableRow[]): boolean =>
   rows.length > 0 && rows.every((r) => isTitleBlockRowLabel(r.key));
 
+// A TITLE BLOCK'S REVISION / ISSUE LOG IS NOT A SCHEDULE, WHATEVER ITS ROWS
+// SAY. isTitleBlockTable reads the row keys, and a filled-in issue log's
+// keys are the issues themselves ("CONTRACT DOCUMENTS", "DESIGN
+// DEVELOPMENT"), not title-block words — so federal-mech #16/#19's ISSUED
+// FOR / REV / DATE grid was listed among the schedules, and with a title
+// borrowed from the discipline line above it ("ELECTRONIC SECURITY /
+// TELECOMMUNICATIONS"). The column heads are what say it: every head is a
+// revision-log word, one is DATE, and one names the issue or revision (or
+// the table is titled REVISIONS). A sheet index (SHEET NUMBER / SHEET NAME
+// / ... DATE) has heads outside this set and is kept. (#260)
+const REVISION_LOG_HEADS = new Set([
+  "ISSUED FOR", "ISSUE", "ISSUED", "ISSUE/REVISION", "REV", "REV NO", "REVISION", "REVISIONS",
+  "NO", "NUMBER", "DATE", "REV DATE", "DESCRIPTION", "REMARKS", "BY", "DRN", "CHK", "APP", "APPR", "APPD",
+]);
+export const isRevisionLogTable = (title: string, headers: string[]): boolean => {
+  const heads = headers.map((h) => norm(h).replace(/\./g, "").replace(/:/g, "").replace(/\s+\d+$/, "").replace(/^(\S+)\s+\1$/, "$1").trim());
+  if (heads.length < 2 || !heads.every((h) => REVISION_LOG_HEADS.has(h))) return false;
+  if (!heads.some((h) => h === "DATE" || h === "REV DATE")) return false;
+  return heads.some((h) => /^(REV|ISSUE)/.test(h)) || /^REVISIONS?$/.test(norm(title));
+};
+
+// A ruled box with no column heads, a few rows, and a "title" that names
+// nothing (no word of three letters: a detail callout "341.1-2", a duct
+// size 38"x14", a tag "EF-4", a plan's "DN") is plan linework that happened
+// to close cells, not a schedule. Real, found in the vectorgrid census (all
+// 969 captured sheets): 10 such tables on 7 open documents, all reference
+// kind, every one junk; a sparse real schedule keeps its named title
+// (LAG SCREW SCHEDULE, DUCT INSULATION SCHEDULE) or its heads. (#260)
+export const isUnnamedFragmentTable = (title: string, headers: string[], rowCount: number): boolean =>
+  rowCount <= 3
+  && headers.filter((h) => !/^COL\d+$/.test(h)).length <= 1
+  && !/[A-Za-z]{3}/.test(title || "");
+
 
 // The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
 // equipment family, not an architectural one — real, found live (itd-d1-lab-
@@ -7927,6 +7960,8 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // constructors did not, and the inconsistency is what surfaced as a
     // highlight that excludes its own schedule's title.
     if (title && region) region = merge(region, title.bbox);
+    // ...nor its revision/issue log, read by its column heads (#260).
+    if (isRevisionLogTable(title?.text ?? "", anchors.map((a) => a.label))) return { table: null, nextIdx: toIdx };
     const table: ScheduleTable = {
       kind: "reference", sheet: sheet.key, title,
       headers: anchors.map((a) => a.label), rows: banded.out, region: region!, anchors,
@@ -12032,6 +12067,10 @@ function scheduleTableFromODLRead(
   // the SAME closed vocabulary here (not inventing a second one) keeps this
   // exactly as narrow as the geometric path's own already-proven guard.
   if (isTitleBlockTable(rows)) return refuse("title-block/administrative table (every row key matches the closed title-block vocabulary)");
+  if (isRevisionLogTable(titleText || "", headers)) return refuse(`title-block revision/issue log (heads ${headers.join(" / ")})`);
+  if (kind === "reference" && isUnnamedFragmentTable(titleText || "", headers, rows.length)) {
+    return refuse(`unnamed ruled fragment: ${rows.length} row(s), no column heads, title "${titleText || ""}" names nothing`);
+  }
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
   headers.splice(0, headers.length, ...promotedHeaders);
   // Real, found-live gap (2026-09-03, 032_PA_Construct_EHRM_Infrastructure's

@@ -253,7 +253,7 @@ import {
   MEASURE_TOOLS, CUT_TOOLS, MARKUP_TOOLS, MARKUP_IDS, HL_INKS, HL_SIZES,
   MARKUP_IMG_MAX, MAX_IMAGE_MARKUP_BYTES, MARKUP_UPLOAD_MAX_BYTES, MARKUP_DECODE_MAX_AREA,
 } from "../lib/canvasConstants.js";
-import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond } from "../lib/canvasUtil.js";
+import { uid, clamp, citeFocusScale, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond } from "../lib/canvasUtil.js";
 // Tile-pyramid rendering (#86) — pure math in lib/tiles.ts (tested), worker
 // pool in lib/tilePool.ts, DOM/Worker orchestration glue here via one
 // long-lived compositor instance. Replaces the old single-raster base +
@@ -917,6 +917,7 @@ export default function TakeoffCanvas() {
   // selection at a time (bidirectional mutual exclusivity). Passing null clears both.
   const selectShape = (id) => { setSelectedId(id); setSelectedMarkupId(null); };
   const selectMarkup = (id) => { setSelectedMarkupId(id); setSelectedId(null); };
+  const pendingFlyOptsRef = useRef({});   // the pending fly-to's options (focus: zoom to a cite's box)
   const pendingFlyRef = useRef(null);   // fly-to target whose sheet is opening this tick (two-phase center once its bitmap loads)
   // Source-trace (◎) equivalent of pendingFlyRef: { sheet_id, rect, token, attempts }
   // for a trace whose SOURCE sheet is opening this tick. Unlike pendingFlyRef it
@@ -2820,7 +2821,7 @@ export default function TakeoffCanvas() {
     const sp = panels.find((p) => p.key === m.sheet_id);
     // once the panel bitmap exists, center (or give up if the markup has no anchor)
     // and clear the ref regardless, so an unanchored markup can't get stuck pending.
-    if (sp && sp.img.w) { centerOnMarkup(m); pendingFlyRef.current = null; }
+    if (sp && sp.img.w) { centerOnMarkup(m, pendingFlyOptsRef.current); pendingFlyRef.current = null; }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [panelImgs, groupSig, status]);
 
@@ -6642,7 +6643,9 @@ export default function TakeoffCanvas() {
   // fires state setters and a sheet's bitmap dims load async: if the target sheet
   // isn't open, stash it in pendingFlyRef + openSheets, and the effect below
   // centers once the panel has non-zero img.w. If already open, center inline.
-  function centerOnMarkup(m) {
+  // opts.focus (a user opening a cite): also zoom in until the cited box reads
+  // (citeFocusScale) — never out. Register clicks keep the user's zoom.
+  function centerOnMarkup(m, opts = {}) {
     const sp = panelByKey(m.sheet_id);
     if (!sp || !sp.img.w) return false;
     let anchor;
@@ -6655,13 +6658,22 @@ export default function TakeoffCanvas() {
     const el = containerRef.current;
     if (!el) return false;
     const r = el.getBoundingClientRect();
-    const scale = tfRef.current.scale;
-    const sx = anchor[0] * sp.img.w + sp.xOffset, sy = anchor[1] * sp.img.h;
+    let scale = tfRef.current.scale;
+    let sx = anchor[0] * sp.img.w + sp.xOffset;
+    const sy = anchor[1] * sp.img.h;
+    if (opts.focus && (m.type === "cloud" || m.type === "highlight") && m.rect) {
+      const x0 = Math.min(m.rect[0][0], m.rect[1][0]) * sp.img.w + sp.xOffset;
+      const bw = Math.abs(m.rect[1][0] - m.rect[0][0]) * sp.img.w, bh = Math.abs(m.rect[1][1] - m.rect[0][1]) * sp.img.h;
+      scale = citeFocusScale(scale, bw, bh, r.width, r.height);
+      // wider than the view at that scale (a schedule row): show its start —
+      // the row's tag — a little in from the left, not its middle columns
+      if (bw * scale > 0.9 * r.width) sx = x0 + (0.45 * r.width) / scale;
+    }
     setTfNow({ x: r.width / 2 - sx * scale, y: r.height / 2 - sy * scale, scale });
     selectMarkup(m.id);
     return true;
   }
-  function flyToMarkup(m) {
+  function flyToMarkup(m, opts = {}) {
     if (!m) return;
     // a fly-to and a source-trace both end in setTfNow off the same deps
     // ([panelImgs, groupSig, status]) — starting one must cancel a competing
@@ -6669,10 +6681,11 @@ export default function TakeoffCanvas() {
     // the user already stopped looking at.
     pendingSourceRef.current = null;
     setShowMarkups(true);   // flying to a markup reveals the layer, so you never land on an invisible selection
+    pendingFlyOptsRef.current = opts;
     if (!panelKeySet.has(m.sheet_id)) { pendingFlyRef.current = m; openSheets([m.sheet_id], false); return; }
     // open already, but its bitmap may still be mid-render (img.w === 0) — if the
     // inline center can't run yet, hand off to the phase-2 effect below.
-    if (!centerOnMarkup(m)) pendingFlyRef.current = m;
+    if (!centerOnMarkup(m, opts)) pendingFlyRef.current = m;
   }
   // Reposition an image markup — the row's Place button. Two cases, branched on
   // whether the image's CURRENT sheet is already open (panelKeySet.has):
@@ -9801,7 +9814,7 @@ export default function TakeoffCanvas() {
     const markup = agentStateRef.current.markups.find((m) => m.id === citation.markupId)
       || markups.find((m) => m.id === citation.markupId);
     if (markup) {
-      flyToMarkup(markup);
+      flyToMarkup(markup, { focus: true });
       return;
     }
     // Markup not found yet — open the sheet; user can retry from the card.
@@ -14172,7 +14185,7 @@ export default function TakeoffCanvas() {
               });
               if (result?.error) { setCommitMsg(`Could not show that: ${result.error}`, "refusal"); return; }
               const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
-              if (markup) flyToMarkup(markup);
+              if (markup) flyToMarkup(markup, { focus: true });
             }}
           /></WorkspaceDock>
         )}
@@ -14555,8 +14568,8 @@ export default function TakeoffCanvas() {
             if (markups[0] && focus && dims?.w && dims?.h) {
               // Center the group using a temporary display extent. The canvas
               // still paints only the individual immutable source boxes.
-              flyToMarkup({ ...markups[0], rect: [[focus[0] / dims.w, focus[1] / dims.h], [focus[2] / dims.w, focus[3] / dims.h]] });
-            } else if (markups[0]) flyToMarkup(markups[0]);
+              flyToMarkup({ ...markups[0], rect: [[focus[0] / dims.w, focus[1] / dims.h], [focus[2] / dims.w, focus[3] / dims.h]] }, { focus: true });
+            } else if (markups[0]) flyToMarkup(markups[0], { focus: true });
             return { ...results[0], citation_count: results.length };
           }}
         />

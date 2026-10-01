@@ -49,6 +49,21 @@ export function invertCanvasPixels(cv) {
 
 export const uid = (p) => `${p}-${mintUuid()}`;
 export const clamp = (s) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, s));
+// The scale a user-opened cite lands at: the cited box's limiting side spans
+// ~60% of the viewport's width or ~50% of its height — but a long thin box (a
+// schedule row) is zoomed until it stands CITE_READ_PX tall on screen, where
+// its text reads, even when that makes it wider than the view. Never past
+// CITE_FOCUS_MAX (raster px ≈ screen px), never zoomed out from where the user
+// already is. A box seen at fit zoom is a speck; this is what makes "open the
+// cite" show the cited text.
+export const CITE_FOCUS_MAX = 1.5;
+export const CITE_READ_PX = 28;
+export function citeFocusScale(current, boxW, boxH, viewW, viewH) {
+  if (!(boxW > 0) || !(boxH > 0) || !(viewW > 0) || !(viewH > 0)) return clamp(current);
+  const fit = Math.min((0.6 * viewW) / boxW, (0.5 * viewH) / boxH);
+  const target = Math.min(CITE_FOCUS_MAX, (0.5 * viewH) / boxH, Math.max(fit, CITE_READ_PX / boxH));
+  return clamp(Math.max(current, target));
+}
 // shared by the status-bar tone AND the auto-dismiss skip (in the canvas) — one
 // definition of "this message is bad news" for both readers
 export const isDangerMsg = (s) => s === STALE_TAB_MESSAGE || s.startsWith("Commit failed") || s.startsWith("Couldn't");
