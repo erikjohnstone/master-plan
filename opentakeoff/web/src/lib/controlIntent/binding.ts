@@ -52,7 +52,7 @@
 // unit's family and the only units its titles name are those of the title
 // that names the unit; or by family only when no packet binds the unit.
 import type { Packet } from "./evidence";
-import { pageLines, repairSpacing, SENTENCE, subjectFamily, subjectWords } from "./evidence";
+import { controlFamily, pageLines, repairSpacing, SENTENCE, subjectWords } from "./evidence";
 import type { RowUnit } from "./rowReader";
 import { frameBox } from "../assemblies/scheduleNotes";
 
@@ -375,12 +375,12 @@ const ASPECT = /\bPOWER\s+(?:SUPPLY|SUPPLIES|WIRING|DISTRIBUTION)\b|\b(?:CONTROL
  * of a union name ("TERMINAL BOX VAV/CAV/AFCV": VAV and CAV are terminal
  * units, AFCV names none). */
 export function familyOf(title: string): string | null {
-  const f = subjectFamily(title);
+  const f = controlFamily(title);
   if (f) return f;
   const t = repairSpacing(title);
   const found = new Set<string>();
   for (const union of t.match(/\b[A-Z0-9]+(?:\/[A-Z0-9]+)+\b/g) ?? []) {
-    for (const part of union.split("/")) { const g = subjectFamily(t.replace(union, part)); if (g) found.add(g); }
+    for (const part of union.split("/")) { const g = controlFamily(t.replace(union, part)); if (g) found.add(g); }
   }
   return found.size === 1 ? [...found][0] : null;
 }
@@ -404,7 +404,7 @@ export function coSubjects(title: string): Map<string, string[]> {
   for (const segment of repairSpacing(title).split(/\s+[-–—]\s+/)) {
     const parts = segment.split(/\s+AND\s+|\s*&\s*/).map((x) => x.trim()).filter(Boolean);
     if (parts.length < 2) continue;
-    const named = parts.map((x) => ({ x, family: subjectFamily(x) }));
+    const named = parts.map((x) => ({ x, family: controlFamily(x) }));
     if (named.some((n) => !n.family) || new Set(named.map((n) => n.family)).size < 2) continue;
     for (const n of named) {
       const others = named.filter((o) => o.family !== n.family).flatMap((o) => subjectWords(o.x));
@@ -487,7 +487,7 @@ function designatorFits(q: string, u: RowUnit): boolean | null {
   if (own === q) return true;
   const words = PREFIX_WORDS[q];
   if (!words) return own ? false : null;
-  return subjectFamily(words) === u.family || printed(words, typeText(u));
+  return controlFamily(words) === u.family || printed(words, typeText(u));
 }
 
 /** Words a mark column's header prints that name no kind of unit. */
@@ -526,7 +526,7 @@ function tagFit(k: TagKey, u: RowUnit, title: string, sharing: readonly RowUnit[
   const identity = (o: RowUnit) => `${tagKey(o.tag)?.qualifier ?? ""}|${o.family}`;
   const cands = sharing.filter(could);
   if (new Set(cands.map(identity)).size <= 1) return "yes";
-  const family = subjectFamily(title);
+  const family = controlFamily(title);
   const named = cands.filter((o) => o.family === family || namesRow(title, o));
   if (!named.length) return "proposal";
   if (!named.includes(u)) return "no";
@@ -818,6 +818,28 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     familyNamed.set(t.p.id, one);
     return one;
   };
+  /** The designators a packet's text defines for a kind of unit, each with
+   * the families the words before it name ("HEAT EXCHANGER (HX) CONTROL
+   * VALVE SHALL BE CONTROLLED BY THE BAS", "MAKEUP AIR UNIT (MAU) SHALL BE
+   * INTERLOCKED"). */
+  const definedCache = new Map<string, Map<string, Set<string>>>();
+  const definedIn = (p: Packet) => {
+    const hit = definedCache.get(p.id);
+    if (hit) return hit;
+    const m = new Map<string, Set<string>>();
+    for (const l of pageLines(p.spans)) {
+      for (const x of repairSpacing(l.text).matchAll(/((?:[A-Z][A-Z/&-]*\s+){0,4}[A-Z][A-Z/&-]*)\s*\(([A-Z]{2,6})\)/g)) {
+        const ws = x[1].split(/\s+/);
+        const fams = m.get(x[2]) ?? m.set(x[2], new Set()).get(x[2])!;
+        for (let i = 0; i < ws.length; i++) { const f = controlFamily(ws.slice(i).join(" ")); if (f) fams.add(f); }
+      }
+    }
+    definedCache.set(p.id, m);
+    return m;
+  };
+  /** How many scheduled units carry each designator (a mark's letters). */
+  const designatorCount = new Map<string, number>();
+  for (const k of scheduled) designatorCount.set(k.prefix, (designatorCount.get(k.prefix) ?? 0) + 1);
   // Cross-references to a section of a packet (a sequence the unit's row
   // names): the packet is the unit's for its kind, but the unit is not named
   // by a title.
@@ -934,8 +956,14 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
           ? (lists.get(t.p.id) ?? []).find((x) => x.keys.some((k) => sameTag(k, key) && fitOf(k, u, x.line) === "yes")) : undefined;
         // A detail's own label that lists its units ("EXHAUST FAN (EF-1, 2,
         // 3, 4, & 5)") says whose it is, as a title list does.
+        // A system's drawing (its title names no family and no unit) whose
+        // text defines the unit's designator after words naming its kind
+        // ("HEAT EXCHANGER (HX) CONTROL VALVE" in a SNOW MELT sequence), where
+        // the set schedules one unit of that designator: it names that unit.
+        const designated = t.family === null && t.tags.length === 0 && designatorCount.get(key.prefix) === 1 && Boolean(definedIn(t.p).get(key.prefix)?.has(u.family));
         if (listed) add({ packet: t.p.id, kind: "label_list", evidence: `"${t.p.title}" is labelled for ${u.tag} in the list "${listed.line}"` });
         else if (asLabel || inText) add({ packet: t.p.id, kind: "tag_body", evidence: `${u.tag} is printed inside "${t.p.title}"${asLabel ? " as a label" : ""}` });
+        else if (designated) add({ packet: t.p.id, kind: "tag_body", evidence: `"${t.p.title}" names its kind by its designator "(${key.prefix})", and ${u.tag} is the one ${key.prefix} the set schedules` });
       }
     }
     direct.set(u.index, found);
@@ -1066,7 +1094,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     const familyCands = named ? [] : titled.filter((t) => t.p.scope !== "sheet" && !titleKinds.has(t.p.kind) && (t.tags.length === 0 || typicalFor(t)) && !listsOthers(t)
       && !(chosen?.has(t.p.id) && !found.some((b) => b.packet === t.p.id))
       && (((t.family === u.family || t.families.includes(u.family)) && !(partner && t.families.includes(u.family) && !t.families.includes(partner.family)))
-        || (t.family === null && namesRow(t.p.title, u, typeText(u), paired && SPLIT.test(repairSpacing(t.p.title))))));
+        || (t.family === null && (namesRow(t.p.title, u, typeText(u), paired && SPLIT.test(repairSpacing(t.p.title))) || (paired && splitOnly(t.p.title))))));
     const byKind = new Map<string, Array<{ t: typeof titled[number]; unconfirmed: string[]; apart: string[]; subject: boolean; qualified: number; vav?: string }>>();
     const peers = bySchedule.get(`${u.cite?.sheet}|${u.table_title}`) ?? [u];
     const special = scheduledApart(u, familyTitles.get(u.family) ?? new Set());
@@ -1085,7 +1113,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       // A drawing of one aspect of the kind's controls stands beside its
       // control diagram, not against it.
       const group = `${t.p.kind}${ASPECT.test(repairSpacing(t.p.title)) ? "|aspect" : ""}`;
-      (byKind.get(group) ?? byKind.set(group, []).get(group)!).push({ t, unconfirmed: [...unconfirmed, ...apart], apart, subject: namesRow(t.p.title, u, typeText(u), split), qualified: quals.length - unconfirmed.length,
+      (byKind.get(group) ?? byKind.set(group, []).get(group)!).push({ t, unconfirmed: [...unconfirmed, ...apart], apart, subject: namesRow(t.p.title, u, typeText(u), split) || (paired && splitOnly(t.p.title)), qualified: quals.length - unconfirmed.length,
         ...(vav.length ? { vav: `${vav.map((q) => `"${q}"`).join(", ")}: ${servesVav.get(u.index)}` } : {}) });
     }
     // Several details of one kind are left: the one printed right under or
@@ -1229,10 +1257,16 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   // terminal unit's), takes that unit's packets; so does a split system's
   // outdoor unit, its indoor unit's.
   /** The set's one air handler a unit's description puts it in ("AHU SUPPLY
-   * FAN", "RTU RETURN FAN"), when the unit is another kind of equipment. */
+   * FAN", "RTU RETURN FAN"), when the unit is another kind of equipment; or
+   * its schedule's title, when it is that air handler's name and then the
+   * unit's own kind ("DOAS HEAT EXCHANGER SCHEDULE" over a heat exchanger;
+   * never "AIR TERMINAL UNIT SCHEDULE (AHU 2)", the units an air handler
+   * serves). */
   const describedHost = (u: RowUnit): RowUnit | null => {
     const desc = Object.entries(u.cells).filter(([h]) => /\b(?:DESCRIPTION|TYPE)\b/i.test(h)).map(([, v]) => clean(v)).join(" | ");
     const fams = new Set([...desc.matchAll(/(?<![A-Z0-9-])(AHU|RTU)S?(?![A-Z0-9-])/g)].map((m) => HOST_PREFIX[m[1]]));
+    const lead = clean(u.table_title).replace(/\([^)]*\)/g, " ").replace(/\s+SCHEDULES?\s*$/, "").match(/^\s*(AHU|RTU|DOAS)S?\s+([A-Z].*)$/);
+    if (lead && controlFamily(lead[2]) === u.family) fams.add(HOST_PREFIX[lead[1]]);
     if (fams.size !== 1) return null;
     const [family] = fams;
     if (family === u.family) return null;
@@ -1336,8 +1370,26 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       // proposals stay: another unit's packet is no reading of this one's.
       const indoor = indoorOf.get(u.index) ?? servedIndoor.get(u.index);
       const host = indoor ?? describedHost(u);
-      if (!host) continue;
       const kinds = new Set(own.filter((b) => !b.proposal).map(kindOf));
+      if (!host) {
+        // A part bound to some kinds of packet by its own tag (017_MD's S-A-1
+        // and HC-A-1, printed in "ACU A-1 … SEQUENCE OF OPERATIONS" and its
+        // points schedule) takes the drawings titled for its host of the
+        // kinds it has none of ("AIR CONDITIONING UNIT (ACU-A-1)", the control
+        // diagram): the one host the set does not schedule that its row names,
+        // or the host of its designation under the set's convention (CI-55,
+        // CI-56). Never in place of a packet of its own.
+        const hosts = unscheduledHosts(u);
+        const conv = hosts.length ? null : conventionHost(u);
+        const theirs = hosts.length === 1 ? titled.filter((t) => t.p.scope !== "sheet" && titledFor(t.p.title, hosts[0].key)) : conv?.theirs ?? [];
+        const more = theirs.filter((t) => !kinds.has(t.p.kind) && !own.some((o) => o.packet === t.p.id) && !controllerDetail(t.p));
+        const perKind = new Map<string, number>();
+        for (const t of more) perKind.set(t.p.kind, (perKind.get(t.p.kind) ?? 0) + 1);
+        const why = hosts.length === 1 ? `its row names ${hosts[0].mark} (${hosts[0].header}), which the set does not schedule`
+          : conv ? `its schedule prints no owner; the set's ${conv.follow} parts that name theirs each name the ${conv.letters} of their own designation (${conv.example})` : "";
+        if (more.length) out.set(u.index, [...own, ...more.map((t) => ({ packet: t.p.id, kind: "component_of" as BindingKind, evidence: `${why}, and "${t.p.title}" is titled for it; the unit has no ${t.p.kind} of its own`, ...((perKind.get(t.p.kind) ?? 0) > 1 ? { ambiguous: true as const } : {}) }))]);
+        continue;
+      }
       const more = (out.get(host.index) ?? []).filter((b) => !b.proposal && b.kind !== "component_of" && !kinds.has(kindOf(b)) && !own.some((o) => o.packet === b.packet) && !controllerDetail(byId.get(b.packet)!));
       if (more.length) out.set(u.index, [...own, ...more.map((b) => ({ packet: b.packet, kind: "component_of" as BindingKind, evidence: `its row ${indoor ? "is the outdoor unit of" : "describes it as part of"} ${host.tag}, whose packet it is (${b.kind}: ${b.evidence})`, ...(b.ambiguous ? { ambiguous: true as const } : {}) }))]);
       continue;
@@ -1353,7 +1405,8 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     const serves = piping ? new Set<RowUnit>() : at(OWNER_HEADER);
     const elsewhere = Object.entries(u.cells).some(([h, v]) => LOCATION_HEADER.test(h) && /\b(?:TU|VAV|FCU|AHU|RTU|CUH|UH)[-\s]?\d/i.test(String(v)) && !namedUnits(v, true).length);
     const indoor = indoorOf.get(u.index) ?? undefined;
-    const owners = inside.size ? inside : !elsewhere && serves.size ? serves : indoor ? new Set([indoor]) : new Set<RowUnit>();
+    const described = inside.size || serves.size || indoor ? null : describedHost(u);
+    const owners = inside.size ? inside : !elsewhere && serves.size ? serves : indoor ? new Set([indoor]) : described ? new Set([described]) : new Set<RowUnit>();
     // A host the set does not schedule, named by its whole mark in the unit's
     // own row (017_MD's heating coils, "SERVICE: ACU-A-1"; its humidifier,
     // "LOCATION: BUILDING 101 ACU-A-3"): the drawings titled for that host,
@@ -1395,7 +1448,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     const [owner] = owners;
     const inherited = (out.get(owner.index) ?? []).filter((b) => !b.proposal && b.kind !== "component_of" && !controllerDetail(byId.get(b.packet)!));
     if (!inherited.length) continue;
-    out.set(u.index, inherited.map((b) => ({ packet: b.packet, kind: "component_of" as BindingKind, evidence: `its row ${inside.size ? "puts it in" : indoor === owner ? "is the outdoor unit of" : "names as what it serves"} ${owner.tag}, whose packet it is (${b.kind}: ${b.evidence})`, ...(b.ambiguous ? { ambiguous: true as const } : {}) })));
+    out.set(u.index, inherited.map((b) => ({ packet: b.packet, kind: "component_of" as BindingKind, evidence: `${inside.size ? "its row puts it in" : indoor === owner ? "its row is the outdoor unit of" : described === owner ? "its schedule describes it as part of" : "its row names as what it serves"} ${owner.tag}, whose packet it is (${b.kind}: ${b.evidence})`, ...(b.ambiguous ? { ambiguous: true as const } : {}) })));
   }
 
   // A hydronic plant's drawings: its equipment, where no packet of the kind
@@ -1468,7 +1521,8 @@ function servedSubject(title: string, u: RowUnit): string | null {
   for (const [h, v] of Object.entries(u.cells)) {
     if (!SERVICE_HEADER.test(h)) continue;
     const said = new Set(clean(v).split(/[^A-Z0-9]+/).filter(Boolean).map(stem));
-    if (words.every((w) => said.has(w))) return `its ${clean(h)} "${clean(v)}"`;
+    // In either spacing: "SNOW MELT" is the service "SNOWMELT".
+    if (words.every((w) => said.has(w)) || said.has(words.join(""))) return `its ${clean(h)} "${clean(v)}"`;
   }
   return null;
 }
@@ -1488,7 +1542,7 @@ const PLANT_WORDS = new Set(["CHILLED", "CHILLER", "CHW", "HOT", "HEATING", "HW"
  * CONNECTION DIAGRAM". */
 export function titleSystems(title: string): Set<PlantSystem> {
   const out = new Set<PlantSystem>();
-  if (subjectFamily(title) !== null) return out;
+  if (controlFamily(title) !== null) return out;
   const words = subjectWords(title).flatMap((w) => w.split("/")).filter((w) => w && !/\d/.test(w));
   if (!words.length || words.some((w) => !PLANT_WORDS.has(w))) return out;
   if (words.some((w) => w === "CHILLED" || w === "CHILLER" || w === "CHW")) out.add("chilled_water");
@@ -1557,7 +1611,7 @@ const AIR_HANDLERS = new Set(["AHU", "RTU", "DOAS", "OUTDOOR_AIR_UNIT"]);
 const OWNER_HEADER = /\b(?:SERVICE|SEVICE|SERVES|SERVING|SERVED|SYSTEM|ASSOCIATED|CONNECTED|MATCHING|PAIRED)\b/i;
 /** Equipment a location names by its standard designator ("TU01", "VAV-3"),
  * as a family: TU / ATU are terminal units. */
-const HOST_PREFIX: Record<string, string> = { TU: "VAV", ATU: "VAV", VAV: "VAV", VAVB: "VAV", AHU: "AHU", RTU: "RTU", FCU: "FCU" };
+const HOST_PREFIX: Record<string, string> = { TU: "VAV", ATU: "VAV", VAV: "VAV", VAVB: "VAV", AHU: "AHU", RTU: "RTU", FCU: "FCU", DOAS: "DOAS" };
 
 /** The family of unscheduled equipment a unit's location puts it in. */
 function hostFamilyOf(u: RowUnit, byTag: ReadonlyMap<string, readonly RowUnit[]>): { family: string; loc: string } | null {
@@ -1587,11 +1641,25 @@ const MEDIA = new Set(["HYDRONIC", "CHILLED_WATER", "STEAM", "CONDENSER", "CONDE
  * schedule title or type cells print. */
 function sharesSubject(title: string, u: Pick<RowUnit, "table_title" | "cells">): boolean {
   const row = ` ${canonSubject(typeText(u)).join(" ")} `;
-  return canonSubject(title).some((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/\d/.test(w) && row.includes(` ${w} `));
+  return canonSubject(subjectOnly(title)).some((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/\d/.test(w) && row.includes(` ${w} `));
+}
+
+/** A title less the words that name no subject (NOT_SUBJECT): how the work
+ * is bought or switched, or what the drawing is ("SPLIT SYSTEMS - SEQUENCE
+ * OF OPERATION & BAS INTERFACE" is about split systems; no row prints
+ * INTERFACE). */
+const subjectOnly = (title: string) => repairSpacing(title).replace(NOT_SUBJECT, " ");
+
+/** Whether a title is about split systems and nothing else ("SPLIT SYSTEMS -
+ * SEQUENCE OF OPERATION & BAS INTERFACE"): the subject of a unit that is a
+ * split system's half, whatever its row prints. */
+function splitOnly(title: string): boolean {
+  const words = canonSubject(subjectOnly(title)).filter((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w));
+  return words.length === 1 && words[0] === "SPLIT";
 }
 
 function namesRow(title: string, u: Pick<RowUnit, "table_title" | "cells">, text = typeText(u), paired = false): boolean {
-  const words = canonSubject(title).filter((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !(paired && w === "SPLIT"));
+  const words = canonSubject(subjectOnly(title)).filter((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !(paired && w === "SPLIT"));
   if (!words.length) return false;
   const row = ` ${canonSubject(text).join(" ")} `;
   return words.every((w) => row.includes(` ${w} `));

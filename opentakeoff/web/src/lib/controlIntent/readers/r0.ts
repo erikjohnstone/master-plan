@@ -37,12 +37,12 @@ import type { Box } from "../../assemblies/scheduleNotes";
 import type { Binding } from "../binding";
 import { coSubjects, PREFIX_WORDS, scheduleNamesSubject, tagKey, titleTags } from "../binding";
 import type { Packet } from "../evidence";
-import { subjectFamily } from "../evidence";
+import { controlFamily } from "../evidence";
 import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v9";
+export const R0_VERSION = "control_r0_v10";
 
 /** R0's why for an absence read where no title binds the unit to a packet
  * of its own. */
@@ -141,11 +141,11 @@ export function aboutOthers(bp: { packet: Pick<Packet, "title" | "subtitle">; bi
   // WATER REHEAT …" over the terminal air boxes TAB-102 …, CI-65).
   const lead = head.trim().match(/^[A-Z]{2,6}(?=\s|$)/)?.[0];
   const marked = new Set(lead ? scheduled.filter((s) => tagKey(s.tag)?.prefix === lead).map((s) => s.family) : []);
-  const inWords = subjectFamily(head);
+  const inWords = controlFamily(head);
   const subject = inWords ?? (marked.size === 1 ? [...marked][0] : null);
   if (subject && unit.family && subject !== unit.family && !parts.has(subject) && !co.has(unit.family)) return `its title is about ${subject}${inWords ? "" : ` (${lead}, as the set marks them)`}, not ${unit.family}`;
   if (bp.binding.kind === "family_detail" && unit.family && row) {
-    const family = subjectFamily(bp.packet.title);
+    const family = controlFamily(bp.packet.title);
     const fits = family === unit.family || co.has(unit.family) || (family !== null && parts.has(family)) || (family === null && scheduleNamesSubject(bp.packet.title, row));
     if (!fits) return family ? `its title is about ${family}, not ${unit.family}` : `its title names no kind of equipment, and ${unit.tag}'s schedule does not print its subject`;
   }

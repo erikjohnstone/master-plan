@@ -307,6 +307,26 @@ export function subjectFamily(title: string): string | null {
   return keyed.size === 1 ? [...keyed][0] : null;
 }
 
+/** A terminal unit named in words the schedule-title rules leave to a
+ * schedule's own title: "DUAL DUCT TERMINAL UNIT", "SINGLE DUCT TERMINAL
+ * BOX", "TERMINAL UNITS" (never a packaged terminal air conditioner). */
+const TERMINAL_UNIT = /(?<!\bPACKAGED\s)\b(?:(?:DUAL|DOUBLE|SINGLE)[\s-]+DUCT\s+)?TERMINAL\s+(?:UNITS?|BOX(?:ES)?)\b/;
+
+/** The unit family a control drawing's title names, as the binder and its
+ * readers read it: subjectFamily, else an air terminal unit named in words
+ * (TERMINAL_UNIT; 039_TX's "DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM" over
+ * its AIR TERMINAL UNIT SCHEDULE) when no word of it names another family
+ * ("TERMINAL BOX VAV/FCU/AFCV" names two, so none). The finder reads
+ * subjectFamily alone. */
+export function controlFamily(title: string): string | null {
+  const f = subjectFamily(title);
+  if (f) return f;
+  const t = repairSpacing(title);
+  if (!TERMINAL_UNIT.test(t)) return null;
+  const others = t.split(/[\s/,&()]+/).map((w) => subjectFamily(w)).filter((g): g is string => g !== null && g !== "VAV");
+  return others.length ? null : "VAV";
+}
+
 /** The family one part of a title names by its subject words: the schedule-
  * title rule that reads the most of them, else a standard tag prefix. */
 function familyOfPart(part: string): string | null {

@@ -3,27 +3,27 @@
  "total": {
   "packets": 138,
   "pairs": 310,
-  "pair_hits": 166,
-  "recall": 0.535483870967742,
-  "recall_without_semantic": 0.5806451612903226,
-  "recall_with_proposals": 0.5548387096774193,
-  "bindings": 191,
-  "confirmed_bindings": 174,
-  "precision": 0.9482758620689655,
-  "precision_with_proposals": 0.8952879581151832,
+  "pair_hits": 182,
+  "recall": 0.5870967741935483,
+  "recall_without_semantic": 0.5990783410138248,
+  "recall_with_proposals": 0.6064516129032258,
+  "bindings": 205,
+  "confirmed_bindings": 188,
+  "precision": 0.9627659574468085,
+  "precision_with_proposals": 0.9121951219512195,
   "proposals": 17,
   "ambiguous": 18,
   "hits_inside": 0,
   "hits_containing": 0,
   "key_packets_not_found": 10,
   "units_with_packets": 146,
-  "unit_recall": 0.684931506849315,
+  "unit_recall": 0.7465753424657534,
   "unmatched_instances": 21,
   "none_units_bound": 4,
   "by_key_kind": {
    "family_detail": {
     "pairs": 187,
-    "hit": 105
+    "hit": 109
    },
    "list_range": {
     "pairs": 19,
@@ -31,7 +31,7 @@
    },
    "semantic": {
     "pairs": 93,
-    "hit": 40
+    "hit": 52
    },
    "tag": {
     "pairs": 11,
@@ -40,13 +40,13 @@
   },
   "by_binding_kind": {
    "tag_body": {
-    "bindings": 51,
-    "correct": 48,
+    "bindings": 53,
+    "correct": 50,
     "proposal": 0
    },
    "family_detail": {
-    "bindings": 129,
-    "correct": 112,
+    "bindings": 131,
+    "correct": 116,
     "proposal": 17
    },
    "list_range": {
@@ -55,17 +55,22 @@
     "proposal": 0
    },
    "system": {
-    "bindings": 2,
-    "correct": 2,
+    "bindings": 4,
+    "correct": 4,
+    "proposal": 0
+   },
+   "component_of": {
+    "bindings": 8,
+    "correct": 8,
     "proposal": 0
    }
   },
   "miss_reasons": {
    "key packet not found by the finder": 48,
    "bound as a proposal only": 6,
-   "bound to another packet of that kind": 18,
-   "bound to packets of other kinds only": 12,
-   "no binding at all (tag read)": 16,
+   "bound to another packet of that kind": 16,
+   "bound to packets of other kinds only": 6,
+   "no binding at all (tag read)": 8,
    "instance not matched to a schedule row": 44
   }
  },
@@ -2627,14 +2632,14 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "system",
      "matched": true,
      "note": "item A SNOW MELT PUMPS; its schedule service is SNOWMELT",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     },
     {
@@ -2645,14 +2650,14 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "system",
      "matched": true,
      "note": "item A SNOW MELT PUMPS; its schedule service is SNOWMELT",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     },
     {
@@ -2663,10 +2668,10 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "family_detail",
      "matched": true,
      "note": "M601 section SPLIT SYSTEMS - AIR SOURCE; its DUCTLESS WALL MOUNT FAN COILS (not the four-pipe FAN COIL UNITS section)",
      "bound_same_kind": true,
@@ -2681,10 +2686,10 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "family_detail",
      "matched": true,
      "note": "its DUCTLESS WALL MOUNT FAN COILS (not the four-pipe FAN COIL UNITS section)",
      "bound_same_kind": true,
@@ -2699,14 +2704,14 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "family_detail",
      "matched": true,
      "note": "the split system's OUTDOOR UNIT",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     },
     {
@@ -2717,14 +2722,14 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "family_detail",
      "matched": true,
      "note": "the split system's OUTDOOR UNIT",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     },
     {
@@ -2735,14 +2740,14 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "KITCHEN MECHANICAL EQUIPMENT - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "tag_body",
      "matched": true,
      "note": "items B and C name MAKEUP AIR UNIT (MAU); the schedule's only MAU, serving KITCHEN",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     },
     {
@@ -2807,14 +2812,14 @@
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
      "packet_title": "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "tag_body",
      "matched": true,
      "note": "item B HEAT EXCHANGER (HX) control valve; the schedule's only HX, a snow melt heat exchanger (its note 1)",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     }
    ],
@@ -3016,17 +3021,47 @@
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+     "tag": "SP-1",
+     "family": "PUMP",
+     "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
+     "packet_title": "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_scope": "detail",
+     "kind": "system",
+     "evidence": "its SERVICE \"SNOWMELT\" names the whole subject of \"SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE\", the system it serves",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+     "tag": "SP-2",
+     "family": "PUMP",
+     "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
+     "packet_title": "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_scope": "detail",
+     "kind": "system",
+     "evidence": "its SERVICE \"SNOWMELT\" names the whole subject of \"SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE\", the system it serves",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
      "tag": "FC-01",
      "family": "FCU",
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
-     "packet_title": "FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
      "packet_scope": "detail",
      "kind": "family_detail",
-     "evidence": "\"FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE\" is a detail for its family (FCU)",
+     "evidence": "\"SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE\" is a detail for what its schedule names",
      "proposal": false,
      "ambiguous": false,
-     "correct": false,
-     "hit_how": null,
+     "correct": true,
+     "hit_how": "same",
      "key_none": false
     },
     {
@@ -3034,14 +3069,59 @@
      "tag": "FC-02",
      "family": "FCU",
      "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
-     "packet_title": "FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
      "packet_scope": "detail",
      "kind": "family_detail",
-     "evidence": "\"FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE\" is a detail for its family (FCU)",
+     "evidence": "\"SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE\" is a detail for what its schedule names",
      "proposal": false,
      "ambiguous": false,
-     "correct": false,
-     "hit_how": null,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+     "tag": "HP-01",
+     "family": "HEAT_PUMP",
+     "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
+     "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_scope": "detail",
+     "kind": "family_detail",
+     "evidence": "\"SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE\" is a detail for what its schedule names",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+     "tag": "HP-02",
+     "family": "HEAT_PUMP",
+     "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
+     "packet_title": "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_scope": "detail",
+     "kind": "family_detail",
+     "evidence": "\"SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE\" is a detail for what its schedule names",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+     "tag": "MAU-1",
+     "family": "OUTDOOR_AIR_UNIT",
+     "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
+     "packet_title": "KITCHEN MECHANICAL EQUIPMENT - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_scope": "detail",
+     "kind": "tag_body",
+     "evidence": "\"KITCHEN MECHANICAL EQUIPMENT - SEQUENCE OF OPERATION & BAS INTERFACE\" names its kind by its designator \"(MAU)\", and MAU-1 is the one MAU the set schedules",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
      "key_none": false
     },
     {
@@ -3083,6 +3163,21 @@
      "packet_scope": "detail",
      "kind": "family_detail",
      "evidence": "\"ELECTRIC HEATERS - SEQUENCE OF OPERATION & BAS INTERFACE\" is a detail for its family (UNIT_HEATER)",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+     "tag": "HX-1",
+     "family": "HEAT_EXCHANGER",
+     "packet_sheet": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf#16",
+     "packet_title": "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE",
+     "packet_scope": "detail",
+     "kind": "tag_body",
+     "evidence": "\"SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE\" names its kind by its designator \"(HX)\", and HX-1 is the one HX the set schedules",
      "proposal": false,
      "ambiguous": false,
      "correct": true,
@@ -3215,7 +3310,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
@@ -3224,7 +3319,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
@@ -3233,7 +3328,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
@@ -3242,7 +3337,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
@@ -3251,7 +3346,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
@@ -3260,7 +3355,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
@@ -3269,7 +3364,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
@@ -3305,7 +3400,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     }
    ],
    "not_found": []
@@ -3322,13 +3417,13 @@
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
      "packet_title": "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "the supply fan of ACU-A-1 (schedule SERVICE)",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -3376,13 +3471,13 @@
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
      "packet_title": "AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "the supply fan of ACU-A-2 (schedule SERVICE)",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -3430,13 +3525,13 @@
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
      "packet_title": "AIR CONDITIONING UNIT (ACU-A-3, ACU A-4, ACU A-5, AND ACU A-6) - BUILDING 101",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "the supply fan of ACU-A-3 (schedule SERVICE)",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -3646,13 +3741,13 @@
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
      "packet_title": "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "the steam preheat coil (V1) of ACU-A-1 (schedule SERVICE)",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -3700,13 +3795,13 @@
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
      "packet_title": "AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "the steam preheat coil (V1) of ACU-A-2 (schedule SERVICE)",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -3754,13 +3849,13 @@
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
      "packet_title": "AIR CONDITIONING UNIT (ACU-A-3, ACU A-4, ACU A-5, AND ACU A-6) - BUILDING 101",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "the steam preheat coil (V1) of ACU-A-3 (schedule SERVICE)",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -4050,6 +4145,21 @@
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+     "tag": "S-A-1",
+     "family": "FAN",
+     "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
+     "packet_title": "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its schedule prints no owner; the set's 19 parts that name theirs each name the ACU of their own designation (E-A-1: ACU-A-1), and \"AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101\" is titled for it; the unit has no diagram of its own",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
      "tag": "S-A-2",
      "family": "FAN",
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#16",
@@ -4080,6 +4190,21 @@
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+     "tag": "S-A-2",
+     "family": "FAN",
+     "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
+     "packet_title": "AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its schedule prints no owner; the set's 19 parts that name theirs each name the ACU of their own designation (E-A-1: ACU-A-1), and \"AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101\" is titled for it; the unit has no diagram of its own",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
      "tag": "S-A-3",
      "family": "FAN",
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#16",
@@ -4102,6 +4227,21 @@
      "packet_scope": "detail",
      "kind": "tag_body",
      "evidence": "S-A-3 is printed inside \"DDC INPUT/OUPUT POINT SCHEDULE - ACU A-3, A-4, A-5, AND A-6\"",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+     "tag": "S-A-3",
+     "family": "FAN",
+     "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
+     "packet_title": "AIR CONDITIONING UNIT (ACU-A-3, ACU A-4, ACU A-5, AND ACU A-6) - BUILDING 101",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its schedule prints no owner; the set's 19 parts that name theirs each name the ACU of their own designation (E-A-1: ACU-A-1), and \"AIR CONDITIONING UNIT (ACU-A-3, ACU A-4, ACU A-5, AND ACU A-6) - BUILDING 101\" is titled for it; the unit has no diagram of its own",
      "proposal": false,
      "ambiguous": false,
      "correct": true,
@@ -4275,6 +4415,21 @@
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+     "tag": "HC-A-1",
+     "family": "DUCT_MOUNTED_COIL",
+     "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
+     "packet_title": "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its row names ACU-A-1 (SERVICE), which the set does not schedule, and \"AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101\" is titled for it; the unit has no diagram of its own",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
      "tag": "HC-A-2",
      "family": "DUCT_MOUNTED_COIL",
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#16",
@@ -4305,6 +4460,21 @@
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+     "tag": "HC-A-2",
+     "family": "DUCT_MOUNTED_COIL",
+     "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
+     "packet_title": "AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its row names ACU-A-2 (SERVICE), which the set does not schedule, and \"AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101\" is titled for it; the unit has no diagram of its own",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
      "tag": "HC-A-3",
      "family": "DUCT_MOUNTED_COIL",
      "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#16",
@@ -4327,6 +4497,21 @@
      "packet_scope": "detail",
      "kind": "tag_body",
      "evidence": "HC-A-3 is printed inside \"DDC INPUT/OUPUT POINT SCHEDULE - ACU A-3, A-4, A-5, AND A-6\"",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+     "tag": "HC-A-3",
+     "family": "DUCT_MOUNTED_COIL",
+     "packet_sheet": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#15",
+     "packet_title": "AIR CONDITIONING UNIT (ACU-A-3, ACU A-4, ACU A-5, AND ACU A-6) - BUILDING 101",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its row names ACU-A-3 (SERVICE), which the set does not schedule, and \"AIR CONDITIONING UNIT (ACU-A-3, ACU A-4, ACU A-5, AND ACU A-6) - BUILDING 101\" is titled for it; the unit has no diagram of its own",
      "proposal": false,
      "ambiguous": false,
      "correct": true,
@@ -4522,7 +4707,7 @@
      "matched": true,
      "why": null,
      "keyed": 3,
-     "hit": 2
+     "hit": 3
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
@@ -4531,7 +4716,7 @@
      "matched": true,
      "why": null,
      "keyed": 3,
-     "hit": 2
+     "hit": 3
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
@@ -4540,7 +4725,7 @@
      "matched": true,
      "why": null,
      "keyed": 3,
-     "hit": 2
+     "hit": 3
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
@@ -4576,7 +4761,7 @@
      "matched": true,
      "why": null,
      "keyed": 3,
-     "hit": 2
+     "hit": 3
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
@@ -4585,7 +4770,7 @@
      "matched": true,
      "why": null,
      "keyed": 3,
-     "hit": 2
+     "hit": 3
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
@@ -4594,7 +4779,7 @@
      "matched": true,
      "why": null,
      "keyed": 3,
-     "hit": 2
+     "hit": 3
     },
     {
      "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
@@ -6878,14 +7063,14 @@
      "packet_sheet": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#91",
      "packet_title": "DOAS UNIT CONTROL DIAGRAM",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "M-705 detail 1; labelled inside as PLATE AND FRAME HEAT EXCHANGER; the heat exchanger of 001-DOAS-01-DC9 (DOAS schedule HEAT EXCHANGER column)",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     },
     {
@@ -6896,14 +7081,14 @@
      "packet_sheet": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#91",
      "packet_title": "SEQUENCE OF OPERATION FOR DOAS",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "component_of",
      "matched": true,
      "note": "the sequence of its DOAS (001-DOAS-01-DC9); the passive exchanger has no points of its own",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     }
    ],
@@ -7142,6 +7327,36 @@
      "packet_scope": "detail",
      "kind": "family_detail",
      "evidence": "\"SEQUENCE OF OPERATION FOR CRAC UNITS\" is a detail for what its schedule names",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+     "tag": "001-DHX-01",
+     "family": "HEAT_EXCHANGER",
+     "packet_sheet": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#91",
+     "packet_title": "SEQUENCE OF OPERATION FOR DOAS",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its schedule describes it as part of 001-DOAS-01-DC9, whose packet it is (family_detail: \"SEQUENCE OF OPERATION FOR DOAS\" is a detail for its family (DOAS))",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+     "tag": "001-DHX-01",
+     "family": "HEAT_EXCHANGER",
+     "packet_sheet": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf#91",
+     "packet_title": "DOAS UNIT CONTROL DIAGRAM",
+     "packet_scope": "detail",
+     "kind": "component_of",
+     "evidence": "its schedule describes it as part of 001-DOAS-01-DC9, whose packet it is (family_detail: \"DOAS UNIT CONTROL DIAGRAM\" is a detail for its family (DOAS))",
      "proposal": false,
      "ambiguous": false,
      "correct": true,
@@ -7427,7 +7642,7 @@
      "matched": true,
      "why": null,
      "keyed": 2,
-     "hit": 0
+     "hit": 2
     }
    ],
    "not_found": []

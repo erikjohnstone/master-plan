@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T01:44:19.594Z",
+  "generated_at": "2026-10-01T03:09:16.817Z",
   "live": true,
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -668,33 +668,33 @@
           "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
           "decisions": 22,
           "changed": 0,
-          "calls": 18,
-          "tokens": 164041,
-          "wall_s": 43
+          "calls": 17,
+          "tokens": 107176,
+          "wall_s": 26
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
           "decisions": 103,
           "changed": 1,
           "calls": 29,
-          "tokens": 202166,
-          "wall_s": 72
+          "tokens": 193533,
+          "wall_s": 28
         },
         {
           "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
           "decisions": 4,
           "changed": 0,
           "calls": 12,
-          "tokens": 86619,
-          "wall_s": 18
+          "tokens": 85281,
+          "wall_s": 27
         },
         {
           "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
           "decisions": 89,
           "changed": 0,
           "calls": 9,
-          "tokens": 36452,
-          "wall_s": 7
+          "tokens": 36559,
+          "wall_s": 6
         },
         {
           "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
@@ -702,7 +702,7 @@
           "changed": 0,
           "calls": 9,
           "tokens": 90678,
-          "wall_s": 24
+          "wall_s": 27
         },
         {
           "id": "12_MT_MSU_ReidHall_Renovation",
@@ -724,30 +724,30 @@
           "id": "bldg5406-hvac-demo",
           "decisions": 97,
           "changed": 0,
-          "calls": 35,
-          "tokens": 309661,
-          "wall_s": 118
+          "calls": 34,
+          "tokens": 280662,
+          "wall_s": 100
         },
         {
           "id": "federal-mech",
           "decisions": 194,
           "changed": 8,
           "calls": 62,
-          "tokens": 447390,
-          "wall_s": 111
+          "tokens": 450869,
+          "wall_s": 98
         },
         {
           "id": "itd-d1-lab",
-          "decisions": 54,
-          "changed": 5,
-          "calls": 41,
-          "tokens": 269162,
-          "wall_s": 96
+          "decisions": 53,
+          "changed": 2,
+          "calls": 42,
+          "tokens": 284637,
+          "wall_s": 88
         }
       ],
-      "decisions": 728,
-      "changed": 14,
-      "share": 0.019230769230769232,
+      "decisions": 727,
+      "changed": 11,
+      "share": 0.015130674002751032,
       "changes": [
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -772,9 +772,9 @@
           "tag": "AHU-1",
           "question": "opt.freezestat_to_bas",
           "from": "proposal false",
-          "to": "unresolved null",
+          "to": "applied false",
           "from_readers": "r0:no r1:not_shown r2a:no r2b:no(unverified)",
-          "to_readers": "r0:no r1:no r2a:no(unverified) r2b:yes(unverified)"
+          "to_readers": "r0:no r1:no r2a:not_shown r2b:not_shown"
         },
         {
           "id": "federal-mech",
@@ -784,15 +784,6 @@
           "to": "unresolved null",
           "from_readers": "r0:yes r1:not_shown r2a:not_shown r2b:not_shown",
           "to_readers": "r0:yes r1:no r2a:not_shown r2b:no(unverified)"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "AHU-1",
-          "question": "opt.economizer",
-          "from": "proposal true",
-          "to": "applied true",
-          "from_readers": "r0:yes r1:yes(unverified) r2a:not_shown r2b:yes",
-          "to_readers": "r0:yes r1:yes(unverified) r2a:yes r2b:yes"
         },
         {
           "id": "federal-mech",
@@ -823,30 +814,21 @@
         },
         {
           "id": "federal-mech",
+          "tag": "EF-4",
+          "question": "opt.motorized_damper",
+          "from": "applied true",
+          "to": "proposal true",
+          "from_readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+          "to_readers": "r0:yes r1:not_shown r2a:yes(unverified) r2b:yes"
+        },
+        {
+          "id": "federal-mech",
           "tag": "AHU-1",
           "question": "role",
           "from": "none",
           "to": "applied \"in\"",
           "from_readers": "",
           "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:commands r2b:commands"
-        },
-        {
-          "id": "itd-d1-lab",
-          "tag": "B-1",
-          "question": "role",
-          "from": "unresolved null",
-          "to": "proposal \"in\"",
-          "from_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:monitors_only(unverified)",
-          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:commands"
-        },
-        {
-          "id": "itd-d1-lab",
-          "tag": "B-2",
-          "question": "role",
-          "from": "unresolved null",
-          "to": "proposal \"in\"",
-          "from_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:monitors_only(unverified)",
-          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:commands"
         },
         {
           "id": "itd-d1-lab",
@@ -865,25 +847,16 @@
           "to": "proposal \"in\"",
           "from_readers": "r0:commands r1:commands r2a:not_shown r2b:commands",
           "to_readers": "r0:commands r1:commands(unverified) r2a:not_shown r2b:commands"
-        },
-        {
-          "id": "itd-d1-lab",
-          "tag": "BP-1",
-          "question": "role",
-          "from": "none",
-          "to": "unresolved null",
-          "from_readers": "",
-          "to_readers": "r0:not_shown r1:commands(unverified) r2a:monitors_only r2b:monitors_only"
         }
       ],
       "pass": true
     },
     "cost": {
-      "calls": 222,
-      "tokens": 1633298,
-      "max_wall_s": 118,
-      "total_wall_s": 492,
-      "recorded_at": "2026-09-30T20:01:49.114Z",
+      "calls": 221,
+      "tokens": 1556524,
+      "max_wall_s": 100,
+      "total_wall_s": 403,
+      "recorded_at": "2026-10-01T01:55:35.943Z",
       "pass": true
     },
     "raster": {

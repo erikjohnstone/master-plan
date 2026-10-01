@@ -2043,3 +2043,125 @@ Tests: readers.test.ts: the combiner (`unreadBeside` holds every absence; `besid
 only, C9 and C9b); the record end to end (an unbound points list that prints the damper holds it, a silent one lets
 it apply, an unbound diagram holds it, the list bound to another unit lets it apply), each half checked to fail
 without the change.
+
+## CI-72: units their set's own words tie to a drawing went unbound: a split system's sequence, a service run together, a designator the text defines, a part's host diagram, a part scheduled under its host's name (FIXED, this commit)
+
+**Found:** 2026-10-01, reading binding tier 3's open misses one by one (03-binding-eval-dev3: 144 of 310 pairs
+missed). Five were the binder's:
+- 14_OR: "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE" never reached the units of the SPLIT SYSTEM HEAT
+  PUMPS schedule (FC-01, FC-02, HP-01, HP-02). The title's subject words are SPLIT and INTERFACE (BAS is generic,
+  INTERFACE is not), and a title naming no family binds a unit only where its schedule prints the whole subject.
+  CI-29 had taken BAS INTERFACE out of a title's qualifiers, not out of that subject. The split fan coils fell back
+  to "FAN COIL UNITS - SEQUENCE …", the classroom fan coils' (two false bindings).
+- 14_OR: the snowmelt pumps (SP-1, SP-2: "SERVICE: SNOWMELT") never took "SNOW MELT - SEQUENCE …": a service names a
+  system's subject word for word, in one spelling.
+- 14_OR: HX-1 (the set's one heat exchanger; its row prints only its location) and MAU-1 ("SERVING: KITCHEN"). The
+  SNOW MELT sequence reads "HEAT EXCHANGER (HX) CONTROL VALVE SHALL BE CONTROLLED BY THE BAS". The KITCHEN
+  MECHANICAL EQUIPMENT sequence reads "MAKEUP AIR UNIT (MAU) SHALL BE INTERLOCKED TO THE KITCHEN HOOD EXHAUST FAN
+  (KEF-01)". The text names each by its designator.
+- 017_MD: the supply fans and heating coils (S-A-1 to S-A-3, HC-A-1 to HC-A-3) are printed in their air
+  conditioning unit's sequence and points schedule, and bound there by their own tags. So they never took its
+  control diagram, "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101". The host rules (CI-55, CI-56) ran only for a
+  part with no packet of its own.
+- 030_NY: 001-DHX-01, scheduled under "DOAS HEAT EXCHANGER SCHEDULE", took nothing. Its schedule's title names its
+  host's kind before its own; a part's host was read from its DESCRIPTION and TYPE cells only ("AHU SUPPLY FAN").
+
+**Change (binding.ts):**
+- A title's subject, as a schedule must print it (`namesRow`, `sharesSubject`), leaves out the words that name no
+  subject (NOT_SUBJECT: BAS INTERFACE, bid alternates, ON/OFF, P&ID, power supply, wiring). The finder's
+  subjectWords is unchanged.
+- A title about split systems and nothing else ("SPLIT SYSTEMS - …") is the subject of a split system's half
+  whose row pairs it with its other half, whatever the row prints. Found by the rule's test: the paired halves set
+  SPLIT aside, which left such a title no word to match.
+- A service names a system's whole subject in either spacing ("SNOWMELT" under "SNOW MELT").
+- A system's drawing (its title names no family and no unit) whose text defines a designator after words naming a
+  kind of unit ("HEAT EXCHANGER (HX)") names the set's one unit of that designator, of that kind (tag_body). Two
+  units of it, or the letters marking another kind, bind nothing.
+- A part bound by its own tag takes the drawings titled for its host, of the kinds it has none of. The host is the
+  one unscheduled host its row names (CI-55), or the host of its designation under the set's convention (CI-56).
+- A part's host is also read from its schedule's title when that title is the set's one AHU, RTU or DOAS followed
+  by the part's own kind ("DOAS HEAT EXCHANGER SCHEDULE"). Never a scope note ("AIR TERMINAL UNIT SCHEDULE (AHU
+  2)": an air handler's terminal units are not its parts). It is the owner of a part whose row names no other.
+
+**Measured** (binding eval on cached snapshots, finder v6; base a847120):
+- Binding tier 3 dev (7 open sets, 2 walled):
+  - pair recall 53.5% → 58.7% (166 → 182 of 310); precision 94.8% → 96.3% (174 → 188 confirmed bindings; FC-01
+    and FC-02 no longer take the classroom fan coils' sequence); unit recall 68.5% → 74.7%.
+  - per set: 14_OR 66.7% → 100% (precision 88.9% → 100%); 017_MD 84.6% → 100%; 030_NY 47.1% → 52.9%.
+- Dev, dev 2, held-out and held-out 2: their reports are byte-identical.
+- Over all 56 cached open snapshots (25 dev-tier sets, 31 unseen), 21 units change, all in 14_OR, 017_MD and
+  030_NY: 22 bindings added, 2 removed. Each was read against the drawings. The six on unkeyed units (return fans
+  E-A-1 to E-A-3, cooling coils CC-A-1 to CC-A-3) take their air conditioning unit's control diagram, which draws
+  the RETURN FAN and both coil valves (V1, V2).
+- None of the three sets is in the typicals, reading or unseen-audit tiers: GATE C, GATE B2 and GATE D are
+  untouched.
+
+**Not fixed (recall, documented):**
+- 03_FL's 15 terminal units and 043_FL's 4 pumps (42 pairs, "instance not matched"). The binder binds "ATU A" to
+  its SINGLE DUCT ATU BOX CONTROL SCHEMATIC, and HWP1-2 and CWP9-10 to their pumps' diagrams and sequences. The
+  keys spell the instances "(E)ATU A" and HWP-1/HWP-2: the row "HWP1-2" schedules two pumps, which the takeoff
+  reads as one unit (AS-116). Neither key nor scorer is changed.
+- 030_NY:
+  - The telecom rooms' fan coils, under "TELECOMMUNICATION ROOM CONTROL DIAGRAM (FAN COIL)" (12 pairs): which fan
+    coils serve a telecom room is printed only in the plans' room names; their rows give a room number.
+  - The CRAC condensing units (4 pairs): the key chooses between the PLC and the standalone controller's drawings
+    from the renders.
+- The finder's misses (48 pairs, most on the walled documents).
+
+Tests: evidence.test.ts "… (CI-72)". It covers each rule with its negative controls:
+- a pump serving another system;
+- two heat exchangers;
+- the letters marking another kind;
+- a fan bound by its tag with no host;
+- two DOAS units;
+- terminal units scheduled "(AHU 2)";
+- the paired split system's halves.
+
+Each rule was checked to fail without its change (six mutations).
+
+## CI-73: a terminal unit named in words ("DUAL DUCT TERMINAL UNIT …") was no family to the binder, so 039_TX's 186 terminal units took none of their drawings (FIXED, this commit; R0 v10)
+
+**Found:** 2026-10-01, by a census of the open sets' units with no confirmed binding (47 sets with packets: 646 of
+1,484 units; 202 of 487 packets bound to no unit). The largest gap was 039_TX: all 186 units of its BLDG 109 AIR
+TERMINAL UNIT SCHEDULE were unbound beside "DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM", "DUAL DUCT TERMINAL UNIT
+CONTROLS" (its points list) and "DUAL DUCT TERMINAL UNIT SEQUENCE OF OPERATION", which no unit took. The binder reads
+a title's family by the takeoff's schedule-title rules (FAMILY_SPECS), which name "AIR TERMINAL UNIT" and "FAN
+POWERED TERMINAL UNIT" but not a terminal unit qualified otherwise. Those rules decide what the takeoff counts, and
+the finder reads them too, so the fix is not made there.
+
+**Change:**
+- `controlFamily` (evidence.ts): subjectFamily, else "VAV" for a title that names a terminal unit or box in words
+  (DUAL, DOUBLE or SINGLE DUCT, or none). Never a packaged terminal unit, and never where another word of the title,
+  or a member of a union ("TERMINAL BOX VAV/FCU/AFCV"), names another family.
+- The binder reads every title through it, and so does R0's check that a family detail is about the unit's family
+  (R0 v10). The finder keeps subjectFamily: no packet changes.
+- 039_TX's rows (TU-101C, TU-101H, …) cite notes that say DUAL DUCT, so the qualifier is confirmed: each unit takes
+  the diagram, the points list and the sequence.
+
+**Measured:**
+- Binding evals on every tier (dev, dev 2, dev 3, held-out, held-out 2): unchanged beyond CI-72.
+- Over the 56 cached open snapshots, the 186 units are the only change beyond CI-72: 558 family details, each a
+  terminal unit of the set whose drawings are the dual duct terminal unit's.
+- The unseen audit (039_TX is an unseen set): 1,116 new applied decisions, six per unit, each checked against sheet
+  M-501. Role "in" (the BAS drives the cold and hot duct dampers, AO on the diagram and the points list); setpoint
+  adjustment true (ZONE SETPOINT ADJUST, an AI; "THE OCCUPANT SHALL BE ABLE TO ADJUST ... AT THE ZONE SENSOR"); no CO2
+  sensor, occupancy sensor, window switch or reheat water temperatures (C9b: none in the diagram, the points list or
+  the sequence; the modes run on schedule). All right. The audit reads 1,230 applied, 1,230 right.
+- Found by that audit: the vision runs' crop of the control diagram held only its title. The diagram's own labels
+  ("AO - COLD DUCT DAMPER", "NOTE: OPERATE TWO SINGLE DUCT RETROFIT KITS AS A COMBINED DUAL DUCT UNIT.") are printed at
+  the title's size on that sheet, so the finder read them as titles and closed the diagram's region at the note. Their
+  "none" there looked at nothing; the decisions stand on the points list, the sequence and the drawing read by eye.
+  The finder's fix is CI-74.
+- GATE D: every item passes; the live re-run changes 11 of 727 decisions (1.5%; the limit is 2%).
+
+**Noted, not changed:** 039_TX schedules each dual duct box as two rows (TU-101C and TU-101H: the same room, the same
+airflow, cold and hot deck). The takeoff counts 186 terminal units where the points list ("DUAL DUCT TERMINAL UNIT
+CONTROLS": cold and hot duct airflow, cold and hot duct damper, one zone temperature) describes one controller per
+box. The plans draw no TU tag that could settle it, so the count stays as printed; it is listed for the estimator's
+review (AS candidate).
+
+Tests: evidence.test.ts "… (CI-73)". The finder's subjectFamily is unchanged for these titles. A packaged terminal
+unit is excluded, and another family named in words keeps its family. The dual duct drawings bind the terminal units
+and not a fan coil. A union naming two families names none. Without a row that says dual duct, the drawing is the
+family's one design (CI-58); beside a single duct one, it stays a proposal. The test fails when the fallback is
+removed.

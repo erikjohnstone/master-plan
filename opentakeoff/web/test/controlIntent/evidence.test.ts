@@ -2,7 +2,7 @@
 // mode met on the dev documents (synthetic spans; no document text).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findPackets, packetKind, repairSpacing, sheetTitleOf, subjectFamily } from "../../src/lib/controlIntent/evidence.ts";
+import { controlFamily, findPackets, packetKind, repairSpacing, sheetTitleOf, subjectFamily } from "../../src/lib/controlIntent/evidence.ts";
 import { bindPackets, familyOf, tagKey, titleTags } from "../../src/lib/controlIntent/binding.ts";
 import type { NoteSpan } from "../../src/lib/assemblies/scheduleNotes.ts";
 import type { RowUnit } from "../../src/lib/controlIntent/rowReader.ts";
@@ -837,6 +837,83 @@ test("a part takes the drawings of a host the set does not schedule, or of its o
   assert.deepEqual(keys("UNIT A-1 CONTROL DIAGRAM", ["A-1"], ["ACU"]), ["|A-1"]);
   const fan = bindPackets([packet("d7", "ACU A-7 CONTROL DIAGRAM", "diagram")], [unit(0, "E-A-7", "FAN", "RETURN FAN SCHEDULE", { SERVICE: "ACU-A-7" })]);
   assert.deepEqual(fan.get(0)?.map((x) => [x.packet, x.kind]), [["d7", "component_of"]], "the return fan takes its host's diagram as a part, not by its own mark");
+});
+
+test("a system's title is read without the words that name no subject; a service in either spacing; a designator its text defines; a part's host drawing of a kind it lacks; a schedule titled for its host (CI-72)", () => {
+  const kinds = (b: ReturnType<typeof bindPackets>, i: number) => (b.get(i) ?? []).map((x) => `${x.packet}:${x.kind}${x.proposal ? "?" : ""}`);
+  // 14_OR: "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE" is about
+  // what the SPLIT SYSTEM HEAT PUMPS schedule lists (no row prints
+  // INTERFACE), and for its fan coil it is more specific than the FAN COIL
+  // UNITS sequence, which stays the hydronic fan coils' own.
+  const seq = [packet("split", "SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS INTERFACE", "sequence"), packet("fcu", "FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE", "sequence")];
+  const split = bindPackets(seq, [unit(0, "FC-01", "FCU", "SPLIT SYSTEM HEAT PUMPS", { SERVING: "MDF" }), unit(1, "HP-01", "CONDENSING_UNIT", "SPLIT SYSTEM HEAT PUMPS", { SERVING: "MDF" }),
+    unit(2, "FC-101", "FCU", "FAN COIL UNITS", { SERVING: "CLASSROOM 135" })]);
+  assert.deepEqual([0, 1, 2].map((i) => kinds(split, i)), [["split:family_detail"], ["split:family_detail"], ["fcu:family_detail"]]);
+  // A service printed run together is the title's subject in two words; a
+  // pump serving another system is not its.
+  const snow = [packet("sm", "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE", "sequence")];
+  const pumps = bindPackets(snow, [unit(0, "SP-1", "PUMP", "HYDRONIC PUMPS", { SERVICE: "SNOWMELT" }), unit(1, "HWP-1", "PUMP", "HYDRONIC PUMPS", { SERVICE: "HEATING WATER" })]);
+  assert.deepEqual([0, 1].map((i) => kinds(pumps, i)), [["sm:system"], []]);
+  assert.match(pumps.get(0)![0].evidence, /its SERVICE "SNOWMELT" names the whole subject/);
+  // A system's sequence that defines a kind's designator ("HEAT EXCHANGER
+  // (HX)") names the set's one unit of it, of the kind its words name; two
+  // of them, or another kind marked with those letters, take nothing.
+  const text = [sp("B. HEAT EXCHANGER (HX) CONTROL VALVE SHALL BE CONTROLLED BY THE BAS.", 120, 300), sp("MAKEUP AIR UNIT (MAU) SHALL BE INTERLOCKED TO THE HOOD.", 120, 330)];
+  const sys = [packet("sys", "SNOW MELT - SEQUENCE OF OPERATION & BAS INTERFACE", "sequence", text)];
+  const one = bindPackets(sys, [unit(0, "HX-1", "HEAT_EXCHANGER", "HEAT EXCHANGER", { LOCATION: "BOILER" }), unit(1, "MAU-1", "OUTDOOR_AIR_UNIT", "MAKE UP AIR UNITS", { SERVING: "KITCHEN" })]);
+  assert.deepEqual([0, 1].map((i) => kinds(one, i)), [["sys:tag_body"], ["sys:tag_body"]]);
+  assert.match(one.get(0)![0].evidence, /names its kind by its designator "\(HX\)", and HX-1 is the one HX the set schedules/);
+  const two = bindPackets(sys, [unit(0, "HX-1", "HEAT_EXCHANGER", "HEAT EXCHANGER"), unit(1, "HX-2", "HEAT_EXCHANGER", "HEAT EXCHANGER")]);
+  assert.deepEqual([0, 1].map((i) => kinds(two, i)), [[], []]);
+  const other = bindPackets(sys, [unit(0, "HX-1", "PUMP", "PUMP SCHEDULE")]);
+  assert.deepEqual(kinds(other, 0), [], "the letters name a heat exchanger here, not a pump marked HX");
+  // 017_MD: a supply fan printed in its air conditioning unit's sequence and
+  // points schedule (bound by its own tag) takes that unit's control diagram,
+  // the one kind of drawing it has none of; a fan bound by its tag with no
+  // host takes nothing more.
+  const acu = [packet("d1", "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101", "diagram"),
+    packet("s1", "ACU A-1 EXISTING TO REMAIN SEQUENCE OF OPERATIONS", "sequence", [sp("SUPPLY FAN S-A-1 SHALL RUN", 120, 300), sp("RETURN FAN E-A-1 SHALL RUN", 120, 330)])];
+  const parts = bindPackets(acu, [unit(0, "E-A-1", "FAN", "RETURN FAN SCHEDULE", { SERVICE: "ACU-A-1" }), unit(1, "E-A-2", "FAN", "RETURN FAN SCHEDULE", { SERVICE: "ACU-A-2" }),
+    unit(2, "HC-A-1", "DUCT_MOUNTED_COIL", "HEATING COIL SCHEDULE", { SERVICE: "ACU-A-1" }), unit(3, "S-A-1", "FAN", "SUPPLY FAN SCHEDULE", { CFM: "4000" })]);
+  assert.deepEqual(kinds(parts, 0), ["s1:tag_body", "d1:component_of"]);
+  assert.match(parts.get(0)![1].evidence, /names ACU-A-1 \(SERVICE\), which the set does not schedule, and "AIR CONDITIONING UNIT \(ACU-A-1\) - BUILDING 101" is titled for it; the unit has no diagram of its own/);
+  const lone = bindPackets(acu, [unit(0, "S-A-1", "FAN", "SUPPLY FAN SCHEDULE", { CFM: "4000" })]);
+  assert.ok(!kinds(lone, 0).some((k) => k.startsWith("d1:")), "no row names a host and no convention holds: no host's diagram");
+  // 030_NY: a heat exchanger scheduled under "DOAS HEAT EXCHANGER SCHEDULE"
+  // is the set's one DOAS's part; terminal units scheduled "(AHU 2)" are
+  // served by that unit, never its parts; with two DOAS units, neither.
+  const doas = [packet("ds", "SEQUENCE OF OPERATION FOR DOAS", "sequence"), packet("dd", "DOAS UNIT CONTROL DIAGRAM", "diagram")];
+  const hx = bindPackets(doas, [unit(0, "DOAS-1", "DOAS", "DOAS SCHEDULE", { LOCATION: "ROOF" }), unit(1, "DHX-1", "HEAT_EXCHANGER", "DOAS HEAT EXCHANGER SCHEDULE", { "ASSOCIATED EQUIPMENT": "DHX-1" })]);
+  assert.deepEqual(kinds(hx, 1), ["ds:component_of", "dd:component_of"]);
+  assert.match(hx.get(1)![0].evidence, /its schedule describes it as part of DOAS-1/);
+  const twoDoas = bindPackets(doas, [unit(0, "DOAS-1", "DOAS", "DOAS SCHEDULE"), unit(1, "DOAS-2", "DOAS", "DOAS SCHEDULE"), unit(2, "DHX-1", "HEAT_EXCHANGER", "DOAS HEAT EXCHANGER SCHEDULE")]);
+  assert.deepEqual(kinds(twoDoas, 2), []);
+  const ahu = [packet("as", "AIR HANDLING UNIT SEQUENCE OF OPERATION", "sequence")];
+  const atu = bindPackets(ahu, [unit(0, "AHU-2", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(1, "ATU A", "VAV", "AIR TERMINAL UNIT SCHEDULE (AHU 2)")]);
+  assert.deepEqual(kinds(atu, 1), [], "a terminal unit an air handler serves is not its part");
+});
+
+test("a terminal unit named in words is an air terminal unit to the binder and its readers, never to the finder (CI-73)", () => {
+  // 039_TX: the AIR TERMINAL UNIT SCHEDULE's units and the "DUAL DUCT
+  // TERMINAL UNIT" drawings. The schedule-title rules (and the finder that
+  // reads them) name no family for those words; the control drawings do.
+  for (const t of ["DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM", "SINGLE DUCT TERMINAL BOX SEQUENCE", "TERMINAL UNITS POINTS LIST"]) {
+    assert.equal(subjectFamily(t), null, t);
+    assert.equal(controlFamily(t), "VAV", t);
+  }
+  assert.equal(controlFamily("PACKAGED TERMINAL UNIT CONTROLS"), null, "a packaged terminal unit is no air terminal unit");
+  assert.equal(controlFamily("WATER SOURCE HEAT PUMP TERMINAL UNIT CONTROLS"), subjectFamily("WATER SOURCE HEAT PUMP TERMINAL UNIT CONTROLS"), "another family named in words keeps it");
+  const dd = [packet("dg", "DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM", "diagram"), packet("sq", "DUAL DUCT TERMINAL UNIT SEQUENCE OF OPERATION", "sequence")];
+  const tu = (i: number, tag: string) => unit(i, tag, "VAV", "BLDG 109 AIR TERMINAL UNIT SCHEDULE", { "CONTROL TYPE": "VAV" }, ["DUAL DUCT TERMINAL UNIT, PRESSURE INDEPENDENT"]);
+  const b = bindPackets(dd, [tu(0, "TU-101C"), tu(1, "TU-101H"), unit(2, "FCU-1", "FCU", "FAN COIL UNIT SCHEDULE")]);
+  assert.deepEqual([0, 1].map((i) => (b.get(i) ?? []).map((x) => `${x.packet}:${x.kind}${x.proposal ? "?" : ""}`)), [["dg:family_detail", "sq:family_detail"], ["dg:family_detail", "sq:family_detail"]]);
+  assert.equal(b.get(2), undefined, "a fan coil takes no terminal unit's drawing");
+  // Rows that never say dual duct: the family's one design (CI-58), said so;
+  // beside a single duct diagram, the dual duct one stays a proposal.
+  const plain = bindPackets(dd, [unit(0, "TU-1", "VAV", "AIR TERMINAL UNIT SCHEDULE", { "CONTROL TYPE": "VAV" }), unit(1, "TU-2", "VAV", "AIR TERMINAL UNIT SCHEDULE", { "CONTROL TYPE": "VAV" })]);
+  assert.match(plain.get(0)![0].evidence, /its row does not print "DUAL DUCT"; the family's one diagram detail, taken by each of its 2 units/);
+  const two = bindPackets([...dd, packet("sd", "SINGLE DUCT TERMINAL UNIT CONTROL DIAGRAM", "diagram")], [unit(0, "TU-1", "VAV", "AIR TERMINAL UNIT SCHEDULE", { "CONTROL TYPE": "VAV" })]);
+  assert.deepEqual((two.get(0) ?? []).filter((x) => x.packet === "dg").map((x) => Boolean(x.proposal)), [true], "two variants of the diagram: the row must say which");
 });
 
 test("a mark with a building's number before it is a tag: a title naming its mark, with or without the number, is the unit's; another building's is not", () => {

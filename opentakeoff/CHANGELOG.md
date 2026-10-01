@@ -1,5 +1,28 @@
 # Changelog
 
+- **Control drawings: units their set's own words tie to a drawing are bound
+  to it.**
+  - A split system's sequence ("SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS
+    INTERFACE") reaches its units. Its fan coils no longer take the hydronic
+    fan coils' sequence.
+  - A pump whose service is "SNOWMELT" takes the "SNOW MELT" sequence.
+  - A system's sequence that names a kind of unit by its designator ("HEAT
+    EXCHANGER (HX)", "MAKEUP AIR UNIT (MAU)") binds the set's one such unit.
+  - A supply fan or coil printed in its air conditioning unit's sequence also
+    takes that unit's control diagram.
+  - A heat exchanger scheduled under "DOAS HEAT EXCHANGER SCHEDULE" takes the
+    set's one DOAS's drawings.
+  - A terminal unit named in words ("DUAL DUCT TERMINAL UNIT CONTROL
+    DIAGRAM", its points list and its sequence) is a terminal unit's drawing:
+    039_TX's 186 dual duct units take all three.
+  - Binding tier 3: pair recall 53.5% → 58.7%, precision 94.8% → 96.3%. Every
+    other tier, held-out included, is unchanged.
+  - Unseen audit: 1,230 applied, 1,230 right (1,116 new, on 039_TX's terminal
+    units, each checked against the drawings). GATE D passes every item (the
+    live re-run changes 1.5% of decisions; the limit is 2%).
+  (`web/src/lib/controlIntent/binding.ts`, `evidence.ts`, `readers/r0.ts`;
+  CONTROL_INTENT_BUG_CATALOGUE CI-72, CI-73.)
+
 - **Control drawings: a device no drawing of a unit shows is read as absent
   once the unit's whole bound text has been read, and never from a sequence
   whose own detail beside it went unread.** Before, "not drawn" was read only
