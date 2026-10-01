@@ -1,5 +1,8 @@
 # Changelog
 
+- **A schedule whose mark column a heavy rule cuts off keeps its marks.** A one-column strip whose every row line is
+  its neighbour table's is that table's column: 23_GA's fan coil schedule reads FCU-1 under TAG (with AS-149), and
+  02_UT's floor loading schedule reads whole. (`bakeoff/vectorgrid.py` `_sheared_mark_column`; AS-150.)
 - **A schedule boxed by a double border keeps its text, and a sheet whose lines are drawn thousands of times over is read.**
   - The gap between a schedule's outer border and its inner frame closed into one band-shaped face around the whole
     table; every word then sat in two faces and the table came back empty. 04_NV's cooling tower schedule was lost

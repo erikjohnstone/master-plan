@@ -8289,3 +8289,29 @@ Schedule (Type Mark, Description, Manufacturer). In the same census (AS-147) no 
 **Should this be on the shared path? Yes.** vectorgrid is the one reading of a schedule's grid for every surface.
 
 Tests: `web/test/vectorGridOverdrawnLine.test.ts` draws one rule re-plotted 6,000 times in overlapping pieces, crossed by short verticals, beside a small fan schedule, and runs the sidecar's own `extract_grid` in a child limited to 3 GB of address space: it reads the schedule. Without the merge the child dies (`std::bad_alloc`). Skipped where vectorgrid's Python is not installed.
+
+## AS-150 — a schedule whose mark column a heavy rule cuts off lost its marks: 23_GA's fan coil read keyed by its model number (FIXED, this commit)
+
+**Found:** reading AS-149's first measurement. 23_GA's M601 (page 35) prints a FAN COIL UNITS table whose designer drew
+a heavy rule after the TAG column. vectorgrid groups faces into tables and cuts a group at a border-weight wall, so
+TAG and FCU-1 became a strip of their own; the horizontal-shear merge that rejoins such a strip asks that its row
+lines agree with the table's (90%), and they do not: the table's ENTERING AIR TEMP. group prints two header lines
+under its own head, so the strip has one row line fewer (3 of 4). The table was read keyed by its model number
+("FV4C") and FCU-1 was gone from it.
+
+**Change:** `bakeoff/vectorgrid.py` `find_tables`: beside the row-agreement test, a strip ONE column wide (at least
+two faces sharing one left and one right edge) every one of whose row lines (within 2pt) is one of its neighbour's,
+where the neighbour has two columns or more, is that neighbour's column and is merged into it
+(`_sheared_mark_column`). Two schedules side by side each have columns of their own, so neither is a one-column strip.
+
+**Measured:** in the census of AS-147 (all 970 captured schedule sheets re-extracted), the rule's only table-level
+change is 02_UT #52: its DESIGN FLOOR LOADING SCHEDULE (19 rows, structural) is read whole where a 2-row fragment
+titled "DESIGNATION" was. No HVAC table and no unit changes. 23_GA's M601 is not a schedule sheet to vectorgrid until
+AS-149; with both, its FAN COIL UNITS table reads TAG = FCU-1 (see AS-149).
+
+**Should this be on the shared path? Yes.** vectorgrid is the one reading of a schedule's grid for every surface.
+
+Tests: `web/test/vectorGridMarkColumn.test.ts` redraws M601's own FAN COIL UNITS ruling (every stroke and its
+weight, clipped to the table) and words (fixture `as150-23ga-m601-fcu-ruling.json`) and runs the real sidecar: the
+table reads TAG, FCU-1 and FV4C together. A negative control draws the TAG strip 40pt lower, so its rows are not the
+table's: it stays apart. With the rule removed the first test fails and the second passes.

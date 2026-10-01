@@ -1078,6 +1078,36 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         same = len({r for r in ra if any(abs(r - t) <= 2 for t in rb)})
         return same / max(len(ra), len(rb))
 
+    def _sheared_mark_column(_cells, ma, mb) -> bool:
+        """A schedule's mark column cut off by a heavy rule (AS-150).
+
+        23_GA's M601 draws a heavy rule after TAG on its FAN COIL UNITS
+        table, so the weight cut shears TAG off; its header spans the two
+        lines the ENTERING AIR TEMP. group prints under its own head, so the
+        strip has one row line fewer than the table (3 of 4) and the
+        identical-rows test above refuses it. The table was read keyed by
+        its model number (FV4C) and FCU-1 was gone. A strip ONE column wide
+        whose every row line is one of its neighbour's is that table's column
+        and nothing else: two schedules side by side have columns of their
+        own on both sides."""
+        def rows_of(members) -> set:
+            rs = set()
+            for i in members:
+                _x0, y0, _x1, y1 = _cells[i].bounds
+                rs.add(round(y0)); rs.add(round(y1))
+            return rs
+        for strip, other in ((ma, mb), (mb, ma)):
+            if len(strip) < 2:
+                continue
+            if len({round(_cells[i].bounds[0]) for i in strip}) != 1 or len({round(_cells[i].bounds[2]) for i in strip}) != 1:
+                continue
+            if len({round(_cells[i].bounds[0]) for i in other}) < 2:
+                continue
+            ro = rows_of(other)
+            if all(any(abs(r - t) <= 2 for t in ro) for r in rows_of(strip)):
+                return True
+        return False
+
     def vbounds(members):
         bs = [cells[i].bounds for i in members]
         return min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs)
@@ -1156,7 +1186,8 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                 horiz = (
                     abs(ay0 - by0) <= 2 and abs(ay1 - by1) <= 2
                     and xgap <= 2
-                    and _row_agreement(cells, groups[ka], groups[kb]) >= 0.9
+                    and (_row_agreement(cells, groups[ka], groups[kb]) >= 0.9
+                         or _sheared_mark_column(cells, groups[ka], groups[kb]))
                     and _wider_than_a_row(cells, groups[ka] + groups[kb])
                 )
                 gap = by0 - ay1 if by0 >= ay1 else ay0 - by1
