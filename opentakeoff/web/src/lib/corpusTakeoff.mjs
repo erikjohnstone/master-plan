@@ -94,6 +94,26 @@ export function isGroupedMarkHeader(header) {
   const name = headerName(header);
   return GROUPED_MARK_HEADER_RE.test(name) && !MARK_HEADER_RE.test(name) && !MARK_HEADER_SYNONYM_RE.test(name);
 }
+// A split system's two halves by the group heading over each one's mark
+// column (AS-144): the indoor unit's (26_CA's EVAPORATOR DESIGNATION, 22_GA's
+// INDOOR UNIT MARK, 18_OR's FAN COIL SYMBOL) and the outdoor unit's
+// (CONDENSER DESIGNATION, OUTDOOR UNIT MARK, HEAT PUMP SYMBOL).
+const SPLIT_MARK_TAIL = String.raw`\s(?:PLAN\s*(?:MARK|CODE)|(?:UNIT|EQUIP(?:MENT)?\.?)\s*(?:MARK|TAG)|MARK|SYMBOL|TAG|DESIGNATION)\.?$`;
+const SPLIT_SIDE_MARK_HEADER_RES = {
+  indoor: new RegExp(String.raw`^(?:EVAP(?:ORATOR)?|INDOOR\s+UNIT|FAN[\s\-]*COIL|AIR[\s\-]*HANDL(?:ER|ING\s+UNIT))\b.*` + SPLIT_MARK_TAIL, "i"),
+  outdoor: new RegExp(String.raw`^(?:CONDENS(?:ER|ING\s+UNIT)|OUTDOOR\s+UNIT|HEAT[\s\-]*PUMP)\b.*` + SPLIT_MARK_TAIL, "i"),
+};
+/**
+ * Whether a table's header prints a split system's two mark columns, one
+ * under each half's group heading (AS-144): a schedule of indoor units each
+ * beside its outdoor unit, whatever its title calls them.
+ * @param {object} table a schedule table, as scheduleTableView gives it
+ */
+export function isSplitPairHeaderShape(table) {
+  const names = (table?.headers || []).map((header) => headerName(header));
+  return names.some((name) => SPLIT_SIDE_MARK_HEADER_RES.indoor.test(name))
+    && names.some((name) => SPLIT_SIDE_MARK_HEADER_RES.outdoor.test(name));
+}
 /** A name's letters and digits, as the extraction runs a row's key together. */
 const lettersAndDigits = (text) => String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const UNIT_MARK_HEADER_RE = /^UNIT\s*MARK$/i;
@@ -1309,7 +1329,7 @@ const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MEC
 export function familyTableGate(table, spec, family = null) {
   const {
     exclude, keyRe = null, blankKeyRe = null, blankHeaderRes = null, blankServiceHint = null,
-    titledOnly = false, altTitleRe = null, altKeyRe = null, titledKeyRe = null, host = null,
+    titledOnly = false, altTitleRe = null, altKeyRe = null, titledKeyRe = null, host = null, splitKeyRe = null,
   } = spec || {};
   const titleRe = spec?.titleRe || spec?.title || null;
   const title = String(table?.title?.text || "");
@@ -1345,6 +1365,17 @@ export function familyTableGate(table, spec, family = null) {
   const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
   const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
     && scheduleTitleMatches(ruleTitle, host.titleRe, host.exclude);
+  // A split system's schedule its title does not name (AS-144): 26_CA's AIR
+  // CONDITIONING UNITS - AIR COOLED SYSTEMS prints each evaporator's mark
+  // (AC-P3-1) under EVAPORATOR DESIGNATION beside its condenser's (ACCU-P3-1)
+  // under CONDENSER DESIGNATION, and no family's title rule reads it. Its
+  // header shape vouches for each half's family as a host title does: the
+  // marks its split rule reads (an evaporator's AC-*, a condenser's ACCU-*),
+  // each in its own half's column (rowIdentityText reads a grouped mark
+  // column for the family that reads it; AS-95), after the schedules titled
+  // as its own. A title that names any family keeps its own reading.
+  const splitOk = Boolean(splitKeyRe) && !blankTitle && !catchAll && !titleNamesFamily(ruleTitle)
+    && isSplitPairHeaderShape(table);
   // Read by its marks alone: no title vouches for the family here (AS-66).
   const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAll);
   let pass = 2;
@@ -1352,7 +1383,7 @@ export function familyTableGate(table, spec, family = null) {
   let rowService = null;
   if (titleOk || altOk) {
     pass = 1;
-  } else if (!hostOk) {
+  } else if (!hostOk && !splitOk) {
     // A family's own schedules, then another's that lists its units, then
     // the rest, so a unit they define cites them.
     if (titledOnly) return null;
@@ -1385,7 +1416,7 @@ export function familyTableGate(table, spec, family = null) {
   // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
   // because altOk is false there.
   const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-  const filterRe = hostOk ? host.keyRe
+  const filterRe = hostOk ? host.keyRe : splitOk ? splitKeyRe
     : (blankTitle || genericValveTitle) ? blankGate : catchAll ? null : titledFilter;
   // In a table titled as the family, a mark its untitled rule reads
   // (blankKeyRe: a CONTROL DAMPER SCHEDULE's CD-1) or its title vouches for
@@ -1409,7 +1440,7 @@ export function familyTableGate(table, spec, family = null) {
   // the air they serve): each is one line (AS-81), as splitRowMarks reads.
   const wordsNamed = !filterRe && !catchAll && tableNamedByWords(table, identity);
   const gate = {
-    pass, title, titleOk, altOk, hostOk, blankTitle, genericValveTitle,
+    pass, title, titleOk, altOk, hostOk, splitOk, blankTitle, genericValveTitle,
     catchAll, unvouched, filterRe, titledAlso, rowService, coTitled, wordsNamed, identity,
   };
   // The marks the family reads in a row's name, as it reads the row's marks
@@ -1436,6 +1467,27 @@ function tableNamedByWords(table, identity) {
     return rowMarkPieces(rowMarkText(rowIdentityText(row, identity), rowKey, false), false)[0];
   }).filter(Boolean);
   return firsts.filter((first) => namedByWords(first)).length * 2 > firsts.length;
+}
+
+// Whether any family's title rule names each title (AS-144).
+const TITLE_NAMES_FAMILY = new Map();
+
+/**
+ * Whether a schedule title names any family (AS-144): its own title, its
+ * other title or a host title, as familyTableGate reads each. A split
+ * system's header shape vouches only for a table whose title names none.
+ * @param {string} title the title the family rules read (familyRuleTitle)
+ */
+function titleNamesFamily(title) {
+  let named = TITLE_NAMES_FAMILY.get(title);
+  if (named !== undefined) return named;
+  named = Object.values(HVAC_FAMILY_SPECS).some((spec) => [
+    [spec.titleRe || spec.title, spec.exclude],
+    [spec.altTitleRe, spec.exclude],
+    [spec.host?.titleRe, spec.host?.exclude],
+  ].some(([re, exclude]) => Boolean(re) && scheduleTitleMatches(title, re, exclude)));
+  TITLE_NAMES_FAMILY.set(title, named);
+  return named;
 }
 
 // The families each title names, with the mark rule each reads its rows by.
@@ -1530,7 +1582,7 @@ export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = 
   if (!read) return 0;
   if (gate.unvouched && ((!countKeyed && !unvouchedMarkNamesUnit(one))
     || spelledRead(titledOnlyRe, one, canon))) return 0;
-  return gate.hostOk ? 1 : read;
+  return gate.hostOk || gate.splitOk ? 1 : read;
 }
 
 /**
@@ -1986,6 +2038,9 @@ export const HVAC_FAMILY_SPECS = {
       exclude: /POINTS\s*LIST|DDC/i,
       keyRe: /^FCU[\s\-]?\d/i,
     },
+    // A split system's indoor units by its header shape (AS-144): 26_CA's
+    // AC-P3-1 under EVAPORATOR DESIGNATION.
+    splitKeyRe: /^(?:(?:FCU|FC|EV|DFC|DAC|SS)[\s\-]?\d|AC[\s\-])/i,
   },
   VAV: {
     // A VAV box or terminal schedule (009_FL's VAV TERMINAL SCHEDULE, 033_MN's
@@ -2039,6 +2094,9 @@ export const HVAC_FAMILY_SPECS = {
     altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
     // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63).
     altKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
+    // A split system's outdoor units by its header shape (AS-144): 26_CA's
+    // ACCU-P3-1 under CONDENSER DESIGNATION.
+    splitKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
@@ -2055,6 +2113,8 @@ export const HVAC_FAMILY_SPECS = {
       exclude: /POINTS\s*LIST|DDC/i,
       keyRe: /^HP[\s\-]?\d/i,
     },
+    // A split system's outdoor heat pumps by its header shape (AS-144).
+    splitKeyRe: /^HP[\s\-]?\d/i,
   },
   // Return / exhaust air handlers often titled RAH / without "AIR HANDLING UNIT".
   // VRF split indoor/outdoor unit schedules (IDU-*/ODU-* / IU-*/OU-*).

@@ -8041,3 +8041,55 @@ Tests: `web/test/titleBandRangeRows.test.ts` with M0.09's own vectorgrid reply a
 `as142-26ca-m009.vectorgrid.json`): 13 mutations (each rule off, each bound loosened, the
 restriction removed or widened, the WFU title narrowed), all killed. A second fixture, 23_GA's p8 reply
 (`as142-23ga-p8.vectorgrid.json`), pins the restriction: its grid is no schedule and stays refused.
+
+## AS-144 — a split system's schedule whose title names no family was read by none: 26_CA's seven air conditioning units and six condensing units were never units (FIXED, this commit)
+
+**Found:** a census of the titled tables no family reads whose rows read as marks (1,400 marks in 141 tables over the
+open corpus: drawing indexes, finishes, plumbing fixtures, coordination lists, and some units). 26_CA's M0.10 prints
+AIR CONDITIONING UNITS - AIR COOLED SYSTEMS (SPECIFICATION SECTION 23 05 30): seven evaporators under EVAPORATOR
+DESIGNATION (AC-P3-1, AC-P1-1, AC-1-1, AC-31-1, AC-32-1, AC-62-1, AC-64-1), each beside its condenser under CONDENSER
+DESIGNATION (ACCU-P3-1, ACCU-P1-1, ACCU-P2-1, ACCU-31-1, ACCU-32-2, ACCU-63-1; AC-64-1's is integrated, "N/A"). No
+family's title rule names "AIR CONDITIONING UNITS", and the gate gives a titled table that names no family to none:
+the takeoff counted neither half, and the reconcile held no row for a condensing unit (the whole-set reconcile held the
+evaporators' rows by their marks alone).
+
+**Change** (`corpusTakeoff.mjs`):
+- `isSplitPairHeaderShape`: a header that prints a split system's two mark columns, one under each half's group heading:
+  the indoor unit's (EVAPORATOR, INDOOR UNIT, FAN COIL, AIR HANDLER/HANDLING UNIT) and the outdoor unit's (CONDENSER,
+  CONDENSING UNIT, OUTDOOR UNIT, HEAT PUMP), each ending in a mark word (DESIGNATION, MARK, TAG, SYMBOL, PLAN CODE...).
+  A chiller's EVAPORATOR EWT and CONDENSER EWT are no mark columns; one half alone is no pair; OUTDOOR AIR is no outdoor
+  unit, an EVAPORATIVE cooler no evaporator.
+- `familyTableGate`: such a table, titled, no general schedule, whose title names no family (`titleNamesFamily`: any
+  family's own title, other title or host title), is vouched for by its shape for each family with a split rule
+  (`splitKeyRe`): FCU reads the indoor half's marks (FCU-, FC-, EV-, DFC-, DAC-, SS- and a number, AC-), CONDENSING_UNIT
+  the outdoor's (CU-, DCU-, ACCU-, SSCU-), HEAT_PUMP an outdoor HP-#. As a host title does: read after the schedules
+  titled as the family's own, a widened reading, so a unit its own family's schedule (or an untitled table, by the
+  family's own rule) lists cites that table. Each family names a row's unit by the mark columns it reads (the grouped
+  mark columns, AS-95): the evaporator's AC-P3-1 for FCU, the condenser's ACCU-P3-1 for CONDENSING_UNIT.
+
+**Measured:** 26_CA (its AS-142 graph): the takeoff 278 -> 291, the seven evaporators as fan coils and the six
+condensing units; nothing removed. Reconcile (dev): units with no reconcile row 9 -> 3 (the six condensing units),
+plan tags linked to their rows 215 -> 220 of 280, placement precision unchanged (94.6%); five of the condensing units
+read AMBIGUOUS (the plans print "ACCU 31-1", found by its tag, not verified against the unit's symbol), and ACCU-32-2
+SCHEDULE_ONLY: its plan on sheet 22 prints "ACCU 32-1", a schedule-plan discrepancy the reconcile now names. The
+walled check documents' score: identical (aggregates only; one of them gains 12 units, no family sharing a mark with
+another).
+
+**Census:** the compile of the 98 cached graphs, base and changed: 26_CA +13, one walled check document +12 (fan coils
+and condensing units), nothing else; no unit removed or re-cited. Five open tables print the shape: 12_MT's SPLIT
+SYSTEM HEAT PUMP SCHEDULE, 18_OR's INDOOR FAN COIL UNITS and 22_GA's DUCTLESS SPLIT SYSTEM SCHEDULE keep their titles'
+reading; 26_CA's is read now; 030_NY's HEAT PUMP UNIT SCHEDULE keeps its title's, and its building-prefixed
+016-AC-01-16-12 and 016-CU-01-16-12 stay unread (the heat pump rule reads neither; open).
+
+**Not adopted:** reading each family only in its own half's column: on the walled document it read two fewer fan
+coils (rows whose indoor column prints a mark no fan coil rule reads, beside another column's mark that one does);
+the takeoff's own reading of grouped mark columns names those units.
+
+**Should this be on the shared path? Yes.** The family gate is the one reading of a table the takeoff, the reconcile
+and the assemblies share (UI and MCP alike).
+
+Tests: `web/test/splitPairShape.test.ts` (5): the shape; 26_CA's three rows (fan coils, condensing units, the
+reconcile's rows); an outdoor heat pump beside its fan coil; the scope (a title naming a family, a host or other
+title, a general schedule, an untitled table, half a pair); the cite order. 17 mutations, 16 failing them; the
+survivor (no host title in `titleNamesFamily`) is equivalent today: every host title the specs hold is also a family's
+own title (AIR HANDLER, CHILLER SCHEDULE).

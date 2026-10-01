@@ -1,5 +1,15 @@
 # Changelog
 
+- **A split system's schedule whose title names no family is read by its header shape.**
+  - 26_CA's AIR CONDITIONING UNITS - AIR COOLED SYSTEMS prints each evaporator's mark (AC-P3-1) under
+    EVAPORATOR DESIGNATION beside its condenser's (ACCU-P3-1) under CONDENSER DESIGNATION. No family's title
+    names it, so neither half was counted. A titled table (not a general schedule) whose title names no family
+    and whose header prints an indoor half's and an outdoor half's mark columns is now read as a split system:
+    its indoor marks as fan coils, its outdoor CU-*/ACCU-* as condensing units and HP-* as heat pumps, after
+    any schedule titled as the unit's own family.
+  - 26_CA: seven fan coils and six condensing units (takeoff 278 → 291); reconcile units with no row 9 → 3, drawn
+    tags linked 215 → 220 of 280; ACCU-32-2 now flags the plan's "ACCU 32-1".
+  (`web/src/lib/corpusTakeoff.mjs` `isSplitPairHeaderShape`, `familyTableGate`; ASSEMBLIES_BUG_CATALOGUE AS-144.)
 - **A schedule title the drawing's rules cut into cells is still its title, and a one-row schedule naming its
   units by range is read.**
   - 26_CA's HOT WATER BOILER and PLATE AND FRAME HEAT EXCHANGER schedules were refused whole: rules crossing
