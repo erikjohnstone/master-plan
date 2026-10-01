@@ -2084,9 +2084,11 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^RAH[\s\-]/i,
   },
-  // Wash / water filter units (Transbay blank-title WFU-* rows).
+  // Wash / water filter units (Transbay blank-title WFU-* rows), under a
+  // title naming a filtration unit too (26_CA's WATER FILTRATION UNIT, the
+  // title its table reads since AS-142).
   WFU: {
-    titleRe: /WATER\s+FILTER|WASHER\s+FILTER|\bWFU\b.*SCHEDULE/i,
+    titleRe: /WATER\s+FILT(?:ER|RATION)|WASHER\s+FILTER|\bWFU\b.*SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^WFU[\s\-]/i,
   },

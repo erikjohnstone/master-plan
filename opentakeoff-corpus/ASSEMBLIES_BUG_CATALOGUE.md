@@ -7987,3 +7987,57 @@ Tests: `web/test/familyTitles.test.ts` (3: titles without their section; M0.09's
 blower coils compiled; a blower coil and a WCU mark untitled, PUMPS AND ACCESSORIES and HEAT PUMPS, no unit). 8
 mutations each fail them: the section kept; no bare CHILLER, PUMPS or COOLING TOWER title; PUMPS unanchored; no WCU or
 BCU under its title; WCU read untitled.
+
+## AS-142 — schedule titles that rules cut into cells, and a one-row schedule naming its units by range, were refused: 26_CA's boilers and heat exchangers were never extracted (FIXED, this commit)
+
+**Found:** reading what AS-108 left on 26_CA's M0.09. Vectorgrid finds every one of its ten tables; the table builder
+(`scheduleTableFromODL`) refused two and read three untitled:
+- HOT WATER BOILER (SPECIFICATION SECTION 23 52 16): rules crossing the title band cut it into a blank one-column cell,
+  "HOT WATER BOILER (SPECIFICATION SECTION 23 52" across eleven columns and "16)" across three. No cell spans the table,
+  so no title was read; and its one row, "B-2-1 THRU 4" (four boilers), is no tag shape and no column is proven by one
+  row: "no keyed data rows".
+- PLATE AND FRAME HEAT EXCHANGER (FLUID TO FLUID) (SPECIFICATION SECTION 23 57 19): cut into a blank cell, "PLATE" and
+  the rest; the band was the first header candidate, failed the vocabulary bar, and the table was refused ("no header
+  block above the data") with its six units, HEX-2-1 to HEX-35-2.
+- FAN COIL (SPECIFICATION SECTION 23 82 19) spans 28 of its table's 30 columns beside a blank cell, PUMPS (SPECIFICATION
+  SECTION 23 21 23) 15 of 17, COOLING TOWER (SPECIFICATION SECTION 23 65 13) likewise: read as a header tier, so the
+  table had no title and every column's name began with it ("FAN COIL (SPECIFICATION SECTION 23 82 19) CFM").
+
+**Change** (`sheetgraph.ts`, `scheduleTableFromODL`):
+- A row-0 band whose text cells printed runs of the drawing's text chain together, each run crossing the cut between two
+  of them, is the table's title (`titleBandCutByRules`): a run is one line of type, and no column boundary falls inside
+  one. Every text cell of the row must be on the chain, one row tall.
+- A row-0 cell that is the row's only text and spans all but two columns (three quarters at least), beside blank cells
+  one row tall, is the table's title: the existing rule wants all but one.
+- A row of a table whose header names its key column (DESIGNATION, MARK, TAG…) is kept, with its printed text as its key,
+  when the cell prints a tag (no space in it, a number in it) then THRU, TO, AND, "&" or "," and more such tags or the
+  number that continues the first (`marksRangeOrList`), and no pass keyed it; equipment tables only, every row so far
+  keyed from that column, never a key already minted. The takeoff reads the units from the cell, as it reads the pumps'
+  "CHWP-2-1 THRU 3".
+
+- Either title rule holds only when the table it reads is an equipment schedule; otherwise the table is read again
+  without them, as before. Unrestricted, the rules titled other grids by stray text (a dimension, a rebar note, a
+  procedure line, "CLG", a points list's HARDWARE POINTS band) and lost 004_MO's DUCTWORK table.
+
+**Measured:** 26_CA, graph rebuilt: takeoff 252 → 278 (+4 BOILER, +6 HEAT_EXCHANGER, +7 BCU blower coils, +9
+PHWP/SHWP pumps), nothing removed; the WFU unit is kept and now cited from its titled table. Reconcile: units with no
+row 16 → 9, drawn tags found 150 → 157, recall 70.1% → 73.1%, precision 95.2% → 94.6%, drawn tags linked to their row
+207 → 215 of 280. Attribute eval identical (161 cells, 100%).
+
+**Census:** the vectorgrid replies of 90 documents (969 sheets), recorded once and replayed through the base and the
+new builder. Open corpus: only 26_CA changes (two tables added, four titled). Walled documents: 11 table lines change;
+the takeoff moves on two (044_NY +10/−3, 096_IN +51), whose check-side reconcile aggregates are identical base vs new
+and whose WP1 compile keys fail on base and new alike. The BAS compile is unchanged everywhere.
+
+**Not changed:** the tri-path air handler table's second block (19x31, "CUSTOM FACTORY-BUILT TRI-PATH MULTI-ZONE AIR
+HANDLING UNITS", damper, filter and electrical data for the same twelve rows, with no mark column) is still refused
+("no keyed data rows"); its rows join the first block's by position only. Continuation census: 7 open continuation blocks in the corpus, one of them HVAC (this one): no
+continuation rule is adopted on one case.
+
+**Should this be on the shared path? Yes.** The table builder is the one reading of a schedule's grid for every surface
+(`Session.graphForPipeline`).
+
+Tests: `web/test/titleBandRangeRows.test.ts` with M0.09's own vectorgrid reply and text runs (fixture
+`as142-26ca-m009.vectorgrid.json`): 13 mutations (each rule off, each bound loosened, the
+restriction removed or widened, the WFU title narrowed), all killed. A second fixture, 23_GA's p8 reply
+(`as142-23ga-p8.vectorgrid.json`), pins the restriction: its grid is no schedule and stays refused.

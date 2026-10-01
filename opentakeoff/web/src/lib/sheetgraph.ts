@@ -10128,7 +10128,84 @@ function hasTitlelessRowOrientedSchedule(
  * null when the table doesn't look like a recognized schedule shape at all
  * (kind classification fails to qualify) or carries no real keyed data rows
  * — never a guess, the same refusal discipline as the rest of this file. */
+/** Row 0's text cells, when printed runs of the drawing's own text chain each
+ * of them to the next across the cell boundary between them: one line of type
+ * that rules crossing the band cut into cells (AS-142). Its text, the cells
+ * joined in column order, and its box in source space; null otherwise. */
+function titleBandCutByRules(
+  cells: ODLTableCell[],
+  pageViewportTransform: number[],
+  spans: GraphSpan[],
+): { text: string; bbox: number[] } | null {
+  if (cells.length < 2 || cells.some((c) => (c["row span"] || 1) > 1)) return null;
+  const texted = cells
+    .filter((c) => odlCellText(c).trim())
+    .sort((a, b) => a["column number"] - b["column number"]);
+  if (texted.length < 2) return null;
+  const boxes = texted.map((c) => odlBboxToProjectSpace(c["bounding box"], pageViewportTransform));
+  const top = Math.min(...boxes.map((b) => b[1]));
+  const bottom = Math.max(...boxes.map((b) => b[3]));
+  const runs = spans.filter((s) => !s.rot && s.str.trim() && s.y + s.h / 2 >= top && s.y + s.h / 2 <= bottom);
+  for (let i = 0; i + 1 < texted.length; i++) {
+    const lo = Math.min(boxes[i][2], boxes[i + 1][0]);
+    const hi = Math.max(boxes[i][2], boxes[i + 1][0]);
+    if (!runs.some((s) => s.x < lo - 1 && s.x + s.w > hi + 1)) return null;
+  }
+  const all = cells.map((c) => c["bounding box"]);
+  return {
+    text: texted.map((c) => odlCellText(c).replace(/\s+/g, " ").trim()).join(" "),
+    bbox: [
+      Math.min(...all.map((b) => b[0])),
+      Math.min(...all.map((b) => b[1])),
+      Math.max(...all.map((b) => b[2])),
+      Math.max(...all.map((b) => b[3])),
+    ],
+  };
+}
+
+/** A key cell that names several units of one row by a range or a list
+ * (AS-142): "B-2-1 THRU 4", "EF-1 THRU EF-4", "P-1 & 2", "AHU-1, AHU-2 AND
+ * AHU-3". The first piece is a tag (rowKeyOf) printed without a space and
+ * with a number in it, so a phrase ("LEVEL 2 THRU 4", "SEE PLANS THRU 4") or a
+ * word ("SPARE") is not one; every later piece is such a tag or the bare number
+ * (letter) that continues the first. */
+function marksRangeOrList(raw: string, buildings: Set<string>): boolean {
+  const pieces = raw.replace(/\s+/g, " ").trim()
+    .split(/\s+(?:THRU|THROUGH|TO)\s+|\s*(?:&|,)\s*|\s+AND\s+/i)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const tag = (p: string) => !/\s/.test(p) && /\d/.test(p) && !!rowKeyOf(p, "equipment", buildings);
+  if (pieces.length < 2 || pieces.length > 12 || !tag(pieces[0])) return false;
+  return pieces.slice(1).every((p) => /^[A-Z]?\d{1,3}[A-Z]?$/i.test(p) || tag(p));
+}
+
 export function scheduleTableFromODL(
+  t: ODLTable,
+  sheetKey: string,
+  pageViewportTransform: number[],
+  opts: Parameters<typeof scheduleTableFromODLRead>[3] = {},
+): ScheduleTable | null {
+  // AS-142's title rules (a title band the rules cut, a lone cell across
+  // nearly every column) hold only where they give an equipment schedule its
+  // title: a refusal, or a reference, finish or other table, is read again
+  // without them, as before. Over the 90 open and check documents' replayed
+  // grids they otherwise titled an abbreviation list "CLG", a room tag
+  // "200.18", a concrete specification note and a points list's
+  // HARDWARE POINTS / SOFTWARE POINTS band, and lost a finish table.
+  let titled = false;
+  const declined: string[] = [];
+  const table = scheduleTableFromODLRead(t, sheetKey, pageViewportTransform,
+    { ...opts, reject: (reason) => declined.push(reason) }, () => { titled = true; });
+  if (!titled || table?.kind === "equipment") {
+    for (const reason of declined) opts.reject?.(reason);
+    return table;
+  }
+  return scheduleTableFromODLRead(t, sheetKey, pageViewportTransform, opts, null);
+}
+
+/** scheduleTableFromODL's reading, with AS-142's title rules when
+ * `onTitleRule` is given (called when one of them titles the table). */
+function scheduleTableFromODLRead(
   t: ODLTable,
   sheetKey: string,
   pageViewportTransform: number[],
@@ -10282,6 +10359,7 @@ export function scheduleTableFromODL(
      * grid that starts with genuinely blank spacer rows). */
     unruledHeaderAbove?: boolean;
   } = {},
+  onTitleRule: (() => void) | null = null,
 ): ScheduleTable | null {
   const refuse = (reason: string): null => { opts.reject?.(reason); return null; };
   if (t["number of rows"] < 2 || t["number of columns"] < 2) {
@@ -10385,6 +10463,60 @@ export function scheduleTableFromODL(
           };
           bodyStart = 1;
         }
+      }
+    }
+    // A TITLE THAT RULES CUT IS STILL ONE LINE OF TYPE (AS-142).
+    //
+    // Neither rule above fires when the rules that cross a title band leave a
+    // narrow cell beside it. 26_CA's M0.09 prints HOT WATER BOILER
+    // (SPECIFICATION SECTION 23 52 16) over a fifteen-column table, and row 0
+    // came back as a blank one-column cell, "HOT WATER BOILER (SPECIFICATION
+    // SECTION 23 52" across eleven columns and "16)" across three; PLATE AND
+    // FRAME HEAT EXCHANGER (FLUID TO FLUID) (SPECIFICATION SECTION 23 57 19)
+    // as a blank cell, "PLATE" in one column and the rest across sixteen. The
+    // boiler's title was read as a header tier; the heat exchanger's was the
+    // first header candidate, failed the vocabulary bar, and the table was
+    // refused ("no header block above the data") with its six units.
+    //
+    // The drawing's own text says these cells are one title: one printed run
+    // ("(SPECIFICATION SECTION 23 52 16)", "PLATE AND FRAME HEAT EXCHANGER
+    // (FLUID TO FLUID)") crosses each cut. A run is one line of type, and no
+    // column boundary falls inside one, so cells that runs chain together are
+    // one piece of prose, not the labels of columns. Every text cell of the
+    // row must be on the chain (a header row's labels are separate runs, so a
+    // label that overflows into its neighbour links two cells, never all of
+    // them), the cells are one row tall (a header tier's labels often span
+    // down), and rows follow for a header and data.
+    //
+    // Or the rules leave the title whole in one cell and cut off its ends:
+    // 26_CA's FAN COIL (SPECIFICATION SECTION 23 82 19) spans 28 of its
+    // table's 30 columns beside a blank cell over DESIGNATION and LOCATION /
+    // SERVICE, PUMPS (SPECIFICATION SECTION 23 21 23) 15 of 17. Neither is
+    // the one cell across the table the first rule wants, and each was read
+    // as a header tier: the table had no title, and every column's name began
+    // with it ("FAN COIL (SPECIFICATION SECTION 23 82 19) CFM"). A cell that
+    // is the row's only text and spans all but two columns (three quarters at
+    // least), beside blank cells one row tall, names the table: a group label
+    // that wide would leave the key column's header beside it.
+    // Read so only when the caller asks (onTitleRule): scheduleTableFromODL
+    // keeps the result where it is an equipment schedule.
+    if (!titleCell && R >= 3 && onTitleRule) {
+      const band = opts.sourceSpans?.length ? titleBandCutByRules(row0.cells, pageViewportTransform, opts.sourceSpans) : null;
+      const texted = row0.cells.filter((c) => odlCellText(c).trim());
+      const lone = texted.length === 1 && row0.cells.every((c) => (c["row span"] || 1) === 1)
+        && (texted[0]["column span"] || 1) >= Math.max(2, C - 2, Math.ceil(C * 0.75)) ? texted[0] : null;
+      if (band) {
+        titleCell = {
+          type: "table cell", id: 0, "page number": t["page number"],
+          "bounding box": band.bbox, "row number": 1, "column number": 1,
+          "row span": 1, "column span": C, kids: [{ type: "text", content: band.text }],
+        };
+        bodyStart = 1;
+        onTitleRule();
+      } else if (lone) {
+        titleCell = lone;
+        bodyStart = 1;
+        onTitleRule();
       }
     }
   }
@@ -11618,6 +11750,8 @@ export function scheduleTableFromODL(
 
   const strictKeyCol = keyColIdx >= 0 ? keyColIdx : 0;
   buildRows([strictKeyCol], false);
+  // The column(s) the rows are keyed from, for the range rescue below.
+  let keyedBy: number[] = [strictKeyCol];
 
   // WHEN THE STRICT RULE FAILS MOST OF A TABLE, IT IS THE WRONG RULE HERE.
   //
@@ -11648,7 +11782,7 @@ export function scheduleTableFromODL(
       rows.push(...strictRows);
       emitted.clear();
       for (const r of strictEmitted) emitted.add(r);
-    }
+    } else keyedBy = evidenced;
   }
 
   // THE TABLE'S OWN KEY COLUMN, WHEN NO COLUMN HOLDS A TAG.
@@ -11803,7 +11937,34 @@ export function scheduleTableFromODL(
 
   if (!rows.length) {
     const evidenced = findEvidencedKeyColumn();
-    if (evidenced.length) buildRows(evidenced, true);
+    if (evidenced.length) {
+      buildRows(evidenced, true);
+      keyedBy = evidenced;
+    }
+  }
+  // A ROW THE NAMED KEY COLUMN SCHEDULES BY RANGE OR LIST IS A ROW (AS-142).
+  //
+  // rowKeyOf keys a tag and refuses "B-2-1 THRU 4": the shape is not a tag,
+  // and widening it would widen it for symbol sweep and resolve_tag too.
+  // Where the column is proven by its rows (three or more keyed) such a row
+  // keeps its printed text (the rescue above keys 26_CA's "CHWP-2-1 THRU 3"
+  // so). A table of one or two rows proves nothing by its rows: 26_CA's HOT
+  // WATER BOILER schedule is one row naming four boilers, and it was refused
+  // whole ("no keyed data rows"). Its column is proven another way: the
+  // header names it (DESIGNATION, MARK, TAG…), and the cell prints a tag,
+  // then THRU, TO, AND, "&" or "," and more tags or the number that continues
+  // the first. Such a row keeps its printed text as its key; the takeoff
+  // reads the units from the cell (expandEquipMarkRange). Only an equipment
+  // table, only rows no pass keyed, only when every row so far is keyed from
+  // that column, and never a key already minted (buildRows' printed path).
+  if (kind === "equipment" && keyColIdx >= 0 && keyedBy.length === 1 && keyedBy[0] === keyColIdx
+    && emitted.size < dataRows.length) {
+    const ranged = new Set(dataRows.filter((r) => {
+      if (emitted.has(r)) return false;
+      const cell = grid[r][keyColIdx];
+      return !!cell && cell["row number"] - 1 === r && marksRangeOrList(norm(odlCellText(cell)), selfEvidenced);
+    }));
+    if (ranged.size) buildRows([keyColIdx], true, ranged);
   }
   if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])})`);
   // A DRAWING'S OWN TITLE-BLOCK GRID IS NOT A SCHEDULE, HOWEVER IT IS READ.

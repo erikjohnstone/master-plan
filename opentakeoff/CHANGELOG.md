@@ -1,5 +1,21 @@
 # Changelog
 
+- **A schedule title the drawing's rules cut into cells is still its title, and a one-row schedule naming its
+  units by range is read.**
+  - 26_CA's HOT WATER BOILER and PLATE AND FRAME HEAT EXCHANGER schedules were refused whole: rules crossing
+    the title band cut it into cells, so no title was read, and the boiler's one row, "B-2-1 THRU 4", is no tag
+    shape (no keyed rows) while the heat exchanger table took its cut title for a header (no header above the
+    data). A row-0 band whose cells' text runs one printed line across the cuts is the table's title; so is a
+    row-0 cell that is the row's only text across all but two columns. A row of a table whose header names its
+    key column (DESIGNATION, MARK...) that prints a tag then THRU, TO, AND, "&" or "," and more tags or the
+    number continuing it is a row. The FAN COIL, PUMPS, COOLING TOWER and WATER FILTRATION UNIT tables, read
+    untitled before, read their titles (a water filtration unit's title is the WFU family's). Both title rules
+    hold only for an equipment schedule; any other grid is read without them, as before.
+  - 26_CA: four boilers, six heat exchangers, seven blower coils and nine pumps are counted (takeoff 252 → 278,
+    nothing removed); reconcile units with no row 16 → 9, drawn tags linked to their row 207 → 215 of 280.
+    Replayed across 90 documents, only 26_CA changes on the open corpus.
+  (`web/src/lib/sheetgraph.ts` `scheduleTableFromODL`, `titleBandCutByRules`, `marksRangeOrList`;
+  `web/src/lib/corpusTakeoff.mjs` WFU; ASSEMBLIES_BUG_CATALOGUE AS-142.)
 - **A schedule titled with its specification section, or by its family's
   noun alone, is read as its family's.**
   - "CHILLER (SPECIFICATION SECTION 23 64 16)" named no family: no rule
