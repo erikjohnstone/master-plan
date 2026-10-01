@@ -175,12 +175,18 @@ def column_roles(table: IndexedTable, start: int, typed: dict[str, tuple[Literal
     pass and every later check of a saved result under the rule that made it."""
     columns = list(dict.fromkeys([*table.headers, *(h for r in table.rows for h in r.cells)]))
     first = table.rows[0] if start and table.rows else None
+    # Version 2: a header cell the extraction shares between several columns
+    # ("AV BV ADJ SCH" over four) is not any one column's label; each column
+    # is read by its own header.
+    merged = Counter(c.bbox for h, c in first.cells.items() if h in table.headers and c.bbox is not None) \
+        if first is not None and rule != POINT_RULE_V1 else Counter()
     attributes: dict[str, str] = {}
     metadata: list[str] = []
     for h in columns:
         if h in typed:
             continue
-        child = first.cells[h].text if first is not None and h in table.headers and h in first.cells else h
+        cell = first.cells.get(h) if first is not None and h in table.headers else None
+        child = cell.text if cell is not None and not (cell.bbox is not None and merged[cell.bbox] > 1) else h
         label = header_label(child, rule)
         if rule == POINT_RULE_V1:
             if label in ATTRIBUTES:
@@ -653,6 +659,166 @@ def read_row(reading: MatrixReading, raw: IndexedRow, rule: PointRule = CURRENT_
     return RowReading(cells=cells, issues=issues, uninterpreted=uninterpreted)
 
 
+def column_spans(table: IndexedTable) -> dict[str, tuple[float, float]]:
+    """Each printed column's x-extent from its own extracted cells. A cell the
+    extraction merged over several columns ("AV BV ADJ SCH") gives the columns
+    it covers an even share in header order, only where a column has no cell
+    of its own."""
+    own: dict[str, list[Box]] = {}
+    merged: dict[Box, list[str]] = {}
+    for row in table.rows:
+        boxes = {h: c.bbox for h, c in row.cells.items() if h in table.headers and c.bbox is not None}
+        shared = Counter(boxes.values())
+        for header in table.headers:
+            box = boxes.get(header)
+            if box is not None and shared[box] == 1:
+                own.setdefault(header, []).append(box)
+            elif box is not None and header not in merged.setdefault(box, []):
+                merged[box].append(header)
+    spans = {h: (sorted(b[0] for b in boxes)[len(boxes) // 2], sorted(b[2] for b in boxes)[len(boxes) // 2])
+             for h, boxes in own.items()}
+    for box, headers in merged.items():
+        width = (box[2] - box[0]) / len(headers)
+        for index, header in enumerate(headers):
+            spans.setdefault(header, (box[0] + width * index, box[0] + width * (index + 1)))
+    return spans
+
+
+def joined_text(parts: list[SourceSpan]) -> str:
+    parts = sorted(parts, key=lambda span: (span.bbox_px[0], span.source_index))
+    text = parts[0].text.strip()
+    for previous, span in zip(parts, parts[1:]):
+        gap = span.bbox_px[0] - previous.bbox_px[2]
+        text += (" " if gap > 0.15 * (span.bbox_px[3] - span.bbox_px[1]) else "") + span.text.strip()
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def source_text_rows(table: IndexedTable, reading: MatrixReading, page: SourcePage, others: list[IndexedTable],
+                     rule: PointRule = CURRENT_POINT_RULE) -> list[tuple[int, IndexedRow]]:
+    """Version 2: the rows a point list prints that its extraction dropped,
+    read from the page's own text. A full-width section band ("CROSS-TIE
+    LOOP", "DDC CONTROLLER") ends many extractions while the list goes on,
+    and a row can fall out between two extracted rows. A printed line is a
+    row only where every span on it sits inside one of the list's own
+    columns, it names the row in the name or key column, and it marks an
+    I/O, attribute or count column or prints the row's point type, its cells
+    set apart as cells are, not run on a word space apart. Reading stops at
+    text wider than the list, at a sentence or heading, at another point
+    list, a point-list caption or the list's own header printed again, at a
+    row named as one the list already printed, at a gap of more than three
+    rows, or after three printed lines that are not rows. Returns (insert
+    position, row) pairs in page order;
+    each row is flagged for review where its observations are made."""
+    if rule == POINT_RULE_V1 or table.region is None or len(reading.names) != 1:
+        return []
+    data = table.rows[reading.start:]
+    bands = []
+    for row in data:
+        boxes = [c.bbox for c in row.cells.values() if c.bbox is not None]
+        if not boxes:
+            return []
+        bands.append((min(b[1] for b in boxes), max(b[3] for b in boxes)))
+    if not bands:
+        return []
+    spans_x = column_spans(table)
+    marked = [*reading.typed, *reading.roles.attributes]
+    mark_list = not reading.typed and not reading.row_type_headers
+    if reading.names[0] not in spans_x:
+        return []
+    key_columns = [h for h in table.headers
+                   if all(h in row.cells and row.cells[h].text.strip() == row.key.strip() for row in data)]
+    identity = [*reading.names, *key_columns[:1]]
+    extracted_keys = {normalized_header(row.key) for row in data}
+    x0, _y0, x1, y1 = table.region
+    top = min(band[0] for band in bands)
+    pitch = sorted(b - a for a, b in bands)[len(bands) // 2]
+    centres = [(a + b) / 2 for a, b in bands]
+    in_order = all(a <= b for a, b in zip(centres, centres[1:]))
+    stops = [other.region[1] for other in others
+             if other is not table and other.region is not None and other.sheet == table.sheet
+             and other.region[1] > top and min(other.region[2], x1) > max(other.region[0], x0)]
+    captions = [span.bbox_px[1] for span in page.spans if span.bbox_px[1] > y1 and point_matrix_caption(span.text)
+                and min(span.bbox_px[2], x1) > max(span.bbox_px[0], x0)]
+    limit = min([*stops, *captions, page.height_px])
+    spans = sorted((span for span in page.spans if span.text.strip() and span.rotation in (None, 0)
+                    and top - 2 <= box_center(span.bbox_px)[1] < limit
+                    and min(span.bbox_px[2], x1) > max(span.bbox_px[0], x0)),
+                   key=lambda span: (box_center(span.bbox_px)[1], span.bbox_px[0], span.source_index))
+    lines: list[list[SourceSpan]] = []
+    for span in spans:
+        if lines and same_printed_line(lines[-1][0], span):
+            lines[-1].append(span)
+        else:
+            lines.append([span])
+
+    def column_of(span: SourceSpan) -> str | None:
+        cx = box_center(span.bbox_px)[0]
+        inside = [h for h, (a, b) in spans_x.items() if a <= cx <= b]
+        if len(inside) != 1:
+            return None
+        a, b = spans_x[inside[0]]
+        slack = max(3.0, min(0.15 * (b - a), 12.0))
+        return inside[0] if a - slack <= span.bbox_px[0] and span.bbox_px[2] <= b + slack else None
+
+    found: list[tuple[float, IndexedRow]] = []
+    misses, last = 0, max(band[1] for band in bands)
+    for line in lines:
+        cy = box_center(line[0].bbox_px)[1]
+        if any(a - 2 <= cy <= b + 2 for a, b in bands):
+            continue
+        below = cy > max(centres)
+        if below and cy - last > 3.5 * pitch:
+            break
+        outside = any(span.bbox_px[0] < x0 - 2 or span.bbox_px[2] > x1 + 2 for span in line)
+        cells: dict[str, list[SourceSpan]] = {}
+        for span in line:
+            column = column_of(span)
+            if column is None:
+                cells = {}
+                break
+            cells.setdefault(column, []).append(span)
+        ordered = sorted(line, key=lambda span: span.bbox_px[0])
+        height = max(span.bbox_px[3] - span.bbox_px[1] for span in line)
+        if cells and any(column_of(a) != column_of(b) and b.bbox_px[0] - a.bbox_px[2] < 0.8 * height
+                         for a, b in zip(ordered, ordered[1:])):
+            # Words set a word space apart run on as one text, not across cells.
+            cells = {}
+        texts = {h: joined_text(parts) for h, parts in cells.items()}
+        if (normalized_header(texts.get(reading.names[0], "")) == header_label(reading.effective[reading.names[0]], rule)
+                or sum(normalized_header(text) == normalized_header(reading.effective.get(h, h))
+                       for h, text in texts.items()) >= 2):
+            # The list's own header printed again: another list starts here.
+            if below:
+                break
+            continue
+        named = any(texts.get(h) for h in identity)
+        if mark_list:
+            io = any(point_mark_kind(text) is not None for text in texts.values())
+        else:
+            io = (any(h in texts and printed_count(texts[h], rule) is not None for h in marked)
+                  or any(h in texts and re.fullmatch(r"[A-Z0-9/-]{1,8}", texts[h]) for h in reading.row_type_headers))
+        if outside or not named or not io or not (in_order or below):
+            words = joined_text(line)
+            prose = len(words.split()) > 6 or ":" in words or words.endswith(".")
+            if below and (outside or prose or misses >= 2):
+                # A sentence or a heading ends the list; a short band ("DDC
+                # CONTROLLER", "CROSS-TIE LOOP") names the rows that follow.
+                break
+            misses += 1 if below else 0
+            continue
+        key = next((texts[h] for h in (*key_columns[:1], *reading.names) if texts.get(h)), "")
+        if normalized_header(key) in extracted_keys:
+            # A row named as one the list already printed starts a repeated
+            # block or another list: never this list's own new row.
+            if below:
+                break
+            continue
+        misses, last = 0, max(last, max(span.bbox_px[3] for span in line))
+        found.append((cy, IndexedRow(key=key, cells={
+            h: IndexedCell(text=texts[h], bbox=union_boxes([span.bbox_px for span in cells[h]])) for h in texts})))
+    return [(reading.start + sum(c < cy for c in centres), row) for cy, row in found]
+
+
 def review_point_lists(payload: PointListInput, rule: PointRule = CURRENT_POINT_RULE) -> PointListResult:
     # Revalidate nested mutations and detach all output from caller-owned data.
     payload = PointListInput.model_validate(payload.model_dump())
@@ -677,6 +843,34 @@ def review_point_lists(payload: PointListInput, rule: PointRule = CURRENT_POINT_
     matrix_counts = Counter(item[0] for item in selected)
     if any(n > 1 for n in matrix_counts.values()):
         raise ValueError("Duplicate indexed matrix identity; reconcile source regions explicitly")
+
+    # Version 2: rows the list prints beyond (or between) its extracted rows,
+    # read from the page text. The matrix keeps its identity and extracted
+    # region (math swaps the graph's copy for it by title or region); each row
+    # cites its own cells and is flagged for review. They are kept only where
+    # the list's I/O columns, name and point types read as before and every
+    # extracted row reads exactly as before; a column only they fill may gain
+    # its meaning.
+    text_rows: dict[str, set[int]] = {}
+    selected_tables = [item[1] for item in selected]
+    for index, (matrix_id, table, page, reading, source_recovered) in enumerate(selected):
+        found = source_text_rows(table, reading, page, selected_tables, rule) if page is not None else []
+        if not found:
+            continue
+        extended_rows = list(table.rows)
+        positions = set()
+        for offset, (position, row) in enumerate(found):
+            extended_rows.insert(position + offset, row)
+            positions.add(position + offset)
+        extended = IndexedTable(sheet=table.sheet, title=table.title, headers=table.headers,
+                                region=table.region, rows=extended_rows)
+        again = read_matrix(extended, rule)
+        if ((again.typed, again.names, again.row_type_headers, again.start, again.alarm_headed)
+                != (reading.typed, reading.names, reading.row_type_headers, reading.start, reading.alarm_headed)
+                or any(read_row(again, raw, rule) != read_row(reading, raw, rule) for raw in table.rows[reading.start:])):
+            continue
+        selected[index] = (matrix_id, extended, page, again, source_recovered)
+        text_rows[matrix_id] = positions
 
     bound_notes: dict[str, list[PointNote]] = {item[0]: [] for item in selected}
     note_conflicts: set[str] = set()
@@ -731,11 +925,13 @@ def review_point_lists(payload: PointListInput, rule: PointRule = CURRENT_POINT_
         # result must replay the exact matrix it cites.  Determinism comes from
         # the owned input order; changing it here makes `rows` disagree with
         # `raw.rows` and correctly fails the shared JS evidence contract.
-        for raw in table.rows[start:]:
+        for position, raw in enumerate(table.rows[start:], start):
             name = raw.cells[names[0]].text if len(names) == 1 and names[0] in raw.cells else ""
             row_issues = []
             if local_keys[raw.key] > 1:
                 row_issues.append("DUPLICATE_LOCAL_ROW_KEY")
+            if position in text_rows.get(matrix_id, set()):
+                row_issues.append("SOURCE_TEXT_ROW_RECOVERED")
             read = read_row(reading, raw, rule)
             row_issues.extend(read.issues)
             if any(raw is total for total in totals) and (len(totals) > 1 or any(

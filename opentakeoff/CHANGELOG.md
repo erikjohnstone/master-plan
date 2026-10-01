@@ -1,5 +1,28 @@
 # Changelog
 
+- **BAS points: rows a points list prints past a section band are read, and
+  the BAS math counts what the point lists read.**
+  - A full-width band ("DDC CONTROLLER", "CROSS-TIE LOOP") ended the table
+    extraction while the list went on; those rows, and a row that fell out
+    between two rows, are now read from the drawing's text in the list's own
+    columns (point rule version 2), each flagged for review and citing its
+    own text. Over the 11 open sets with point lists: 38 rows recovered
+    (077_MT's three heat pump lists 12 + 8 + 6, 013_MO's cross-tie list 10,
+    039_TX's LOW/HIGH ZONE TEMP 2), every one checked against the drawings;
+    039_TX's printed TOTALS now equal its rows. Paragraphs, headings, notes,
+    another list, its caption or header, a row repeating one the list already
+    printed, and gaps stop the reading; no extracted row reads differently.
+  - The BAS math reads each matrix's name, per-row point type and printed
+    totals with the point lists' reader: 013_MO's cross-tie list (its header
+    printed twice by the extraction) was 0 points in the math and is now
+    AI 6, AO 1, DI 3, DO 2, as the point lists and the drawing read it;
+    077_MT's math goes from 3/0/3/3 to 11/0/9/10 (AI/AO/DI/DO) with 5 software
+    values. A printed SUBTOTAL row is never counted. Over all 109 cached
+    corpus sets nothing else changes.
+  - A header cell the extraction merged over several columns ("AV BV ADJ
+    SCH") reads each column by its own header.
+  (`bas_engine/point_lists.py`, `adapters.py`; `web/src/lib/basProjectIssueCatalog.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-132, AS-133.)
 - **BAS points: the columns standard point lists print around their I/O are
   read (point rule version 2).**
   - The production point lists (Takeoff's BAS workspace and MCP, one Python

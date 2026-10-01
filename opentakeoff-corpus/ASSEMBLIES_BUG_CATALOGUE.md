@@ -7640,3 +7640,82 @@ flagged PRINTED_TOTAL_MISMATCH.
 **Measured:** 087_US's totals match its rows, and its counted I/O is now the drawing's (AI 4 → 2, AO 2 → 1, DI 6 → 3,
 DO 6 → 3, AV 2 → 1). 039_TX's totals disagree (ALARM 2, its rows 0): the drawing prints LOW ZONE TEMP and HIGH ZONE
 TEMP, which the extraction dropped. The flag catches it.
+
+## AS-132 — a points list that goes on past a full-width section band lost its rows: the extraction stopped at the band (FIXED, this commit; version 2)
+
+**Found:** AS-129's census, read against the renders. Three open sets lose printed rows:
+- 077_MT, sheet 5: three heat pump lists. Each prints "HEAT PUMP FACTORY CONTROLLER BACNET POINTS" (4 rows), a blank
+  row, a centred "DDC CONTROLLER" band and the controller's own points (8, 6 and 12 rows). The extraction stops at
+  the band; the DDC rows, the list's real I/O, were never read.
+- 013_MO, sheet 21: the cross-tie points list prints HOT WATER LOOP (3 rows), then "CROSS-TIE LOOP" and
+  "CROSS-TIE PUMP" bands and 10 more rows. The extraction ends at the first band (the rest becomes two untitled
+  fragments that are not point matrices).
+- 039_TX, sheet 31: LOW ZONE TEMP and HIGH ZONE TEMP fall out between ZONE TEMP and the TOTALS row (AS-131's mismatch).
+
+**Change (`source_text_rows`, `point_lists.py`, version 2 only):** for each selected point matrix, the rows the list
+prints below or between its extracted rows are read from the page's own text, in the list's own columns:
+- columns are the extracted cells' x-extents (median over rows; a header cell merged over several columns, "AV BV
+  ADJ SCH", is shared evenly in header order, only where a column has no cell of its own);
+- a printed line is a row only where every span sits inside one column (center inside, edges within a small
+  slack), cells are set apart as cells are (spans in different columns at least 0.8 of the text height apart, so
+  words run on a word space apart stay one text), it names the row in the name or key column, and it marks an I/O,
+  attribute or count column (a mark, a count, "-") or prints a short point type;
+- reading stops at text wider than the list, a non-row line that reads as prose (more than six words, a colon, a
+  closing period), another selected point matrix's region, a point-list caption, the list's own header printed again,
+  a row named as one the list already printed (a repeated block or another unit's copy), a gap of more than 3.5 rows,
+  or a third consecutive non-row line;
+- a recovered row cites the spans it was read from, is flagged SOURCE_TEXT_ROW_RECOVERED (review_required), and is
+  inserted in page order (between rows only where the extracted rows are in page order).
+The matrix keeps its identity (`matrix_id`) and extracted region. The rows are kept only where the list's I/O
+columns, name, point types and alarm columns read as before and every extracted row reads exactly as before; a column
+only the recovered rows fill (077_MT's ADJ and SCH) may gain its meaning. A saved result replays: `validate_observations`
+re-reads the extended matrix.
+
+**Measured** (the 11 open sets' production inputs, through the Python engine and the node transport with the JS contract):
+- **38 rows recovered, each checked against the drawing, mark by mark:** 077_MT 12 + 8 + 6 (its lists' AI/BI/BO/AV
+  marks and the TRD, ALM, DISP, ADJ, SCH attributes), 013_MO 10 (CTWR-T … CTP-NIA; CTP-COM's "COM" stays
+  POINT_TYPE_AMBIGUOUS), 039_TX 2 (LOW/HIGH ZONE TEMP, ALARM). The reading stopped at 013_MO's NOTES A–D, 077_MT's
+  SEQUENCE OF OPERATION text and 039_TX's TOTAL HARDWARE line.
+- 039_TX's TOTALS row now equals its rows: PRINTED_TOTAL_MISMATCH clears (review → no typed requirement).
+- No extracted row reads differently on any set; no matrix identity changes. Rows: review 203 → 240 (+38 recovered,
+  −1 totals), interpreted 557, no typed point 78 → 79.
+- Version 1 is reproduced byte for byte on all 11 sets.
+- Walled sets (totals only): 28 cached, 8 with point lists, 35 matrices: 2 rows recovered (each one attribute mark, 1 to 3 rows below its list), no extracted row changes (interpreted 567 = 567), declared I/O unchanged (575).
+
+**Holes found and closed before landing:** the first version took a row-shaped line printed after a one-line
+paragraph, and words exported one span per word could land inside the grid's columns; two rules close it, the
+cell-separation gap and the prose stop. On the walled sets (aggregates only) 2 recovered rows repeated an extracted
+row's name 3 to 10 rows below it, with other marks, flagging that extracted row DUPLICATE_LOCAL_ROW_KEY (2 rows
+interpreted → review): a repeated block, not the list's own rows. A row named as one the list already printed now
+ends the reading, and no extracted row changes on any walled set.
+
+**Should this be on the shared path? Yes.** `review_point_lists` is the one point-list reader Takeoff and MCP share,
+and production math swaps the graph's copy of each point matrix for the point list's (`tablesForBasMath`), so math
+counts the same rows (AS-133).
+
+Tests: `bas_engine/tests/test_point_rows_from_text.py` (band continuation, interior row completing the printed totals,
+heading/sentence stop, word-spaced text, stacked second list, unextracted list by caption and by repeated header, three
+non-rows, gap, text wider than its column, a row repeating an extracted row's name, a value that would change the
+extracted rows' reading, merged header cell, version 1); 16 mutations of the rules, each failing a test.
+
+## AS-133 — the BAS math read 0 points from 013_MO's cross-tie list the point lists read: math identified a matrix's name, point type and totals rows with its own header test (FIXED, this commit)
+
+**Found:** a per-table parity census of production math (with the point list's matrix swapped in) against the point
+lists' declared I/O: 40 of 44 tables agreed. 013_MO's list (the extraction printed every header twice, "POINT TYPE
+POINT TYPE") read AI 6, AO 1, DI 3, DO 2 in the point lists and nothing in the math (BAS_TABLE_UNTYPED): the math
+looked for "POINT TYPE" and "DESCRIPTION" itself and did not read a doubled header. A printed SUBTOTAL, GRAND TOTAL
+or TOTAL POINTS row would also have been counted by the math (it skipped only rows keyed TOTAL/TOTALS).
+
+**Change (`indexed_request`, `adapters.py`):** the math reads each table's I/O columns, name column, per-row point
+type and printed totals rows with the point lists' own `read_matrix` and `printed_total_row` (current rule). The
+earlier name test is kept as an alternative, so no table leaves the math.
+
+**Measured:** over all 109 cached corpus sets (81 open, 28 walled), math on the graph tables changes on 013_MO alone
+(0 → AI 3 from its extracted rows; with AS-132's rows, AI 6, AO 1, DI 3, DO 2, the drawing's). Walled math totals are
+unchanged (AI 300, AO 112, DI 257, DO 125; 799 points; 38 groups). With the production swap, 077_MT goes from
+3/0/3/3 to 11/0/9/10 (AI/AO/DI/DO) with 5 software values (its 26 recovered rows). Parity: 41 of 44 tables agree;
+the 3 left are 009_FL's points printed twice under one name, which the math withholds as INDEX_DUPLICATE_POINT
+(error) and the point lists keep for review (DUPLICATE_LOCAL_ROW_KEY). Slowest set 0.09 s.
+
+Tests: test_point_rows_from_text.py ("math counts the rows the point lists read", "math reads a doubled header and
+skips a printed subtotal", "math never counts a printed subtotal row"); 2 mutations, each failing a test.

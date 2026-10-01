@@ -316,15 +316,23 @@ def point_mark_kind(text: str) -> tuple[Literal["physical", "soft"], str] | None
 
 
 def indexed_request(payload: BlueprintInput) -> EngineRequest:
+    # Math reads a matrix's header (I/O columns, name, per-row point type) and
+    # its printed totals rows with the point lists' own reader under the
+    # current rule, so a drawing gives one listed-point truth. Imported here
+    # because the point-list module builds on this one.
+    from .point_lists import printed_total_row, read_matrix
     groups: list[EquipmentGroup] = []
     points: list[PointRequirement] = []
     diagnostics: list[Diagnostic] = []
     for table in payload.tables:
         title = table.title.text if table.title else ""
-        typed, column_evidence, data_start, alarm_headed = point_columns(table)
+        reading = read_matrix(table)
+        typed, column_evidence, data_start = reading.typed, reading.header_evidence, reading.start
+        alarm_headed = set(reading.alarm_headed)
         is_bas = bool(re.search(r"\b(?:BAS|DDC|POINTS?\s+(?:LIST|SCHEDULE)|POINT\s+FUNCTION\s+SCHEDULE|BACNET\s+INTERFACE\s+SCHEDULE|I\s*/\s*O)\b", title, re.I))
-        has_point_identity = any(normalized_header(h) in {"POINT NAME", "POINT DESCRIPTION", "CONTROL POINTS", "DESCRIPTION"} for h in table.headers)
-        row_type_headers = [header for header in table.headers if point_type_header(header)]
+        has_point_identity = bool(reading.names) or any(
+            normalized_header(h) in {"POINT NAME", "POINT DESCRIPTION", "CONTROL POINTS", "DESCRIPTION"} for h in table.headers)
+        row_type_headers = reading.row_type_headers
         has_marked_rows = any(sum(point_mark_kind(cell.text) is not None for cell in row.cells.values()) == 1
                               for row in table.rows[data_start:])
         # A directional point matrix establishes scope even when its title is
@@ -355,7 +363,8 @@ def indexed_request(payload: BlueprintInput) -> EngineRequest:
         seen: set[str] = set()
         for row in table.rows[data_start:]:
             key = row.key.strip()
-            if not key or normalized_header(key) in ("TAG", "MARK", "POINT", "TOTAL", "TOTALS", "DESCRIPTION"):
+            if (not key or normalized_header(key) in ("TAG", "MARK", "POINT", "TOTAL", "TOTALS", "DESCRIPTION")
+                    or printed_total_row(reading, row)):
                 continue
             identity = row.cells.get("POINT NAME") or row.cells.get("DESCRIPTION") or row.cells.get("TAG") or row.cells.get("MARK")
             if identity is None:

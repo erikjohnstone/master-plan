@@ -128,9 +128,41 @@ Version 2 reads, beyond version 1:
   input on its row, as the row's binary input when it is the only mark, and
   as POINT_CHANNEL_AMBIGUOUS (not counted) beside any other channel;
 - a TOTAL/TOTALS/SUBTOTAL row as a check, never points:
-  PRINTED_TOTAL_MISMATCH where it disagrees with the rows above it.
+  PRINTED_TOTAL_MISMATCH where it disagrees with the rows above it;
+- a header cell the extraction shares between several columns ("AV BV ADJ
+  SCH" over four) by each column's own header;
+- the rows a list prints that its extraction dropped (below).
+
+### Rows the extraction dropped (version 2)
+
+A full-width section band ("DDC CONTROLLER", "CROSS-TIE LOOP") ends many
+table extractions while the list goes on below it, and a row can fall out
+between two extracted rows. Version 2 reads those rows from the page's own
+text, in the list's own columns:
+- the columns are the extracted cells' x-extents (a merged header cell is
+  shared evenly in header order);
+- a printed line is a row only where every span on it sits inside one column,
+  cells are set apart as cells are (not run on a word space apart), it names
+  the row in the name or key column, and it marks an I/O, attribute or count
+  column or prints the row's point type;
+- reading stops at text wider than the list, a sentence or heading, another
+  point list's table, a point-list caption, the list's own header printed
+  again, a row named as one the list already printed (a repeated block or
+  another unit's copy), a gap of more than three rows, or three printed lines
+  that are not rows.
+
+Each such row is `review_required` with SOURCE_TEXT_ROW_RECOVERED and cites
+its own spans. The rows are kept only where the list's I/O columns, name and
+point types read as before and every extracted row reads exactly as before.
+The matrix keeps its identity and extracted region; BAS math swaps the
+graph's copy for it, so math and the point lists count the same rows.
+
+BAS math also reads each matrix's name, per-row point type and printed totals
+rows with `read_matrix` and `printed_total_row` (a header the extraction
+printed twice, "POINT TYPE POINT TYPE", is read once there too).
 
 Never read away: a note or remark, a network or calculated point flag, and a
 column naming who furnishes, reuses or defers a point. Such rows stay
 `review_required`. Measured and tested in ASSEMBLIES_BUG_CATALOGUE AS-129 to
-AS-131 and `bas_engine/tests/test_point_rules_v2.py`.
+AS-133, `bas_engine/tests/test_point_rules_v2.py` and
+`bas_engine/tests/test_point_rows_from_text.py`.

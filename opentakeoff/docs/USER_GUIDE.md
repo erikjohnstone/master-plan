@@ -459,6 +459,14 @@ is checked against the rows above it, and a disagreement is flagged (a row may
 be missing from the extraction). Notes, network or calculated point flags, and
 columns naming who furnishes or reuses a point still wait for your review.
 
+Where a list goes on past a section band ("DDC CONTROLLER", "CROSS-TIE LOOP")
+that ended the table extraction, or a row fell out between two rows, the
+points list reads those rows from the drawing's text in the list's own columns
+and flags each one "source text row recovered" for you to compare with the
+drawing; each cites its own text. The BAS calculation counts the same rows.
+Reading stops at notes, sentences, another list or its caption, a row
+repeating one the list already printed, and a gap.
+
 Full compile JSON additionally contains `bas_point_lists`: source-bound listed
 observations, supported controller footnotes, and separate unobserved-column
 accounting for sparse tables. The existing **Export BAS JSON** button exports
