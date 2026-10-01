@@ -1,5 +1,18 @@
 # Changelog
 
+- **BAS points: a point function schedule read from the drawing's text gets
+  all of its columns.**
+  - federal-mech's (and 019_FL's) AHU-1 schedule, missed by the table
+    extraction and read from the text with its name, tag and point type only,
+    waited for review on all 69 rows. Its fail mode, software function and
+    alarm limit columns are now read under their rotated headers and group
+    labels (point rule version 2), every mark at its column's centre: 69 rows
+    interpreted on each set, each row's marks checked against the drawing.
+    Over the 11 open sets with point lists: interpreted 557 → 695 of 879
+    rows; waiting for review 240 → 102. Counted I/O is unchanged.
+  - A limit or set point column printing values ("55") is read as the
+    point's programmed value, never counted.
+  (`bas_engine/point_lists.py`; ASSEMBLIES_BUG_CATALOGUE AS-134.)
 - **BAS points: rows a points list prints past a section band are read, and
   the BAS math counts what the point lists read.**
   - A full-width band ("DDC CONTROLLER", "CROSS-TIE LOOP") ended the table

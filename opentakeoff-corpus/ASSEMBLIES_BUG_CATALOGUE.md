@@ -7719,3 +7719,39 @@ the 3 left are 009_FL's points printed twice under one name, which the math with
 
 Tests: test_point_rows_from_text.py ("math counts the rows the point lists read", "math reads a doubled header and
 skips a printed subtotal", "math never counts a printed subtotal row"); 2 mutations, each failing a test.
+
+## AS-134 — a point function schedule recovered from the page text kept only its name, tag and point type: all 69 rows waited for review (FIXED, this commit; version 2)
+
+**Found:** AS-129's remaining waits. federal-mech's sheet 21 (and its twin 019_FL's) prints the AHU-1 "HVAC
+CONTROLS - BMS POINT FUNCTION SCHEDULE", 69 numbered rows. The graph omits it, so the source-span recovery reads it
+from the text with its core columns only (POINT NAME, TAG, POINT TYPE), and every row waited as
+SOURCE_SPAN_CORE_COLUMNS_ONLY: its 4 FAIL MODE, 19 SOFTWARE and 2 ALARM LIMITS columns (rotated headers, "■" marks)
+and NOTES were not read. The same schedule's other sheets (CHW, HHW, VAV, miscellaneous), which the graph extracts,
+were already read.
+
+**Change (`function_columns`, `function_cells`, `point_lists.py`, version 2 only):** the recovery also reads the
+columns right of POINT TYPE. Each rotated header (bottom-aligned with POINT TYPE) is a column at its centre; the
+horizontal group labels printed over them (a label on two lines, "ALARM" / "LIMITS", is one; footnote digits are not
+labels) partition the columns, each label centred within 0.35 of a pitch over a contiguous run; columns are named
+"<GROUP> <HEADER>" as the graph names them elsewhere ("FAIL MODE FAIL ON (OPEN)", "SOFTWARE TREND", "ALARM LIMITS LOW
+LIMIT"); a NOTES header right of the last column is the NOTES column, and the schedule's edge ends the row (the title
+block beside it is no cell). A row's spans between the first column and the edge must each sit at a column's centre
+(within 0.3 of its width; NOTES anywhere in its cell). If a label or a mark on any row does not fit, the schedule keeps
+its core columns and SOURCE_SPAN_CORE_COLUMNS_ONLY, as before. A limit, range or set point column printing values
+other than 0 or 1 ("55") is the point's programmed parameter (row metadata), never an attribute count.
+
+**Measured** (11 open sets, Python and the node transport with the JS contract):
+- federal-mech and 019_FL: interpreted 89 → 158 each; review 70 → 1 (the blank sheet-17 form). The 215 marks on
+  sheet 21 all sit within 4 px of a column centre; all 69 rows' marks were checked against the drawing, row by row
+  (the drawing itself skips number 41).
+- Open sets: interpreted 557 → **695 of 879** (79%); review 240 → 102. Counted I/O and the BAS math are unchanged (the
+  I/O was already read from POINT TYPE; the new observations are attributes). No other matrix changes; version 1 is
+  reproduced byte for byte.
+- Walled sets (totals only): 28 cached, 8 with point lists, 35 matrices: no change (interpreted 567, review 241, declared I/O 575 before and after).
+
+**Should this be on the shared path? Yes.** `point_tables_with_source_recovery` is the shared point-list reader's
+input; math swaps in the same matrix.
+
+Tests: `bas_engine/tests/test_point_function_columns.py` (columns under their groups, version 1 core only, a mark
+between two columns, a group label off its columns, a network point mark, printed limit values); 8 mutations, each
+failing a test.

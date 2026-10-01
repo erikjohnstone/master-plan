@@ -467,6 +467,11 @@ drawing; each cites its own text. The BAS calculation counts the same rows.
 Reading stops at notes, sentences, another list or its caption, a row
 repeating one the list already printed, and a gap.
 
+A UFGS point function schedule that the table extraction missed is read from
+the drawing's text with all of its columns (fail mode, software functions,
+alarm limits, notes), where every mark sits on its column; otherwise only its
+name, tag and point type are read and the rows wait for your review.
+
 Full compile JSON additionally contains `bas_point_lists`: source-bound listed
 observations, supported controller footnotes, and separate unobserved-column
 accounting for sparse tables. The existing **Export BAS JSON** button exports

@@ -199,6 +199,10 @@ def column_roles(table: IndexedTable, start: int, typed: dict[str, tuple[Literal
         full = header_label(parent if parent.endswith(label) else f"{parent} {child}".strip(), rule)
         values = [row.cells[h].text for row in table.rows[start:] if h in row.cells and row.cells[h].text.strip()]
         counts = all(printed_count(value, rule) is not None for value in values)
+        if PARAMETER.search(full) and any(printed_count(value, rule) not in (0, 1) for value in values):
+            # A limit, range or set point column printing its values ("55",
+            # "2") programs the point; a mark under it only says it has one.
+            counts = False
         if label in ATTRIBUTES:
             attributes[h] = label
         elif counts and values and FUNCTION_SCOPE.search(full) and not NOT_A_FUNCTION.search(full):
@@ -268,7 +272,97 @@ def boxes_overlap(left: Box | None, right: Box | None) -> bool:
     return min(left[2], right[2]) > max(left[0], right[0]) and min(left[3], right[3]) > max(left[1], right[1])
 
 
-def source_point_function_tables(sources: SourceContext) -> list[IndexedTable]:
+def function_columns(spans: list[SourceSpan], title: SourceSpan, type_header: SourceSpan,
+                     ) -> tuple[list[tuple[str, float, float]], float] | None:
+    """Version 2: the columns a point function schedule prints right of its
+    POINT TYPE, each under a rotated header and named with the group label
+    printed over it, as the graph names them where it extracts the schedule
+    ("FAIL MODE FAIL ON (OPEN)", "SOFTWARE TREND", "ALARM LIMITS LOW LIMIT"),
+    then NOTES. Returns (name, left, right) per column and the schedule's
+    right edge, or None where a header, a group or the pitch is unclear."""
+    type_x = box_center(type_header.bbox_px)[0]
+    bottom = type_header.bbox_px[3]
+    rotated = sorted((span for span in spans if span.rotation in (90, 270)
+                      and box_center(span.bbox_px)[0] > type_x + 10
+                      and abs(span.bbox_px[3] - bottom) <= 20 and span.bbox_px[1] > title.bbox_px[3]),
+                     key=lambda span: box_center(span.bbox_px)[0])
+    if len(rotated) < 2:
+        return None
+    centres = [box_center(span.bbox_px)[0] for span in rotated]
+    gaps = [b - a for a, b in zip(centres, centres[1:])]
+    pitch = sorted(gaps)[len(gaps) // 2]
+    if pitch <= 0 or any(gap < 0.5 * pitch or gap > 3 * pitch for gap in gaps):
+        return None
+    top = min(span.bbox_px[1] for span in rotated)
+    # Group labels: the horizontal text between the title and the rotated
+    # headers, over them; a label printed on two lines ("ALARM" / "LIMITS")
+    # is one label. Footnote digits are not labels.
+    words = sorted((span for span in spans if span.rotation in (None, 0) and span.text.strip()
+                    and not span.text.strip().isdigit()
+                    and title.bbox_px[3] <= span.bbox_px[1] and span.bbox_px[3] <= top
+                    and centres[0] - pitch <= box_center(span.bbox_px)[0] <= centres[-1] + pitch),
+                   key=lambda span: (box_center(span.bbox_px)[0], span.bbox_px[1]))
+    labels: list[tuple[float, str]] = []
+    for span in words:
+        x = box_center(span.bbox_px)[0]
+        if labels and abs(labels[-1][0] - x) <= pitch / 2:
+            labels[-1] = (labels[-1][0], f"{labels[-1][1]} {span.text.strip()}")
+        else:
+            labels.append((x, span.text.strip()))
+    groups: list[tuple[str, int, int]] = []
+    start = 0
+    for x, label in labels:
+        if start >= len(centres):
+            return None
+        end = min(range(start, len(centres)), key=lambda j: abs((centres[start] + centres[j]) / 2 - x))
+        if abs((centres[start] + centres[end]) / 2 - x) > 0.35 * pitch:
+            return None
+        groups.append((normalized_header(label), start, end))
+        start = end + 1
+    if not groups or start != len(centres):
+        return None
+    columns: list[tuple[str, float, float]] = []
+    for label, first, last in groups:
+        for j in range(first, last + 1):
+            left = (centres[j - 1] + centres[j]) / 2 if j else centres[j] - gaps[0] / 2
+            right = (centres[j] + centres[j + 1]) / 2 if j + 1 < len(centres) else centres[j] + gaps[-1] / 2
+            columns.append((f"{label} {normalized_header(rotated[j].text)}", left, right))
+    edge = columns[-1][2]
+    notes = [span for span in spans if span.rotation in (None, 0) and normalized_header(span.text) in ("NOTES", "REMARKS")
+             and span.bbox_px[0] >= edge - 2 and abs(span.bbox_px[3] - bottom) <= 40]
+    if len(notes) == 1:
+        right = notes[0].bbox_px[2] + (notes[0].bbox_px[0] - edge)
+        columns.append((normalized_header(notes[0].text), edge, right))
+        edge = right
+    return columns, edge
+
+
+def function_cells(spans: list[SourceSpan], type_span: SourceSpan, columns: list[tuple[str, float, float]],
+                   edge: float) -> dict[str, IndexedCell] | None:
+    """A recovered row's cells under the schedule's function columns: every
+    span on its printed line between the first column and the schedule's
+    edge must sit at a column's centre (NOTES anywhere in its cell), or the
+    row is not read beyond its core columns."""
+    parts: dict[str, list[SourceSpan]] = {}
+    for span in spans:
+        if span is type_span or span.rotation not in (None, 0) or not same_printed_line(span, type_span):
+            continue
+        x = box_center(span.bbox_px)[0]
+        if not columns[0][1] <= x <= edge:
+            continue
+        hits = [(name, a, b) for name, a, b in columns if a <= x < b]
+        if len(hits) != 1:
+            return None
+        name, a, b = hits[0]
+        if name not in ("NOTES", "REMARKS") and abs(x - (a + b) / 2) > 0.3 * (b - a):
+            return None
+        parts.setdefault(name, []).append(span)
+    return {name: IndexedCell(text=joined_text(found), bbox=union_boxes([span.bbox_px for span in found]))
+            for name, found in parts.items()}
+
+
+def source_point_function_tables(sources: SourceContext, rule: PointRule = CURRENT_POINT_RULE,
+                                  ) -> list[IndexedTable]:
     """Recover bounded core columns from an explicit vector-text point schedule.
 
     This is a consumer-side fallback for a table the shared graph omitted or
@@ -276,7 +370,9 @@ def source_point_function_tables(sources: SourceContext) -> list[IndexedTable]:
     POINT NAME, TAG and POINT TYPE headers, and then binds only rows with an
     aligned printed integer, name, tag and exact directional I/O type. Other
     schedule columns remain unresolved instead of being reconstructed by
-    proximity or mark shape.
+    proximity or mark shape. Version 2 also reads the columns the schedule
+    prints right of POINT TYPE under rotated headers (`function_columns`),
+    only where every mark on every row sits at a column's centre.
     """
     tables: list[IndexedTable] = []
     for page in sources.pages:
@@ -321,6 +417,7 @@ def source_point_function_tables(sources: SourceContext) -> list[IndexedTable]:
                 and abs(box_center(span.bbox_px)[0] - type_x) <= type_tolerance),
                 key=lambda span: (box_center(span.bbox_px)[1], span.source_index))
             recovered: list[IndexedRow] = []
+            typed_by_row: list[SourceSpan] = []
             seen_numbers: set[str] = set()
             for index, type_span in enumerate(row_types):
                 row_y = box_center(type_span.bbox_px)[1]
@@ -373,16 +470,29 @@ def source_point_function_tables(sources: SourceContext) -> list[IndexedTable]:
                     "HARDWARE TAG": IndexedCell(text=tag.text, bbox=tag.bbox_px),
                     "HARDWARE POINT TYPE": IndexedCell(text=type_span.text, bbox=type_span.bbox_px),
                 }))
+                typed_by_row.append(type_span)
                 seen_numbers.add(key)
             if len(recovered) < 2:
                 continue
+            headers = ["POINT NAME", "HARDWARE TAG", "HARDWARE POINT TYPE"]
+            extra: list[Box] = []
+            found = function_columns(spans, title, type_header) if rule != POINT_RULE_V1 else None
+            if found is not None:
+                columns, edge = found
+                read = [function_cells(spans, type_span, columns, edge) for type_span in typed_by_row]
+                if all(cells is not None for cells in read):
+                    recovered = [IndexedRow(key=row.key, cells={**row.cells, **(cells or {})})
+                                 for row, cells in zip(recovered, read)]
+                    headers += [name for name, _a, _b in columns]
+                    extra = [span.bbox_px for span in spans if span.rotation in (90, 270)
+                             and columns[0][1] <= box_center(span.bbox_px)[0] <= edge
+                             and abs(span.bbox_px[3] - type_header.bbox_px[3]) <= 20]
             cells = [cell.bbox for row in recovered for cell in row.cells.values() if cell.bbox is not None]
             region = union_boxes([title.bbox_px, name_header.bbox_px, tag_header.bbox_px,
-                                  type_header.bbox_px, *cells])
+                                  type_header.bbox_px, *cells, *extra])
             tables.append(IndexedTable(sheet=page.sheet_keys[0],
                 title=IndexedCell(text=title.text, bbox=title.bbox_px),
-                headers=["POINT NAME", "HARDWARE TAG", "HARDWARE POINT TYPE"],
-                region=region, rows=recovered))
+                headers=headers, region=region, rows=recovered))
     return tables
 
 
@@ -471,7 +581,7 @@ def point_tables_with_source_recovery(payload: PointListInput, rule: PointRule =
                                       ) -> tuple[list[IndexedTable], set[int]]:
     tables = list(payload.tables)
     recovered_ids: set[int] = set()
-    for recovered in [*source_point_function_tables(payload.sources),
+    for recovered in [*source_point_function_tables(payload.sources, rule),
                       *source_marked_point_tables(payload.sources)]:
         title = normalized_header(recovered.title.text if recovered.title else "")
         matches = [index for index, table in enumerate(tables)

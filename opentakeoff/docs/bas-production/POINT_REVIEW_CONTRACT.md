@@ -131,6 +131,15 @@ Version 2 reads, beyond version 1:
   PRINTED_TOTAL_MISMATCH where it disagrees with the rows above it;
 - a header cell the extraction shares between several columns ("AV BV ADJ
   SCH" over four) by each column's own header;
+- a limit, range or set point column printing values other than 0 or 1
+  ("55") as the point's programmed parameter, never an attribute count;
+- a point function schedule recovered from the page text (the graph omitted
+  it) with the columns it prints right of POINT TYPE: each rotated header,
+  named with the group label printed over it as the graph names it ("FAIL
+  MODE FAIL ON (OPEN)", "SOFTWARE TREND", "ALARM LIMITS LOW LIMIT"), and
+  NOTES. Only where the group labels partition the columns and every mark on
+  every row sits at a column's centre; otherwise the schedule keeps its core
+  columns and SOURCE_SPAN_CORE_COLUMNS_ONLY;
 - the rows a list prints that its extraction dropped (below).
 
 ### Rows the extraction dropped (version 2)
@@ -164,5 +173,6 @@ printed twice, "POINT TYPE POINT TYPE", is read once there too).
 Never read away: a note or remark, a network or calculated point flag, and a
 column naming who furnishes, reuses or defers a point. Such rows stay
 `review_required`. Measured and tested in ASSEMBLIES_BUG_CATALOGUE AS-129 to
-AS-133, `bas_engine/tests/test_point_rules_v2.py` and
-`bas_engine/tests/test_point_rows_from_text.py`.
+AS-134, `bas_engine/tests/test_point_rules_v2.py`,
+`bas_engine/tests/test_point_rows_from_text.py` and
+`bas_engine/tests/test_point_function_columns.py`.
