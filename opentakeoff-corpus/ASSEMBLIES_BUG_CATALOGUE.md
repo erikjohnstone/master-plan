@@ -8344,3 +8344,20 @@ the fan coil table would be keyed by its model number (FV4C), which is why AS-15
 Tests: `web/test/equipmentTableCaption.test.ts` (6): M601's caption and TAG where M601 prints them; a caption drafted
 in two runs, and EQUIPMENT for UNITS; refused: a detail's single-unit label, a note's line, a cross-reference, a
 caption with no mark column under it (none, far below, above), and words that name no HVAC system.
+
+## AS-152 — three WP1 acceptance keys marked weak that their own drawings contradict (DOCUMENTED, keys left as keyed)
+
+**Found:** reading the WP1 under-counts after AS-145 against each document's printed sheets. Each key is marked
+`[WEAK]` in its own notes; none is edited (keys are never changed to fit the code). Each takeoff below reads what the
+schedules print.
+- **068_US** (key: PUMP 3, AIR_SEPARATOR 3; read 2 and 1). Sheet 4's schedules print P-1 and P-2 (BELL & GOSSETT e-90)
+  and one air separator, AS-1. P-3 and P-4 appear only on sheets 5 and 9, as existing equipment, "(E)P-3", "(E)P-4",
+  and in a note on existing switches; no second or third air separator is printed anywhere.
+- **078_US** (key: FAN 1; read 0). The set prints no fan schedule: its exhaust fan appears in a mechanical note
+  ("ASSOCIATED EXHAUST FAN AND MAKEUP AIR UNIT LOCATED ON ROOF") and on a panel schedule's circuit ("MUH-1/EF-1
+  CONTROLS"); nothing schedules it.
+- **041_IL** (key: FCU 2, PUMP 1, GRD 1; read 17 units). FAN COIL UNIT appears only in two abbreviation legends
+  (sheets 19 and 27); the set schedules building 40's air handler, five VAV boxes, a condensing unit, fans, coils, an
+  expansion tank and a compressor, which the takeoff reads.
+
+**Should this be on the shared path?** Not applicable: no code changes.
