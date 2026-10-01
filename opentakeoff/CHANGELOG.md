@@ -1,5 +1,9 @@
 # Changelog
 
+- **An equipment table captioned as the units it lists is read as a schedule.** 23_GA's M601 prints HEAT PUMP UNITS and
+  FAN COIL UNITS over TAG columns with no SCHEDULE in either caption, on a sheet a detail label calls an elevation; its
+  heat pump (HP-1) is now read. Plans keep the stricter SCHEDULE caption rule. (`scheduleLanguageScan.ts`
+  `sheetHasEquipmentTableCaption`, `vectorTakeoffPipeline.ts` `isScheduleTarget`; AS-149.)
 - **A schedule whose mark column a heavy rule cuts off keeps its marks.** A one-column strip whose every row line is
   its neighbour table's is that table's column: 23_GA's fan coil schedule reads FCU-1 under TAG (with AS-149), and
   02_UT's floor loading schedule reads whole. (`bakeoff/vectorgrid.py` `_sheared_mark_column`; AS-150.)

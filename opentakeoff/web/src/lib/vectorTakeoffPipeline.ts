@@ -12,7 +12,7 @@ import {
   extractScheduleTablesFromVectorGrid,
 } from "./vectorGridAdapter.ts";
 import { vectorGridAvailable, vectorGridMode } from "./vectorGridClient.ts";
-import { sheetHasPointsListCaption, sheetHasPointsListTitleSpans, sheetHasScheduleCaption, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
+import { sheetHasEquipmentTableCaption, sheetHasPointsListCaption, sheetHasPointsListTitleSpans, sheetHasScheduleCaption, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
 import {
   adoptVectorGridTables,
   collapseEquivalentPrimaryTables,
@@ -194,6 +194,12 @@ function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): 
   // evidence of absence. Keep the broader legacy title/language hook below
   // the role gate: only a spatially assembled printed caption expands routing.
   if (sheetHasPointsListCaption(ctx.spans)) return true;
+  // An equipment table captioned as the units it lists (HEAT PUMP UNITS) on a
+  // sheet that is no plan (AS-149): 23_GA's M601 reads `elevation` from a
+  // detail label, and its heat pump never reached vectorgrid. A plan's
+  // callouts name units too ("NEW ROOFTOP UNIT"), so plans keep the stricter
+  // SCHEDULE caption above.
+  if (ctx.role !== "plan" && ctx.role !== "demolition" && sheetHasEquipmentTableCaption(ctx.spans)) return true;
   // A real control-schematic sheet routinely titles itself "… CONTROL
   // SCHEMATIC AND POINTS LIST" — the points list literally shares the
   // schematic's own title. Before `schematic` existed as a role such a

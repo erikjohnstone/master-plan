@@ -8315,3 +8315,32 @@ Tests: `web/test/vectorGridMarkColumn.test.ts` redraws M601's own FAN COIL UNITS
 weight, clipped to the table) and words (fixture `as150-23ga-m601-fcu-ruling.json`) and runs the real sidecar: the
 table reads TAG, FCU-1 and FV4C together. A negative control draws the TAG strip 40pt lower, so its rows are not the
 table's: it stays apart. With the rule removed the first test fails and the second passes.
+
+## AS-149 — an equipment table captioned as the units it lists, on a sheet a detail label makes an elevation, never reached vectorgrid: 23_GA's heat pump (FIXED, this commit)
+
+**Found:** the WP1 under-count list after AS-145. 23_GA's key lists HP-1; the takeoff read none. M601 (page 35)
+prints HEAT PUMP UNITS, FAN COIL UNITS and BI-POLAR IONIZATION UNITS over ruled tables whose first column head is
+TAG, and no caption says SCHEDULE. A detail label on the same sheet ("BOTTOM ELEVATION, TOP ELEVATION") makes the
+sheet an `elevation`, and `isScheduleTarget` offers vectorgrid a non-plan sheet only on a SCHEDULE caption, a
+points-list caption or schedule language, so the sheet was never read.
+
+**Change:** `web/src/lib/scheduleLanguageScan.ts` `sheetHasEquipmentTableCaption`: a caption line ending in UNITS or
+EQUIPMENT that names an HVAC system (`EQUIPMENT_TABLE_CAPTION_RE`), plural, with no note's verb (SEE, PROVIDE,
+CONNECT ...) and no cross-reference, over a mark column's head (TAG, MARK, SYMBOL, UNIT NO. ...) printed below it
+within max(120, 10 × caption height) and at most max(240, 2 × caption width) left of it (a caption is centred over
+its table; 23_GA's TAG is 370pt left of HEAT PUMP UNITS). `vectorTakeoffPipeline.ts` `isScheduleTarget` admits a
+sheet with one when its role is not `plan` or `demolition`: a plan's callouts name units too ("NEW ROOFTOP UNIT"),
+so plans keep the SCHEDULE caption rule. A detail's own label is one unit ("AIR HANDLING UNIT") and heads no column.
+
+**Measured:** census of every open document's sheets and the walled check side (counts only; held-out documents not
+run): the rule admits one sheet the gate refused, 23_GA M601; no walled sheet. With AS-150, M601's tables read HP-1
+under HEAT PUMP UNITS, FCU-1 under FAN COIL UNITS (keyed by TAG), EF-1 to EF-3, BPIU-1 and its diffusers; the
+takeoff gains HP-1 and nothing else changes (its other units were already read from other sheets). Without AS-150
+the fan coil table would be keyed by its model number (FV4C), which is why AS-150 lands first.
+
+**Should this be on the shared path? Yes.** `isScheduleTarget` decides what vectorgrid reads for
+`Session.graphForPipeline`, the one sheet graph the UI and MCP both read.
+
+Tests: `web/test/equipmentTableCaption.test.ts` (6): M601's caption and TAG where M601 prints them; a caption drafted
+in two runs, and EQUIPMENT for UNITS; refused: a detail's single-unit label, a note's line, a cross-reference, a
+caption with no mark column under it (none, far below, above), and words that name no HVAC system.

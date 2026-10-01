@@ -142,6 +142,68 @@ export function sheetHasScheduleCaption(spans: GraphSpan[]): boolean {
   return false;
 }
 
+/** A PRINTED EQUIPMENT TABLE CAPTION without the word SCHEDULE (AS-149):
+ * 23_GA's M601 prints HEAT PUMP UNITS and FAN COIL UNITS over ruled tables,
+ * and a detail label on the same sheet ("BOTTOM ELEVATION, TOP ELEVATION")
+ * makes it an elevation; its heat pump was never offered to vectorgrid. A
+ * caption names the units its table lists: an HVAC system noun ending in
+ * UNITS or EQUIPMENT (EQUIPMENT_TABLE_CAPTION_RE), plural, no note's verb, and
+ * a mark column's head (TAG, MARK, SYMBOL) printed just under it. A detail's
+ * own label is one unit ("AIR HANDLING UNIT", "CONNECT CONDENSING UNIT") and
+ * heads no column. */
+const CAPTION_NOTE_VERB_RE = /\b(?:SEE|REFER|PROVIDE|INSTALL|CONNECT|REMOVE|RELOCATE|REPLACE|FURNISH|ROUTE|SHALL|ALL|EACH|TYP(?:ICAL)?)\b/;
+const MARK_COLUMN_HEAD_RE = /^(?:TAG|MARK|SYMBOL|UNIT\s+(?:NO\.?|TAG|MARK)|EQUIP(?:MENT|\.)?\s+(?:NO\.?|TAG|MARK)|ITEM\s+NO\.?)$/;
+export function sheetHasEquipmentTableCaption(spans: GraphSpan[]): boolean {
+  if (!spans.some((sp) => /\b(?:UNITS|EQUIPMENT)\b/.test(spanText(sp)))) return false;
+  const heads = spans.filter((sp) => MARK_COLUMN_HEAD_RE.test(spanText(sp).replace(/\s+/g, " ").trim()));
+  if (!heads.length) return false;
+  return captionLineBoxes(spans).some(({ text, x0, x1, y, h }) => {
+    if (!/\b(?:UNITS|EQUIPMENT)$/.test(text) || CAPTION_XREF_RE.test(text) || CAPTION_NOTE_VERB_RE.test(text)) return false;
+    if (!EQUIPMENT_TABLE_CAPTION_RE.test(text)) return false;
+    // The mark column's head sits below the caption, within a few caption
+    // heights, at the left of the table the caption is centred over (23_GA's
+    // TAG is 370pt left of HEAT PUMP UNITS): the table it titles.
+    return heads.some((hd) => hd.y > y && hd.y - y <= Math.max(120, 10 * h)
+      && hd.x + (hd.w || 0) >= x0 - Math.max(240, 2 * (x1 - x0)) && hd.x <= x1);
+  });
+}
+
+/** joinCaptionLines' lines with their boxes, every line (one span or more). */
+function captionLineBoxes(spans: GraphSpan[]): { text: string; x0: number; x1: number; y: number; h: number }[] {
+  const rows: GraphSpan[][] = [];
+  for (const sp of [...spans].sort((a, b) => a.y - b.y || a.x - b.x)) {
+    const h = sp.h || 12;
+    const row = rows.find((r) => Math.abs(r[0].y - sp.y) <= Math.max(2, 0.5 * Math.max(h, r[0].h || 12)));
+    if (row) row.push(sp);
+    else rows.push([sp]);
+  }
+  const lines: { text: string; x0: number; x1: number; y: number; h: number }[] = [];
+  for (const row of rows) {
+    row.sort((a, b) => a.x - b.x);
+    let cluster: GraphSpan[] = [row[0]];
+    const flush = () => {
+      lines.push({
+        text: cluster.map(spanText).join(" ").replace(/\s+/g, " ").trim(),
+        x0: cluster[0].x,
+        x1: Math.max(...cluster.map((c) => c.x + (c.w || 0))),
+        y: Math.min(...cluster.map((c) => c.y)),
+        h: Math.max(...cluster.map((c) => c.h || 12)),
+      });
+    };
+    for (let i = 1; i < row.length; i++) {
+      const prev = cluster[cluster.length - 1];
+      const gap = row[i].x - (prev.x + (prev.w || 0));
+      if (gap <= Math.max(60, 3 * Math.max(prev.h || 12, row[i].h || 12))) cluster.push(row[i]);
+      else {
+        flush();
+        cluster = [row[i]];
+      }
+    }
+    flush();
+  }
+  return lines;
+}
+
 /** Strict printed points-list caption for admitting an otherwise non-schedule
  * drawing. The older title hook deliberately remains broader for legend/unknown
  * pages. Admission only offers the page to the existing structural extractor;
