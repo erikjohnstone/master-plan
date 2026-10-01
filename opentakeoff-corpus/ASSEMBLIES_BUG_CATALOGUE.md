@@ -8093,3 +8093,35 @@ reconcile's rows); an outdoor heat pump beside its fan coil; the scope (a title 
 title, a general schedule, an untitled table, half a pair); the cite order. 17 mutations, 16 failing them; the
 survivor (no host title in `titleNamesFamily`) is equivalent today: every host title the specs hold is also a family's
 own title (AIR HANDLER, CHILLER SCHEDULE).
+
+## AS-145 — a split system's outdoor heat pump, its indoor air conditioning unit, and a VRF system's terminal units were read by no family under their own titles (FIXED, this commit)
+
+**Found:** the same census (AS-144), over the tables titled for split, ductless and VRF systems:
+- 098_ID's DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE prints each pair under SYMBOL, "FC-1 , HP-1" and
+  "FC-2 , HP-2": the fan coil family read FC-1 and FC-2; no family read the outdoor heat pumps HP-1 and HP-2 (the
+  title names no heat pump, and the condensing unit's split rule reads CU-, DCU-, ACCU-, SSCU- only). The set has no
+  other heat pump schedule: the takeoff counted no heat pump.
+- 21_VA's DUCTLESS SPLIT SYSTEM UNIT SCHEDULE (transposed, AS-65) names its one pair "ACU-1 / ACCU-3": the condensing
+  unit read ACCU-3; no family read the indoor air conditioning unit ACU-1 (the fan coil rule reads AC- with a
+  separator, not ACU).
+- 22_GA's VARIABLE REFRIGERANT FLOW TERMINAL DEVICE SCHEDULE lists thirteen cassettes, VRFC-1 to VRFC-13: the VRF
+  indoor family's title rule names VRF INDOOR units only, and its marks IDU-, IU-, VI-. None was counted.
+
+**Change** (`corpusTakeoff.mjs`):
+- HEAT_PUMP reads a split or ductless system's title (SPLIT SYSTEM AIR CONDITIONING, DUCTLESS (MULTI-)SPLIT,
+  MINI-SPLIT) as its other title, and its outdoor HP-# there, as CONDENSING_UNIT reads its outdoor CU-* (AS-63).
+- Under the fan coil family's own titles (a fan coil, split or ductless system's), an air conditioning unit ACU-# is the
+  fan coil, as DAC-* and SS-* are.
+- VRF_INDOOR reads a VRF system's terminal units' title (VRF TERMINAL, VARIABLE REFRIGERANT FLOW TERMINAL), and under
+  its own title a VRF unit's mark (VRFC-#: VRF and up to two letters, a number).
+
+**Measured:** the compile of the 98 cached graphs: 098_ID +2 (HP-1, HP-2), 21_VA +1 (ACU-1), 22_GA +13 (VRFC-1 to
+VRFC-13); nothing else, no walled document, nothing removed. 22_GA's VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE
+(VRHP-1) stays the condensing unit's (its title names one).
+
+**Should this be on the shared path? Yes.** The family rules are the one gate the takeoff, the reconcile and the
+assemblies read a table by.
+
+Tests: `web/test/splitHalvesVrf.test.ts` (4): 098_ID's pairs; 21_VA's pair and a mini split; the negatives (a fan coil
+schedule's HP-*, an air handling unit's or an untitled ACU-*, a split system's CU-* and its indoor AH-*); 22_GA's
+terminals and a VRF mark under no VRF title. 8 mutations, each failing them.

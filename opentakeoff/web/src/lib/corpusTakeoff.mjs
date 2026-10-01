@@ -2018,15 +2018,18 @@ export const HVAC_FAMILY_SPECS = {
   // Split-system indoor AC-* (bldg5406 AC-1/ACCU-1) — not AHU (AHU titles differ).
   // "SPLIT SYSTEM HEAT PUMPS" (Klamath) lists indoor FC-* beside outdoor HP-*.
   FCU: {
-    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|DUCTLESS\s+SPLIT/i,
+    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
     // Under a split or ductless title: DAC-* ductless units, SS-* split
     // systems (03_FL, 22_GA, 040_IL; AS-63). Under a fan coil title, FCC-*
     // fan coils (028_TX's CHILLED WATER FAN COIL UNIT SCHEDULE lists FCC1-1
     // beside FCU1-3; AS-64), and BCU-* blower coils (26_CA's FAN COIL schedule
-    // lists BCU-P3-1 and BCU-2-1 beside FCU-P2-2; AS-141).
-    titledKeyRe: /^(?:(?:DAC|SS|FCC)[\s\-]?\d|BCU[\s\-]?(?:[A-Z]{1,2})?\d)/i,
+    // lists BCU-P3-1 and BCU-2-1 beside FCU-P2-2; AS-141). And an air
+    // conditioning unit, the indoor half
+    // a split system's title pairs with its outdoor unit (21_VA's DUCTLESS
+    // SPLIT SYSTEM UNIT SCHEDULE's ACU-1 / ACCU-3; AS-145).
+    titledKeyRe: /^(?:(?:DAC|SS|FCC|ACU)[\s\-]?\d|BCU[\s\-]?(?:[A-Z]{1,2})?\d)/i,
     // A bare F-* is a fan coil under the family's title only: 016_NY's fans
     // F-1 and F-2, in an untitled panel schedule, and 041_IL's F0535, a
     // utility cart in an architectural list, were fan coils too (AS-66).
@@ -2091,7 +2094,7 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^(?:CU|ACC)[\s\-]/i,
     // Split indoor/outdoor SYMBOL columns ("F-1 , CU-1" / "DFC-1 , DCU-1"):
     // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
-    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
+    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63).
     altKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
     // A split system's outdoor units by its header shape (AS-144): 26_CA's
@@ -2113,6 +2116,12 @@ export const HVAC_FAMILY_SPECS = {
       exclude: /POINTS\s*LIST|DDC/i,
       keyRe: /^HP[\s\-]?\d/i,
     },
+    // A split or ductless system's outdoor HP-*, the heat pump its title pairs
+    // with an indoor unit (098_ID's DUCTLESS SPLIT HIGH WALL COOLING & HEATING
+    // UNIT SCHEDULE's "FC-1 , HP-1"; AS-145), as CONDENSING_UNIT reads its
+    // outdoor CU-* there.
+    altTitleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    altKeyRe: /^HP[\s\-]?\d/i,
     // A split system's outdoor heat pumps by its header shape (AS-144).
     splitKeyRe: /^HP[\s\-]?\d/i,
   },
@@ -2124,10 +2133,14 @@ export const HVAC_FAMILY_SPECS = {
   // tables — titleRe alone can't reach it (no "INDOOR"/"OUTDOOR" in the
   // title), so it needs its own altTitleRe/altKeyRe path, same mechanism
   // already proven for CONDENSING_UNIT's split CU/DCU marks (GOAL.md rule 39).
+  // Or its terminal units (22_GA's VARIABLE REFRIGERANT FLOW TERMINAL DEVICE
+  // SCHEDULE, VRFC-1 to VRFC-13; AS-145).
   VRF_INDOOR: {
-    titleRe: /VRF\s+INDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+INDOOR/i,
+    titleRe: /VRF\s+(?:INDOOR|TERMINAL)(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+(?:INDOOR|TERMINAL)/i,
     exclude: /POINTS\s*LIST|DDC|OUTDOOR/i,
     keyRe: /^(?:IDU|IU|VI)[\s\-]?/i,
+    // Under its own title, a VRF unit's mark (VRFC-1, a cassette; AS-145).
+    titledKeyRe: /^VRF[A-Z]{0,2}[\s\-]?\d/i,
     altTitleRe: /VRF\s+SYSTEM\s+SCHEDULE/i,
     altKeyRe: /^AC[\s\-]/i,
     titledOnly: true,

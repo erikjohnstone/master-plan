@@ -1,5 +1,13 @@
 # Changelog
 
+- **A split system's outdoor heat pump and indoor air conditioning unit, and a VRF system's terminal units, are
+  read under their titles.**
+  - Under a split, ductless (multi-)split or mini-split title, an outdoor HP-* is the heat pump (098_ID's "FC-1 ,
+    HP-1": the heat pumps were never counted) and an indoor ACU-* the fan coil (21_VA's "ACU-1 / ACCU-3"); the fan
+    coil and condensing unit families read the ductless multi-split and mini-split titles too. A VRF TERMINAL
+    title is the VRF indoor family's, with VRFC-* marks under it (22_GA's thirteen cassettes).
+  - Across the cached corpus: 098_ID +2, 21_VA +1, 22_GA +13; nothing else changes.
+  (`web/src/lib/corpusTakeoff.mjs` family specs; ASSEMBLIES_BUG_CATALOGUE AS-145.)
 - **A split system's schedule whose title names no family is read by its header shape.**
   - 26_CA's AIR CONDITIONING UNITS - AIR COOLED SYSTEMS prints each evaporator's mark (AC-P3-1) under
     EVAPORATOR DESIGNATION beside its condenser's (ACCU-P3-1) under CONDENSER DESIGNATION. No family's title
