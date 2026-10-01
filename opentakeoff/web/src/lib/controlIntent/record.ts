@@ -29,7 +29,7 @@ import { sha256Hex } from "../graphKeys.js";
 import { COMBINE_VERSION, combineUnit, type Decision } from "./combine";
 import { memoryRunStore, PENDING_IMAGE, recordedCall, RUNS_VERSION, type ModelRequest, type RunStore, type Transport } from "./runs";
 import { QUESTIONS_VERSION, unitQuestions, type ReadingQuestion } from "./readers/questions";
-import { aboutOthers, headsOthers, namesUnit, ownPacket, R0_VERSION, readR0, rowKindWords, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
+import { aboutOthers, headsOthers, mentionsDevice, namesUnit, ownPacket, R0_VERSION, readR0, rowKindWords, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
 import { R1_MODEL, R1_PROMPT_VERSION, r1Answers, r1Request, type ReadUnit } from "./readers/r1";
 import { cropSpec, cutOff, joinRun, R2_MODEL, R2_PROMPT_VERSION, R2_RETRIES, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
 import { TERM_LIST, type TermList } from "./readers/terms";
@@ -119,6 +119,9 @@ export async function readControlIntent(input: {
   }
   // The scheduled units, whose tags a packet's title may name (CI-23).
   const scheduled = first.instances.map((i) => ({ tag: i.tag, family: i.family }));
+  // The packets some unit is bound to (proposals too): a drawing outside
+  // them is no unit's yet.
+  const boundToSome = new Set(first.instances.flatMap((i) => bindingsOf(i.item).map((b) => b.packet)));
   const texts = new Map<string, PacketText>();
   const textOf = (p: Packet) => texts.get(p.id) ?? texts.set(p.id, packetText(p)).get(p.id)!;
   type Unit = { reading: UnitReading; bound: BoundPacket[]; read: ReadUnit; kind: string | null };
@@ -269,7 +272,20 @@ export async function readControlIntent(input: {
   await pool(jobs, opts.concurrency ?? 4, async (job) => { await job(); done += 1; opts.onProgress?.(`read ${done}/${jobs.length}`); });
   // 4. Combine.
   for (const u of units) {
-    u.reading.decisions = combineUnit({ questions: u.reading.questions, answers: u.reading.answers, bindings: u.bound.map((b) => b.binding), others: u.bound.filter((b) => b.aboutOthers).map((b) => b.packet.id) }, TERM_LIST);
+    const drawn = u.bound.some((b) => b.packet.kind !== "sequence");
+    // Sequences only, beside drawings no unit is bound to: they may be the
+    // unit's own detail, unread (077_MT's heat pumps: a points list titled by
+    // type above a sequence titled by tags). A points list is read for the
+    // device's words as R0 reads a mention; any other drawing (or the sheet
+    // itself) may draw the device as a bare symbol.
+    const sheets = new Set(u.bound.map((b) => b.packet.sheet));
+    const beside = drawn ? [] : [...packets.values()].filter((p) => p.kind !== "sequence" && sheets.has(p.sheet) && !boundToSome.has(p.id));
+    const unreadBeside = beside.some((p) => p.kind !== "points" || p.scope === "sheet");
+    const besideMentions = unreadBeside ? [] : u.reading.questions.filter((q) => q.kind === "option" && beside.some((p) => mentionsDevice(textOf(p), q.option!, TERM_LIST))).map((q) => q.id);
+    u.reading.decisions = combineUnit({
+      questions: u.reading.questions, answers: u.reading.answers, bindings: u.bound.map((b) => b.binding), others: u.bound.filter((b) => b.aboutOthers).map((b) => b.packet.id),
+      drawn, textless: u.bound.some((b) => !b.text.clauses.length), ...(unreadBeside ? { unreadBeside } : {}), ...(besideMentions.length ? { besideMentions } : {}),
+    }, TERM_LIST);
     out.units.push(u.reading);
   }
   out.units.sort((a, b) => a.item - b.item);

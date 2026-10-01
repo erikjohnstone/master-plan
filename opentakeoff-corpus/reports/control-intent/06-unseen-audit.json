@@ -18,7 +18,7 @@
    "status": "read",
    "units": 17,
    "packets": 12,
-   "applied": 26
+   "applied": 21
   },
   {
    "id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
@@ -51,7 +51,7 @@
    "status": "read",
    "units": 90,
    "packets": 15,
-   "applied": 4
+   "applied": 62
   },
   {
    "id": "07_MO_MSHP_TroopB_HVAC_Boilers_Controls",
@@ -95,7 +95,7 @@
    "status": "read",
    "units": 60,
    "packets": 10,
-   "applied": 16
+   "applied": 19
   },
   {
    "id": "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
@@ -133,7 +133,7 @@
    "status": "read",
    "units": 3,
    "packets": 6,
-   "applied": 5
+   "applied": 4
   },
   {
    "id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
@@ -150,7 +150,7 @@
   {
    "id": "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
    "status": "no_snapshot",
-   "error": "no warm graph"
+   "error": "child exited null with no result"
   },
   {
    "id": "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit",
@@ -207,8 +207,8 @@
  "totals": {
   "eligible": 32,
   "read": 11,
-  "applied": 59,
-  "right": 59,
+  "applied": 114,
+  "right": 114,
   "wrong": 0,
   "unaudited": 0,
   "gone": [],
@@ -348,18 +348,6 @@
   },
   {
    "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
-   "tag": "40-VAV-01",
-   "family": "VAV",
-   "question": "opt.scr_heat",
-   "value": false,
-   "rule": "drawing_read:absence",
-   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
-   "cite": null,
-   "verdict": "right",
-   "checked": "2026-09-28"
-  },
-  {
-   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
    "tag": "40-VAV-02",
    "family": "VAV",
    "question": "role",
@@ -411,18 +399,6 @@
     "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
     "text": "ZONE SETPOINT ADJUST:"
    },
-   "verdict": "right",
-   "checked": "2026-09-28"
-  },
-  {
-   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
-   "tag": "40-VAV-02",
-   "family": "VAV",
-   "question": "opt.scr_heat",
-   "value": false,
-   "rule": "drawing_read:absence",
-   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
-   "cite": null,
    "verdict": "right",
    "checked": "2026-09-28"
   },
@@ -484,18 +460,6 @@
   },
   {
    "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
-   "tag": "40-VAV-03",
-   "family": "VAV",
-   "question": "opt.scr_heat",
-   "value": false,
-   "rule": "drawing_read:absence",
-   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
-   "cite": null,
-   "verdict": "right",
-   "checked": "2026-09-28"
-  },
-  {
-   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
    "tag": "40-VAV-04",
    "family": "VAV",
    "question": "role",
@@ -552,18 +516,6 @@
   },
   {
    "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
-   "tag": "40-VAV-04",
-   "family": "VAV",
-   "question": "opt.scr_heat",
-   "value": false,
-   "rule": "drawing_read:absence",
-   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
-   "cite": null,
-   "verdict": "right",
-   "checked": "2026-09-28"
-  },
-  {
-   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
    "tag": "40-VAV-05",
    "family": "VAV",
    "question": "role",
@@ -615,18 +567,6 @@
     "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
     "text": "ZONE SETPOINT ADJUST:"
    },
-   "verdict": "right",
-   "checked": "2026-09-28"
-  },
-  {
-   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
-   "tag": "40-VAV-05",
-   "family": "VAV",
-   "question": "opt.scr_heat",
-   "value": false,
-   "rule": "drawing_read:absence",
-   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
-   "cite": null,
    "verdict": "right",
    "checked": "2026-09-28"
   },
@@ -641,7 +581,7 @@
    "cite": {
     "packet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#52#p1",
     "sheet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#52",
-    "text": "IF THIS TEMPERATURE FALLS BELOW 40\u00b0F [4.4\u00b0C], AS SENSED BY THE TSL, THE SUPPLY AND RETURN FANS SHALL SHUT DOWN AND A CRITICAL ALARM SHALL INDICATE AT THE DIGITAL CONTROL PANEL AND ECC."
+    "text": "IF THIS TEMPERATURE FALLS BELOW 40°F [4.4°C], AS SENSED BY THE TSL, THE SUPPLY AND RETURN FANS SHALL SHUT DOWN AND A CRITICAL ALARM SHALL INDICATE AT THE DIGITAL CONTROL PANEL AND ECC."
    },
    "verdict": "right",
    "checked": "2026-09-30"
@@ -657,10 +597,34 @@
    "cite": {
     "packet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#52#p1",
     "sheet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#52",
-    "text": "WHEN IN COOLING MODE BELOW 50\u00b0F [10\u00b0C], USE AIRSIDE ECONOMIZER TO MAINTAIN 55\u00b0F [13\u00b0C] SUPPLY AIR TEMPERATURE."
+    "text": "WHEN IN COOLING MODE BELOW 50°F [10°C], USE AIRSIDE ECONOMIZER TO MAINTAIN 55°F [13°C] SUPPLY AIR TEMPERATURE."
    },
    "verdict": "right",
    "checked": "2026-09-30"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.relief_damper",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.relief_fan",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
   },
   {
    "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
@@ -673,10 +637,22 @@
    "cite": {
     "packet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#54#p2",
     "sheet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#54",
-    "text": "IF THIS TEMPERATURE FALLS BELOW 40\u00b0F [4.4\u00b0C], AS SENSED BY THE TSL, THE SUPPLY AND RETURN FANS SHALL SHUT DOWN AND A CRITICAL ALARM SHALL INDICATE AT THE DIGITAL CONTROL PANEL AND ECC."
+    "text": "IF THIS TEMPERATURE FALLS BELOW 40°F [4.4°C], AS SENSED BY THE TSL, THE SUPPLY AND RETURN FANS SHALL SHUT DOWN AND A CRITICAL ALARM SHALL INDICATE AT THE DIGITAL CONTROL PANEL AND ECC."
    },
    "verdict": "right",
    "checked": "2026-09-26"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.enthalpy_economizer",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
   },
   {
    "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
@@ -693,6 +669,666 @@
    },
    "verdict": "right",
    "checked": "2026-09-26"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.setpoint_adjust",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-5",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-5",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-5",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-6",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-6",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-6",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-7",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-7",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-7",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-8",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-8",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-8",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-9",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-9",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "1-TU-28-9",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-1",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-1",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-1",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-2",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-2",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-2",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-3",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-3",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-3",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-4",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-4",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-4",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-5",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-5",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-5",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-6",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-6",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-6",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-7",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-7",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-7",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-8",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-8",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-8",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-9",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-9",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-9",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-10",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-10",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-10",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-11",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-11",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-11",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-12",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-12",
+   "family": "VAV",
+   "question": "opt.occupancy_sensor",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "ATU-6-12",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
   },
   {
    "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
@@ -923,7 +1559,48 @@
   },
   {
    "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A3",
+   "family": "UNIT_HEATER",
+   "question": "opt.fan_status",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
    "tag": "HWUH-A4",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "LOW VOLTAGE BO ENABLE"
+   },
+   "verdict": "right",
+   "checked": "2026-09-29",
+   "note": "The value recorded right on 2026-09-26 (agree r0,r1), now with the vision reader agreeing: the binder reads HWUH-A1/A2 printed in the BURN CHAMBER DDC CONTROL DIAGRAM (p26). The HOT WATER UNIT HEATER DDC CONTROL DETAIL (p28) prints LOW VOLTAGE BO ENABLE and FAN MOTOR HWUH, TYP. ALL: the BAS enables every hot water unit heater."
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A4",
+   "family": "UNIT_HEATER",
+   "question": "opt.fan_status",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-10-01"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A5",
    "family": "UNIT_HEATER",
    "question": "role",
    "value": "in",
@@ -942,18 +1619,13 @@
    "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
    "tag": "HWUH-A5",
    "family": "UNIT_HEATER",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
-    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
-    "text": "LOW VOLTAGE BO ENABLE"
-   },
+   "question": "opt.fan_status",
+   "value": false,
+   "rule": "drawing_read:absence_untitled",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
    "verdict": "right",
-   "checked": "2026-09-29",
-   "note": "The value recorded right on 2026-09-26 (agree r0,r1), now with the vision reader agreeing: the binder reads HWUH-A1/A2 printed in the BURN CHAMBER DDC CONTROL DIAGRAM (p26). The HOT WATER UNIT HEATER DDC CONTROL DETAIL (p28) prints LOW VOLTAGE BO ENABLE and FAN MOTOR HWUH, TYP. ALL: the BAS enables every hot water unit heater."
+   "checked": "2026-10-01"
   },
   {
    "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",
@@ -1008,18 +1680,6 @@
     "sheet": "050_IL_VA_Project_537_17_115_Sterile_Processing.pdf#17",
     "text": "ZONE SETPOINT ADJUST:"
    },
-   "verdict": "right",
-   "checked": "2026-09-28"
-  },
-  {
-   "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",
-   "tag": "1-VAV-01",
-   "family": "VAV",
-   "question": "opt.scr_heat",
-   "value": false,
-   "rule": "drawing_read:absence",
-   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
-   "cite": null,
    "verdict": "right",
    "checked": "2026-09-28"
   },

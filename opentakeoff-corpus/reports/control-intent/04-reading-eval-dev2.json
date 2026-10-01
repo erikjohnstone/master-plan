@@ -1,20 +1,20 @@
 {
  "side": "dev2",
- "mode": "live",
+ "mode": "replay",
  "reading": {
   "total": {
-   "applied-right": 128,
+   "applied-right": 133,
    "applied-wrong": 0,
    "INVENTED": 0,
    "proposal-right": 104,
    "proposal-wrong": 10,
    "unresolved": 4,
-   "abstained": 324
+   "abstained": 319
   },
-  "applied": 128,
+  "applied": 133,
   "applied_wrong_rate": 0,
   "absence": {
-   "applied-right": 0,
+   "applied-right": 5,
    "applied-wrong": 0,
    "INVENTED": 0,
    "proposal-right": 54,
@@ -25,9 +25,9 @@
   "uncited_applied": 0,
   "readers": {
    "r0": {
-    "right": 139,
-    "wrong": 6,
-    "abstained": 425,
+    "right": 286,
+    "wrong": 8,
+    "abstained": 276,
     "unverified": 0,
     "undecided-key": 0
    },
@@ -66,16 +66,16 @@
   "key_none": 46,
   "unresolved_dishonest": 2,
   "rests_on_unprinted": 13,
-  "exact_with_default": 81
+  "exact_with_default": 78
  },
  "control_drawing_instances": null,
  "calls": {
-  "r1.replayed": 40,
-  "r1.live": 1,
+  "r1.replayed": 41,
+  "r1.live": 0,
   "r1.not_recorded": 0,
   "r1.failed": 0,
-  "r2.replayed": 128,
-  "r2.live": 2,
+  "r2.replayed": 130,
+  "r2.live": 0,
   "r2.not_recorded": 0,
   "r2.failed": 0
  },

@@ -1922,3 +1922,124 @@ readers.test.ts; a mutation disabling the trap fails it.
 the first) gave the vision reader no image. It now resolves each set's PDFs as the other instruments do
 (`corpusFiles.mjs`, per set; `setPdfResolver`). Replay is unaffected. Test: assembliesTypicalEval.test.mjs (bulk/,
 raw/, a missing name, an unknown set); a raw-only mutation fails it.
+
+## CI-69: an absence was read only where a title binds the unit, so units the drawings describe only in shared or family packets kept the library's default (FIXED, this commit; R0 v9, combine v8)
+
+**Found:** 2026-09-30, from the held-out typical eval's miss reasons (aggregates only). Held-out GATE C was 35/91;
+of its 69 option misses, 45 were "abstained: nothing read". A category-only tally of those misses (each reader's
+bare answer and the key's direction, no tag, option or text; see CI-70) showed the text model's verified "absent" in
+39 of the 45, beside R0's "not shown": the unit is bound to its drawings only through a shared system drawing or its
+family's typical detail, and C9 read an absence only through a packet a title binds to the unit. On the open tiers
+the same shape (R1 absent, R0 not shown) was the key's false in 400 of 416 decisions (dev 253, dev 2 147); the
+others are 15 zone CO2 sensors the zone-plan reader drew inside the unit's zone (key true; neither vision run had
+confirmed the absence there) and one the key leaves undecided.
+
+**Change:**
+- R0 reads "absent" wherever no bound packet mentions the device and some packet speaks for the unit: its own
+  family detail (whose title the CI-23 check has matched to its family) or a clause or section heading that names
+  it (its tag, its family's noun, its tag's words or its row's kind). Without a title binding it says so
+  (`UNTITLED`). Packets that never name the unit (a binder's mistake, GATE D's swap) say nothing of its devices.
+- C9b (combine.ts): without a title, an absence applies only when the unit's whole bound text is read: R0 finds no
+  term in any bound packet, R1 reads it absent and its answer verifies (no paragraph mentions it), and what is
+  drawn was looked at: both vision runs find it in none of the unit's drawings, or the unit is bound to no drawing
+  at all (sequences only; and, by CI-71, what no unit is bound to beside them is silent too). No binding may be ambiguous or every one a proposal, no bound packet may print no text
+  (a scanned page reads as no mention), and some packet must not be about other units. Silence decides nothing a
+  reader reads there: a zone plan's CO2 symbol in the unit's zone still applies.
+- C9 accepts a unit bound to sequences only (nothing for the vision runs to look at) when R1 reads the device
+  absent too (and, by CI-71, what no unit is bound to beside its sequences is silent too); before, such a unit could
+  never read an absence.
+- An option that is a mode of a part with a printed alternative (the term list's "no": staged heat, a 2-position
+  valve, a hardwired freezestat, return-air humidity, a multi-speed fan, a hardwired interface) is never read from
+  silence, titled or not: the drawings may print the part and never its mode. Found by dev's one INVENTED
+  decision under the first cut: federal-mech FCU-1, a hot-water fan coil, read "no SCR heat" where its key leaves
+  SCR heat undecided ("?"). None of dev's 48 C9 absences was such an option.
+- The reading eval counts every absence rule (C9, its unconfirmed proposal, C9b) as an absence decision: read from
+  silence, it cites nothing by definition, and the dev gate's absence_wrong = 0 now covers C9b too.
+
+**Measured** (replay, recorded runs; no request hash changed):
+- dev: applied 296 → 316 (absences 48 → 68), applied-wrong 0, INVENTED 0, uncited 0; GATE C 227/244, no unit's
+  outcome changes (the new absences are options whose default was already false); control-drawing instances 55/71.
+- dev 2: applied 128 → 133, applied-wrong 0; GATE C 147/202, no unit's outcome changes.
+- held-out (aggregates): applied 5 → 128, applied-wrong 0, INVENTED 0; GATE C 35/91 → **62/91** (68.1%; GATE C asks
+  for 55), 0 dishonest, 0 undisclosed; option misses 69 → 37 (14 no reading question, 13 abstained, 5 proposal only, 5
+  unbound).
+- GATE D: every item passes, the live re-run included (14 of 728 decisions change, 1.9%; at CI-62, 5.7%); 222 model
+  calls, at most 118 s a document.
+- The first cut without the mode rule measured 63/91 with 32 INVENTED on held-out; without the "speaks for the
+  unit" condition, 63/91 with 131 applied. Both were rejected: the mode rule is dev's INVENTED case, and the
+  speaking condition keeps a binder's mistake from deciding anything (one held-out unit is its price).
+- The unseen audit, with CI-71: 61 new applied decisions, each checked against the drawings: right. 05_MO: 17
+  terminal units' CO2 sensor, occupancy sensor and window switch, bound to the one VARIABLE VOLUME AIR TERMINAL UNIT
+  CONTROL DIAGRAM, which draws a wall sensor, flow element, valves and controller; the set prints CO2 and OCCUPANCY
+  SENSOR only in its controls symbol legend (sheet 49), and no plan draws either symbol. AC-57, bound to its sequence
+  only: no relief damper or relief fan (its exhaust damper is the return fan's, which the return-fan option carries),
+  no enthalpy economizer (its points list marks TEMPERATURE ECONOMIZER), no CO2 sensor, occupancy sensor, window switch
+  or setpoint adjustment. 014_MT: HWUH-A3 to A5's fan status, bound to the HOT WATER UNIT HEATER DDC CONTROL DETAIL: a
+  relay, speed controller, room sensor, DDC enable and manual starter, no status point. The mode rule withdraws 6
+  decisions audited right before (SCR heat absent: 041_IL's 40-VAV-01 to 05, 050_IL's 1-VAV-01). The audit: 114
+  applied, 114 right, 0 wrong.
+- Spot checks on the open tiers' unkeyed units: 21_VA's 57 terminal units' window switch (the VAV detail draws an
+  occupancy override button, setpoint adjustment and a multipurpose room's CO2, no window contact); 074_CA's fan
+  coils (a points list: space temperature, supply air, filter, valves, no setpoint adjustment, occupancy or window
+  point) and supply fans (status, speed, room pressure, no damper). Right.
+
+Tests: readers.test.ts (R0's untitled absence and its speaking condition: a shared plant sequence, a swapped label
+list; C9b each condition and the zone plan's symbol; C9 sequences only; the mode rule).
+
+## CI-70: held-out views before CI-69 and CI-71, disclosed (PROCESS NOTE)
+
+- **Category signatures.** CI-69 was designed after viewing, for the held-out documents' option misses, a tally
+  of each reader's bare answer and the key's direction (read-eval's WALLED_SIG: no tag, option, value or text).
+  The split it showed (R1's verified absence, with both vision runs absent or nothing drawn, never the key's true)
+  is C9's own vision requirement, kept; the mode rule came from dev's INVENTED case, but its held-out effect (32
+  INVENTED to 0) was seen before it was adopted. CI-69's held-out figure is therefore not a clean estimate of
+  unseen documents. No typicals tier untouched by the work remains; the next tier keyed from renders is its test.
+- **Why-strings.** During the tier-2 batch (CI-66 to CI-68) a debugging dump (DUMP_ANSWERS) keyed the walled
+  documents' answer counts by the readers' `why` strings, which carry unit tags and label fragments: about a dozen
+  held-out unit tags and five label fragments were printed to the terminal. The dump was deleted and fixed to
+  category-only keys the same hour; nothing seen there informed a rule (CI-69's changes cite dev cases and C9).
+- **CI-71's choice.** CI-71's first cut (every absence held beside any unbound drawing) took held-out's applied 128 →
+  20 (0 wrong either way). Two held-out aggregates were then viewed: that count, and how many held-out units bound to
+  sequences only sit beside an unbound packet, by packet kind (52 of 55, every one a points list). The adopted cut
+  reads such a points list instead of holding everything beside it; its held-out figure is not a clean estimate
+  either.
+
+## CI-71: a unit bound to its sequence alone read "not drawn" beside its own unread points list (FIXED, this commit; combine v8)
+
+**Found:** 2026-10-01, auditing CI-69's new unseen decisions by hand against the drawings. 62 of the 66 were right; 4
+were wrong: 077_MT's water-source heat pumps HP-5A to HP-8A, read "no occupant setpoint adjustment" (C9, sequences
+only). Each is bound to its sequence alone ("SEQUENCE OF OPERATION: HP-5A & HP-6A", M0.4). Directly above it in the
+same detail is the detail's points list, titled by the type ("WATER SOURCE HEAT PUMP - SINGLE ZONE") and bound to no
+unit: "TEMPERATURE - SPACE: JCI THERMOSTAT (T-SP1)". The zoning plans draw each heat pump's thermostat with the
+legend's ADJUSTABLE THERMOSTAT symbol. The sequence names no sensor, so R0 and R1 both read silence, and C9 took it as
+the absence CI-69 had just allowed a unit bound to sequences only.
+
+**Change:** what no unit is bound to beside a sequences-only unit's sequences must be silent too. A drawing on the
+same sheet that no unit is bound to may be the unit's own detail, never read:
+- a points list there is read for the device as R0 reads a mention (the term list's mention, traps blanked;
+  `mentionsDevice`, readers/r0.ts): one that prints it holds that question's absence;
+- any other drawing there, or the sheet itself as a packet, may draw the device as a bare symbol: it holds every
+  absence.
+A drawing bound to another unit is that unit's and holds nothing. `record.ts` computes both (`besideMentions`,
+`unreadBeside`); `combine.ts` keeps the absence a proposal and says why (C9 and C9b alike).
+
+A first cut held every absence beside any unbound drawing. It cost held-out its new readings (applied 128 → 20, 0
+wrong either way): there 52 of the 55 units bound to sequences only sit beside an unbound points list (aggregates
+only, by packet kind). Reading the points list keeps those whose list is silent and holds those whose list prints the
+device, which is what was wrong on 077_MT.
+
+**Measured:** dev and dev 2 unchanged (316 and 133 applied, 0 wrong): no unit there bound to sequences only sits
+beside a drawing no unit is bound to. Held-out (aggregates): applied 128, 0 wrong, 0 invented, GATE C 62/91, as before
+it. Unseen: the 4 wrong decisions are withdrawn, held twice over (the sheet M0.4 is itself a packet no unit is bound
+to, and the points list beside each sequence prints the thermostat). 05_MO's AC-57 keeps 7 of its 8 absences, all
+right: its unbound AHU POINTS LIST prints the return and outdoor air temperatures, so the differential economizer
+question is held. The audit reads 114 applied, 114 right.
+
+**Not fixed (recall, queued):** the binder does not pair a points list or diagram titled by type with the sequence
+titled by tags below it in the same detail (077_MT M0.4; 05_MO MI705's "AHU POINTS LIST" beside AC-57's sequence).
+Bound, the vision runs would read them too; that needs new model runs on every tier.
+
+Tests: readers.test.ts: the combiner (`unreadBeside` holds every absence; `besideMentions` holds its own question
+only, C9 and C9b); the record end to end (an unbound points list that prints the damper holds it, a silent one lets
+it apply, an unbound diagram holds it, the list bound to another unit lets it apply), each half checked to fail
+without the change.

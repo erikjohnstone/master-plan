@@ -71,7 +71,9 @@ export function scoreReadings({ setId, typKey, outcomes, readings }) {
       else outcome = "abstained";
       // "in" (the BAS commands it) changes nothing: only an "out" is a decision.
       if (d.question === "role" && d.outcome === "applied" && value === "in") outcome = k === "in" ? "applied-right" : "applied-wrong";
-      const absence = d.rule === "drawing_read:absence" || d.rule === "drawing_read:absence_unconfirmed";
+      // Every absence rule (C9, its unconfirmed proposal, C9b without a
+      // title): read from silence, it cites nothing by definition.
+      const absence = /^drawing_read:absence(?:_unconfirmed|_untitled)?$/.test(d.rule);
       out.push({ set: setId, tag: u.tag, family: u.family, question: d.question, key: k, outcome, value, rule: d.rule, why: d.why, absence, cited: d.cites.length > 0 || absence, answers: d.answers.map((a) => `${a.reader}${a.run ?? ""}:${a.answer}${a.note ? `(${a.note})` : ""}`) });
       for (const a of d.answers) {
         const v = d.question === "role"

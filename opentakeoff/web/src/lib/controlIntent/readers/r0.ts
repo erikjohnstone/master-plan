@@ -26,7 +26,8 @@
 //   · OPTIONS: the option's yes and no phrases, traps removed first and each
 //     hit checked by the negation guard ("NO", "NOT", "WITHOUT" up to three
 //     words before it, or "NOT REQUIRED" and the like right after it: a
-//     negated yes is a no); "absent" when no packet mentions the device. A
+//     negated yes is a no); "absent" when no packet mentions the device
+//     (saying so where no title binds the unit to a packet of its own). A
 //     device the BAS monitors (POINTS_DECIDE) is the unit's own points
 //     list's to decide: where the unit has one, confirmed, and it lists no
 //     point for the device, a mention elsewhere is a "no" (a duct detector
@@ -41,7 +42,11 @@ import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v8";
+export const R0_VERSION = "control_r0_v9";
+
+/** R0's why for an absence read where no title binds the unit to a packet
+ * of its own. */
+export const UNTITLED = "no title binds the unit to a packet of its own";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
@@ -265,6 +270,15 @@ function untrapped(text: string, traps: readonly TermPattern[]): string {
   return t;
 }
 
+/** Whether a packet prints an option's device (the term list's mention,
+ * its traps blanked) in any line or clause: what R0 reads as a mention. */
+export function mentionsDevice(text: PacketText, option: string, terms: TermList): boolean {
+  const t = terms.options[option];
+  if (!t) return false;
+  const hit = (s: string) => t.mention.some((p) => p.re.test(untrapped(s, t.traps)));
+  return text.lines.some((l) => hit(l.norm)) || text.clauses.some((c) => hit(c.norm));
+}
+
 interface Hit { pattern: TermPattern; clause: number; negated: boolean }
 
 /** Every match of a pattern list in a clause, with the negation guard. */
@@ -352,10 +366,19 @@ export function readR0(unit: { tag: string; family?: string }, bound: readonly B
     });
     return { bp, own, clauses };
   });
-  // "Absent" is read only where a title binds the unit to a packet of its
-  // own: a family's typical detail need not draw a zone's own devices, and a
-  // shared packet speaks for other units too.
+  // Whether a title binds the unit to a packet of its own: an absence read
+  // without one (a family's typical detail need not draw a zone's own
+  // devices, and a shared packet speaks for other units too) says so, and
+  // is read at all only where some packet speaks for the unit (its own
+  // family detail, whose title names its family, or a clause or heading
+  // that names it): packets that never name it may be a binder's mistake,
+  // and their silence is theirs.
   const titled = bound.some((bp) => !bp.aboutOthers && ownPacket(bp.binding, all) && strongBinding(bp.binding));
+  const spoken = scoped.some(({ bp, own, clauses }) => (own && bp.binding.kind === "family_detail" && clauses.length > 0) || clauses.some((c) => {
+    const h = bp.text.paragraphs.find((pg) => pg.id === c.paragraph)?.heading;
+    const tagOnly = Boolean(bp.othersTitled || bp.aboutOthers);
+    return namesUnit(c.norm, unit, tagOnly) || Boolean(h && namesUnit(h, unit, tagOnly));
+  }));
   const out: ReaderAnswer[] = [];
   for (const q of questions) {
     if (q.kind === "role") {
@@ -397,7 +420,10 @@ export function readR0(unit: { tag: string; family?: string }, bound: readonly B
     if (yes.length && !no.length) out.push({ reader: "r0", question: q.id, answer: "yes", rule: `r0.${q.option}.yes.${yes[0].id}`, cites: cite(yes) });
     else if (no.length && !yes.length) out.push({ reader: "r0", question: q.id, answer: "no", rule: `r0.${q.option}.no.${no[0].id}`, cites: cite(no) });
     else if (yes.length && no.length) out.push({ reader: "r0", question: q.id, answer: "not_shown", rule: `r0.${q.option}.both`, cites: [...cite(yes), ...cite(no)], note: "the packets print both the option and its alternative" });
-    else if (!mentioned && titled) out.push({ reader: "r0", question: q.id, answer: "absent", rule: `r0.${q.option}.no_mention`, cites: [] });
+    // No packet mentions it. Where no title binds the unit to a packet of
+    // its own, that is said too: the combiner reads such an absence only
+    // under C9b (combine.ts), and only where a packet speaks for the unit.
+    else if (!mentioned && (titled || spoken)) out.push({ reader: "r0", question: q.id, answer: "absent", rule: `r0.${q.option}.no_mention`, cites: [], ...(titled ? {} : { why: UNTITLED }) });
     else out.push({ reader: "r0", question: q.id, answer: "not_shown", rule: `r0.${q.option}.mention_only`, cites: [] });
   }
   return out;

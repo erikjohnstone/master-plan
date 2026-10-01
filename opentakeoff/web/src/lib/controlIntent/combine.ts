@@ -25,10 +25,33 @@
 //     reads it so).
 //   · ABSENT decides false only when all of C9 hold: R0 found no term for
 //     the device in any of the unit's packets and a title binds the unit to
-//     a packet of its own; both R2 runs say it is not drawn; R1 does not say
-//     it is there; no binding of the unit is ambiguous. A false some reader
+//     a packet of its own; both R2 runs say it is not drawn, or the unit is
+//     bound to no drawing (sequences only) and R1 reads it absent too, and
+//     what no unit is bound to beside its sequences is silent too: a
+//     drawing there may be the unit's own detail, never read (a points list
+//     titled by type above a sequence titled by tags), so a points list
+//     there must print no term for the device (R0's mention) and any other
+//     drawing, or the sheet itself, holds it; R1 does not say it is
+//     there; no binding of the unit is ambiguous. A false some reader
 //     reads explicitly (the alternative printed, cited) is not an absence:
 //     another reader finding no mention of the device agrees with it (C8).
+//     An option that is a mode of a part with a printed alternative (the
+//     term list's "no": staged heat, a 2-position valve, a hardwired
+//     freezestat, return-air humidity, a multi-speed fan, a hardwired
+//     interface) is never an absence: silence does not say which mode.
+//   · ABSENT without a title (C9b) decides false where no title binds the
+//     unit to a packet of its own (its packets are shared system drawings
+//     or its family's detail) only when the unit's whole bound text is
+//     read: R0 finds no term for the device in any of its packets, R1 reads
+//     it absent from every paragraph and its answer verified (no paragraph
+//     mentions it), and what is drawn was looked at: both R2 runs find it
+//     in none of the unit's drawings, or the unit is bound to no drawing at
+//     all (sequences only, all read as text, and what no unit is bound to
+//     beside them silent too, as for C9). Every packet must print text
+//     (a scanned page reads as no mention), no binding may be ambiguous or
+//     every one a proposal, and some packet must be about the unit (not
+//     all about other units). Silence decides nothing a reader reads there
+//     (a zone plan's symbol drawn in the unit's zone).
 //   · PROPOSAL: one reader alone (a model, or R0 off its whitelist), or an
 //     agreement read only through bindings C5 makes proposals.
 //   · UNRESOLVED (C12): readers disagree, or a reading did not verify. Both
@@ -43,7 +66,7 @@ import type { DrawingCite, ReaderAnswer } from "./readers/r0";
 import type { ReadingQuestion } from "./readers/questions";
 import type { TermList } from "./readers/terms";
 
-export const COMBINE_VERSION = "control_combine_v7";
+export const COMBINE_VERSION = "control_combine_v8";
 
 export type Outcome = "applied" | "proposal" | "unresolved" | "none";
 
@@ -78,6 +101,20 @@ export interface UnitAnswers {
   /** Packets bound to the unit that the print says are about other units
    * (readers/r0.ts aboutOthers): no absence is read through them. */
   others?: readonly string[];
+  /** The unit is bound to a drawing the vision reader reads (anything but a
+   * sequence): C9b then needs both vision runs. */
+  drawn?: boolean;
+  /** A packet bound to the unit prints no text (a scanned page): no absence
+   * is read without a title. */
+  textless?: boolean;
+  /** Bound to sequences only, and a drawing no unit is bound to (not a
+   * points list) shares a sheet with them: it may be the unit's own, never
+   * read, so the sequences' silence is no absence. */
+  unreadBeside?: boolean;
+  /** Bound to sequences only, beside points lists no unit is bound to: the
+   * questions whose device such a list prints (R0's mention). Their
+   * sequences' silence is no absence. */
+  besideMentions?: readonly string[];
 }
 
 const voteOf = (a: ReaderAnswer, q: ReadingQuestion, titled = true): Vote | null => {
@@ -111,6 +148,11 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
   const others = new Set(u.others ?? []);
   const titled = u.bindings.some((b) => TITLE_KINDS.has(b.kind) && !b.proposal && !b.ambiguous && !others.has(b.packet));
   const vote = (a: ReaderAnswer, q: ReadingQuestion) => voteOf(a, q, titled);
+  // C9b: the unit's whole bound text can be read for an absence.
+  const readable = !titled && !ambiguous && !allProposal && !u.textless && u.bindings.some((b) => !others.has(b.packet));
+  // Whether the unit is bound to a drawing the vision runs look at (unsaid:
+  // yes, so both runs are needed).
+  const drawn = u.drawn !== false;
   const out: Decision[] = [];
   for (const q of u.questions) {
     const as = u.answers.filter((a) => a.question === q.id);
@@ -147,6 +189,24 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
       out.push({ ...base, outcome: "unresolved", value: null, rule: "drawing_read:disagreement", why: `the readers disagree: ${as.map((a) => `${a.reader}${a.run ? a.run : ""} ${a.answer}`).join(", ")}` });
       continue;
     }
+    // An option that is a mode of a part, with a printed alternative
+    // (staged heat, a 2-position valve, a hardwired freezestat …), is no
+    // device whose absence silence reads: the drawings may print the part
+    // and never its mode.
+    const mode = q.kind === "option" && Boolean(terms?.options[q.option!]?.no.length);
+    // Sequences only: a points list no unit is bound to, beside them, prints
+    // the device.
+    const besidePrinted = Boolean(u.besideMentions?.includes(q.id));
+    // C9b: no mention in any of the unit's packets, read by R0 and R1, and
+    // none drawn (both vision runs) or nothing drawn to look at. Silence
+    // decides nothing another reader reads (a zone plan's symbol).
+    const absentBy = (a: ReaderAnswer | undefined) => Boolean(a && a.answer === "absent" && !a.note);
+    const untitledAbsence = readable && q.kind === "option" && !mode && absentBy(r0) && absentBy(r1) && !unverified.length
+      && (drawn ? r2s.length >= 2 && r2s.every(absentBy) : r2s.length === 0 && !u.unreadBeside && !besidePrinted);
+    if (untitledAbsence && !votes.length) {
+      out.push({ ...base, outcome: "applied", value: false, rule: "drawing_read:absence_untitled", why: drawn ? "not drawn: no term for it in any packet bound to the unit, R1 finds it in no paragraph, and both vision runs find none; no title binds the unit, so its whole bound text was read" : "not drawn: no term for it in any packet bound to the unit, R1 finds it in no paragraph, and the unit is bound to no drawing; no title binds the unit, so its whole bound text was read" });
+      continue;
+    }
     if (!votes.length) {
       out.push({ ...base, outcome: "none", value: null, rule: "drawing_read:not_shown", why: "no reader found it decided" });
       continue;
@@ -168,12 +228,16 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
     const explicitFalse = votes.filter((v) => v.value === false && !v.absence);
     if (value === false && !explicitFalse.length && votes.some((v) => v.absence)) {
       const r0absent = r0 && vote(r0, q)?.absence;
-      const r2absent = r2?.absence === true;
+      // Both vision runs find none, or nothing is drawn (the unit is bound
+      // to sequences only) and R1 reads it absent too: a second reader of
+      // the whole text. A drawing no unit is bound to beside the sequences
+      // may be the unit's own: then nothing drawn was looked at.
+      const r2absent = drawn ? r2?.absence === true : r2s.length === 0 && r1?.answer === "absent" && !r1.note && !u.unreadBeside && !besidePrinted;
       const r1present = r1 && vote(r1, q)?.value === true;
-      if (r0absent && r2absent && !r1present && !ambiguous && !viaProposal) {
-        out.push({ ...base, outcome: "applied", value: false, rule: "drawing_read:absence", why: "not drawn: no term for it in the unit's packets, and both vision runs find none" });
+      if (r0absent && r2absent && !r1present && !ambiguous && !viaProposal && !mode) {
+        out.push({ ...base, outcome: "applied", value: false, rule: "drawing_read:absence", why: drawn ? "not drawn: no term for it in the unit's packets, and both vision runs find none" : "not drawn: no term for it in the unit's packets, which are sequences only, read as text" });
       } else {
-        out.push({ ...base, outcome: "proposal", value: false, rule: "drawing_read:absence_unconfirmed", why: `read as not drawn by ${readers.join(", ")}; C9 needs R0 and both vision runs, a title-bound packet and no ambiguity` });
+        out.push({ ...base, outcome: "proposal", value: false, rule: "drawing_read:absence_unconfirmed", why: mode ? `read as not drawn by ${readers.join(", ")}; a mode of a part (it has a printed alternative) is never read from silence` : !drawn && u.unreadBeside ? `read as not drawn by ${readers.join(", ")} in its sequences; a drawing no unit is bound to is on the same sheet, and may be the unit's own, unread` : !drawn && besidePrinted ? `read as not drawn by ${readers.join(", ")} in its sequences; a points list no unit is bound to, on the same sheet, prints it` : `read as not drawn by ${readers.join(", ")}; C9 needs R0 and both vision runs, a title-bound packet and no ambiguity` });
       }
       continue;
     }

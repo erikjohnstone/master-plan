@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T19:53:08.746Z",
+  "generated_at": "2026-10-01T01:44:19.594Z",
   "live": true,
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -27,15 +27,57 @@
           "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
           "packets": 5,
           "units_read": 9,
-          "options_applied": 12,
-          "proposals": 47,
+          "options_applied": 52,
+          "proposals": 7,
           "applied": [
             {
               "tag": "RTU - 2",
+              "question": "opt.co2_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU - 2",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU - 2",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU - 2",
               "question": "opt.relief_damper",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
               "cite": "THE BAROMETRIC RELIEF DAMPERS SHALL OPEN WITH INCREASED BUILDING PRESSURE."
+            },
+            {
+              "tag": "RTU - 2",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU - 2",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU - 2",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
             },
             {
               "tag": "RTU - 2",
@@ -46,10 +88,52 @@
             },
             {
               "tag": "RTU -1",
+              "question": "opt.co2_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -1",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -1",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -1",
               "question": "opt.relief_damper",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
               "cite": "THE BAROMETRIC RELIEF DAMPERS SHALL OPEN WITH INCREASED BUILDING PRESSURE."
+            },
+            {
+              "tag": "RTU -1",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -1",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -1",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
             },
             {
               "tag": "RTU -1",
@@ -60,10 +144,52 @@
             },
             {
               "tag": "RTU -3",
+              "question": "opt.co2_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -3",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -3",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -3",
               "question": "opt.relief_damper",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
               "cite": "THE BAROMETRIC RELIEF DAMPERS SHALL OPEN WITH INCREASED BUILDING PRESSURE."
+            },
+            {
+              "tag": "RTU -3",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -3",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -3",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
             },
             {
               "tag": "RTU -3",
@@ -74,10 +200,52 @@
             },
             {
               "tag": "RTU -4",
+              "question": "opt.co2_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -4",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -4",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -4",
               "question": "opt.relief_damper",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
               "cite": "THE BAROMETRIC RELIEF DAMPERS SHALL OPEN WITH INCREASED BUILDING PRESSURE."
+            },
+            {
+              "tag": "RTU -4",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -4",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -4",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
             },
             {
               "tag": "RTU -4",
@@ -87,11 +255,60 @@
               "cite": "F (ADJ.) THE SUPPLY FAN THE OUTSIDE AIR DAMPER SHALL OPEN IF ECONOMIZING IS ENABLED AND REMAIN CLOSE"
             },
             {
+              "tag": "RTU -5",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -6",
+              "question": "opt.co2_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -6",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -6",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
               "tag": "RTU -6",
               "question": "opt.relief_damper",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
               "cite": "THE BAROMETRIC RELIEF DAMPERS SHALL OPEN WITH INCREASED BUILDING PRESSURE."
+            },
+            {
+              "tag": "RTU -6",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -6",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -6",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
             },
             {
               "tag": "RTU -6",
@@ -102,6 +319,27 @@
             },
             {
               "tag": "RTU -7",
+              "question": "opt.co2_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -7",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -7",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -7",
               "question": "opt.relief_damper",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
@@ -109,10 +347,52 @@
             },
             {
               "tag": "RTU -7",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -7",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -7",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "RTU -7",
               "question": "opt.economizer",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
               "cite": "F (ADJ.) THE SUPPLY FAN THE OUTSIDE AIR DAMPER SHALL OPEN IF ECONOMIZING IS ENABLED AND REMAIN CLOSE"
+            },
+            {
+              "tag": "EF - 1",
+              "question": "opt.motorized_damper",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "EF - 2",
+              "question": "opt.motorized_damper",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
+            },
+            {
+              "tag": "EF - 2",
+              "question": "opt.pressure_control",
+              "value": false,
+              "rule": "drawing_read:absence",
+              "cite": ""
             }
           ],
           "pq1_no": {
@@ -127,9 +407,44 @@
           "id": "baker-county-eoc",
           "packets": 3,
           "units_read": 2,
-          "options_applied": 2,
+          "options_applied": 14,
           "proposals": 0,
           "applied": [
+            {
+              "tag": "RTU-1",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-1",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-1",
+              "question": "opt.relief_damper",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-1",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-1",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
             {
               "tag": "RTU-1",
               "question": "opt.co2_sensor",
@@ -138,11 +453,60 @@
               "cite": "THE RTU UNIT SHALL ADJUST ITS FRESH AIR FLOW BASED ON THE CO2 READING FROM TEH ROOM MOUNTED CO2 SENS"
             },
             {
+              "tag": "RTU-1",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-2",
+              "question": "opt.occupancy_sensor",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-2",
+              "question": "opt.duct_smoke_detectors",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-2",
+              "question": "opt.relief_damper",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-2",
+              "question": "opt.relief_fan",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
+              "tag": "RTU-2",
+              "question": "opt.return_fan",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
+            },
+            {
               "tag": "RTU-2",
               "question": "opt.co2_sensor",
               "value": true,
               "rule": "drawing_read:agree(r0,r1)",
               "cite": "THE RTU UNIT SHALL ADJUST ITS FRESH AIR FLOW BASED ON THE CO2 READING FROM TEH ROOM MOUNTED CO2 SENS"
+            },
+            {
+              "tag": "RTU-2",
+              "question": "opt.window_switch",
+              "value": false,
+              "rule": "drawing_read:absence_untitled",
+              "cite": ""
             }
           ],
           "pq1_no": {
@@ -241,7 +605,7 @@
         {
           "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
           "identical": true,
-          "lines": 298,
+          "lines": 287,
           "replayed": 9,
           "not_recorded": 0
         },
@@ -294,330 +658,132 @@
       "rows": [
         {
           "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "decisions": 66,
-          "changed": 6,
+          "decisions": 60,
+          "changed": 0,
           "calls": 4,
-          "tokens": 16279,
+          "tokens": 15929,
           "wall_s": 1
         },
         {
           "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
-          "decisions": 18,
-          "changed": 1,
-          "calls": 17,
-          "tokens": 128187,
-          "wall_s": 37
+          "decisions": 22,
+          "changed": 0,
+          "calls": 18,
+          "tokens": 164041,
+          "wall_s": 43
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "decisions": 97,
-          "changed": 10,
+          "decisions": 103,
+          "changed": 1,
           "calls": 29,
-          "tokens": 177046,
-          "wall_s": 26
+          "tokens": 202166,
+          "wall_s": 72
         },
         {
           "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
           "decisions": 4,
-          "changed": 2,
+          "changed": 0,
           "calls": 12,
-          "tokens": 70527,
-          "wall_s": 12
+          "tokens": 86619,
+          "wall_s": 18
         },
         {
           "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
-          "decisions": 45,
+          "decisions": 89,
           "changed": 0,
           "calls": 9,
-          "tokens": 35194,
+          "tokens": 36452,
           "wall_s": 7
         },
         {
           "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
           "decisions": 60,
-          "changed": 4,
+          "changed": 0,
           "calls": 9,
-          "tokens": 65606,
-          "wall_s": 16
+          "tokens": 90678,
+          "wall_s": 24
         },
         {
           "id": "12_MT_MSU_ReidHall_Renovation",
-          "decisions": 9,
+          "decisions": 31,
           "changed": 0,
           "calls": 2,
-          "tokens": 6400,
+          "tokens": 6323,
           "wall_s": 1
         },
         {
           "id": "baker-county-eoc",
-          "decisions": 2,
+          "decisions": 14,
           "changed": 0,
           "calls": 1,
-          "tokens": 5227,
+          "tokens": 4877,
           "wall_s": 1
         },
         {
           "id": "bldg5406-hvac-demo",
           "decisions": 97,
-          "changed": 1,
-          "calls": 34,
-          "tokens": 271537,
-          "wall_s": 93
-        },
-        {
-          "id": "federal-mech",
-          "decisions": 180,
-          "changed": 12,
-          "calls": 63,
-          "tokens": 468109,
+          "changed": 0,
+          "calls": 35,
+          "tokens": 309661,
           "wall_s": 118
         },
         {
+          "id": "federal-mech",
+          "decisions": 194,
+          "changed": 8,
+          "calls": 62,
+          "tokens": 447390,
+          "wall_s": 111
+        },
+        {
           "id": "itd-d1-lab",
-          "decisions": 53,
-          "changed": 0,
+          "decisions": 54,
+          "changed": 5,
           "calls": 41,
-          "tokens": 248255,
-          "wall_s": 80
+          "tokens": 269162,
+          "wall_s": 96
         }
       ],
-      "decisions": 631,
-      "changed": 36,
-      "share": 0.05705229793977813,
+      "decisions": 728,
+      "changed": 14,
+      "share": 0.019230769230769232,
       "changes": [
         {
-          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "tag": "RTU - 2",
-          "question": "opt.differential_economizer",
-          "from": "none",
-          "to": "proposal true",
-          "from_readers": "",
-          "to_readers": "r0:not_shown r1:yes"
-        },
-        {
-          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "tag": "RTU -1",
-          "question": "opt.differential_economizer",
-          "from": "none",
-          "to": "proposal true",
-          "from_readers": "",
-          "to_readers": "r0:not_shown r1:yes"
-        },
-        {
-          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "tag": "RTU -3",
-          "question": "opt.differential_economizer",
-          "from": "none",
-          "to": "proposal true",
-          "from_readers": "",
-          "to_readers": "r0:not_shown r1:yes"
-        },
-        {
-          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "tag": "RTU -4",
-          "question": "opt.differential_economizer",
-          "from": "none",
-          "to": "proposal true",
-          "from_readers": "",
-          "to_readers": "r0:not_shown r1:yes"
-        },
-        {
-          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "tag": "RTU -6",
-          "question": "opt.differential_economizer",
-          "from": "none",
-          "to": "proposal true",
-          "from_readers": "",
-          "to_readers": "r0:not_shown r1:yes"
-        },
-        {
-          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "tag": "RTU -7",
-          "question": "opt.differential_economizer",
-          "from": "none",
-          "to": "proposal true",
-          "from_readers": "",
-          "to_readers": "r0:not_shown r1:yes"
-        },
-        {
-          "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
-          "tag": "WHSE-AHU-1",
-          "question": "opt.duct_smoke_detectors",
-          "from": "unresolved null",
-          "to": "proposal false",
-          "from_readers": "r0:no r1:yes r2a:not_shown r2b:not_shown",
-          "to_readers": "r0:no r1:not_shown r2a:not_shown r2b:not_shown"
-        },
-        {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-102",
+          "tag": "TAB-201",
           "question": "opt.setpoint_adjust",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+          "from": "proposal true",
+          "to": "applied true",
+          "from_readers": "r0:not_shown r1:not_shown r2a:yes r2b:yes",
+          "to_readers": "r0:not_shown r1:yes r2a:yes r2b:yes"
         },
         {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-102",
-          "question": "opt.reheat_water_temps",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-104",
-          "question": "opt.setpoint_adjust",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-104",
-          "question": "opt.reheat_water_temps",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-105",
-          "question": "opt.setpoint_adjust",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-105",
-          "question": "opt.reheat_water_temps",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-106",
-          "question": "opt.setpoint_adjust",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-106",
-          "question": "opt.reheat_water_temps",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-107",
-          "question": "opt.setpoint_adjust",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "TAB-107",
-          "question": "opt.reheat_water_temps",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
-          "tag": "CWP-1",
-          "question": "role",
-          "from": "applied \"in\"",
-          "to": "proposal \"in\"",
-          "from_readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands(unverified)",
-          "to_readers": "r0:commands r1:commands(unverified) r2a:commands(unverified) r2b:commands(unverified)"
-        },
-        {
-          "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
-          "tag": "CWP-2",
-          "question": "role",
-          "from": "applied \"in\"",
-          "to": "proposal \"in\"",
-          "from_readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands(unverified)",
-          "to_readers": "r0:commands r1:commands(unverified) r2a:commands(unverified) r2b:commands(unverified)"
-        },
-        {
-          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
-          "tag": "AHU-04",
-          "question": "opt.relief_damper",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:not_shown r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
-          "tag": "AHU-05",
-          "question": "opt.relief_damper",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:not_shown r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
-          "tag": "AHU-06",
-          "question": "opt.duct_smoke_detectors",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:absent r2b:not_shown",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
-          "tag": "AHU-08",
-          "question": "opt.relief_damper",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:not_shown r2a:not_shown r2b:absent",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
-        },
-        {
-          "id": "bldg5406-hvac-demo",
+          "id": "federal-mech",
           "tag": "AHU-1",
-          "question": "opt.occupancy_sensor",
-          "from": "proposal false",
-          "to": "applied false",
-          "from_readers": "r0:absent r1:absent r2a:absent r2b:not_shown",
-          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+          "question": "opt.relief_damper",
+          "from": "proposal true",
+          "to": "none",
+          "from_readers": "r0:not_shown r1:yes r2a:not_shown r2b:not_shown",
+          "to_readers": ""
         },
         {
           "id": "federal-mech",
           "tag": "AHU-1",
           "question": "opt.freezestat_to_bas",
           "from": "proposal false",
-          "to": "applied false",
+          "to": "unresolved null",
           "from_readers": "r0:no r1:not_shown r2a:no r2b:no(unverified)",
-          "to_readers": "r0:no r1:no r2a:not_shown r2b:no(unverified)"
+          "to_readers": "r0:no r1:no r2a:no(unverified) r2b:yes(unverified)"
         },
         {
           "id": "federal-mech",
           "tag": "AHU-1",
           "question": "opt.duct_smoke_detectors",
           "from": "proposal true",
-          "to": "applied true",
+          "to": "unresolved null",
           "from_readers": "r0:yes r1:not_shown r2a:not_shown r2b:not_shown",
-          "to_readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown"
+          "to_readers": "r0:yes r1:no r2a:not_shown r2b:no(unverified)"
         },
         {
           "id": "federal-mech",
@@ -635,7 +801,7 @@
           "from": "unresolved null",
           "to": "applied \"in\"",
           "from_readers": "r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands",
-          "to_readers": "r0:commands r1:commands r2a:not_shown r2b:commands"
+          "to_readers": "r0:commands r1:commands r2a:commands r2b:not_shown"
         },
         {
           "id": "federal-mech",
@@ -644,87 +810,87 @@
           "from": "unresolved null",
           "to": "applied \"in\"",
           "from_readers": "r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands",
-          "to_readers": "r0:commands r1:commands r2a:not_shown r2b:commands"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "CWP-1",
-          "question": "role",
-          "from": "proposal \"in\"",
-          "to": "applied \"in\"",
-          "from_readers": "r0:not_shown r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:not_shown r1:commands r2a:commands r2b:commands"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "CWP-2",
-          "question": "role",
-          "from": "proposal \"in\"",
-          "to": "applied \"in\"",
-          "from_readers": "r0:not_shown r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:not_shown r1:commands r2a:commands r2b:commands"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "HWP-1",
-          "question": "role",
-          "from": "proposal \"in\"",
-          "to": "none",
-          "from_readers": "r0:not_shown r1:commands(unverified) r2a:commands r2b:commands",
-          "to_readers": ""
-        },
-        {
-          "id": "federal-mech",
-          "tag": "HWP-2",
-          "question": "role",
-          "from": "proposal \"in\"",
-          "to": "none",
-          "from_readers": "r0:not_shown r1:commands(unverified) r2a:commands r2b:commands",
-          "to_readers": ""
+          "to_readers": "r0:commands r1:commands r2a:commands r2b:not_shown"
         },
         {
           "id": "federal-mech",
           "tag": "EF-1",
           "question": "opt.motorized_damper",
           "from": "unresolved null",
-          "to": "proposal true",
+          "to": "applied true",
           "from_readers": "r0:yes r1:no r2a:yes r2b:yes",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:yes(unverified)"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "EF-4",
-          "question": "opt.motorized_damper",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:yes(unverified)"
+          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:yes"
         },
         {
           "id": "federal-mech",
           "tag": "AHU-1",
           "question": "role",
           "from": "none",
-          "to": "proposal \"in\"",
+          "to": "applied \"in\"",
           "from_readers": "",
-          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands(unverified) r2a:commands r2b:commands"
+          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:commands r2b:commands"
+        },
+        {
+          "id": "itd-d1-lab",
+          "tag": "B-1",
+          "question": "role",
+          "from": "unresolved null",
+          "to": "proposal \"in\"",
+          "from_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:monitors_only(unverified)",
+          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:commands"
+        },
+        {
+          "id": "itd-d1-lab",
+          "tag": "B-2",
+          "question": "role",
+          "from": "unresolved null",
+          "to": "proposal \"in\"",
+          "from_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:monitors_only(unverified)",
+          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:commands"
+        },
+        {
+          "id": "itd-d1-lab",
+          "tag": "EH-5",
+          "question": "opt.fan_status",
+          "from": "applied true",
+          "to": "proposal true",
+          "from_readers": "r0:yes r1:yes r2a:yes r2b:not_shown",
+          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:not_shown"
+        },
+        {
+          "id": "itd-d1-lab",
+          "tag": "HUM-1",
+          "question": "role",
+          "from": "applied \"in\"",
+          "to": "proposal \"in\"",
+          "from_readers": "r0:commands r1:commands r2a:not_shown r2b:commands",
+          "to_readers": "r0:commands r1:commands(unverified) r2a:not_shown r2b:commands"
+        },
+        {
+          "id": "itd-d1-lab",
+          "tag": "BP-1",
+          "question": "role",
+          "from": "none",
+          "to": "unresolved null",
+          "from_readers": "",
+          "to_readers": "r0:not_shown r1:commands(unverified) r2a:monitors_only r2b:monitors_only"
         }
       ],
-      "pass": false
+      "pass": true
     },
     "cost": {
-      "calls": 221,
-      "tokens": 1492367,
+      "calls": 222,
+      "tokens": 1633298,
       "max_wall_s": 118,
-      "total_wall_s": 392,
-      "recorded_at": "2026-09-30T19:51:21.988Z",
+      "total_wall_s": 492,
+      "recorded_at": "2026-09-30T20:01:49.114Z",
       "pass": true
     },
     "raster": {
       "rows": [
         {
           "id": "itd-d1-lab-raster",
-          "vector_applied": 38,
+          "vector_applied": 36,
           "items": 0,
           "packets": 0,
           "applied": 0,
@@ -740,7 +906,7 @@
     "swap (tag)": true,
     "model-off": true,
     "replay": true,
-    "re-run": false,
+    "re-run": true,
     "cost": true,
     "raster": true
   },

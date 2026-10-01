@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T20:03:27.616Z",
+  "generated_at": "2026-10-01T01:30:48.140Z",
   "side": "dev",
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -31,18 +31,18 @@
   },
   "summary": {
     "total": {
-      "applied-right": 296,
+      "applied-right": 316,
       "applied-wrong": 0,
       "INVENTED": 0,
       "proposal-right": 44,
       "proposal-wrong": 5,
       "unresolved": 9,
-      "abstained": 292
+      "abstained": 272
     },
-    "applied": 296,
+    "applied": 316,
     "applied_wrong_rate": 0,
     "absence": {
-      "applied-right": 48,
+      "applied-right": 68,
       "applied-wrong": 0,
       "INVENTED": 0,
       "proposal-right": 27,
@@ -53,11 +53,11 @@
     "uncited_applied": 0,
     "readers": {
       "r0": {
-        "right": 319,
-        "wrong": 1,
-        "abstained": 326,
+        "right": 573,
+        "wrong": 16,
+        "abstained": 56,
         "unverified": 0,
-        "undecided-key": 0
+        "undecided-key": 1
       },
       "r1": {
         "right": 507,
@@ -90,13 +90,13 @@
     },
     "by_set": {
       "federal-mech": {
-        "applied-right": 151,
+        "applied-right": 153,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 8,
         "proposal-wrong": 1,
         "unresolved": 6,
-        "abstained": 225
+        "abstained": 223
       },
       "bldg5406-hvac-demo": {
         "applied-right": 64,
@@ -117,13 +117,13 @@
         "abstained": 0
       },
       "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile": {
-        "applied-right": 22,
+        "applied-right": 28,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 12
+        "abstained": 6
       },
       "itd-d1-lab": {
         "applied-right": 21,
@@ -135,22 +135,22 @@
         "abstained": 5
       },
       "12_MT_MSU_ReidHall_Renovation": {
-        "applied-right": 0,
+        "applied-right": 8,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 4,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 16
+        "abstained": 8
       },
       "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for": {
-        "applied-right": 3,
+        "applied-right": 7,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 1,
         "unresolved": 1,
-        "abstained": 13
+        "abstained": 9
       },
       "004_MO_T2504_03_Interior_and_Exterior_Renovation": {
         "applied-right": 0,
@@ -191,13 +191,13 @@
     },
     "by_family": {
       "VAV": {
-        "applied-right": 176,
+        "applied-right": 184,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 13,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 233
+        "abstained": 225
       },
       "AHU": {
         "applied-right": 37,
@@ -218,22 +218,22 @@
         "abstained": 3
       },
       "UNIT_HEATER": {
-        "applied-right": 20,
+        "applied-right": 26,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 12
+        "abstained": 6
       },
       "FCU": {
-        "applied-right": 11,
+        "applied-right": 13,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 4,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 4
+        "abstained": 2
       },
       "PUMP": {
         "applied-right": 4,
@@ -263,13 +263,13 @@
         "abstained": 8
       },
       "HEAT_EXCHANGER": {
-        "applied-right": 0,
+        "applied-right": 4,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 6
+        "abstained": 2
       },
       "AIR_COOLED_CHILLER": {
         "applied-right": 3,
@@ -337,22 +337,22 @@
         "abstained": 11
       },
       "opt.occupancy_sensor": {
-        "applied-right": 5,
+        "applied-right": 10,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 9,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 63
+        "abstained": 58
       },
       "opt.window_switch": {
-        "applied-right": 13,
+        "applied-right": 18,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 63
+        "abstained": 58
       },
       "opt.co2_sensor": {
         "applied-right": 27,
@@ -409,13 +409,13 @@
         "abstained": 1
       },
       "opt.fan_status": {
-        "applied-right": 1,
+        "applied-right": 7,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 6
+        "abstained": 0
       },
       "opt.relief_damper": {
         "applied-right": 1,
@@ -463,13 +463,13 @@
         "abstained": 2
       },
       "opt.isolation_valve": {
-        "applied-right": 2,
+        "applied-right": 4,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 4
+        "abstained": 2
       },
       "opt.modulating_valve": {
         "applied-right": 6,
@@ -508,13 +508,13 @@
         "abstained": 0
       },
       "opt.condensate_pump": {
-        "applied-right": 0,
+        "applied-right": 2,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 2
+        "abstained": 0
       },
       "opt.variable_speed_wheel": {
         "applied-right": 1,

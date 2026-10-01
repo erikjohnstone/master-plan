@@ -1,5 +1,28 @@
 # Changelog
 
+- **Control drawings: a device no drawing of a unit shows is read as absent
+  once the unit's whole bound text has been read, and never from a sequence
+  whose own detail beside it went unread.** Before, "not drawn" was read only
+  through a drawing whose title names the unit, so units described by a
+  shared system drawing or their family's typical detail kept the library's
+  default. Now it applies when no drawing bound to the unit has a term for the
+  device, the text model finds it in no paragraph, and both vision runs find
+  none, or the unit is bound to sequences only. A unit bound to sequences
+  only must also be silent beside them: a points list there that no unit is
+  bound to is read for the device's words, and any other unbound drawing
+  holds the absence (077_MT's heat pumps had read "no setpoint adjustment"
+  beside the points list that prints their thermostats). A mode of a part
+  the drawings could print without naming it (SCR or staged heat, a
+  2-position valve) is never read from silence.
+  - Held-out units whose typical and every option are right: 35 → 62 of 91
+    (GATE C asks for 55); readings applied 5 → 128, 0 wrong, 0 invented.
+    Dev (227/244) and dev 2 (147/202) keep every unit's outcome; 316 and 133
+    applied, 0 wrong.
+  - Unseen audit: 114 applied, 114 right; GATE D passes every item, the live
+    re-run included (1.9% of decisions change; the limit is 2%).
+  (`web/src/lib/controlIntent/combine.ts`, `readers/r0.ts`, `record.ts`;
+  CONTROL_INTENT_BUG_CATALOGUE CI-69 to CI-71.)
+
 - **Schedule ↔ plan reconcile: six times faster on a 64-sheet set, the same
   answers.** The plan sweep's fallback readers for a mark lettered in pieces
   ("SR" "-" "1", "CV" "-" "CHW" "-" "BP-M") re-read every run of text on a

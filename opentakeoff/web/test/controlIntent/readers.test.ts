@@ -10,7 +10,7 @@ import { findPackets, type Packet } from "../../src/lib/controlIntent/evidence.t
 import type { Binding } from "../../src/lib/controlIntent/binding.ts";
 import { closeLetterSpacing, leadSubject, normText, packetText, printedIn } from "../../src/lib/controlIntent/readers/text.ts";
 import { compileTermList, TERM_LIST } from "../../src/lib/controlIntent/readers/terms.ts";
-import { aboutOthers, headsOthers, readR0, namesUnit, rowKindWords, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
+import { aboutOthers, headsOthers, readR0, namesUnit, rowKindWords, UNTITLED, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
 import type { ReadingQuestion } from "../../src/lib/controlIntent/readers/questions.ts";
 import { r1Answers, r1Request } from "../../src/lib/controlIntent/readers/r1.ts";
 import { cropSpec, cutOff, joinRun, r2PacketAnswers, R2_MAX_TOKENS, R2_RETRIES, SPAN_PX_PER_PT } from "../../src/lib/controlIntent/readers/r2.ts";
@@ -149,12 +149,26 @@ test("R0: a monitored point is the unit's own points list's to decide: a duct de
   assert.notEqual(d.rule, "r0.fan_status.points_list_omits", "only a monitored point's option");
 });
 
-test("R0: absence is read only through a packet a title binds to the unit; a shared packet speaks for the unit only where it names it", () => {
+test("R0: an absence says whether a title binds the unit to a packet of its own; a shared packet speaks for the unit only where it names it", () => {
   const p = packet("p1", "VAV BOX CONTROL DIAGRAM", [sp("ZONE TEMPERATURE SENSOR", 100, 100), sp("AO - DAMPER", 100, 300)]);
   const [fam] = readR0({ tag: "VAV-1" }, [bound(p, "family_detail")], [opt("co2_sensor")], TERM_LIST);
-  assert.equal(fam.answer, "not_shown", "a typical detail need not draw a zone's CO2 sensor");
+  // A typical detail need not draw a zone's CO2 sensor: R0 says it read it
+  // without a title, and the combiner reads that only under C9b.
+  assert.deepEqual([fam.answer, fam.why], ["absent", UNTITLED]);
   const [own] = readR0({ tag: "VAV-1" }, [bound(p, "tag")], [opt("co2_sensor")], TERM_LIST);
-  assert.equal(own.answer, "absent");
+  assert.deepEqual([own.answer, own.why], ["absent", undefined]);
+  // A shared packet that never names the unit (a binder's mistake, GATE D's
+  // swap) speaks for other units: its silence is theirs.
+  const plant = packet("p9", "CHILLED WATER SYSTEM SEQUENCE OF OPERATION", [sp("THE BMS SHALL STAGE THE CHILLERS TO MAINTAIN THE SUPPLY WATER SETPOINT.", 100, 100)], "sequence");
+  assert.equal(readR0({ tag: "VAV-1", family: "VAV" }, [bound(plant, "tag_body")], [opt("co2_sensor")], TERM_LIST)[0].answer, "not_shown");
+  assert.equal(readR0({ tag: "VAV-1", family: "VAV" }, [bound(plant, "system")], [opt("co2_sensor")], TERM_LIST)[0].answer, "not_shown");
+  // A label list that never prints the unit's tag (a swap, not the binder's
+  // own finding) is not its word either.
+  const labels = packet("p11", "CONTROL DIAGRAM - TYPE A", [sp("EF-1, EF-2", 100, 100), sp("BO - START/STOP", 100, 200)]);
+  assert.equal(readR0({ tag: "VAV-1", family: "VAV" }, [bound(labels, "label_list")], [opt("co2_sensor")], TERM_LIST)[0].answer, "not_shown");
+  // One that names it does: its silence is about the unit too.
+  const named = packet("p10", "HVAC SEQUENCE OF OPERATION", [sp("VAV-1 SHALL MODULATE ITS DAMPER TO MAINTAIN THE ZONE SETPOINT.", 100, 100)], "sequence");
+  assert.deepEqual(readR0({ tag: "VAV-1", family: "VAV" }, [bound(named, "tag_body")], [opt("co2_sensor")], TERM_LIST).map((a) => [a.answer, a.why]), [["absent", UNTITLED]]);
   const sys = packet("p2", "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION", [
     sp("THE BMS SHALL MODULATE BOILER ISOLATION VALVES TO BALANCE FLOW.", 100, 100),
     sp("THE PUMP ISOLATION VALVE SHALL CLOSE WHEN THE PUMP STOPS.", 100, 300),
@@ -432,6 +446,79 @@ test("combine: absence applies only when R0 finds no term and both vision runs f
   assert.equal(d([a, b]).outcome, "proposal", "R0 must find no term");
   assert.equal(d([r0, a, b, ans("r1", "opt.duct_smoke_detectors", "yes")]).outcome, "unresolved");
   assert.equal(d([r0, a, b], [...titled, { packet: "p2", kind: "tag", evidence: "t", ambiguous: true }]).outcome, "proposal");
+  // A unit bound to sequences only: nothing drawn for the vision runs, so
+  // R1's reading of the whole text is the second reader.
+  const seq = (answers: ReaderAnswer[]) => combineUnit({ questions: q, answers, bindings: titled, drawn: false }, TERM_LIST)[0];
+  const r1 = ans("r1", "opt.duct_smoke_detectors", "absent");
+  assert.deepEqual([seq([r0, r1]).outcome, seq([r0, r1]).value, seq([r0, r1]).rule], ["applied", false, "drawing_read:absence"]);
+  assert.match(seq([r0, r1]).why, /sequences only/);
+  assert.equal(seq([r0]).outcome, "proposal", "R0 alone (the models off) is no absence");
+  assert.equal(d([r0, r1]).outcome, "proposal", "drawn, the vision runs must look");
+  // Beside a drawing no unit is bound to (077_MT: a points list titled by
+  // type above a sequence titled by tags), the sequences' silence is no
+  // absence: the drawing may be the unit's own, never read.
+  const beside = combineUnit({ questions: q, answers: [r0, r1], bindings: titled, drawn: false, unreadBeside: true }, TERM_LIST)[0];
+  assert.deepEqual([beside.outcome, beside.value, beside.rule], ["proposal", false, "drawing_read:absence_unconfirmed"]);
+  assert.match(beside.why, /no unit is bound to/);
+  // Beside a points list no unit is bound to, read as R0 reads a mention:
+  // one that prints the device holds it; one silent on it lets it apply.
+  const printed = combineUnit({ questions: q, answers: [r0, r1], bindings: titled, drawn: false, besideMentions: ["opt.duct_smoke_detectors"] }, TERM_LIST)[0];
+  assert.deepEqual([printed.outcome, printed.rule], ["proposal", "drawing_read:absence_unconfirmed"]);
+  assert.match(printed.why, /points list no unit is bound to, on the same sheet, prints it/);
+  assert.equal(combineUnit({ questions: q, answers: [r0, r1], bindings: titled, drawn: false, besideMentions: ["opt.co2_sensor"] }, TERM_LIST)[0].outcome, "applied", "another device's mention says nothing of this one");
+});
+
+test("combine: without a title, an absence applies only when R0 and R1 read none in the unit's whole bound text and both vision runs find none, or nothing is drawn (C9b)", () => {
+  const q = [opt("co2_sensor")];
+  const family: Binding[] = [{ packet: "p1", kind: "family_detail", evidence: "f" }];
+  const d = (answers: ReaderAnswer[], x: { bindings?: Binding[]; drawn?: boolean; textless?: boolean; others?: string[]; unreadBeside?: boolean; besideMentions?: string[] } = {}) =>
+    combineUnit({ questions: q, answers, bindings: x.bindings ?? family, ...(x.drawn === undefined ? {} : { drawn: x.drawn }), ...(x.textless ? { textless: true } : {}), ...(x.others ? { others: x.others } : {}), ...(x.unreadBeside ? { unreadBeside: true } : {}), ...(x.besideMentions ? { besideMentions: x.besideMentions } : {}) }, TERM_LIST)[0];
+  const r0 = ans("r0", "opt.co2_sensor", "absent", { why: UNTITLED });
+  const r1 = ans("r1", "opt.co2_sensor", "absent");
+  const a = ans("r2", "opt.co2_sensor", "absent", { run: "a" });
+  const b = ans("r2", "opt.co2_sensor", "absent", { run: "b" });
+  const all = d([r0, r1, a, b]);
+  assert.deepEqual([all.outcome, all.value, all.rule], ["applied", false, "drawing_read:absence_untitled"]);
+  assert.match(all.why, /both vision runs find none; no title binds the unit/);
+  // Sequences only: R0 and R1 read the whole text; no vision run is owed.
+  assert.equal(d([r0, r1], { drawn: false }).outcome, "applied");
+  assert.equal(d([r0, r1, a], { drawn: false }).outcome, "none", "a vision answer where nothing is drawn is not the case read");
+  assert.equal(d([r0, r1], { drawn: false, unreadBeside: true }).outcome, "none", "a drawing no unit is bound to beside the sequences may be the unit's own");
+  assert.equal(d([r0, r1], { drawn: false, besideMentions: ["opt.co2_sensor"] }).outcome, "none", "a points list no unit is bound to beside the sequences prints it");
+  // Each reader is needed.
+  assert.equal(d([r0, a, b]).outcome, "none", "R1 must read it absent");
+  assert.equal(d([r1, a, b]).outcome, "none", "R0 must find no term");
+  assert.equal(d([r0, r1, a]).outcome, "none", "one vision run is not two");
+  assert.equal(d([r0, r1, a, ans("r2", "opt.co2_sensor", "not_shown", { run: "b" })]).outcome, "none", "a run that did not decide");
+  assert.equal(d([r0, r1]).outcome, "none", "drawn, but no vision answer (the model off or failed)");
+  assert.equal(d([r0, ans("r1", "opt.co2_sensor", "absent", { note: "unverified" }), a, b]).outcome, "none");
+  assert.equal(d([r0, r1, a, ans("r2", "opt.co2_sensor", "yes", { run: "b", note: "unverified" })]).outcome, "none", "an unverified sighting holds it open");
+  // What the unit is bound through.
+  assert.equal(d([r0, r1, a, b], { textless: true }).outcome, "none", "a scanned page reads as no mention");
+  assert.equal(d([r0, r1, a, b], { bindings: [{ packet: "p1", kind: "family_detail", evidence: "f", proposal: true }] }).outcome, "none", "every binding a proposal");
+  assert.equal(d([r0, r1, a, b], { bindings: [{ packet: "p1", kind: "family_detail", evidence: "f", ambiguous: true }] }).outcome, "none", "an ambiguous binding");
+  assert.equal(d([r0, r1, a, b], { others: ["p1"] }).outcome, "none", "a packet about other units says nothing of this one");
+  // Silence decides nothing a reader reads there: the zone plan's symbol.
+  const rp = ans("rp", "opt.co2_sensor", "yes", { whitelisted: true });
+  assert.deepEqual([d([r0, r1, a, b, rp]).outcome, d([r0, r1, a, b, rp]).value], ["applied", true]);
+  // A titled unit keeps C9 (R0's absence is its vote there).
+  assert.equal(d([ans("r0", "opt.co2_sensor", "absent"), r1, a, b], { bindings: titled }).rule, "drawing_read:absence");
+});
+
+test("combine: a mode of a part with a printed alternative (SCR or staged heat) is never read from silence, titled or not", () => {
+  // federal-mech FCU-1, a hot-water fan coil: no packet mentions electric
+  // heat, and its key leaves SCR heat undecided ("?"). The drawings may
+  // print a part and never its mode.
+  const q = [opt("scr_heat")];
+  assert.ok(TERM_LIST.options.scr_heat.no.length, "staged heat is its printed alternative");
+  const all = (why?: string) => [ans("r0", "opt.scr_heat", "absent", why ? { why } : {}), ans("r1", "opt.scr_heat", "absent"), ans("r2", "opt.scr_heat", "absent", { run: "a" }), ans("r2", "opt.scr_heat", "absent", { run: "b" })];
+  const titledMode = combineUnit({ questions: q, answers: all(), bindings: titled }, TERM_LIST)[0];
+  assert.deepEqual([titledMode.outcome, titledMode.rule], ["proposal", "drawing_read:absence_unconfirmed"]);
+  assert.match(titledMode.why, /a mode of a part/);
+  assert.equal(combineUnit({ questions: q, answers: all(UNTITLED), bindings: [{ packet: "p1", kind: "family_detail", evidence: "f" }] }, TERM_LIST)[0].outcome, "none");
+  // Its alternative printed is an explicit false, as before (C8).
+  const staged = combineUnit({ questions: q, answers: [ans("r0", "opt.scr_heat", "no"), ans("r1", "opt.scr_heat", "no")], bindings: titled }, TERM_LIST)[0];
+  assert.deepEqual([staged.outcome, staged.value], ["applied", false]);
 });
 
 test("combine: a false read explicitly is not an absence; another reader finding no mention agrees with it (C8)", () => {
@@ -667,6 +754,55 @@ test("record: R0, R1 and R2 read a unit, agree and apply; replay reads the same 
   // No readings, or readings that decide nothing: apply is unchanged.
   assert.deepEqual(applyAssemblies({ project, library: LIB, readings: null }), before);
   assert.deepEqual(applyAssemblies({ project, library: LIB, readings: { units: [] } }), before);
+});
+
+test("record: a unit bound to its sequence only reads no absence beside a drawing no unit is bound to, or a points list that prints the device; beside a silent points list or another unit's drawing it does (077_MT)", async () => {
+  const items = [row("FAN", "EF-1", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "CONSTANT" }), row("FAN", "EF-2", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "CONSTANT" })];
+  const seqP = packet("s1", "EXHAUST FAN EF-1 SEQUENCE OF OPERATION", [
+    sp("EXHAUST FAN EF-1 SEQUENCE OF OPERATION", 100, 80, 30),
+    sp("THE EXHAUST FAN SHALL START AND STOP ON THE BAS SCHEDULE.", 100, 140),
+    sp("FAN STATUS SHALL BE MONITORED BY A CURRENT SWITCH.", 100, 163),
+  ], "sequence");
+  // The detail's points list, titled by the type: it prints the damper.
+  const pts = packet("d1", "EXHAUST FAN POINTS", [sp("BO - FAN START/STOP", 1500, 140), sp("BO - DAMPER OPEN/CLOSE", 1500, 163)], "points");
+  let project: CompiledProject = { items, control: { version: "control_evidence_v1", packets: [seqP, pts], sheet_numbers: {} } };
+  // A model that reads the sequence: the BAS starts the fan; no damper.
+  const model: Transport = async (r) => {
+    const user = r.messages.find((m) => m.role === "user")!;
+    if (typeof user.content !== "string") return { content: JSON.stringify({ answers: [] }) };
+    const ps = (JSON.parse(user.content) as { packets: Array<{ paragraphs: Array<{ id: string; text: string }> }> }).packets.flatMap((p) => p.paragraphs);
+    const start = ps.find((p) => /START AND STOP/.test(p.text));
+    if (!start) return { content: JSON.stringify({ answers: [] }) };
+    return { content: JSON.stringify({ answers: [
+      { question: "role", answer: "commands", quotes: [{ paragraph: start.id, text: start.text }], subject_quote: { paragraph: start.id, text: start.text } },
+      { question: "opt.motorized_damper", answer: "absent", quotes: [], subject_quote: null },
+    ] }) };
+  };
+  const damperOf = async (rebind: (item: number, bindings: readonly Binding[]) => readonly Binding[]) => {
+    const readings = await readControlIntent({ project, library: LIB }, { store: memoryRunStore(), transport: model, rebind });
+    const u = readings.units.find((x) => x.tag === "EF-1")!;
+    return u.decisions.find((d) => d.question === "opt.motorized_damper")!;
+  };
+  const own = { packet: "s1", kind: "tag" as const, evidence: "its title names EF-1" };
+  // The points list is no unit's: it may be EF-1's own detail, unread, and
+  // it prints the damper.
+  const orphan = await damperOf((item) => (item === 0 ? [own] : []));
+  assert.deepEqual([orphan.outcome, orphan.rule], ["proposal", "drawing_read:absence_unconfirmed"], JSON.stringify(orphan.answers.map((a) => [a.reader, a.answer, a.note])));
+  assert.match(orphan.why, /points list no unit is bound to, on the same sheet, prints it/);
+  // A points list beside that prints no damper is silent too: it applies.
+  project = { items, control: { version: "control_evidence_v1", packets: [seqP, packet("d1", "EXHAUST FAN POINTS", [sp("BO - FAN START/STOP", 1500, 140), sp("BI - FAN STATUS", 1500, 163)], "points")], sheet_numbers: {} } };
+  const silent = await damperOf((item) => (item === 0 ? [own] : []));
+  assert.deepEqual([silent.outcome, silent.value, silent.rule], ["applied", false, "drawing_read:absence"], JSON.stringify(silent.answers.map((a) => [a.reader, a.answer, a.note])));
+  // A diagram beside may draw it as a bare symbol: it holds the absence.
+  project = { items, control: { version: "control_evidence_v1", packets: [seqP, packet("d1", "EXHAUST FAN CONTROL DIAGRAM", [sp("BO - FAN START/STOP", 1500, 140), sp("BI - FAN STATUS", 1500, 163)], "diagram")], sheet_numbers: {} } };
+  const diagram = await damperOf((item) => (item === 0 ? [own] : []));
+  assert.deepEqual([diagram.outcome, diagram.rule], ["proposal", "drawing_read:absence_unconfirmed"]);
+  assert.match(diagram.why, /a drawing no unit is bound to is on the same sheet/);
+  project = { items, control: { version: "control_evidence_v1", packets: [seqP, pts], sheet_numbers: {} } };
+  // Another unit's drawing on the sheet is that unit's: the sequence's
+  // silence is EF-1's absence (R0 and R1 read it).
+  const theirs = await damperOf((item) => (item === 0 ? [own] : [{ packet: "d1", kind: "tag", evidence: "its title names EF-2" }]));
+  assert.deepEqual([theirs.outcome, theirs.value, theirs.rule], ["applied", false, "drawing_read:absence"], JSON.stringify(theirs.answers.map((a) => [a.reader, a.answer, a.note])));
 });
 
 test("record: a unit bound to another unit's titled packet reads nothing from it; that unit still reads it (CI-23, GATE D's adversarial swap)", async () => {
