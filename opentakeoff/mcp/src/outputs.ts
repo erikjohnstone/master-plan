@@ -412,6 +412,7 @@ export const reconcileSchedulePlanOutput = {
       "printed_schedule_quantity",
       "printed_schedule_quantity_per_mark",
       "one_per_unique_schedule_row",
+      "one_per_typical_level",
       "unparseable_printed_quantity",
       "printed_quantity_for_several_marks",
       "type_definition_not_quantity",
@@ -438,6 +439,14 @@ export const reconcileSchedulePlanOutput = {
     // enum was missing.
     status: z.enum(["MATCH", "SCHEDULE_ONLY", "PLAN_ONLY", "REFUSED_NO_SCALE", "REFUSED_NO_TEXT", "AMBIGUOUS", "ERROR"]),
     quantity_comparison: z.enum(["scheduled_vs_installed", "type_definition_vs_plan_count"]).optional(),
+    typical_levels: z.object({
+      levels: z.number().int(),
+      header: z.string(),
+      text: z.string(),
+      placements: z.number().int(),
+      levels_drawn: z.array(z.string()),
+      levels_missing: z.array(z.string()),
+    }).optional().describe("AS-139: a row standing for one unit on each typical level it lists (TYPICAL LEVELS \"6-33\" beside AHU-(6-33)-1, or an X where the level goes, CAV-X-1): its placements read over the levels their plans' titles draw (a typical plan for levels 6-16 stands for eleven), the levels no plan in the set draws named"),
     schedule_cite: z.object({
       sheet: z.string(),
       title: z.string().nullable(),

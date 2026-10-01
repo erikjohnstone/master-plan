@@ -42,6 +42,12 @@ export interface CompileItem {
   cells: Record<string, { text: string; bbox: number[] | null }>;
   building?: string | null;
   description?: string | null;
+  /** A row standing for one unit on each typical level it lists (AS-139):
+   * the takeoff's scheduled quantity, its basis and the column it reads. */
+  scheduled_qty?: number | null;
+  scheduled_qty_basis?: string | null;
+  scheduled_qty_source_header?: string | null;
+  scheduled_qty_source_text?: string | null;
 }
 
 /** The schedule table the item was compiled from: its headers in order; the

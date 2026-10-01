@@ -244,6 +244,140 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
   };
 }
 
+/** A heading naming the typical levels (floors) one row stands for (AS-139):
+ * 26_CA's TYPICAL LEVELS (its tri-path air handlers) and TYPICAL FLOORS (its
+ * exhaust terminals). */
+const TYPICAL_LEVELS_HEADER_RE = /^TYP(?:ICAL|\.)?\s*(?:LEVELS?|FLOORS?)$/i;
+
+/**
+ * The levels a list prints, in its order, or null when any part of it is no
+ * level (AS-139): "6-33" (28 levels), "34-35", "3-4, 6-34", "34,35", "P3".
+ * A range runs up (6-33, never 33-6) and over at most 200 levels.
+ * @param {string} text
+ * @returns {string[]|null}
+ */
+export function parseLevelList(text) {
+  const raw = String(text ?? "").toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-").trim();
+  if (!raw) return null;
+  const out = [];
+  for (const part of raw.split(/\s*(?:,|&|\bAND\b)\s*/)) {
+    const range = part.match(/^(\d{1,3})\s*(?:-|THRU|TO)\s*(\d{1,3})$/);
+    if (range) {
+      const a = Number(range[1]), b = Number(range[2]);
+      if (!(a < b) || b - a > 199) return null;
+      for (let n = a; n <= b; n++) out.push(String(n));
+    } else if (/^\d{1,3}$/.test(part)) out.push(String(Number(part)));
+    else if (/^[A-Z]{1,2}\d{0,2}$/.test(part)) out.push(part);
+    else return null;
+  }
+  return out.length && new Set(out).size === out.length ? out : null;
+}
+
+const cellTextOf = (cell) => String((cell && typeof cell === "object" ? cell.text : cell) ?? "").trim();
+
+/**
+ * The typical levels a row stands for one unit on each of (AS-139), or null.
+ * The row prints two or more levels under a typical-levels heading (TYPICAL
+ * LEVELS "6-33"), and its mark is a template of them: it prints the same
+ * levels in parentheses (26_CA's "AHU-(6-33)-1"; "AHU-(34,35)-1" beside
+ * "34-35"), or an X where each level's number goes ("CAV-X-1" beside "3-4,
+ * 6-34"). A mark naming one unit ("CAV-2-1", TYPICAL FLOORS "2") or levels
+ * its column does not list stands for one unit, as before.
+ * @param {{ key?: string, cells?: Record<string, { text?: string } | string> }} row
+ * @param {string|null} [mark] the row's mark, where the caller read it
+ * @returns {{ levels: string[], count: number, header: string, text: string, template: "levels"|"placeholder" }|null}
+ */
+export function typicalLevelsOfRow(row, mark = null) {
+  let header = null, text = "";
+  for (const [h, cell] of Object.entries(row?.cells || {})) {
+    if (!TYPICAL_LEVELS_HEADER_RE.test(String(h || "").trim())) continue;
+    header = String(h).trim();
+    text = cellTextOf(cell);
+    break;
+  }
+  if (!header || !text) return null;
+  const levels = parseLevelList(text);
+  if (!levels || levels.length < 2) return null;
+  const name = String(mark ?? rowIdentityTag(row) ?? "").toUpperCase();
+  const groups = [...name.matchAll(/\(([^()]*)\)/g)].map((g) => g[1]);
+  let template = null;
+  if (groups.length === 1) {
+    const printed = parseLevelList(groups[0]);
+    if (printed && printed.length === levels.length && printed.every((l) => levels.includes(l))) template = "levels";
+  } else if (!groups.length && /(?:^|[^A-Z0-9])X(?=[^A-Z0-9]|$)/.test(name)) template = "placeholder";
+  if (!template) return null;
+  return { levels, count: levels.length, header, text, template };
+}
+
+/**
+ * The marks a typical-level row's unit is drawn by on the plans (AS-139):
+ * each level's own mark, the level where the row prints its levels or its X
+ * ("AHU-(6-33)-1" → AHU-6-1 … AHU-33-1; "CAV-X-1" → CAV-3-1 …), and for a
+ * row printing its levels, the mark with an X for its level (AHU-X-2), as
+ * 26_CA's level 36 plan tags AHU-(36-49)-2.
+ * @param {string} mark the row's mark
+ * @param {{ levels: string[], template: "levels"|"placeholder" }} typical typicalLevelsOfRow's reading
+ * @returns {string[]}
+ */
+export function typicalLevelMarks(mark, typical) {
+  const m = String(mark || "").trim();
+  const at = (level) => (typical.template === "levels"
+    ? m.replace(/\s*\([^()]*\)\s*/, level)
+    : m.replace(/(^|[^A-Z0-9])X(?=[^A-Z0-9]|$)/i, `$1${level}`));
+  const forms = typical.levels.map(at);
+  if (typical.template === "levels") forms.push(at("X"));
+  return [...new Set(forms)];
+}
+
+/**
+ * The levels a plan sheet's title says it draws (AS-139), or null: a typical
+ * plan the levels it stands for ("MECHANICAL TYPICAL PLAN - LEVELS 6-16",
+ * "... - LEVELS 4, 6-14"), a level's plan its level ("MECHANICAL LEVEL 17
+ * PLAN", "LEVEL 61 ALTERNATE PLAN"; a parking level P1), a numbered floor
+ * ("3RD FLOOR PLAN"). A roof or a title naming no level, none.
+ * @param {string} title
+ * @returns {string[]|null}
+ */
+export function planTitleLevels(title) {
+  const t = String(title || "").toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
+  const parking = t.match(/\bPARKING\s+LEVEL\s+(\d{1,2})\b/);
+  if (parking) return [`P${Number(parking[1])}`];
+  const many = t.match(/\b(?:LEVELS|FLOORS)\s+((?:\d{1,3}\s*(?:-|THRU|TO|,|&|AND)\s*)+\d{1,3})\b/);
+  if (many) return parseLevelList(many[1]);
+  const one = t.match(/\bLEVEL\s+(\d{1,3})\b/) || t.match(/\b(\d{1,3})(?:ST|ND|RD|TH)\s+FLOOR\b/) || t.match(/\bFLOOR\s+(\d{1,3})\b/);
+  return one ? [String(Number(one[1]))] : null;
+}
+
+/**
+ * A typical-level row's installed units (AS-139): each verified placement
+ * stands for the row's levels its plan draws (planTitleLevels), each level
+ * once — 26_CA's CAV-X-2 on MECHANICAL TYPICAL PLAN - LEVELS 6-16 stands for
+ * eleven of its levels, on MECHANICAL LEVEL 17 PLAN for one, and a second
+ * plan of a level already counted (LEVEL 61 ALTERNATE PLAN beside LEVEL 61
+ * PLAN) for none — and for one unit where its plan names no level of the
+ * row. Null when no placement is given.
+ * @param {string[]} levels the row's typical levels (typicalLevelsOfRow)
+ * @param {Array<{ sheet: string }>} cites its verified placements
+ * @param {(sheet: string) => string} titleOf a plan sheet's title
+ * @returns {{ qty: number, levels_drawn: string[], levels_missing: string[], placements: number }|null}
+ */
+export function typicalLevelInstalled(levels, cites, titleOf) {
+  if (!cites?.length) return null;
+  const drawn = new Set();
+  let qty = 0;
+  for (const cite of cites) {
+    const own = (planTitleLevels(titleOf(cite.sheet)) || []).filter((l) => levels.includes(l));
+    if (!own.length) { qty += 1; continue; }
+    for (const l of own) if (!drawn.has(l)) { drawn.add(l); qty += 1; }
+  }
+  return {
+    qty,
+    levels_drawn: levels.filter((l) => drawn.has(l)),
+    levels_missing: levels.filter((l) => !drawn.has(l)),
+    placements: cites.length,
+  };
+}
+
 /**
  * Read a printed QTY/QUANTITY/NO./COUNT/# cell off a schedule row — the
  * scheduled quantity a printed table actually states, as opposed to "one
@@ -263,10 +397,13 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
  * "B-1/B-2"; `opts.marks`, AS-75) prints one QTY for all of them: a QTY equal
  * to that count is one unit per mark; any other QTY says nothing of each
  * mark's count and is refused, never divided or multiplied.
+ * A row with no QTY column that stands for one unit on each typical level it
+ * lists (typicalLevelsOfRow; AS-139) schedules that many: 26_CA's
+ * "AHU-(6-33)-1" under TYPICAL LEVELS "6-33" is 28 air handlers.
  * @param {{ cells?: Record<string, { text?: string } | string> }} row
- * @param {{ typeDefinition?: boolean, marks?: number }} [opts]
+ * @param {{ typeDefinition?: boolean, marks?: number, mark?: string|null }} [opts]
  * @returns {{ qty: number|null, refused: boolean, reason: string|null,
- *   basis: "printed_schedule_quantity"|"printed_schedule_quantity_per_mark"|"one_per_unique_schedule_row"|"unparseable_printed_quantity"|"printed_quantity_for_several_marks"|"type_definition_not_quantity",
+ *   basis: "printed_schedule_quantity"|"printed_schedule_quantity_per_mark"|"one_per_unique_schedule_row"|"one_per_typical_level"|"unparseable_printed_quantity"|"printed_quantity_for_several_marks"|"type_definition_not_quantity",
  *   source_header: string|null, source_text: string|null }}
  */
 export function scheduledQtyStatusFromRow(row, opts = {}) {
@@ -328,6 +465,17 @@ export function scheduledQtyStatusFromRow(row, opts = {}) {
       basis: "type_definition_not_quantity",
       source_header: null,
       source_text: null,
+    };
+  }
+  const typical = !(Number.isInteger(opts.marks) && opts.marks > 1) && typicalLevelsOfRow(row, opts.mark ?? null);
+  if (typical) {
+    return {
+      qty: typical.count,
+      refused: false,
+      reason: null,
+      basis: "one_per_typical_level",
+      source_header: typical.header,
+      source_text: typical.text,
     };
   }
   return {
@@ -635,6 +783,11 @@ export function unscheduledTagsAndAliasCandidates(graph) {
           if (key) unitKeys.add(key);
         }
       }
+      // Each level's mark of a typical-level row (AS-139): 26_CA's AHU 6-1
+      // and AHU 17-1 are AHU-(6-33)-1's units on levels 6 and 17.
+      const identity = rowIdentityTag(row);
+      const typical = identity ? typicalLevelsOfRow(row, identity) : null;
+      if (typical) for (const mark of typicalLevelMarks(identity, typical)) unitKeys.add(markKey(mark));
     }
   }
   // A respelling reads as a unit a family's schedule lists (scheduleMarksRead),
@@ -882,7 +1035,53 @@ export async function sweepBasServedMark(session, tag, opts = {}) {
 }
 
 
-export function reconcileRowsFromTakeoffItems(items, failures = []) {
+/**
+ * The installed side of a typical-level row (AS-139): its verified placements
+ * read over the levels their plans draw (typicalLevelInstalled), with the
+ * reason a short count gives. Null for any other row.
+ * @param {{ basis: string }} qtyStatus the row's scheduledQtyStatusFromRow
+ * @param {object} row the row's cells, as scheduledQtyStatusFromRow reads them
+ * @param {string} mark the row's mark
+ * @param {Array<{ sheet: string }>} cites its verified placements
+ * @param {((sheet: string) => string)|null} titleOf a plan sheet's title
+ */
+function typicalLevelReading(qtyStatus, row, mark, cites, titleOf) {
+  if (qtyStatus?.basis !== "one_per_typical_level" || !titleOf) return null;
+  const typical = typicalLevelsOfRow(row, mark);
+  const installed = typical && typicalLevelInstalled(typical.levels, cites, titleOf);
+  if (!installed) return null;
+  const missing = installed.levels_missing;
+  return {
+    installed,
+    disclosure: {
+      levels: typical.count,
+      header: typical.header,
+      text: typical.text,
+      placements: installed.placements,
+      levels_drawn: installed.levels_drawn,
+      levels_missing: missing,
+    },
+    reason: missing.length
+      ? `One unit on each of the ${typical.count} levels ${typical.header} lists ("${typical.text}"): ${installed.placements} placement${installed.placements === 1 ? "" : "s"} on plans drawing ${installed.levels_drawn.length} of them; no plan in this set draws level${missing.length === 1 ? "" : "s"} ${compactLevels(missing)}.`
+      : null,
+  };
+}
+
+/** Levels as they print, runs joined: 7, 8, 9, 20 → "7-9, 20". */
+function compactLevels(levels) {
+  const out = [];
+  for (let i = 0; i < levels.length; i++) {
+    let j = i;
+    while (j + 1 < levels.length && /^\d+$/.test(levels[j]) && /^\d+$/.test(levels[j + 1]) && Number(levels[j + 1]) === Number(levels[j]) + 1) j++;
+    out.push(j > i + 1 ? `${levels[i]}-${levels[j]}` : j === i + 1 ? `${levels[i]}, ${levels[j]}` : levels[i]);
+    i = j;
+  }
+  return out.join(", ");
+}
+
+// opts.sheetTitleOf: a plan sheet's title, for a typical-level row's
+// placements (AS-139).
+export function reconcileRowsFromTakeoffItems(items, failures = [], { sheetTitleOf = /** @type {((sheet: string) => string) | null} */ (null) } = {}) {
   const failByTag = new Map();
   for (const f of failures || []) {
     if (f?.tag) failByTag.set(f.tag, f);
@@ -897,7 +1096,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     // A unit of a row naming several (AS-98): the row's printed QTY counts
     // them all, never each.
     const qtyStatus = item.schedule_row
-      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly, ...(item.row_marks > 1 ? { marks: item.row_marks } : {}) })
+      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly, ...(item.row_marks > 1 ? { marks: item.row_marks } : {}), mark: item.tag })
       : scheduledQtyStatusFromRow({ cells: {} });
     const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
     // A refused/error sweep proves only that installed quantity could not be
@@ -919,7 +1118,14 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     const explicitInstallationVerified = item.status === "resolved" && installedEvidenceGrade === "explicit_installation_note";
     const tagTextOnly = item.status === "resolved" && (installedEvidenceGrade === "tag_text_only"
       || installedEvidenceGrade === "mixed_geometry_and_tag_text");
-    const installedQty = geometryVerified || explicitInstallationVerified ? (item.quantity ?? 0) : null;
+    // A typical-level row's placements stand for the levels their plans draw
+    // (AS-139): 26_CA's CAV-X-2 on its typical plan for levels 6-16 is eleven
+    // of its 31 exhaust terminals.
+    const typicalLevels = geometryVerified
+      ? typicalLevelReading(qtyStatus, { cells: item.schedule_row || {} }, item.tag, item.drawing_locations || [], sheetTitleOf)
+      : null;
+    const installedQty = typicalLevels ? typicalLevels.installed.qty
+      : geometryVerified || explicitInstallationVerified ? (item.quantity ?? 0) : null;
     const taggedPlanQty = tagTextOnly ? (item.tagged_plan_quantity ?? (basis === "exact_plan_tag" ? item.quantity : 0) ?? 0) : null;
     const fail = failByTag.get(item.tag);
     const status = classifyReconcileStatus({
@@ -957,6 +1163,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
       quantity_comparison: scheduleDefinitionOnly
         ? "type_definition_vs_plan_count"
         : "scheduled_vs_installed",
+      ...(typicalLevels ? { typical_levels: typicalLevels.disclosure } : {}),
       schedule_cite: item.schedule
         ? {
             sheet: item.schedule.sheet,
@@ -989,7 +1196,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
       ...(item.plan_other_locations?.length ? { plan_other_cites: item.plan_other_locations } : {}),
       ...(item.reference_tags?.length ? { reference_tag_cites: item.reference_tags } : {}),
       ...(item.served_equipment_cites?.length ? { served_equipment_cites: item.served_equipment_cites } : {}),
-      reason: qtyStatus.reason || item.reason || fail?.detail
+      reason: qtyStatus.reason || item.reason || fail?.detail || typicalLevels?.reason
         || (tagTextOnly
           ? `Exact plan tag text was found ${taggedPlanQty} time${taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
           : null)
@@ -1150,6 +1357,9 @@ export function summarizeReconcile(rows) {
  *   markKey (scheduleRowsReadingMark; AS-89)
  */
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map(), { sources = null } = {}) {
+  // A plan sheet's title, for a typical-level row's placements (AS-139).
+  const titles = new Map((graph?.sheets || []).map((s) => [s.key, String(s.evidence?.text || "")]));
+  const sheetTitleOf = (key) => titles.get(key) || "";
   const rows = [];
   const seen = new Set();
   // The marks the scaffold holds a row for, in any table (AS-62).
@@ -1227,7 +1437,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         seen.add(scopeIdentity);
         held.add(canon);
         const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);
-        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly, marks: sameKindMarks(tagList, tag) });
+        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly, marks: sameKindMarks(tagList, tag), mark: tag });
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
         const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
         const reportedInstalledQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
@@ -1258,7 +1468,13 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
             || (sweep.installedQtyBasis === "symbol_fingerprint" || sweep.installedQtyBasis === "tag_attached_vector" ? "symbol_geometry"
               : sweep.installedQtyBasis === "explicit_installation_note" ? "explicit_installation_note"
                 : sweep.installedQtyBasis === "exact_plan_tag" ? "tag_text_only" : "unverified");
-        const installedQty = installedEvidenceGrade === "symbol_geometry"
+        // A typical-level row's placements stand for the levels their plans
+        // draw (AS-139), as the whole-set reconcile reads them.
+        const typicalLevels = installedEvidenceGrade === "symbol_geometry"
+          ? typicalLevelReading(qtyStatus, row, tag, sweep.planCites || [], sheetTitleOf)
+          : null;
+        const installedQty = typicalLevels ? typicalLevels.installed.qty
+          : installedEvidenceGrade === "symbol_geometry"
           || installedEvidenceGrade === "explicit_installation_note"
           ? reportedInstalledQty
           : null;
@@ -1293,6 +1509,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           quantity_comparison: scheduleDefinitionOnly
             ? "type_definition_vs_plan_count"
             : "scheduled_vs_installed",
+          ...(typicalLevels ? { typical_levels: typicalLevels.disclosure } : {}),
           schedule_cite: {
             sheet: table.sheet,
             title: table.title?.text || null,
@@ -1305,7 +1522,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           ...(sweep.planOtherCites?.length ? { plan_other_cites: sweep.planOtherCites } : {}),
           ...(sweep.referenceTagCites?.length ? { reference_tag_cites: sweep.referenceTagCites } : {}),
           ...(servedEquipmentCites.length ? { served_equipment_cites: servedEquipmentCites } : {}),
-          reason: qtyStatus.reason || sweep.reason
+          reason: qtyStatus.reason || sweep.reason || typicalLevels?.reason
             || (installedEvidenceGrade === "tag_text_only"
               ? `Exact plan tag text was found ${sweep.taggedPlanQty ?? 0} time${sweep.taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
               : null)

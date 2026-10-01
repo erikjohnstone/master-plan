@@ -8125,3 +8125,45 @@ assemblies read a table by.
 Tests: `web/test/splitHalvesVrf.test.ts` (4): 098_ID's pairs; 21_VA's pair and a mini split; the negatives (a fan coil
 schedule's HP-*, an air handling unit's or an untitled ACU-*, a split system's CU-* and its indoor AH-*); 22_GA's
 terminals and a VRF mark under no VRF title. 8 mutations, each failing them.
+
+## AS-139 — a row standing for one unit on each typical level it lists was one unit: 26_CA's 112 tri-path air handlers read as 12 (FIXED, this commit)
+
+**Found:** 26_CA's reconcile after AS-108. M0.09's CUSTOM FACTORY-BUILT TRI-PATH MULTI-ZONE AIR HANDLING UNITS prints
+twelve rows, two per group of levels: "AHU-(6-33)-1" and "-2" under TYPICAL LEVELS "6-33", "AHU-(34,35)-1" under
+"34-35", and so on to "AHU-(59-61)-2". Each row is one air handler on each level it lists (the level plans tag them
+"AHU 6-1", "AHU 17-1"), 112 in all, and the takeoff, the reconcile and the assemblies counted twelve. The exhaust
+terminal schedule does the same with an X for the level ("CAV-X-2", TYPICAL FLOORS "3-4, 6-34": 31 terminals). The
+level plans draw a level's own marks, never the row's, so the sweep found none of them, and the review list called
+each level's tag unscheduled; and a typical plan stands for many levels ("MECHANICAL TYPICAL PLAN - LEVELS 6-16").
+
+**Change** (`schedulePlanReconcile.mjs`, on the shared path the takeoff, the reconcile and the assemblies read):
+- `typicalLevelsOfRow`: a row is a typical-level template only where its mark prints its levels (a parenthesized
+  range or list, "AHU-(6-33)-1") or an X for them ("CAV-X-2") and a TYPICAL LEVEL(S)/FLOOR(S) column lists more than one
+  level; a mark naming one level, levels its column does not list, or no such column: one unit, as before.
+- `scheduledQtyStatusFromRow`: such a row schedules one unit a level (`one_per_typical_level`, the column and its text
+  cited); a printed QTY, and a row naming several marks, read as before.
+- `typicalLevelInstalled`, `planTitleLevels`: a verified placement stands for the row's levels its plan's title draws
+  ("TYPICAL PLAN - LEVELS 6-16" eleven, "LEVEL 17" one), each level once; levels no plan draws are named in the row's
+  reason ("no plan in this set draws levels 18, 32-33").
+- `typicalLevelMarks`: the sweep looks for each level's own mark ("AHU-6-1" ... for AHU-(6-33)-1), and the review list
+  calls none of them unscheduled.
+- The takeoff (`mcp/src/takeoff.ts`, `compileHvacTakeoff` items) carries the row's scheduled quantity and basis, and
+  the assemblies (`apply.ts`, `normalize.ts`) multiply a typical-level unit's lines by it.
+
+**Census:** the rows `typicalLevelsOfRow` reads as templates over every cached graph (26_CA from its current graph):
+26_CA only: the twelve air handler rows (112 units), CAV-X-1 to CAV-X-3 (89) and the ten FSD-X dampers (on a table no
+family reads); no walled document has one.
+
+**Measured:** 26_CA's reconcile against its keyed placements (`reconcile-eval.mjs`, graph rebuilt), before → after:
+placement recall 71.5% → 84.1% at precision 94.6% → 95.0%; unit counts exact 154 → 166 of 190 (over 1 → 1, under
+35 → 23); drawn tags linked to their row 220 → 255 of 280. An X form (AHU-X-2) counts only on plans whose title
+draws one of the row's levels: without that, level 36's plan, tagging AHU-(36-49)-2 that way, added one unit to each
+of five rows (over 6), measured and fixed before this commit. The attribute eval on 26_CA is unchanged.
+
+**Should this be on the shared path? Yes.** The row's quantity is schedule truth: the takeoff, the reconcile and the
+assemblies read it from one function, for the UI and MCP alike.
+
+Tests: `web/test/typicalLevels.test.ts` (8): the template forms, a one-level mark, levels the column does not list,
+the X form, plan title levels, the installed quantity and the review list; 8 of 8 mutations of the rules fail them.
+`mcp/test/typicalLevelSweeps.test.ts` (4): the level sweeps merged as the row's (sheets joined, counts added,
+completeness, a text-only level kept as plan-tag text, unanchored marks named).

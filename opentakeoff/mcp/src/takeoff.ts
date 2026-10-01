@@ -1217,8 +1217,10 @@ export async function reconcileSchedulePlan(session: Session, opts: {
         || (famU === "AHU" && /AIR HANDLING/i.test(title));
     });
   }
+  // A plan sheet's title, for a typical-level row's placements (AS-139).
+  const sheetTitles = new Map(graph.sheets.map((s) => [s.key, String(s.evidence?.text || "")]));
   const rows = attachDiagramCorroboration(
-    reconcileRowsFromTakeoffItems(items, takeoff.failures),
+    reconcileRowsFromTakeoffItems(items, takeoff.failures, { sheetTitleOf: (key: string) => sheetTitles.get(key) || "" }),
     await session.controlSchematics(),
   );
   return {

@@ -53,7 +53,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
-import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markZeroRespellings, rowIdentityTag, rowNamesEachUnitOnce, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark } from '../../web/src/lib/schedulePlanReconcile.mjs';
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markZeroRespellings, rowIdentityTag, rowNamesEachUnitOnce, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark, planTitleLevels, typicalLevelMarks, typicalLevelsOfRow } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -989,6 +989,64 @@ function assembliesPayloadOf(block: Record<string, unknown> | null, journal: rea
   const base = block ?? { schema: ASSEMBLIES_STATE_SCHEMA, pinned: [], settings: {}, overrides: [] };
   const { answer_journal: _old, ...rest } = base as Record<string, unknown> & { answer_journal?: unknown };
   return { ...rest, ...(journal.length ? { answer_journal: journal } : {}) };
+}
+
+/**
+ * The sweeps of a typical-level row's level marks read as the row's one
+ * sweep (AS-139): the sheets' placements joined, the found and occurrence
+ * counts added, complete only where every sweep was. The row's verified
+ * placements stay verified; a level only its tag text grounds, beside
+ * geometry, joins as plan-tag text (counted_from: explicit_label), as a
+ * sweep reports a placement no geometry verifies.
+ */
+export function mergeTypicalLevelSweeps(tag: string, results: { mark: string; r: any }[], refused: string[] = []): any {
+  const geometric = results.filter(({ r }) => r.anchor?.grounding_basis !== "exact_plan_tag");
+  const base = (geometric[0] ?? results[0]).r;
+  const basis = base.anchor?.grounding_basis;
+  const bySheet = new Map<string, any>();
+  for (const { r } of results) {
+    const textOnly = basis !== "exact_plan_tag" && r.anchor?.grounding_basis === "exact_plan_tag";
+    for (const s of r.sheets || []) {
+      const matches = (s.matches || []).map((m: any) => (textOnly ? { ...m, counted_from: "explicit_label" } : m));
+      const cur = bySheet.get(s.sheet);
+      if (!cur) {
+        bySheet.set(s.sheet, { ...s, matches, withheld: [...(s.withheld || [])], excluded: [...(s.excluded || [])], text_only: [...(s.text_only || [])],
+          candidates: { ...(s.candidates || {}) } });
+        continue;
+      }
+      cur.found = (cur.found || 0) + (s.found || 0);
+      cur.matches.push(...matches);
+      cur.withheld.push(...(s.withheld || []));
+      cur.excluded.push(...(s.excluded || []));
+      cur.text_only.push(...(s.text_only || []));
+      for (const [k, v] of Object.entries(s.candidates || {})) if (typeof v === "number") cur.candidates[k] = (cur.candidates[k] || 0) + v;
+      cur.complete = cur.complete !== false && s.complete !== false;
+      cur.elapsed_ms = (cur.elapsed_ms || 0) + (s.elapsed_ms || 0);
+    }
+  }
+  const skipped = new Map<string, any>();
+  for (const { r } of results) for (const k of r.skipped || []) skipped.set(JSON.stringify(k), k);
+  const notes = results.map(({ r }) => r.note).filter(Boolean);
+  const warnings = results.map(({ r }) => r.warning).filter(Boolean);
+  const committed = results.map(({ r }) => r).filter((r) => r.shape_ids);
+  return {
+    ...base,
+    tag,
+    row: { ...base.row, key: tag },
+    tag_citations: results.flatMap(({ r }) => r.tag_citations || []),
+    anchor: base.anchor ? { ...base.anchor, occurrences: results.reduce((n, { r }) => n + (r.anchor?.occurrences || 0), 0) } : base.anchor,
+    found: results.reduce((n, { r }) => n + (r.found || 0), 0),
+    sheets: [...bySheet.values()],
+    complete: results.every(({ r }) => r.complete !== false),
+    skipped: [...skipped.values()],
+    ...(committed.length ? {
+      committed: committed.reduce((n, r) => n + (r.committed || 0), 0),
+      shape_ids: committed.flatMap((r) => r.shape_ids || []),
+      ea_total: committed.reduce((n, r) => n + (r.ea_total || 0), 0),
+    } : {}),
+    note: [...notes, `One unit on each typical level its row lists: swept by its levels' own marks ${results.map(({ mark }) => mark).join(", ")}${refused.length ? `; not anchored: ${refused.join("; ")}` : ""}.`].join(" "),
+    ...(warnings.length ? { warning: warnings.join(" ") } : {}),
+  };
 }
 
 export class Session {
@@ -4460,6 +4518,10 @@ export class Session {
      * sweeps without a preference still refuse honest cross-family collisions. */
     preferSheet?: string | null;
     preferTitle?: string | null;
+    /** One level's mark of a typical-level row (AS-139), swept as the row's:
+     * the row is found by `tag`, its placements by this mark. Set only by the
+     * sweep itself (sweepTypicalLevelMarks). */
+    planKey?: string | null;
     /** Shared affine recognition. Omitted means AFFINE_WIRE_DEFAULT; an
      * explicit { enabled:false } retains rigid-only behavior for diagnosis. */
     affine?: SweepOptions["affine"];
@@ -4911,11 +4973,38 @@ export class Session {
       const rowNamed = new Set(graph.tables.flatMap((x) => x.rows.map((row) => canonKey(identityOf(row)))));
       for (const variant of markZeroRespellings(t)) if (!rowNamed.has(canonKey(variant))) addCand(variant);
       const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
-      if (!hasOcc(t)) {
-        for (const cand of planTagCandidates) {
-          if (hasOcc(cand)) {
-            t = cand;
-            break;
+      if (opts.planKey) {
+        t = canonKey(opts.planKey);
+      } else {
+        // A row standing for one unit on each typical level it lists, its
+        // unit drawn by each level's own mark (AS-139): 26_CA's AHU-(6-33)-1
+        // is tagged AHU 6-1 on the typical plan for levels 6-16, AHU 17-1 on
+        // level 17's. Each mark drawn on a plan, no other row's, is swept as
+        // the row's, and the placements read together.
+        const typical = readByMark ? null : typicalLevelsOfRow(r, selectedRowIdentity);
+        if (typical) {
+          // The mark with an X for its level (AHU-X-2) is every such row's
+          // alike: it is this row's only on a plan drawing one of its levels
+          // (26_CA's level 36 plan tags AHU-(36-49)-2 so, never AHU-(6-33)-2).
+          const forms = typicalLevelMarks(selectedRowIdentity, typical).map(canonKey);
+          const xForm = typical.template === "levels" ? forms[forms.length - 1] : null;
+          const sheetTitle = (key: string) => String(graph.sheets.find((sh: any) => sh.key === key)?.evidence?.text || "");
+          const drawsOwnLevel = (key: string) => (planTitleLevels(sheetTitle(key)) || []).some((l: string) => typical.levels.includes(l));
+          const occurs = (form: string) => (form === xForm
+            ? planSheets.some((sh) => drawsOwnLevel(sh.key) && occOf(sh, form).length > 0)
+            : hasOcc(form));
+          const drawn = forms.filter((form) => form !== t && !rowNamed.has(form) && occurs(form));
+          if (drawn.length && (drawn.length > 1 || !hasOcc(t))) {
+            return this.sweepTypicalLevelMarks(tag, opts, hasOcc(t) ? [t, ...drawn] : drawn,
+              xForm && drawn.includes(xForm) ? { mark: xForm, sheetOk: drawsOwnLevel } : null);
+          }
+        }
+        if (!hasOcc(t)) {
+          for (const cand of planTagCandidates) {
+            if (hasOcc(cand)) {
+              t = cand;
+              break;
+            }
           }
         }
       }
@@ -6472,6 +6561,35 @@ export class Session {
       ...(notes.length ? { note: notes.join(" ") } : {}),
       ...(capped.length ? { warning: `Work cap: candidate placements were dropped un-scored on ${capped.map((p) => p.state.key).join(", ")} — sweep those sheets singly with symbol_sweep and reconcile the counts.` } : {}),
     };
+  }
+
+  /**
+   * A typical-level row swept by each level's own mark (AS-139), its
+   * placements read as the row's: one sweep a mark, the results joined by
+   * sheet. A mark the sweep cannot anchor is named in the note; none at all,
+   * the row is refused as the first refusal says. A level whose mark only
+   * its text grounds (exact_plan_tag) beside geometry-grounded levels counts
+   * as plan-tag text, never as a verified placement.
+   */
+  private async sweepTypicalLevelMarks(tag: string, opts: Parameters<Session["sweepScheduleRow"]>[1], marks: string[],
+    only: { mark: string; sheetOk: (sheet: string) => boolean } | null = null) {
+    const results: { mark: string; r: any }[] = [];
+    const refused: string[] = [];
+    for (const mark of marks) {
+      try {
+        let r: any = await this.sweepScheduleRow(tag, { ...opts, planKey: mark });
+        // The X form counts only on the plans drawing one of the row's levels.
+        if (only && mark === only.mark && r?.sheets) r = { ...r, sheets: r.sheets.filter((s: any) => only.sheetOk(s.sheet)) };
+        if (r?.status === "reference_only") refused.push(`${mark}: drawn on no plan sheet`);
+        else results.push({ mark, r });
+      } catch (e: any) {
+        refused.push(`${mark}: ${e?.message || String(e)}`);
+      }
+    }
+    if (!results.length) {
+      throw new UserError(`Schedule row "${tag}" stands for one unit on each typical level it lists, and none of its levels' marks drawn on a plan could be anchored: ${refused.join(" | ")}`);
+    }
+    return mergeTypicalLevelSweeps(tag, results, refused);
   }
 
   /** The mid-session shape inventory (#149): every committed shape's id,

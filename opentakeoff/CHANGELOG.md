@@ -1,5 +1,16 @@
 # Changelog
 
+- **A schedule row standing for one unit on each typical level it lists is that many units, and the plans' level
+  marks are its tags.**
+  - 26_CA's tri-path air handler schedule prints twelve rows such as AHU-(6-33)-1 (TYPICAL LEVELS 6-33): 112 air
+    handlers that the takeoff, the reconcile and the assemblies counted as 12, and whose plan tags (AHU 6-1, AHU 17-1)
+    the review list called unscheduled. Such a row now schedules one unit a level (basis `one_per_typical_level`,
+    the column cited); the sweep reads each level's own mark; a typical plan stands for the levels its title draws,
+    and levels no plan draws are named.
+  - 26_CA: placement recall 71.5% → 84.1% (precision 95.0%), exact unit counts 154 → 166 of 190, drawn tags linked
+    220 → 255 of 280. No other cached document has such a row.
+  (`web/src/lib/schedulePlanReconcile.mjs` `typicalLevelsOfRow`, `typicalLevelMarks`, `planTitleLevels`,
+  `typicalLevelInstalled`; `mcp/src/session.ts` `sweepTypicalLevelMarks`; ASSEMBLIES_BUG_CATALOGUE AS-139.)
 - **A split system's outdoor heat pump and indoor air conditioning unit, and a VRF system's terminal units, are
   read under their titles.**
   - Under a split, ductless (multi-)split or mini-split title, an outdoor HP-* is the heat pump (098_ID's "FC-1 ,

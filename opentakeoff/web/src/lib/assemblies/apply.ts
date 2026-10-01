@@ -189,7 +189,8 @@ export function sheetPage(sheet: string): { file: string; page: number } | null 
 /** What the apply path reads of an hvac_equipment compile and of the sheet
  * graph it was compiled from (loosely typed: both are JSON on the wire). */
 export interface HvacCompile {
-  categories?: Record<string, { items?: ReadonlyArray<{ tag: string; sheet_id: string; table_title: string; cells?: CompileItem["cells"]; building?: string | null; description?: string | null; bbox_px?: readonly number[] | null }> }>;
+  categories?: Record<string, { items?: ReadonlyArray<{ tag: string; sheet_id: string; table_title: string; cells?: CompileItem["cells"]; building?: string | null; description?: string | null; bbox_px?: readonly number[] | null;
+    scheduled_qty?: number | null; scheduled_qty_basis?: string | null; scheduled_qty_source_header?: string | null; scheduled_qty_source_text?: string | null }> }>;
 }
 export interface GraphTables {
   sheets?: ReadonlyArray<{ key: string }>;
@@ -209,7 +210,12 @@ export function compiledRowsAndTables(compiled: HvacCompile, graph: GraphTables)
   for (const [family, cat] of Object.entries(compiled.categories ?? {})) {
     for (const it of cat.items ?? []) {
       items.push({ family, tag: it.tag, sheet_id: it.sheet_id, table_title: it.table_title, cells: it.cells ?? {},
-        building: it.building ?? null, description: it.description ?? null });
+        building: it.building ?? null, description: it.description ?? null,
+        // A unit on each typical level its row lists (AS-139), carried where read.
+        ...(it.scheduled_qty_basis === "one_per_typical_level" ? {
+          scheduled_qty: it.scheduled_qty ?? null, scheduled_qty_basis: it.scheduled_qty_basis,
+          scheduled_qty_source_header: it.scheduled_qty_source_header ?? null, scheduled_qty_source_text: it.scheduled_qty_source_text ?? null,
+        } : {}) });
     }
   }
   const wanted = new Set(items.map((it) => `${it.sheet_id}|${it.table_title}`));
@@ -565,9 +571,15 @@ export function instancesOf(project: CompiledProject, normalized: readonly Norma
     }
     const handlers = links.get(i) ?? [];
     const qty = n.attributes.qty?.value;
+    // A row standing for one unit on each typical level it lists (AS-139):
+    // 26_CA's AHU-(6-33)-1 under TYPICAL LEVELS "6-33" is 28 air handlers.
+    const levels = it.scheduled_qty_basis === "one_per_typical_level" && Number.isInteger(it.scheduled_qty) && (it.scheduled_qty ?? 0) >= 2
+      ? it.scheduled_qty as number : null;
     const multiplier = typeof qty === "number" && Number.isInteger(qty) && qty >= 1
       ? { value: qty, basis: `QTY "${n.attributes.qty.printed}" (${n.attributes.qty.cite.header})` }
-      : { value: 1, basis: "one unit per tag" };
+      : levels
+        ? { value: levels, basis: `one per typical level: ${it.scheduled_qty_source_header} "${it.scheduled_qty_source_text}" (${levels} levels)` }
+        : { value: 1, basis: "one unit per tag" };
     const text = (a: string) => (typeof n.attributes[a]?.value === "string" ? String(n.attributes[a].value) : null);
     return {
       item: i,
