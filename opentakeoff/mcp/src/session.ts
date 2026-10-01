@@ -4152,11 +4152,14 @@ export class Session {
     const merged: TagOcc[] = [...exact, ...compoundTagOcc(sh.spans, key), ...authoredCounts];
     const dedupedMerged = merged.filter((occurrence, index) => !merged.slice(0, index).some((prior) =>
       Math.hypot(prior.cx - occurrence.cx, prior.cy - occurrence.cy) <= Math.max(prior.h, occurrence.h)));
-    const splitHyphen = splitHyphenTagOcc(sh.spans, key);
-    const fragmented = allowFamilyQuorum
-      ? familyQuorumFragmentedTagOcc(sh.spans, key)
-      : fragmentedTagOcc(sh.spans, key);
-    const deepHyphen = deepHyphenChainTagOcc(sh.spans, key);
+    // The fallbacks are read in turn, each only when every reading before it
+    // found nothing (the order below); a mark found as drawn never runs them.
+    const spans = sh.spans;
+    const splitHyphen = (): TagOcc[] => splitHyphenTagOcc(spans, key);
+    const fragmented = (): TagOcc[] => allowFamilyQuorum
+      ? familyQuorumFragmentedTagOcc(spans, key)
+      : fragmentedTagOcc(spans, key);
+    const deepHyphen = (): TagOcc[] => deepHyphenChainTagOcc(spans, key);
     // Last, a bare prefix as the key's shorthand: its family's letters whole.
     const letters = markLetters(key);
     const shorthand = (): TagOcc[] => barePrefix && barePrefix !== "never" && letters.length >= 2
@@ -4165,12 +4168,16 @@ export class Session {
         .map(occurrenceOf)
       : [];
     const orShorthand = (found: TagOcc[]): TagOcc[] => (found.length ? found : shorthand());
+    const firstFound = (...readings: Array<() => TagOcc[]>): TagOcc[] | null => {
+      for (const read of readings) {
+        const found = read();
+        if (found.length) return found;
+      }
+      return null;
+    };
     const occurrences = dedupedMerged.length
       ? dedupedMerged
-      : (splitHyphen.length ? splitHyphen
-        : fragmented.length ? fragmented
-          : deepHyphen.length ? deepHyphen
-            : orShorthand(familySuffixTagOcc(sh.spans, key)));
+      : (firstFound(splitHyphen, fragmented, deepHyphen) ?? orShorthand(familySuffixTagOcc(spans, key)));
     occurrences.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     byKey.set(cacheKey, occurrences);
     return occurrences;

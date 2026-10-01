@@ -7462,3 +7462,36 @@ review and likely-units lists unchanged (9 of 72 unscheduled units named, 26 ent
 mark "X N-M" as a pair), AS-117 (the canvas's SLA fallback reconcile) stay open. AS-110, AS-115 and AS-118 were
 numbers given to candidates in this round's working notes that did not land (AS-110, a thermostat-label rule for the
 plan sweep, fixed 004_MO's DOAS-1 and broke 040_IL's UH-2, so it was reverted).
+
+## AS-127 — the reconcile took 13 minutes on a 64-sheet set: the plan sweep's fallback readers re-read every run of text for every mark (FIXED — byte-identical outputs)
+
+**Found:** profiling 26_CA (64 sheets, 469 schedule marks, 323 reconcile rows), where the whole-set reconcile took
+798 s (1581 s to 1944 s in earlier runs on a busier machine). The plan sweep reads a mark on a sheet by its ordinary
+tag reading first; where that finds nothing, it tries fallbacks in order: a split-hyphen reading, a fragmented reading
+(a mark lettered in runs on one row or the next line, "SR" "-" "1"), a deep hyphen chain ("CV" "-" "CHW" "-" "BP" "-"
+"M"), and the family-suffix shorthand. Two costs: `tagOccurrencesOnSheet` (session.ts) evaluated every fallback before
+taking the first that found anything, and the fragmented and deep-chain readers scanned every run of the sheet for
+every start and every next piece. Measured over every sheet × schedule mark of 26_CA (an equivalence harness running
+the readers as they were and as they are): the deep chain 433 s, the fragmented reading 24 s.
+
+**Change:**
+- `session.ts`: the fallbacks run lazily, in their order; the first that finds anything answers. That is what the code
+  took before, so the answer is the same.
+- `symbolsweep.ts`: per spans array, an index of each run's text as the readers compare it (trimmed, upper case,
+  without hyphens; the fragmented reading also drops a leading gang count "(6) "). A chain's starts and next pieces
+  come from the index's buckets for the mark's prefixes instead of a scan of every run, in the same order (array
+  order, as `spans.find` gave). The fragmented reading's next run on the same row or the next line comes from a
+  y-sorted index of tops, searched within the two bands its tests allow (a shade wider, then the original tests
+  exactly, the first in array order). An index is reused for one array while its length and its first, middle and
+  last runs are unchanged (a sheet's spans are read-only once built; a test changes one in place and is read anew).
+
+**Measured:**
+- The twelve keyed dev documents' seeded reconcile on the committed code and on this one: 12 of 12 outputs
+  byte-identical. Wall time 945 s → 271 s; 26_CA 798 s → 130 s; 040_IL 33 s → 27 s; the others within a second.
+- The equivalence harness, old readers against new on every sheet and every schedule mark (and its hyphenated forms)
+  of 26_CA, 040_IL, 011_IL, 016_NY (both readers) and federal-mech and itd-d1-lab (the deep chain): 0 differences.
+  26_CA's reader time: deep chain 433 s → 4.2 s, fragmented 23.5 s → 5.5 s.
+
+Tests: symbolsweep.test.ts (an index is not reused once a middle run changes in place; checked to fail with the old
+first-and-last check), and the sweep and reconcile suites: web 217/217, MCP tools 121/121, session, takeoff and
+reconcile eval 41/41.

@@ -2984,6 +2984,57 @@ export function splitHyphenTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   return out;
 }
 
+/** What an index built for a spans array checks before it is reused. The
+ * arrays these readers take are a sheet's text, read-only once built; its
+ * length and its first, middle and last runs stand for it. */
+function spansStamp(spans: FlatSpan[]): string {
+  const at = (i: number) => { const sp = spans[i]; return sp ? `${sp.str}\u0000${sp.x0},${sp.y0}` : ""; };
+  return `${spans.length}\u0001${at(0)}\u0001${at(spans.length >> 1)}\u0001${at(spans.length - 1)}`;
+}
+
+/** The spans ordered by their top (y0), for a lookup of every span whose top
+ * lies in a band, built once per spans array. */
+interface SpanTopIndex { stamp: string; order: number[]; tops: number[] }
+const spanTopIndexCache = new WeakMap<FlatSpan[], SpanTopIndex>();
+function spanTopIndex(spans: FlatSpan[]): SpanTopIndex {
+  const cached = spanTopIndexCache.get(spans);
+  const stamp = spansStamp(spans);
+  if (cached?.stamp === stamp) return cached;
+  // A span with no finite top passes no band test; it is left out of the order.
+  const order = spans.map((_, i) => i).filter((i) => Number.isFinite(spans[i].y0)).sort((a, b) => spans[a].y0 - spans[b].y0 || a - b);
+  const index: SpanTopIndex = { stamp, order, tops: order.map((i) => spans[i].y0) };
+  spanTopIndexCache.set(spans, index);
+  return index;
+}
+/** The indexes of the spans whose y0 is strictly between lo and hi. */
+function spansWithTopBetween(index: SpanTopIndex, lo: number, hi: number): number[] {
+  const { order, tops } = index;
+  let a = 0, b = tops.length;
+  while (a < b) { const m = (a + b) >> 1; if (tops[m] <= lo) a = m + 1; else b = m; }
+  const out: number[] = [];
+  for (let k = a; k < tops.length && tops[k] < hi; k++) out.push(order[k]);
+  return out;
+}
+
+/** Each span's text as fragmentedTagOcc reads it (trimmed, upper case, a
+ * leading gang count "(6) " dropped) and without its hyphens, and the spans
+ * by that hyphen-free text, built once per spans array. */
+interface CalloutTextIndex { stamp: string; ups: string[]; byStrip: Map<string, number[]> }
+const calloutTextIndexCache = new WeakMap<FlatSpan[], CalloutTextIndex>();
+function calloutTextIndex(spans: FlatSpan[]): CalloutTextIndex {
+  const cached = calloutTextIndexCache.get(spans);
+  const stamp = spansStamp(spans);
+  if (cached?.stamp === stamp) return cached;
+  // Parenthesized gang counts belong to the placement callout, not the
+  // schedule mark itself: "(6) LD" + "-" + "1" is one LD-1 occurrence.
+  const ups = spans.map((sp) => sp.str.trim().toUpperCase().replace(/^\(\d+\)\s*/, ""));
+  const byStrip = new Map<string, number[]>();
+  ups.forEach((t, i) => { const k = t.replace(/-/g, ""); const bucket = byStrip.get(k); if (bucket) bucket.push(i); else byStrip.set(k, [i]); });
+  const index: CalloutTextIndex = { stamp, ups, byStrip };
+  calloutTextIndexCache.set(spans, index);
+  return index;
+}
+
 /** sweep_schedule_row's own tag-occurrence match (`occOf` in both
  * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
  * ONE literal span — but a real drawn tag is routinely split across
@@ -3010,29 +3061,47 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const stripHy = (s: string) => s.replace(/-/g, "");
   const targetStripped = stripHy(key);
   if (!targetStripped) return [];
-  // Parenthesized gang counts belong to the placement callout, not the
-  // schedule mark itself: "(6) LD" + "-" + "1" is one LD-1 occurrence.
-  const upper = (s: string) => s.trim().toUpperCase().replace(/^\(\d+\)\s*/, "");
+  const { ups, byStrip } = calloutTextIndex(spans);
   const out: TagOcc[] = [];
-  const starts = spans.filter((sp) => {
-    const t = upper(sp.str);
-    return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
-  });
-  for (const start of starts) {
-    let text = upper(start.str);
+  // A start: a non-empty run, shorter than the key, whose hyphen-free text
+  // begins the key's (a lone "-" included), in array order.
+  const startIndexes: number[] = [];
+  for (let k = 0; k <= targetStripped.length; k++) {
+    for (const i of byStrip.get(targetStripped.slice(0, k)) ?? []) if (ups[i].length > 0 && ups[i].length < key.length) startIndexes.push(i);
+  }
+  if (!startIndexes.length) return out;
+  startIndexes.sort((a, b) => a - b);
+  const tops = spanTopIndex(spans);
+  // The first span, in array order, on the same row or the next line: only a
+  // span whose top lies within the two bands those tests allow can pass them.
+  const following = (cur: FlatSpan, h: number): number => {
+    let first = -1;
+    const consider = (i: number) => {
+      if (first >= 0 && i >= first) return;
+      const sp = spans[i];
+      if (sp === cur) return;
+      const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
+      const nextLine = Math.abs(sp.y0 - cur.y1) < h * 0.6 && Math.abs((sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2) < h * 1.5;
+      if (sameRow || nextLine) first = i;
+    };
+    // The bands are a shade wider than the tests (which `consider` applies
+    // exactly), so no rounding at their edges leaves a span out.
+    for (const i of spansWithTopBetween(tops, cur.y0 - h * 0.4 - 1e-3, cur.y0 + h * 0.4 + 1e-3)) consider(i);
+    for (const i of spansWithTopBetween(tops, cur.y1 - h * 0.6 - 1e-3, cur.y1 + h * 0.6 + 1e-3)) consider(i);
+    return first;
+  };
+  for (const si of startIndexes) {
+    const start = spans[si];
+    let text = ups[si];
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
     let ok = stripHy(text) === targetStripped;
     for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < 4; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
-      const next = spans.find((sp) => {
-        if (sp === cur) return false;
-        const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
-        const nextLine = Math.abs(sp.y0 - cur.y1) < h * 0.6 && Math.abs((sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2) < h * 1.5;
-        return sameRow || nextLine;
-      });
-      if (!next) break;
-      const candidate = text + upper(next.str);
+      const ni = following(cur, h);
+      if (ni < 0) break;
+      const next = spans[ni];
+      const candidate = text + ups[ni];
       if (!targetStripped.startsWith(stripHy(candidate))) break;
       text = candidate;
       x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
@@ -3094,6 +3163,27 @@ export function familyQuorumFragmentedTagOcc(spans: FlatSpan[], key: string): Ta
     }
   }
   return merged;
+}
+
+/** Each span's text as the chain readers compare it (trimmed, upper case)
+ * and without its hyphens, and the spans by that hyphen-free text, built
+ * once per spans array. A sheet's spans are read for hundreds of marks
+ * (every schedule key's landmarks, every row's views); comparing them by
+ * lookup, not by re-reading every span at every hop, returns the same
+ * occurrences. */
+interface SpanTextIndex { stamp: string; ups: string[]; strips: string[]; byStrip: Map<string, number[]> }
+const spanTextIndexCache = new WeakMap<FlatSpan[], SpanTextIndex>();
+function spanTextIndex(spans: FlatSpan[]): SpanTextIndex {
+  const cached = spanTextIndexCache.get(spans);
+  const stamp = spansStamp(spans);
+  if (cached?.stamp === stamp) return cached;
+  const ups = spans.map((sp) => sp.str.trim().toUpperCase());
+  const strips = ups.map((t) => t.replace(/-/g, ""));
+  const byStrip = new Map<string, number[]>();
+  strips.forEach((t, i) => { const bucket = byStrip.get(t); if (bucket) bucket.push(i); else byStrip.set(t, [i]); });
+  const index: SpanTextIndex = { stamp, ups, strips, byStrip };
+  spanTextIndexCache.set(spans, index);
+  return index;
 }
 
 /** A SEPARATE, DEEPER same-row fragment chain for a real shape
@@ -3163,25 +3253,43 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
   const stripHy = (s: string) => s.replace(/-/g, "");
   const targetStripped = stripHy(key);
   if (!targetStripped) return [];
-  const upper = (s: string) => s.trim().toUpperCase();
+  const { ups, strips, byStrip } = spanTextIndex(spans);
+  // The spans whose hyphen-free text continues the chain's: a prefix of what
+  // is left of the key's (the empty text of a "-" or blank run included), in
+  // array order, as a scan of every span would meet them.
+  const continuations = new Map<number, number[]>();
+  const continuing = (have: number): number[] => {
+    let found = continuations.get(have);
+    if (found) return found;
+    const rest = targetStripped.slice(have);
+    found = [];
+    for (let k = 0; k <= rest.length; k++) {
+      const bucket = byStrip.get(rest.slice(0, k));
+      if (bucket) found.push(...bucket);
+    }
+    found.sort((a, b) => a - b);
+    continuations.set(have, found);
+    return found;
+  };
+  const starts: number[] = [];
+  for (let k = 1; k <= targetStripped.length; k++) {
+    for (const i of byStrip.get(targetStripped.slice(0, k)) ?? []) if (ups[i].length < key.length) starts.push(i);
+  }
+  starts.sort((a, b) => a - b);
   const out: TagOcc[] = [];
-  const starts = spans.filter((sp) => {
-    const t = upper(sp.str);
-    return stripHy(t).length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
-  });
-  for (const start of starts) {
-    let text = upper(start.str);
+  for (const si of starts) {
+    const start = spans[si];
+    let have = strips[si];
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
     const used = new Set<FlatSpan>([start]);
-    let ok = stripHy(text) === targetStripped;
-    for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < HOP_BUDGET; guard++) {
+    let ok = have === targetStripped;
+    for (let guard = 0; !ok && have.length < targetStripped.length && guard < HOP_BUDGET; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
-      let next: FlatSpan | null = null, bestD = Infinity;
-      for (const sp of spans) {
+      let next: FlatSpan | null = null, nextIndex = -1, bestD = Infinity;
+      for (const i of continuing(have.length)) {
+        const sp = spans[i];
         if (used.has(sp)) continue;
-        const candidate = text + upper(sp.str);
-        if (!targetStripped.startsWith(stripHy(candidate))) continue;
         const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
         const sameColumn = Math.abs(sp.x0 - cur.x0) < h * 0.4
           && ((sp.y1 <= cur.y1 + 1 && cur.y0 - sp.y1 < h * 1.5)
@@ -3190,15 +3298,14 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
         const dx = (sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2;
         const dy = (sp.y0 + sp.y1) / 2 - (cur.y0 + cur.y1) / 2;
         const d = dx * dx + dy * dy;
-        if (d < bestD) { bestD = d; next = sp; }
+        if (d < bestD) { bestD = d; next = sp; nextIndex = i; }
       }
       if (!next) break;
-      const candidate = text + upper(next.str);
-      text = candidate;
+      have += strips[nextIndex];
       x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
       cur = next;
       used.add(next);
-      ok = stripHy(text) === targetStripped;
+      ok = have === targetStripped;
     }
     if (ok) out.push({
       cx: (x0 + x1) / 2,

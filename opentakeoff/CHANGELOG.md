@@ -1,5 +1,16 @@
 # Changelog
 
+- **Schedule ↔ plan reconcile: six times faster on a 64-sheet set, the same
+  answers.** The plan sweep's fallback readers for a mark lettered in pieces
+  ("SR" "-" "1", "CV" "-" "CHW" "-" "BP-M") re-read every run of text on a
+  sheet for every mark; they now look runs up by their text, and the later
+  fallbacks run only when the earlier ones find nothing. 26_CA's whole-set
+  reconcile (323 rows) 798 s → 130 s; the twelve keyed dev documents 945 s →
+  271 s; every output byte-identical (12 of 12), and the old and new
+  readers agree on every sheet and schedule mark of six documents.
+  (`web/src/lib/symbolsweep.ts`, `mcp/src/session.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-127.)
+
 - **Schedule ↔ plan reconcile: a unit's mark on a zone plan, a detail or a
   diagram links to its row, and the review lists stop calling scheduled
   units unscheduled.** Measured on the twelve keyed dev documents (8d46f5c →
