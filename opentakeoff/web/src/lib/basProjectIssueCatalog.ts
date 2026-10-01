@@ -24,7 +24,7 @@ add('points', ['SOURCE_SPAN_CORE_COLUMNS_ONLY'],
 add('points', ['POINT_CHANNEL_AMBIGUOUS'],
   'An alarm column under the binary inputs is marked beside this row\'s own output or status. It is not counted as a separate input: decide from the drawing whether the equipment has its own alarm contact.');
 add('points', ['SOURCE_TEXT_ROW_RECOVERED'],
-  'This row is printed in the list but the table extraction stopped before it (a section band, or a gap between rows); it was read from the page text in the list\'s own columns. Compare it with the drawing before release.');
+  'This row is printed in the list but the table extraction dropped it (it stopped at a section band, skipped a row, or folded the first row into the header); it was read from the page text in the list\'s own columns. Compare it with the drawing before release.');
 add('points', ['PRINTED_TOTAL_MISMATCH'],
   'The list\'s printed totals differ from the rows read above them. Compare the drawing row by row: a row may be missing from the extraction, or the printed total may be wrong.');
 add('points', ['CONTROLLER_QUALIFIER_RETAINED_NOT_FIELD_WIRING'], 'Read the retained controller qualifier. Listed observations do not establish field wiring.', 'information');

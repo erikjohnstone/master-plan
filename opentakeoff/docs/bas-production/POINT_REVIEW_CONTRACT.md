@@ -160,6 +160,13 @@ text, in the list's own columns:
   another unit's copy), a gap of more than three rows, or three printed lines
   that are not rows.
 
+A first row the extraction folded into the header ("EQUIPMENT DESCRIPTION
+COOLING VALVE V-1", "... VALVE POSITION ●": the name header carries more
+words and another header ends with a printed mark) is read too: the header
+without the folded values, and the row from the printed line just above the
+first extracted row, only where that line reads exactly the folded values,
+column by column; otherwise the matrix stays as extracted.
+
 Each such row is `review_required` with SOURCE_TEXT_ROW_RECOVERED and cites
 its own spans. The rows are kept only where the list's I/O columns, name and
 point types read as before and every extracted row reads exactly as before.
@@ -173,6 +180,7 @@ printed twice, "POINT TYPE POINT TYPE", is read once there too).
 Never read away: a note or remark, a network or calculated point flag, and a
 column naming who furnishes, reuses or defers a point. Such rows stay
 `review_required`. Measured and tested in ASSEMBLIES_BUG_CATALOGUE AS-129 to
-AS-134, `bas_engine/tests/test_point_rules_v2.py`,
-`bas_engine/tests/test_point_rows_from_text.py` and
-`bas_engine/tests/test_point_function_columns.py`.
+AS-135, `bas_engine/tests/test_point_rules_v2.py`,
+`bas_engine/tests/test_point_rows_from_text.py`,
+`bas_engine/tests/test_point_function_columns.py` and
+`bas_engine/tests/test_point_folded_header.py`.

@@ -1,5 +1,19 @@
 # Changelog
 
+- **BAS points: a list whose first row the extraction folded into its
+  headings is read, with that row.**
+  - 05_MO's AHU POINTS LIST (sheet 54) had its first row folded into the
+    column headings ("EQUIPMENT DESCRIPTION COOLING VALVE V-1", "... VALVE
+    POSITION ●"), so no name column was found and all 30 rows waited for
+    review, and the cooling valve's output was lost. The headings are now read
+    without the folded values and the row from the drawing's line above the
+    first row, only where that line reads exactly those values (point rule
+    version 2): 31 rows, 29 interpreted (one note and the recovered row wait),
+    each checked against the drawing; the BAS math gains the valve's AO
+    (05_MO AO 23 → 24). Over the 11 open sets: interpreted 695 → 723 of 880
+    rows; waiting for review 102 → 74.
+  (`bas_engine/point_lists.py`, `web/src/lib/basProjectIssueCatalog.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-135.)
 - **BAS points: a point function schedule read from the drawing's text gets
   all of its columns.**
   - federal-mech's (and 019_FL's) AHU-1 schedule, missed by the table

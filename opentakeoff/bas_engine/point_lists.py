@@ -9,9 +9,9 @@ from typing import Any, Literal
 
 from pydantic import TypeAdapter, field_validator, model_validator
 
-from .adapters import (CURRENT_POINT_RULE, POINT_RULE_V1, IndexedCell, IndexedRow, IndexedTable, PointRule,
-                       alarm_cell_roles, normalized_header, point_columns, point_mark_kind, point_matrix_caption,
-                       point_type_header, printed_count, row_point_channel)
+from .adapters import (CURRENT_POINT_RULE, FILLED_MARKS, POINT_RULE_V1, IndexedCell, IndexedRow, IndexedTable,
+                       PointRule, alarm_cell_roles, normalized_header, point_columns, point_mark_kind,
+                       point_matrix_caption, point_type_header, printed_count, row_point_channel)
 from .models import Contract, Count, Evidence, Identifier
 from .sources import Box, SourceContext, SourcePage, SourceSpan, valid_box
 
@@ -803,6 +803,88 @@ def joined_text(parts: list[SourceSpan]) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def span_column(span: SourceSpan, spans_x: dict[str, tuple[float, float]]) -> str | None:
+    """The one column a printed span sits in: its centre inside exactly one
+    column's extent and its edges within a small slack of it."""
+    cx = box_center(span.bbox_px)[0]
+    inside = [h for h, (a, b) in spans_x.items() if a <= cx <= b]
+    if len(inside) != 1:
+        return None
+    a, b = spans_x[inside[0]]
+    slack = max(3.0, min(0.15 * (b - a), 12.0))
+    return inside[0] if a - slack <= span.bbox_px[0] and span.bbox_px[2] <= b + slack else None
+
+
+# Version 2: the extraction can fold a list's first data row into its header
+# ("EQUIPMENT DESCRIPTION COOLING VALVE V-1", "... VALVE POSITION ●").
+LABEL_PREFIXES = sorted({"POINT NAME", "POINT DESCRIPTION", "CONTROL POINTS", "DESCRIPTION", "EQUIPMENT DESCRIPTION",
+                         *(label for label in ROW_METADATA_V2 if not label.startswith("COL"))}, key=len, reverse=True)
+HEADER_MARKS = {"●", "•", "✓", "✔", *FILLED_MARKS}
+
+
+def folded_first_row(table: IndexedTable, rule: PointRule = CURRENT_POINT_RULE,
+                     ) -> tuple[dict[str, str], dict[str, str]] | None:
+    """Version 2: a first data row the extraction folded into the header. The
+    name column's header is a name label followed by more text, and another
+    header ends with a printed mark. Returns {header: label} for every header
+    and {label: printed value} for the folded cells, or None."""
+    if rule == POINT_RULE_V1:
+        return None
+    labels: dict[str, str] = {}
+    values: dict[str, str] = {}
+    for header in table.headers:
+        text = normalized_header(header)
+        words = text.split(" ")
+        prefix = next((p for p in LABEL_PREFIXES if text.startswith(p + " ")), None)
+        if len(words) > 1 and words[-1] in HEADER_MARKS:
+            labels[header] = " ".join(words[:-1])
+            values[labels[header]] = words[-1]
+        elif prefix is not None and header_label(text, rule) == text:
+            labels[header] = prefix
+            values[prefix] = text[len(prefix):].strip()
+        else:
+            labels[header] = header
+    names = [label for label in values if identity_header(label, rule)]
+    if (len(names) != 1 or not any(value in HEADER_MARKS for value in values.values())
+            or len(set(labels.values())) != len(labels)):
+        return None
+    return labels, values
+
+
+def folded_row_text(table: IndexedTable, reading: MatrixReading, page: SourcePage,
+                    values: dict[str, str]) -> IndexedRow | None:
+    """The folded first row as the page prints it: the printed line just above
+    the first extracted row, kept only where it reads exactly the values the
+    header carries, column by column, and nothing else."""
+    data = table.rows[reading.start:]
+    tops = [min(c.bbox[1] for c in row.cells.values() if c.bbox is not None)
+            for row in data if any(c.bbox is not None for c in row.cells.values())]
+    if not data or len(tops) != len(data) or table.region is None:
+        return None
+    x0, _y0, x1, _y1 = table.region
+    above = sorted((span for span in page.spans if span.text.strip() and span.rotation in (None, 0)
+                    and box_center(span.bbox_px)[1] < tops[0] and min(span.bbox_px[2], x1) > max(span.bbox_px[0], x0)),
+                   key=lambda span: -box_center(span.bbox_px)[1])
+    if not above:
+        return None
+    line = [span for span in above if same_printed_line(span, above[0])]
+    spans_x = column_spans(table)
+    cells: dict[str, list[SourceSpan]] = {}
+    for span in line:
+        column = span_column(span, spans_x)
+        if column is None:
+            return None
+        cells.setdefault(column, []).append(span)
+    texts = {h: normalized_header(joined_text(parts)) for h, parts in cells.items()}
+    if texts != {h: normalized_header(v) for h, v in values.items()}:
+        return None
+    key_columns = [h for h in table.headers
+                   if all(h in row.cells and row.cells[h].text.strip() == row.key.strip() for row in data)]
+    key = next((texts[h] for h in (*key_columns[:1], *reading.names) if texts.get(h)), "")
+    return IndexedRow(key=key, cells={h: IndexedCell(text=joined_text(parts), bbox=union_boxes([s.bbox_px for s in parts]))
+                                      for h, parts in cells.items()})
+
+
 def source_text_rows(table: IndexedTable, reading: MatrixReading, page: SourcePage, others: list[IndexedTable],
                      rule: PointRule = CURRENT_POINT_RULE) -> list[tuple[int, IndexedRow]]:
     """Version 2: the rows a point list prints that its extraction dropped,
@@ -862,13 +944,7 @@ def source_text_rows(table: IndexedTable, reading: MatrixReading, page: SourcePa
             lines.append([span])
 
     def column_of(span: SourceSpan) -> str | None:
-        cx = box_center(span.bbox_px)[0]
-        inside = [h for h, (a, b) in spans_x.items() if a <= cx <= b]
-        if len(inside) != 1:
-            return None
-        a, b = spans_x[inside[0]]
-        slack = max(3.0, min(0.15 * (b - a), 12.0))
-        return inside[0] if a - slack <= span.bbox_px[0] and span.bbox_px[2] <= b + slack else None
+        return span_column(span, spans_x)
 
     found: list[tuple[float, IndexedRow]] = []
     misses, last = 0, max(band[1] for band in bands)
@@ -964,6 +1040,25 @@ def review_point_lists(payload: PointListInput, rule: PointRule = CURRENT_POINT_
     text_rows: dict[str, set[int]] = {}
     selected_tables = [item[1] for item in selected]
     for index, (matrix_id, table, page, reading, source_recovered) in enumerate(selected):
+        folded = folded_first_row(table, rule) if page is not None else None
+        if folded is not None and page is not None:
+            # Version 2: the header is read without the row folded into it, and
+            # that row is read where the page prints it, only where the two agree.
+            labels, values = folded
+            renamed = IndexedTable(sheet=table.sheet, title=table.title, region=table.region,
+                                   headers=[labels[h] for h in table.headers],
+                                   rows=[IndexedRow(key=row.key, cells={labels.get(h, h): c for h, c in row.cells.items()})
+                                         for row in table.rows])
+            again = read_matrix(renamed, rule)
+            row = folded_row_text(renamed, again, page, values) if len(again.names) == 1 else None
+            if row is not None:
+                folded_rows = list(renamed.rows)
+                folded_rows.insert(again.start, row)
+                table = IndexedTable(sheet=table.sheet, title=table.title, region=table.region,
+                                     headers=renamed.headers, rows=folded_rows)
+                reading = read_matrix(table, rule)
+                selected[index] = (matrix_id, table, page, reading, source_recovered)
+                text_rows[matrix_id] = {again.start}
         found = source_text_rows(table, reading, page, selected_tables, rule) if page is not None else []
         if not found:
             continue
@@ -980,7 +1075,7 @@ def review_point_lists(payload: PointListInput, rule: PointRule = CURRENT_POINT_
                 or any(read_row(again, raw, rule) != read_row(reading, raw, rule) for raw in table.rows[reading.start:])):
             continue
         selected[index] = (matrix_id, extended, page, again, source_recovered)
-        text_rows[matrix_id] = positions
+        text_rows[matrix_id] = text_rows.get(matrix_id, set()) | positions
 
     bound_notes: dict[str, list[PointNote]] = {item[0]: [] for item in selected}
     note_conflicts: set[str] = set()

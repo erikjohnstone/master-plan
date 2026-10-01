@@ -7755,3 +7755,34 @@ input; math swaps in the same matrix.
 Tests: `bas_engine/tests/test_point_function_columns.py` (columns under their groups, version 1 core only, a mark
 between two columns, a group label off its columns, a network point mark, printed limit values); 8 mutations, each
 failing a test.
+
+## AS-135 — a points list whose first row the extraction folded into its headings had no name column: all 30 rows waited and the folded row's point was lost (FIXED, this commit; version 2)
+
+**Found:** AS-129's remaining waits. 05_MO's AHU POINTS LIST (sheet 54) was extracted with its first data row folded into
+the column headings: "EQUIPMENT DESCRIPTION COOLING VALVE V-1", "CONTROL POINT TAG CLG-V1", "ABBREVIATION CLG-V1",
+"SYSTEM OUTPUTS ANALOG VALVE POSITION ●", "... GRAPHIC DISPLAY ●". No heading read as the point name, so the list waited
+as POINT_NAME_COLUMN_UNRESOLVED on all 30 rows, and the cooling valve's AO (CLG-V1) was in no row.
+
+**Change (`folded_first_row`, `folded_row_text`, `point_lists.py`, version 2 only):** a folded row is recognised only where
+the name column's heading is a name label followed by more words and another heading ends with a printed mark; each
+heading is split into its label (a name, tag, abbreviation or other row label, or the heading without its final mark) and
+the folded value. The row is then read from the printed line just above the first extracted row, in the list's own
+columns, and kept only where that line reads exactly the folded values, column by column, and nothing else. Then the
+headings are read without the folded values and the row is inserted first, flagged SOURCE_TEXT_ROW_RECOVERED. Otherwise
+the matrix stays exactly as extracted. The span-to-column placement is now one helper (`span_column`) shared with
+AS-132.
+
+**Measured** (11 open sets, Python and the node transport with the JS contract):
+- 05_MO sheet 54: 30 → 31 rows; interpreted 0 → 29 (T-2 waits on its note "REUSE EXISTING DEVICE"; the recovered
+  CLG-V1 row waits for review); every row's I/O, alarm role and attribute checked against the drawing. Only that
+  matrix changes.
+- Open sets: interpreted 695 → **723 of 880** (82%); review 102 → 74. BAS math: 05_MO AO 23 → 24 (the cooling valve);
+  nothing else. Point-list/math parity 41/44 unchanged. Version 1 reproduced byte for byte.
+- Walled sets (totals only): 28 cached, 8 with point lists, 35 matrices: no change.
+
+**Should this be on the shared path? Yes:** the one point-list reader; production math swaps in the same matrix.
+
+Tests: `bas_engine/tests/test_point_folded_header.py` (the folded row read; version 1 as printed, also under POINT
+NAME; a page line with another name, a mark in another column, or no line; a longer name heading without a folded
+mark); 4 mutations, each failing a test. The AS-132/133 (18) and AS-134 (8) mutations re-run on this code, all failing
+a test.

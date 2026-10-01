@@ -470,7 +470,10 @@ repeating one the list already printed, and a gap.
 A UFGS point function schedule that the table extraction missed is read from
 the drawing's text with all of its columns (fail mode, software functions,
 alarm limits, notes), where every mark sits on its column; otherwise only its
-name, tag and point type are read and the rows wait for your review.
+name, tag and point type are read and the rows wait for your review. When the
+extraction folds a list's first row into its column headings, the headings
+are read without it and that row is read from the drawing, only where the
+drawing's line matches what the headings carried.
 
 Full compile JSON additionally contains `bas_point_lists`: source-bound listed
 observations, supported controller footnotes, and separate unobserved-column
