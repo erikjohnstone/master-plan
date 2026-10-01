@@ -1626,7 +1626,19 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
       status: sweepByTag.get(row.row_id || row.tag)?.itemStatus,
     });
   }
-  const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag);
+  // A row no sweep searched (outside the call's tags, or every row when the
+  // caller opts out of sweeping the family) has no plan evidence either way.
+  // It is not SCHEDULE_ONLY ("scheduled, not drawn"), which the summary, the
+  // agent and the estimator's discrepancy list read as a finding (AS-136).
+  // The reason names no scope, so a family reconciled in chunks reads as its
+  // one call does (reconcileFamilyInChunks).
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag).map((row) => (
+    sweepByTag.has(row.row_id) || sweepByTag.has(row.tag) ? row : {
+      ...row,
+      status: "AMBIGUOUS",
+      reason: `Not searched: this reconcile did not search the plans for ${row.tag}, so whether it is drawn is unknown.`
+        + (row.reason ? ` ${row.reason}` : ""),
+    }));
   return {
     rows,
     summary: summarizeReconcile(rows),

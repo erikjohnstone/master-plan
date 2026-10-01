@@ -1,5 +1,19 @@
 # Changelog
 
+- **Schedule ↔ plan reconcile: a row the call did not search reads "Not
+  searched", never SCHEDULE_ONLY.**
+  - A family reconcile scoped to some tags, or told not to sweep, still
+    returns every row of the family. The rows it never searched read
+    SCHEDULE_ONLY ("scheduled, not drawn"), and the summary, the agent's
+    takeoff lines and the estimator document's discrepancy list counted
+    them as findings: 26_CA's fans scoped to two tags reported 45 of 47 as
+    not drawn.
+  - They now read AMBIGUOUS, "Not searched: this reconcile did not search the
+    plans for <tag>, so whether it is drawn is unknown.", with no installed
+    quantity. Searched rows and full-family reconciles are unchanged.
+  (`web/src/lib/schedulePlanReconcile.mjs`
+  `reconcileScheduleFamilyWithSweeps`, `mcp/src/tools.ts` parameter
+  descriptions; ASSEMBLIES_BUG_CATALOGUE AS-136.)
 - **Takeoff canvas: a family's schedule ↔ plan reconcile sweeps the plans as
   MCP's tool does, also past the canvas's time limit.**
   - Asked to reconcile one family, the in-app agent got no row swept: the

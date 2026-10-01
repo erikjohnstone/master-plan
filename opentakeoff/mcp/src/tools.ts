@@ -1159,9 +1159,9 @@ No approval, installed count or complete requirement discovery. Changes stay in 
     inputSchema: {
       family: z.string().optional().describe('Optional family scope: VAV, FCU, AHU, pump, etc.'),
       categories: z.array(z.string()).optional().describe("Optional hvacTaxonomy category filter"),
-      tags: z.array(z.string()).optional().describe("Optional MARK tags to sweep (scoped reconcile — fast)"),
+      tags: z.array(z.string()).optional().describe("Optional MARK tags to sweep (scoped reconcile — fast). With family, the family's other rows are returned unsearched: AMBIGUOUS, reason \"Not searched\", never SCHEDULE_ONLY"),
       evaluation_fast: z.boolean().optional().describe("Use evaluation-fast sweep (corpus/demo speed)"),
-      family_sweep_all: z.boolean().optional().describe("When family set and tags omitted, sweep every row in that family only"),
+      family_sweep_all: z.boolean().optional().describe("With family and no tags: sweep every row of that family (the default when omitted); false returns the family's rows unsearched (AMBIGUOUS, reason \"Not searched\")"),
       path: z.string().optional().describe("Optional JSON file path for the reconcile table"),
       export_path: z.string().optional().describe("Optional directory for reconcile.csv export"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),

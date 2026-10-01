@@ -711,6 +711,49 @@ test("shared reconcile splits geometry matches, text fallbacks, and withheld can
   assert.equal(row.plan_candidate_cites.length, 1);
 });
 
+// AS-136: a row no sweep searched (outside the call's tags, or every row when
+// the caller opts out of sweeping the family) read SCHEDULE_ONLY, "scheduled,
+// not drawn", and the summary counted it as a finding.
+test("AS-136: a family reconcile's row no sweep searched reads not searched, never SCHEDULE_ONLY", async () => {
+  const graph = { tables: [{
+    kind: "equipment", sheet: "set.pdf#2", title: { text: "VAV SCHEDULE" },
+    rows: ["VAV-1", "VAV-2", "VAV-3"].map((m) => ({ key: m, cells: { MARK: { text: m }, QTY: { text: "1" } } })),
+  }] };
+  const swept: string[] = [];
+  const session = { sweepScheduleRow: async (tag: string) => {
+    swept.push(tag);
+    if (tag === "VAV-2") throw new Error('Tag "VAV-2" is not drawn on any plan sheet.');
+    return { found: 1, complete: true, search_scope: "exhaustive", unlabeled_audit_complete: true,
+      anchor: { grounding_basis: "symbol_fingerprint" },
+      sheets: [{ sheet: "set.pdf#5", matches: [{ at: [10, 20], score: 0.98, tag_at: { x0: 1, y0: 2, x1: 3, y1: 4 } }] }] };
+  } };
+  const needle = { label: "VAV", titleRe: /VAV SCHEDULE/i };
+  const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, { tags: ["VAV-1", "VAV-2"] });
+  assert.deepEqual(swept, ["VAV-1", "VAV-2"]);
+  assert.deepEqual(scoped.rows.map((r: any) => [r.tag, r.status]), [["VAV-1", "MATCH"], ["VAV-2", "SCHEDULE_ONLY"], ["VAV-3", "AMBIGUOUS"]]);
+  const vav3 = scoped.rows[2];
+  assert.equal(vav3.installed_qty, null);
+  assert.equal(vav3.plan_search_complete, null, "no search ran: not an unfinished one");
+  assert.equal(vav3.scheduled_qty, 1, "the schedule side is read as before");
+  assert.equal(vav3.reason, "Not searched: this reconcile did not search the plans for VAV-3, so whether it is drawn is unknown.");
+  assert.deepEqual([scoped.summary.match, scoped.summary.schedule_only, scoped.summary.ambiguous], [1, 1, 1]);
+  // A caller who opts out of sweeping the family: no row searched, none a finding.
+  swept.length = 0;
+  const optOut = await reconcileScheduleFamilyWithSweeps(session, graph, needle, { sweepAll: false });
+  assert.deepEqual(swept, []);
+  assert.deepEqual(optOut.rows.map((r: any) => r.status), ["AMBIGUOUS", "AMBIGUOUS", "AMBIGUOUS"]);
+  assert.ok(optOut.rows.every((r: any) => r.reason.startsWith(`Not searched: this reconcile did not search the plans for ${r.tag},`)));
+  assert.equal(optOut.summary.schedule_only, 0);
+  // The schedule side's own reason follows.
+  const unread = { tables: [{ ...graph.tables[0], rows: [{ key: "VAV-4", cells: { MARK: { text: "VAV-4" }, QTY: { text: "SEE NOTE" } } }] }] };
+  const [vav4] = (await reconcileScheduleFamilyWithSweeps(session, unread, needle, { sweepAll: false })).rows;
+  assert.equal(vav4.reason, 'Not searched: this reconcile did not search the plans for VAV-4, so whether it is drawn is unknown. QTY column present but unparseable ("SEE NOTE")');
+  // Every row swept: as before.
+  const all = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {});
+  assert.deepEqual(all.rows.map((r: any) => r.status), ["MATCH", "SCHEDULE_ONLY", "MATCH"]);
+  assert.ok(all.rows.every((r: any) => !/^Not searched/.test(r.reason ?? "")));
+});
+
 test("family reconciliation preserves independently reused marks by authored drawing group", () => {
   const row = () => ({
     key: "CD-1",

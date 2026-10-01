@@ -7831,3 +7831,39 @@ Tests: `web/test/reconcileInChunks.test.ts` (7: chunks read the one call's rows,
 failing alone, a caller's tags and opt-out, a mark in two tables, a scaffold that cannot be read, the bridge's flag,
 the canvas's wiring); `mcp/test/planToolParity.test.mjs` (2 on D07: chunks against one call, with a failing chunk,
 tags and an opt-out; the CLI sweeping every row unless told not to); 13 mutations, each failing a test.
+
+## AS-136 — a family reconcile scoped to some tags, or told not to sweep, read every row it never searched as SCHEDULE_ONLY (FIXED, this commit)
+
+**Found:** reviewing AS-117's scoped calls. `reconcile_schedule_plan { family, tags }` sweeps only the named tags, and
+`family_sweep_all: false` sweeps no row, yet both return every row of the family. A row no sweep searched had no plan
+evidence either way, and `classifyReconcileStatus` read it SCHEDULE_ONLY ("scheduled, not drawn"), the status of a unit
+the plans were searched for and do not show. The summary counted those rows as findings. So did the agent's takeoff
+lines and the estimator document's discrepancy list ("Pillar B reconcile: SCHEDULE_ONLY"). MCP's tool, the production
+CLI and the canvas (which runs MCP's reconcile since AS-117) all read the same way.
+
+On AS-117's measured families, each scoped to its first two tags (the code before this change): 9 calls on 5 documents,
+every requested row MATCH, and every one of the 92 unrequested rows SCHEDULE_ONLY. Examples: 011_IL HEAT_PUMP 13 of 15,
+14_OR FCU 18 of 20 and PUMP 6 of 8, itd-d1-lab FAN 5 of 7, 004_MO RTU 5 of 7, and 26_CA FAN 45 of 47 ("45 fans not
+drawn" after a search of two).
+
+**Change:** `reconcileScheduleFamilyWithSweeps` (`schedulePlanReconcile.mjs`) marks a row that no sweep searched as
+AMBIGUOUS, with the reason "Not searched: this reconcile did not search the plans for <tag>, so whether it is drawn is
+unknown." followed by the row's own schedule-side reason (an unreadable QTY, say). Its installed quantity,
+`plan_search_complete` and `search_scope` stay null: no search ran, which is not an unfinished one (AS-117's split
+chunks that never finish read `plan_search_complete: false`). Searched rows are untouched, and so are the whole-set
+reconcile and every family call that sweeps every row (the default). The reason names no scope, so a family reconciled
+in chunks (AS-117) still reads as its one call does. MCP's `tags` and `family_sweep_all` descriptions now say what
+unswept rows read, and that leaving `family_sweep_all` unset sweeps every row.
+
+**Measured:** on the 9 scoped calls, the 92 unrequested rows read AMBIGUOUS "Not searched" (summary: 0 SCHEDULE_ONLY
+where there were 92), the requested rows are the whole call's, row for row; every whole-family call is unchanged.
+On real documents, 011_IL HEAT_PUMP and 004_MO RTU/DOAS through MCP's tool: whole families byte-identical to AS-117's run, requested rows identical, the 13 and 5 unrequested rows SCHEDULE_ONLY → AMBIGUOUS. UI proof (headless Chromium, the dev server, MCP's tool over an in-memory client; each row compared with MCP's, its reason included): 011_IL and 004_MO, 56 checks; the agent's call, the chunked call past the limit and the call scoped to two tags all return MCP's rows.
+
+**Should this be on the shared path? Yes.** The status of an unsearched row is decided once, in the shared family
+reconcile that MCP's tool, the production CLI and the canvas all run.
+
+Tests: `web/test/schedulePlanReconcile.test.ts` ("a family reconcile's row no sweep searched reads not searched": a
+scoped call, an opt-out, an unreadable QTY's reason kept, a full sweep unchanged); AS-117's D07 test (chunks against
+one call, scoped and opted out) still passes. 8 mutations each fail a test: no marking; the status kept; SCHEDULE_ONLY;
+`plan_search_complete: false`; swept rows marked instead; the tag left out of the reason; the schedule-side reason
+dropped; a reason naming the call's scope (fails the D07 chunk test).
