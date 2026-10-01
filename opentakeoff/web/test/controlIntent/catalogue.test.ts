@@ -37,6 +37,32 @@ test("existing flags come from structure: table title, (E) tag, a whole-phrase r
   assert.equal(m.has(1), false);
 });
 
+test("AS-137: a mark printed with (E) is existing though the takeoff names the unit without it; (N) is not", async () => {
+  // The flag reads the mark as printed (063_MT's "(E) EF- 4", named EF- 4),
+  // a tag printed with (E) before it (088_AZ's (E)FC-1), and a cell printing
+  // the unit's own mark with (E) — never another unit's.
+  assert.match(existingFlag({ tag: "EF- 4", table_title: "EXHAUST FAN SCHEDULE", cells: {}, printed_mark: "(E) EF- 4" })!, /\(E\) EF- 4/);
+  assert.match(existingFlag({ tag: "(E)FC-1", table_title: "FAN COIL SCHEDULE", cells: {} })!, /\(E\)FC-1/);
+  assert.match(existingFlag({ tag: "VAV-105", table_title: "VAV SCHEDULE", cells: { TAG: "(E) VAV-105" } })!, /TAG/);
+  assert.equal(existingFlag({ tag: "VAV-105", table_title: "VAV SCHEDULE", cells: { SERVES: "(E) VAV-106" } }), null);
+  assert.equal(existingFlag({ tag: "ACC-2", table_title: "AIR COOLED CHILLER SCHEDULE", cells: {}, printed_mark: "(N)ACC-2" }), null);
+  // The takeoff carries the mark as printed to the apply path.
+  const { compileHvacTakeoff } = await import("../../src/lib/corpusTakeoff.mjs");
+  const { compiledRowsAndTables } = await import("../../src/lib/assemblies/apply.ts");
+  const row = (key: string, mark: string) => ({ key, sheet: "s.pdf#9", cells: { MARK: { text: mark }, MANUFACTURER: { text: "COOK" }, TYPE: { text: "INLINE" }, CFM: { text: "330" }, VOLTAGE: { text: "120" } } });
+  const graph = { tables: [{ kind: "equipment", sheet: "s.pdf#9", title: { text: "EXHAUST FAN SCHEDULE" }, region: [0, 0, 100, 100] as [number, number, number, number], headers: ["MARK", "MANUFACTURER", "TYPE", "CFM", "VOLTAGE"],
+    rows: [row("EEF-4", "(E) EF- 4"), row("EF-5", "EF-5"), row("NEF-6", "(N)EF-6")] }] };
+  const { items } = compiledRowsAndTables(compileHvacTakeoff(null, graph) as unknown as Parameters<typeof compiledRowsAndTables>[0], graph);
+  const by = new Map(items.map((it) => [it.tag, it]));
+  assert.deepEqual([...by.keys()].sort(), ["EF- 4", "EF-5", "EF-6"]);
+  assert.equal(by.get("EF- 4")!.printed_mark, "(E) EF- 4");
+  assert.equal(by.get("EF-5")!.printed_mark, undefined);
+  const flag = (tag: string) => existingFlag({ tag, table_title: by.get(tag)!.table_title, cells: {}, printed_mark: by.get(tag)!.printed_mark });
+  assert.ok(flag("EF- 4"));
+  assert.equal(flag("EF-5"), null);
+  assert.equal(flag("EF-6"), null);
+});
+
 test("PQ5 not_in_scope takes condensate and plumbing pumps out, never an HVAC pump", () => {
   const cond = unit(0, "CP-1", "PUMP", { attributes: { service: { value: "CONDENSATE" } } });
   const dhw = unit(1, "RP-1", "PUMP", { cells: { REMARKS: "DOMESTIC HOT WATER RECIRCULATION" } });

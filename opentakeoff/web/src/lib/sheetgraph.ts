@@ -895,6 +895,10 @@ export interface ScheduleTable {
   drawing_group?: string;
   /** True when the header row was read at a quarter-turn (rotated headers). */
   rotated_headers?: boolean;
+  /** True when the table is a picture read by OCR (AS-153): its text is the
+   * ink's reading, not the PDF's text layer, so every value is disclosed as
+   * such and worth a look at the sheet. */
+  read_from_picture?: boolean;
   /** Present when the table continues across sheets: every fragment,
    * base first. rows[] above is already the union. */
   parts?: TablePart[];
@@ -8578,7 +8582,7 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
 }
 
 // ── the graph ───────────────────────────────────────────────────────────────
-export interface SheetGraphSchedule { kind: TableKind; title: string; rows: number; region: Bbox; continues?: string; rotated_headers?: boolean }
+export interface SheetGraphSchedule { kind: TableKind; title: string; rows: number; region: Bbox; continues?: string; rotated_headers?: boolean; read_from_picture?: boolean }
 export interface SheetGraphSheet { key: string; role: SheetRole; confidence: number; evidence: Evidence | null; building?: string; drawing_group?: string; schedules: SheetGraphSchedule[] }
 /** L3.5 topology summary per plan sheet (shared vector pipeline). */
 export interface SheetTopologySummary {
@@ -9436,6 +9440,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
           kind: t.kind, title: p.title || t.title?.text || "", rows: p.rows, region: p.region,
           ...(i > 0 ? { continues: t.sheet } : {}),
           ...(p.rotated_headers ? { rotated_headers: true } : {}),
+          ...(t.read_from_picture ? { read_from_picture: true } : {}),
         });
       }
     }
@@ -12089,6 +12094,7 @@ export function syncSheetSchedules(g: SheetGraph, sheetKeys: Iterable<string>): 
           kind: t.kind, title: p.title || t.title?.text || "", rows: p.rows, region: p.region,
           ...(i > 0 ? { continues: t.sheet } : {}),
           ...(p.rotated_headers ? { rotated_headers: true } : {}),
+          ...(t.read_from_picture ? { read_from_picture: true } : {}),
         });
       }
     }

@@ -621,8 +621,18 @@ as an option the unit's typical no longer has after you adopt an updated typical
 is marked *not applied*, with why; the rest of it still applies. A line whose
 quantity cannot stand, such as a fan command counted from -2 cells the schedule
 reading got wrong, is listed under **Lines that cannot be counted**, with why: no
-total counts it, so check the unit's schedule row. A schedule sheet whose tables
-are pictures (pasted images or a scan) gives the takeoff no table to read, so any
+total counts it, so check the unit's schedule row. A schedule pasted into a sheet
+as a picture is read from its pixels where it is a ruled table and the OCR engine
+is installed (`bakeoff/requirements.txt`): each unit read from one says *read from
+a picture* beside its tag, because its values are OCR's reading of the ink, so
+check the ones that matter on the sheet. A picture cut into tiles is read as one,
+and a picture holding only a table's rules under the page's own text is read from
+that text, so its units say nothing of a picture. Reading a picture takes a minute or
+more the first time; the result is kept under `~/.cache/opentakeoff-picture`
+(`OPENTAKEOFF_PICTURE_CACHE` names another folder, or `0` turns keeping off;
+`OPENTAKEOFF_RASTER_OCR=0` turns picture reading off), so the same drawing set
+opens at its usual speed after that. A schedule sheet whose pictures could
+not be read (no OCR, a scan with no ruled table) gives the takeoff no table, so any
 unit it schedules is missing here: the panel names each such sheet (its sheet
 number, page and file) in red above the settings, with the share of it the
 pictures cover, and the PDF section lists

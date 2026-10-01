@@ -48,6 +48,11 @@ export interface CompileItem {
   scheduled_qty_basis?: string | null;
   scheduled_qty_source_header?: string | null;
   scheduled_qty_source_text?: string | null;
+  /** The row's schedule is a picture read by OCR (AS-153). */
+  read_from_picture?: boolean;
+  /** The mark as printed when a status is printed with it ("(E) EF- 4" for
+   * EF- 4; AS-137). */
+  printed_mark?: string;
 }
 
 /** The schedule table the item was compiled from: its headers in order; the

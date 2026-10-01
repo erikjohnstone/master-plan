@@ -92,23 +92,36 @@ export interface AnswerUnit {
   cells: Record<string, string>;
   table_title: string;
   table_headers: readonly string[];
+  /** The mark as printed when a status is printed with it (AS-137). */
+  printed_mark?: string;
   cite: Cite;
 }
 
 const clean = (s: unknown) => String(s ?? "").replace(/\s+/g, " ").trim();
+const lettersAndDigits = (s: unknown) => String(s ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
 /** Why a unit's row marks it existing, or null. Structure first: the table's
- * own title, the tag's printed "(E)" suffix, or a cell that says so as a whole
- * phrase (a remark "EXISTING", "EXISTING TO REMAIN", "SPECIFICATIONS SHOWN FOR
- * REFERENCE ONLY") — never "REPLACE EXISTING", which is a new unit. */
-export function existingFlag(u: Pick<AnswerUnit, "tag" | "table_title" | "cells">): string | null {
+ * own title, the tag's printed "(E)" before or after it, or a cell that says
+ * so as a whole phrase (a remark "EXISTING", "EXISTING TO REMAIN",
+ * "SPECIFICATIONS SHOWN FOR REFERENCE ONLY") — never "REPLACE EXISTING",
+ * which is a new unit. The takeoff names a unit without the status its mark
+ * is printed with (063_MT's "(E) VAV-105" is VAV-105, 03_FL's "(E)ATU A" ATU
+ * A), so the cell that prints the unit's own mark with "(E)" says so too
+ * (AS-137); "(N)", new, says nothing. */
+export function existingFlag(u: Pick<AnswerUnit, "tag" | "table_title" | "cells" | "printed_mark">): string | null {
   if (/\bEXISTING\b/i.test(u.table_title) && !/\bNEW\b/i.test(u.table_title)) return `the schedule is titled "${clean(u.table_title)}"`;
-  if (/\(E\)\s*$/i.test(u.tag)) return `the tag "${u.tag}" is printed with (E)`;
+  if (/^\s*\(E\)|\(E\)\s*$/i.test(u.tag)) return `the tag "${u.tag}" is printed with (E)`;
   for (const [h, v] of Object.entries(u.cells)) {
     const t = clean(v).toUpperCase();
     if (/^\(?E\)?$|^EXISTING$|^EXISTING\s+(TO\s+REMAIN|UNIT)\b|\bEXISTING\s+TO\s+REMAIN\b|\bTO\s+REMAIN\b|SPECIFICATIONS\s+SHOWN\s+FOR\s+REFERENCE\s+ONLY/.test(t)
       && !/\b(REPLACE|REMOVE|DEMOLISH|RELOCATE)\b/.test(t)) return `its ${h} reads "${clean(v)}"`;
   }
+  const own = lettersAndDigits(u.tag);
+  for (const [h, v] of Object.entries(u.cells)) {
+    const m = clean(v).match(/^\(E\)\s*(.+)$|^(.+?)\s*\(E\)$/i);
+    if (own && m && lettersAndDigits(m[1] ?? m[2]) === own) return `its ${h} prints "${clean(v)}"`;
+  }
+  if (u.printed_mark && /^\s*\(E\)|\(E\)\s*$/i.test(u.printed_mark)) return `the tag is printed "${clean(u.printed_mark)}"`;
   return null;
 }
 

@@ -201,9 +201,11 @@ assembly library to every scheduled unit: its controls typical and its mechanica
 the options, variables and expanded lines, each citing the schedule row and the library rule.
 Read `report.exceptions` first, and `report.line_errors`: a line there has no quantity (a
 negative one, or a point count that is not whole, from a misread value), so report it with its
-why. Read `report.schedules_unread` too: a schedule sheet named there is pictures, so any unit
-it schedules is missing from the report, however complete the rest looks. Say which sheets, and
-never report the set's equipment as complete while one is named. An unresolved unit names what
+why. Read `report.schedules_unread` too: a schedule sheet named there is pictures that could not
+be read, so any unit it schedules is missing from the report, however complete the rest looks.
+Say which sheets, and never report the set's equipment as complete while one is named. A table
+read from a picture by OCR carries `read_from_picture` (in `sheet_graph`, `find_schedule`, the
+takeoff's items and the assemblies' cites): say so when you quote its values. An unresolved unit names what
 it waits for: an attribute the schedule does not print, a project setting, or two typicals that
 tie. That is the answer, not a failure.
 Report it, or pass the partner's value in `settings` or an override with a reason. Never

@@ -140,6 +140,46 @@ export function vectorGridTableToOdl(t: VectorGridTable, page: number): ODLTable
   };
 }
 
+// A schedule's numbered notes printed inside its own grid (AS-155): a row
+// whose first cell is the label NOTES, then rows each holding a note number
+// and one line of text, the text in one cell spanning the row or alone in
+// it. 07_MO's pictured PUMP SCHEDULE prints "NOTE" and then "1 BOLTED
+// FLANGE" … "6 ECM MOTOR" under its last pump: read as rows, every note was a
+// pump keyed "1" to "6". Only a band that is all notes (or blank rows) to the
+// table's end is dropped; one row in it that holds more than a line of text
+// keeps the whole band, and the label row itself stays, as before. The
+// table's region is unchanged: the notes are still printed inside it, where
+// scheduleNotes reads them from the page's text.
+const NOTES_LABEL = /^\s*NOTES?\s*:?\s*$/i;
+const NOTE_NUMBER = /^\s*\(?\d{1,2}\s*[.)]?\s*$/;
+
+export function dropNumberedNotes(t: VectorGridTable): VectorGridTable {
+  const byRow = new Map<number, VectorGridCell[]>();
+  for (const c of t.cells) {
+    const list = byRow.get(c.row);
+    if (list) list.push(c);
+    else byRow.set(c.row, [c]);
+  }
+  const rows = [...byRow.keys()].sort((a, b) => a - b);
+  const lead = (r: number) => byRow.get(r)!.reduce((a, c) => (c.col < a.col ? c : a));
+  const label = rows.findIndex((r) => r > 0 && lead(r).col === 0 && NOTES_LABEL.test(lead(r).text));
+  if (label < 0) return t;
+  const band = rows.slice(label + 1);
+  let numbered = 0;
+  for (const r of band) {
+    const cells = byRow.get(r)!;
+    if (cells.every((c) => !c.text.trim())) continue;
+    const first = lead(r);
+    if (first.col !== 0 || !NOTE_NUMBER.test(first.text)) return t;
+    if (cells.filter((c) => c !== first && c.text.trim()).length > 1) return t;
+    numbered++;
+  }
+  if (!numbered) return t;
+  const keep = rows[label];
+  const cells = t.cells.filter((c) => c.row <= keep);
+  return { ...t, cells, rows: keep + 1 };
+}
+
 /** One vectorgrid region → one ScheduleTable, or null when it is not a
  * schedule shape at all. Everything downstream of the grid — title, header
  * tiers, row keys, kind, building, span snapping — is `scheduleTableFromODL`,
@@ -154,8 +194,8 @@ export function vectorGridTableToScheduleTable(
   // A raster region is a picture of a table: no faces, and its text is ink.
   // Presenting it as an empty grid would let it merge over a real read.
   if (t.raster || !t.cells.length) return null;
-  const odl = vectorGridTableToOdl(t, page);
-  return scheduleTableFromODL(odl, ctx.sheetKey, [scale, 0, 0, scale, 0, 0], {
+  const odl = vectorGridTableToOdl(dropNumberedNotes(t), page);
+  const table = scheduleTableFromODL(odl, ctx.sheetKey, [scale, 0, 0, scale, 0, 0], {
     ...(ctx.buildings ? { buildings: ctx.buildings } : {}),
     ...(reject ? { reject } : {}),
     sourceSpans: ctx.spans,
@@ -175,6 +215,10 @@ export function vectorGridTableToScheduleTable(
     // through vectorgrid).
     unruledHeaderAbove: true,
   });
+  // A picture read by OCR says so on the table (AS-153): sheet_graph,
+  // find_schedule and the takeoff's items carry it to whoever reads them.
+  if (table && t.ocr) table.read_from_picture = true;
+  return table;
 }
 
 /** Do the two processes describe the same page? "size" is a different page
@@ -320,6 +364,8 @@ function concatFragments(a: VectorGridTable, b: VectorGridTable): VectorGridTabl
     rows: top.rows + bottomRows,
     cols: top.cols,
     raster: false,
+    // Either fragment read from a picture makes the table one (AS-153).
+    ...(top.ocr || bottom.ocr ? { ocr: true } : {}),
     cells: [
       ...top.cells,
       ...bottomCells.map((c) => ({ ...c, row: c.row + rowOffset })),

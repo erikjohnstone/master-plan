@@ -8361,3 +8361,221 @@ schedules print.
   expansion tank and a compressor, which the takeoff reads.
 
 **Should this be on the shared path?** Not applicable: no code changes.
+
+## AS-153 — a schedule pasted into a sheet as a picture was never read: 07_MO's 29 VAV boxes, 029_ME's boilers and pumps (FIXED, this commit)
+
+**Found:** AS-54 named the schedule sheets whose tables are pictures (07_MO's M-601 to M-603 and E-601/E-602, 029_ME's
+ME601, 15_IA's E2) and left reading them to extraction: vectorgrid found each picture (`raster_regions`,
+`_image_is_a_table`) and could only report it as a raster region with no cells, and the takeoff read no unit from it.
+M-601 alone schedules 29 VAV boxes with hydronic reheat, two expansion tanks, a buffer tank and 13 air devices; ME601
+schedules the project's two boilers and six pumps. Of the 970 captured schedule sheets, vectorgrid offers a picture on 57
+open sheets and 10 walled ones.
+
+**Change:** `bakeoff/rastergrid.py` (new) turns a picture back into what vectorgrid reads from a drawn table, and
+`sidecar/vectorgrid_rpc.py` reads it with the same core (`find_tables` split into `tables_from_segments`, `slot` taking
+the words it is given):
+- **Rules from the pixels.** The picture is rendered at 200 dpi; ink belonging to a piece at least 30pt wide and 18pt
+  tall (a grid; no letter of any title is) is opened along each axis with a 9pt kernel, and every run thinner than
+  2.5pt is a rule, a stroke in page space with its own thickness as its weight.
+- **Words from the ink.** With the rules painted out, outlines drawn around marks (a hexagon around "VAV" over "1": a
+  piece much taller and wider than the type and mostly hollow) lose their ring, and thin slanted strokes taller than the
+  type lose their ink. The picture is read by RapidOCR (PP-OCR, ONNX; the engine `cellocr.py` already used as this
+  repository's pixel judge) in tiles of at most 1,800 px cut on blank lines (RapidOCR shrinks anything larger, and lost
+  the header row at 3,870 px). A face read doubtfully (no words, a word under 0.92 confidence, or ink no word covers)
+  is read again from its own crop, which the detector enlarges; the reading that covers more of the ink, or as much
+  with more confidence, is kept ("VAV 6" for "6").
+- The page's displayed box is the render's clip on a sheet stored turned (029_ME's /Rotate 270: through the derotation
+  matrix its boiler schedule rendered transposed and blank).
+- **Isolation.** Each picture is read in a child process with a 600 s limit: OCR is native code, and a crash or a hang
+  costs the picture, not the sidecar and the drawn tables of the same sheet. Without OCR (`rastergrid.available()`:
+  `rapidocr_onnxruntime`, now in `bakeoff/requirements.txt`) a picture stays a raster region, as before.
+- **Read once.** A picture takes a minute or more (M-601's VAV schedule 80 s; 017_MD #14's six pictures 17 minutes
+  on a loaded machine), and a set is opened again and again, so a finished read is kept under
+  `~/.cache/opentakeoff-picture` (beside ODL's cache), keyed by the PDF's bytes, the page, the picture's box and the
+  reader's own source and OCR version: a changed set or a changed reader reads it again; a crash or a timeout is not
+  kept. `OPENTAKEOFF_PICTURE_CACHE` names another folder or, with `0`, keeps nothing; `OPENTAKEOFF_RASTER_OCR=0` turns
+  picture reading off before the cache is consulted.
+- **Disclosure.** A table read from a picture carries `ocr` in the reply and `read_from_picture` on the ScheduleTable,
+  in `sheet_graph` and `find_schedule`, on every takeoff item read from it, on the assemblies' cites, and as "read from
+  a picture" beside the unit in the Assemblies panel.
+- **Found on the way:** both sidecar clients (`vectorGridClient.ts`, `tableSidecarClient.ts`) let an exiting process
+  clear its successor and fail the request just sent to it; each request now remembers its process.
+
+**Measured:** M-601's VAV schedule reads VAV 1 to VAV 29 with every row's values (28 marks; the sheet prints no VAV 18).
+ME601 reads BOILER B-1 and B-2, EXPANSION TANK XT-1 and PUMP P-1, P-1E, P-2, P-2E, P-3 and P-4.
+
+**Census** (every captured sheet with a picture, read on the final code): of the open sheets, 40 give tables and 17
+stay pictures (photographs, maps, notes and keys; 082_OR's M002 and M003 among them until AS-156); walled sheets 9 and
+1, count only. Replayed through the table code and the takeoff with AS-155's and AS-156's rules, the takeoff counts
+126 units on 6 open documents that it read none of from those sheets: 029_ME 9, 046_MI 4 (CU-10, AC-10, SP-6, SP-7),
+07_MO 60, 100_OH 3 (RTU-1 to RTU-3), tarrant-county 4 (RF-1 to RF-4) and 082_OR 46 (AS-156). None is removed or
+re-cited, and no walled document's units change. Every unit was read against its sheet. Left unread: 07_MO's chiller
+(its mark OCR'd "C L"); EXT 1, EXT 2 and CBT 1 under a title naming both expansion and buffer tanks, which each
+family's rule excludes for the other; GF 1, CPF 1, and the split systems F 1 and F 2.
+
+**Should this be on the shared path? Yes.** vectorgrid is the one reading of a schedule's grid for every surface
+(`Session.graphForPipeline`); the flag reaches the UI and MCP from the same table.
+
+Tests: `web/test/vectorGridPictureSchedule.test.ts` (6, live sidecar and OCR; skipped where either is missing) places
+two crops of M-601's own pictures where the sheet places them: the VAV schedule's marks set in hexagons in a hairline
+font read VAV 1 to VAV 5 with their rows and no slash or N from a hexagon's side; the tank schedule reads its title,
+header and EXT 1/EXT 2; the same picture on a sheet stored at /Rotate 270 reads the same; a photograph-like picture
+gives no table; with OCR off the picture stays a raster region; a picture read once is answered from the cache (a
+mark written into the kept read comes back), and with the cache off it is read again and nothing is kept. Mutants
+(render clip through the derotation matrix, no outline erasing, no second reading of doubtful faces, rules from all
+ink; no cache read, "0" not honoured, "0" read as a folder) each fail it.
+`web/test/pictureScheduleProvenance.test.ts` (3): ME601's two picture tables as the sidecar read them become BOILER
+B-1, B-2 and PUMP P-1E, P-2E, P-1 to P-4, each `read_from_picture`, to the assemblies' cite; a table from the text
+layer says nothing. Its three mutants fail it.
+
+## AS-154 — pictures AS-153 never saw: tiles each under the size floor, small schedules, and ruling under the page's own text (FIXED, this commit)
+
+**Found:** a census of every image placed on the 970 captured schedule sheets, against `raster_regions`' floor
+(100,000 pt^2, "smaller is a logo"):
+- **Tiles.** Some PDF writers place a large picture as a grid of small images. 23_GA's E-series sheet (#44) places its
+  two panel schedules, its lighting fixture schedule and its MECHANICAL EQUIPMENT POWER SCHEDULE (EF-1 to EF-3, HP-1,
+  FCU-1) as 101 tiles 26 to 220pt wide, every one under the floor; 082_OR's M002 (#2, and #3) is a whole schedule
+  sheet (FAN COIL UNITS, DEDICATED OUTDOOR AIR SYSTEM, AIR COOLED CHILLER, HOT WATER CONDENSING BOILER, EXHAUST FANS,
+  EXPANSION TANK) placed as 80 tiles, with 64 words of text on the page, all in its title block. `raster_regions` joined
+  abutting pictures only after the floor had dropped every tile, so none of these was ever offered to the reader.
+- **Small schedules.** Between 50,000 and 100,000 pt^2: 07_MO's CHEMICAL POT FEEDER SCHEDULE (#22, CPF-1), 029_ME's
+  EXPANSION TANK SCHEDULE (#7, XT-1), 23_GA's power schedule (83,025 pt^2 once joined), 078_US's pump-out calculation,
+  058_CA's lighting circuit lists; and title-block logos, placed on every sheet (011_IL, 061_IA, 082_OR, 14_OR).
+- **Ruling under the page's text.** 01_NY's #59 places its page as 40 tiles holding the rules, and prints the words over
+  them as text: AS-153 read its DESIGN LOADS AND FACTORS table by OCR though every word was in the PDF.
+
+**Change** (`bakeoff/vectorgrid.py` `raster_regions`, `sidecar/vectorgrid_rpc.py` `read_picture`, `bakeoff/rastergrid.py`):
+- Placed images that abut and share a band are joined first (sweeps along rows, then columns, until none joins), and the
+  floor is the joined picture's; it is a table when tiles that look like one cover at least half of it. A joined picture
+  that does not is still read where its own tiles over the floor look like a table, joined among themselves, as before.
+- A picture from 50,000 pt^2 counts when most of it is the sheet's own: not placed on more than 3 pages of the set as
+  the same image, or as an image of the same pixel size and stored length (011_IL stores its logo anew on every sheet).
+  Counted from the pages' resources once per file.
+- A table whose box holds the page's own words, at least one for every three faces, is read from them as a drawn table
+  is, with no OCR and no `ocr` flag; only the rest of the picture is OCR'd.
+- Two tables' boxes can overlap (082_OR's notes band under one table and the next table's header); a word OCR'd again at
+  the place it was read is dropped (it doubled every header cell of 082_OR's exhaust fan schedule).
+
+**Measured** (`raster_regions` before and after on all 970 captured sheets): open documents, 8 sheets gain a picture,
+none loses one (01_NY #59, 086_CA #7 and 095_UT #3 lost theirs to the join until the second rule above); walled
+documents, 1 sheet changed (count only). Read: 23_GA's #44 gives 4 picture tables, 07_MO's chemical pot feeder CPF 1 and
+029_ME's XT-1 read, and 01_NY's #59 reads from its own words. 082_OR's M002 and M003 are joined here and read once
+AS-156 gives their sheets a size (15 tables).
+
+**Left as it is:** OCR on pictures this coarse (082_OR's tiles are ~3 px per point) runs words together
+("SUPPLYFAN", "HOTWAT ER"); family words and marks read, prose does not. A picture of a table with no rules at all
+stays unread.
+
+**Should this be on the shared path? Yes.** Same reading of a sheet's pictures for every surface (vectorgrid, through
+`Session.graphForPipeline`).
+
+Tests (`web/test/vectorGridPictureSchedule.test.ts`, live): M-601's VAV picture cut into 4 x 4 tiles of ~17,000 pt^2
+reads as one table with VAV 1 to VAV 5; a grid picture with the page's words printed over it reads those words with no
+`ocr`; the tank schedule placed at 96,300 pt^2 reads on a one-page set and is no picture at all when placed on all five
+pages of a set. Mutants (the floor before the join, the text route off, the own-pages rule off, the small floor at
+100,000) each fail one.
+
+## AS-137 — a unit whose mark is printed "(E)" was not flagged existing: the takeoff names it without its status (FIXED, this commit)
+
+**Found:** a census of every captured schedule cell for a status printed with a mark ("(E) VAV-105", "(N)ACC-2",
+"CH-2 (E)") over all open documents: 063_MT, 03_FL, 04_NV, 29_TX and 017_MD print them; the walled documents 24 times
+(counts only). The takeoff names each unit without the status (`normalizeEquipMark`, AS-84/85: 063_MT's "(E) EF- 4" is
+EF- 4, 03_FL's "(E)ATU A" is ATU A), which is right for its name and its plan tags, but the takeoff item keeps the row's
+cells without its mark column, so the project question "existing units keep their controls" (PQ3, `existingFlag`)
+never saw the "(E)": 063_MT's EF-4, an existing exhaust fan in a schedule not titled EXISTING, was a new unit to it.
+`existingFlag` also read "(E)" only after a tag, so a tag printed "(E)FC-1" was not flagged either.
+
+**Change:** the takeoff item carries `printed_mark`, the mark as printed, when a status "(E)", "(N)" or "(R)" is printed
+before or after it (`corpusTakeoff.mjs`); the apply path carries it to the compiled item and the question unit
+(`assemblies/apply.ts`, `normalize.ts`); `existingFlag` (`controlIntent/catalogue.ts`) flags a unit whose printed mark,
+tag, or a cell printing the unit's own mark has "(E)" before or after it, each after the rules it already had, so no
+unit's reason changes. "(N)", new, flags nothing.
+
+**Measured** (`existingFlag` over every replayed document's 2,659 takeoff items, before and after): flagged existing
+46 → 49. Open: 063_MT's EF- 4 (its row prints "(E) EF- 4"; the only open change). Check side: +2 (counts only).
+Held-out: no change. No unit lost its flag; no reason changed.
+
+**Should this be on the shared path? Yes.** The takeoff item, the apply path and the project questions are one module
+each for the Takeoff panel and `apply_assemblies`.
+
+Tests: `web/test/controlIntent/catalogue.test.ts` "AS-137": the printed mark, a tag printed with (E) before it, a cell
+printing the unit's own mark with (E) (never another unit's), (N) flags nothing; a fan schedule printing "(E) EF- 4",
+"EF-5" and "(N)EF-6" through `compileHvacTakeoff` and `compiledRowsAndTables` flags EF- 4 alone. Five mutants (no
+`printed_mark` on the item, none carried by the apply path, the flag not reading it, the cell rule off, (E) only after a
+tag) each fail it.
+
+**AS-87, not adopted (measured):** a mark glued to a number in parentheses ("RF-1(1)") is keyed by the extraction with
+the number run in (RF-11). No open captured schedule table prints one (0 cells of that shape over every open document;
+061_IA's RF-1(1) was AS-85's synthetic footnote check, its sheet prints RF-1). Either fix has a cost no document can
+measure: keying the bare mark merges two rows a drawing numbers EF-2(1) and EF-2(2); keying it with its parentheses
+changes the key's shape for every consumer. Left as it is.
+
+## AS-155 — a schedule's numbered notes printed inside its own grid read as units: 07_MO's pumps "1" to "6" (FIXED, this commit)
+
+**Found:** replaying AS-153/154's picture reads through the takeoff, every unit read was checked against its sheet.
+07_MO's pictured schedules print their notes inside their own grid: a row whose first cell is NOTE or NOTES, then
+rows each holding a note number and one line ("1 BOLTED FLANGE" … "6 ECM MOTOR" under the PUMP SCHEDULE's last pump,
+"1 FACTORY INSULATED ROOF CURB" … under the ROOF TOP UNIT SCHEDULE's RTU 1, "1 SEE DEVICE CALLOUTS …" under the AIR
+DEVICE SCHEDULE). The takeoff skipped the NOTES row itself, never the rows after it, and read PUMP 1 to 6, RTU 1 to 4
+and air devices 1 to 7.
+
+**Change** (`web/src/lib/vectorGridAdapter.ts` `dropNumberedNotes`, before the grid becomes a table): below a row whose
+first cell is the label NOTE / NOTES (not the table's first row), when every row to the table's end is blank or holds
+a note number (1 or 2 digits, "1." or "(1)") in its first cell and at most one other cell of text, those rows are not
+table rows. One row in the band holding more than a line of text (a unit's row) keeps the whole band, and the label row
+stays as before. The table's region is unchanged: the notes are still printed inside it, where `scheduleNotes` reads
+them from the page's text.
+
+**Measured** (all 969 captured sheets replayed through the table code before and after): 13 tables in 3 open
+documents lose 68 note rows: 11 of 07_MO's picture tables, and the PLUMBING FIXTURE SCHEDULE notes "1." to "6." of
+062_ID and itd-d1-lab. Seven row keys in those tables are respelled by the spaced-mark rule now that their mark
+column holds only marks (RTU 1 as RTU1, as a drawn table's would be). No table is added or lost, and no walled
+document changes. Through the takeoff, 17 phantom units go (07_MO's PUMP 1 to 6, RTU 1 to 4 and air devices 1 to 7)
+and no real unit is lost.
+
+**Found on the way:** 07_MO's FAN SCHEDULE lists RLF 1 beside EXF 1 to EXF 3, and relief fans' RLF was no fan mark.
+It is now one under a fan schedule's title, as EXF is (`corpusTakeoff.mjs` FAN `titledKeyRe`). Over the 90
+captured documents it adds RLF 1 and nothing else; RLF keys no other table.
+
+**Should this be on the shared path? Yes.** It decides what a schedule's rows are, for the sheet graph, the takeoff,
+`query_table` and the reconcile alike; it sits where vectorgrid's grid becomes a ScheduleTable, used by every surface.
+
+Tests: `web/test/vectorGridAdapter.test.ts` (6): the pump schedule with a NOTE row and two numbered notes reads P-1 and
+P-2 and no note, with its region unchanged; only the band below the label is dropped; a band with a unit's row in it,
+a table numbered with no NOTES label, and a band whose first cell is a mark, a label with only blank rows under it, and a table that is all notes are each
+left alone. Five mutants (the filter unwired, no one-line guard, any first cell as a note number, no numbered row
+required, the label allowed as the first row) each fail one. `corpusTakeoffVol2Families` reads RLF 1 under FAN
+SCHEDULE and not in an untitled table; its mutant fails it.
+
+## AS-156 — a sheet whose drawn lines close no cell had no page size: 082_OR's whole schedule sheets refused (FIXED, this commit)
+
+**Found:** checking AS-154's claim that 082_OR's M002 (a whole schedule sheet placed as 80 tiles) is read, the census
+showed it joined into one picture and read into no table. `tables_from_segments` returned early, without the page's
+size or origin, when the page's drawn lines close no cell, which is what a sheet that is all picture plus a border's
+corner draws. Two things followed. The picture was read on a 0 x 0 page, where every face fails the cell-size test
+(the largest face may be a share of the page's area). And the reply's `pageWidth` was null, so the browser's
+`pageBoxAgrees` refused the whole sheet ("vectorgrid measured nullxnullpt"). Of the 969 captured sheets, 7 took this
+path, all in open documents: 082_OR's M002, M003 and #16, 14_OR's #16, 004_MO's #40, 009_FL's #1 and 06_MO's #47.
+
+**Change** (`bakeoff/vectorgrid.py` `tables_from_segments`): that return carries `page_w`, `page_h` and `origin`, as
+every other return does.
+
+**Measured** (the 7 sheets re-extracted, replayed through the table code and the takeoff): 082_OR's M002 reads 7
+picture tables and M003 reads 8: FAN COIL UNITS (FC-101 to FC-210), DEDICATED OUTDOOR AIR SYSTEM (DOAS-1 to 4),
+AIR COOLED CHILLER CH-1, HOT WATER CONDENSING BOILER B-1 and B-2, EXPANSION TANK ET-1, EXHAUST FANS KEF-1, HYDRONIC
+PUMPS (CHP-1, CHP-2, BP-1, BP-2, HWP-1, HWP-2, SP-1, SP-2), SPLIT SYSTEM HEAT PUMPS (HP-01 with FC-01, HP-02 with
+FC-02), MAKE UP AIR UNITS MAU-1, AS-1 and HS-1, ELECTRIC HEATERS EH-1 to 3 and HEAT EXCHANGER HX-1. That is 46 units
+where the takeoff read none, every one read from a picture and flagged. The other 5 sheets now have their size, have
+no table, and no longer fail. No walled document is among them.
+
+**Found on the way:** the pictured ventilation table's subtotal rows read "DOAS-1 TOTAL:" and, OCR running it
+together, "DOAS-3TOTAL:", which read as a DOAS unit. A totals row is now never a mark (`isScheduleHeaderJunkMark`,
+which the takeoff, the reconcile and the left-out list share): TOTAL, TOTALS, PANEL TOTALS, KW TOTAL. Over the 90
+captured documents' tables every key it matches is a totals row, and no unit changes but this one.
+
+**Should this be on the shared path? Yes.** The page size is part of vectorgrid's reply for every surface, and the
+totals rule is in the one mark check the takeoff and the reconcile share.
+
+Tests: `web/test/vectorGridPictureSchedule.test.ts` (live): a sheet whose only drawn lines are a border's corner
+says its size and reads its tank schedule picture (EXT 1); with the fix reverted it fails.
+`corpusTakeoffVol2Families`: DOAS-3TOTAL:, DOAS-2 TOTAL: and TOTALS are no unit; its mutant fails it.

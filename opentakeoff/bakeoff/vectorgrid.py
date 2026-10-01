@@ -132,6 +132,13 @@ MAX_REGION_WFRAC = 0.92 # a REGION this wide is the sheet's own furniture, not a
 # silently returning nothing. Qualifying as one needs both tests, because
 # either alone matches ordinary page art:
 RASTER_MIN_AREA = 100_000.0  # pt^2 — roughly 5 x 4 inches placed; smaller is a logo
+# ... or a small schedule: 07_MO's CHEMICAL POT FEEDER SCHEDULE (82,665 pt^2),
+# 029_ME's EXPANSION TANK SCHEDULE (91,719), 23_GA's MECHANICAL EQUIPMENT POWER
+# SCHEDULE (83,025). Down to this area a picture is one when it is the sheet's
+# own: most of it is not placed on more than RASTER_OWN_PAGES pages of the set,
+# where a title-block logo is placed on every sheet (AS-154).
+RASTER_SMALL_AREA = 50_000.0
+RASTER_OWN_PAGES = 3
 RASTER_WHITE = 0.62          # a pasted table is mostly paper
 RASTER_RULES = 3             # ... crossed by at least this many full-width dark rules
 
@@ -326,7 +333,17 @@ def raster_regions(pdf_path: str, page_no: int = 1) -> list[tuple]:
         import pymupdf
     except ImportError:
         return []
-    out = []
+    # ONE SCREENSHOT CAN BE PLACED AS SEVERAL IMAGES. 017_MD…#14 pastes
+    # ACU-A-5 as two 437x874 rects side by side at x 1016-1454 and 1453-1891,
+    # and ACU-A-3 likewise — so matching a caption to one rect claims half the
+    # table and silently drops half the schedule. Merge rects that abut and
+    # share their other extent: that is one picture, cut for placement. The
+    # cut can be fine: 23_GA's E-series sheet pastes its panel, lighting and
+    # equipment power schedules as grids of tiles 26 to 220pt wide, every one
+    # under RASTER_MIN_AREA, so the floor is the merged picture's (AS-154),
+    # and the picture is a table when tiles that look like one cover at least
+    # half of it (a lone logo or stamp stays one small picture).
+    tiles: list[list] = []      # [x0, y0, x1, y1, [(xref, area), ...]]
     with pymupdf.open(pdf_path) as doc:
         page = doc[page_no - 1]
         rot = page.rotation_matrix
@@ -334,35 +351,114 @@ def raster_regions(pdf_path: str, page_no: int = 1) -> list[tuple]:
             for r in page.get_image_rects(im[0]):
                 rr = r * rot            # image rects come back pre-rotation
                 w, h = rr.x1 - rr.x0, rr.y1 - rr.y0
-                if w <= 0 or h <= 0 or w * h < RASTER_MIN_AREA:
+                if w <= 0 or h <= 0:
                     continue
-                if not _image_is_a_table(doc, im[0]):
-                    continue
-                out.append((rr.x0, rr.y0, rr.x1, rr.y1))
+                tiles.append([rr.x0, rr.y0, rr.x1, rr.y1, [(im[0], w * h)]])
 
-    # ONE SCREENSHOT CAN BE PLACED AS SEVERAL IMAGES. 017_MD…#14 pastes
-    # ACU-A-5 as two 437x874 rects side by side at x 1016-1454 and 1453-1891,
-    # and ACU-A-3 likewise — so matching a caption to one rect claims half the
-    # table and silently drops half the schedule. Merge rects that abut and
-    # share their other extent: that is one picture, cut for placement.
-    merged = True
-    while merged:
-        merged = False
-        for i in range(len(out)):
-            for j in range(i + 1, len(out)):
-                a, b = out[i], out[j]
-                same_rows = abs(a[1] - b[1]) <= 2 and abs(a[3] - b[3]) <= 2
-                same_cols = abs(a[0] - b[0]) <= 2 and abs(a[2] - b[2]) <= 2
-                touch_x = min(a[2], b[2]) >= max(a[0], b[0]) - 3
-                touch_y = min(a[3], b[3]) >= max(a[1], b[1]) - 3
-                if (same_rows and touch_x) or (same_cols and touch_y):
-                    out[i] = (min(a[0], b[0]), min(a[1], b[1]),
-                              max(a[2], b[2]), max(a[3], b[3]))
-                    out.pop(j)
-                    merged = True
-                    break
-            if merged:
+        # Sweeps, not pairs: a sheet can place thousands of small images.
+        # Join tiles of one row band end to end, then strips of one column
+        # band top to bottom, until a sweep joins nothing.
+        def sweep(tiles: list, along: int) -> list:
+            a0, a1 = along, along + 2            # the axis tiles join along
+            b0, b1 = 1 - along, 3 - along        # the band they must share
+            tiles = sorted(tiles, key=lambda t: (round(t[b0]), round(t[b1]), t[a0]))
+            out: list = []
+            for t in tiles:
+                c = out[-1] if out else None
+                if (c is not None and abs(c[b0] - t[b0]) <= 2 and abs(c[b1] - t[b1]) <= 2
+                        and t[a0] <= c[a1] + 3 and t[a1] >= c[a0] - 3):
+                    c[0], c[1] = min(c[0], t[0]), min(c[1], t[1])
+                    c[2], c[3] = max(c[2], t[2]), max(c[3], t[3])
+                    c[4] = c[4] + t[4]
+                else:
+                    out.append(list(t))
+            return out
+
+        while True:
+            n = len(tiles)
+            tiles = sweep(sweep(tiles, 0), 1)
+            if len(tiles) == n:
                 break
+
+        out = []
+        looks: dict = {}
+
+        def looks_like_a_table(xref: int) -> bool:
+            if xref not in looks:
+                looks[xref] = _image_is_a_table(doc, xref)
+            return looks[xref]
+
+        for x0, y0, x1, y1, parts in tiles:
+            area = (x1 - x0) * (y1 - y0)
+            if area < RASTER_SMALL_AREA:
+                continue
+            if area < RASTER_MIN_AREA and 2 * sum(a for xref, a in parts if _pages_placing(doc, pdf_path, xref) > RASTER_OWN_PAGES) >= sum(a for _, a in parts):
+                continue
+            table = sum(a for xref, a in parts if looks_like_a_table(xref))
+            if table >= 0.5 * sum(a for _, a in parts):
+                out.append((x0, y0, x1, y1))
+                continue
+            # A picture that is mostly not a table can still hold one: a page
+            # placed as tiles whose ruled part is a few of them (01_NY's #59,
+            # its DESIGN LOADS AND FACTORS table under the page's own text).
+            # Those tiles, each over the floor and each like a table, joined
+            # among themselves, are the picture as before AS-154.
+            own = [[*rr, [(xref, a)]] for xref, a in parts if a >= RASTER_MIN_AREA and looks_like_a_table(xref)
+                   for rr in _placements(page, rot, xref)]
+            while own:
+                n = len(own)
+                own = sweep(sweep(own, 0), 1)
+                if len(own) == n:
+                    break
+            out.extend((t[0], t[1], t[2], t[3]) for t in own
+                       if x0 - 1 <= t[0] and t[2] <= x1 + 1 and y0 - 1 <= t[1] and t[3] <= y1 + 1)
+    return out
+
+
+_placing: dict = {}
+
+
+def _pages_placing(doc, pdf_path: str, xref: int) -> int:
+    """On how many pages of the set this picture is placed: as the same image,
+    or as an image of the same pixel size and stored length (011_IL stores its
+    title-block logo once per sheet, a new image each time). Read from each
+    page's resources alone, once per file and modification, for the
+    sidecar's lifetime."""
+    import os
+    try:
+        st = os.stat(pdf_path)
+        key = (os.path.realpath(pdf_path), st.st_size, st.st_mtime_ns)
+    except OSError:
+        key = (pdf_path, 0, 0)
+    if key not in _placing:
+        sig_of: dict = {}
+        by_sig: dict = {}
+        for pg in doc:
+            seen = set()
+            for im in pg.get_images(full=True):
+                if im[0] not in sig_of:
+                    try:
+                        length = doc.xref_get_key(im[0], "Length")[1]
+                    except Exception:  # noqa: BLE001
+                        length = ""
+                    sig_of[im[0]] = (im[2], im[3], length) if length else ("xref", im[0])
+                seen.add(sig_of[im[0]])
+            for g in seen:
+                by_sig[g] = by_sig.get(g, 0) + 1
+        _placing.clear()                      # one set at a time is enough
+        _placing[key] = (sig_of, by_sig)
+    sig_of, by_sig = _placing[key]
+    return by_sig.get(sig_of.get(xref, ("xref", xref)), 0)
+
+
+def _placements(page, rot, xref: int) -> list[tuple]:
+    """Where one embedded image is placed on the page, in the page's
+    displayed space."""
+    out = []
+    for r in page.get_image_rects(xref):
+        rr = r * rot
+        if rr.x1 > rr.x0 and rr.y1 > rr.y0:
+            out.append((rr.x0, rr.y0, rr.x1, rr.y1))
     return out
 
 
@@ -905,7 +1001,16 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
 
     rasters = [{"bbox": b, "cells": [], "n_cells": 0, "raster": True}
                for b in raster_regions(pdf_path, page_no)]
+    return tables_from_segments(segs, chars, page_w, page_h, rasters, (page_ox, page_oy))
 
+
+def tables_from_segments(segs: list[tuple], chars, page_w: float, page_h: float,
+                         rasters: list | None = None, origin: tuple = (0.0, 0.0)) -> dict:
+    """find_tables on strokes already read: the page's drawn rules, or a
+    picture's rules read from its pixels (rastergrid.py, AS-153). Every test
+    below is the same for both."""
+    rasters = rasters or []
+    page_ox, page_oy = origin
     if not segs:
         return {"tables": rasters,
                 "diagnostics": {"segments": 0, "rasters": len(rasters),
@@ -984,8 +1089,12 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             continue
         cells.append(g)
     if not cells:
+        # The page's size and origin too: a sheet whose rules make no cell is
+        # often all picture, and its picture is read at this size (AS-156).
         return {"tables": rasters,
-                "diagnostics": {"segments": len(segs), "cells": 0, "rasters": len(rasters)}}
+                "diagnostics": {"segments": len(segs), "cells": 0, "rasters": len(rasters),
+                                "page_w": page_w, "page_h": page_h,
+                                "origin": [page_ox, page_oy]}}
 
     # Adjacency, CUT at border-weight walls. Two schedules stacked on a shared
     # rule stay separate because that shared rule is drawn heavy.

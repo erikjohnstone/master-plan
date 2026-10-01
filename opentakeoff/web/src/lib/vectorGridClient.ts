@@ -62,6 +62,9 @@ export interface VectorGridTable {
   cols: number;
   cells: VectorGridCell[];
   raster: boolean;
+  /** Read from a picture of a table (AS-153): its rules from the pixels and
+   * its text by OCR (bakeoff/rastergrid.py), not from the PDF's text layer. */
+  ocr?: boolean;
   assigned: number;
   orphan: number;
   straddle: number;
@@ -79,18 +82,23 @@ export interface VectorGridReply {
 
 let proc: ChildProcessWithoutNullStreams | null = null;
 let nextId = 1;
-const pending = new Map<number, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
+// Each request remembers the process it was sent to: a process that exits
+// fails its own requests and no other's (AS-153 found the race: a sidecar shut
+// down and at once restarted saw the old process's exit clear the new one and
+// fail the request just sent to it).
+const pending = new Map<number, { resolve: (v: unknown) => void; reject: (e: Error) => void; child: ChildProcessWithoutNullStreams }>();
 
 function ensureProc(): ChildProcessWithoutNullStreams {
   if (proc) return proc;
   const py = process.env.OPENTAKEOFF_VECTORGRID_PYTHON
     || process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON
     || "python3";
-  proc = spawn(py, [SERVER], {
+  const child = spawn(py, [SERVER], {
     stdio: ["pipe", "pipe", "pipe"],
     env: { ...process.env, PYTHONUNBUFFERED: "1" },
   });
-  const rl = createInterface({ input: proc.stdout });
+  proc = child;
+  const rl = createInterface({ input: child.stdout });
   rl.on("line", (line) => {
     let msg: { id?: number; result?: unknown; error?: { message?: string } };
     try {
@@ -105,20 +113,23 @@ function ensureProc(): ChildProcessWithoutNullStreams {
     if (msg.error) p.reject(new Error(String(msg.error.message || "vectorgrid error")));
     else p.resolve(msg.result);
   });
-  proc.on("exit", (code) => {
-    proc = null;
-    for (const [, p] of pending) p.reject(new Error(`vectorgrid sidecar exited (${code})`));
-    pending.clear();
+  child.on("exit", (code) => {
+    if (proc === child) proc = null;
+    for (const [id, p] of pending) {
+      if (p.child !== child) continue;
+      pending.delete(id);
+      p.reject(new Error(`vectorgrid sidecar exited (${code})`));
+    }
   });
-  proc.stderr.on("data", () => {});
-  return proc;
+  child.stderr.on("data", () => {});
+  return child;
 }
 
 function rpc<T>(method: string, params: Record<string, unknown>): Promise<T> {
   const child = ensureProc();
   const id = nextId++;
   return new Promise<T>((res, rej) => {
-    pending.set(id, { resolve: res as (v: unknown) => void, reject: rej });
+    pending.set(id, { resolve: res as (v: unknown) => void, reject: rej, child });
     child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", id, method, params })}\n`);
   });
 }

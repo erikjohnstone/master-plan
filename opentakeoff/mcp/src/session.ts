@@ -8653,6 +8653,7 @@ export class Session {
             kind: t.kind, title: t.title, rows: t.rows, region: Session.wireBox(t.region),
             ...(t.continues ? { continues: t.continues } : {}),
             ...(t.rotated_headers ? { rotated_headers: true } : {}),
+            ...(t.read_from_picture ? { read_from_picture: true } : {}),
           })),
         };
       }),
@@ -8780,6 +8781,7 @@ export class Session {
         ...(t.building ? { building: t.building } : {}),
         ...(t.drawing_group ? { drawing_group: t.drawing_group } : {}),
         ...(t.rotated_headers ? { rotated_headers: true } : {}),
+        ...(t.read_from_picture ? { read_from_picture: true } : {}),
         ...(t.rows.some((r) => r.revision) ? { revised_rows: t.rows.filter((r) => r.revision).length } : {}),
         ...(t.parts ? { parts: t.parts.map((p) => ({ sheet: p.sheet, title: p.title, rows: p.rows, region: Session.wireBox(p.region) })) } : {}),
       })),

@@ -507,6 +507,18 @@ describe("AS-68 a table titled with the family's name in words is the family's s
     assert.deepEqual(compile([table("m.pdf#4", "", ["EXF-3", "TF-4", "EF-5"])])("FAN"), ["EF-5"]);
   });
 
+  it("reads no unit from a totals row, even one OCR ran together with its unit (AS-156)", () => {
+    // 082_OR's pictured ventilation table: "DOAS-1 TOTAL:" … and "DOAS-3TOTAL:".
+    const tags = compile([table("m.pdf#2", "DEDICATED OUTDOOR AIR SYSTEM", ["DOAS-1", "DOAS-2", "DOAS-3TOTAL:", "DOAS-2 TOTAL:", "TOTALS"])]);
+    assert.deepEqual(tags("DOAS"), ["DOAS-1", "DOAS-2"]);
+  });
+
+  it("reads a relief fan RLF under a fan title only (AS-155)", () => {
+    // 07_MO's pictured FAN SCHEDULE: RLF 1 beside EXF 1 to EXF 3.
+    assert.deepEqual(compile([table("m.pdf#23", "FAN SCHEDULE", ["RLF 1", "EXF 1"])])("FAN"), ["EXF 1", "RLF 1"]);
+    assert.deepEqual(compile([table("m.pdf#5", "", ["RLF-2"])])("FAN"), []);
+  });
+
   it("reads VAV box and terminal schedules and variable volume terminals, never a box's connections or controls", () => {
     // 009_FL's VAV TERMINAL SCHEDULE, 033_MN's VAV BOX WITH HOT WATER REHEAT
     // SCHEDULE, 061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE.

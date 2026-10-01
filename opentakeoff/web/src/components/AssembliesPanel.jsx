@@ -1045,6 +1045,9 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                       <td style={td}>
                         <button type="button" style={{ ...btn, border: "none", padding: 0, textDecoration: "underline", background: "transparent" }}
                           onClick={(ev) => { ev.stopPropagation(); onOpenCitation?.(citeRow(u.cites[0], u.tag)); }}>{u.tag}</button>
+                        {u.cites[0]?.read_from_picture ? (
+                          <span title="This schedule is a picture in the PDF, read by OCR: check its values on the sheet" style={{ marginLeft: 6, fontSize: 11, opacity: 0.75 }} data-read-from-picture>read from a picture</span>
+                        ) : null}
                       </td>
                       <td style={td}>{u.family}{u.compiled_family !== u.family ? ` (from ${u.compiled_family})` : ""}</td>
                       <td style={td}>{u.layer}</td>

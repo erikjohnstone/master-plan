@@ -133,6 +133,9 @@ export interface Cite {
   table_title: string;
   header: string;
   bbox: number[] | null;
+  /** The schedule is a picture read by OCR (AS-153): the value is the ink's
+   * reading, worth a look at the sheet. */
+  read_from_picture?: boolean;
 }
 
 /** One unit's recipe in a project for one layer (plan §8.2). */

@@ -88,7 +88,7 @@ def page_words(pdf: Path, page_no: int = 1) -> list:
     return out
 
 
-def slot(pdf: Path, table: dict, page_no: int = 1) -> tuple[dict, int, int, int]:
+def slot(pdf: Path, table: dict, page_no: int = 1, words: list | None = None) -> tuple[dict, int, int, int]:
     """Words of this table's region, dropped into its faces.
 
     -> (cell -> [words], assigned, orphan, straddle)
@@ -99,7 +99,9 @@ def slot(pdf: Path, table: dict, page_no: int = 1) -> tuple[dict, int, int, int]
     "TOTAL HEAT T REJECTION". A glyph can fall on the wrong side of a wall; a
     word is placed by its own centre, once.
     """
-    words = page_words(pdf, page_no)
+    # A picture's words are read from its ink (rastergrid.py, AS-153), in
+    # page_words' own shape; a drawn table's come from the text layer.
+    words = page_words(pdf, page_no) if words is None else words
     x0, top, x1, bot = table["bbox"]
     inside = [w for w in words
               if x0 <= (w[0] + w[2]) / 2 <= x1

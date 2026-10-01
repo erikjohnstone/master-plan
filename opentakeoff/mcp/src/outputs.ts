@@ -1483,6 +1483,7 @@ export const sheetGraphOutput = {
       kind: z.string(), title: z.string(), rows: z.number().int(), region: wireBox,
       continues: z.string().optional().describe("Present on a continuation fragment ('… SCHEDULE — CONT'D'): the sheet carrying the table's base fragment. The fragments read as ONE table — resolve_tag and find_schedule already see the union"),
       rotated_headers: z.boolean().optional().describe("true when the column headers were read at a quarter-turn"),
+      read_from_picture: z.boolean().optional().describe("true when the table is a picture pasted into the sheet and was read by OCR: its values are the ink's reading, not the PDF's text; view_sheet the region to confirm a value that matters"),
     })),
   })),
   rooms: z.array(graphRoom).describe("Numbers CORROBORATED as rooms — a room-finish row answers for them, or (where the set carries no room-finish schedule) a room name is drawn with them. Each says which in `corroboration`. Schedule sheets contribute rows, never phantom rooms"),
@@ -1533,6 +1534,7 @@ export const findScheduleOutput = {
     building: z.string().optional().describe("The building this table answers for, when its title or sheet names one"),
     drawing_group: z.string().optional().describe("The authored project/site scope carried by the table's source sheet"),
     rotated_headers: z.boolean().optional().describe("true when the column headers were read at a quarter-turn"),
+    read_from_picture: z.boolean().optional().describe("true when the table is a picture pasted into the sheet and was read by OCR: its values are the ink's reading, not the PDF's text; view_sheet the region to confirm a value that matters"),
     revised_rows: z.number().int().optional().describe("Rows carrying a delta/REV marker — the ink changed there; resolve those tags to see which"),
     parts: z.array(z.object({ sheet: z.string(), title: z.string(), rows: z.number().int(), region: wireBox }))
       .optional().describe("Present when the table CONTINUES across sheets ('… SCHEDULE — CONT'D'): every fragment, base first, each with its own viewable region"),

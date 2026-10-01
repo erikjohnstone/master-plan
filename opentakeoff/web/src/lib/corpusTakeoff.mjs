@@ -1872,6 +1872,10 @@ function uniqueFamily(graph, spec, family, onEmit = null) {
         : splitRowMarks(working, willFilter, gate.wordsNamed);
       for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
+        // The mark as printed when a status is printed with it, which the
+        // unit's name drops (AS-137): 063_MT's "(E) EF- 4" is EF- 4, and
+        // existing (controlIntent/catalogue.ts existingFlag).
+        const printedMark = /^\s*\(\s*[ENR]\s*\)|\(\s*[ENR]\s*\)\s*$/i.test(String(rawOne)) ? String(rawOne).replace(/\s+/g, " ").trim() : null;
         const canon = one.toUpperCase().replace(/\s+/g, "");
         if (!canon) continue;
         // Footnote / notes rows that leaked into the key column.
@@ -1948,6 +1952,9 @@ function uniqueFamily(graph, spec, family, onEmit = null) {
           unit: "EA",
           sheet_id: table.sheet,
           table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
+          // A schedule read from a picture by OCR (AS-153) says so on each unit.
+          ...(table.read_from_picture ? { read_from_picture: true } : {}),
+          ...(printedMark ? { printed_mark: printedMark } : {}),
           bbox_px: bbox || null,
           // Whole schedule row for cite paints — not just the MARK cell.
           row_bbox_px: rowBbox || bbox || null,
@@ -2272,8 +2279,9 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-|[A-Z]{1,2}EF(?=[\s\-]?\d))[\s\-]?/i,
     // Under a FAN SCHEDULE title: E-A-* zone-lettered fans (017_MD's RETURN
     // FAN SCHEDULE), bare F-* (016_NY) and BF-* (096_IN; AS-63); EXF-* (097_UT's
-    // VENTILATION FANS) and transfer fans TF-* (26_CA's TF-P2-1; AS-68).
-    titledKeyRe: /^(?:(?:E-[A-Z]-|F|BF|EXF)[\s\-]?\d|TF[\s\-])/i,
+    // VENTILATION FANS) and transfer fans TF-* (26_CA's TF-P2-1; AS-68);
+    // relief fans RLF-* (07_MO's FAN SCHEDULE, RLF 1 beside EXF 1-3; AS-155).
+    titledKeyRe: /^(?:(?:E-[A-Z]-|F|BF|EXF|RLF)[\s\-]?\d|TF[\s\-])/i,
     // Read by its mark alone, EG-* is an exhaust grille (096_IN's untitled
     // diffuser and grille schedule lists EG2 and EG3; AS-66).
     titledOnlyRe: /^EG[\s\-]?\d/i,
@@ -3215,7 +3223,11 @@ export function isScheduleHeaderJunkMark(canon) {
   )
     // A legend's heading: 047_NC's "PIPING LEGEND", under a legend sheet's
     // "-CONDENSING UNIT" read as a title, was a condensing unit (AS-66).
-    || /LEGEND$/i.test(String(canon || ""));
+    || /LEGEND$/i.test(String(canon || ""))
+    // A totals row: TOTAL, TOTALS, PANEL TOTALS, and a unit's subtotal OCR
+    // ran together, 082_OR's pictured "DOAS-3TOTAL:" (AS-156). No equipment
+    // mark ends in the word.
+    || /TOTALS?:?$/i.test(String(canon || ""));
 }
 
 function sheetRecords(sessionOrSheets, graph) {
@@ -3382,6 +3394,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         unit: "EA",
         sheet_id: table.sheet,
         table_title: title,
+        ...(table.read_from_picture ? { read_from_picture: true } : {}),
         bbox_px: cellBbox(row, /^MARK/i) || row.identity?.bbox || null,
         table_bbox_px: tableBbox,
         title_bbox_px: titleBbox,

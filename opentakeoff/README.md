@@ -304,7 +304,9 @@ second use is not a side effect; see [the data layer](#the-data-layer--why-this-
 - **The sheet graph**—an agent asks *"what finish is in room 134, and how do you know"* and
   gets the schedule row with a citation per cell, across continuation sheets, rotated headers,
   and multi-building keys: `sheet_graph` / `resolve_tag` / `find_schedule`
-  ([#87](https://github.com/Kentucky-ai/opentakeoff/issues/87))
+  ([#87](https://github.com/Kentucky-ai/opentakeoff/issues/87)). A schedule pasted in as a
+  picture is read too, its rules from the pixels and its text by OCR, and every value read that
+  way is marked `read_from_picture` so you check it on the sheet
 - **Roll goods**—opt a condition into broadloom or sheet material and the engine figures the
   seams: lanes, multi-roll splits, cuts drawn to scale over their rooms in cutting order, a
   to-scale roll diagram with drag-to-reorder, and order footage beside the measured quantities

@@ -1,5 +1,41 @@
 # Changelog
 
+- **A schedule pasted into a sheet as a picture is read, and says so.**
+  - vectorgrid found pictured tables and could only report them as raster regions with no cells: 07_MO's M-601 (29
+    VAV boxes, tanks, air devices) and 029_ME's ME601 (two boilers, six pumps) gave the takeoff nothing. Now a
+    picture's rules are read from its pixels and its text by OCR (RapidOCR, ONNX), and the same table builder reads
+    them: the VAV schedule reads all 28 marks (VAV 1 to VAV 29) with every row's values. Over the
+    corpus the takeoff counts 126 more units on 6 documents from pictures (07_MO's VAV boxes, pumps and fans, 082_OR's
+    whole mechanical schedule sheets, 029_ME's boilers and pumps), and none is lost.
+  - Marks drawn in hexagons, light hairline type, bold titles and sheets stored turned (/Rotate 270) are read; a
+    picture that is no ruled table is left alone. Each picture is read in a process of its own with a time limit, so a
+    crash there never costs the sheet's drawn tables. Without the OCR engine a picture stays unread, as before.
+  - Every table, unit and cite read from a picture carries `read_from_picture`, and the Assemblies panel marks the
+    unit "read from a picture": check its values on the sheet.
+  - A picture is read once per drawing set: the reading is kept under `~/.cache/opentakeoff-picture`
+    (`OPENTAKEOFF_PICTURE_CACHE` names another folder, `0` keeps nothing).
+  - Both sidecar clients let an exiting process fail the next process's first request; fixed.
+  (`bakeoff/rastergrid.py`, `sidecar/vectorgrid_rpc.py` `read_picture`, `vectorGridAdapter.ts`; ASSEMBLIES_BUG_CATALOGUE
+  AS-153.)
+- **A unit whose mark is printed "(E)" is flagged existing.** The takeoff names "(E) EF- 4" EF- 4, and the existing-units
+  question never saw the "(E)": an existing fan in a schedule not titled EXISTING was asked about as new. The takeoff
+  item now carries the mark as printed (`printed_mark`), and the flag reads it, a tag printed "(E)FC-1", and a cell
+  printing the unit's own mark with "(E)". 063_MT's EF-4 is flagged; no other open unit changes. (ASSEMBLIES_BUG_CATALOGUE
+  AS-137.)
+- **Pictures cut into tiles, small schedule pictures, and ruling under real text are read too.** A schedule placed as a
+  grid of small images (23_GA's E-series power schedule, 082_OR's whole M002 schedule sheet) is joined into one picture
+  before the size floor; a small picture that is the sheet's own (07_MO's chemical pot feeder schedule, 029_ME's
+  expansion tank) is read, while a logo placed on every sheet is not; and a picture holding only rules under the page's
+  own words is read from those words, without OCR. (ASSEMBLIES_BUG_CATALOGUE AS-154.)
+- **A schedule's numbered notes printed inside its own grid are not units.** 07_MO's pictured pump schedule prints "NOTE"
+  and then "1 BOLTED FLANGE" … "6 ECM MOTOR" in its grid, and each note was a pump keyed "1" to "6" (likewise RTU 1 to 4
+  and air devices 1 to 7). Rows below a NOTES label that each hold a note number and one line of text, to the table's
+  end, are no longer table rows. 17 phantom units go, and no real unit is lost. A relief fan's RLF is a fan mark under a
+  fan schedule's title (07_MO's RLF 1). (`vectorGridAdapter.ts` `dropNumberedNotes`; ASSEMBLIES_BUG_CATALOGUE AS-155.)
+- **A sheet whose drawn lines close no cell says its size.** vectorgrid answered such a sheet (often all picture, with a
+  border's corner) without a page size, so its picture was read on a 0 x 0 page and the browser refused the whole sheet.
+  082_OR's M002 and M003, whole mechanical schedule sheets placed as pictures, now read 15 tables and 46 units. A totals
+  row ("TOTAL", "DOAS-3TOTAL:") is never a unit. (`bakeoff/vectorgrid.py`; ASSEMBLIES_BUG_CATALOGUE AS-156.)
 - **An equipment table captioned as the units it lists is read as a schedule.** 23_GA's M601 prints HEAT PUMP UNITS and
   FAN COIL UNITS over TAG columns with no SCHEDULE in either caption, on a sheet a detail label calls an elevation; its
   heat pump (HP-1) is now read. Plans keep the stricter SCHEDULE caption rule. (`scheduleLanguageScan.ts`

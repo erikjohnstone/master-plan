@@ -190,7 +190,8 @@ export function sheetPage(sheet: string): { file: string; page: number } | null 
  * graph it was compiled from (loosely typed: both are JSON on the wire). */
 export interface HvacCompile {
   categories?: Record<string, { items?: ReadonlyArray<{ tag: string; sheet_id: string; table_title: string; cells?: CompileItem["cells"]; building?: string | null; description?: string | null; bbox_px?: readonly number[] | null;
-    scheduled_qty?: number | null; scheduled_qty_basis?: string | null; scheduled_qty_source_header?: string | null; scheduled_qty_source_text?: string | null }> }>;
+    scheduled_qty?: number | null; scheduled_qty_basis?: string | null; scheduled_qty_source_header?: string | null; scheduled_qty_source_text?: string | null;
+    read_from_picture?: boolean; printed_mark?: string }> }>;
 }
 export interface GraphTables {
   sheets?: ReadonlyArray<{ key: string }>;
@@ -211,6 +212,8 @@ export function compiledRowsAndTables(compiled: HvacCompile, graph: GraphTables)
     for (const it of cat.items ?? []) {
       items.push({ family, tag: it.tag, sheet_id: it.sheet_id, table_title: it.table_title, cells: it.cells ?? {},
         building: it.building ?? null, description: it.description ?? null,
+        ...(it.read_from_picture ? { read_from_picture: true } : {}),
+        ...(it.printed_mark ? { printed_mark: it.printed_mark } : {}),
         // A unit on each typical level its row lists (AS-139), carried where read.
         ...(it.scheduled_qty_basis === "one_per_typical_level" ? {
           scheduled_qty: it.scheduled_qty ?? null, scheduled_qty_basis: it.scheduled_qty_basis,
@@ -428,10 +431,12 @@ export function servingAirHandlers(items: readonly CompiledItem[]): Map<number, 
 
 /** The cite of a row's own mark: the cell that reads as its tag. */
 export function rowCite(item: CompiledItem): Cite {
+  // A schedule read from a picture by OCR says so on every cite (AS-153).
+  const pic = item.read_from_picture ? { read_from_picture: true } : {};
   for (const [header, cell] of Object.entries(item.cells ?? {})) {
-    if (canonTag(cell?.text ?? "") === canonTag(item.tag)) return { sheet: item.sheet_id, table_title: item.table_title, header, bbox: cell?.bbox ?? null };
+    if (canonTag(cell?.text ?? "") === canonTag(item.tag)) return { sheet: item.sheet_id, table_title: item.table_title, header, bbox: cell?.bbox ?? null, ...pic };
   }
-  return { sheet: item.sheet_id, table_title: item.table_title, header: "(row)", bbox: null };
+  return { sheet: item.sheet_id, table_title: item.table_title, header: "(row)", bbox: null, ...pic };
 }
 
 /** A derived attribute: its value, and the rule and project fact behind it. */
@@ -617,6 +622,7 @@ export function answerUnitsOf(project: CompiledProject, instances: readonly Appl
       attributes: inst.attributes, unknown: inst.unknown as AnswerUnit["unknown"],
       cells: Object.fromEntries(Object.entries(it.cells ?? {}).map(([h, c]) => [h, String(c?.text ?? "")])),
       table_title: it.table_title, table_headers: headersOf.get(`${it.sheet_id}|${it.table_title}`) ?? [],
+      ...(it.printed_mark ? { printed_mark: it.printed_mark } : {}),
       cite: inst.cites[0],
       ...(normalized?.[inst.item]?.notes ? { notes: normalized[inst.item].notes } : {}),
     };

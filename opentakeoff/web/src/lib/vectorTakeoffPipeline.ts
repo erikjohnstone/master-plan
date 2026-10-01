@@ -360,7 +360,10 @@ async function runL2VectorGridForSheet(
   // merged-cell/comparison-column structure — they are pasted images, 0
   // real PDF text words anywhere near either one, out of 2293 on the page).
   if (res.rasters > 0) {
-    report.notes.push(`${ctx.key}: ${res.rasters} raster table region(s) found and correctly excluded (pasted image, no ruled vector content to read) — not an extraction miss.`);
+    // A picture vectorgrid could read is a table by now (AS-153); one still
+    // a raster region is a picture it could not: no ruled table in its pixels,
+    // or no OCR engine installed. Any schedule it holds is missing.
+    report.notes.push(`${ctx.key}: ${res.rasters} picture(s) of a table not read (no ruled table found in the pixels, or the OCR engine is not installed) — any schedule printed there is missing from the takeoff; view_sheet to check.`);
   }
   if (mode === "shadow" || !res.tables.length) return;
   // Not mergeCandidates: vectorgrid is not one candidate among peers on a
