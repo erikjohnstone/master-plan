@@ -1,5 +1,13 @@
 # Changelog
 
+- **A schedule boxed by a double border keeps its text, and a sheet whose lines are drawn thousands of times over is read.**
+  - The gap between a schedule's outer border and its inner frame closed into one band-shaped face around the whole
+    table; every word then sat in two faces and the table came back empty. 04_NV's cooling tower schedule was lost
+    that way: its four cooling towers (CT-1 to CT-4) are now read. A face with a hole thinner than a cell is a sliver.
+  - 041_IL's sheet 11 re-plots one rule 6,834 times; noding every overlap ran the table sidecar out of memory (13.5 GB,
+    killed). Strokes on one line are merged before noding when a line carries 256 or more: the sheet reads in 15 s.
+  - Re-extracting all 970 captured schedule sheets: +4 units, none removed or re-cited, no walled document changed.
+  (`bakeoff/vectorgrid.py` `find_tables`, `_merge_collinear`; ASSEMBLIES_BUG_CATALOGUE AS-147, AS-151.)
 - **A schedule drawn edge to edge, and a unit's row printed on two or more lines, are read as schedules and rows.**
   - vectorgrid dropped any region wider than 92% of its sheet as a title block strip; 014_MT M0.2's CUSTOM and COMFORT
     AIR HANDLING UNIT SCHEDULEs are 93.7% and 92.7%. A region that wide is now kept when it has a schedule's columns

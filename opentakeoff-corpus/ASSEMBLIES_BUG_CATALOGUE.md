@@ -8240,3 +8240,52 @@ Tests: `web/test/tallDataRows.test.ts` on M0.2's and 017_MD #12's own vectorgrid
 mutations of the three rules fail them. `web/test/vectorGridWideSchedule.test.ts` redraws M0.2's COMFORT schedule's
 own ruling and runs the real sidecar: it reads AHU-A2 across 42 columns, and a title strip as wide, ten fields, is
 still dropped (with the guard as before, the first fails; with no guard, the second).
+
+## AS-147 — a schedule boxed by a double border came back from vectorgrid with no text: 04_NV's four cooling towers were never units (FIXED, this commit)
+
+**Found:** the WP1 under-count list after AS-145. 04_NV's key lists four cooling towers; the takeoff read none. Sheet
+32 prints COOLING TOWER SCHEDULE: one row, "CT-1,2,3,4" under ITEM NO., EVAPCO AT-114-1024. vectorgrid found the
+table (38 faces, 8 rows by 17 columns), but its reply to the takeoff had no table there at all.
+- The schedule is boxed twice: a hairline outer border 1.6pt outside the inner frame its walls stop at. That gap
+  closes into ONE face, a band around the whole table with the table as its hole. `find_tables` keeps a face by its
+  bounds (a sliver is thinner than 2pt in either axis), and the band's bounds are the table's own, so it was kept
+  and joined the table.
+- `slot()` drops each word into the faces whose boxes hold it. Every word of the table sat inside the band's box and
+  its own cell's: all 110 counted as straddling two faces, none was assigned, and `extract_grid` drops a table with
+  no assigned text.
+
+**Change:** `bakeoff/vectorgrid.py` `find_tables`: a face with a hole whose thickness (area over half its perimeter,
+outer and inner rings both) is under `MIN_CELL_SIDE` is a sliver like any other, and is not a cell. A face holding a
+drawn symbol (a cell with a box inside it) is as thick as the cell and is kept.
+
+**Measured:** 04_NV #32's COOLING TOWER SCHEDULE reads whole (CT-1,2,3,4, EVAPCO AT-114-1024): the takeoff gains its four cooling towers, CT-1 to CT-4 (its WP1 key lists 4; it read 0).
+
+**Census:** every captured schedule sheet (970: 844 open, 126 walled) re-extracted with AS-147, AS-150 and AS-151 together and compared with its captured reply: 810 open sheets identical, 33 changed, 1 newly read (041_IL #11, AS-151); 4 walled sheets changed (counts only). Replayed through the table builder and the takeoff: +4 units (04_NV's cooling towers), 0 removed, 0 re-cited; no walled document's units change. The table-level changes outside 04_NV, each attributed by re-extracting the sheet with the ring rule alone: AS-147 re-reads 058_CA's Title 24 lighting compliance forms (#244, #246) and 078_US's "DN" junk box (#5, #7); AS-150 is 02_UT #52's (below). The other 27 changed replies change no table the builder makes.
+
+**Should this be on the shared path? Yes.** vectorgrid is the one reading of a schedule's grid for every surface
+(`Session.graphForPipeline`).
+
+Tests: `web/test/vectorGridRingFace.test.ts` redraws 04_NV #32's own ruling (every stroke and its weight) and words
+(fixture `as147-04nv-p32-ring.json`) and runs the real sidecar: the double-bordered schedule reads CT-1,2,3,4,
+EVAPCO AT-114-1024 and its other cells, as the same schedule boxed once does. With the rule removed the first test
+fails and the second still passes. Skipped where vectorgrid's Python is not installed.
+
+## AS-151 — a sheet whose lines are drawn thousands of times over killed the table sidecar: 041_IL M-sheet 11 never read (FIXED, this commit)
+
+**Found:** the capture runs for AS-142 to AS-147. vectorgrid on 041_IL's sheet 11 grew to 13.5 GB and was killed by the
+kernel every time; in production the sidecar dies mid-document, and the sheet's schedules are never read. The page
+has 18,876 strokes, not many: one horizontal line carries 6,834 of them, overlapping (a re-plotted rule). GEOS's
+`node()` splits every stroke at every crossing and overlap, and exhausted memory (`std::bad_alloc` under a 5 GB cap).
+
+**Change:** `bakeoff/vectorgrid.py` `find_tables`: when any one line carries `MERGE_STROKES_ON_A_LINE` (256) strokes or
+more, axis-aligned strokes on one line are merged where they overlap or touch before noding (`_merge_collinear`):
+18,876 lines become 3,190 and node in 0.1 s. Stroke weights are still read from every stroke. Every other page is
+noded exactly as before: merging everywhere moved symbol and legend regions on 7 of the first 60 corpus sheets (GEOS
+nodes merged strokes a hair differently from their overlapping parts), so the merge is kept to the pathology.
+
+**Measured:** 041_IL sheet 11: killed at 13.5 GB → 14.6 s, 373 MB, 8 tables, among them its 23-row Specialty Equipment
+Schedule (Type Mark, Description, Manufacturer). In the same census (AS-147) no other sheet's reply changes from the merge: the five sheets whose tables AS-147 changes give byte-identical differences with the ring rule alone.
+
+**Should this be on the shared path? Yes.** vectorgrid is the one reading of a schedule's grid for every surface.
+
+Tests: `web/test/vectorGridOverdrawnLine.test.ts` draws one rule re-plotted 6,000 times in overlapping pieces, crossed by short verticals, beside a small fan schedule, and runs the sidecar's own `extract_grid` in a child limited to 3 GB of address space: it reads the schedule. Without the merge the child dies (`std::bad_alloc`). Skipped where vectorgrid's Python is not installed.

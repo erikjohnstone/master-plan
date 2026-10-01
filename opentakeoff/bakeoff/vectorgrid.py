@@ -847,6 +847,48 @@ def _border_weight(segs: list[tuple]) -> float | None:
     return heavy if heavy >= ws[0] * 1.6 else None
 
 
+MERGE_STROKES_ON_A_LINE = 256  # see find_tables: a line drawn this many times over is merged before noding
+
+
+def _max_strokes_on_a_line(segs: list[tuple]) -> int:
+    """The most axis-aligned strokes any one line carries."""
+    counts: dict = defaultdict(int)
+    for x0, y0, x1, y1, _ in segs:
+        if y0 == y1:
+            counts[("h", y0)] += 1
+        elif x0 == x1:
+            counts[("v", x0)] += 1
+    return max(counts.values(), default=0)
+
+
+def _merge_collinear(segs: list[tuple]) -> list:
+    """Axis-aligned strokes on one line, merged where they overlap or touch;
+    every other stroke as drawn. Only the noding input: weights are read from
+    the strokes themselves."""
+    rows: dict = defaultdict(list)
+    cols: dict = defaultdict(list)
+    other = []
+    for x0, y0, x1, y1, _ in segs:
+        if y0 == y1:
+            rows[y0].append((min(x0, x1), max(x0, x1)))
+        elif x0 == x1:
+            cols[x0].append((min(y0, y1), max(y0, y1)))
+        else:
+            other.append(((x0, y0), (x1, y1)))
+    out = []
+    for key, runs, horizontal in [(k, v, True) for k, v in rows.items()] + [(k, v, False) for k, v in cols.items()]:
+        runs.sort()
+        lo, hi = runs[0]
+        for a, b in runs[1:]:
+            if a <= hi:
+                hi = max(hi, b)
+                continue
+            out.append(((lo, key), (hi, key)) if horizontal else ((key, lo), (key, hi)))
+            lo, hi = a, b
+        out.append(((lo, key), (hi, key)) if horizontal else ((key, lo), (key, hi)))
+    return out + other
+
+
 def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     """-> {tables: [{bbox, cells:[bbox], n_cells}], diagnostics: {...}}"""
     with pdfplumber.open(pdf_path) as doc:
@@ -878,7 +920,19 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     # Faces of the arrangement. node() splits every stroke at every crossing —
     # without it GEOS silently fails to close polygons at unnoded intersections,
     # which is the single most common way this approach is got wrong.
-    lines = MultiLineString([((x0, y0), (x1, y1)) for x0, y0, x1, y1, _ in segs])
+    #
+    # STROKES THAT OVERLAP ON ONE LINE ARE ONE LINE TO NODE (#254). A drafter's
+    # hatch or a re-plotted rule draws the same line many times: 041_IL#11
+    # prints 6,834 overlapping strokes on a single row, and GEOS, noding every
+    # overlap pairwise, ran out of memory (13.5 GB, killed every time) on a
+    # page of 18,876 segments. Merged where they overlap or touch, the same
+    # rules are 3,190 lines and node in 0.1 s. Only such a page: GEOS nodes
+    # merged strokes a hair differently from their overlapping parts, which
+    # moved symbol and legend regions on 7 of the first 60 corpus sheets, so
+    # every page whose lines carry fewer strokes is noded exactly as before.
+    # Weights are read from every stroke either way (_weight_index above).
+    lines = MultiLineString(_merge_collinear(segs) if _max_strokes_on_a_line(segs) >= MERGE_STROKES_ON_A_LINE
+                            else [((x0, y0), (x1, y1)) for x0, y0, x1, y1, _ in segs])
     noded = node(lines)
     # polygonize_full takes a SEQUENCE of geometries; node() hands back a single
     # MultiLineString, so hand over its parts rather than the collection itself.
@@ -907,6 +961,19 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             continue
         gx0, gy0, gx1, gy1 = g.bounds
         if min(gx1 - gx0, gy1 - gy0) < MIN_CELL_SIDE:
+            continue
+        # A RING IS A SLIVER TOO (AS-147). A table drawn with a double border
+        # leaves a gap between its outer rule and its inner frame, and when the
+        # grid's walls stop at the inner frame that gap closes into ONE face:
+        # a band 1.6pt thick around the whole table, with the table as its hole.
+        # Its bounds are the table's, so the test above, which reads bounds,
+        # passes it; and every word of the table then falls inside both that
+        # face's box and its own cell's, so slot() counts each as straddling
+        # two faces and the table comes back with no text and is dropped.
+        # Measured on 04_NV#32's COOLING TOWER SCHEDULE: 38 faces, all 110 words
+        # straddling, four cooling towers gone. A band's thickness is its area
+        # over half its perimeter (outer and inner rings both).
+        if g.interiors and 2 * g.area / g.length < MIN_CELL_SIDE:
             continue
         # ... and neither is a tall blank. A cell's height is bounded by the
         # text it holds: even a merged multi-line header is a few line-heights.
