@@ -1,5 +1,20 @@
 # Changelog
 
+- **Schedules titled with their specification section are read.**
+  - A sheet whose tables are titled "CHILLER (SPECIFICATION SECTION
+    23 64 16)" or "PUMPS (SPECIFICATION SECTION 23 21 23)", with SCHEDULES
+    only in its title block, read as a section drawing, so none of its tables
+    was extracted: 26_CA's schedule sheet M0.09, ten tables (seven are now
+    read; AS-142 lists the other three). SECTION after
+    SPECIFICATION or SPEC, or before a MasterFormat number, now reads as a
+    reference to the specification; a drawn section ("SECTION A-A") reads
+    as before. 26_CA's takeoff: 189 → 248 units; its reconcile: units with
+    no row 71 → 16, drawn tags linked to their row 155 → 207 of 280.
+  - A mark's separator inside parentheses no longer splits it:
+    "AHU-(34,35)-1", the air handler of typical levels 34 and 35, was read
+    as "AHU-(34", one unit for two rows.
+  (`web/src/lib/sheetgraph.ts` `ROLE_SIGNALS`, `web/src/lib/corpusTakeoff.mjs`
+  `rowMarkPieces`; ASSEMBLIES_BUG_CATALOGUE AS-108, AS-138.)
 - **Schedule ↔ plan reconcile: a row the call did not search reads "Not
   searched", never SCHEDULE_ONLY.**
   - A family reconcile scoped to some tags, or told not to sweep, still

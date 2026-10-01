@@ -1699,12 +1699,25 @@ export function splitRowMarks(text, willFilter, wordsNamed = false) {
   return continued.flatMap((t) => expandEquipMarks(t));
 }
 
-/** A row's text in the pieces its marks are split from (splitRowMarks). */
+/** A row's text in the pieces its marks are split from (splitRowMarks), on
+ * a separator outside parentheses only: 26_CA's "AHU-(34,35)-1" is the air
+ * handler of typical levels 34 and 35, one mark (AS-138). */
 function rowMarkPieces(text, willFilter) {
-  return String(text)
-    .split(willFilter ? /[/,]/ : "/")
-    .map((t) => t.trim().replace(QUOTES_RE, ""))
-    .filter(Boolean);
+  const pieces = [];
+  let depth = 0;
+  let piece = "";
+  for (const ch of String(text)) {
+    if (ch === "(") depth++;
+    else if (ch === ")") depth = Math.max(0, depth - 1);
+    if (!depth && (ch === "/" || (willFilter && ch === ","))) {
+      pieces.push(piece);
+      piece = "";
+      continue;
+    }
+    piece += ch;
+  }
+  pieces.push(piece);
+  return pieces.map((t) => t.trim().replace(QUOTES_RE, "")).filter(Boolean);
 }
 
 /**

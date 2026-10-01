@@ -324,6 +324,39 @@ test("sheet roles: a demolition plan's title with no PLAN word decides a sheet t
   assert.equal(both.role, "plan");
 });
 
+// AS-108: 26_CA's schedules sheet M0.09 titles each table with the
+// specification section of its equipment and prints SCHEDULES only in its
+// title block; the reference read as a section drawing (detail, 0.6) over the
+// title block (0.5), so no table on the sheet was extracted.
+test("sheet roles: a specification section reference is not a section drawing (AS-108)", () => {
+  const titled = (...titles: string[]) => ({ key: "s", sheet_number: "M0.09", spans: [
+    ...notes(12), ...titles.map((t, i) => tsp(t, 300 + 1500 * i, 200, 30)), tsp("MECHANICAL", 5000, 4100, 51), tsp("SCHEDULES", 5000, 4170, 51),
+  ] });
+  const m009 = titled("(SPECIFICATION SECTION 23 73 63)", "(SPECIFICATION SECTION 23 64 16)", "(SPECIFICATION SECTION 23 21 23)");
+  assert.deepEqual([classifySheetRoleBySignals(m009).role, classifySheetRole(m009).role], ["schedule", "schedule"]);
+  // a schedule title citing its section reads by its title
+  assert.equal(classifySheetRoleBySignals(titled("FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)")).role, "schedule");
+  // the reference however it is spelled is no section drawing
+  for (const ref of ["SPECIFICATIONS SECTION 23 05 13", "SPEC SECTION 230513", "SPEC. SECTION 23 09 23", "LISTED IN SPEC SECTION 012300-ALTERNATES:",
+    "SECTION 15950", "SECTION 23 73 63.13", "(SECTION 23 36 00)",
+    // with no number (013_MO's I-100)
+    "REFER TO THE ALLOWANCES SPECIFICATION SECTION FOR ALL", "PER SPECIFICATIONS SECTIONS", "SEE SPEC SECTION", "SEE SPEC. SECTION"]) {
+    const sheet = { key: "r", sheet_number: "M001", spans: [...notes(12), tsp(ref, 300, 200, 30)] };
+    assert.equal(classifySheetRoleBySignals(sheet).role, "unknown", ref);
+  }
+  // a schedule's column printing each unit's specification section is no section drawing
+  for (const header of ["SPEC SECTION", "SPEC. SECTION", "SPECIFICATION SECTION", "SPECIFICATIONS SECTIONS"]) {
+    const sheet = { key: "h", sheet_number: "M601", spans: [...notes(12), tsp(header, 300, 260, 12), tsp("MECHANICAL", 5000, 4100, 51), tsp("SCHEDULES", 5000, 4170, 51)] };
+    assert.equal(classifySheetRoleBySignals(sheet).role, "schedule", header);
+  }
+  // a drawn section is a section as before; a code section stays excluded
+  for (const title of ["SECTION A-A", "BUILDING SECTION", "SECTION 3", "WALL SECTIONS", "SECTION 1/M-501", "SECTIONS AND DETAILS"]) {
+    const sheet = { key: "d", sheet_number: "M501", spans: [...notes(12), tsp(title, 300, 200, 30)] };
+    assert.equal(classifySheetRoleBySignals(sheet).role, "detail", title);
+  }
+  assert.equal(classifySheetRoleBySignals({ key: "c", sheet_number: "E601", spans: [...notes(12), tsp("VARIES (SEE CODE SECTION)", 300, 200, 30)] }).role, "unknown");
+});
+
 test("sheet roles: a control/DDC schematic classifies role \"schematic\", never \"legend\" via its own cross-reference note (plan §3.2 WP1)", () => {
   // A real, general drafting shape: a control-schematic sheet titles itself
   // with SCHEMATIC/DIAGRAM/SEQUENCE OF OPERATION vocabulary and separately

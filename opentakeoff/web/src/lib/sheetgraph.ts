@@ -340,7 +340,17 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // "ELEVATION NUMBER" exclusion two lines above -- excludes only this one
   // measured phrase shape, never loosens a real "WALL SECTION"/"BUILDING
   // SECTION A-A"/"CROSS SECTION" sheet-title match anywhere else.
-  { re: /DETAILS?\b|(?<!CODE )SECTIONS?\b/, role: "detail", conf: 0.6 },
+  //
+  // A specification reference is not a section drawing either (AS-108):
+  // a schedule titled with the section that specifies its equipment
+  // ("PUMPS (SPECIFICATION SECTION 23 21 23)", "FAN POWERED TERMINAL UNIT
+  // SCHEDULE (SECTION 23 36 00)"), or a note citing one ("LISTED IN SPEC
+  // SECTION 012300"), outvoted 26_CA's schedules sheet M0.09, whose tables
+  // print no SCHEDULE word, and none of its tables was extracted. SECTION
+  // after SPECIFICATION(S) or SPEC, or before a MasterFormat number (three
+  // pairs of digits, or five digits), is that reference; a drawn section
+  // ("SECTION A-A", "SECTION 3", "BUILDING SECTION") reads as before.
+  { re: /DETAILS?\b|(?<!CODE )(?<!SPECIFICATIONS? )(?<!SPEC\.? )SECTIONS?\b(?!\s+(?:\d{2}\s?\d{2}\s?\d{2}|\d{5})\b)/, role: "detail", conf: 0.6 },
 ];
 // Running-text references are not titles: "SEE FINISH PLAN FOR ADDITIONAL
 // INFORMATION" in a remark cell must never make a schedule sheet a plan.

@@ -7867,3 +7867,80 @@ scoped call, an opt-out, an unreadable QTY's reason kept, a full sweep unchanged
 one call, scoped and opted out) still passes. 8 mutations each fail a test: no marking; the status kept; SCHEDULE_ONLY;
 `plan_search_complete: false`; swept rows marked instead; the tag left out of the reason; the schedule-side reason
 dropped; a reason naming the call's scope (fails the D07 chunk test).
+
+## AS-108 — a specification section reference is not a section drawing: 26_CA's schedule sheet M0.09 went unread (FIXED, this commit)
+
+**Found:** 26_CA's reconcile (#209): 71 scheduled units had no reconcile row, and the takeoff read none of them either.
+Most are on M0.09 and M0.10, whose tables carry no SCHEDULE word in their own titles but the specification section
+of their equipment ("CHILLER (SPECIFICATION SECTION 23 64 16)", "PUMPS (SPECIFICATION SECTION 23 21 23)"); SCHEDULES
+is printed only in the title block. The extraction role's signals read every "SECTION" as a section drawing (detail,
+0.6), which outvoted the title block (schedule, 0.5). A detail sheet's vector geometry is not extracted
+(`Session.graphForPipeline` reads segments on plan, schedule, demolition, schematic and unknown sheets only), so
+M0.09's tables were not read at all. M0.10's were read without it (its fan-powered terminal titles print SCHEDULE)
+and are unchanged.
+
+**Change:** the detail signal (`ROLE_SIGNALS`, `sheetgraph.ts`) no longer reads SECTION after SPECIFICATION(S) or
+SPEC(.), nor before a MasterFormat number (three pairs of digits, as in 23 73 63 or 230513, or five digits, as in
+15950): that is a reference to the specification, not a drawn section. "SECTION A-A", "SECTION 3", "SECTION 1/M-501",
+"BUILDING SECTION", "WALL SECTIONS" and "SECTIONS AND DETAILS" read as before, and "CODE SECTION" stays excluded.
+
+**Census (the base classifier against the changed one, every sheet of the 90 open documents' 3,593):** 6 extraction
+roles change, 5 on open documents and 1 on a walled check document (counted, not shown):
+- 26_CA M0.09 and M0.10: detail → schedule (the change it was written for);
+- 013_MO I-100 and I-110: detail → unknown by signal ("LISTED IN SPEC SECTION 012300-ALTERNATES"), their final role
+  plan as before;
+- 028_TX M-506: detail → unknown ("SPECIFICATION SECTION 23 09 23 FOR ADDITIONAL INFORMATION").
+
+**Graphs (built before and after for the four documents with a changed role):** 26_CA 35 → 42 tables, the 35 identical
+and 7 added, all on M0.09: the tri-path air handlers, the chillers, the cooling air handlers, the air inlets and
+outlets, and three tables whose titles the extraction folded into their header band (fan coils, cooling towers,
+pumps). 013_MO and 028_TX: every table identical. The walled check document is 071_ME (aggregates only): its final
+roles and all 29 tables identical, and its compiled units too.
+
+**Measured:** 26_CA, before and after (the production reconcile, the takeoff and the evals):
+- Takeoff: 189 → 248 units, none removed and no quantity changed: air handlers +23, fan coils +18, pumps +14,
+  cooling towers +4 (AS-108 alone, 247; AS-138 below adds one).
+- Reconcile eval (26_CA's key, 193 units): units with no reconcile row 71 → 16; drawn units found 120 → 150; unit
+  count exact 118 of 122 → 147 of 177; placements agreeing 142 → 178 (precision 95.3% → 95.2%); a scheduled unit's
+  drawn tag linked to its row 155 → 207 of 280; review list entries 726 → 702, a scheduled unit's tag among them
+  37 → 15. Every unit and link the run before got right reads the same. The likely-units list gains 2 entries the key
+  counts as no unit: FCU-P1-1 and FCU-P2-1, thermostat labels on the parking plans naming the blower coils the
+  schedule calls BCU-P1-1 and BCU-P2-1.
+- Rows 323 → 407: MATCH 245 → 285, SCHEDULE_ONLY 62 → 95, AMBIGUOUS 16 → 27.
+- Attribute eval (dev 4: 26_CA's keyed tables on M0.11 and M4.05), table-box eval and tag eval on 26_CA: identical.
+
+What the newly read tables still get wrong, each its own entry: the tri-path air handlers' 12 rows are typical-level
+templates (AHU-(6-33)-1 is one air handler on each of levels 6 to 33, drawn "AHU 6-1", "AHU 17-1" on the level plans)
+and read SCHEDULE_ONLY, one unit each (AS-139); the fan coil, cooling tower and pump tables have no title, the
+extraction having folded it into their header band, so no family reads the blower coils BCU-* or the pumps PHWP-* and
+SHWP-* (AS-140); no family reads the chillers WCU-2-1 to WCU-2-4 (AS-141); the hot water boilers, the plate and frame
+heat exchangers and the second half of the tri-path air handler table are not extracted (AS-142); and the air inlets
+and outlets' slot and floor diffusers SD-A to SD-D and FD-A are reconciled as smoke and fire dampers (AS-143).
+
+**Should this be on the shared path? Yes.** The sheet's role decides what the one extraction reads, for the UI and MCP
+alike (`Session.graphForPipeline`).
+
+Tests: `sheetgraph.test.ts` ("a specification section reference is not a section drawing": M0.09's titles and title
+block, a schedule title citing its section, eight spellings of a reference, four column headings that name a section,
+six drawn sections and a code section). 8 mutations each fail it: no SPECIFICATION lookbehind, no SPEC lookbehind, no
+MasterFormat lookahead, no five-digit section, any number after SECTION a reference, no CODE lookbehind, SPECIFICATIONS
+unread, SPEC. unread.
+
+## AS-138 — a separator inside a mark's parentheses split the mark: 26_CA's AHU-(34,35)-1 and -2 were one unit named "AHU-(34" (FIXED, this commit)
+
+**Found:** reading the units AS-108 adds. M0.09 names the tri-path air handlers of typical levels by the levels in
+parentheses: "AHU-(6-33)-1", "AHU-(34,35)-1" and their "-2" twins. `splitRowMarks` splits a row's name on "/" and, for
+a family's mark rule, on ",": "AHU-(34,35)-1" became "AHU-(34" and "35)-1", and both rows read as one unit "AHU-(34".
+
+**Change:** `rowMarkPieces` (`corpusTakeoff.mjs`) splits on a separator outside parentheses only. An unclosed
+parenthesis keeps the rest of the name whole. "CWP-1/CWP-2", "DFC-1 , DCU-1" and every other name split as before.
+
+**Measured:** 26_CA, the compile on M0.09's tables: "AHU-(34" (one unit for two rows) → AHU-(34,35)-1 and
+AHU-(34,35)-2 (+1 unit, the broken mark gone). Census: the compile and the reconcile's units of every row, on the 97 cached
+graphs (before AS-108), with the old split and the new: no unit changes on any document, walled ones included.
+
+**Should this be on the shared path? Yes.** `splitRowMarks` is the one reading of a row's marks for the takeoff, the
+reconcile and the family gate.
+
+Tests: `web/test/rowMarkPieces.test.ts` (2: the split itself; 26_CA's four air handler rows compiled). 2 mutations each
+fail them: the old split; commas splitting inside parentheses.
