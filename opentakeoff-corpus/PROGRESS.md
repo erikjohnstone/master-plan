@@ -229,3 +229,16 @@ being saved as a regression check of the mark-prefix change, which touches every
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
+
+### Room-code unit marks after a numbered building (2026-10-02)
+
+038_NC numbers 8 of its 20 mini-split pairs by the room each serves:
+floor + wing + room (47-IDU-1A137, 47-ODU-2E202A). `markCoreForKeyRe`
+stripped the building number but refused the remainder (IDU-1A137 is not a
+SHORT_EQUIP_MARK_RE shape), so those rows reached no family. It now accepts
+`FAMILY-<floor><wing><room>` after a numbered building only. Offline A/B over
+all 45 saved graphs: 1 set changed, +16 −0 units, 038_NC FCU 12→20 (key 20),
+CONDENSING_UNIT 16→24. Gap left: the key counts 47-ODU-BC143C as HEAT_PUMP
+(the only outdoor row printing heating capacity, 40,000 Btu/h). The takeoff
+has no per-row family split by a heating column, so it stays a
+CONDENSING_UNIT (units total right, one in the wrong family).

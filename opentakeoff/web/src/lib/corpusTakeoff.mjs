@@ -503,6 +503,11 @@ export function markCoreForKeyRe(tag) {
   if (SHORT_EQUIP_MARK_RE.test(stripped)) {
     return stripped;
   }
+  // After a numbered building the unit's number may be the room it serves,
+  // floor + wing + room (038_NC's 47-IDU-1A137, 47-ODU-2E202A → IDU-1A137).
+  if (/^\d{1,3}-/.test(canon) && /^[A-Z]{2,8}-\d{1,2}[A-Z]{1,2}\d{2,4}[A-Z]?$/.test(stripped)) {
+    return stripped;
+  }
   return canon;
 }
 

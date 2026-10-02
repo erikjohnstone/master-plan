@@ -1,5 +1,10 @@
 # Changelog
 
+- **Units numbered by the room they serve.** A mark can carry a building number and then a room code for its
+  number: 038_NC's 47-IDU-1A137 (building 47, floor 1, wing A, room 137). The takeoff stripped the building and
+  then refused IDU-1A137 as a mark, so 8 of the set's 20 mini-split pairs went uncounted. After a numbered building
+  a floor + wing + room number is now read as the unit's number. 038_NC: indoor units 12 → 20, outdoor 16 → 24;
+  no other saved graph changes.
 - **An existing unit's mark matches its bare plan tag.** A schedule can print a status after a mark that its plans
   leave off: 012_MO's VFD SCHEDULE lists VFD-CT-1..3 "(EXIST.)", tagged VFD-CT-1..3 on the plans. The row keeps its
   status (it tells an existing unit from a new one of the same mark), so the three drives read schedule-only. The

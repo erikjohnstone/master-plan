@@ -836,6 +836,17 @@ describe("split, VRV, CRAC, inline fan and grille schedules by the names they pr
     assert.equal(markCoreForKeyRe("CV-FCU-A2-HHW"), "CV-FCU-A2-HHW");
   });
 
+  it("strips a building number before a unit numbered by the room it serves", () => {
+    // floor + wing + room: 038_NC's 47-IDU-1A137, 47-ODU-2E202A.
+    assert.equal(markCoreForKeyRe("47-IDU-1A137"), "IDU-1A137");
+    assert.equal(markCoreForKeyRe("47-ODU-2E202A"), "ODU-2E202A");
+    // Only after a numbered building: a lettered or coded token keeps its mark.
+    assert.equal(markCoreForKeyRe("CV-FCU-1A137"), "CV-FCU-1A137");
+    assert.equal(markCoreForKeyRe("B950-FCU-1A137"), "B950-FCU-1A137");
+    const tags = compile([table("m.pdf#20", "MINI-SPLIT INDOOR UNIT SCHEDULE", ["47-IDU-A301", "47-IDU-1A137"])]);
+    assert.deepEqual(tags("FCU"), ["47-IDU-1A137", "47-IDU-A301"]);
+  });
+
   it("reads a mini-split's indoor and outdoor units in their own families", () => {
     const tags = compile([
       table("m.pdf#20", "MINI-SPLIT INDOOR UNIT SCHEDULE", ["47-IDU-A301", "47-IDU-BF107"]),
