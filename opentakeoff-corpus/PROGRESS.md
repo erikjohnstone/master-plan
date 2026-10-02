@@ -75,6 +75,15 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 016_NY 24 lines / 10 schedules): no product problems. 21 crashed again (Chrome OOM, see rules) and are still
 unverified.
 
+## Stale compile keys (found 2026-10-02)
+
+35 `takeoffs/cross-set-compile/*.compile.json` keys say 0 items with notes like "no extractable HVAC tables": they
+were written from pipeline output, not from the drawings, and only the WP1 acceptance list is scored, so nothing
+fails on them. 095_UT's was hiding a real reading failure (fixed in 0881cd7, re-keyed from the render). Of the
+zero-key sets the browser sweep finished, the app reads units on 029_ME, 038_NC, 054_NV, 064_MT, 073_MT, 087_US,
+08_ME and 100_OH; only 052_IL and 057_US read nothing, and both are correct. The rest were OOM-lost or never swept:
+compile them in node (one at a time) and look at any that read 0.
+
 ## Active work / next queue
 
 1. Corpus A/B (HEAD vs 302cf34, production env) → fill **Verified baseline**; investigate any regression.
