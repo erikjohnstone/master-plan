@@ -4,7 +4,9 @@
  * a grid from its pixels, as it reads a picture of a table (AS-153). The test
  * draws a fan schedule, plots its letters as outlines (SVG text-as-path, back
  * to PDF), and checks the sidecar reads every cell; the same schedule printed
- * as text is read from its text, and an empty ruled grid is not read at all.
+ * as text is read from its text, an empty ruled grid is not read at all, and
+ * nor is a small box lettered in ink (a keynote or a callout is no schedule:
+ * a sheet lettered in ink letters those too, and reading each costs seconds).
  * Skipped where vectorgrid's Python or its OCR engine is not installed.
  */
 import assert from "node:assert/strict";
@@ -24,14 +26,19 @@ import sys, pymupdf
 mode, out = sys.argv[1], sys.argv[2]
 doc = pymupdf.open(); page = doc.new_page(width=792, height=612)
 x0, y0 = 100, 100
-for r in range(5): page.draw_line((x0, y0 + 30 * r), (x0 + 400, y0 + 30 * r), width=0.8)
-for c in range(5): page.draw_line((x0 + 100 * c, y0), (x0 + 100 * c, y0 + 120), width=0.8)
+if mode == "box":
+    rows = [["1", "SEE", "NOTE"], ["2", "VERIFY", "SIZE"], ["3", "TYP", "4"]]
+else:
+    rows = [["MARK", "TYPE", "CFM", "RPM", "NOTES"], ["EF-1", "ROOF", "400", "1050", "1"], ["EF-2", "ROOF", "500", "1100", "1"],
+            ["EF-3", "WALL", "250", "900", "2"], ["EF-4", "WALL", "300", "950", "2"]]
+nr, nc = len(rows), len(rows[0])
+for r in range(nr + 1): page.draw_line((x0, y0 + 30 * r), (x0 + 100 * nc, y0 + 30 * r), width=0.8)
+for c in range(nc + 1): page.draw_line((x0 + 100 * c, y0), (x0 + 100 * c, y0 + 30 * nr), width=0.8)
 if mode != "empty":
-    rows = [["MARK", "TYPE", "CFM", "NOTES"], ["EF-1", "ROOF", "400", "1"], ["EF-2", "ROOF", "500", "1"], ["EF-3", "WALL", "250", "2"]]
     for r, row in enumerate(rows):
         for c, t in enumerate(row): page.insert_text((x0 + 100 * c + 8, y0 + 30 * r + 20), t, fontsize=10)
-    page.insert_text((x0, y0 - 12), "EXHAUST FAN SCHEDULE", fontsize=12)
-if mode == "ink":
+    page.insert_text((x0, y0 - 12), "KEYED NOTES" if mode == "box" else "EXHAUST FAN SCHEDULE", fontsize=12)
+if mode in ("ink", "box"):
     doc = pymupdf.open("pdf", pymupdf.open("svg", page.get_svg_image(text_as_path=True).encode()).convert_to_pdf())
     assert not doc[0].get_text().strip()
 doc.save(out)
@@ -66,7 +73,7 @@ describe("a drawn table lettered in ink is read from its pixels", { skip: ready 
     const tables = read("ink");
     const texts = tables.flatMap((t) => t.cells.map((c) => c.text).filter(Boolean));
     assert.ok(tables.some((t) => t.ocr), "read by OCR");
-    for (const want of ["MARK", "CFM", "EF-1", "EF-2", "EF-3", "WALL", "250"]) assert.ok(texts.includes(want), `${want} in ${texts.join(",")}`);
+    for (const want of ["MARK", "CFM", "EF-1", "EF-2", "EF-3", "EF-4", "WALL", "250"]) assert.ok(texts.includes(want), `${want} in ${texts.join(",")}`);
   });
   it("reads the same schedule printed as text from its text, not by OCR", () => {
     const tables = read("text");
@@ -75,5 +82,8 @@ describe("a drawn table lettered in ink is read from its pixels", { skip: ready 
   });
   it("does not read an empty ruled grid", () => {
     assert.ok(read("empty").every((t) => !t.ocr));
+  });
+  it("does not read a small box lettered in ink: a keynote is no schedule", () => {
+    assert.ok(read("box").every((t) => !t.ocr));
   });
 });

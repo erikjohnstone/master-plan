@@ -2,10 +2,13 @@
   "set_id": "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 MSHP Troop C \u2014 finish-schedule-only; no extractable HVAC equipment tables (honest ZERO).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Vol2 MSHP Troop C \u2014 the HVAC schedules (M-601, M-602) are lettered in ink (vector outlines, no text layer). M-601: ROOFTOP UNIT SCHEDULE RTU-1, RTU-2; FAN TERMINAL UNIT- ELECTRIC HEATING SCHEDULE FTU-r102, r103, x104, x106, x107, x108, n110-n113 and FTU-1201..1209 (19); VARIABLE AIR VOLUME BOX SCHEDULE VAV-n101, x102, x103, 1201, 1202, 1203 (6); EXISTING EXHAUST FAN SCHEDULE (FOR REFERENCE ONLY) not counted. M-602: every equipment schedule is titled EXISTING ... (FOR REFERENCE ONLY), not counted; the AIR DEVICE LEGEND lists air device types, not units. Fan terminal units are counted under VAV. Disclosure: general notes call the FTU-12XX and VAV-12XX units (12) existing to remain, shown for reference and balancing; they are counted, as the takeoff counts every unit of a schedule its title does not mark for reference. The earlier [ZERO] key was written from a pipeline run that could not see ink lettering, not from the drawing.",
+  "categories": {
+    "RTU": 2,
+    "VAV": 25
+  },
   "totals": {
-    "items": 0
+    "items": 27
   },
   "bas_points": {
     "rows": 0

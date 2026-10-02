@@ -2,10 +2,13 @@
   "set_id": "29_TX_JPS_Hospital_CentralPlant_Chiller",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/29_TX_JPS_Hospital_CentralPlant_Chiller.pdf",
   "kind": "hvac_equipment",
-  "notes": "Honest ZERO \u2014 0 extractable tables on chiller package as shipped.",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] JPS Hospital central plant chiller \u2014 M9.01 prints two schedules as pasted pictures: WATER COOLED CHILLER SCHEDULE (FOR REFERENCE ONLY) lists one unit, CH-3 (Trane CVHF1300 centrifugal, 1,250 tons), whose note 10 says the owner procured it and the contractor installs it, so it is work in this contract; COOLING COIL SCHEDULE lists one unit, CC-1 (chilled water, serves AHU-01). The chiller is counted under AIR_COOLED_CHILLER, the takeoff's family for every chiller schedule. The earlier [ZERO] key was written from a pipeline run that never offered the sheet (no text layer to speak of) to the table reader, not from the drawing.",
+  "categories": {
+    "AIR_COOLED_CHILLER": 1,
+    "DUCT_MOUNTED_COIL": 1
+  },
   "totals": {
-    "items": 0
+    "items": 2
   },
   "bas_points": {
     "rows": 0

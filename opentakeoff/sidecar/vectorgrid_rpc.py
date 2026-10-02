@@ -140,7 +140,14 @@ class _InkLettering:
     `printed` test counts them) are fewer than one for every three faces,
     and the paths inside it no bigger than a letter number at least
     INK_LETTERS_PER_FACE for every face. Both are read once per page, and
-    only when a table asks."""
+    only when a table asks.
+
+    Only a grid shaped like a schedule asks (_schedule_shaped): a sheet
+    lettered in ink letters its details, plans and keynote boxes in ink
+    too, and every ruled box there is a grid its words do not fill.
+    07_MO's 25 drawing sheets offered 262 such boxes, and reading each
+    from its pixels cost 900 s of a 962 s graph build for no table kept
+    (one framing detail's linework, 105 faces, took 111 s)."""
 
     def __init__(self, pdf_path: str, page_no: int):
         self.pdf_path, self.page_no = pdf_path, page_no
@@ -163,6 +170,8 @@ class _InkLettering:
         self._ink = ink
 
     def unprinted(self, t: dict) -> bool:
+        if not _schedule_shaped(t["cells"]):
+            return False
         if self._words is None:
             self._load()
         x0, y0, x1, y1 = t["bbox"]
@@ -171,6 +180,35 @@ class _InkLettering:
         if 3 * inside(self._words) >= faces:
             return False
         return inside(self._ink) >= INK_LETTERS_PER_FACE * faces
+
+
+def _schedule_shaped(faces: list) -> bool:
+    """A grid with the rows and columns of a schedule: at least
+    INK_TABLE_MIN_FACES faces in at least INK_TABLE_MIN_COLS columns and two
+    rows (a heading and a unit), filling at least INK_TABLE_MIN_FILL of the
+    lattice its rules make (distinct column edges x distinct row edges). A
+    schedule's rules cross the whole table, so nearly every position of that
+    lattice is a face, and merged header cells cost it little: 020_MO's
+    widest, 26 columns under spanned heads, fills 0.39, its others
+    0.54-0.96, and its smallest, one unit under its heading, has 20 faces.
+    A drawing's lines meet where its parts do, so its faces leave most of
+    the lattice empty (07_MO's framing detail fills 0.17, an enlarged plan
+    0.20), and a keynote box, a callout or a title strip is a few faces or
+    one row. Of 07_MO's 262 boxes lettered in ink, one is shaped like a
+    schedule: its EQUIPMENT DATA SCHEDULE (525 faces, 0.92)."""
+    if len(faces) < INK_TABLE_MIN_FACES:
+        return False
+    xs = {round(float(f[0]), 0) for f in faces} | {round(float(f[2]), 0) for f in faces}
+    ys = {round(float(f[1]), 0) for f in faces} | {round(float(f[3]), 0) for f in faces}
+    cols, rows = len(xs) - 1, len(ys) - 1
+    if cols < INK_TABLE_MIN_COLS or rows < 2:
+        return False
+    return len(faces) >= INK_TABLE_MIN_FILL * cols * rows
+
+
+INK_TABLE_MIN_FACES = 20
+INK_TABLE_MIN_COLS = 3
+INK_TABLE_MIN_FILL = 0.3
 
 
 # A letter drawn as ink is a path no bigger than this (points): schedule type
@@ -250,7 +288,14 @@ def _read_picture(pdf_path: str, page_no: int, bbox: list, diag: dict, out: list
     import json
     import os
     import subprocess
-    import rastergrid                                # noqa: E402
+    # A runtime without the reader reads no picture, as a machine without OCR
+    # does: the packaged runtime shipped without rastergrid.py, and every page
+    # holding a picture died here with ModuleNotFoundError, its drawn tables
+    # with it.
+    try:
+        import rastergrid                            # noqa: E402
+    except ImportError:
+        return False
     if not rastergrid.available():
         return False
     hit = None
