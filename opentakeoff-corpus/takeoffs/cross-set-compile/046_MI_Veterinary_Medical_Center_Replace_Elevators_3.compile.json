@@ -2,10 +2,14 @@
   "set_id": "046_MI_Veterinary_Medical_Center_Replace_Elevators_3",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/046_MI_Veterinary_Medical_Center_Replace_Elevators_3.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 elevator replace \u2014 no HVAC tables (honest ZERO).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Michigan State Veterinary Medical Center, replace elevators 3 and 4. M-1 prints one HVAC schedule, SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE: indoor unit AC-10 (Mitsubishi PKA-A24KL, elevator machine room) with condensing unit CU-10 (PUY-A24NHA, outdoor). P-1 prints a SUMP PUMP SCHEDULE: SP-6 and SP-7 (submersible elevator pit sump pumps, counted as pumps as the takeoff's PUMP family reads them) and an OIL INTERCEPTOR SCHEDULE (OS-2, OS-3; no family). The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "FCU": 1,
+    "CONDENSING_UNIT": 1,
+    "PUMP": 2
+  },
   "totals": {
-    "items": 0
+    "items": 4
   },
   "bas_points": {
     "rows": 0

@@ -2,10 +2,13 @@
   "set_id": "087_US_Contra_Costa_College_Chiller_Replacement",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/087_US_Contra_Costa_College_Chiller_Replacement.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 Contra Costa chiller replacement \u2014 no extractable HVAC schedule tables.",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Contra Costa College chiller replacement, M-sheet 1: AIR-COOLED CHILLER SCHEDULE lists ACCH-1 (Carrier 30RB120, 120.1 tons, serving the existing AHUs); CHILLED WATER PUMP SCHEDULE lists PCH-1 and PCH-2 (B&G e-1531, chilled water). The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "AIR_COOLED_CHILLER": 1,
+    "PUMP": 2
+  },
   "totals": {
-    "items": 0
+    "items": 3
   },
   "bas_points": {
     "rows": 0

@@ -2,10 +2,17 @@
   "set_id": "D_25_CO_weld-mech-permit-set",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/D_25_CO_weld-mech-permit-set.pdf",
   "kind": "hvac_equipment",
-  "notes": "Honest ZERO \u2014 insulation schedule only; no HVAC equipment unit schedules.",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Weld County crime lab storage building (Greeley). Both MECHANICAL SCHEDULES sheets print their schedules as pictures. M0.1: ROOFTOP PACKAGE UNIT SCHEDULE RTU-1, RTU-2, RTU-3 (Trane; each tag printed RTU over its number); INFRA-RED TUBE HEATER SCHEDULE IRH-1, IRH-2 (Schwank S100-80; tag printed IRH over its number); GAS FIRED UNIT HEATER SCHEDULE UH-1; SPLIT SYSTEM INDOOR UNIT SCHEDULE AC-1 (Mitsubishi PKA-A24KA4, wall mounted); SPLIT CONDENSING UNIT SCHEDULE CU-1; DIFFUSER, GRILLE AND REGISTER SCHEDULE types A..G (7); BUILDING AIR BALANCE SCHEDULE (airflows, no units). M0.2: FAN SCHEDULE EF-1..EF-8; ELECTRIC HEATER SCHEDULE EWH-1, EWH-2; SINGLE DUCT VARIABLE AIR VOLUME BOX SCHEDULE (ALL VAV BOX FRAMES MAY NOT BE USED) lists box sizes 6\" to 16\" with no tags, so it schedules types, not units: no VAV is counted from it. Disclosure: the infrared tube heaters are counted with the unit heaters (gas-fired space heaters; the takeoff has no infrared heater family). The earlier [ZERO] key ('insulation schedule only') was written from pipeline output, not from the drawing.",
+  "categories": {
+    "RTU": 3,
+    "UNIT_HEATER": 5,
+    "FCU": 1,
+    "CONDENSING_UNIT": 1,
+    "FAN": 8,
+    "GRD": 7
+  },
   "totals": {
-    "items": 0
+    "items": 25
   },
   "bas_points": {
     "rows": 0

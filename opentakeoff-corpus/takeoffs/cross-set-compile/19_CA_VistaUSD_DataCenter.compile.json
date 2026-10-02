@@ -2,10 +2,14 @@
   "set_id": "19_CA_VistaUSD_DataCenter",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/19_CA_VistaUSD_DataCenter.pdf",
   "kind": "hvac_equipment",
-  "notes": "Honest ZERO \u2014 0 extractable tables on vector set as shipped.",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Vista USD data center. The only schedule that lists HVAC units is E-6.2's MECHANICAL EQUIPMENT SCHEDULE (the electrical connections of the mechanical equipment, lettered in ink, marks in hexagons): CU-1, CU-2 (208V/3PH condensing units), FC-1, FC-2 (fan coils), EF-1, EF-2 (exhaust fans). The earlier zero key ('0 extractable tables') was written from pipeline output, not from the drawing.",
+  "categories": {
+    "CONDENSING_UNIT": 2,
+    "FCU": 2,
+    "FAN": 2
+  },
   "totals": {
-    "items": 0
+    "items": 6
   },
   "bas_points": {
     "rows": 0

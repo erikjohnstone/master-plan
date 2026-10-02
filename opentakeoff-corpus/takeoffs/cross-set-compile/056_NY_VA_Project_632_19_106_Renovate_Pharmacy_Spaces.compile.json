@@ -2,15 +2,26 @@
   "set_id": "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 NY VA pharmacy \u2014 no extractable HVAC schedules.",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] VA Northport, renovate pharmacy spaces. Both SCHEDULES sheets (200-MH6000, 200-MH6001) are lettered entirely in ink (no text layer). MH6000: AIR HANDLING UNIT SCHEDULE AHU-PHARMACY-1 (Haakon); HUMIDIFIER SCHEDULE H-1 (Dri-Steem Ultra-Sorb); AIR INLETS / OUTLETS SCHEDULE CD1..CD4, CG-1, CG-2, RG-1..RG-3; an untitled fan table (basis of design Greenheck) for EF-2A (Vektor-H-18 lab exhaust fan); PUMP SCHEDULE P-1 (AHU-PHARMACY-1 freeze protection). MH6001: AIR FLOW CONTROL VALVE SCHEDULE VAV-01R1, VAV-01R2, VAV-01R3, VAV-02R..VAV-06R, VAV-08R..VAV-10R (11 Antec venturi air valves, counted as lab air valves); LAMINAR FLOW DIFFUSER WITH HEPA FILTER, tag HCD on three rows (one air device type); CAV/VAV Schedule VAV-1..VAV-10 (Titus DESV). The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "AHU": 1,
+    "HUMIDIFIER": 1,
+    "GRD": 10,
+    "FAN": 1,
+    "PUMP": 1,
+    "LAB_AIR_VALVE": 11,
+    "VAV": 10
+  },
   "totals": {
-    "items": 0
+    "items": 35
   },
   "bas_points": {
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 11,
+    "categories": {
+      "LAB_AIR_VALVE": 11
+    }
   }
 }

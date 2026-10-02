@@ -2,10 +2,13 @@
   "set_id": "100_OH_Butler_Tech_RTU_Welding_Source_Capture",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 Butler Tech RTU welding capture \u2014 no extractable HVAC schedule tables (honest ZERO).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Butler Tech RTU / welding source capture, M2.0: ROOFTOP UNIT SCHEDULE lists RTU-1, RTU-2 and RTU-3 (Trane YSD180G4RZA); the DIFFUSER, GRILLE, AND REGISTER SCHEDULE (sheet 5) lists four air device types, RR-6, SR-3, SR-4 and SR-6. The WELD FUME CARTRIDGE TYPE COLLECTION SYSTEM schedule's DC-1 (a dust collector) is no HVAC family and is not counted. The earlier [ZERO] key was written from pipeline output.",
+  "categories": {
+    "RTU": 3,
+    "GRD": 4
+  },
   "totals": {
-    "items": 0
+    "items": 7
   },
   "bas_points": {
     "rows": 0

@@ -2,10 +2,12 @@
   "set_id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 Roberts Hall classroom \u2014 finish/lighting only (no HVAC schedules).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Roberts Hall classroom renovation: two air device types are scheduled, S-1 (Titus OMNI plaque face diffuser, GRILLES, REGISTERS AND DIFFUSERS SCHEDULE) and R-2S (Titus 355RS louvered filter grille, M-121's INTERIOR AIR INLETS & OUTLETS SCHEDULE). No other HVAC equipment schedule in the set. The earlier [ZERO] key was written from pipeline output.",
+  "categories": {
+    "GRD": 2
+  },
   "totals": {
-    "items": 0
+    "items": 2
   },
   "bas_points": {
     "rows": 0

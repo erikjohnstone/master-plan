@@ -3,10 +3,16 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/043_FL_VA_Project_673_21_151_Replace_Air_Handling",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 multipart FL VA AHU replace \u2014 no extractable HVAC schedule tables (rejoined).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] VA James A. Haley, replace air handling unit ED-203. The MECHANICAL SCHEDULES sheet (page 20) prints its schedules as five pictures on a sheet whose own title is not in the text layer: AIR HANDLING UNIT SCHEDULE ED-203 (packaged with attached vestibule, 13,500 CFM); PUMP SCHEDULE \"CWP - & CWP-2\" (chilled water, the 1 lost in print) and HWP-1 & HWP-2 (heating hot water); VARIABLE FREQUENCY DRIVE SCHEDULE VFD-1..VFD-4 serving CWP-1, CWP-2, HWP-1, HWP-2; FAN SCHEDULE ED-203-SF and ED-203-RF (the AHU's supply and return fans, scheduled apart); STEAM HUMIDIFIER SCHEDULE ED-203-HC (provided as part of the AHU). E001's electrical MECHANICAL EQUIPMENT SCHEDULE lists the same AHU and four pumps as ED 203, HWP 1-2 and CWP 9-10 (the chilled water pumps' numbers differ between the two disciplines; the count does not). The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "AHU": 1,
+    "PUMP": 4,
+    "FAN": 2,
+    "HUMIDIFIER": 1,
+    "VARIABLE_FREQUENCY_DRIVE": 4
+  },
   "totals": {
-    "items": 0
+    "items": 12
   },
   "bas_points": {
     "rows": 0

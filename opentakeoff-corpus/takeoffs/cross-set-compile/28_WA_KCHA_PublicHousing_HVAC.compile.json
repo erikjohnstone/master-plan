@@ -2,10 +2,14 @@
   "set_id": "28_WA_KCHA_PublicHousing_HVAC",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/28_WA_KCHA_PublicHousing_HVAC.pdf",
   "kind": "hvac_equipment",
-  "notes": "Honest ZERO \u2014 0 extractable tables on rejoined HVAC PDF.",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] KCHA public housing HVAC, sheet 2: HEAT PUMP AC UNIT SCHEDULE lists one row, VHP (Ephoca AIO vertical stack heat pump), QUANTITY 43; EXHAUST FAN SCHEDULE lists EF-5 and SF-6 (Cook inline fans); PUMP SCHEDULE lists CP-4 (Armstrong, recovery coils). Counts are distinct scheduled marks, as the takeoff counts them; VHP's 43 is its row's quantity. The AIR TERMINAL SCHEDULE defines grille symbols (SG, RG), not units. The earlier zero key was written from pipeline output.",
+  "categories": {
+    "HEAT_PUMP": 1,
+    "FAN": 2,
+    "PUMP": 1
+  },
   "totals": {
-    "items": 0
+    "items": 4
   },
   "bas_points": {
     "rows": 0

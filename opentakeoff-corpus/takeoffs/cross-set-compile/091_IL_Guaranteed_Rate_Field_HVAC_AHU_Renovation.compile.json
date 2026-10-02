@@ -2,10 +2,18 @@
   "set_id": "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 Guaranteed Rate Field AHU reno (091) \u2014 no extractable HVAC schedule tables.",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] Guaranteed Rate Field HVAC replacement phase XI. M4.01 MECHANICAL SCHEDULES prints ten schedules as pictures, each tag split into ABB. and NO. columns: PACKAGED ROOFTOP UNITS (RTU) RTU-1 (York); AIR HANDLING UNITS (AHU) AHU-3A-01, AHU-3A-02, AHU-6B-01 (Carrier 39MN); EXHAUST FANS (EF) RF-1B-1, EF-TR-A1, EF-2-44-1, EF-104; KITCHEN EXHAUST FANS (KEF) KEF-1, KEF-2; HYDRONIC COILS (HC) CC-1..CC-3 and ELECTRIC HEATING COIL (EHC) EHC-1..EHC-3 (the AHUs' coil sections, scheduled and supplied apart; counted as coils, as 017_MD's HC/CC are); GRILLES, REGISTERS, AND DIFFUSERS types A..D; AIR COOLED CONDENSING UNITS (CU) CU-1..CU-4; HYDRONIC FAN COIL UNITS (FCU) FCU-1, FCU-2; DX FAN COIL UNITS (AC) AC-1..AC-8. E-sheet HVAC EQUIPMENT WIRING SCHEDULE lists connections of the same units. The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "RTU": 1,
+    "AHU": 3,
+    "FAN": 6,
+    "DUCT_MOUNTED_COIL": 6,
+    "GRD": 4,
+    "CONDENSING_UNIT": 4,
+    "FCU": 10
+  },
   "totals": {
-    "items": 0
+    "items": 34
   },
   "bas_points": {
     "rows": 0

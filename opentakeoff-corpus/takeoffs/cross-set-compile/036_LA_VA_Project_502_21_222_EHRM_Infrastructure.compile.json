@@ -2,10 +2,16 @@
   "set_id": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 EHRM \u2014 no HVAC equipment schedules (honest ZERO).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] VA Alexandria (Pineville) EHRM infrastructure. MP601 MECHANICAL SCHEDULES (text): VRV- AIR-COOLED CONDENSING UNIT SCHEDULE 07-A-CU-1, 09-A-CU-1 (Daikin RXYQ VRV heat pumps; VRF outdoor units); VRV- INDOOR UNIT SCHEDULE 15 indoor units 07-B-EU-1, 07-1-EU-1..4, 07-2-EU-1..2, 07-3-EU-1..2, 07-4-EU-1..3, 09-1-EU-1, 09-2-EU-1, 09-3-EU-1 (VRF indoor units); DUCTLESS SPLIT SYSTEM SCHEDULE 34 indoor units (01-1-DAC-1 .. 171-1-DAC-1) on 33 outdoor condensing units (01-1-CU-1 .. 171-1-CU-1); COMPUTER ROOM AIR CONDITIONING 07-EVAP-1 (Liebert DS indoor unit) with 07-COND-1 (its outdoor condenser, counted with the condensing units). Marks carry a building and floor or wing prefix. The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "FCU": 34,
+    "CONDENSING_UNIT": 34,
+    "VRF_INDOOR": 15,
+    "VRF_OUTDOOR": 2,
+    "CRAH": 1
+  },
   "totals": {
-    "items": 0
+    "items": 86
   },
   "bas_points": {
     "rows": 0

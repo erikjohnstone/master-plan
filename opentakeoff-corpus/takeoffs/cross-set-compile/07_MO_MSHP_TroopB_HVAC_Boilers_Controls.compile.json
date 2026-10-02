@@ -2,15 +2,40 @@
   "set_id": "07_MO_MSHP_TroopB_HVAC_Boilers_Controls",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/07_MO_MSHP_TroopB_HVAC_Boilers_Controls.pdf",
   "kind": "hvac_equipment",
-  "notes": "Honest ZERO \u2014 0 extractable tables on rejoined mechanical PDF (controls/boiler set without schedule text layer usable by sheet graph).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] MSHP Troop B (Macon) HVAC, boilers, pumps and controls. M-601, M-602 and M-603 print every schedule as a picture, most marks in hexagons. M-601: VAV BOX SCHEDULE VAV-1..VAV-17 (AHU-1) and VAV-19..VAV-29 (RTU-2), 28 boxes (no VAV-18); EXPANSION & BUFFER TANK SCHEDULE EXT-1, EXT-2 (expansion) and CBT-1 (chilled water buffer); AIR DEVICE SCHEDULE S1..S8, R1..R4 and RH-1 (a relief air hood, counted with the air devices it is scheduled with). M-602: BOILER SCHEDULE one row for B-1 and B-2 (Patterson-Kelly SL-850); CHILLER SCHEDULE C-1 (Trane CGAM52, air cooled); HEAT PUMP SPLIT SYSTEM F-1 and F-2 (indoor heat pump furnaces, typed ELECT FURNACE; counted as the split systems' indoor units, FCU) with CUH-1 and CUH-2 (outdoor heat pumps); PUMP SCHEDULE PB-1, PB-2, PH-1..PH-5, PC-1, PC-2; GLYCOL FEED SYSTEM GF-1; CHEMICAL POT FEEDER SCHEDULE CPF-1; ROOF TOP UNIT SCHEDULE RTU-1. M-603: AIR HANDLER UNIT SCHEDULE AHU-1, RTU-2 (a rooftop air handler with hydronic coils, scheduled as an air handler) and FCU-1 (garage blower coil, counted as FCU); ENERGY RECOVERY VENTILATOR SCHEDULE ERV-1; DAMPER SCHEDULE D-1..D-5 (control dampers); FAN SCHEDULE RLF-1, EXF-1..EXF-3; AIR SEPARATOR AS1; CONTROL VALVE SCHEDULE CV1..CV7 (cooling coil valves CV1, CV3, CV5 on chilled water; heating coil valves CV2, CV4, CV6 and CV7 on hot water) and a row 'CV-7 THRU 35' for the VAV boxes' reheat coils: one hot water valve per box, 28, read as CV-8 to CV-35 (the printed range starts at CV7, which the row above already names). The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "VAV": 28,
+    "EXPANSION_TANK": 2,
+    "BUFFER_TANK": 1,
+    "GRD": 13,
+    "BOILER": 2,
+    "AIR_COOLED_CHILLER": 1,
+    "HEAT_PUMP": 2,
+    "FCU": 3,
+    "PUMP": 9,
+    "GLYCOL_MAKEUP": 1,
+    "CHEMICAL_POT_FEEDER": 1,
+    "RTU": 1,
+    "AHU": 2,
+    "ERV": 1,
+    "CONTROL_DAMPER": 5,
+    "FAN": 4,
+    "AIR_SEPARATOR": 1,
+    "CHW_CONTROL_VALVE": 3,
+    "HHW_CONTROL_VALVE": 32
+  },
   "totals": {
-    "items": 0
+    "items": 112
   },
   "bas_points": {
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 40,
+    "categories": {
+      "CHW_CONTROL_VALVE": 3,
+      "HHW_CONTROL_VALVE": 32,
+      "CONTROL_DAMPER": 5
+    }
   }
 }

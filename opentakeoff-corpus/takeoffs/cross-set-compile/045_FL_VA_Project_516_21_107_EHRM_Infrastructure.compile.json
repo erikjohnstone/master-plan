@@ -2,10 +2,12 @@
   "set_id": "045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf",
   "kind": "hvac_equipment",
-  "notes": "[ZERO] Vol2 EHRM \u2014 no HVAC equipment schedules (honest ZERO).",
-  "categories": {},
+  "notes": "[KEYED 2026-10-02 from the render] VA Lee County HCC (Cape Coral), EHRM infrastructure. M501 prints the only equipment schedule, CHILLED WATER FAN COIL UNIT SCHEDULE: FCU1-1-1, FCU1-3-4, FCU1-5-3, FCU1-7-2, FCU2-1-7, FCU2-4-16, FCU2-6-19, FCU3-1-17, FCU4-1-24 (Carrier 42CG-10 / 42DE-08; the control points schedule says typical of 9 fan coil units). The two CONTROL POINTS SCHEDULEs list points, not units. The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "categories": {
+    "FCU": 9
+  },
   "totals": {
-    "items": 0
+    "items": 9
   },
   "bas_points": {
     "rows": 0
