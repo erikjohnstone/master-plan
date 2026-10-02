@@ -53,6 +53,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 32aab47 | Symbol-sweep panel fits the window (Commit was unreachable at 1440×900); G3 browser proof 14/14 |
 | aed8849 | Review all; Count on plans opens the line's plan |
 | b6d2590 | Import re-points plan counts with their conditions |
+| (this) | Reference-only / N.I.C. schedules read no units (16_NV 62 → 58 = key; WP1 test green) |
 
 ## Known limits (documented, not fixed)
 
@@ -65,6 +66,9 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 - MCP `conformance.test.ts` "sheet graph (#87) … find_schedule": room 134's EAST finish no longer chains to its
   material-schedule definition (`SMOKEY MOUNTAIN AC-18` expected, undefined). Fails identically at the PR #108
   merge `4255465`, before any of this goal's commits.
+- `corpusTakeoffWp1Acceptance` federal BAS (89 vs 26 expected) and 04_NV (19 vs 16): identical at 302cf34 and at
+  `4255465`. 04_NV's three extra lines are LV-1/LV-2 (louvers) and WS-1 (water softener), read by family rules newer
+  than the key; the key was not changed (rule: never edit a key to pass). 16_NV (62 vs 58) is fixed above.
 
 ## Sweep re-run (OOM-lost sets)
 

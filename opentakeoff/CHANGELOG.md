@@ -1,5 +1,12 @@
 # Changelog
 
+- **A schedule printed for reference does not count.** A table titled FOR REFERENCE ONLY, NOT IN CONTRACT or
+  (N.I.C.) lists units that are not work in this contract; the takeoff counted them as new units. 16_NV's
+  "EXISTING ROOFTOP UNIT SCHEDULE (FOR REFERENCE ONLY)" added RTU-2..5 to the four new rooftop units: 62 lines,
+  the key says 58. The family gate both the takeoff and the reconcile read (`familyTableGate`, AS-77) now reads no
+  unit from such a table; 16_NV compiles to 58, nothing else moved. Schedules titled EXISTING, REUSED or RELOCATED
+  still count: about a dozen corpus sets schedule existing units that carry work (new controls, a refurbish).
+
 - **Review the whole takeoff in one pass.** The Takeoff header offers **Review all N** beside the review summary: one
   grid over every line of every schedule, in the takeoff's own order, each tile naming its schedule, with the same keys
   (C confirm, F flag, E correct, T check tags, P count on plans). Before, each schedule's Review opened separately:

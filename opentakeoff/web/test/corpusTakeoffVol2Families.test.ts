@@ -725,3 +725,17 @@ describe("AS-75 a row naming a range or pair of marks schedules each of them", (
     assert.deepEqual(cats.AHU.items.map((i) => i.tag).sort(), ["AHU-1-2", "AHU-3"]);
   });
 });
+
+it("a schedule printed for reference only, or not in contract, is not takeoff work; an existing one still is", async () => {
+  const { familyTableGate, HVAC_FAMILY_SPECS, isReferenceOnlyScheduleTitle } = await import("../src/lib/corpusTakeoff.mjs");
+  const table = (text: string) => ({ sheet: "x.pdf#4", title: { text }, headers: ["UNIT", "MANUFACTURER"], rows: [{ UNIT: "RTU-2", MANUFACTURER: "CARRIER" }] });
+  const rtu = (HVAC_FAMILY_SPECS as any).RTU;
+  // 16_NV prints the units it replaces beside the new ones.
+  assert.equal(familyTableGate(table("EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)"), rtu, "RTU"), null);
+  assert.notEqual(familyTableGate(table("GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (BID ALTERNATE 1)"), rtu, "RTU"), null);
+  assert.notEqual(familyTableGate(table("EXISTING ROOF TOP UNIT SCHEDULE"), rtu, "RTU"), null, "existing units can still carry work");
+  assert.equal(isReferenceOnlyScheduleTitle("PUMP SCHEDULE (N.I.C.)"), true);
+  assert.equal(isReferenceOnlyScheduleTitle("FAN SCHEDULE - NOT IN CONTRACT"), true);
+  assert.equal(isReferenceOnlyScheduleTitle("FAN COIL UNIT SCHEDULE (EXISTING TO BE REUSED)"), false);
+  assert.equal(isReferenceOnlyScheduleTitle("REFERENCE SCHEDULE"), false);
+});

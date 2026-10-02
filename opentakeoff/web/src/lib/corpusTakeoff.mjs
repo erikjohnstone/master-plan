@@ -1360,6 +1360,12 @@ function identifierColumnByCardinality(table) {
 // a general schedule, where only a family's mark rule may claim a row.
 const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i;
 
+/** A schedule title that says the table is not work in this contract. */
+export function isReferenceOnlyScheduleTitle(title) {
+  const t = String(title || "").replace(/\s+/g, " ").toUpperCase();
+  return /\b(?:FOR\s+)?REFERENCE\s+ONLY\b|\bNOT\s+IN\s+(?:THE\s+)?CONTRACT\b|\(\s*N\.?\s*I\.?\s*C\.?\s*\)/.test(t);
+}
+
 /**
  * How a family reads one schedule table, or null when it reads no unit there:
  * the one gate the takeoff (uniqueFamily) and the schedule↔plan reconcile
@@ -1398,6 +1404,12 @@ export function familyTableGate(table, spec, family = null) {
   // instead of relying on dozens of family-specific exclude regexes to stay
   // perfectly synchronized with the BAS title/table grammar.
   if (isBasPointsListTitle(title) || isBasPointsListTable(table)) return null;
+  // A schedule its title says is printed for reference, or is not in the
+  // contract, is not takeoff work: 16_NV's "EXISTING GAS-FIRED DX COOLING ROOF
+  // TOP UNIT SCHEDULE (FOR REFERENCE ONLY)" put the four existing units it
+  // replaces (2-5) beside the four new ones (B2-B5). An "EXISTING ..." or "TO
+  // BE REUSED" title alone is not this: such units can still carry work.
+  if (isReferenceOnlyScheduleTitle(title)) return null;
   // Soft title match: exact regex first, then compact (no-space) form so
   // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
   // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
