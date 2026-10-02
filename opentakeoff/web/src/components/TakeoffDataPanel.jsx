@@ -428,16 +428,16 @@ export default function TakeoffDataPanel({
     return any ? n : null;
   }, [visibleLines]);
 
-  // The same total with the estimator's corrected counts standing in.
+  // The same total with the estimator's corrected and tag counts standing in.
   const correctedTotal = useMemo(() => {
-    if (!reviewSummary.corrected) return null;
+    if (!reviewSummary.corrected && !reviewSummary.counted) return null;
     let n = 0, any = false;
     for (const line of visibleLines) {
       const q = effectiveLineQty(line, lineReviews);
       if (typeof q === "number" && (line.unit || "EA") === "EA") { n += q; any = true; }
     }
     return any ? n : null;
-  }, [visibleLines, lineReviews, reviewSummary.corrected]);
+  }, [visibleLines, lineReviews, reviewSummary.corrected, reviewSummary.counted]);
 
   const lockedTotal = corpusMeta?.totals?.items
     ?? corpusMeta?.totals?.rows
@@ -584,9 +584,9 @@ export default function TakeoffDataPanel({
                   <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
                 )}
                 {correctedTotal != null && correctedTotal !== qtyTotal && (
-                  <span data-takeoff-ea-corrected={correctedTotal} title="EA total with your corrected counts in place of the read ones"
+                  <span data-takeoff-ea-corrected={correctedTotal} title="EA total with your corrected counts and your tag counts in place of the read ones"
                     style={{ color: "var(--cobalt)" }}>
-                    <strong style={{ fontWeight: 650 }}>{correctedTotal}</strong> EA with your corrections
+                    <strong style={{ fontWeight: 650 }}>{correctedTotal}</strong> EA with your counts
                   </span>
                 )}
               </>}
@@ -598,11 +598,12 @@ export default function TakeoffDataPanel({
               <span>{rows.length} cited source fields</span>
               {canReview && lines.length > 0 && (
                 <span data-takeoff-review data-confirmed={reviewSummary.confirmed} data-flagged={reviewSummary.flagged} data-corrected={reviewSummary.corrected}
-                  data-stale={reviewSummary.stale} data-total={reviewSummary.total}
+                  data-counted={reviewSummary.counted} data-stale={reviewSummary.stale} data-total={reviewSummary.total}
                   style={{ color: reviewSummary.confirmed === reviewSummary.total ? "var(--c-positive, #1f6b4a)" : undefined }}>
                   <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{reviewSummary.confirmed}/{reviewSummary.total}</strong> lines confirmed
                   {reviewSummary.flagged ? ` · ${reviewSummary.flagged} flagged` : ""}
                   {reviewSummary.corrected ? ` · ${reviewSummary.corrected} corrected` : ""}
+                  {reviewSummary.counted ? ` · ${reviewSummary.counted} counted from tags` : ""}
                   {reviewSummary.stale ? ` · ${reviewSummary.stale} changed since review` : ""}
                 </span>
               )}
@@ -816,7 +817,7 @@ export default function TakeoffDataPanel({
                           title="Check every line of this schedule against its own drawing evidence, on one screen"
                           style={{ ...btnStyle, padding: "3px 9px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0,
                             color: fam.confirmed === fam.total ? "var(--c-positive, #1f6b4a)" : "var(--cobalt)", borderColor: "currentColor" }}>
-                          Review · {fam.confirmed}/{fam.total} confirmed{fam.flagged ? ` · ${fam.flagged} flagged` : ""}{fam.corrected ? ` · ${fam.corrected} corrected` : ""}
+                          Review · {fam.confirmed}/{fam.total} confirmed{fam.flagged ? ` · ${fam.flagged} flagged` : ""}{fam.corrected ? ` · ${fam.corrected} corrected` : ""}{fam.counted ? ` · ${fam.counted} counted` : ""}
                         </button>;
                       })()}
                     </h3>
@@ -889,7 +890,7 @@ export default function TakeoffDataPanel({
                                     const { state, record } = lineReviewState(line, lineReviews);
                                     if (state === "unreviewed") return null;
                                     const look = { confirmed: ["✓ Confirmed", "var(--c-positive, #1f6b4a)"], flagged: ["⚑ Flagged", "var(--c-danger, #b03a26)"],
-                                      corrected: [`✎ Your count ${record?.qty}`, "var(--cobalt)"], stale: ["Changed since review", "var(--warning, #9a5a00)"] }[state];
+                                      corrected: [`✎ Your count ${record?.qty}`, "var(--cobalt)"], counted: [`# Your count ${record?.qty} from tags`, "var(--c-positive, #1f6b4a)"], stale: ["Changed since review", "var(--warning, #9a5a00)"] }[state];
                                     return <span data-line-review={state} title={record?.note || look[0]} style={{ color: look[1], fontWeight: 650 }}>{look[0]}</span>;
                                   })()}
                                   <SourceComparisonActions line={line} onOpenCitation={onOpenCitation} onCompareCitations={openSourceComparison} comparisonBusy={comparisonBusy} />

@@ -19,6 +19,10 @@ const asBbox = (bbox) => {
   return null;
 };
 
+// A line's printed tags kept for the estimator to check one by one; a line
+// past this many is checked from its first MAX and says so.
+export const MAX_TAG_OCCURRENCES = 2000;
+
 const cellText = (cell) => {
   if (cell == null) return "";
   if (typeof cell === "string" || typeof cell === "number") return String(cell);
@@ -381,6 +385,22 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
           evidence_kind: "plan_tag_text",
           evidence_binding_status: "geometry_unverified",
         }));
+      }
+      // A line whose printed tags are its only plan evidence carries every one
+      // of them, so the estimator can check each tag before counting the line
+      // (Takeoff → Review); the first stays the line's plan_tag_observation.
+      if (typeof taggedPlanQty === "number" && !(typeof row.installed_qty === "number" && !tagOnlyInstalledClaim)) {
+        const occurrences = row.plan_tag_cites?.length ? row.plan_tag_cites : (tagOnlyInstalledClaim ? row.plan_cites || [] : []);
+        for (const cite of occurrences.slice(0, MAX_TAG_OCCURRENCES)) {
+          if (!cite?.sheet || !cite?.bbox) continue;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "plan_tag_occurrence", value: tag,
+            sheet_id: cite.sheet, table_title: scheduleTitle,
+            bbox_px: cite.bbox, source_tool: name,
+            evidence_kind: "plan_tag_text",
+            evidence_binding_status: "geometry_unverified",
+          }));
+        }
       }
       if (Array.isArray(row.plan_candidate_cites) && row.plan_candidate_cites.length) {
         rows.push(makeTakeoffRow({
@@ -1703,6 +1723,7 @@ export function compileAgentTakeoff(rows = []) {
         plan_tag_sheet_id: null,
         plan_tag_bbox_px: null,
         plan_tag_binding_status: null,
+        plan_tag_occurrences: [],
         diagram_cites: [],
         reference_tag_cites: [],
         served_tag_cites: [],
@@ -1870,6 +1891,11 @@ export function compileAgentTakeoff(rows = []) {
       if (row.bbox_px) g.plan_tag_bbox_px = row.bbox_px;
       if (row.evidence_binding_status) g.plan_tag_binding_status = row.evidence_binding_status;
       if (row.note) g.notes.push(row.note);
+    } else if (field === "plan_tag_occurrence") {
+      const box = asBbox(row.bbox_px);
+      if (row.sheet_id && box && !g.plan_tag_occurrences.some((o) => o.sheet_id === row.sheet_id && o.bbox_px.every((v, i) => v === box[i]))) {
+        g.plan_tag_occurrences.push({ sheet_id: row.sheet_id, bbox_px: box });
+      }
     } else if (field === "diagram_tag") {
       if (row.sheet_id && row.bbox_px) {
         const identity = `${row.sheet_id}\0${JSON.stringify(row.bbox_px)}\0${row.evidence_kind || ""}`;
@@ -1928,7 +1954,9 @@ export function compileAgentTakeoff(rows = []) {
       g.plan_sheet_id = row.sheet_id;
       if (row.bbox_px) g.plan_bbox_px = row.bbox_px;
       g.status = g.status || "located";
-    } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag" && field !== "plan_tag_observation" && field !== "diagram_tag"
+    } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag" && field !== "plan_tag_observation" && field !== "plan_tag_occurrence"
+      // a tag count cites the plan sheet its first tag is on, not the schedule
+      && field !== "tagged_plan_quantity" && field !== "diagram_tag"
       && field !== "reference_tag" && field !== "served_equipment_tag"
       // A valve compile's plan_paint hint is emitted BEFORE the tag's quantity
       // row and only says which schedule to prefer when re-sweeping; letting it
@@ -1937,7 +1965,7 @@ export function compileAgentTakeoff(rows = []) {
       && field !== "plan_paint_prefer_schedule_title")) {
       if (!g.schedule_sheet_id) g.schedule_sheet_id = row.sheet_id;
     }
-    if (row.bbox_px && !g.bbox_px && field !== "plan_status" && field !== "plan_tag" && field !== "installed_quantity") {
+    if (row.bbox_px && !g.bbox_px && field !== "plan_status" && field !== "plan_tag" && field !== "plan_tag_occurrence" && field !== "installed_quantity") {
       // Identity / MARK cites prefer the quantity row's bbox; other fields keep attrCites.
       if (field === "MARK" || field === "TAG" || field === "quantity") g.bbox_px = row.bbox_px;
       else if (!g.bbox_px && row.source_tool === "compile_corpus_takeoff") g.bbox_px = row.bbox_px;
@@ -2043,6 +2071,7 @@ export function compileAgentTakeoff(rows = []) {
       plan_tag_sheet_id: g.plan_tag_sheet_id || null,
       plan_tag_bbox_px: g.plan_tag_bbox_px || null,
       plan_tag_binding_status: g.plan_tag_binding_status || null,
+      plan_tag_occurrences: g.plan_tag_occurrences,
       plan_bbox_px: g.plan_bbox_px || null,
       diagram_cites: g.diagram_cites.map(({ identity: _identity, ...cite }) => cite),
       reference_tag_cites: g.reference_tag_cites.map(({ identity: _identity, ...cite }) => cite),

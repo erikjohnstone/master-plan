@@ -584,21 +584,31 @@ line appears as a tile with its plan tag (or, without one, its schedule row) on
 the drawing. Confirm the lines that are right and flag the ones that are not:
 
 - **C** confirms the focused tile and moves on; **F** flags it with an optional
-  note; **E** corrects its count; **U** clears the decision; **Enter** opens the
-  evidence on the drawing; the arrow keys move between tiles.
+  note; **E** corrects its count; **T** checks and counts its plan tags; **U**
+  clears the decision; **Enter** opens the evidence on the drawing; the arrow
+  keys move between tiles.
 - **Correct…** records your own count for a line with a required reason (for
   example, a second box drawn without its tag). The read count stays beside it;
-  the Takeoff header adds an **EA with your corrections** total, and exports
-  carry both counts.
+  the Takeoff header adds an **EA with your counts** total, and exports carry
+  both counts.
+- **Check N tags…** appears on a line whose printed plan tags are its only plan
+  evidence: a grille, register or diffuser type tagged on an air-terminals
+  plan, say, where the tags are read but no drawn device is tied to them, so the
+  line reads "61 tags on plans · not counted" and carries no installed count.
+  It opens one tile per printed tag with what is drawn around it. Leave out any
+  tag that does not mark a device of this type (**X**, or **Leave out**), then
+  choose **Count N** (or press **Enter**). The tags you kept become your count
+  for the line, shown as "Your count 59 of 61 tags · 2 left out" and carried
+  like a correction.
 - **Confirm N shown** confirms every shown line that is not already confirmed,
-  flagged or corrected.
-- The filters show **Not reviewed**, **Flagged**, **Changed** or **Confirmed**
-  lines.
+  flagged, corrected or counted.
+- The filters show **Not reviewed**, **Flagged**, **Corrected**, **Counted**,
+  **Changed** or **Confirmed** lines.
 
 A decision records the evidence it was made on. If a later run produces a
-different quantity, status or cited box for the line, it reads **Changed since
-review** until you look again; a correction made on the old evidence stops
-counting until then. Confirmations and flags never change a quantity. Decisions
+different quantity, status, cited box or set of tags for the line, it reads
+**Changed since review** until you look again; a correction or tag count made on
+the old evidence stops counting until then. Confirmations and flags never change a quantity. Decisions
 are saved with the project, show as counts in the Takeoff header, and export as
 **Review**, **Estimator qty**, **Review note** and **Reviewed at** columns in
 CSV and Excel (and **Review** and **Estimator qty** in PDF).

@@ -246,10 +246,15 @@ test("sheet roles: a plan title with qualifiers, stacked or without PLAN, decide
   ] });
   assert.deepEqual([withDetail.role, withDetail.evidence?.text], ["plan", "MECHANICAL LEVEL 4 PLAN"]);
   // a floor's discipline sheet with no PLAN word
-  for (const title of ["FIRST FLOOR - SECTOR A - HVAC", "MECHANICAL MEZZANINE - SECTOR B", "BASEMENT – VENTILATION – PHASE 4 - BID ALTERNATE 3", "PIPE BASEMENT - PIPING - PHASE 2", "SECOND FLOOR MECHANICAL"]) {
+  for (const title of ["FIRST FLOOR - SECTOR A - HVAC", "MECHANICAL MEZZANINE - SECTOR B", "BASEMENT – VENTILATION – PHASE 4 - BID ALTERNATE 3", "PIPE BASEMENT - PIPING - PHASE 2", "SECOND FLOOR MECHANICAL", "GROUND FLOOR AIR TERMINALS", "LEVEL 2 AIR DISTRIBUTION"]) {
     const r = classifySheetRole({ key: "t", sheet_number: "M211", spans: [...notes(12), tsp(title, 2568, 2950, 57)] });
     assert.deepEqual([r.role, r.evidence?.text], ["plan", title], title);
   }
+  // an air-terminals plan whose note line reads DETAILS (federal-mech M2.2)
+  const airTerminals = classifySheetRole({ key: "m22", sheet_number: "M2.2", spans: [
+    ...notes(12), tsp("GRID. SEE ARCHITECTURAL PLANS AND DETAILS.", 4948, 234, 19), tsp("GROUND FLOOR AIR", 5520, 3760, 44), tsp("TERMINALS", 5600, 3810, 44),
+  ] });
+  assert.deepEqual([airTerminals.role, airTerminals.evidence?.text], ["plan", "GROUND FLOOR AIR TERMINALS"]);
   // a quarter-turned title block reads in its own frame (run upward, next line to the right)
   const turned = classifySheetRole({ key: "r", sheet_number: "M2.02", spans: [
     ...notes(12), tsp("MECHANICAL LEVEL", 5400, 3000, 51, 270), tsp("2 PLAN", 5460, 3100, 51, 270),
@@ -280,7 +285,7 @@ test("sheet roles: the plan-title pass never touches a schedule, demolition, pla
   ] });
   assert.notEqual(legend.role, "plan");
   // a sentence, a key plan and a detail title are never plan titles
-  for (const text of ["PROVIDE NEW MECHANICAL LEVEL 2 PLAN", "KEY PLAN - LEVEL 2", "ROOF CURB - MECHANICAL UNIT", "HVAC RISER - LEVEL 2", "FRAMING PER PLAN"]) {
+  for (const text of ["PROVIDE NEW MECHANICAL LEVEL 2 PLAN", "KEY PLAN - LEVEL 2", "ROOF CURB - MECHANICAL UNIT", "HVAC RISER - LEVEL 2", "FRAMING PER PLAN", "AIR DEVICE DETAILS - LEVEL 2", "AIR DISTRIBUTION NOTES"]) {
     const r = classifySheetRole({ key: "n", sheet_number: "M999", spans: [...notes(12), tsp(text, 2500, 2900, 57)] });
     assert.notEqual(r.role, "plan", text);
   }

@@ -1,5 +1,18 @@
 # Changelog
 
+- **Count air devices from their printed tags.**
+  - An air-distribution plan titled by its devices ("GROUND FLOOR AIR TERMINALS") is a plan. Its sheet note
+    "...SEE ARCHITECTURAL PLANS AND DETAILS." made federal-mech's M2.2 a detail sheet, so its 236 type tags (S1-1 ×61,
+    R1-2 ×35, …) counted nowhere and all 21 grille, register and diffuser types read "schedule only". They now read
+    every tag (each count equals the PDF's own word count of that mark on the sheet). Shared sheet graph
+    (`TITLE_DISCIPLINE` in `web/src/lib/sheetgraph.ts`).
+  - A line whose printed tags are its only plan evidence carries every tag, and Review offers **Check N tags…** (T):
+    one tile per tag, leave out any that is not a device of the type (X), **Count N** (Enter). The kept tags become
+    the estimator's count for the line ("Counted from tags"), bound to the tags it was made on, in the header's
+    "EA with your counts" and in exports as Estimator qty. The machine's quantity is unchanged.
+  - Fixed: a line with tag sightings and no scheduled quantity took the plan sheet as its schedule sheet, so its
+    **Schedule row** cite opened the plan page.
+
 - **Review the takeoff on one screen, and keep the record.**
   - A schedule's **Review** shows every line as a tile with its own drawing evidence. Confirm, or flag with a note,
     from the keyboard (C, F, U, arrows, Enter) or for every shown line at once. Each decision is bound to the
@@ -7,7 +20,7 @@
     review". Decisions are saved with the project, counted in the Takeoff header and exported as Review columns.
     Confirmations and flags never change a quantity.
   - **Correct…** (or E) records the estimator's own count for a line with a required reason. The read count stays
-    beside it; the header adds an "EA with your corrections" total and exports carry both as Qty and Estimator qty.
+    beside it; the header adds an "EA with your counts" total and exports carry both as Qty and Estimator qty.
     A correction made on evidence that later changes stops counting until reviewed again.
     (`web/src/lib/lineReview.js`, `web/src/components/LineReviewGrid.jsx`.)
   - A reconcile line now cites its schedule row (`schedule_cite.row_bbox`, the union of the row's cells, on the sheet

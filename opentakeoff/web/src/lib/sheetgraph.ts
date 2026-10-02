@@ -423,7 +423,12 @@ export function classifySheetRoleBySignals(sheet: SheetSpans): { role: SheetRole
 // those three kinds, so a detail, riser or section title naming a floor
 // ("ROOF CURB - MECHANICAL UNIT", "HVAC RISER - LEVEL 2") never reads as one.
 const TITLE_LEVEL = "(?:(?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|GROUND|MAIN|UPPER|LOWER|\\d{1,2}(?:ST|ND|RD|TH))\\s+(?:FLOOR|LEVEL)|(?:LEVEL|FLOOR)\\s+[A-Z]?\\d{1,3}[A-Z]?|(?:[A-Z]+\\s+)?(?:BASEMENT|MEZZANINE|PENTHOUSE|ATTIC|CELLAR)|(?:LOW\\s+|HIGH\\s+)?ROOF|CRAWL\\s*SPACE|INTERSTITIAL)";
-const TITLE_DISCIPLINE = "(?:HVAC|MECHANICAL|PIPING|HYDRONICS?|VENTILATION|DUCTWORK|SHEET\\s*METAL|PLUMBING|ELECTRICAL|POWER|LIGHTING|FIRE\\s+PROTECTION|FIRE\\s+ALARM|SPRINKLERS?)";
+// An air-distribution plan names its devices in place of a discipline
+// ("GROUND FLOOR AIR TERMINALS", federal-mech M2.2): the plan where every
+// diffuser, register and grille is tagged with its type, so its tags are the
+// air-device count. Read as a detail by a note's "...SEE ARCHITECTURAL PLANS
+// AND DETAILS." line, its 21 types' 296 tags counted nowhere.
+const TITLE_DISCIPLINE = "(?:HVAC|MECHANICAL|PIPING|HYDRONICS?|VENTILATION|DUCTWORK|SHEET\\s*METAL|PLUMBING|ELECTRICAL|POWER|LIGHTING|FIRE\\s+PROTECTION|FIRE\\s+ALARM|SPRINKLERS?|AIR\\s+(?:TERMINALS?|DEVICES?|DISTRIBUTION|OUTLETS?))";
 const LEVEL_PART_RE = new RegExp(`^${TITLE_LEVEL}$`);
 const DISCIPLINE_PART_RE = new RegExp(`^${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?$`);
 const LEVEL_DISCIPLINE_PART_RE = new RegExp(`^(?:${TITLE_LEVEL}\\s+${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?|${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?\\s+${TITLE_LEVEL})$`);

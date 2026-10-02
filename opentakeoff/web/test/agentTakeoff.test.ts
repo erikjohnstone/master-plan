@@ -1302,6 +1302,40 @@ test("Agent quarantine prevents exact plan tag text from becoming an installed s
   assert.match(line.notes, /symbol geometry.*not verified/i);
 });
 
+test("reconciled tag-only line carries every printed tag for the estimator to check; a counted line carries none", () => {
+  const rows = rowsFromToolResult("reconcile_schedule_plan", {}, {
+    rows: [{
+      tag: "S1-1", scheduled_qty: null, scheduled_qty_basis: "type_definition_not_quantity", installed_qty: null,
+      tagged_plan_qty: 3, status: "AMBIGUOUS",
+      schedule_cite: { sheet: "m.pdf#15", title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE" },
+      plan_cites: [],
+      plan_tag_cites: [
+        { sheet: "m.pdf#3", bbox: { x0: 10, y0: 10, x1: 30, y1: 20 } },
+        { sheet: "m.pdf#3", bbox: { x0: 50, y0: 10, x1: 70, y1: 20 } },
+        { sheet: "m.pdf#3", bbox: { x0: 50, y0: 10, x1: 70, y1: 20 } },
+        { sheet: "m.pdf#4", bbox: { x0: 90, y0: 10, x1: 110, y1: 20 } },
+      ],
+    }, {
+      tag: "VAV-1", scheduled_qty: 1, installed_qty: 1, installed_qty_basis: "tag_attached_vector", tagged_plan_qty: null, status: "MATCH",
+      schedule_cite: { sheet: "m.pdf#14", title: "VAV SCHEDULE" },
+      plan_cites: [{ sheet: "m.pdf#4", bbox: [1, 2, 3, 4], tag_bbox: [1, 2, 3, 4] }],
+      plan_tag_cites: [],
+    }], summary: { total: 2 },
+  });
+  const lines = compileAgentTakeoff(rows);
+  const s11 = lines.find((l) => l.tag === "S1-1"), vav = lines.find((l) => l.tag === "VAV-1");
+  assert.ok(s11 && vav);
+  assert.equal(s11.installed_qty, null);
+  assert.equal(s11.tagged_plan_qty, 3);
+  // each printed tag once, in order; the first stays the line's tag cite
+  assert.deepEqual(s11.plan_tag_occurrences, [
+    { sheet_id: "m.pdf#3", bbox_px: [10, 10, 30, 20] }, { sheet_id: "m.pdf#3", bbox_px: [50, 10, 70, 20] }, { sheet_id: "m.pdf#4", bbox_px: [90, 10, 110, 20] },
+  ]);
+  assert.deepEqual(linePlanTagCite(s11)?.bbox_px, [10, 10, 30, 20]);
+  assert.equal(s11.schedule_sheet_id, "m.pdf#15", "an occurrence never stands in for the schedule sheet");
+  assert.deepEqual(vav.plan_tag_occurrences, []);
+});
+
 test("reconciled line exposes authored diagram evidence without promoting it to installed quantity", () => {
   const rows = rowsFromCompiledTakeoff({
     kind: "control_valves",
