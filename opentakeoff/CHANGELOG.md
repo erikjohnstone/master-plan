@@ -1,5 +1,10 @@
 # Changelog
 
+- **A row heading a section of units is no unit.** 011_IL's DIFFUSER, REGISTER, AND GRILLE SCHEDULE prints RETURN
+  over RG-1 and SUPPLY over SD-1 to SD-4; both headings were counted as grilles. A row whose one printed cell is a
+  word of letters alone, in a table whose units fill their rows, is read for no unit, by the takeoff and the
+  reconcile alike (familyRowRead). A census of word-shaped marks over all 45 saved graphs found only these two.
+  011_IL GRD 7 → 5 (= key); no other saved graph changes.
 - **A VRF system's outdoor units titled as condensing units.** 036_LA's "VRV- AIR-COOLED CONDENSING UNIT SCHEDULE"
   (07-A-CU-1, 09-A-CU-1) was counted with the split systems' condensing units. A VRF/VRV title naming condensing
   or heat pump units now reads as VRF outdoor units (CU/ACCU/HP marks), and the condensing-unit family no longer

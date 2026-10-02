@@ -1630,8 +1630,24 @@ function titleFamilies(title) {
  * table's, by its headers and marks.
  */
 export function familyRowRead(gate, row, table) {
+  if (sectionHeadingRow(row, table)) return false;
   if (!gate.rowService) return true;
   return (valveRowService(row) || inferValveServiceFromTable(table)) === gate.rowService;
+}
+
+/**
+ * A row that heads a section of a schedule's units, not a unit: its one
+ * printed cell a word of letters alone, in a table whose units fill their
+ * rows. 011_IL's DIFFUSER, REGISTER, AND GRILLE SCHEDULE prints RETURN over
+ * RG-1 and SUPPLY over SD-1 to SD-4, and both were grilles. A unit's row
+ * prints its values, or a mark with a number.
+ */
+const filledCells = (row) => Object.values(row?.cells || {}).filter((c) => String(c?.text ?? "").trim()).length;
+export function sectionHeadingRow(row, table) {
+  if (row?.transposed || filledCells(row) !== 1) return false;
+  const only = Object.values(row.cells).find((c) => String(c?.text ?? "").trim());
+  if (!/^[A-Z][A-Z\s&/-]{3,}$/i.test(String(only.text).trim())) return false;
+  return (table?.rows || []).filter((r) => filledCells(r) >= 3).length >= 2;
 }
 
 /**

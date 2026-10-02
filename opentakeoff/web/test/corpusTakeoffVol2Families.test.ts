@@ -921,3 +921,16 @@ describe("a VRF system's outdoor units titled as condensing units", () => {
     assert.deepEqual(compile([table("m.pdf#2", "AIR COOLED CONDENSING UNIT SCHEDULE", ["CU-1"])])("CONDENSING_UNIT"), ["CU-1"]);
   });
 });
+
+describe("a row heading a section of a schedule's units", () => {
+  it("is no unit (011_IL's RETURN and SUPPLY over its grilles); a unit printed alone is", () => {
+    const row = (cells: Record<string, string>) => ({ key: Object.values(cells)[0], cells: Object.fromEntries(Object.entries(cells).map(([k, v]) => [k, { text: v }])) });
+    const grilles = { sheet: "m.pdf#16", kind: "equipment", title: { text: "DIFFUSER, REGISTER, AND GRILLE SCHEDULE" },
+      headers: ["MARK", "MOUNTING", "TYPE", "NECK SIZE"],
+      rows: [row({ MARK: "RETURN" }), row({ MARK: "RG-1", MOUNTING: "CEILING", TYPE: "RETURN GRILLE", "NECK SIZE": "22x22" }),
+        row({ MARK: "SUPPLY" }), row({ MARK: "SD-1", MOUNTING: "CEILING", TYPE: "DIFFUSER", "NECK SIZE": "6" }),
+        row({ MARK: "SD-2", MOUNTING: "CEILING", TYPE: "DIFFUSER", "NECK SIZE": "8" }), row({ MARK: "SD-3" })] };
+    const cats = compileHvacTakeoff(null, { tables: [grilles] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual(cats.GRD.items.map((i) => i.tag).sort(), ["RG-1", "SD-1", "SD-2", "SD-3"]);
+  });
+});
