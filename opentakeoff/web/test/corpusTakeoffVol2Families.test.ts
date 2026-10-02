@@ -917,6 +917,13 @@ describe("a VRF system's outdoor units titled as condensing units", () => {
     ]);
     assert.deepEqual(tags("VRF_OUTDOOR"), ["07-A-CU-1", "09-A-CU-1"]);
     assert.deepEqual(tags("CONDENSING_UNIT"), ["01-1-CU-1"]);
+    // 032_PA: a split system's outdoor units, beside its indoor units' schedule.
+    const split = compile([
+      table("m.pdf#2", "SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE", ["AC 1-A001D"]),
+      table("m.pdf#2", "SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE", ["ACCU 1-A001D", "ACCU 3-121"]),
+    ]);
+    assert.deepEqual(split("CONDENSING_UNIT"), ["ACCU 1-A001D", "ACCU 3-121"]);
+    assert.deepEqual(split("FCU"), ["AC 1-A001D"]);
     // A plain condensing unit schedule stays the condensing units'.
     assert.deepEqual(compile([table("m.pdf#2", "AIR COOLED CONDENSING UNIT SCHEDULE", ["CU-1"])])("CONDENSING_UNIT"), ["CU-1"]);
   });

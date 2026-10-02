@@ -180,6 +180,58 @@ export function dropNumberedNotes(t: VectorGridTable): VectorGridTable {
   return { ...t, cells, rows: keep + 1 };
 }
 
+// A title and notes printed beside a notes column, not across the table.
+// 032_PA's SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE prints its title
+// over columns 6-24 of 25, beside a NOTES column (0-5) whose label and notes
+// sit in the two rows under it, above the header. The title spanned too few
+// columns for a title rule, the notes joined every column's name, and the
+// table's 38 outdoor units reached no family. Before the header (the first
+// row with two cells of text), a row whose one text cell, among cells one row
+// tall, is the title (row 0, naming a SCHEDULE) or notes (a NOTES label or a
+// numbered note): the title is read as one cell spanning every column, as the
+// indoor schedule above it prints it, and the notes rows leave the grid. A
+// header's group label alone in its row ("ELECTRICAL") is neither.
+const PROSE_TITLE = /\bSCHEDULES?\b/i;
+const PROSE_NOTES = /^\s*(?:NOTES?\s*:|\(\d{1,2}\)\s+\S)/i;
+
+export function widenLeadingProse(t: VectorGridTable): VectorGridTable {
+  const byRow = new Map<number, VectorGridCell[]>();
+  for (const c of t.cells) {
+    const list = byRow.get(c.row);
+    if (list) list.push(c);
+    else byRow.set(c.row, [c]);
+  }
+  const widened = new Map<number, VectorGridCell>();
+  for (const r of [...byRow.keys()].sort((a, b) => a - b)) {
+    const cells = byRow.get(r)!;
+    const texted = cells.filter((c) => c.text.trim());
+    if (texted.length >= 2) break;
+    if (!texted.length) continue;
+    const lone = texted[0];
+    if (cells.some((c) => (c.rowSpan || 1) > 1)) break;
+    if ((lone.colSpan || 1) >= t.cols) continue;
+    const prose = r === 0 ? PROSE_TITLE.test(lone.text) : PROSE_NOTES.test(lone.text);
+    if (!prose) break;
+    const boxes = cells.map((c) => c.bbox);
+    widened.set(r, {
+      ...lone, col: 0, colSpan: t.cols,
+      bbox: [Math.min(...boxes.map((b) => b[0])), Math.min(...boxes.map((b) => b[1])),
+        Math.max(...boxes.map((b) => b[2])), Math.max(...boxes.map((b) => b[3]))],
+    });
+  }
+  if (!widened.size) return t;
+  // Notes rows leave the grid, as dropNumberedNotes leaves a notes band below
+  // the units: the region still holds them, where scheduleNotes reads them
+  // from the page's text. The rows under them move up.
+  const dropped = [...widened.keys()].filter((r) => r > 0).sort((a, b) => a - b);
+  const shift = (r: number) => r - dropped.filter((d) => d < r).length;
+  const cells = t.cells
+    .filter((c) => !widened.has(c.row))
+    .concat(widened.has(0) ? [widened.get(0)!] : [])
+    .map((c) => (dropped.length ? { ...c, row: shift(c.row) } : c));
+  return { ...t, cells, rows: t.rows - dropped.length };
+}
+
 /** One vectorgrid region → one ScheduleTable, or null when it is not a
  * schedule shape at all. Everything downstream of the grid — title, header
  * tiers, row keys, kind, building, span snapping — is `scheduleTableFromODL`,
@@ -194,7 +246,7 @@ export function vectorGridTableToScheduleTable(
   // A raster region is a picture of a table: no faces, and its text is ink.
   // Presenting it as an empty grid would let it merge over a real read.
   if (t.raster || !t.cells.length) return null;
-  const odl = vectorGridTableToOdl(dropNumberedNotes(t), page);
+  const odl = vectorGridTableToOdl(dropNumberedNotes(widenLeadingProse(t)), page);
   const table = scheduleTableFromODL(odl, ctx.sheetKey, [scale, 0, 0, scale, 0, 0], {
     ...(ctx.buildings ? { buildings: ctx.buildings } : {}),
     ...(reject ? { reject } : {}),

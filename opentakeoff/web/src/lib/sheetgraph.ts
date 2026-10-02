@@ -10937,6 +10937,24 @@ function scheduleTableFromODLRead(
       if (cell && cell["row number"] - 1 === r) ownCells.add(cell);
     }
     if (!ownCells.size) { headerEnd = r + 1; continue; } // fully blank spacer row
+    // A HEADER CELL THAT RUNS DOWN INTO A ROW KEEPS IT IN THE HEADER. 032_PA's
+    // SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE prints TYPE, EQUIP. NO.
+    // and seven more labels two rows tall beside groups (REFRIGERANT,
+    // COMPRESSOR, ELECTRICAL, DIMENSIONS) whose leaf labels (TYPE, QTY. (oz),
+    // FLA (A), VOLT, WIDTH (IN)) fill the second row. That row covers every
+    // column with the labels above it and its own, failed the vocabulary bar,
+    // and was read as a unit keyed "TYPE" whose columns were only the groups'
+    // names. A row whose first column is still a label printed in a header row
+    // above it, and whose own labels each sit in one column, is that header's
+    // leaf tier: a unit's row prints its first cell. Read so under a printed
+    // title only: a title block's DESIGN FIRM label runs down its rows too.
+    const leadAbove = grid[r][0];
+    if (leadAbove && leadAbove["row number"] - 1 < r && leadAbove["row number"] - 1 >= bodyStart
+      && headerEnd > bodyStart && odlCellText(leadAbove).trim() && titleCell && odlCellText(titleCell).trim()
+      && [...ownCells].every((cl) => (cl["column span"] || 1) === 1 && (cl["row span"] || 1) === 1)) {
+      headerEnd = r + 1;
+      continue;
+    }
     const { fullCoverage, grouped } = classifyBodyRow(r, ownCells);
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
     if (!headerCandidateChecked) {

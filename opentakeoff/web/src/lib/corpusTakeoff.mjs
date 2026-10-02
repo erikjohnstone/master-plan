@@ -2238,7 +2238,9 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^(?:CU|ACC)[\s\-]/i,
     // Split indoor/outdoor SYMBOL columns ("F-1 , CU-1" / "DFC-1 , DCU-1"):
     // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
-    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    // 032_PA's SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE, beside its
+    // SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE (the fan coils').
+    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+OUTDOOR\s+UNITS?|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63),
     // and outdoor units ODU-* (038_NC's MINI-SPLIT OUTDOOR UNIT SCHEDULE).
     altKeyRe: /^(?:CU|DCU|ACCU|SSCU|ODU)[\s\-]/i,

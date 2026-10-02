@@ -1,5 +1,16 @@
 # Changelog
 
+- **A schedule titled beside its notes, with a two-tier header (032_PA's outdoor units).** 032_PA's SPLIT SYSTEM
+  OUTDOOR UNIT (CONDENSER) SCHEDULE prints its title beside a NOTES column, its notes in two rows under it, then a
+  header whose first labels (TYPE, EQUIP. NO.) run down both tiers beside groups whose leaf labels fill the second.
+  The title spanned too few columns for a title rule, the notes joined every column's name, the leaf tier was read
+  as a unit keyed "TYPE", and the table never reached the graph: 38 outdoor units were missing. The vector-grid
+  adapter now reads a leading row whose one text cell is the title (naming a SCHEDULE) across the table and drops
+  leading notes rows (NOTES: or a numbered note). The table builder reads a row as the header's leaf tier where its
+  first column is still a label printed above it and its own labels each sit in one column, under a printed title
+  only. "SPLIT SYSTEM OUTDOOR UNIT" also reads as condensing units. Replayed over the vector grids of every
+  table-bearing page of 45 saved sets: only titled tables change (032_PA read; two titles found; header-only
+  fragments and header-label rows no longer read as data). 032_PA rebuilt: CONDENSING_UNIT 0 → 38 (= key).
 - **A row heading a section of units is no unit.** 011_IL's DIFFUSER, REGISTER, AND GRILLE SCHEDULE prints RETURN
   over RG-1 and SUPPLY over SD-1 to SD-4; both headings were counted as grilles. A row whose one printed cell is a
   word of letters alone, in a table whose units fill their rows, is read for no unit, by the takeoff and the

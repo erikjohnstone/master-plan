@@ -230,6 +230,30 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### 032_PA's outdoor units: title beside notes, two-tier header (2026-10-02)
+
+The SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE (38 units) never reached the
+graph: title beside a NOTES column (too narrow for a title rule), notes fused
+into every header, and the leaf header tier read as a unit "TYPE". Fixed in the
+vector-grid adapter (widenLeadingProse: title row naming a SCHEDULE widened,
+leading notes rows dropped) and the table builder (a row under a header label
+that runs down, whose own labels each sit in one column, is the leaf tier;
+titled tables only). Plus "SPLIT SYSTEM OUTDOOR UNIT" → CONDENSING_UNIT.
+
+New instrument (scratchpad, method recorded here): grid replay. For every
+table-bearing page of the 45 saved graphs (344 pages), vectorgrid replies were
+saved once (`grids/replay.py`, ~1 s/page) and both versions of
+vectorGridTableToScheduleTable are run over every table (`grids/ab.mts`).
+Final: 1,930 tables, 13 changed, none lost a unit: 032_PA read; titles found
+(014_MT, 020_MO); header-label rows (MARK, SYMBOL) and one-row header-only
+fragments no longer data; headers cleaned. Rejected on the way: (a) merging the
+notes rows into one prose cell (fused them back into the headers); (b) ending
+the header at the first row printing its own first cell (pulled 012_MO's panel
+circuit 1 into a header, broke AS-146's grouped-tier tests); (c) the rule on
+untitled grids (kept title blocks and revision blocks as tables). 032_PA graph
+rebuilt with the final code: CONDENSING_UNIT 0 → 38 (= key); EXPANSION_TANK
+0/2 remains (marks NET A/B, a status letter glued to the family letters).
+
 ### Transposed air devices named by letters (2026-10-02)
 
 21_VA's GRD 4/12 was worse than a miss: the four "grilles" read were attribute

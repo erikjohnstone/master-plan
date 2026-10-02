@@ -19,6 +19,7 @@ import {
   isFragmentAdjacent,
   stackFragments,
   dropNumberedNotes,
+  widenLeadingProse,
   type VectorGridContext,
 } from "../src/lib/vectorGridAdapter.ts";
 import type { VectorGridTable } from "../src/lib/vectorGridClient.ts";
@@ -319,5 +320,59 @@ describe("vectorGridAdapter — numbered notes inside the grid (AS-155)", () => 
       cell(5, 1, "SPARE", [160, 300, 340, 320], 1, 3)];
     const t = withNotes(band, 6);
     assert.equal(dropNumberedNotes(t), t);
+  });
+});
+
+// 032_PA's SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE, in small: the title
+// printed beside a NOTES column, the label and a note in the two rows under
+// it, then a two-tier header whose first labels run down both tiers.
+const CONDENSERS: VectorGridTable = {
+  bbox: [100, 200, 400, 340], rows: 7, cols: 6, raster: false,
+  assigned: 30, orphan: 0, straddle: 0,
+  cells: [
+    cell(0, 2, "SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE", [200, 200, 400, 220], 1, 4),
+    cell(1, 0, "NOTES:", [100, 220, 200, 240], 1, 2),
+    cell(2, 0, "(1) PROVIDE 18\" STAND BOLTED TO ROOF.", [100, 240, 200, 260], 1, 2),
+    cell(3, 0, "TYPE", [100, 260, 150, 300], 2, 1),
+    cell(3, 1, "EQUIP. NO.", [150, 260, 200, 300], 2, 1),
+    cell(3, 2, "REFRIGERANT", [200, 260, 300, 280], 1, 2),
+    cell(3, 4, "ELECTRICAL", [300, 260, 400, 280], 1, 2),
+    cell(4, 2, "TYPE", [200, 280, 250, 300]), cell(4, 3, "QTY. (oz)", [250, 280, 300, 300]),
+    cell(4, 4, "VOLT", [300, 280, 350, 300]), cell(4, 5, "PH", [350, 280, 400, 300]),
+    ...[5, 6].flatMap((r) => [
+      cell(r, 0, "ACCU", [100, 300 + (r - 5) * 20, 150, 320 + (r - 5) * 20]),
+      cell(r, 1, `1-A10${r}`, [150, 300 + (r - 5) * 20, 200, 320 + (r - 5) * 20]),
+      cell(r, 2, "407C", [200, 300 + (r - 5) * 20, 250, 320 + (r - 5) * 20]),
+      cell(r, 3, "134", [250, 300 + (r - 5) * 20, 300, 320 + (r - 5) * 20]),
+      cell(r, 4, "208", [300, 300 + (r - 5) * 20, 350, 320 + (r - 5) * 20]),
+      cell(r, 5, "1", [350, 300 + (r - 5) * 20, 400, 320 + (r - 5) * 20])]),
+  ],
+};
+
+describe("vectorGridAdapter — a title and notes beside a notes column", () => {
+  it("reads the title across the table and drops the notes rows above the header", () => {
+    const t = widenLeadingProse(CONDENSERS);
+    assert.equal(t.rows, 5);
+    const title = t.cells.filter((c) => c.row === 0);
+    assert.deepEqual(title.map((c) => [c.col, c.colSpan]), [[0, 6]]);
+    assert.ok(!t.cells.some((c) => /NOTES|PROVIDE/.test(c.text)));
+    assert.deepEqual(t.cells.filter((c) => c.row === 1).map((c) => c.text), ["TYPE", "EQUIP. NO.", "REFRIGERANT", "ELECTRICAL"]);
+  });
+
+  it("reads the units with both header tiers in their columns' names", () => {
+    const table = vectorGridTableToScheduleTable(CONDENSERS, 1, ctx(), 3);
+    assert.ok(table);
+    assert.equal(table.title?.text, "SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE");
+    assert.deepEqual(table.rows.map((r) => r.cells["EQUIP. NO."]?.text), ["1-A105", "1-A106"]);
+    assert.ok(table.headers.includes("REFRIGERANT QTY. (OZ)") || table.headers.includes("REFRIGERANT QTY. (oz)"), JSON.stringify(table.headers));
+    assert.ok(table.headers.includes("ELECTRICAL VOLT"), JSON.stringify(table.headers));
+    assert.ok(!table.headers.some((h) => /NOTES/.test(h)), JSON.stringify(table.headers));
+  });
+
+  it("leaves a lone group label, a title that names no schedule, and a ruled title alone", () => {
+    const group: VectorGridTable = { ...CONDENSERS, cells: CONDENSERS.cells.map((c) =>
+      c.row === 0 ? { ...c, text: "ELECTRICAL" } : c) };
+    assert.equal(widenLeadingProse(group), group);
+    assert.equal(widenLeadingProse(PUMPS), PUMPS);
   });
 });
