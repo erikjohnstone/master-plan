@@ -2187,7 +2187,7 @@ export const HVAC_FAMILY_SPECS = {
     // rows on RTU schedules stay fully claimed. Title gate is the filter.
     // A rooftop unit titled by what it packages (095_UT's ROOFTOP PACKAGED
     // AIR CONDITIONING UNIT) is one too.
-    titleRe: /ROOF[\s\-]*TOP\s+(?:(?:PACKAGED|AIR[\s\-]*CONDITIONING)\s+)*UNIT|PACKAGED\s+ROOFTOP|PACKAGED\s+EQUIPMENT\s+SCHEDULE\s*\(?\s*RTU|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
+    titleRe: /ROOF[\s\-]*TOP\s+(?:(?:PACKAGED?|AIR[\s\-]*CONDITIONING)\s+)*UNIT|PACKAGED\s+ROOFTOP|PACKAGED\s+EQUIPMENT\s+SCHEDULE\s*\(?\s*RTU|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|CONNECTION\s+SCHEDULE/i,
   },
   ERV: {

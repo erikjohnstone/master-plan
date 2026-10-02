@@ -230,6 +230,18 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### OCR title abbreviations, rooftop PACKAGE unit (2026-10-02)
+
+Offline A/B over 45 saved graphs: 2 sets changed, +8 −0 units, error vs keys
+8 closer, 0 farther (091_IL FAN 4→6, DUCT_MOUNTED_COIL 3→6; D_25_CO RTU
+0→3). Known remaining by-design misses on these sets: 043_FL's AHU ED-203 and
+fans ED-203-SF/RF (marks named after the room, which a titled AHU/FAN table's
+mark filter refuses on purpose); 091_IL's AHU and RTU pictures produce no
+table. Ranking keys by error showed many older keys list only some families
+(05_MO, 028_TX, 016_NY, 096_IN "[WEAK]"/partial). Over-reads there are real
+schedules (05_MO's AIR HANDLING UNIT SCHEDULE has 4 units, the key lists 1), so
+those sets need re-keying from renders before over-reads can be scored.
+
 ### Room-code unit marks after a numbered building (2026-10-02)
 
 038_NC numbers 8 of its 20 mini-split pairs by the room each serves:

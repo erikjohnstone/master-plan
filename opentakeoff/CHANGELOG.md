@@ -1,5 +1,11 @@
 # Changelog
 
+- **OCR-read schedule titles with a closing abbreviation.** A pictured schedule's title read by OCR can lose its
+  spaces or the "(" of a closing abbreviation: 091_IL's "HYDR ONIC COILS (HC)" and "KITCHENEXHAUSTFANS KEF)".
+  The no-space fallback glued the abbreviation to the last word (HYDRONICCOILSHC), and neither table read as its
+  family. The title matcher now retries, last, without a closing "(ABBR)"; the family's exclude still reads the
+  whole title. Also "ROOFTOP PACKAGE UNIT" reads as a packaged rooftop unit (D_25_CO). Saved graphs: 091_IL fans
+  4 → 6 and coils 3 → 6, D_25_CO rooftop units 0 → 3, all now equal to their keys; no other set changes.
 - **Units numbered by the room they serve.** A mark can carry a building number and then a room code for its
   number: 038_NC's 47-IDU-1A137 (building 47, floor 1, wing A, room 137). The takeoff stripped the building and
   then refused IDU-1A137 as a mark, so 8 of the set's 20 mini-split pairs went uncounted. After a numbered building

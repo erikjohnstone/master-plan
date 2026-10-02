@@ -103,6 +103,13 @@ export function scheduleTitleMatches(rawTitle, titleRe, exclude) {
   } catch {
     /* malformed compactification — fall through */
   }
+  // A closing abbreviation in parentheses, its "(" sometimes lost to OCR, is
+  // glued to the last word once spaces go: "HYDR ONIC COILS (HC)" compacts to
+  // HYDRONICCOILSHC and "KITCHENEXHAUSTFANS KEF)" to KITCHENEXHAUSTFANSKEF,
+  // and neither reads as its family (091_IL). Read last, the title without it
+  // (the exclude above still read the whole title).
+  const bare = raw.replace(/\s*\(?\s*[A-Z]{1,6}\s*\)\s*$/i, "");
+  if (bare !== raw && bare.trim()) return scheduleTitleMatches(bare, titleRe, exclude);
   return false;
 }
 

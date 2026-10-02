@@ -1673,3 +1673,19 @@ test("a title as the family rules read it: no status, discipline, continuation o
   for (const t of ["(N) VAV BOX CONNECTION SCHEDULE", "VAV-BOX CONTROL DIAGRAM", "EXISTING VAV BOX WIRING DIAGRAM - 2 OF 3"]) assert.equal(is(t, VAV), false, t);
   assert.equal(is("(N) CONDENSATE PUMP TRAP PACKAGED SCHEDULE", PUMP), false);
 });
+
+test("a closing abbreviation glued to the last word by OCR still reads as the family", () => {
+  const { FAN, DUCT_MOUNTED_COIL, RTU, FCU } = HVAC_FAMILY_SPECS;
+  const is = (t: string, spec: { titleRe: RegExp; exclude?: RegExp }) => scheduleTitleMatches(t, spec.titleRe, spec.exclude);
+  // 091_IL's pictured schedules, read by OCR.
+  assert.equal(is("KITCHENEXHAUSTFANS KEF)", FAN), true);
+  assert.equal(is("HYDR ONIC COILS (HC)", DUCT_MOUNTED_COIL), true);
+  // D_25_CO: a rooftop PACKAGE unit is a packaged one.
+  assert.equal(is("ROOFTOP PACKAGE UNIT SCHEDULE", RTU), true);
+  // The exclude still reads the whole title, and dropping the abbreviation
+  // names no family a title did not.
+  assert.equal(is("FANCOIL (FCU)", FAN), false);
+  assert.equal(is("SCHEDULE (EF)", FAN), false);
+  assert.equal(is("HYDRONIC FAN COIL UNITS (FCU)", DUCT_MOUNTED_COIL), false);
+  assert.equal(is("HYDRONIC FAN COIL UNITS (FCU)", FCU), true);
+});
