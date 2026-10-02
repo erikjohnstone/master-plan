@@ -143,6 +143,9 @@ export async function cachedSheetGraph(pdfPath, opts) {
     // key and served each other's graphs. Every warm A/B after that compared
     // an answer against itself and reported no difference — silent and total.
     .update(`vg:${resolveVectorGridMode()}`)
+    // L3.5 topology is opt-in (vectorTakeoffPipeline.ts topologyRequested):
+    // a graph built without it must never answer a run that asked for it.
+    .update(`topo:${process.env.OPENTAKEOFF_TOPOLOGY === "on" ? "on" : "off"}`)
     .update(await pdfIdentity(pdfPath, opts.expectedSha256));
   for (const value of opts.identity || []) keyHash.update(String(value));
   const key = keyHash.digest("hex");

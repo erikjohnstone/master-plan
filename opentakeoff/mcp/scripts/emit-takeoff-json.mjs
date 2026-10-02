@@ -15,6 +15,10 @@ import { Session } from "../src/session.ts";
 import { buildLegendTakeoff, reconcileSchedulePlan } from "../src/takeoff.ts";
 import { buildEstimatorTakeoffDocument } from "../../web/src/lib/estimatorTakeoffDocument.mjs";
 
+// The estimator document's pipeline_topology summary is the one reader of the
+// opt-in L3.5 topology stage (vectorTakeoffPipeline.ts topologyRequested).
+process.env.OPENTAKEOFF_TOPOLOGY ??= "on";
+
 const args = process.argv.slice(2);
 function arg(name) {
   const i = args.indexOf(name);

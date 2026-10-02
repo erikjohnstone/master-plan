@@ -320,3 +320,38 @@ describe("L2 vectorgrid: a refused engine must say so where a person will see it
   // slow — the test runner waiting on a handle nothing ever closed.
   after(async () => { await shutdownVectorGrid(); });
 });
+
+describe("L3.5 topology is opt-in", () => {
+  // Two crossing ducts' worth of linework on a plan sheet: enough for a graph.
+  const segs = [0, 0, 100, 0, 100, 0, 100, 100, 50, -50, 50, 50, 0, 100, 100, 100];
+  async function run() {
+    const g: SheetGraph = {
+      available: true, sheets: [], rooms: [], unmatched_tags: [], tables: [],
+      callouts: [], buildings: [], revisions: [], notes: [],
+    };
+    const report = await runVectorTakeoffPipeline(g, {
+      runODL: async () => {},
+      getSheetContexts: () => [{ key: "fixture.pdf#1", role: "plan", spans: [], segs, width: 1000, height: 1000,
+        pageViewportTransform: [1, 0, 0, 1, 0, 0] }],
+      sheetHasPointsListTitle: () => false,
+    });
+    return { g, report };
+  }
+  const prior = process.env.OPENTAKEOFF_TOPOLOGY;
+  after(() => { if (prior === undefined) delete process.env.OPENTAKEOFF_TOPOLOGY; else process.env.OPENTAKEOFF_TOPOLOGY = prior; });
+
+  it("does not run unless asked: the app and MCP never read it", async () => {
+    delete process.env.OPENTAKEOFF_TOPOLOGY;
+    const { g, report } = await run();
+    assert.ok(!report.layers_run.includes("L3.5:topology"));
+    assert.equal(report.stage_ms?.["L3.5:topology"], undefined);
+    assert.equal(g.vector_topology, undefined);
+  });
+
+  it("runs for the batch estimator document when OPENTAKEOFF_TOPOLOGY=on", async () => {
+    process.env.OPENTAKEOFF_TOPOLOGY = "on";
+    const { report } = await run();
+    assert.ok(report.layers_run.includes("L3.5:topology"));
+    assert.equal(typeof report.stage_ms?.["L3.5:topology"], "number");
+  });
+});

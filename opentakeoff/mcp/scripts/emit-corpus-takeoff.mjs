@@ -13,6 +13,10 @@ import { buildEstimatorTakeoffDocument } from "../../web/src/lib/estimatorTakeof
 import { cachedGraphForKey } from "../test/helpers/loadKeySession.mjs";
 import { VECTOR_PIPELINE_CACHE_ID } from "./graphCacheConstants.mjs";
 
+// The estimator document's pipeline_topology summary is the one reader of the
+// opt-in L3.5 topology stage (vectorTakeoffPipeline.ts topologyRequested).
+process.env.OPENTAKEOFF_TOPOLOGY ??= "on";
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
 const DEFAULT_OUT = resolve(HERE, "../../out");

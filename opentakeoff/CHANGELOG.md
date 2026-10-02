@@ -1,5 +1,12 @@
 # Changelog
 
+- **A minute off the first answer on dense sets.** The sheet graph built an MEP topology graph for every plan sheet
+  (L3.5) before the first question could be asked. It was 59 s of klamath-cc-learning-center's 87 s graph build
+  (one 143,572-segment sheet took 38.5 s), and nothing in the app or the MCP tools reads it: its only reader is the
+  batch estimator document's `pipeline_topology` summary. It now runs only when that document asks for it
+  (`OPENTAKEOFF_TOPOLOGY=on`, set by `mcp/scripts/emit-*.mjs`; part of the graph cache key). klamath: 87 s → 36 s,
+  every table, sheet, room and tag identical.
+
 - **Count untagged units on the plans from Review.** A line whose units are drawn without tags had nothing to
   count from: itd-d1-lab's diffusers and return grilles are drawn as symbols only, so 10 of its 11 diffuser and
   grille lines carried a schedule row and no quantity. Review now offers **Count on plans…** (P) on every line. It

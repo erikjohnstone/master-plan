@@ -1,5 +1,28 @@
 ## Active work
 
+### Active work: production platform (current capabilities production-ready) — started 2026-10-01
+
+Goal (user): make the current capabilities production ready and keep improving them; do not touch the
+export-to-estimating side; no open-ended autonomous symbol finding (SYM-1..3 parked).
+
+- **G0 time study** (5 sets, 319 lines, real UI): machine time 41 s–3 min per set; 268 lines (84%) carry plan-tag
+  evidence, 51 schedule-only. Graph build dominates on 3 sets (85–150 s). Script `scratchpad/demo/timestudy.mjs`.
+- **G5 (landed e4bee84, 302cf34):** air-terminal plans are plans; tag-only lines carry every printed tag; Review
+  "Check N tags…" → estimator count. federal-mech GRD: 236 tags read (each = PDF word count); EA 128 → 105 before
+  review (23 phantom type-units removed); UI proof 17/17.
+- **P0/P1 (landed bb8a9b4):** whole-flow sweep defects fixed — side-by-side split probe lacked linework (016_NY
+  M-601 3 → 10 schedules), multi-building room key order, hanger/duct size rows as marks (054_NV), spool-hash sheet
+  names in reconcile row_sheet/prose, import drops line reviews, compile/empty messages, plan-only units listed.
+- **G3 (landed bb8a9b4):** Review "Count on plans…" — canvas Symbol/Count under a line-linked condition; the
+  line's "counted on plans" decision follows its count marks. Unit tests pass; browser proof pending.
+- **Known limit:** 095_UT — the RTU schedule shares a legend sheet beside a symbol legend; its header merges
+  with the legend and a one-row side cannot justify the split. Parenthetical-role and legend-segs attempts did
+  not recover it (reverted). The empty-state message points the estimator to Count.
+- **Sweep r1 caveat:** 29 of 54 swept sets crashed (cgroup OOM: Chrome beside the corpus eval) — environmental,
+  set aside for a one-at-a-time re-run; not counted as results.
+- **Next:** corpus A/B for bb8a9b4 vs 302cf34; G3 browser proof; sweep re-run; graph-build profiling.
+
+
 ### Active work: control intent (GOAL LOOP C, `goals/CONTROL_INTENT.md`) — started 2026-09-25
 
 The owner's go-ahead (2026-09-25) authorised executing this goal, with

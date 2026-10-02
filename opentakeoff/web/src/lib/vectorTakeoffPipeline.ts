@@ -454,6 +454,12 @@ async function runL45OcrAssist(
   );
 }
 
+/** L3.5 runs only when asked for (OPENTAKEOFF_TOPOLOGY=on): its one reader is
+ * the batch estimator document's `pipeline_topology` summary. */
+export function topologyRequested(): boolean {
+  return typeof process !== "undefined" && process.env?.OPENTAKEOFF_TOPOLOGY === "on";
+}
+
 /** True when this sheet is one L3.5 would look at at all. */
 function topologyEligible(ctx: VectorSheetContext): boolean {
   if (!ctx.segs?.length) return false;
@@ -658,28 +664,38 @@ export async function runVectorTakeoffPipeline(
   // cumulative budget that stops the stage once it has spent its time. Sheets
   // that are skipped are NAMED in the report rather than silently dropped —
   // the same discipline the drawn-delta vector budget already uses.
-  report.layers_run.push("L3.5:topology");
-  await timed("L3.5:topology", () => {
-    const maxSegs = Number(process.env.OPENTAKEOFF_TOPOLOGY_MAX_SEGMENTS || 150_000);
-    const budgetMs = Number(process.env.OPENTAKEOFF_TOPOLOGY_BUDGET_MS || 30_000);
-    let spent = 0;
-    const skipped: string[] = [];
-    for (const ctx of contexts) {
-      if (!topologyEligible(ctx)) continue;
-      const segCount = (ctx.segs?.length ?? 0) / 4;
-      if (segCount > maxSegs) { skipped.push(`${ctx.key} (${Math.round(segCount)} segments)`); continue; }
-      if (spent >= budgetMs) { skipped.push(`${ctx.key} (topology budget spent)`); continue; }
-      spent += runL35Topology(g, ctx, report);
-    }
-    if (skipped.length) {
-      report.notes.push(
-        `L3.5: topology skipped on ${skipped.length} sheet(s) — linework too dense or the `
-        + `stage's time budget was spent. Tables, rows and every takeoff number are `
-        + `unaffected; only the pipeline_topology summary omits these sheets. `
-        + skipped.slice(0, 6).join(", ") + (skipped.length > 6 ? ", …" : ""),
-      );
-    }
-  });
+  //
+  // OPT-IN since 2026-10-02. Bounded still cost the estimator a minute: on
+  // klamath-cc-learning-center (17 sheets) L3.5 was 59 s of an 87 s graph
+  // build (sheet 5, 143,572 segments, 38.5 s alone), for a summary no
+  // production surface reads — not the app, not an MCP tool, only the batch
+  // estimator document (mcp/scripts/emit-*.mjs), which turns it on. The flag
+  // is part of the graph cache key, so a graph built without it is never
+  // served to a run that asked for it.
+  if (topologyRequested()) {
+    report.layers_run.push("L3.5:topology");
+    await timed("L3.5:topology", () => {
+      const maxSegs = Number(process.env.OPENTAKEOFF_TOPOLOGY_MAX_SEGMENTS || 150_000);
+      const budgetMs = Number(process.env.OPENTAKEOFF_TOPOLOGY_BUDGET_MS || 30_000);
+      let spent = 0;
+      const skipped: string[] = [];
+      for (const ctx of contexts) {
+        if (!topologyEligible(ctx)) continue;
+        const segCount = (ctx.segs?.length ?? 0) / 4;
+        if (segCount > maxSegs) { skipped.push(`${ctx.key} (${Math.round(segCount)} segments)`); continue; }
+        if (spent >= budgetMs) { skipped.push(`${ctx.key} (topology budget spent)`); continue; }
+        spent += runL35Topology(g, ctx, report);
+      }
+      if (skipped.length) {
+        report.notes.push(
+          `L3.5: topology skipped on ${skipped.length} sheet(s) — linework too dense or the `
+          + `stage's time budget was spent. Tables, rows and every takeoff number are `
+          + `unaffected; only the pipeline_topology summary omits these sheets. `
+          + skipped.slice(0, 6).join(", ") + (skipped.length > 6 ? ", …" : ""),
+        );
+      }
+    });
+  }
 
   // L4 cross-source dedup + equivalent collapse
   report.layers_run.push("L4:reconcile-dedup");
