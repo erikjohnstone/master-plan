@@ -53,12 +53,11 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 32aab47 | Symbol-sweep panel fits the window (Commit was unreachable at 1440×900); G3 browser proof 14/14 |
 | aed8849 | Review all; Count on plans opens the line's plan |
 | b6d2590 | Import re-points plan counts with their conditions |
-| (this) | Reference-only / N.I.C. schedules read no units (16_NV 62 → 58 = key; WP1 test green) |
+| 957a0bb | Reference-only / N.I.C. schedules read no units (16_NV 62 → 58 = key; WP1 test green) |
+| (this) | One-unit schedule captioned as its unit (095_UT RTU AC-WW, 0 → 1; key re-keyed from render) |
 
 ## Known limits (documented, not fixed)
 
-- 095_UT: the RTU schedule shares a legend sheet beside a symbol legend; the takeoff reads nothing there. The
-  empty state points the estimator to Count.
 - 052_IL, 057_US: no equipment schedules in the set; empty takeoff is correct.
 
 ## Known failing tests (pre-existing, not from this goal's work)

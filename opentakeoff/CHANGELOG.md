@@ -1,5 +1,16 @@
 # Changelog
 
+- **A one-unit schedule captioned as its unit is read.** 095_UT's H-001 prints a ruled ROOFTOP PACKAGED AIR
+  CONDITIONING UNIT schedule (one unit, AC-WW) beside its symbol legend; the legend's "SUPPLY DUCT (CROSS SECTION)"
+  makes the sheet a `detail`, the caption has no SCHEDULE word and is singular, so the sheet was never offered to the
+  table reader and the takeoff was empty. The AS-149 caption rule (`sheetHasEquipmentTableCaption`) now also takes a
+  singular UNIT caption when the mark head under it starts a row of quantity heads (two or more of CFM, MBH, VOLTS,
+  MCA, MOCP, ...), which a detail's TAG or a legend's abbreviation list ("CRAH  COMPUTER ROOM AIR HANDLING UNIT",
+  001_NC) does not have. The RTU family also reads a rooftop unit titled by what it packages (ROOFTOP PACKAGED AIR
+  CONDITIONING UNIT). Census over all 130 corpus PDFs: the caption rule changes routing on one sheet (095_UT H-001);
+  the title rule newly matches no other table title. 095_UT compiles to 1 RTU (was 0); its compile key, written from
+  the earlier empty run, is re-keyed from the render.
+
 - **A schedule printed for reference does not count.** A table titled FOR REFERENCE ONLY, NOT IN CONTRACT or
   (N.I.C.) lists units that are not work in this contract; the takeoff counted them as new units. 16_NV's
   "EXISTING ROOFTOP UNIT SCHEDULE (FOR REFERENCE ONLY)" added RTU-2..5 to the four new rooftop units: 62 lines,

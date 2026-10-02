@@ -739,3 +739,13 @@ it("a schedule printed for reference only, or not in contract, is not takeoff wo
   assert.equal(isReferenceOnlyScheduleTitle("FAN COIL UNIT SCHEDULE (EXISTING TO BE REUSED)"), false);
   assert.equal(isReferenceOnlyScheduleTitle("REFERENCE SCHEDULE"), false);
 });
+
+it("a rooftop unit titled by what it packages is a rooftop unit (095_UT's ROOFTOP PACKAGED AIR CONDITIONING UNIT)", async () => {
+  const { familyTableGate, HVAC_FAMILY_SPECS } = await import("../src/lib/corpusTakeoff.mjs");
+  const table = (text: string) => ({ sheet: "x.pdf#2", title: { text }, headers: ["SYMBOL", "ACFM"], rows: [{ SYMBOL: "AC-WW", ACFM: "2,000" }] });
+  const rtu = (HVAC_FAMILY_SPECS as any).RTU;
+  assert.notEqual(familyTableGate(table("ROOFTOP PACKAGED AIR CONDITIONING UNIT"), rtu, "RTU"), null);
+  assert.notEqual(familyTableGate(table("ROOFTOP AIR CONDITIONING UNIT SCHEDULE"), rtu, "RTU"), null);
+  assert.equal(familyTableGate(table("ROOFTOP EXHAUST FAN SCHEDULE"), rtu, "RTU"), null);
+  assert.equal(familyTableGate(table("ROOFTOP CURB SCHEDULE"), rtu, "RTU"), null);
+});

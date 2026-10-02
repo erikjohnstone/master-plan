@@ -2158,7 +2158,9 @@ export const HVAC_FAMILY_SPECS = {
     // PACKAGED EQUIPMENT SCHEDULE (RTU) — common finish/replacement sheets.
     // No keyRe: Carson/Suwannee RTU marks are set-local (B*/C*/bare); titled
     // rows on RTU schedules stay fully claimed. Title gate is the filter.
-    titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|PACKAGED\s+EQUIPMENT\s+SCHEDULE\s*\(?\s*RTU|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
+    // A rooftop unit titled by what it packages (095_UT's ROOFTOP PACKAGED
+    // AIR CONDITIONING UNIT) is one too.
+    titleRe: /ROOF[\s\-]*TOP\s+(?:(?:PACKAGED|AIR[\s\-]*CONDITIONING)\s+)*UNIT|PACKAGED\s+ROOFTOP|PACKAGED\s+EQUIPMENT\s+SCHEDULE\s*\(?\s*RTU|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|CONNECTION\s+SCHEDULE/i,
   },
   ERV: {

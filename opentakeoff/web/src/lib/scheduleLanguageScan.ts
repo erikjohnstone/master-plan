@@ -147,25 +147,49 @@ export function sheetHasScheduleCaption(spans: GraphSpan[]): boolean {
  * and a detail label on the same sheet ("BOTTOM ELEVATION, TOP ELEVATION")
  * makes it an elevation; its heat pump was never offered to vectorgrid. A
  * caption names the units its table lists: an HVAC system noun ending in
- * UNITS or EQUIPMENT (EQUIPMENT_TABLE_CAPTION_RE), plural, no note's verb, and
- * a mark column's head (TAG, MARK, SYMBOL) printed just under it. A detail's
- * own label is one unit ("AIR HANDLING UNIT", "CONNECT CONDENSING UNIT") and
- * heads no column. */
+ * UNITS or EQUIPMENT (EQUIPMENT_TABLE_CAPTION_RE), no note's verb, and a mark
+ * column's head (TAG, MARK, SYMBOL) printed just under it. A detail's own
+ * label is one unit ("AIR HANDLING UNIT", "CONNECT CONDENSING UNIT") and heads
+ * no column, so a singular caption counts only over a row of column heads
+ * (headsAColumnRow). */
 const CAPTION_NOTE_VERB_RE = /\b(?:SEE|REFER|PROVIDE|INSTALL|CONNECT|REMOVE|RELOCATE|REPLACE|FURNISH|ROUTE|SHALL|ALL|EACH|TYP(?:ICAL)?)\b/;
 const MARK_COLUMN_HEAD_RE = /^(?:TAG|MARK|SYMBOL|UNIT\s+(?:NO\.?|TAG|MARK)|EQUIP(?:MENT|\.)?\s+(?:NO\.?|TAG|MARK)|ITEM\s+NO\.?)$/;
 export function sheetHasEquipmentTableCaption(spans: GraphSpan[]): boolean {
-  if (!spans.some((sp) => /\b(?:UNITS|EQUIPMENT)\b/.test(spanText(sp)))) return false;
+  if (!spans.some((sp) => /\b(?:UNITS?|EQUIPMENT)\b/.test(spanText(sp)))) return false;
   const heads = spans.filter((sp) => MARK_COLUMN_HEAD_RE.test(spanText(sp).replace(/\s+/g, " ").trim()));
   if (!heads.length) return false;
   return captionLineBoxes(spans).some(({ text, x0, x1, y, h }) => {
-    if (!/\b(?:UNITS|EQUIPMENT)$/.test(text) || CAPTION_XREF_RE.test(text) || CAPTION_NOTE_VERB_RE.test(text)) return false;
+    if (!/\b(?:UNITS?|EQUIPMENT)$/.test(text) || CAPTION_XREF_RE.test(text) || CAPTION_NOTE_VERB_RE.test(text)) return false;
     if (!EQUIPMENT_TABLE_CAPTION_RE.test(text)) return false;
+    const single = /\bUNIT$/.test(text);
     // The mark column's head sits below the caption, within a few caption
     // heights, at the left of the table the caption is centred over (23_GA's
     // TAG is 370pt left of HEAT PUMP UNITS): the table it titles.
     return heads.some((hd) => hd.y > y && hd.y - y <= Math.max(120, 10 * h)
-      && hd.x + (hd.w || 0) >= x0 - Math.max(240, 2 * (x1 - x0)) && hd.x <= x1);
+      && hd.x + (hd.w || 0) >= x0 - Math.max(240, 2 * (x1 - x0)) && hd.x <= x1
+      && (!single || headsAColumnRow(spans, hd, x0, x1)));
   });
+}
+
+/** A one-unit schedule is captioned as its unit ("ROOFTOP PACKAGED AIR
+ * CONDITIONING UNIT", 095_UT's H-001, read `detail` from its legend's "SUPPLY
+ * DUCT (CROSS SECTION)"), which is also how a detail labels the unit it draws
+ * and how an abbreviations list spells one out (001_NC's "CRAH  COMPUTER ROOM
+ * AIR HANDLING UNIT" over a MARK symbol). The schedule's mark head starts a row
+ * of column heads that name quantities; a detail's TAG and a legend's words do
+ * not. At least two such heads on the mark head's band, right of it and under
+ * the caption's reach. */
+const QUANTITY_HEAD_RE = /^(?:[A-Z]+\s+)?(?:A?CFM|GPM|MBH|BTUH|KW|B?HP|RPM|VOLTS?|PHASE|HZ|HERTZ|MCA|MOCP|FLA|AMPS|EAT|LAT|EWT|LWT|ESP|TSP|SEER2?|I?EER|WEIGHT|CAPACITY)\b/;
+function headsAColumnRow(spans: GraphSpan[], hd: GraphSpan, x0: number, x1: number): boolean {
+  const band = Math.max(24, 3 * (hd.h || 12));
+  const reach = x1 + Math.max(240, 2 * (x1 - x0));
+  let n = 0;
+  for (const sp of spans) {
+    if (sp === hd || sp.x <= hd.x || sp.x > reach || Math.abs(sp.y - hd.y) > band) continue;
+    const t = spanText(sp).replace(/\s+/g, " ").trim();
+    if (t.length <= 24 && QUANTITY_HEAD_RE.test(t) && ++n >= 2) return true;
+  }
+  return false;
 }
 
 /** joinCaptionLines' lines with their boxes, every line (one span or more). */

@@ -28,6 +28,20 @@ describe("AS-149: an equipment table captioned as the units it lists", () => {
     assert.equal(sheetHasEquipmentTableCaption([caption("CONNECT CONDENSING UNIT"), tag]), false);
   });
 
+  it("reads a one-unit schedule captioned as its unit over a row of column heads (095_UT H-001)", () => {
+    const heads = ["COOLING", "ACFM", "ESP", "HEATING", "ELECTRICAL", "MCA", "MOCP"].map((h, i) => span(h, 2860 + 120 * i, 2232));
+    assert.equal(sheetHasEquipmentTableCaption([caption("ROOFTOP PACKAGED AIR CONDITIONING UNIT"), span("SYMBOL", 2737, 2235), ...heads]), true);
+  });
+
+  it("refuses a one-unit label whose mark sits among words that name no quantity", () => {
+    const callouts = ["SUPPLY", "RETURN", "CURB", "FLASHING", "DUCT"].map((h, i) => span(h, 2860 + 120 * i, 2232));
+    assert.equal(sheetHasEquipmentTableCaption([caption("ROOFTOP PACKAGED AIR CONDITIONING UNIT"), span("TAG", 2737, 2235), ...callouts]), false,
+      "a detail's callouts beside its TAG");
+    // 001_NC's abbreviations list: "CRAH  COMPUTER ROOM AIR HANDLING UNIT" over a MARK symbol in the legend.
+    const legend = ["DDC", "DIRECT DIGITAL CONTROL", "H", "O", "T", "9."].map((h, i) => span(h, 2860 + 120 * i, 2232));
+    assert.equal(sheetHasEquipmentTableCaption([caption("CRAH COMPUTER ROOM AIR HANDLING UNIT"), span("MARK", 2737, 2235), ...legend]), false);
+  });
+
   it("refuses a note's line and a cross-reference", () => {
     assert.equal(sheetHasEquipmentTableCaption([caption("PROVIDE NEW ROOFTOP UNITS"), tag]), false);
     assert.equal(sheetHasEquipmentTableCaption([caption("SEE FAN COIL UNITS"), tag]), false);
