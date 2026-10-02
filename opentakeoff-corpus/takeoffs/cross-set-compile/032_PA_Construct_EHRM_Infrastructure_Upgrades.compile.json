@@ -3,12 +3,16 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/032_PA_Construct_EHRM_Infrastructure_Upgrades",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 multipart PA EHRM \u2014 single pump schedule hit (rejoined).",
+  "notes": "[KEYED 2026-10-02 from the render] Lebanon VA EHRM infrastructure (PA). M-sheet 2: SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE, 38 indoor units marked AC <bldg>-<room> (FCU, as split indoor units are keyed elsewhere), and SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE, 38 ACCU <bldg>-<room> (CONDENSING_UNIT; the table reads untitled). M-sheet 3: EXISTING COMPUTER ROOM AIR CONDITIONER SCHEDULE AC-A1, AC-A2, AC-B1, AC-B2 and the new COMPUTER ROOM AIR CONDITIONER SCHEDULE AC-A1..B2 (CRAH 8: existing units count by the keys' convention, the title does not mark them reference-only; the new units replace them); PUMP SCHEDULE pumps A and B (2); EXPANSION TANK SCHEDULE tanks A and B (2); existing and new CLOSED CIRCUIT DRY COOLER A/B (no takeoff family, not counted). The earlier key (PUMP 1) was written from pipeline output.",
   "categories": {
-    "PUMP": 1
+    "FCU": 38,
+    "CONDENSING_UNIT": 38,
+    "CRAH": 8,
+    "PUMP": 2,
+    "EXPANSION_TANK": 2
   },
   "totals": {
-    "items": 1
+    "items": 88
   },
   "bas_points": {
     "rows": 0

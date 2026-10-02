@@ -2,15 +2,16 @@
   "set_id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 Town Offices facilities HVAC \u2014 FCU/ERV/HP/GRD.",
+  "notes": "[MEAT] Vol2 Town Offices facilities HVAC \u2014 FCU/ERV/HP/GRD. [2026-10-02, from the drawing] + ELECTRIC HEATING COIL SCHEDULE on sheet 4: EHC-1 serving ERV-1 (INDEECO QUZ), DUCT_MOUNTED_COIL 1; the other families unchanged.",
   "categories": {
     "FCU": 4,
     "ERV": 2,
     "HEAT_PUMP": 2,
-    "GRD": 4
+    "GRD": 4,
+    "DUCT_MOUNTED_COIL": 1
   },
   "totals": {
-    "items": 12
+    "items": 13
   },
   "bas_points": {
     "rows": 0
