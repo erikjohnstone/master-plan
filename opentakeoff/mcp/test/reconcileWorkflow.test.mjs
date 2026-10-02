@@ -231,7 +231,7 @@ test("Orange County bulk VAV reconcile scaffold matches compile (DESIGNATION col
   assert.ok(rows.some((r) => /^VAV-1-01$/i.test(r.tag)), "DESIGNATION-keyed VAV tag");
 });
 
-test("Orange County bulk VAV reconcile: all 32 scheduled tags MATCH (WP1 cross-set)", async () => {
+test("Orange County bulk VAV reconcile: every scheduled tag MATCH, both floors (WP1 cross-set)", async () => {
   const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
