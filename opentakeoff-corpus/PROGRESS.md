@@ -54,7 +54,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | aed8849 | Review all; Count on plans opens the line's plan |
 | b6d2590 | Import re-points plan counts with their conditions |
 | 957a0bb | Reference-only / N.I.C. schedules read no units (16_NV 62 → 58 = key; WP1 test green) |
-| (this) | One-unit schedule captioned as its unit (095_UT RTU AC-WW, 0 → 1; key re-keyed from render) |
+| 0881cd7 | One-unit schedule captioned as its unit (095_UT RTU AC-WW, 0 → 1; key re-keyed from render) |
 
 ## Known limits (documented, not fixed)
 
