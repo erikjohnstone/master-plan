@@ -738,6 +738,8 @@ it("a schedule printed for reference only, or not in contract, is not takeoff wo
   assert.equal(isReferenceOnlyScheduleTitle("FAN SCHEDULE - NOT IN CONTRACT"), true);
   assert.equal(isReferenceOnlyScheduleTitle("FAN COIL UNIT SCHEDULE (EXISTING TO BE REUSED)"), false);
   assert.equal(isReferenceOnlyScheduleTitle("REFERENCE SCHEDULE"), false);
+  // 29_TX: a new chiller the owner bought and the contractor installs.
+  assert.equal(isReferenceOnlyScheduleTitle("WATER COOLED CHILLER SCHEDULE (FOR REFERENCE ONLY)"), false);
 });
 
 it("a rooftop unit titled by what it packages is a rooftop unit (095_UT's ROOFTOP PACKAGED AIR CONDITIONING UNIT)", async () => {

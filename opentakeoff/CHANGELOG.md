@@ -17,6 +17,9 @@
   the key says 58. The family gate both the takeoff and the reconcile read (`familyTableGate`, AS-77) now reads no
   unit from such a table; 16_NV compiles to 58, nothing else moved. Schedules titled EXISTING, REUSED or RELOCATED
   still count: about a dozen corpus sets schedule existing units that carry work (new controls, a refurbish).
+  - Narrowed: "for reference only" excludes a schedule only when its title also says EXISTING. 29_TX prints a
+    WATER COOLED CHILLER SCHEDULE (FOR REFERENCE ONLY) for a chiller the owner bought and the contractor installs
+    (its note 10), which is work. NOT IN CONTRACT and (N.I.C.) still exclude on their own.
 
 - **Review the whole takeoff in one pass.** The Takeoff header offers **Review all N** beside the review summary: one
   grid over every line of every schedule, in the takeoff's own order, each tile naming its schedule, with the same keys

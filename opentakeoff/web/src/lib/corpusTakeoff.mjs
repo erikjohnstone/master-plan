@@ -1360,10 +1360,16 @@ function identifierColumnByCardinality(table) {
 // a general schedule, where only a family's mark rule may claim a row.
 const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i;
 
-/** A schedule title that says the table is not work in this contract. */
+/** A schedule title that says the table is not work in this contract: not in
+ * contract (N.I.C.), or existing units printed for reference only (16_NV's
+ * EXISTING ... ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)). A new unit's
+ * schedule printed for reference is still work: 29_TX's WATER COOLED CHILLER
+ * SCHEDULE (FOR REFERENCE ONLY) is a chiller the owner bought and the
+ * contractor installs. */
 export function isReferenceOnlyScheduleTitle(title) {
   const t = String(title || "").replace(/\s+/g, " ").toUpperCase();
-  return /\b(?:FOR\s+)?REFERENCE\s+ONLY\b|\bNOT\s+IN\s+(?:THE\s+)?CONTRACT\b|\(\s*N\.?\s*I\.?\s*C\.?\s*\)/.test(t);
+  if (/\bNOT\s+IN\s+(?:THE\s+)?CONTRACT\b|\(\s*N\.?\s*I\.?\s*C\.?\s*\)/.test(t)) return true;
+  return /\b(?:FOR\s+)?REFERENCE\s+ONLY\b/.test(t) && /\bEXISTING\b/.test(t);
 }
 
 /**
