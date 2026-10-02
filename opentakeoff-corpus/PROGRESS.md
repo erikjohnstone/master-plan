@@ -128,6 +128,12 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 - `corpusTakeoffWp1Acceptance` federal BAS (89 vs 26 expected) and 04_NV (19 vs 16): identical at 302cf34 and at
   `4255465`. 04_NV's three extra lines are LV-1/LV-2 (louvers) and WS-1 (water softener), read by family rules newer
   than the key; the key was not changed (rule: never edit a key to pass). 16_NV (62 vs 58) is fixed above.
+- MCP `basServedEquipmentPlanPaint` (all 5 sets) fails its first assertion, the BAS point-row total against
+  `bas_points.rows` in the cross-set compile keys (021_XX 109 vs 63, 015_VA 75 vs 39). Those keys were last written
+  at 6fabaeb; the row count grew with the later point-list reading work (AS-132..135). Replaying the BAS compile
+  on saved graphs gives the same totals at c637a3d (before the 2026-10-02 batch) and at c7e48ee (021_XX 109/109,
+  015_VA 75/75), so the batch changed nothing here. The key needs re-counting from the drawings' point lists
+  before this test means anything; not edited to pass.
 
 ## Sweep re-run (OOM-lost sets)
 
