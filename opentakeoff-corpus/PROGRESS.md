@@ -230,6 +230,20 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### 07_MO pictured schedules: tanks, glycol, pot feeder (2026-10-02)
+
++5 units (EXT-1, EXT-2, CBT-1, GF-1, CPF-1), all in its key; 015_VA +1 (GFS-1,
+a titled GLYCOL FEED SYSTEM row its older partial key omits). 07_MO gaps left
+(46 units), each needing more than vocabulary: CONTROL VALVE SCHEDULE (35:
+CV1..CV7 plus "CV-7 THRU 35" for the VAV reheat valves; the water must be read
+from SERVES text "c c" / "H/C" / "REHEAT COILS", and the OCR'd title is glued
+with an asterisk); DAMPER SCHEDULE (5 control dampers; OCR lost D-1's digit,
+generic title qualified only by a CONTROL DAMPER column); "CH ILERSCHEDULE"
+(OCR-garbled chiller title); HEAT PUMP SPLIT SYSTEM F-1/F-2 (indoor furnaces,
+keyed FCU) with CUH-1/2 (keyed heat pumps, not in the extracted rows); AIR
+HANDLER UNIT SCHEDULE's RTU-2 and FCU-1 (keyed AHU and FCU; the AHU mark rule
+reads AHU/AC only).
+
 ### 032_PA's outdoor units: title beside notes, two-tier header (2026-10-02)
 
 The SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE (38 units) never reached the
