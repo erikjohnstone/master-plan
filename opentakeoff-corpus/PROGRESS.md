@@ -21,9 +21,20 @@ archive as current.** `STATE.md` (2026-09-13) is also stale; this file supersede
 
 ## Verified baseline
 
-**Pending.** A full corpus eval at HEAD with the production environment, scorers run one after another, is
-running (`scratchpad/evalab3/new.log`), followed by the same run at `302cf34` for A/B. This section is filled from that
-run, not from the archive.
+A/B on 2026-10-02, same container and environment (ot-env, vectorgrid on, scorers run one after another, eval
+concurrency 2): `9de1d7e` (new) against `302cf34` (base). Logs in the session scratchpad (`evalab3/`).
+
+- **Takeoff + reference (`takeoff-eval --with-reference`):** identical on every keyed set. Exact-match rates:
+  bessemer 70.0%, itd-d1-lab 78.4%, federal-mech 99.0%, navfac 95.4%, bldg5406 75.0%, baker-county-eoc 57.5%,
+  itd-d1-lab-raster 100%. Most of the remaining deltas are untagged symbol counts on plans (baker R1/E1/S1...,
+  bldg5406 CDB/RRA), which is the parked symbol-finding work; the estimator counts those with Count on plans.
+- **Graph (`graph-eval`):** identical on every set that ran on both sides (rowsym 99.8%). Three sets have no
+  comparison because a child process was OOM-killed: baker-county-eoc and 089_FL on new, 04_NV on base.
+- **Table recall (`table-recall-eval`):** same 12 tables missed on both sides; new drops 3 junk tables base reported
+  (12_MT#11 EDGE DETAIL, 031_MO#39 BOX HEADER ELEVATION / BORROW LITE SILL).
+- **Tag recall (`tag-eval`):** not compared; it runs ~6 h per side on this container.
+- Commits after `9de1d7e` (957a0bb reference-only titles, 0881cd7 one-unit captions) were measured by targeted
+  censuses, not by this run.
 
 ## Current goal
 
@@ -86,7 +97,8 @@ compile them in node (one at a time) and look at any that read 0.
 
 ## Active work / next queue
 
-1. Corpus A/B (HEAD vs 302cf34, production env) → fill **Verified baseline**; investigate any regression.
+1. ~~Corpus A/B~~ done (above). Re-run graph-eval alone for baker-county-eoc and 089_FL (OOM-killed in the A/B); baker's
+   graph build reached ~3.9 GB RSS, a risk in a browser tab.
 2. ~~Browser proof of Review all + auto-opened plan~~ — 18/18 on itd-d1-lab (2026-10-02).
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
