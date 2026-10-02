@@ -353,3 +353,24 @@ test("the plan sweep finds a transposed schedule's unit on its view's row, one p
   assert.deepEqual(scheduleMarksRead(graph, view, ["FAN"]), ["EF-1", "EF-2", "EF-5", "EF-3"]);
   assert.deepEqual(scheduleRowsReadingMark(graph, "AREA SERVED"), [], "an attribute is no unit");
 });
+
+test("air devices named by their type's letters alone are read one per column under a corner and worded rows (21_VA's AIR DISTRIBUTION DEVICE SCHEDULE)", () => {
+  const units = ["CD", "RGL", "RG, TG", "EG", "SR1", "LD-1"];
+  const devices = transposed("m.pdf#51", "AIR DISTRIBUTION DEVICE SCHEDULE", null, "DESIGNATION", units, [
+    { label: "DEVICE", values: ["CEILING DIFFUSER", "RETURN GRILLE", "RETURN GRILLE TRANSFER GRILLE", "EXHAUST GRILLE", "SUPPLY REGISTER", "SUPPLY LINEAR DIFFUSER"] },
+    { label: "TYPE", values: ["LAY-IN", "GRID CORE", "GRID CORE", "GRID CORE", "DOUBLE DEFLECTION", "SLOT"] },
+    { label: "NECK", values: ["ROUND", "SQUARE", "SQUARE", "SQUARE", "RECTANGULAR", "ROUND TO PLENUM"] },
+    { label: "MANUFACTURER", values: ["ANEMOSTAT", "ANEMOSTAT", "ANEMOSTAT", "ANEMOSTAT", "ANEMOSTAT", "ANEMOSTAT"] },
+    { label: "MODEL NUMBER", values: ["EPL-D", "GC5L", "GC5", "GC5", "S2HO", "SLAD-PS-75"] },
+    { label: "CONSTRUCTION", values: ["STEEL", "ALUMINUM", "ALUMINUM", "ALUMINUM", "STEEL", "ALUMINUM"] },
+  ]);
+  assert.deepEqual(tagsOf(compiled([devices]), "GRD").sort(), ["CD", "EG", "LD-1", "RG", "RGL", "SR1", "TG"]);
+  // No attribute is a unit.
+  assert.ok(!tagsOf(compiled([devices]), "GRD").some((t) => /DEVICE|NECK|CONSTRUCTION|MODEL/.test(t)));
+  // A schedule read the usual way, its rows by letters and its columns named
+  // in letters, stays as extracted.
+  const usual = { kind: "equipment", sheet: "m.pdf#52", title: { text: "AIR DISTRIBUTION DEVICE SCHEDULE" },
+    headers: ["MARK", "TYPE", "CFM", "MFR", "LD-1"],
+    rows: ["CD", "RG", "EG"].map((m, i) => ({ key: m, cells: { MARK: cell(m, 0, 100 + H * i, 100, 130 + H * i), TYPE: cell("LAY-IN", 100, 100 + H * i, 200, 130 + H * i) } })) };
+  assert.equal(scheduleTableView(usual), usual);
+});

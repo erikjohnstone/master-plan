@@ -230,6 +230,14 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Transposed air devices named by letters (2026-10-02)
+
+21_VA's GRD 4/12 was worse than a miss: the four "grilles" read were attribute
+names (DEVICE, NECK, MODEL NUMBER, CONSTRUCTION) from the transposed AIR
+DISTRIBUTION DEVICE SCHEDULE. transposedScheduleView now accepts letter-only
+type marks under a first-column corner with worded rows. Offline A/B over 45
+saved graphs: 1 set changed, +12 −4 units (the 4 phantoms), 21_VA GRD = key.
+
 ### OCR title abbreviations, rooftop PACKAGE unit (2026-10-02)
 
 Offline A/B over 45 saved graphs: 2 sets changed, +8 −0 units, error vs keys

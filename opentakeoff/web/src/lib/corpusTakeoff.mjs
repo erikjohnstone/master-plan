@@ -564,6 +564,8 @@ const markCanon = (s) => String(s || "").toUpperCase().replace(/\s+/g, "");
 const numberedMark = (s) => SHORT_EQUIP_MARK_RE.test(markCoreForKeyRe(markCanon(s)));
 /** A unit a letter names beside its numbered siblings (071_ME's RTU-G). */
 const letteredMark = (s) => /^[A-Z]{2,8}-[A-Z]{1,2}$/.test(markCanon(s));
+/** A type printed as letters alone (21_VA's air devices CD, RGL, EG). */
+const typeMark = (s) => /^[A-Z]{1,4}$/.test(markCanon(s));
 
 /**
  * A table no title vouches for (untitled, or a general MISCELLANEOUS,
@@ -598,7 +600,7 @@ export function unvouchedMarkNamesUnit(mark) {
  * printing it is read. Trailing words after a mark (071_ME's "RTU-1 (ALT#2)",
  * a chiller's model or a unit heater's ratings run into its header) are
  * dropped by the compile's own normalization. Null when any part is no mark. */
-function transposedHeaderKeys(header) {
+function transposedHeaderKeys(header, lettersAlone = false) {
   let s = String(header || "").toUpperCase().replace(/\s+/g, " ").trim();
   if (!s) return null;
   s = s.replace(/\b([A-Z]{1,8})([\s\-]?)(\d{1,4})\s+(?:THRU|THROUGH|TO)\s+(?:\1[\s\-]?)?(\d{1,4})\b/g, (m, p, sep, a, b) => {
@@ -614,7 +616,7 @@ function transposedHeaderKeys(header) {
     // The words after a mark first, so a rating run into the header (21_VA's
     // "UH-1 THRU UH-3 ... 1/20 115/1 DIRECT") is no pair.
     const pair = normalizeEquipMark(group).split(/\s*\/\s*/).filter(Boolean).map((p) => normalizeEquipMark(p).trim());
-    if (!pair.length || !pair.every((p) => numberedMark(p) || letteredMark(p))) return null;
+    if (!pair.length || !pair.every((p) => numberedMark(p) || letteredMark(p) || (lettersAlone && typeMark(p)))) return null;
     keys.push(pair.join(" / "));
   }
   return keys.length ? keys : null;
@@ -663,12 +665,19 @@ function transposedScheduleView(table) {
   for (let i = 0; i < headers.length - 1; i++) if (MARK_ROW_LABEL_RE.test(headers[i].trim())) L = i;
   if (L < 0) return null;
   const unitHeaders = headers.slice(L + 1);
-  const unitKeys = unitHeaders.map(transposedHeaderKeys);
-  if (unitKeys.some((k) => !k) || !unitKeys.flat().some((k) => k.split(" / ").some(numberedMark))) return null;
   const labelHeader = headers[L];
   const labelOf = (row) => String(row.cells?.[labelHeader]?.text ?? row.key ?? "").replace(/\s+/g, " ").trim();
   const labels = rows.map(labelOf).filter(Boolean);
   if (!labels.length || labels.filter((l) => numberedMark(normalizeEquipMark(l))).length > 0.3 * labels.length) return null;
+  // Units named by their type's letters alone (21_VA's AIR DISTRIBUTION DEVICE
+  // SCHEDULE: CD, RGL, "RG, TG" … LD-1, LR-1) are read so only where the
+  // corner is the table's first column and the rows are attributes printed in
+  // words: a schedule read the usual way names its own columns in letters
+  // (TYPE, CFM, MFR) and its rows by marks, often letters too (CD, RG).
+  const worded = (l) => /\s/.test(l) || /^[A-Z]{5,}$/i.test(l);
+  const lettersAlone = L === 0 && labels.length >= 3 && labels.filter(worded).length >= 0.6 * labels.length;
+  const unitKeys = unitHeaders.map((h) => transposedHeaderKeys(h, lettersAlone));
+  if (unitKeys.some((k) => !k) || !unitKeys.flat().some((k) => k.split(" / ").some(numberedMark))) return null;
 
   const sectionHeaders = headers.slice(0, L);
   const top = (row) => {

@@ -1,5 +1,12 @@
 # Changelog
 
+- **Air devices named by letters alone, printed on their side.** 21_VA's AIR DISTRIBUTION DEVICE SCHEDULE runs its
+  devices across the columns (CD, RGL, "RG, TG", EG … LD-1, LR-1) and their attributes down the rows. The
+  transposed-schedule reader wanted every column to name a numbered or lettered-pair mark, so the table was read
+  row-wise and four of its attribute names (DEVICE, NECK, MODEL NUMBER, CONSTRUCTION) were counted as grilles. A
+  type printed as letters alone is now read as a unit there, only where the corner label is the table's first
+  column and at least 60% of the rows are attributes printed in words. 21_VA: GRD 4 phantom → 12 real (= key);
+  no other saved graph changes.
 - **OCR-read schedule titles with a closing abbreviation.** A pictured schedule's title read by OCR can lose its
   spaces or the "(" of a closing abbreviation: 091_IL's "HYDR ONIC COILS (HC)" and "KITCHENEXHAUSTFANS KEF)".
   The no-space fallback glued the abbreviation to the last word (HYDRONICCOILSHC), and neither table read as its
