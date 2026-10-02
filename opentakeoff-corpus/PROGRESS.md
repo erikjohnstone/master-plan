@@ -238,7 +238,10 @@ Render-keyed residuals, each judged not worth a rule yet: 043_FL PUMP 6/4 (OCR
 lost a digit and a letter in the pump schedule, "CWP-& CWP-2" / "HVP-& HVP-2",
 and the electrical MECHANICAL EQUIPMENT SCHEDULE lists "CWP 9-10", which
 disagrees with the mechanical numbering); 082_OR's LV-1/LV-2 louvers (since fixed: louver host title + grille
-yieldKeyRe, GRD 7 + LOUVER 2 = key); 038_NC 47-ODU-BC143C a heat pump by its heating column; 21_VA RF1/RF2
+yieldKeyRe, GRD 7 + LOUVER 2 = key); 038_NC 47-ODU-BC143C a heat pump by its heating column (census over 50 saved
+graphs: outdoor rows printing a heating value are 015_VA's four mini-split heat
+pumps, 038_NC's one, plus false friends, 016_NY's TOTAL HEAT REJECTION and
+062_ID's gas-fired split; keys disagree on the family, so not adopted); 21_VA RF1/RF2
 from a technology sheet's AV list (see the rejected gate above). Grid-replay
 census found abbreviation legends ("PWM - PULSE WIDTH MODULATED", "FU - FUSED")
 printed as small grids above the header of 031_MO's VFD and disconnect schedules
