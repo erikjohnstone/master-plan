@@ -230,6 +230,25 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Guard and residuals after the 2026-10-02 batch
+
+Full web suite at 4f48e01 (+ docs): 4,197 tests, 4,184 pass, 0 fail (13
+skipped/todo). MCP typecheck clean; T-HVAC-01 takeoff regression passes.
+Render-keyed residuals, each judged not worth a rule yet: 043_FL PUMP 6/4 (OCR
+lost a digit and a letter in the pump schedule, "CWP-& CWP-2" / "HVP-& HVP-2",
+and the electrical MECHANICAL EQUIPMENT SCHEDULE lists "CWP 9-10", which
+disagrees with the mechanical numbering); 082_OR LV-1/LV-2 louvers inside an
+AIR DISTRIBUTION schedule read as GRD (needs a titled family to yield rows to a
+host rule); 038_NC 47-ODU-BC143C a heat pump by its heating column; 21_VA RF1/RF2
+from a technology sheet's AV list (see the rejected gate above). Grid-replay
+census found abbreviation legends ("PWM - PULSE WIDTH MODULATED", "FU - FUSED")
+printed as small grids above the header of 031_MO's VFD and disconnect schedules
+and 016_NY's equipment connection schedule, fused into column names; counts are
+unaffected, attribute names are not. Stale partial keys (05_MO, 028_TX, 016_NY,
+096_IN, 014_MT, 019_FL, 030_NY, 26_CA) over-read only from titled family
+schedules (030_NY checked table by table), so they need re-keying before their
+over-reads can be scored.
+
 ### Rejected: untitled tables gated by their share of HVAC marks (2026-10-02)
 
 21_VA's FAN 12/10: RF1, RF2 come from an untitled audio-visual device list on a
