@@ -23,6 +23,9 @@
   in exports as Estimator qty. The count follows the condition's count marks: an undo or a deleted mark lowers it,
   and deleting the condition removes it. Review logic in `web/src/lib/lineReview.js` (`recordCanvasCount`,
   `syncCanvasCounts`); the counting itself is the canvas's own Symbol and Count tools.
+  - Importing a colleague's takeoff carries their plan counts with their conditions: a count follows its condition
+    onto the operator's same-named one (or a renamed id), as the count marks themselves do. Before, the count kept
+    the colleague's condition id, which no longer existed, and the live sync dropped it.
   - Fixed: the Symbol sweep's review panel had no height limit, so a sweep with several label groups and questions
     ran past the bottom of a 1440×900 window and its **Commit** button could not be reached. The panel now fits the
     window; its body scrolls and Commit stays in view. Found by the browser proof of this flow on itd-d1-lab

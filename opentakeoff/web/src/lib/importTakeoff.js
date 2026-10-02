@@ -18,7 +18,7 @@
 
 import { ANN_SCHEMA } from "./store.js";
 import { sanitizeApprovals } from "./approvals.js";
-import { sanitizeLineReviews } from "./lineReview.js";
+import { sanitizeLineReviews, countedOnPlans } from "./lineReview.js";
 import { basWorkflowSchema, mergeBasWorkflows } from "./basWorkflow.ts";
 
 /** Parse + gate an import file's text. Throws with copy the message bar shows
@@ -173,6 +173,14 @@ export function mergeTakeoffImport(current, imported, knownFiles = null) {
   // "Changed since review". A line the operator already decided keeps theirs.
   const curReviews = sanitizeLineReviews(cur.line_reviews);
   const impReviews = sanitizeLineReviews(imported.line_reviews);
+  // A count made on the plans follows its condition's marks, so it follows the
+  // condition here too: merged onto the operator's same-named condition, or
+  // renamed on an id collision, exactly as the shapes are re-pointed above.
+  for (const [k, rec] of Object.entries(impReviews.records)) {
+    if (countedOnPlans(rec) && condMap.has(rec.condition_id) && condMap.get(rec.condition_id) !== rec.condition_id) {
+      impReviews.records[k] = { ...rec, condition_id: condMap.get(rec.condition_id) };
+    }
+  }
   const reviewsAdded = Object.keys(impReviews.records).filter((k) => !(k in curReviews.records)).length;
   const lineReviews = { ...curReviews, records: { ...impReviews.records, ...curReviews.records } };
 

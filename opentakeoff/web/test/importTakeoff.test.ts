@@ -235,3 +235,20 @@ test("merge: a colleague's line reviews join the project; a line the operator de
   assert.equal(none.payload.line_reviews, undefined);
   assert.equal(none.note.reviews_added, 0);
 });
+
+test("merge: a colleague's plan count follows its condition onto the operator's same-named one", () => {
+  const current = {
+    conditions: [{ id: "mine", finish_tag: "D-1 · DIFFUSER SCHEDULE" }],
+    shapes: [{ id: "s0", sheet_id: "va.pdf", condition_id: "mine", measure_role: "count" }], markups: [], sheets: [],
+  };
+  const imported = doc({
+    conditions: [{ id: "theirs", finish_tag: "D-1 · DIFFUSER SCHEDULE", materials: [] }],
+    shapes: [{ id: "s9", sheet_id: "va.pdf", condition_id: "theirs", measure_role: "count" }],
+    line_reviews: { schema: "opentakeoff.line_review.v1", records: {
+      "tag:D-1|sched:DIFFUSER SCHEDULE": { decision: "counted", sig: "eeee5555", qty: 1, condition_id: "theirs", at: "t" },
+    } },
+  });
+  const { payload } = mergeTakeoffImport(current, imported);
+  assert.equal(payload.line_reviews.records["tag:D-1|sched:DIFFUSER SCHEDULE"].condition_id, "mine");
+  assert.equal(payload.shapes.find((s: { id: string }) => s.id === "s9").condition_id, "mine");
+});
