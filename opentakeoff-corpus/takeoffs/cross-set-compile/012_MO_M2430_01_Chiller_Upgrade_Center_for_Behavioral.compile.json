@@ -3,15 +3,17 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 multipart chiller upgrade \u2014 ACC + CT + pumps/VFDs (rejoined).",
+  "notes": "[KEYED 2026-10-02 from the drawings] Chiller upgrade, Center for Behavioral Medicine (MO), rejoined multipart. M601: chillers CH-1..3, cooling towers CT-1..3, PUMP SCHEDULE CWP-1..3, PCHP-1..3, PHWP-1..3, SCHP-1/2, SHWP-1/2 (13), AIR SEPARATOR SCHEDULE AS-1/2, EXPANSION TANK SCHEDULE ET-1. E-sheet VFD SCHEDULE: 16 drives, the 13 pump drives and VFD-CT-1..3 printed (EXIST.) (existing units count by the keys' convention; the plans print them bare, so the reconcile leaves those three schedule-only). The earlier key (VFD 13, no AS/ET) was written from pipeline output.",
   "categories": {
     "AIR_COOLED_CHILLER": 3,
     "PUMP": 13,
     "COOLING_TOWER": 3,
-    "VARIABLE_FREQUENCY_DRIVE": 13
+    "VARIABLE_FREQUENCY_DRIVE": 16,
+    "AIR_SEPARATOR": 2,
+    "EXPANSION_TANK": 1
   },
   "totals": {
-    "items": 32
+    "items": 38
   },
   "bas_points": {
     "rows": 0
