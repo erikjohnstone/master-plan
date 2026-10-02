@@ -328,7 +328,7 @@ test("Vol2 chiller upgrade 012: ACC + PUMP + VFD all MATCH, existing drives too 
   }
 });
 
-test("Vol2 FL airport 089: DOAS + FCU families with plan-drawn MATCH (multipart rejoin)", async (t) => {
+test("Vol2 FL airport 089: DOAS, heat pump, pump, water heater and fans MATCH (multipart rejoin)", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "089_FL_Airport_Terminal_and_Hangar_Development.compile.json"),
@@ -468,16 +468,14 @@ test("Vol2 chiller 012: cooling towers honest SCHEDULE_ONLY (plant not plan-draw
   });
 });
 
-test("Vol2 FL airport 089: FCU honest SCHEDULE_ONLY (tags not plan text)", async (t) => {
+test("Vol2 FL airport 089: the VRF SYSTEM SCHEDULE's indoor units AC-1..12 all MATCH", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "089_FL_Airport_Terminal_and_Hangar_Development.compile.json"),
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
-  await assertFamilyStatusCounts(session, graph, key, "FCU", {
-    schedule_only: key.categories.FCU,
-  });
+  await assertFamilyAllMatch(session, graph, key, "VRF_INDOOR");
 });
 
 test("Vol2 PHX 088: VFD honest partial — 2 MATCH · 9 SCHEDULE_ONLY", async (t) => {

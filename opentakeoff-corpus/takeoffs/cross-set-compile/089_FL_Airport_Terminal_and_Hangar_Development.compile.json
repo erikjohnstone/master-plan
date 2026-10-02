@@ -3,19 +3,21 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/089_FL_Airport_Terminal_and_Hangar_Development.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/089_FL_Airport_Terminal_and_Hangar_Development",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 multipart FL airport terminal/hangar \u2014 DOAS/FCU/HP/louvers + mixing valves (rejoined).",
+  "notes": "[KEYED 2026-10-02 from the drawings] FL airport terminal and hangar (rejoined multipart). Mechanical schedules sheet (#136): INDOOR DX DOAS FAN COIL UNIT SCHEDULE DOAS-1; OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE HP-2; VRF SYSTEM SCHEDULE AC-1..AC-12 (12 VRF indoor units; the earlier key counted 7 as FCU); FAN SCHEDULE EF-1, EF-2, IF-1 (inline fan); ELECTRIC UNIT HEATER SCHEDULE EUH-1..8; DIFFUSERS, REGISTERS AND GRILLES SCHEDULE marks A..G (7, GRD); LOUVER SCHEDULE L-1..L-5 (5). Plumbing (#163): ELECTRIC WATER HEATER EWH-1, MIXING VALVE MX-1/2, HOT WATER CIRCULATING PUMP RCP-1. All plan-drawn units MATCH their tags. The earlier key was written from pipeline output.",
   "categories": {
     "DOAS": 1,
-    "FCU": 7,
     "HEAT_PUMP": 1,
+    "VRF_INDOOR": 12,
     "PUMP": 1,
     "WATER_HEATER": 1,
-    "FAN": 2,
+    "FAN": 3,
+    "UNIT_HEATER": 8,
     "MIXING_VALVE": 2,
-    "LOUVER": 7
+    "GRD": 7,
+    "LOUVER": 5
   },
   "totals": {
-    "items": 22
+    "items": 41
   },
   "bas_points": {
     "rows": 0
