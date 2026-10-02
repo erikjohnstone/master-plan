@@ -234,10 +234,9 @@ being saved as a regression check of the mark-prefix change, which touches every
 
 +5 units (EXT-1, EXT-2, CBT-1, GF-1, CPF-1), all in its key; 015_VA +1 (GFS-1,
 a titled GLYCOL FEED SYSTEM row its older partial key omits). 07_MO gaps left
-(46 units), each needing more than vocabulary: CONTROL VALVE SCHEDULE (35:
-CV1..CV7 plus "CV-7 THRU 35" for the VAV reheat valves; the water must be read
-from SERVES text "c c" / "H/C" / "REHEAT COILS", and the OCR'd title is glued
-with an asterisk); DAMPER SCHEDULE (5 control dampers; OCR lost D-1's digit,
+(46 units): CONTROL VALVE SCHEDULE (35) since fixed — water read from SERVES
+coil abbreviations, glued title and "THRU35" range accepted, CHW 3 + HHW 32 =
+key; still open: DAMPER SCHEDULE (5 control dampers; OCR lost D-1's digit,
 generic title qualified only by a CONTROL DAMPER column); "CH ILERSCHEDULE"
 (OCR-garbled chiller title); HEAT PUMP SPLIT SYSTEM F-1/F-2 (indoor furnaces,
 keyed FCU) with CUH-1/2 (keyed heat pumps, not in the extracted rows); AIR

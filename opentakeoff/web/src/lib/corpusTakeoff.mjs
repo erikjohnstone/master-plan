@@ -1053,8 +1053,10 @@ export function inferValveServiceFromTable(table) {
 const VALVE_ROW_SERVICE_HEADER_RE = /\b(?:SERVICE|SYSTEM|FLUID|MEDI(?:UM|A)|PIPING|SERVED|SERVES)\b/i;
 // A water named outright, with its supply and return spellings; a pump's or a
 // unit's mark (CHWP-1, HWP-1) names none.
-const VALVE_ROW_HOT_RE = /\b(?:H?HW[SR]?|HOT\s*WATER|HEATING\s*(?:HOT\s*)?WATER|REHEAT|STEAM)\b/i;
-const VALVE_ROW_COLD_RE = /\b(?:CHW[SR]?|CHILLED\s*WATER|COOLING\s*WATER)\b/i;
+// Or the coil it serves, named or abbreviated as drafters print it: 07_MO's
+// SERVES "AHU-1 c c" (cooling coil) and "AHU-1 H/C" (heating coil).
+const VALVE_ROW_HOT_RE = /\b(?:H?HW[SR]?|HOT\s*WATER|HEATING\s*(?:HOT\s*)?WATER|REHEAT|STEAM|HEATING\s+COILS?|H\s*\/?\s*C(?![\s-]*\d))\b/i;
+const VALVE_ROW_COLD_RE = /\b(?:CHW[SR]?|CHILLED\s*WATER|COOLING\s*WATER|COOLING\s+COILS?|C\s*\/?\s*C(?![\s-]*\d))\b/i;
 
 /**
  * The water a valve schedule's row names in its own service, system, fluid
@@ -1104,7 +1106,9 @@ export function valveTableService(table) {
 // "EQUIPMENT CONTROL VALVES" all qualify), not this one PDF's fix.
 export function isGenericControlValveTitle(title) {
   const t = String(title || "");
-  if (!/\bCONTROL\s+VALVES?\b/i.test(t)) return false;
+  // Its words run together where OCR read a pictured title (07_MO's
+  // "CONTROLVALVESCHEDULE *").
+  if (!/\bCONTROL\s*VALVES?(?:\b|SCHEDULE)/i.test(t)) return false;
   if (/BYPASS|CHW|CHILLED\s*WATER|HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT/i.test(t)) return false;
   return true;
 }
@@ -1862,6 +1866,9 @@ export function splitRowMarks(text, willFilter, wordsNamed = false, drawn = null
   // In plain type (AS-85), so a range or list printed with another dash
   // glyph reads as one printed with a hyphen.
   text = plainMarkText(text);
+  // A range whose THRU ran into its last number where OCR read a picture
+  // (07_MO's "CV-7 THRU35") reads as one printed with its space.
+  text = String(text).replace(/\b(THRU|THROUGH)(?=\d)/gi, "$1 ");
   const pieces = rowMarkPieces(text, willFilter);
   if (!willFilter && pieces.length > 1 && !pieces.some((piece) => markToken(piece))
     && !pieces.every((piece) => bareMark(piece)) && (wordsNamed || namedByWords(pieces[0]))) {

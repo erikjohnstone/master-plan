@@ -1,5 +1,12 @@
 # Changelog
 
+- **A valve's water from the coil it serves, and OCR's glued valve titles and ranges.** 07_MO's pictured CONTROL
+  VALVE SCHEDULE ("CONTROLVALVESCHEDULE *") names no water in its title; each row's SERVES prints the coil
+  ("AHU-1 c c", "AHU-1 H/C", "FCU-1 HC", "VAV BOX REHEAT COILS"), and one row schedules the boxes' valves as
+  "CV-7 THRU35". A generic control valve title is now read with its words run together, a row's service names its
+  water by a cooling or heating coil (written out, or abbreviated C/C, CC, H/C, HC, never followed by a number,
+  which is a unit's mark), and a THRU run into its last number is re-spaced. 07_MO: CHW valves 0 → 3, HHW
+  valves 0 → 32 (= key; the range's CV-7 is the row above's CV7); no other saved graph changes.
 - **Tank, glycol and pot-feeder schedules by their own marks.** 07_MO's pictured EXPANSION & BUFFER TANK SCHEDULE
   (EXT-1, EXT-2, CBT-1) was refused by both tank families, each excluding the other's word; its GLYCOL FEED SYSTEM
   (GF-1) and CHEMICAL POT FEEDER SCHEDULE (CPF-1) printed marks the families did not read. A title naming both

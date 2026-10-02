@@ -2694,3 +2694,22 @@ test("a whole-set row stands for each unit the takeoff counts from it: a split s
     HEAT_PUMP: { compile: ["HP1", "HP2"], reconcile: ["HP1", "HP2"] },
   });
 });
+
+test("a valve row names its water by the coil it serves, abbreviated as drafters print it (07_MO's CONTROL VALVE SCHEDULE)", () => {
+  const row = (cells: Record<string, string>) => ({ cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text }])) });
+  assert.equal(valveRowService(row({ SERVES: "AHU-1 c c" })), "CHW");
+  assert.equal(valveRowService(row({ SERVES: "RTU-2 c/c" })), "CHW");
+  assert.equal(valveRowService(row({ SERVES: "AHU-1 H/C" })), "HHW");
+  assert.equal(valveRowService(row({ SERVES: "FCU-1 HC" })), "HHW");
+  assert.equal(valveRowService(row({ SERVES: "VAV BOX REHEAT COILS" })), "HHW");
+  assert.equal(valveRowService(row({ SERVES: "AHU-2 COOLING COIL" })), "CHW");
+  // A unit's mark that only holds the letters names none.
+  assert.equal(valveRowService(row({ SERVES: "HC-1" })), null);
+  assert.equal(valveRowService(row({ SERVES: "CCU-1" })), null);
+  const valves = { sheet: "m.pdf#3", kind: "equipment", title: { text: "CONTROLVALVESCHEDULE *" }, headers: ["TAG", "SERVES", "VALVE TYPE", "FLOW (GPM)", "CV"],
+    rows: [["CV1", "AHU-1 c c"], ["CV2", "AHU-1 H/C"], ["CV-7 THRU35", "VAVBOX REHEAT COILS"]].map(([t, s]) => ({ key: t,
+      cells: { TAG: { text: t }, SERVES: { text: s }, "VALVE TYPE": { text: "GLOBE 2WAY" }, "FLOW (GPM)": { text: "12" }, CV: { text: "7.8" } } })) };
+  const cats = compileHvacTakeoff(null, { tables: [valves] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+  assert.deepEqual(cats.CHW_CONTROL_VALVE.items.map((i) => i.tag), ["CV1"]);
+  assert.equal(cats.HHW_CONTROL_VALVE.items.length, 1 + 29);
+});
