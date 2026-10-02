@@ -1671,7 +1671,11 @@ export function sectionHeadingRow(row, table) {
  *   a count-keyed table's identifier column (B-3), not a mark
  */
 export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = {}) {
-  const { keyRe = null, blankKeyRe = null, titledOnlyRe = null } = spec || {};
+  const { keyRe = null, blankKeyRe = null, titledOnlyRe = null, yieldKeyRe = null } = spec || {};
+  // A mark the family yields to another's host rule (yieldKeyRe): 082_OR's
+  // louvers LV-1, LV-2 listed in its AIR DISTRIBUTION schedule are the louver
+  // family's, not grilles.
+  if (yieldKeyRe && markMatchesKeyRe(yieldKeyRe, one, canon)) return 0;
   const reads = (re) => (!re ? 0
     : re.test(canon) || re.test(one) ? 2
       : markMatchesKeyRe(re, one, canon) ? 1 : 0);
@@ -2717,6 +2721,7 @@ export const HVAC_FAMILY_SPECS = {
     // GRILLES SCHEDULE), or an air distribution schedule, its whole title
     // (082_OR's AIR DISTRIBUTION: LS-1, RG-1, SD-1 ...).
     titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|GRILLE\s+SCHEDULE|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSERS?[,\s]*REGISTERS?[,\s]*(?:&|AND)?\s*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+DEVICE\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND|\/)\s*OUTLETS?|^\s*AIR\s+DISTRIBUTION(?:\s+DEVICES?)?(?:\s+SCHEDULE)?\s*$/i,
+    yieldKeyRe: /^(?:LV|LVR)[\s\-]?\d/i,
   },
   RANGE_HOOD: {
     titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE|SNORKEL\s+HOOD\s+SCHEDULE/i,
@@ -2729,6 +2734,13 @@ export const HVAC_FAMILY_SPECS = {
   LOUVER: {
     titleRe: /\bLOUVERS?\s*SCHEDULE\b|\bLOUER\s*SCHEDULE\b/i,
     exclude: /PENTHOUSE|POINTS\s*LIST|DDC|LOUVERED/i,
+    // Louvers listed in an air device schedule, by their louver marks (the
+    // grille family yields them).
+    host: {
+      titleRe: /GRILLES?[,\s]*REGISTERS?|DIFFUSERS?[\s\-,]*(?:REGISTERS?|GRILLES?)|AIR\s+DEVICE\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND|\/)\s*OUTLETS?|^\s*AIR\s+DISTRIBUTION/i,
+      exclude: /POINTS\s*LIST|DDC/i,
+      keyRe: /^(?:LV|LVR)[\s\-]?\d/i,
+    },
   },
   // Roof penthouse / architectural louvered penthouse (PH-* / ALP-*).
   LOUVERED_PENTHOUSE: {

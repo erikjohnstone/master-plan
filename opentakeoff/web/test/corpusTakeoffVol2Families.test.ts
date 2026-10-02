@@ -965,3 +965,14 @@ describe("tanks, glycol and pot feeders under their own titles (07_MO's pictured
     assert.deepEqual(compile([table("", ["EXT-1", "CPF-1", "GF-1"])])("EXPANSION_TANK"), []);
   });
 });
+
+describe("louvers listed in an air device schedule", () => {
+  it("are the louver family's, not grilles (082_OR's AIR DISTRIBUTION LV-1, LV-2)", () => {
+    const rows = ["SD-1", "RG-1", "EG-1", "LV-1", "LV-2"];
+    const table = { sheet: "m.pdf#1", kind: "equipment", title: { text: "AIR DISTRIBUTION" }, headers: ["MARK"],
+      rows: rows.map((k) => ({ key: k, cells: { MARK: { text: k } } })) };
+    const cats = compileHvacTakeoff(null, { tables: [table] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual(cats.GRD.items.map((i) => i.tag).sort(), ["EG-1", "RG-1", "SD-1"]);
+    assert.deepEqual(cats.LOUVER.items.map((i) => i.tag).sort(), ["LV-1", "LV-2"]);
+  });
+});

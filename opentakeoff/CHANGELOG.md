@@ -1,5 +1,10 @@
 # Changelog
 
+- **Louvers listed in an air device schedule are louvers.** 082_OR's AIR DISTRIBUTION schedule lists LV-1 and LV-2
+  beside its grilles and diffusers, and the grille family read all its rows. The louver family now reads LV marks in
+  an air device / distribution schedule (a host title), and the grille family yields them (a new yieldKeyRe, read in
+  familyMarkRead by the takeoff and the reconcile alike). 082_OR: GRD 9 → 7, LOUVER 0 → 2 (= key); no other saved
+  graph changes.
 - **A valve's water from the coil it serves, and OCR's glued valve titles and ranges.** 07_MO's pictured CONTROL
   VALVE SCHEDULE ("CONTROLVALVESCHEDULE *") names no water in its title; each row's SERVES prints the coil
   ("AHU-1 c c", "AHU-1 H/C", "FCU-1 HC", "VAV BOX REHEAT COILS"), and one row schedules the boxes' valves as
