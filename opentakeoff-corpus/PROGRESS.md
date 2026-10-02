@@ -61,7 +61,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 ## Active work / next queue
 
 1. Corpus A/B (HEAD vs 302cf34, production env) → fill **Verified baseline**; investigate any regression.
-2. Browser proof of Review all + auto-opened plan (script ready: `scratchpad/demo/proof-plancount.mjs`).
+2. ~~Browser proof of Review all + auto-opened plan~~ — 18/18 on itd-d1-lab (2026-10-02).
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
