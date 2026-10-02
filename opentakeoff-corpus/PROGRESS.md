@@ -98,10 +98,15 @@ unverified.
 
 35 `takeoffs/cross-set-compile/*.compile.json` keys say 0 items with notes like "no extractable HVAC tables": they
 were written from pipeline output, not from the drawings, and only the WP1 acceptance list is scored, so nothing
-fails on them. 095_UT's was hiding a real reading failure (fixed in 0881cd7, re-keyed from the render). Of the
-zero-key sets the browser sweep finished, the app reads units on 029_ME, 038_NC, 054_NV, 064_MT, 073_MT, 087_US,
-08_ME and 100_OH; only 052_IL and 057_US read nothing, and both are correct. The rest were OOM-lost or never swept:
-compile them in node (one at a time) and look at any that read 0.
+fails on them. 095_UT's was hiding a real reading failure (fixed in 0881cd7, re-keyed from the render).
+
+Node compile of every zero-key set at 2c1ba16 (one at a time): 16 now read units (039_TX 186 VAV, 036_LA 69,
+07_MO 60, 082_OR 46, 091_IL 22, D_25_CO 19, 029_ME 9, 045_FL 9, 100_OH 7, 038_NC 6, 043_FL 4, 046_MI 4, 28_WA 4,
+064_MT 2, 073_MT 2, 087_US 1), so those keys are stale. 058_CA aborted (311 sheets, heap). Still 0, checked by
+render: 052_IL, 057_US (no schedules), 084_SC (the chiller is on the plan and the specs only; no schedule). 29_TX
+is a real miss: its M9.01 COOLING COIL SCHEDULE and WATER COOLED CHILLER SCHEDULE are lettered as vector outlines
+(no text layer), so no reader can see them. Remaining zero sets not yet rendered: 006, 010, 020, 02_UT, 048, 054,
+055, 056, 080, 086, 08_ME, 15_IA, 19_CA, 20_TX.
 
 ## Active work / next queue
 
