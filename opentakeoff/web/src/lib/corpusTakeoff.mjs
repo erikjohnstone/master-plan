@@ -2216,7 +2216,7 @@ export const HVAC_FAMILY_SPECS = {
   },
   CONDENSING_UNIT: {
     titleRe: /CONDENSING\s+UNIT(?:\s+SCHEDULE)?|AIR[\s\-]*COOLED\s+CONDENSING\s+UNIT/i,
-    exclude: /AIR[\s\-]*COOLED\s+CHILLER|POINTS\s*LIST|DDC/i,
+    exclude: /AIR[\s\-]*COOLED\s+CHILLER|POINTS\s*LIST|DDC|\bVR[FV]\b/i,
     // Blank-title only on primary titles — Carson titled B1/B2 must not be
     // filtered by a CU/ACC keyRe.
     blankKeyRe: /^(?:CU|ACC)[\s\-]/i,
@@ -2280,6 +2280,11 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /VR[FV][\s\-]+OUTDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+(?:FLOW|VOLUME)\s+OUTDOOR/i,
     exclude: /POINTS\s*LIST|DDC|INDOOR/i,
     keyRe: /^(?:ODU|OU|VO)[\s\-]?/i,
+    // A VRF system's outdoor units titled as condensing units or heat pumps
+    // (036_LA's "VRV- AIR-COOLED CONDENSING UNIT SCHEDULE", 07-A-CU-1), their
+    // marks as such units' are.
+    altTitleRe: /VR[FV][\s\-]+(?:(?:AIR|WATER)[\s\-]*COOLED\s+)?(?:CONDENSING|HEAT\s+PUMP)\s+UNIT/i,
+    altKeyRe: /^(?:ODU|OU|VO|CU|ACCU|CCU|HP)[\s\-]?\d/i,
     titledOnly: true,
   },
 

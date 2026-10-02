@@ -1,5 +1,9 @@
 # Changelog
 
+- **A VRF system's outdoor units titled as condensing units.** 036_LA's "VRV- AIR-COOLED CONDENSING UNIT SCHEDULE"
+  (07-A-CU-1, 09-A-CU-1) was counted with the split systems' condensing units. A VRF/VRV title naming condensing
+  or heat pump units now reads as VRF outdoor units (CU/ACCU/HP marks), and the condensing-unit family no longer
+  reads a VRF title. 036_LA: VRF_OUTDOOR 0 → 2 (= key); no other saved graph changes.
 - **Air devices named by letters alone, printed on their side.** 21_VA's AIR DISTRIBUTION DEVICE SCHEDULE runs its
   devices across the columns (CD, RGL, "RG, TG", EG … LD-1, LR-1) and their attributes down the rows. The
   transposed-schedule reader wanted every column to name a numbered or lettered-pair mark, so the table was read

@@ -900,3 +900,24 @@ describe("split, VRV, CRAC, inline fan and grille schedules by the names they pr
     assert.deepEqual(compile([table("m.pdf#3", "AIR DISTRIBUTION SYSTEM NOTES", ["1"])])("GRD"), []);
   });
 });
+
+describe("a VRF system's outdoor units titled as condensing units", () => {
+  const table = (sheet: string, title: string, keys: string[]) => ({
+    sheet, title: { text: title }, headers: ["MARK"], kind: "equipment",
+    rows: keys.map((k) => ({ key: k, cells: { MARK: { text: k } } })),
+  });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+  it("reads 036_LA's VRV- AIR-COOLED CONDENSING UNIT SCHEDULE as VRF outdoor units, not condensing units", () => {
+    const tags = compile([
+      table("m.pdf#1", "VRV- AIR-COOLED CONDENSING UNIT SCHEDULE", ["07-A-CU-1", "09-A-CU-1"]),
+      table("m.pdf#1", "DUCTLESS SPLIT SYSTEM SCHEDULE", ["01-1-CU-1"]),
+    ]);
+    assert.deepEqual(tags("VRF_OUTDOOR"), ["07-A-CU-1", "09-A-CU-1"]);
+    assert.deepEqual(tags("CONDENSING_UNIT"), ["01-1-CU-1"]);
+    // A plain condensing unit schedule stays the condensing units'.
+    assert.deepEqual(compile([table("m.pdf#2", "AIR COOLED CONDENSING UNIT SCHEDULE", ["CU-1"])])("CONDENSING_UNIT"), ["CU-1"]);
+  });
+});
