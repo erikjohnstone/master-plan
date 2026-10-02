@@ -69,6 +69,14 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 
 ## Known limits (documented, not fixed)
 
+- `sweep_schedule_row` on a tag ranked by claims (compound luminaire labels, air-device tables) tries every
+  same-sheet occurrence as the anchor × 3 pads, with two region-restricted `matchSymbol` calls each. On
+  baker-county-eoc R1 (23 luminaires on a 61k-segment lighting plan) that is 69 + 69 calls, 1-26 s each: one sweep
+  takes 468 s and ~2 GB. Every other baker tag sweeps in under 25 s. Not changed: the ranking's last tie-break
+  (more fingerprint segments) means no early exit preserves today's answers, and reworking the matcher is the parked
+  symbol-finding work. The A/B's baker graph-eval OOM came from this sweep, not from the graph build (5.5 s spans +
+  1.9 s graph); run alone it scores the same as base (cells 85.7%, rowsym 94.7%), peak 5.7 GB.
+
 - 052_IL, 057_US: no equipment schedules in the set; empty takeoff is correct.
 
 ## Known failing tests (pre-existing, not from this goal's work)
@@ -97,8 +105,7 @@ compile them in node (one at a time) and look at any that read 0.
 
 ## Active work / next queue
 
-1. ~~Corpus A/B~~ done (above). Re-run graph-eval alone for baker-county-eoc and 089_FL (OOM-killed in the A/B); baker's
-   graph build reached ~3.9 GB RSS, a risk in a browser tab.
+1. ~~Corpus A/B~~ done (above). baker-county-eoc re-run alone: same as base (see Known limits). 089_FL still to re-run.
 2. ~~Browser proof of Review all + auto-opened plan~~ — 18/18 on itd-d1-lab (2026-10-02).
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
