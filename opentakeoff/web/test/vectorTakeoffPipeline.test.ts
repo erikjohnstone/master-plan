@@ -6,7 +6,7 @@ import { describe, it, after } from "node:test";
 import { slicePageTiles, clipSpansToTile } from "../src/lib/pageTileGrid.ts";
 import { sheetHasScheduleKeywords, extractScheduleTablesFromLineGrid, MAX_LINE_GRID_SEGMENTS } from "../src/lib/scheduleGridFallback.ts";
 import { extractScheduleTablesFromStreamGrid } from "../src/lib/scheduleStreamFallback.ts";
-import { runVectorTakeoffPipeline, scheduleKeywordRegion, type VectorPipelineHooks } from "../src/lib/vectorTakeoffPipeline.ts";
+import { runVectorTakeoffPipeline, scheduleKeywordRegion, isTextStarvedDrawing, type VectorPipelineHooks } from "../src/lib/vectorTakeoffPipeline.ts";
 import { shutdownVectorGrid } from "../src/lib/vectorGridClient.ts";
 import { sheetHasPointsListTitleSpans } from "../src/lib/scheduleLanguageScan.ts";
 import type { GraphSpan, SheetGraph } from "../src/lib/sheetgraph.ts";
@@ -353,5 +353,18 @@ describe("L3.5 topology is opt-in", () => {
     const { report } = await run();
     assert.ok(report.layers_run.includes("L3.5:topology"));
     assert.equal(typeof report.stage_ms?.["L3.5:topology"], "number");
+  });
+});
+
+describe("a drawing lettered in ink is offered to vectorgrid", () => {
+  const spans = (n: number) => Array.from({ length: n }, (_, i) => ({ str: `T${i}`, x: i, y: 0, w: 5, h: 5 }));
+  const segs = (n: number) => new Array(n * 4).fill(0);
+  it("29_TX's M9.01: 158 spans over 26,847 drawn segments", () => {
+    assert.equal(isTextStarvedDrawing({ spans: spans(158), segs: segs(26847) }), true);
+  });
+  it("not a sheet whose text carries its lettering, nor a near-empty one", () => {
+    assert.equal(isTextStarvedDrawing({ spans: spans(1200), segs: segs(26847) }), false);
+    assert.equal(isTextStarvedDrawing({ spans: spans(20), segs: segs(300) }), false, "a cover or a blank sheet");
+    assert.equal(isTextStarvedDrawing({ spans: spans(20) }), false);
   });
 });

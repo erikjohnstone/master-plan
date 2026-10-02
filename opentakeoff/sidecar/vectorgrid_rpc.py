@@ -90,9 +90,20 @@ def extract_grid(pdf_path: str, page_no: int = 1) -> dict:
     out: list = []
     diag = found.get("diagnostics", {})
 
+    lettering = _InkLettering(pdf_path, page_no)
     for t in found["tables"]:
         bbox = [float(v) for v in t["bbox"]]
         if t.get("raster") and _read_picture(pdf_path, page_no, bbox, diag, out):
+            continue
+        # A DRAWN TABLE LETTERED IN INK reads as a picture of one. A CAD export
+        # can keep the rules and the title block as text and plot every other
+        # letter as strokes or filled outlines: 29_TX's M9.01 prints its
+        # WATER COOLED CHILLER SCHEDULE and COOLING COIL SCHEDULE that way,
+        # ruled, with no word of either in the text layer, and the takeoff read
+        # nothing from the set. A grid the page's own words do not fill, whose
+        # box holds the small paths letters are drawn with, is read from its
+        # pixels as a pasted picture is (AS-153).
+        if t.get("cells") and lettering.unprinted(t) and _read_picture(pdf_path, page_no, bbox, diag, out):
             continue
         if t.get("raster") or not t.get("cells"):
             # A picture of a table. It has no faces by construction and its
@@ -121,6 +132,54 @@ def extract_grid(pdf_path: str, page_no: int = 1) -> dict:
         "tables": out,
         "diagnostics": diag,
     }
+
+
+class _InkLettering:
+    """Whether a drawn table is lettered in ink rather than in text: the
+    page's words in its box (celltext.page_words, as read_picture's own
+    `printed` test counts them) are fewer than one for every three faces,
+    and the paths inside it no bigger than a letter number at least
+    INK_LETTERS_PER_FACE for every face. Both are read once per page, and
+    only when a table asks."""
+
+    def __init__(self, pdf_path: str, page_no: int):
+        self.pdf_path, self.page_no = pdf_path, page_no
+        self._words = None
+        self._ink = None
+
+    def _load(self) -> None:
+        from celltext import page_words              # noqa: E402
+        import pymupdf
+        self._words = [((w[0] + w[2]) / 2, (w[1] + w[3]) / 2) for w in page_words(Path(self.pdf_path), self.page_no)]
+        ink = []
+        with pymupdf.open(self.pdf_path) as doc:
+            page = doc[self.page_no - 1]
+            rot = page.rotation_matrix
+            for d in page.get_drawings():
+                r = d["rect"] * rot          # drawings come back pre-rotation, like image rects
+                w, h = r.x1 - r.x0, r.y1 - r.y0
+                if 0 < max(w, h) <= INK_LETTER_PT:
+                    ink.append(((r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2))
+        self._ink = ink
+
+    def unprinted(self, t: dict) -> bool:
+        if self._words is None:
+            self._load()
+        x0, y0, x1, y1 = t["bbox"]
+        inside = lambda pts: sum(1 for cx, cy in pts if x0 <= cx <= x1 and y0 <= cy <= y1)  # noqa: E731
+        faces = max(1, len(t["cells"]))
+        if 3 * inside(self._words) >= faces:
+            return False
+        return inside(self._ink) >= INK_LETTERS_PER_FACE * faces
+
+
+# A letter drawn as ink is a path no bigger than this (points): schedule type
+# runs 3-7pt, and a cell's own rules and the grid's frame are longer.
+INK_LETTER_PT = 12.0
+# ... and a lettered table has at least this many of them per face: a cell's
+# few letters, numbers or a dash. An empty form (a blank title block grid, a
+# ruled box left for a stamp) has none.
+INK_LETTERS_PER_FACE = 2
 
 
 # A picture is read in a process of its own, for at most this long (seconds):

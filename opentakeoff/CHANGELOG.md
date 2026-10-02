@@ -1,5 +1,14 @@
 # Changelog
 
+- **Schedules lettered in ink are read.** A CAD export can keep only the title block and a few callouts as text
+  and plot every other letter as strokes or filled outlines; such a sheet's schedules had nothing for any reader to
+  see. 29_TX's M9.01 prints its WATER COOLED CHILLER SCHEDULE and COOLING COIL SCHEDULE that way and the takeoff read
+  nothing from the set. Now a non-plan sheet whose text layer is starved (fewer than 200 spans over 2,000+ drawn
+  segments) is offered to vectorgrid, and a drawn grid the page's words do not fill but whose box holds letter-sized
+  ink paths is read from its pixels by the same reader as a pasted picture of a table (AS-153, RapidOCR). 29_TX:
+  0 → 2 units (CH-3, Trane CVHF1300, 1,250 tons; CC-1 serving AHU-01); graph build 64 s. A grid printed as text is
+  read from its text as before, and an empty ruled grid is not read. Corpus A/B on 13 sets in progress.
+
 - **A one-unit schedule captioned as its unit is read.** 095_UT's H-001 prints a ruled ROOFTOP PACKAGED AIR
   CONDITIONING UNIT schedule (one unit, AC-WW) beside its symbol legend; the legend's "SUPPLY DUCT (CROSS SECTION)"
   makes the sheet a `detail`, the caption has no SCHEDULE word and is singular, so the sheet was never offered to the

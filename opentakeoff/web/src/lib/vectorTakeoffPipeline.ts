@@ -174,6 +174,14 @@ function sheetTableCount(g: SheetGraph, sheetKey: string): number {
   return g.tables.filter((t) => t.sheet === sheetKey).length;
 }
 
+/** Fewer spans than INK_LETTERED_MAX_SPANS over at least INK_LETTERED_MIN_SEGS
+ * drawn segments: a drawing whose text layer cannot be where its lettering is. */
+const INK_LETTERED_MAX_SPANS = 200;
+const INK_LETTERED_MIN_SEGS = 2000;
+export function isTextStarvedDrawing(ctx: Pick<VectorSheetContext, "spans" | "segs">): boolean {
+  return ctx.spans.length < INK_LETTERED_MAX_SPANS && (ctx.segs?.length ?? 0) / 4 >= INK_LETTERED_MIN_SEGS;
+}
+
 function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): boolean {
   if (ctx.role === "schedule") return true;
   // A SCHEDULE ON A DRAWING SHEET IS STILL A SCHEDULE, and this gate was
@@ -200,6 +208,14 @@ function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): 
   // callouts name units too ("NEW ROOFTOP UNIT"), so plans keep the stricter
   // SCHEDULE caption above.
   if (ctx.role !== "plan" && ctx.role !== "demolition" && sheetHasEquipmentTableCaption(ctx.spans)) return true;
+  // A sheet lettered in ink. A CAD export can keep only the title block and
+  // a few callouts as text and plot every other letter as strokes or filled
+  // outlines (29_TX's M9.01: 158 spans, its chiller and cooling coil
+  // schedules none of them; 020_MO's HVAC sheets: 6 spans each). No caption
+  // can be read there, so a text-starved drawing that is no plan is offered
+  // to vectorgrid, which reads a ruled grid lettered in ink from its pixels
+  // and leaves every other grid as before (vectorgrid_rpc's _InkLettering).
+  if (ctx.role !== "plan" && ctx.role !== "demolition" && isTextStarvedDrawing(ctx)) return true;
   // A real control-schematic sheet routinely titles itself "… CONTROL
   // SCHEMATIC AND POINTS LIST" — the points list literally shares the
   // schematic's own title. Before `schematic` existed as a role such a
