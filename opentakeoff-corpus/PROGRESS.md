@@ -15,12 +15,20 @@ export-to-estimating side; no open-ended autonomous symbol finding (SYM-1..3 par
   names in reconcile row_sheet/prose, import drops line reviews, compile/empty messages, plan-only units listed.
 - **G3 (landed bb8a9b4):** Review "Count on plans…" — canvas Symbol/Count under a line-linked condition; the
   line's "counted on plans" decision follows its count marks. Unit tests pass; browser proof pending.
+- **P2 graph speed (landed e3479c8):** L3.5 topology made opt-in (only the batch estimator document reads it).
+  klamath cold CLI 87 s → 36 s, every table/sheet/room/tag identical. 25_WA with the production env (vectorgrid
+  on) builds in 26 s on the CLI; the 454 s seen in the app during the sweep was contention (2 browsers + eval).
+  Measurements must `source /root/.ot-env.sh` (vectorgrid's Python); an eval without it runs with vectorgrid off.
+- **G3 browser proof (landed 32aab47):** 14/14 on itd-d1-lab; it found the Symbol-sweep panel overflowing a
+  1440×900 window (Commit unreachable) — fixed. Count on plans now opens the line's plan; Review all (one grid over
+  every schedule's lines) added.
 - **Known limit:** 095_UT — the RTU schedule shares a legend sheet beside a symbol legend; its header merges
   with the legend and a one-row side cannot justify the split. Parenthetical-role and legend-segs attempts did
   not recover it (reverted). The empty-state message points the estimator to Count.
 - **Sweep r1 caveat:** 29 of 54 swept sets crashed (cgroup OOM: Chrome beside the corpus eval) — environmental,
   set aside for a one-at-a-time re-run; not counted as results.
-- **Next:** corpus A/B for bb8a9b4 vs 302cf34; G3 browser proof; sweep re-run; graph-build profiling.
+- **Next:** corpus A/B (HEAD vs 302cf34, with ot-env) running; sweep re-run of the 29 OOM sets one at a time once
+  the eval is done; MCP test + test:shared-path (#246 stale expectations).
 
 
 ### Active work: control intent (GOAL LOOP C, `goals/CONTROL_INTENT.md`) — started 2026-09-25

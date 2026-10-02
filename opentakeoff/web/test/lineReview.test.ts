@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import {
   lineReviewKey, lineEvidenceSignature, emptyLineReviews, sanitizeLineReviews, lineReviewState,
   recordLineReviews, clearLineReviews, summarizeLineReviews, withReviewColumns, effectiveLineQty, tagOccurrenceKey, tagCount,
-  recordCanvasCount, syncCanvasCounts, countedOnPlans,
+  recordCanvasCount, syncCanvasCounts, countedOnPlans, countSheetFor,
 } from "../src/lib/lineReview.js";
 
 const vav1 = { tag: "VAV-1", table_title: "VAV Box Schedule", qty: 1, unit: "EA", status: "MATCH", scheduled_qty: 1, installed_qty: 1,
@@ -169,4 +169,12 @@ test("a plan count is bound to the evidence it was started on and refuses a bad 
   // A tag count is not a plan count, and neither syncs the other.
   const key = Object.keys(reviews.records)[0];
   assert.deepEqual(sanitizeLineReviews({ records: { [key]: { ...reviews.records[key], condition_id: "" } } }).records, {});
+});
+
+test("counting on plans opens the line's own plan, else where its schedule's other lines were found", () => {
+  assert.equal(countSheetFor(vav1, []), "m.pdf#6");
+  assert.equal(countSheetFor({ tag: "S-2", plan_tag_occurrences: [{ sheet_id: "m.pdf#4", bbox_px: [1, 1, 2, 2] }] }), "m.pdf#4");
+  const sib = (k: string) => ({ tag: "x", plan_sheet_id: k });
+  assert.equal(countSheetFor(s1, [s1, sib("m.pdf#3"), sib("m.pdf#5"), sib("m.pdf#3")]), "m.pdf#3");
+  assert.equal(countSheetFor(s1, [s1]), null);
 });

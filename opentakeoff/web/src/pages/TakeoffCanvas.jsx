@@ -40,7 +40,7 @@ import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
 import { sanitizeAssembliesState } from "../lib/assemblies/projectState";
-import { sanitizeLineReviews, lineReviewKey, lineEvidenceSignature, recordCanvasCount, syncCanvasCounts, emptyLineReviews } from "../lib/lineReview.js";
+import { sanitizeLineReviews, lineReviewKey, lineEvidenceSignature, recordCanvasCount, syncCanvasCounts, emptyLineReviews, countSheetFor } from "../lib/lineReview.js";
 import { loadStarterLibrary } from "../lib/assemblies/starterLibrary";
 import { takeoffNavigationBadge } from "../lib/completeBasPresentation.js";
 import { renderPdfCitationPreview } from "../lib/citationComparison.js";
@@ -5410,7 +5410,7 @@ export default function TakeoffCanvas() {
   // condition's count marks (syncCanvasCounts below), so an undo or a deleted
   // mark lowers it. The count is the number of marks; nothing else changes it.
   const countMarks = (cid, list = shapes) => list.reduce((n, s) => n + (s.condition_id === cid && s.measure_role === "count" ? 1 : 0), 0);
-  function countLineOnPlans(line, family) {
+  function countLineOnPlans(line, family, siblings = []) {
     const key = lineReviewKey(line);
     if (!key) return;
     const link = { key, sig: lineEvidenceSignature(line), tag: String(line.tag || "") };
@@ -5425,7 +5425,13 @@ export default function TakeoffCanvas() {
     }
     activateCondition(c.id, { reassign: false });
     setTool("symbol");
-    setPlanCount({ ...link, title, family: family || null, condition_id: c.id });
+    // Open the plan this line (or its schedule's other lines) was found on,
+    // so the estimator starts where the units are drawn.
+    const planKey = countSheetFor(line, siblings);
+    const planFile = planKey ? parseSheetKey(planKey).file : null;
+    const opened = planFile && sheets.some((sh) => sh.name === planFile) ? planKey : null;
+    if (opened) goToSheet(opened);
+    setPlanCount({ ...link, title, family: family || null, condition_id: c.id, opened });
     setShowTakeoffData(false);
   }
   function noteLinkedCount(cid, added) {
@@ -14397,7 +14403,7 @@ export default function TakeoffCanvas() {
           style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 59, display: "flex", alignItems: "center", gap: 10, maxWidth: 760, padding: "8px 12px", background: "var(--paper-bright)", border: "1px solid var(--cobalt)", boxShadow: "var(--shadow-2)", fontSize: 12.5, color: "var(--ink)" }}>
           <span>
             <strong>Counting {planCount.tag || "this line"}</strong>{planCount.title ? ` (${planCount.title})` : ""} on the plans: <strong data-plan-count-n>{n}</strong> so far.
-            {live ? <> Open a plan, box one drawn unit with Symbol ({keyText("Y")}) to find the rest, or click each with Count ({keyText("C")}). Every count mark under this condition is the line's count.</>
+            {live ? <> {planCount.opened ? `Opened p.${parseSheetKey(planCount.opened).page}, where this line's schedule was found on the plans; box` : "Open a plan, box"} one drawn unit with Symbol ({keyText("Y")}) to find the rest, or click each with Count ({keyText("C")}). Every count mark under this condition is the line's count.</>
               : <> Its condition was deleted, so nothing is being counted.</>}
           </span>
           {live && <button type="button" onClick={() => setTool("symbol")} aria-pressed={tool === "symbol"} style={{ ...tb, fontWeight: tool === "symbol" ? 650 : 400 }}>Symbol</button>}

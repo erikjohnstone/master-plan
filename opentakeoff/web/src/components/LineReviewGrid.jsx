@@ -145,7 +145,7 @@ function TagCheck({ line, record, renderPreview, onOpenCitation, onCount, onBack
   </section>;
 }
 
-export default function LineReviewGrid({ title, lines, reviews, onReviewsChange, renderPreview, onOpenCitation, onCountOnPlans, onBack }) {
+export default function LineReviewGrid({ title, lines, reviews, onReviewsChange, renderPreview, onOpenCitation, onCountOnPlans, onBack, showSchedule = false }) {
   const [filter, setFilter] = useState("all");
   const [focus, setFocus] = useState(0);
   const [noteFor, setNoteFor] = useState(null);
@@ -251,6 +251,9 @@ export default function LineReviewGrid({ title, lines, reviews, onReviewsChange,
             <strong style={{ fontFamily: "var(--f-mono)", whiteSpace: "nowrap" }}>{line.tag || "—"}</strong>
             <span style={{ marginLeft: "auto", fontSize: "var(--fs-xs)", fontWeight: 650, color: st.color, whiteSpace: "nowrap" }}>{state === "counted" && countedOnPlans(record) ? "Counted on plans" : st.label}</span>
           </div>
+          {showSchedule ? <div data-review-schedule style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)", marginTop: -4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {String((typeof line.table_title === "object" && line.table_title ? line.table_title.text : line.table_title) || "")}
+          </div> : null}
           <div style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)", marginTop: -4 }}>{quantityText(line)}</div>
           <Thumb evidence={ev} renderPreview={renderPreview} />
           <div style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)", minHeight: 16 }}>

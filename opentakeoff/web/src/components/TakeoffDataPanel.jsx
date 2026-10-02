@@ -193,6 +193,9 @@ function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, com
 }
 
 
+/** The review grid's title (and key) when it holds every schedule's lines. */
+const ALL_LINES = "All schedules";
+
 export default function TakeoffDataPanel({
   // ASSEMBLIES (WP5.4): { project, status, onLoad, starter, partner,
   // onSavePartner, state, onStateChange } — the Assemblies tab's inputs.
@@ -381,7 +384,10 @@ export default function TakeoffDataPanel({
   const canReview = typeof onLineReviewsChange === "function";
   const reviewSummary = useMemo(() => summarizeLineReviews(lines, lineReviews), [lines, lineReviews]);
   const reviewGroups = useMemo(() => groupTakeoffByFamily(lines, { uiSpecMax: UI_SPEC_MAX }), [lines]);
-  const reviewLines = reviewFamily ? (reviewGroups.find((g) => familyLabel(g.family) === reviewFamily)?.lines || []) : [];
+  // "Review all" walks every line of every schedule in one grid, in the
+  // takeoff's own schedule order.
+  const reviewLines = reviewFamily === ALL_LINES ? reviewGroups.flatMap((g) => g.lines || [])
+    : reviewFamily ? (reviewGroups.find((g) => familyLabel(g.family) === reviewFamily)?.lines || []) : [];
 
   const visibleLines = useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -519,10 +525,10 @@ export default function TakeoffDataPanel({
         {readingSource && <BasSourceReader workflow={basWorkflow} request={sourceView.request} adapter={adapter} onBack={closeSource} />}
         {sourceComparison && <BasSourceComparison comparison={sourceComparison} onBack={closeSourceComparison} onOpenCitation={onOpenCitation} />}
         {reviewFamily && !readingSource && !sourceComparison && <LineReviewGrid
-          title={reviewFamily} lines={reviewLines} reviews={lineReviews}
+          title={reviewFamily} lines={reviewLines} reviews={lineReviews} showSchedule={reviewFamily === ALL_LINES}
           onReviewsChange={onLineReviewsChange} renderPreview={onRenderReviewPreview}
           onOpenCitation={onOpenCitation} onBack={() => setReviewFamily(null)}
-          onCountOnPlans={onCountOnPlans ? (line) => onCountOnPlans(line, reviewFamily) : undefined} />}
+          onCountOnPlans={onCountOnPlans ? (line) => onCountOnPlans(line, reviewFamily, reviewFamily === ALL_LINES ? reviewLines.filter((l) => l.table_title === line.table_title) : reviewLines) : undefined} />}
         <div hidden={readingSource || !!sourceComparison || !!reviewFamily} style={{ display: readingSource || sourceComparison || reviewFamily ? 'none' : 'contents' }}>
         <header style={{
           display: "flex", alignItems: "flex-start", gap: 12,
@@ -611,6 +617,13 @@ export default function TakeoffDataPanel({
                   {reviewSummary.counted ? ` · ${reviewSummary.counted} counted` : ""}
                   {reviewSummary.stale ? ` · ${reviewSummary.stale} changed since review` : ""}
                 </span>
+              )}
+              {canReview && reviewGroups.length > 1 && (
+                <button type="button" data-review-all onClick={() => setReviewFamily(ALL_LINES)}
+                  title="Review every line of every schedule in one grid"
+                  style={{ padding: "2px 8px", fontSize: "var(--fs-xs)", border: "1px solid var(--cobalt)", background: "var(--paper-bright)", color: "var(--cobalt)", cursor: "pointer", borderRadius: "var(--r-1)" }}>
+                  Review all {reviewSummary.total}
+                </button>
               )}
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>

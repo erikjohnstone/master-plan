@@ -1,5 +1,13 @@
 # Changelog
 
+- **Review the whole takeoff in one pass.** The Takeoff header offers **Review all N** beside the review summary: one
+  grid over every line of every schedule, in the takeoff's own order, each tile naming its schedule, with the same keys
+  (C confirm, F flag, E correct, T check tags, P count on plans). Before, each schedule's Review opened separately:
+  16 grids on federal-mech's 128 lines.
+- **Count on plans opens the plan.** "Count on plans…" now opens the plan sheet the line was found on (its unit, its
+  tag, or a tag sighting), or, for a line with no plan evidence, the plan where its schedule's other lines were found,
+  and the banner says which page it opened. Before, the estimator was left on whatever sheet was open.
+
 - **A minute off the first answer on dense sets.** The sheet graph built an MEP topology graph for every plan sheet
   (L3.5) before the first question could be asked. It was 59 s of klamath-cc-learning-center's 87 s graph build
   (one 143,572-segment sheet took 38.5 s), and nothing in the app or the MCP tools reads it: its only reader is the

@@ -226,6 +226,28 @@ export function syncCanvasCounts(reviews, counts) {
   return next || reviews;
 }
 
+/**
+ * The plan sheet to open when counting a line on the plans: the line's own
+ * plan evidence first (its unit, then its printed tag, then any of its tag
+ * sightings), else the plan sheet the same schedule's other lines were most
+ * often found on. Null when nothing points at a plan.
+ * @param {any} line @param {any[]} siblings
+ * @returns {string | null}
+ */
+export function countSheetFor(line, siblings = []) {
+  const own = line?.plan_sheet_id || line?.plan_tag_sheet_id || countableTags(line)[0]?.sheet_id;
+  if (own) return own;
+  const seen = new Map();
+  for (const s of siblings || []) {
+    if (s === line) continue;
+    const k = s?.plan_sheet_id || s?.plan_tag_sheet_id;
+    if (k) seen.set(k, (seen.get(k) || 0) + 1);
+  }
+  let best = null;
+  for (const [k, n] of seen) if (!best || n > best[1]) best = [k, n];
+  return best ? best[0] : null;
+}
+
 /** Remove the decision for each line (immutable update). */
 export function clearLineReviews(reviews, lines) {
   const next = { schema: LINE_REVIEW_SCHEMA, records: { ...(reviews?.records || {}) } };

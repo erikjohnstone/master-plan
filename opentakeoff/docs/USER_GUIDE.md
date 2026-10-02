@@ -579,7 +579,9 @@ verified, so the cite opens the tag rather than a guessed device box. A line
 matched by a repeated symbol keeps separate **Symbol** and **Tag** cites.
 **Compare** puts the schedule row and the plan evidence side by side.
 
-To check a whole schedule at once, choose **Review** beside its title. Each
+To check a whole schedule at once, choose **Review** beside its title; to go
+through every schedule's lines in one grid, choose **Review all** in the
+Takeoff header (each tile then names its schedule). Each
 line appears as a tile with its plan tag (or, without one, its schedule row) on
 the drawing. Confirm the lines that are right and flag the ones that are not:
 
@@ -604,8 +606,9 @@ the drawing. Confirm the lines that are right and flag the ones that are not:
   tags: diffusers and grilles shown only as symbols, say, where the schedule
   row is all the takeoff could read. It sets the Takeoff aside, opens the
   canvas with the Symbol tool on a condition named for the line ("S-1 ·
-  DIFFUSER SCHEDULE"), and a banner shows the count so far. Open a plan and
-  box one drawn unit to find the rest (review the matches and **Commit**), or
+  DIFFUSER SCHEDULE"), and a banner shows the count so far. It opens the plan
+  the line was found on (or, for a line with no plan evidence, the plan where
+  its schedule's other lines were found); box one drawn unit to find the rest (review the matches and **Commit**), or
   click each unit with **Count** (**C**). Every count mark under that
   condition is your count for the line, shown as "Your count 14 on the plans"
   and "Counted on plans" in exports: undo a commit or delete a mark and the
