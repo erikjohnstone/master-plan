@@ -192,7 +192,7 @@ export function dropNumberedNotes(t: VectorGridTable): VectorGridTable {
 // indoor schedule above it prints it, and the notes rows leave the grid. A
 // header's group label alone in its row ("ELECTRICAL") is neither.
 const PROSE_TITLE = /\bSCHEDULES?\b/i;
-const PROSE_NOTES = /^\s*(?:NOTES?\s*:|\(\d{1,2}\)\s+\S)/i;
+const PROSE_NOTES = /^\s*(?:(?:NOTES?|REMARKS?)\s*:|\(\d{1,2}\)\s+\S|\d{1,2}\.\s+[A-Z])/i;
 
 export function widenLeadingProse(t: VectorGridTable): VectorGridTable {
   const byRow = new Map<number, VectorGridCell[]>();
@@ -205,9 +205,15 @@ export function widenLeadingProse(t: VectorGridTable): VectorGridTable {
   for (const r of [...byRow.keys()].sort((a, b) => a - b)) {
     const cells = byRow.get(r)!;
     const texted = cells.filter((c) => c.text.trim());
-    if (texted.length >= 2) break;
+    // A title the rules cut into pieces, each across several columns
+    // (096_IN's "DIFFUSER / GRILLE" | "SCHEDULE"), is one title.
+    const cutTitle = r === 0 && texted.length >= 2 && cells.every((c) => (c.colSpan || 1) > 1 && (c.rowSpan || 1) === 1)
+      && PROSE_TITLE.test(texted.map((c) => c.text).join(" "));
+    if (texted.length >= 2 && !cutTitle) break;
     if (!texted.length) continue;
-    const lone = texted[0];
+    const lone = cutTitle
+      ? { ...texted[0], text: texted.slice().sort((a, b) => a.col - b.col).map((c) => c.text.trim()).join(" "), colSpan: 1 }
+      : texted[0];
     if (cells.some((c) => (c.rowSpan || 1) > 1)) break;
     if ((lone.colSpan || 1) >= t.cols) continue;
     const prose = r === 0 ? PROSE_TITLE.test(lone.text) : PROSE_NOTES.test(lone.text);

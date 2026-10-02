@@ -369,10 +369,28 @@ describe("vectorGridAdapter — a title and notes beside a notes column", () => 
     assert.ok(!table.headers.some((h) => /NOTES/.test(h)), JSON.stringify(table.headers));
   });
 
+  it("reads a title the rules cut into pieces as one, and REMARKS with notes numbered 1. as notes (096_IN's DIFFUSER / GRILLE SCHEDULE)", () => {
+    const cut: VectorGridTable = { ...CONDENSERS, cells: [
+      cell(0, 0, "DIFFUSER / GRILLE", [100, 200, 300, 220], 1, 4),
+      cell(0, 4, "SCHEDULE", [300, 200, 400, 220], 1, 2),
+      cell(1, 0, "REMARKS:", [100, 220, 300, 240], 1, 4),
+      cell(2, 0, "1. BRANCH DUCTWORK TO THE DIFFUSER SHALL BE THE SAME SIZE AS THE NECK.", [100, 240, 300, 260], 1, 4),
+      ...CONDENSERS.cells.filter((c) => c.row >= 3)] };
+    const t = widenLeadingProse(cut);
+    assert.deepEqual(t.cells.filter((c) => c.row === 0).map((c) => [c.text, c.col, c.colSpan]), [["DIFFUSER / GRILLE SCHEDULE", 0, 6]]);
+    assert.ok(!t.cells.some((c) => /REMARKS|BRANCH/.test(c.text)));
+    assert.equal(t.rows, 5);
+  });
+
   it("leaves a lone group label, a title that names no schedule, and a ruled title alone", () => {
     const group: VectorGridTable = { ...CONDENSERS, cells: CONDENSERS.cells.map((c) =>
       c.row === 0 ? { ...c, text: "ELECTRICAL" } : c) };
     assert.equal(widenLeadingProse(group), group);
     assert.equal(widenLeadingProse(PUMPS), PUMPS);
+    // A header row of group labels, each across columns, names no schedule.
+    const groups: VectorGridTable = { ...CONDENSERS, cells: [
+      cell(0, 0, "COOLING", [100, 200, 250, 220], 1, 3), cell(0, 3, "HEATING", [250, 200, 400, 220], 1, 3),
+      ...CONDENSERS.cells.filter((c) => c.row >= 3)] };
+    assert.equal(widenLeadingProse(groups), groups);
   });
 });

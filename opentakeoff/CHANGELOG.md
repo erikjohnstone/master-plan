@@ -1,5 +1,10 @@
 # Changelog
 
+- **A title the rules cut into pieces, and REMARKS notes above the header.** 096_IN's DIFFUSER / GRILLE SCHEDULE
+  prints its title in two cells ("DIFFUSER / GRILLE" | "SCHEDULE") over a REMARKS: label and a numbered note
+  ("1. BRANCH DUCTWORK…"); the note joined ten of its sixteen column names. The vector-grid adapter reads a row 0
+  of multi-column cells naming a SCHEDULE as one title, and REMARKS: and "1." notes as notes. Grid replay over
+  1,930 tables: only this table changes; its columns now read TAG, NECK SIZE, FACE LENGTH …, rows unchanged.
 - **A schedule titled beside its notes, with a two-tier header (032_PA's outdoor units).** 032_PA's SPLIT SYSTEM
   OUTDOOR UNIT (CONDENSER) SCHEDULE prints its title beside a NOTES column, its notes in two rows under it, then a
   header whose first labels (TYPE, EQUIP. NO.) run down both tiers beside groups whose leaf labels fill the second.
