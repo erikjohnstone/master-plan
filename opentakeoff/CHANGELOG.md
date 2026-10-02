@@ -15,6 +15,10 @@
   in exports as Estimator qty. The count follows the condition's count marks: an undo or a deleted mark lowers it,
   and deleting the condition removes it. Review logic in `web/src/lib/lineReview.js` (`recordCanvasCount`,
   `syncCanvasCounts`); the counting itself is the canvas's own Symbol and Count tools.
+  - Fixed: the Symbol sweep's review panel had no height limit, so a sweep with several label groups and questions
+    ran past the bottom of a 1440×900 window and its **Commit** button could not be reached. The panel now fits the
+    window; its body scrolls and Commit stays in view. Found by the browser proof of this flow on itd-d1-lab
+    (sweep 9 → +2 Count clicks → undo: the line reads 10, in the tile, header, chip and CSV).
 
 - **Production fixes found by running the whole estimator flow on every corpus set.**
   - Schedules lost on multi-table sheets: the side-by-side split read each half of a sheet through a copy that carried

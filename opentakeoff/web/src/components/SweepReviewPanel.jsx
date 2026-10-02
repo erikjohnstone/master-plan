@@ -103,7 +103,10 @@ export default function SweepReviewPanel({
   const commitN = (sweep.includeSeed ? 1 : 0) + matchN + accQ;
   const unlabeled = (seedTag || sweep.matches.some((m) => m.label)) ? sweep.matches.filter((m) => !m.label).length : 0;
   return (
-    <div data-sweep-review style={{ position: "fixed", right: 12, top: "calc(var(--topbar-h) + 12px)", width: 340, zIndex: Z.popover, background: "var(--paper-cream)", border: "1px solid var(--ink-faint)", boxShadow: "var(--shadow-pop)", display: "flex", flexDirection: "column", fontSize: "var(--fs-m)" }}>
+    <div data-sweep-review style={{ position: "fixed", right: 12, top: "calc(var(--topbar-h) + 12px)", width: 340, zIndex: Z.popover, background: "var(--paper-cream)", border: "1px solid var(--ink-faint)", boxShadow: "var(--shadow-pop)", display: "flex", flexDirection: "column", fontSize: "var(--fs-m)",
+      // Never taller than the window: a sweep with many label groups and questions ran past the bottom of a
+      // 900 px screen and took Commit with it. The body scrolls; the header and Commit stay put.
+      maxHeight: "calc(100vh - var(--topbar-h) - 24px)" }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 8, padding: "10px 12px", borderBottom: "1px solid var(--ink-faint)" }}>
         <span className="field-label">SYMBOL SWEEP</span>
         <span style={{ flex: 1 }} />
@@ -121,7 +124,7 @@ export default function SweepReviewPanel({
           {sweep.dropped} placement(s) were never scored — tighten the marquee around more distinctive linework before trusting this as a total.
         </div>
       )}
-      <div style={{ padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div data-sweep-body style={{ padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8, flex: "1 1 auto", minHeight: 0, overflowY: "auto" }}>
         <div><b style={{ fontFamily: "var(--f-display)", fontSize: "var(--fs-xl)" }}>{matchN}</b> of {sweep.matches.length} matched will commit{mLine && tagGroups.length <= 1 ? <span style={{ color: "var(--ink-soft)" }}> — {mLine}</span> : null}</div>
         {sweep.transformCompetition && (
           <div style={{ fontSize: "var(--fs-xs)", lineHeight: 1.45, color: "var(--ink-soft)" }}>
@@ -208,7 +211,7 @@ export default function SweepReviewPanel({
           <span>Count the seed{seedTag ? <span> — drawing says <b style={{ fontFamily: "var(--f-mono)" }}>{seedTag}</b></span> : null}</span>
         </label>
       </div>
-      <div style={{ padding: "10px 12px", borderTop: "1px solid var(--ink-faint)", display: "flex", flexDirection: "column", gap: 6 }}>
+      <div style={{ padding: "10px 12px", borderTop: "1px solid var(--ink-faint)", display: "flex", flexDirection: "column", gap: 6, flexShrink: 0 }}>
         <button type="button" className="btn-primary" onClick={commitSweep} style={{ justifyContent: "center" }}>
           Commit {commitN} as {activeCondTag || "…"}
         </button>
