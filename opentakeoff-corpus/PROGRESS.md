@@ -230,6 +230,16 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Rejected: untitled tables gated by their share of HVAC marks (2026-10-02)
+
+21_VA's FAN 12/10: RF1, RF2 come from an untitled audio-visual device list on a
+technology sheet (#117: CA1, FB1, FP1, JB1 …). Gating an untitled table on the
+share of its rows any HVAC family reads did not separate it (the families' mark
+rules are broad: FP, T, S all read), and it dropped six 26_CA AHU rows
+(AHU 50-2 … 58-2) unverified. Reverted. The discriminating signal is the
+sheet's discipline (a T-sheet holds no HVAC schedule), a larger change kept
+for later.
+
 ### 07_MO pictured schedules: tanks, glycol, pot feeder (2026-10-02)
 
 +5 units (EXT-1, EXT-2, CBT-1, GF-1, CPF-1), all in its key; 015_VA +1 (GFS-1,
