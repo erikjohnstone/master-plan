@@ -1,7 +1,7 @@
 # Changelog
 
-- **A fan terminal unit schedule is a VAV schedule.** 020_MO's M-601 (lettered in ink, read by the picture reader
-  above) prints an FTU FAN TERMINAL UNIT- ELECTRIC HEATING SCHEDULE of 19 boxes (FTU-r102, FTU-x104, FTU-n110,
+- **A fan terminal unit schedule is a VAV schedule.** 020_MO's M-601 (lettered in ink, read by the ink reader
+  below) prints an FTU FAN TERMINAL UNIT- ELECTRIC HEATING SCHEDULE of 19 boxes (FTU-r102, FTU-x104, FTU-n110,
   FTU-1201 ...): a fan terminal unit is a fan-powered box, but the VAV family's title rule read only FAN POWERED, and
   its mark rule read SFTU/PFTU and no bare FTU, nor a status letter (x existing, r relocated, n new) before the
   number. The VAV family now reads a title that begins with a fan terminal unit (after an optional FTU caption and
@@ -9,14 +9,34 @@
   title an FTU mark with or without a status letter. Census over the corpus text layer: no other table title says
   FAN TERMINAL UNIT, and FTU marks appear only in 020_MO.
 
-- **Schedules lettered in ink are read.** A CAD export can keep only the title block and a few callouts as text
-  and plot every other letter as strokes or filled outlines; such a sheet's schedules had nothing for any reader to
-  see. 29_TX's M9.01 prints its WATER COOLED CHILLER SCHEDULE and COOLING COIL SCHEDULE that way and the takeoff read
-  nothing from the set. Now a non-plan sheet whose text layer is starved (fewer than 200 spans over 2,000+ drawn
-  segments) is offered to vectorgrid, and a drawn grid the page's words do not fill but whose box holds letter-sized
-  ink paths is read from its pixels by the same reader as a pasted picture of a table (AS-153, RapidOCR). 29_TX:
-  0 → 2 units (CH-3, Trane CVHF1300, 1,250 tons; CC-1 serving AHU-01); graph build 64 s. A grid printed as text is
-  read from its text as before, and an empty ruled grid is not read. Corpus A/B on 13 sets in progress.
+- **The shipped MCP runtime crashed on a page holding a picture of a table.** The packaged vectorgrid runtime
+  (`mcp/dist/python/vectorgrid`, built by `scripts/finish-build.mjs`) left out `bakeoff/rastergrid.py`, the reader of
+  pictures of tables (AS-153). On any sheet given to the table reader that held a picture, `_read_picture` raised
+  ModuleNotFoundError and the page's drawn tables were lost with it (reproduced from a fresh build on itd-d1-lab's
+  M0.1). rastergrid.py is now shipped (its OCR engine stays optional, and `available()` says when it is missing), and
+  a runtime without it declines the picture as a machine without OCR does. Packaging tests: a page holding a picture
+  and a drawn table keeps the drawn table without the reader, and reads the picture with it.
+
+- **Schedules lettered in ink, or pasted as pictures on a sheet without text, are read.** A CAD export can keep only
+  the title block and a few callouts as text and plot every other letter as strokes or filled outlines; such a
+  sheet's schedules had nothing for any reader to see. Two changes on the shared path:
+  - A non-plan sheet whose text layer is starved (fewer than 200 spans over 2,000+ drawn segments) is offered to
+    vectorgrid. 29_TX's M9.01 pastes its WATER COOLED CHILLER SCHEDULE and COOLING COIL SCHEDULE as pictures on such
+    a sheet, which was never given to the table reader; the picture reader (AS-153) now reads both: 0 → 2 units
+    (CH-3, Trane CVHF1300, 1,250 tons, bought by the owner and installed by the contractor; CC-1 serving AHU-01).
+  - A drawn grid whose box holds letter-sized ink paths and too few of the page's words is read from its pixels by
+    the same reader, when it is shaped like a schedule: 20+ faces in 3+ columns and 2+ rows, filling 0.3+ of the
+    lattice its column and row edges make. 020_MO letters all its HVAC schedules in outlines: 0 → 27 units (RTU-1/2,
+    6 VAV and, with the fan terminal unit rule above, 19 FTU); its EXISTING ... (FOR REFERENCE ONLY) schedules stay
+    out. Without the shape test every keynote box, callout and detail's linework on a sheet lettered in ink went to
+    OCR: 07_MO's drawing sheets hold 262 such boxes (one is a schedule), and reading them cost ~780 s of its build
+    for no unit.
+  - A/B on 14 sets against 3604904: items identical on the other 12; 020_MO and 29_TX as above, both re-keyed from
+    the render (their [ZERO] keys had been written from pipeline output). Tables identical except 020_MO's ink
+    schedules, 29_TX's two pictures and 20_TX's ink symbol legend. Graph build, both sides cold (picture cache off
+    on base, new code on new): 1,906 s → 2,482 s over 8 sets, of which 401 s is 020_MO reading its 17 schedules;
+    20_TX +177 s (its legend), 16_NV +94 s, itd-d1-lab +60 s (a pasted load summary), 07_MO −215 s, the rest within
+    ±70 s. A finished read is cached, so a set pays it once.
 
 - **A one-unit schedule captioned as its unit is read.** 095_UT's H-001 prints a ruled ROOFTOP PACKAGED AIR
   CONDITIONING UNIT schedule (one unit, AC-WW) beside its symbol legend; the legend's "SUPPLY DUCT (CROSS SECTION)"

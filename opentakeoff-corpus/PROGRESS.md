@@ -66,6 +66,8 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | b6d2590 | Import re-points plan counts with their conditions |
 | 957a0bb | Reference-only / N.I.C. schedules read no units (16_NV 62 → 58 = key; WP1 test green) |
 | 0881cd7 | One-unit schedule captioned as its unit (095_UT RTU AC-WW, 0 → 1; key re-keyed from render) |
+| 50d2547, f97e7ab | Ink-lettered and pictured schedules on text-starved sheets: 020_MO 0 → 27, 29_TX 0 → 2 (both re-keyed from render); OCR only for schedule-shaped grids; shipped MCP runtime no longer crashes on a picture |
+| e789663 | VAV family reads FAN TERMINAL UNIT schedules and FTU marks with status letters (020_MO's 19 FTU) |
 
 ## Known limits (documented, not fixed)
 
@@ -78,6 +80,21 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   1.9 s graph); run alone it scores the same as base (cells 85.7%, rowsym 94.7%), peak 5.7 GB.
 
 - 052_IL, 057_US: no equipment schedules in the set; empty takeoff is correct.
+
+- Text-starved sheets cost graph time when they hold real tables: a cold build reads every schedule-shaped grid
+  lettered in ink and every pasted picture on them (020_MO +401 s for its 17 schedules, 20_TX +177 s for an ink
+  symbol legend, itd-d1-lab +60 s for a pasted load summary). Finished reads are cached per document. Timing method:
+  compare cold against cold (`OPENTAKEOFF_PICTURE_CACHE=0` on base, or new code on new); the cache key includes the
+  sidecar's source, so a base run at older code can hit reads cached long ago and look 10x faster.
+
+- Hidden content under later opaque fills (013_MO): the CAD export stacks viewports and masks the earlier ones with
+  white fills painted after them; every extractor reads the masked copies too. 013_MO's CONTROL VALVES row
+  "CV-1 - CV-6" is lost to an interleaved hidden copy and its BOILERS grid (8 boilers) stops after the first row.
+  Not clipping (pymupdf TEXT_CLIP and the clip paths keep them). Candidate rule on the sidecar: drop a word or rule
+  covered by an opaque fill with a later paint order (pymupdf seqno). Corpus census of hidden text running.
+
+- OCR on ink tags: 19_CA's E-6.2 MECHANICAL EQUIPMENT SCHEDULE (ink) reads CU-1/2, FC-1/2, EF-2, but its EF-1
+  hexagon tag reads "F". Not pursued (OCR tuning).
 
 ## Known failing tests (pre-existing, not from this goal's work)
 
@@ -104,9 +121,11 @@ Node compile of every zero-key set at 2c1ba16 (one at a time): 16 now read units
 07_MO 60, 082_OR 46, 091_IL 22, D_25_CO 19, 029_ME 9, 045_FL 9, 100_OH 7, 038_NC 6, 043_FL 4, 046_MI 4, 28_WA 4,
 064_MT 2, 073_MT 2, 087_US 1), so those keys are stale. 058_CA aborted (311 sheets, heap). Still 0, checked by
 render: 052_IL, 057_US (no schedules), 084_SC (the chiller is on the plan and the specs only; no schedule). 29_TX
-is a real miss: its M9.01 COOLING COIL SCHEDULE and WATER COOLED CHILLER SCHEDULE are lettered as vector outlines
-(no text layer), so no reader can see them. Remaining zero sets not yet rendered: 006, 010, 020, 02_UT, 048, 054,
-055, 056, 080, 086, 08_ME, 15_IA, 19_CA, 20_TX.
+was a real miss: its M9.01 schedules are pictures on a sheet with no text layer; read since 50d2547 and re-keyed
+(2 units). 020_MO was a real miss too (schedules lettered as outlines): read since 50d2547/e789663 and re-keyed
+(27 units). 048_NY checked by render: honest zero (no schedule sheet in the set; its notes cite an equipment
+schedule that is not in it). 19_CA: real content in ink on E-6.2 (see Known limits). Remaining zero sets not yet
+rendered: 006, 010, 02_UT, 054, 055, 056, 080, 086, 08_ME, 15_IA, 20_TX.
 
 ## Active work / next queue
 
