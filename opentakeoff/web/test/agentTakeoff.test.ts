@@ -16,6 +16,8 @@ import {
   lineScheduleCite,
   makeTakeoffRow,
   mergeTakeoffRows,
+  planOnlyUnitRows,
+  PLAN_ONLY_TITLE,
   cleanTakeoffTag,
   rowsFromAnswerMarkdown,
   rowsFromCompiledTakeoff,
@@ -1535,4 +1537,25 @@ test("reconcile line cites its schedule row and its printed plan tag", () => {
   const planTag = linePlanTagCite(line);
   assert.deepEqual(plan?.bbox_px, [850, 280, 890, 294]);
   assert.deepEqual(planTag?.bbox_px, plan?.bbox_px);
+});
+
+test("units drawn on the plans with no schedule row become review lines, counted only by the estimator", () => {
+  const rows = planOnlyUnitRows([
+    { sheet: "m.pdf#5", role: "plan", text: "CU-1", bbox: { x0: 960, y0: 3146, x1: 1005, y1: 3165 } },
+    { sheet: "m.pdf#6", role: "plan", text: "CU-1", bbox: { x0: 10, y0: 20, x1: 50, y1: 40 } },
+    { sheet: "m.pdf#5", role: "plan", text: "CU-2", bbox: { x0: 1068, y0: 3146, x1: 1113, y1: 3165 } },
+    { sheet: "m.pdf#9", role: "demolition", text: "CU-9", bbox: { x0: 1, y0: 2, x1: 3, y1: 4 } },
+  ], { workflow: "reconcile" });
+  const lines = compileAgentTakeoff(mergeTakeoffRows([], rows));
+  assert.deepEqual(lines.map((l) => l.tag).sort(), ["CU-1", "CU-2"], "a demolition-plan mark is removal scope, not a unit");
+  const cu1 = lines.find((l) => l.tag === "CU-1");
+  assert.ok(cu1);
+  assert.equal(cu1.table_title, PLAN_ONLY_TITLE);
+  assert.equal(cu1.qty, null, "nothing counted until the estimator counts it");
+  assert.equal(cu1.tagged_plan_qty, 2);
+  assert.equal(cu1.plan_tag_occurrences.length, 2);
+  assert.equal(String(cu1.status).toUpperCase(), "PLAN_ONLY");
+  assert.match(cu1.notes, /2 sheets/);
+  assert.equal(lineScheduleCite(cu1), null, "no schedule row to cite");
+  assert.deepEqual(planOnlyUnitRows(undefined as any), []);
 });

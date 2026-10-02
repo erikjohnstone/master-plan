@@ -208,3 +208,30 @@ test("a twin whose parent merged into the operator's own condition keeps its mat
   assert.equal(twin.materials[0].origin_id, undefined);
   assert.equal(twin.materials[0].inherited, undefined);
 });
+
+test("merge: a colleague's line reviews join the project; a line the operator decided keeps theirs", () => {
+  const rec = (decision: string, sig: string, extra: Record<string, unknown> = {}) => ({ decision, sig, at: "2026-10-02T00:00:00Z", ...extra });
+  const current = {
+    conditions: [], shapes: [{ id: "s0", sheet_id: "va.pdf", condition_id: "x" }], markups: [], sheets: [],
+    line_reviews: { schema: "opentakeoff.line_review.v1", records: { "tag:VAV-1|sched:VAV": rec("flagged", "aaaa1111", { note: "mine" }) } },
+  };
+  const imported = doc({
+    line_reviews: { schema: "opentakeoff.line_review.v1", records: {
+      "tag:VAV-1|sched:VAV": rec("confirmed", "aaaa1111"),
+      "tag:VAV-2|sched:VAV": rec("corrected", "bbbb2222", { qty: 2, note: "second box" }),
+      "tag:S1-1|sched:GRD": rec("counted", "cccc3333", { qty: 59, excluded: ["m.pdf#3|1,1,2,2"] }),
+      "tag:BAD|sched:VAV": rec("corrected", "dddd4444"),   // a correction with no count or reason never loads
+    } },
+  });
+  const { payload, note } = mergeTakeoffImport(current, imported);
+  assert.equal(note.reviews_added, 2);
+  const r = payload.line_reviews.records;
+  assert.equal(r["tag:VAV-1|sched:VAV"].decision, "flagged");
+  assert.equal(r["tag:VAV-2|sched:VAV"].qty, 2);
+  assert.equal(r["tag:S1-1|sched:GRD"].qty, 59);
+  assert.equal(r["tag:BAD|sched:VAV"], undefined);
+  // nothing to merge, nothing written
+  const none = mergeTakeoffImport({ ...current, line_reviews: undefined }, doc());
+  assert.equal(none.payload.line_reviews, undefined);
+  assert.equal(none.note.reviews_added, 0);
+});

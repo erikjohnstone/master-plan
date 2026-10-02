@@ -2,7 +2,7 @@
 // Takeoff tab = compiled quantity schedule (contractor document).
 // Workflow data = raw EAV evidence trail. Chat stays conversational.
 import LineReviewGrid from "./LineReviewGrid.jsx";
-import { summarizeLineReviews, lineReviewState, withReviewColumns, effectiveLineQty } from "../lib/lineReview.js";
+import { summarizeLineReviews, lineReviewState, withReviewColumns, effectiveLineQty, countedOnPlans } from "../lib/lineReview.js";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import {
@@ -228,6 +228,10 @@ export default function TakeoffDataPanel({
   lineReviews = null,
   onLineReviewsChange,
   onRenderReviewPreview,
+  // Count a line's units on the plans (canvas Symbol / Count tools); and the
+  // schedule whose review grid to reopen when the estimator comes back.
+  onCountOnPlans,
+  initialReviewFamily = null,
 }) {
   const [sourceView, setSourceView] = useState(null);
   const [sourceComparison, setSourceComparison] = useState(null);
@@ -373,7 +377,7 @@ export default function TakeoffDataPanel({
   };
 
   const lines = useMemo(() => compileAgentTakeoff(rows), [rows]);
-  const [reviewFamily, setReviewFamily] = useState(null);
+  const [reviewFamily, setReviewFamily] = useState(initialReviewFamily);
   const canReview = typeof onLineReviewsChange === "function";
   const reviewSummary = useMemo(() => summarizeLineReviews(lines, lineReviews), [lines, lineReviews]);
   const reviewGroups = useMemo(() => groupTakeoffByFamily(lines, { uiSpecMax: UI_SPEC_MAX }), [lines]);
@@ -517,7 +521,8 @@ export default function TakeoffDataPanel({
         {reviewFamily && !readingSource && !sourceComparison && <LineReviewGrid
           title={reviewFamily} lines={reviewLines} reviews={lineReviews}
           onReviewsChange={onLineReviewsChange} renderPreview={onRenderReviewPreview}
-          onOpenCitation={onOpenCitation} onBack={() => setReviewFamily(null)} />}
+          onOpenCitation={onOpenCitation} onBack={() => setReviewFamily(null)}
+          onCountOnPlans={onCountOnPlans ? (line) => onCountOnPlans(line, reviewFamily) : undefined} />}
         <div hidden={readingSource || !!sourceComparison || !!reviewFamily} style={{ display: readingSource || sourceComparison || reviewFamily ? 'none' : 'contents' }}>
         <header style={{
           display: "flex", alignItems: "flex-start", gap: 12,
@@ -603,7 +608,7 @@ export default function TakeoffDataPanel({
                   <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{reviewSummary.confirmed}/{reviewSummary.total}</strong> lines confirmed
                   {reviewSummary.flagged ? ` · ${reviewSummary.flagged} flagged` : ""}
                   {reviewSummary.corrected ? ` · ${reviewSummary.corrected} corrected` : ""}
-                  {reviewSummary.counted ? ` · ${reviewSummary.counted} counted from tags` : ""}
+                  {reviewSummary.counted ? ` · ${reviewSummary.counted} counted` : ""}
                   {reviewSummary.stale ? ` · ${reviewSummary.stale} changed since review` : ""}
                 </span>
               )}
@@ -772,7 +777,13 @@ export default function TakeoffDataPanel({
                       }}>Review sequences</button>
                     </div>}
                   </> : "The Agent retained its evidence and review findings without inventing equipment quantities."}
-                </> : corpusMeta?.bas_math ? "No quantity-bearing rows were found in the original schedules. Engineering evidence and review gaps are shown below." : <>
+                </> : corpusMeta?.bas_math ? "No quantity-bearing rows were found in the original schedules. Engineering evidence and review gaps are shown below." : corpusMeta?.takeoff_id ? <span data-takeoff-empty-compiled>
+                  {/* A compile ran and found nothing: say so, and what it read, rather than asking for a run that already happened. */}
+                  <strong style={{ display: "block", color: "var(--ink)", marginBottom: 8 }}>No equipment schedule rows were found in this set.</strong>
+                  The takeoff read {corpusMeta.sheet_count ?? "every"} sheet{corpusMeta.sheet_count === 1 ? "" : "s"}
+                  {Array.isArray(corpusMeta.empty_pages) && corpusMeta.empty_pages.length ? ` (${corpusMeta.empty_pages.length} with no readable text)` : ""} and counted nothing from them.
+                  If a sheet does carry a schedule the takeoff could not read (one printed beside a symbol legend, say), open that sheet and count its units with the Count tool (C).
+                </span> : <>
                   No finished takeoff yet.<br />
                   Run Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.
                 </>}
@@ -890,7 +901,7 @@ export default function TakeoffDataPanel({
                                     const { state, record } = lineReviewState(line, lineReviews);
                                     if (state === "unreviewed") return null;
                                     const look = { confirmed: ["✓ Confirmed", "var(--c-positive, #1f6b4a)"], flagged: ["⚑ Flagged", "var(--c-danger, #b03a26)"],
-                                      corrected: [`✎ Your count ${record?.qty}`, "var(--cobalt)"], counted: [`# Your count ${record?.qty} from tags`, "var(--c-positive, #1f6b4a)"], stale: ["Changed since review", "var(--warning, #9a5a00)"] }[state];
+                                      corrected: [`✎ Your count ${record?.qty}`, "var(--cobalt)"], counted: [`# Your count ${record?.qty} ${countedOnPlans(record) ? "on plans" : "from tags"}`, "var(--c-positive, #1f6b4a)"], stale: ["Changed since review", "var(--warning, #9a5a00)"] }[state];
                                     return <span data-line-review={state} title={record?.note || look[0]} style={{ color: look[1], fontWeight: 650 }}>{look[0]}</span>;
                                   })()}
                                   <SourceComparisonActions line={line} onOpenCitation={onOpenCitation} onCompareCitations={openSourceComparison} comparisonBusy={comparisonBusy} />

@@ -584,8 +584,8 @@ line appears as a tile with its plan tag (or, without one, its schedule row) on
 the drawing. Confirm the lines that are right and flag the ones that are not:
 
 - **C** confirms the focused tile and moves on; **F** flags it with an optional
-  note; **E** corrects its count; **T** checks and counts its plan tags; **U**
-  clears the decision; **Enter** opens the evidence on the drawing; the arrow
+  note; **E** corrects its count; **T** checks and counts its plan tags; **P**
+  counts its units on the plans; **U** clears the decision; **Enter** opens the evidence on the drawing; the arrow
   keys move between tiles.
 - **Correct…** records your own count for a line with a required reason (for
   example, a second box drawn without its tag). The read count stays beside it;
@@ -600,6 +600,27 @@ the drawing. Confirm the lines that are right and flag the ones that are not:
   choose **Count N** (or press **Enter**). The tags you kept become your count
   for the line, shown as "Your count 59 of 61 tags · 2 left out" and carried
   like a correction.
+- **Count on plans…** (**P**) is for a line whose units are drawn without
+  tags: diffusers and grilles shown only as symbols, say, where the schedule
+  row is all the takeoff could read. It sets the Takeoff aside, opens the
+  canvas with the Symbol tool on a condition named for the line ("S-1 ·
+  DIFFUSER SCHEDULE"), and a banner shows the count so far. Open a plan and
+  box one drawn unit to find the rest (review the matches and **Commit**), or
+  click each unit with **Count** (**C**). Every count mark under that
+  condition is your count for the line, shown as "Your count 14 on the plans"
+  and "Counted on plans" in exports: undo a commit or delete a mark and the
+  count follows; delete the condition and the count goes with it. **Back to
+  review** returns to the same schedule. Like every decision it is bound to the
+  line's evidence when you began, so a recompile that changes the line reads
+  "Changed since review".
+- **Drawn on plans — no schedule row read** groups the units tagged on a plan
+  whose mark belongs to a scheduled family (a CU-3 beside a condensing unit
+  schedule, say) but which no schedule row the takeoff read defines. Each mark
+  is one line with every tag it was read at; it counts nothing until you check
+  its tags and choose **Count N**. A unit drawn on two plans (a duct plan and
+  a piping plan) reads twice, so leave the repeat out. Look for the schedule
+  the takeoff missed, or raise an RFI. Marks on demolition plans are removal
+  work and are not listed.
 - **Confirm N shown** confirms every shown line that is not already confirmed,
   flagged, corrected or counted.
 - The filters show **Not reviewed**, **Flagged**, **Corrected**, **Counted**,

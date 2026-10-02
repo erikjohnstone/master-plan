@@ -155,6 +155,9 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
     assert.equal(isScheduleHeaderJunkMark("B950A"), false);
     // Letter-suffixed building tags (no digits) must not be treated as junk.
     assert.equal(isScheduleHeaderJunkMark("CV-CHW-BP-A"), false);
+    // A size with its metric equivalent is a hanger/duct table's row (054_NV), never a unit.
+    for (const size of ["1-2[25-50]", "2-1/2-5[65-125]", "10X20[250X500]", "6 - 8 [150 - 200]"]) assert.equal(isScheduleHeaderJunkMark(size), true, size);
+    for (const mark of ["1", "12", "EF-1", "AHU-1[E]", "CU-1"]) assert.equal(isScheduleHeaderJunkMark(mark), false, mark);
   });
 
   it("HHW_CONTROL_VALVE altTitle claims bare VALVE SCHEDULE + V-HHW marks", () => {

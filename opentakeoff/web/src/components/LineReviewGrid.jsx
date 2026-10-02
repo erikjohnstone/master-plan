@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { lineReviewKey, lineReviewState, recordLineReviews, clearLineReviews, summarizeLineReviews, countableTags, tagOccurrenceKey } from "../lib/lineReview.js";
+import { lineReviewKey, lineReviewState, recordLineReviews, clearLineReviews, summarizeLineReviews, countableTags, tagOccurrenceKey, countedOnPlans } from "../lib/lineReview.js";
 import { lineScheduleCite, linePlanCite, linePlanTagCite } from "../lib/agentTakeoff.js";
 
 // One screen to check a whole schedule family: every line's own drawing
@@ -145,7 +145,7 @@ function TagCheck({ line, record, renderPreview, onOpenCitation, onCount, onBack
   </section>;
 }
 
-export default function LineReviewGrid({ title, lines, reviews, onReviewsChange, renderPreview, onOpenCitation, onBack }) {
+export default function LineReviewGrid({ title, lines, reviews, onReviewsChange, renderPreview, onOpenCitation, onCountOnPlans, onBack }) {
   const [filter, setFilter] = useState("all");
   const [focus, setFocus] = useState(0);
   const [noteFor, setNoteFor] = useState(null);
@@ -197,6 +197,7 @@ export default function LineReviewGrid({ title, lines, reviews, onReviewsChange,
     else if (key === "e" || key === "E") { openCorrect(line); e.preventDefault(); }
     else if (key === "u" || key === "U") { clear(line); e.preventDefault(); }
     else if ((key === "t" || key === "T") && countableTags(line).length) { setChecking(lineReviewKey(line)); e.preventDefault(); }
+    else if ((key === "p" || key === "P") && onCountOnPlans) { onCountOnPlans(line); e.preventDefault(); }
     else if (key === "Enter") { const ev = evidence.get(lineReviewKey(line)); if (ev) onOpenCitation?.(ev.cite); e.preventDefault(); }
   };
 
@@ -219,7 +220,7 @@ export default function LineReviewGrid({ title, lines, reviews, onReviewsChange,
       <div style={{ fontSize: "var(--fs-l)", fontWeight: 650 }}>Review · {title}</div>
       <div data-review-summary data-confirmed={summary.confirmed} data-flagged={summary.flagged} data-corrected={summary.corrected} data-counted={summary.counted} data-stale={summary.stale} data-unreviewed={summary.unreviewed}
         style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>
-        {summary.confirmed} of {summary.total} confirmed · {summary.flagged} flagged{summary.corrected ? ` · ${summary.corrected} corrected` : ""}{summary.counted ? ` · ${summary.counted} counted from tags` : ""}{summary.stale ? ` · ${summary.stale} changed since review` : ""}
+        {summary.confirmed} of {summary.total} confirmed · {summary.flagged} flagged{summary.corrected ? ` · ${summary.corrected} corrected` : ""}{summary.counted ? ` · ${summary.counted} counted` : ""}{summary.stale ? ` · ${summary.stale} changed since review` : ""}
       </div>
       <div role="group" aria-label="Show" style={{ display: "flex", gap: 4, marginLeft: "auto" }}>
         {FILTERS.map(([k, label]) => <button key={k} type="button" aria-pressed={filter === k} onClick={() => { setFilter(k); setFocus(0); }}
@@ -232,7 +233,7 @@ export default function LineReviewGrid({ title, lines, reviews, onReviewsChange,
       </button>
     </header>
     <div style={{ padding: "6px 20px", fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>
-      Each tile shows the line's own evidence on the drawings. Keys: arrows move · C confirm · F flag with a note · E correct the count · T check and count its plan tags · U clear · Enter open on the drawing.
+      Each tile shows the line's own evidence on the drawings. Keys: arrows move · C confirm · F flag with a note · E correct the count · T check and count its plan tags · P count it on the plans · U clear · Enter open on the drawing.
       A decision records the evidence it was made on; if that evidence later changes, the line reads “Changed since review”.
     </div>
     <div ref={grid} onKeyDown={onKeyDown} style={{ overflow: "auto", padding: "8px 20px 20px", display: "grid", gap: 12,
@@ -248,7 +249,7 @@ export default function LineReviewGrid({ title, lines, reviews, onReviewsChange,
             background: "var(--paper-bright)", display: "flex", flexDirection: "column", gap: 6, outline: "none" }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
             <strong style={{ fontFamily: "var(--f-mono)", whiteSpace: "nowrap" }}>{line.tag || "—"}</strong>
-            <span style={{ marginLeft: "auto", fontSize: "var(--fs-xs)", fontWeight: 650, color: st.color, whiteSpace: "nowrap" }}>{st.label}</span>
+            <span style={{ marginLeft: "auto", fontSize: "var(--fs-xs)", fontWeight: 650, color: st.color, whiteSpace: "nowrap" }}>{state === "counted" && countedOnPlans(record) ? "Counted on plans" : st.label}</span>
           </div>
           <div style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)", marginTop: -4 }}>{quantityText(line)}</div>
           <Thumb evidence={ev} renderPreview={renderPreview} />
@@ -258,8 +259,10 @@ export default function LineReviewGrid({ title, lines, reviews, onReviewsChange,
           {state === "corrected" ? <div data-review-corrected={record.qty} style={{ fontSize: "var(--fs-xs)", color: STATE_STYLE.corrected.color, fontWeight: 650 }}>
             Your count {record.qty} · read {typeof line.qty === "number" ? line.qty : "—"}
           </div> : null}
-          {state === "counted" ? <div data-review-counted={record.qty} style={{ fontSize: "var(--fs-xs)", color: STATE_STYLE.counted.color, fontWeight: 650 }}>
-            Your count {record.qty} of {countableTags(line).length} tags{record.excluded?.length ? ` · ${record.excluded.length} left out` : ""}
+          {state === "counted" ? <div data-review-counted={record.qty} data-review-counted-on={countedOnPlans(record) ? "plans" : "tags"} style={{ fontSize: "var(--fs-xs)", color: STATE_STYLE.counted.color, fontWeight: 650 }}>
+            {countedOnPlans(record)
+              ? `Your count ${record.qty} on the plans · follows its count marks`
+              : `Your count ${record.qty} of ${countableTags(line).length} tags${record.excluded?.length ? ` · ${record.excluded.length} left out` : ""}`}
           </div> : null}
           {record?.note && state !== "unreviewed" ? <div style={{ fontSize: "var(--fs-xs)", color: st.color }}>“{record.note}”</div> : null}
           {correctFor === key
@@ -296,6 +299,9 @@ export default function LineReviewGrid({ title, lines, reviews, onReviewsChange,
               <button type="button" data-review-correct onClick={() => openCorrect(line)} style={btn}>Correct…</button>
               {countableTags(line).length > 0 && <button type="button" data-review-check-tags onClick={() => setChecking(key)}
                 style={{ ...btn, fontWeight: 650, color: "var(--cobalt)", borderColor: "var(--cobalt)" }}>Check {countableTags(line).length} tags…</button>}
+              {onCountOnPlans && <button type="button" data-review-count-plans onClick={() => onCountOnPlans(line)}
+                title="Count this line's units on the plans with the Symbol tool or Count clicks; the count lands on this line and follows its marks."
+                style={{ ...btn, ...(countableTags(line).length ? {} : { fontWeight: 650, color: "var(--cobalt)", borderColor: "var(--cobalt)" }) }}>Count on plans…</button>}
               {state !== "unreviewed" && <button type="button" onClick={() => clear(line)} style={{ ...btn, color: "var(--ink-muted)" }}>Clear</button>}
               {ev && <button type="button" onClick={() => onOpenCitation?.(ev.cite)} style={{ ...btn, marginLeft: "auto" }}>Open</button>}
             </div>}

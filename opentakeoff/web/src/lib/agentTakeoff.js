@@ -125,6 +125,62 @@ export function makeTakeoffRow({
 }
 
 /** Extract structured rows from a completed agent tool call. */
+/** The takeoff group for units drawn on the plans with no schedule row read. */
+export const PLAN_ONLY_TITLE = "Drawn on plans — no schedule row read";
+
+/**
+ * The reconcile's `unscheduled_units` — a unit-shaped mark of a scheduled
+ * family drawn on a plan with no schedule row of its own (federal-mech's
+ * CU-1..CU-5 beside a condensing unit schedule the takeoff never read) — as
+ * one review line per mark. Every printed tag rides along so the estimator
+ * can check each and count them; nothing is counted until they do. A mark on
+ * a demolition plan is removal scope, not a unit, and stays out.
+ * @param {any[]} units @param {{ workflow?: string, runId?: any, source_tool?: string }} meta
+ */
+export function planOnlyUnitRows(units, { workflow = "", runId = null, source_tool = "reconcile_schedule_plan" } = {}) {
+  const byMark = new Map();
+  for (const u of Array.isArray(units) ? units : []) {
+    if (!u?.text || !u?.sheet || u.role !== "plan") continue;
+    const box = asBbox(u.bbox);
+    if (!box) continue;
+    const mark = String(u.text).trim();
+    const key = mark.toUpperCase().replace(/\s+/g, "");
+    if (!byMark.has(key)) byMark.set(key, { mark, tags: [] });
+    byMark.get(key).tags.push({ sheet: u.sheet, bbox: box });
+  }
+  const out = [];
+  for (const { mark, tags } of byMark.values()) {
+    const sheets = new Set(tags.map((t) => t.sheet)).size;
+    out.push(makeTakeoffRow({
+      workflow, runId, tag: mark, field: "tagged_plan_quantity", value: tags.length, unit: "EA",
+      sheet_id: tags[0].sheet, table_title: PLAN_ONLY_TITLE, bbox_px: tags[0].bbox, source_tool,
+      quantity_basis: "exact_plan_tag",
+      note: `Tagged on the plans${sheets > 1 ? ` (${sheets} sheets — the same unit drawn on two plans reads twice)` : ""}; no schedule row with this mark was read. Check the schedules — it may sit on one the takeoff could not read — or raise an RFI.`,
+      evidence_kind: "plan_tag_text",
+      evidence_binding_status: "geometry_unverified",
+    }));
+    out.push(makeTakeoffRow({
+      // no sheet: there is no schedule row to cite, and a status row's sheet
+      // would read back as the line's schedule sheet
+      workflow, runId, tag: mark, field: "plan_status", value: "PLAN_ONLY",
+      table_title: PLAN_ONLY_TITLE, source_tool,
+    }));
+    out.push(makeTakeoffRow({
+      workflow, runId, tag: mark, field: "plan_tag_observation", value: mark,
+      sheet_id: tags[0].sheet, table_title: PLAN_ONLY_TITLE, bbox_px: tags[0].bbox, source_tool,
+      evidence_kind: "plan_tag_text", evidence_binding_status: "geometry_unverified",
+    }));
+    for (const t of tags.slice(0, MAX_TAG_OCCURRENCES)) {
+      out.push(makeTakeoffRow({
+        workflow, runId, tag: mark, field: "plan_tag_occurrence", value: mark,
+        sheet_id: t.sheet, table_title: PLAN_ONLY_TITLE, bbox_px: t.bbox, source_tool,
+        evidence_kind: "plan_tag_text", evidence_binding_status: "geometry_unverified",
+      }));
+    }
+  }
+  return out;
+}
+
 export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
   const rows = [];
   const workflow = meta.workflow || "";
@@ -442,6 +498,7 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
         }));
       }
     }
+    rows.push(...planOnlyUnitRows(data.unscheduled_units, { workflow, runId, source_tool: name }));
   }
 
   if (name === "analyze_control_schematics" || (name === "run_complete_bas_takeoff" && data.control_schematics)) {

@@ -3291,7 +3291,12 @@ export function isScheduleHeaderJunkMark(canon) {
     // A totals row: TOTAL, TOTALS, PANEL TOTALS, and a unit's subtotal OCR
     // ran together, 082_OR's pictured "DOAS-3TOTAL:" (AS-156). No equipment
     // mark ends in the word.
-    || /TOTALS?:?$/i.test(String(canon || ""));
+    || /TOTALS?:?$/i.test(String(canon || ""))
+    // A size with its metric equivalent in brackets — a pipe hanger or duct
+    // table's row ("1 - 2 [25 - 50]", "10 x 20 [250x500]"), never a unit:
+    // 054_NV's detail-sheet hanger table under a bare SCHEDULE title was
+    // three "EA" lines. 0 of 5,486 marks in the corpus snapshots match.
+    || /^[\d./\-X×]+\[[\d./\-X×]+\]$/i.test(String(canon || "").replace(/\s+/g, ""));
 }
 
 function sheetRecords(sessionOrSheets, graph) {

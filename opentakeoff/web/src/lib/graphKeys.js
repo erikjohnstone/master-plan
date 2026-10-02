@@ -73,7 +73,24 @@ const PACKET_FIELDS = new Set(["packet", "id"]);
  *  numbers, cell text and titles untouched. */
 // prefer_schedule_sheet: corpusTakeoff.mjs copies item.sheet_id into it for
 // every valve-compile plan_paint target, so it is a spooled key like the rest.
-const KEY_FIELDS = new Set(["sheet", "key", "sheet_id", "sheet_key", "prefer_schedule_sheet"]);
+// row_sheet: the reconcile's schedule_cite names the sheet carrying the
+// schedule row's own box (missed here, every reconcile line's Schedule row
+// cite and Review thumbnail named "<sha>.pdf" and could not open).
+// counted_on / target_sheet / to_sheet / kept_sheet: other sheet keys the
+// tool outputs carry under their own names.
+const KEY_FIELDS = new Set(["sheet", "key", "sheet_id", "sheet_key", "prefer_schedule_sheet", "row_sheet", "counted_on", "target_sheet", "to_sheet", "kept_sheet"]);
+
+/** A spooled name inside the tool's own explanations ("SCHEDULE on
+ *  <sha>.pdf#8" in a refusal reason or note): the estimator reads it, so it
+ *  reads back as the real name too. Only these prose fields, never quoted
+ *  drawing text or cells, and only an exact 64-hex spool name. */
+const PROSE_FIELDS = new Set(["reason", "note", "detail", "message"]);
+const SPOOLED_IN_TEXT = /\b([0-9a-f]{64})\.pdf/gi;
+function remapText(text, shaToName) {
+  if (!SPOOLED_IN_TEXT.test(text)) return text;
+  SPOOLED_IN_TEXT.lastIndex = 0;
+  return text.replace(SPOOLED_IN_TEXT, (whole, sha) => shaToName.get(sha.toLowerCase()) ?? whole);
+}
 
 /** Deep, in-place remap of every sheet key in a freshly parsed graph.
  *  Returns the same object. Cycles are tolerated. */
@@ -97,6 +114,7 @@ export function remapGraphSheetKeys(graph, shaToName) {
       if (typeof v === "string") {
         if (KEY_FIELDS.has(k)) node[k] = remapKey(v, shaToName);
         else if (PACKET_FIELDS.has(k)) node[k] = remapPacketId(v, shaToName);
+        else if (PROSE_FIELDS.has(k)) node[k] = remapText(v, shaToName);
       } else if (v && typeof v === "object") {
         walk(v);
       }

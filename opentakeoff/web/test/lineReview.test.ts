@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   lineReviewKey, lineEvidenceSignature, emptyLineReviews, sanitizeLineReviews, lineReviewState,
   recordLineReviews, clearLineReviews, summarizeLineReviews, withReviewColumns, effectiveLineQty, tagOccurrenceKey, tagCount,
+  recordCanvasCount, syncCanvasCounts, countedOnPlans,
 } from "../src/lib/lineReview.js";
 
 const vav1 = { tag: "VAV-1", table_title: "VAV Box Schedule", qty: 1, unit: "EA", status: "MATCH", scheduled_qty: 1, installed_qty: 1,
@@ -131,4 +132,41 @@ test("a tag count goes stale when the line's tags change, and refuses a line wit
   assert.throws(() => recordLineReviews(emptyLineReviews(), [vav1], { decision: "counted" }), /no plan tags to count/);
   // A line with no occurrences signs as it always did.
   assert.equal(lineEvidenceSignature({ ...vav1, plan_tag_occurrences: [] }), lineEvidenceSignature(vav1));
+});
+
+// A diffuser drawn untagged: its schedule row is all the takeoff read.
+const s1 = { tag: "S-1", table_title: "Diffuser Schedule", qty: null, unit: "EA", status: "SCHEDULE_ONLY", schedule_sheet_id: "m.pdf#13", row_bbox_px: [10, 60, 900, 80] };
+
+test("a count made on the plans follows its condition's marks and survives a reload", () => {
+  const link = { key: lineReviewKey(s1), sig: lineEvidenceSignature(s1), tag: "S-1" };
+  let reviews = recordCanvasCount(emptyLineReviews(), link, "cnd_1", 14, { at: "t" });
+  const { state, record } = lineReviewState(s1, reviews);
+  assert.equal(state, "counted");
+  assert.ok(countedOnPlans(record));
+  assert.equal(effectiveLineQty(s1, reviews), 14);
+  assert.deepEqual(withReviewColumns([s1], reviews).map((r: any) => [r.review_state, r.review_qty]), [["Counted on plans", 14]]);
+  assert.equal(lineReviewState(s1, sanitizeLineReviews(JSON.parse(JSON.stringify(reviews)))).record.condition_id, "cnd_1");
+  // Unchanged counts return the same object (safe to run on every shape change).
+  assert.equal(syncCanvasCounts(reviews, { cnd_1: 14 }), reviews);
+  // A deleted mark lowers the count; other decisions are untouched.
+  reviews = recordLineReviews(reviews, [vav1], { decision: "confirmed", at: "t" });
+  const lowered = syncCanvasCounts(reviews, { cnd_1: 13, other: 2 });
+  assert.equal(effectiveLineQty(s1, lowered), 13);
+  assert.equal(lineReviewState(vav1, lowered).state, "confirmed");
+  // Removing the condition removes the count it carried.
+  const gone = syncCanvasCounts(lowered, { other: 2 });
+  assert.equal(lineReviewState(s1, gone).state, "unreviewed");
+  assert.equal(lineReviewState(vav1, gone).state, "confirmed");
+});
+
+test("a plan count is bound to the evidence it was started on and refuses a bad link", () => {
+  const link = { key: lineReviewKey(s1), sig: lineEvidenceSignature(s1) };
+  const reviews = recordCanvasCount(emptyLineReviews(), link, "cnd_1", 3);
+  assert.equal(lineReviewState({ ...s1, row_bbox_px: [10, 90, 900, 110] }, reviews).state, "stale");
+  assert.throws(() => recordCanvasCount(emptyLineReviews(), { key: "x", sig: "s" }, "cnd_1", 1), /not tied/);
+  assert.throws(() => recordCanvasCount(emptyLineReviews(), link, "", 1), /condition/);
+  assert.throws(() => recordCanvasCount(emptyLineReviews(), link, "cnd_1", 1.5), /whole number/);
+  // A tag count is not a plan count, and neither syncs the other.
+  const key = Object.keys(reviews.records)[0];
+  assert.deepEqual(sanitizeLineReviews({ records: { [key]: { ...reviews.records[key], condition_id: "" } } }).records, {});
 });

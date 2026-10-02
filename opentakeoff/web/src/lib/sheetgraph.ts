@@ -4448,9 +4448,13 @@ export function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipmen
   // "room-finish"` specifically — a "finish"-kind material-schedule code
   // (CPT-1, P-2) never reaches this branch, so this cannot relabel a paint
   // or material row as a room.
-  if (kind === "room-finish" && CODE_RE.test(key)) return { key };
+  // A key qualified by a building the set names ("A-134" beside BUILDING A)
+  // carries that building, ahead of the letter-led room key below: "A-134"
+  // is CODE_RE-shaped too, and returning first lost its building, so a
+  // multi-building set's rooms resolved under "no building".
   const q = key.match(QUALIFIED_KEY_RE);
   if (q && buildings?.has(q[1])) return { key, building: q[1] };
+  if (kind === "room-finish" && CODE_RE.test(key)) return { key };
   // GOAL.md rule 22: a bare letter-only room key ("A" through "K", no
   // digit anywhere) — real in a small building whose rooms are never
   // numbered — only alongside real corroboration that THIS row is
@@ -7104,6 +7108,12 @@ function singleRowSitsInDrawnGrid(
 
   let above = false, below = false;
   const verticals: number[] = [];
+  // A column wall is often drawn cell by cell — one vertical piece per row —
+  // so on a two-row block no single piece spans the block (13_MI#28's DATA
+  // DEVICE SCHEDULE: walls at x=1542 and 1778 drawn 1217-1308 and 1308-1399).
+  // Collinear pieces at one x join into the wall they draw before the
+  // "cuts this row" test; a one-piece wall reads exactly as before.
+  const pieces = new Map<number, Array<[number, number]>>();
   const nSeg = Math.floor(segs.length / 4);
   for (let i = 0; i < nSeg; i++) {
     const sx0 = segs[i * 4], sy0 = segs[i * 4 + 1], sx1 = segs[i * 4 + 2], sy1 = segs[i * 4 + 3];
@@ -7117,12 +7127,24 @@ function singleRowSitsInDrawnGrid(
       if (my <= ry0 && my >= ry0 - pad) above = true;
       else if (my >= ry1 && my <= ry1 + pad) below = true;
     } else if (hx - lx <= 2) {                           // vertical rule
-      // must actually cut this row, not merely pass near it
-      if (ly > ry0 + rowH * 0.25 || hy < ry1 - rowH * 0.25) continue;
       const mx = (lx + hx) / 2;
       if (mx < x0 - 2 || mx > x1 + 2) continue;
-      verticals.push(mx);
+      if (hy < ry0 - pad || ly > ry1 + pad) continue;
+      const k = Math.round(mx);
+      (pieces.get(k) ?? pieces.set(k, []).get(k)!).push([ly, hy]);
     }
+  }
+  // must actually cut this row (block), not merely pass near it
+  for (const [k, spans] of pieces) {
+    spans.sort((a, b) => a[0] - b[0]);
+    let [lo, hi] = spans[0];
+    let cuts = false;
+    for (const [a, b] of [...spans.slice(1), [Infinity, Infinity] as [number, number]]) {
+      if (a <= hi + 3) { hi = Math.max(hi, b); continue; }
+      if (lo <= ry0 + rowH * 0.25 && hi >= ry1 - rowH * 0.25) { cuts = true; break; }
+      [lo, hi] = [a, b];
+    }
+    if (cuts) verticals.push(k);
   }
   if (!above || !below) return false;
   // The verticals must be the HEADER's own columns, not stray linework: at
@@ -8326,9 +8348,15 @@ function columnBandCandidates(spans: GraphSpan[]): Seam[] {
  * reference-only split still gets caught downstream anyway: extractedKeys
  * never credits a reference-kind key, so `lostAny` sees nothing to protect
  * on that seam either way — this only narrows what counts as evidence HERE. */
-function sideHasRealTable(spans: GraphSpan[], sheetKey: string, opts: ExtractOpts): boolean {
+function sideHasRealTable(spans: GraphSpan[], sheetKey: string, opts: ExtractOpts, segs?: SheetSpans["segs"]): boolean {
   if (spans.length < 4) return false;
-  const probe: SheetSpans = { key: sheetKey, spans };
+  // The probe carries the sheet's linework: the reference reader proves a
+  // one- or two-row table by its drawn cell walls (singleRowSitsInDrawnGrid),
+  // which refuses whenever no segs are supplied. Without them every short
+  // schedule on a side read as no table, the side seam was never cut, and
+  // 016_NY#18 lost 7 of its 10 schedules (B-12; B-11's DATA DEVICE SCHEDULE
+  // on 13_MI#28 the same way) once B-34 put two-row tables behind that check.
+  const probe: SheetSpans = { key: sheetKey, spans, ...(segs ? { segs } : {}) };
   for (const kind of ["room-finish", "finish", "equipment"] as const) {
     if (extractTable(probe, kind, opts)) return true;
   }
@@ -8533,7 +8561,7 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
     const baselineKeys = extractedKeys(sheet, probeOpts, seam);
     const left = sheet.spans.filter((s) => centerX(s) < seam.x0);
     const right = sheet.spans.filter((s) => centerX(s) > seam.x1);
-    if (!sideHasRealTable(left, sheet.key, probeOpts) || !sideHasRealTable(right, sheet.key, probeOpts)) continue;
+    if (!sideHasRealTable(left, sheet.key, probeOpts, sheet.segs) || !sideHasRealTable(right, sheet.key, probeOpts, sheet.segs)) continue;
     const leftSheet: SheetSpans = { key: sheet.key, sheet_number: sheet.sheet_number, spans: left, ...(sheet.segs ? { segs: sheet.segs } : {}) };
     const rightSheet: SheetSpans = { key: sheet.key, sheet_number: sheet.sheet_number, spans: right, ...(sheet.segs ? { segs: sheet.segs } : {}) };
     const splitLeft = extractedKeys(leftSheet, probeOpts);
@@ -8591,7 +8619,7 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
   while (merged && bands.length > 1) {
     merged = false;
     for (let i = 0; i < bands.length; i++) {
-      if (sideHasRealTable(bands[i].spans, sheet.key, probeOptsFinal)) continue;
+      if (sideHasRealTable(bands[i].spans, sheet.key, probeOptsFinal, sheet.segs)) continue;
       const candidates: number[] = [];
       if (i > 0) candidates.push(i - 1);
       if (i + 1 < bands.length) candidates.push(i + 1);
@@ -8600,7 +8628,7 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
       let into = -1;
       for (const n of candidates) {
         const unionSpans = [...bands[n].spans, ...bands[i].spans];
-        if (sideHasRealTable(unionSpans, sheet.key, probeOptsFinal)) {
+        if (sideHasRealTable(unionSpans, sheet.key, probeOptsFinal, sheet.segs)) {
           into = n;
           break;
         }

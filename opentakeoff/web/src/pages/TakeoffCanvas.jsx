@@ -40,7 +40,7 @@ import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
 import { sanitizeAssembliesState } from "../lib/assemblies/projectState";
-import { sanitizeLineReviews } from "../lib/lineReview.js";
+import { sanitizeLineReviews, lineReviewKey, lineEvidenceSignature, recordCanvasCount, syncCanvasCounts, emptyLineReviews } from "../lib/lineReview.js";
 import { loadStarterLibrary } from "../lib/assemblies/starterLibrary";
 import { takeoffNavigationBadge } from "../lib/completeBasPresentation.js";
 import { renderPdfCitationPreview } from "../lib/citationComparison.js";
@@ -713,6 +713,10 @@ export default function TakeoffCanvas() {
   // Takeoff tab = finished compiled takeoff; Workflow data = raw aggregate.
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
+  // Counting a takeoff line's units on the plans (Review → Count on plans):
+  // the line, its linked condition and the review grid to come back to.
+  const [planCount, setPlanCount] = useState(null);
+  const [reviewReturn, setReviewReturn] = useState(null);
   // ASSEMBLIES (WP5.4): the libraries load when the Takeoff panel opens — the
   // read-only starter once (on demand; it stays out of the main bundle), the
   // partner's own records from the profile store each time.
@@ -2930,6 +2934,7 @@ export default function TakeoffCanvas() {
       if (note.conditions_added) parts.push(`${note.conditions_added} new condition${note.conditions_added === 1 ? "" : "s"}`);
       if (note.conditions_merged) parts.push(`${note.conditions_merged} matched your finish tags`);
       if (note.unknown_files.length) parts.push(`some shapes reference ${note.unknown_files.join(", ")} — open that file to see them`);
+      if (note.reviews_added) parts.push(`${note.reviews_added} line review decision${note.reviews_added === 1 ? "" : "s"} (yours kept where you had already decided)`);
       setCommitMsg(parts.join(" · ") + ".");
     } catch (e) {
       // module copy already speaks "Couldn't…" (the sticky danger convention);
@@ -5383,6 +5388,7 @@ export default function TakeoffCanvas() {
     })) });
     const skippedN = sw.matches.length - sw.matches.filter((m) => !off.has(tagKey(m))).length;
     setCommitMsg(`Committed ${rows.length} EA under ${condById[activeCond]?.finish_tag || "condition"}${sw.includeSeed ? " — seed included" : ""}${skippedN ? ` · ${skippedN} excluded by label` : ""} · one undo step (${keyText("⌘Z")}).`);
+    noteLinkedCount(activeCond, rows.length);
     setSweep(null);
   }
 
@@ -5393,7 +5399,57 @@ export default function TakeoffCanvas() {
       sheet_id: tp.key, condition_id: activeCond, measure_role: "count",
       verts_norm: [[(p[0] - tp.xOffset) / tp.img.w, p[1] / tp.img.h]], computed: { count: 1 }, ...(activeLabel ? { label: activeLabel } : {}), origin: { method: "manual" },
     }] });
+    noteLinkedCount(activeCond, 1);
   }
+
+  // ── Count a takeoff line on the plans (Review → Count on plans) ───────────
+  // A line whose units are drawn without tags (diffusers, grilles) has only its
+  // schedule row as evidence. The estimator counts its symbols here, with the
+  // Symbol tool or Count clicks, under a condition tied to the line; the count
+  // lands on the line as their "counted on plans" decision and follows the
+  // condition's count marks (syncCanvasCounts below), so an undo or a deleted
+  // mark lowers it. The count is the number of marks; nothing else changes it.
+  const countMarks = (cid, list = shapes) => list.reduce((n, s) => n + (s.condition_id === cid && s.measure_role === "count" ? 1 : 0), 0);
+  function countLineOnPlans(line, family) {
+    const key = lineReviewKey(line);
+    if (!key) return;
+    const link = { key, sig: lineEvidenceSignature(line), tag: String(line.tag || "") };
+    const title = String((typeof line.table_title === "object" && line.table_title ? line.table_title.text : line.table_title) || "");
+    let c = agentStateRef.current.conditions.find((x) => x.takeoff_line?.key === key);
+    if (!c) c = mintCondition(`${line.tag || "Line"}${title ? ` · ${title}` : ""}`, { takeoff_line: link });
+    else if (c.takeoff_line.sig !== link.sig) {
+      // the line's evidence changed since counting began: count against what it shows now
+      const id = c.id;
+      setConditions((prev) => prev.map((x) => (x.id === id ? { ...x, takeoff_line: link } : x)));
+      agentStateRef.current = { ...agentStateRef.current, conditions: agentStateRef.current.conditions.map((x) => (x.id === id ? { ...x, takeoff_line: link } : x)) };
+    }
+    activateCondition(c.id, { reassign: false });
+    setTool("symbol");
+    setPlanCount({ ...link, title, family: family || null, condition_id: c.id });
+    setShowTakeoffData(false);
+  }
+  function noteLinkedCount(cid, added) {
+    const link = agentStateRef.current.conditions.find((x) => x.id === cid)?.takeoff_line;
+    if (!link) return;
+    const qty = countMarks(cid) + added;
+    try { setLineReviews((prev) => recordCanvasCount(prev || emptyLineReviews(), link, cid, qty)); }
+    catch (e) { setCommitMsg(`The count was placed but not recorded on ${link.tag || "the line"}: ${e.message}`); }
+  }
+  function backToReview() {
+    setReviewReturn(planCount?.family || null);
+    setPlanCount(null);
+    setTool("select");
+    setShowTakeoffData(true);
+  }
+  // Every plan count follows its condition's live count marks; a removed
+  // condition takes its count with it.
+  useEffect(() => {
+    if (!lineReviews) return;
+    const counts = Object.fromEntries(conditions.map((c) => [c.id, 0]));
+    for (const sh of shapes) if (sh.measure_role === "count" && counts[sh.condition_id] !== undefined) counts[sh.condition_id] += 1;
+    const next = syncCanvasCounts(lineReviews, counts);
+    if (next !== lineReviews) setLineReviews(Object.keys(next.records).length ? next : null);
+  }, [shapes, conditions, lineReviews]);
 
   // ── One-Click Area — click inside a room; the linework bounds it ──────────
   // Flood-fill on a downscaled raster of THIS panel's vector segments (the same
@@ -6915,7 +6971,7 @@ export default function TakeoffCanvas() {
   // ONE condition-minting path — the human +condition button and the agent's
   // create_condition tool both come through here, so the field set and the
   // color/hatch auto-rotation can never drift between the two.
-  function mintCondition(tag) {
+  function mintCondition(tag, extra = {}) {
     // read the LIVE list (agentStateRef) — the agent can mint mid-run, when the
     // render-scope `conditions` closure is stale; the ref is updated per render
     // AND immediately below, so two mints in one model turn rotate correctly.
@@ -6930,6 +6986,7 @@ export default function TakeoffCanvas() {
       multiplier: 1,        // ×N for identical repeated units (measure one, multiply)
       waste_pct: 0,         // flooring waste allowance (manual) — applied in the Report
       materials: [],        // supporting materials (adhesive, grout, …) with coverage rates
+      ...extra,
     };
     agentStateRef.current = { ...agentStateRef.current, conditions: [...cs, c] };
     setConditions((prev) => [...prev, c]);
@@ -8797,8 +8854,9 @@ export default function TakeoffCanvas() {
     } catch (e) {
       // If the production endpoint is down, refuse rather than silently under-count.
       return {
-        error: `Production compile (Session+ODL) failed: ${e?.message || e}. `
-          + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
+        // Say what failed and that nothing partial was kept; never fall back to
+        // a weaker reading (the UI and MCP read one graph pipeline).
+        error: `The takeoff could not be compiled: ${e?.message || e}. Nothing was counted from a partial reading; run it again once that is resolved.`,
       };
     }
     // openPanel: false — merge this compile's own rows into state but do NOT
@@ -9117,6 +9175,13 @@ export default function TakeoffCanvas() {
       takeoffRowCount: () => agentTakeoffRows.length,
       indexProgress: () => indexProgress,
       graphPrewarm: () => graphPrewarm,
+      // UI proofs: open a sheet, and read where a sheet pixel sits on screen
+      // (screen = container + tf.x/y + px × tf.scale) to aim a real click.
+      goToSheet: (key) => goToSheet(key),
+      viewTransform: () => {
+        const r = containerRef.current?.getBoundingClientRect();
+        return r ? { ...tfRef.current, left: r.left, top: r.top, width: r.width, height: r.height } : null;
+      },
       debugGraph: async (opts) => {
         const g = await ensureAgentGraph();
         return {
@@ -14324,6 +14389,23 @@ export default function TakeoffCanvas() {
         </div>
       )}
 
+      {planCount && !showTakeoffData && (() => {
+        const live = conditions.some((c) => c.id === planCount.condition_id);
+        const n = countMarks(planCount.condition_id);
+        const tb = { padding: "5px 10px", fontSize: 12, border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", color: "var(--ink)", cursor: "pointer", whiteSpace: "nowrap" };
+        return <div role="status" data-plan-count={planCount.tag} data-plan-count-qty={n}
+          style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 59, display: "flex", alignItems: "center", gap: 10, maxWidth: 760, padding: "8px 12px", background: "var(--paper-bright)", border: "1px solid var(--cobalt)", boxShadow: "var(--shadow-2)", fontSize: 12.5, color: "var(--ink)" }}>
+          <span>
+            <strong>Counting {planCount.tag || "this line"}</strong>{planCount.title ? ` (${planCount.title})` : ""} on the plans: <strong data-plan-count-n>{n}</strong> so far.
+            {live ? <> Open a plan, box one drawn unit with Symbol ({keyText("Y")}) to find the rest, or click each with Count ({keyText("C")}). Every count mark under this condition is the line's count.</>
+              : <> Its condition was deleted, so nothing is being counted.</>}
+          </span>
+          {live && <button type="button" onClick={() => setTool("symbol")} aria-pressed={tool === "symbol"} style={{ ...tb, fontWeight: tool === "symbol" ? 650 : 400 }}>Symbol</button>}
+          {live && <button type="button" onClick={() => setTool("count")} aria-pressed={tool === "count"} style={{ ...tb, fontWeight: tool === "count" ? 650 : 400 }}>Count</button>}
+          <button type="button" data-plan-count-back onClick={backToReview} style={{ ...tb, background: "var(--cobalt)", color: "var(--paper-bright)", borderColor: "var(--cobalt)" }}>Back to review</button>
+        </div>;
+      })()}
+
       {showTakeoffData && (
         <TakeoffDataPanel
           assemblies={{
@@ -14335,6 +14417,8 @@ export default function TakeoffCanvas() {
           rows={agentTakeoffRows}
           lineReviews={lineReviews}
           onLineReviewsChange={setLineReviews}
+          onCountOnPlans={countLineOnPlans}
+          initialReviewFamily={reviewReturn}
           onRenderReviewPreview={async (citation, kind) => {
             const source = parseSheetKey(citation.sheet_id);
             const doc = await docFor(source.file);
@@ -14473,7 +14557,7 @@ export default function TakeoffCanvas() {
             if (!ids.size) return;
             setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
           }}
-          onClose={() => setShowTakeoffData(false)}
+          onClose={() => { setShowTakeoffData(false); setReviewReturn(null); }}
           onCompareCitations={async ({ plan, planTag, schedule, tag, line }) => {
             if (!plan?.sheet_id || !plan?.bbox_px || !schedule?.sheet_id || !schedule?.bbox_px) {
               const error = 'This row does not retain both exact source boxes, so comparison was refused.';

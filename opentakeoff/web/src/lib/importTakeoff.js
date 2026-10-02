@@ -18,6 +18,7 @@
 
 import { ANN_SCHEMA } from "./store.js";
 import { sanitizeApprovals } from "./approvals.js";
+import { sanitizeLineReviews } from "./lineReview.js";
 import { basWorkflowSchema, mergeBasWorkflows } from "./basWorkflow.ts";
 
 /** Parse + gate an import file's text. Throws with copy the message bar shows
@@ -59,7 +60,7 @@ const freeId = (id, taken) => {
  *   can say why nothing visible changed.
  * @returns {{payload: Record<string, any>, note: {replaced: boolean, shapes_added: number,
  *   shapes_pending: number, conditions_merged: number, conditions_added: number,
- *   scales_adopted: number, unknown_files: string[]}}}
+ *   scales_adopted: number, unknown_files: string[], reviews_added?: number}}}
  */
 export function mergeTakeoffImport(current, imported, knownFiles = null) {
   const cur = current && typeof current === "object" ? current : {};
@@ -165,6 +166,16 @@ export function mergeTakeoffImport(current, imported, knownFiles = null) {
     if (s && typeof s === "object" && s.sheet_id && s.units_per_px && !scaled.has(s.sheet_id)) { sheets.push(s); scaled.add(s.sheet_id); scalesAdopted++; }
   }
 
+  // ── line reviews: transport, operator wins per line ──────────────────────
+  // A review decision is keyed by its line (tag + schedule) and bound to the
+  // evidence it was made on, so a colleague's confirmations, flags and counts
+  // join this project safely: where the evidence here differs they read
+  // "Changed since review". A line the operator already decided keeps theirs.
+  const curReviews = sanitizeLineReviews(cur.line_reviews);
+  const impReviews = sanitizeLineReviews(imported.line_reviews);
+  const reviewsAdded = Object.keys(impReviews.records).filter((k) => !(k in curReviews.records)).length;
+  const lineReviews = { ...curReviews, records: { ...impReviews.records, ...curReviews.records } };
+
   // Everything else is the operator's workspace, not import cargo: name, tabs,
   // grouping, levels, columns, labels, palette, client info, rules, counters
   // all stay current (rules never ride the MCP export by RFC scope anyway).
@@ -176,10 +187,11 @@ export function mergeTakeoffImport(current, imported, knownFiles = null) {
     markups: [...arr(cur.markups), ...addedMarkups],
     ...(addedRfis.length ? { rfis: [...arr(cur.rfis), ...addedRfis] } : {}),
     ...(addedApprovals.length ? { approvals: [...arr(cur.approvals), ...addedApprovals] } : {}),
+    ...(Object.keys(lineReviews.records).length ? { line_reviews: lineReviews } : {}),
     sheets,
   };
   return {
     payload,
-    note: { replaced: false, shapes_added: addedShapes.length, shapes_pending: pendingCount(addedShapes), conditions_merged: condMerged, conditions_added: condAdded, scales_adopted: scalesAdopted, unknown_files: unknownFiles(addedShapes) },
+    note: { replaced: false, shapes_added: addedShapes.length, shapes_pending: pendingCount(addedShapes), conditions_merged: condMerged, conditions_added: condAdded, scales_adopted: scalesAdopted, unknown_files: unknownFiles(addedShapes), reviews_added: reviewsAdded },
   };
 }

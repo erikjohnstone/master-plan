@@ -108,3 +108,25 @@ test("a control packet's id is rekeyed where the readings cite it; drawing text 
   assert.equal(cite.text, `${SHA}.pdf#36#p8`, "quoted drawing text is never rewritten");
   assert.equal(g.items[0].id, "row-7");
 });
+
+test("a reconcile row's schedule-row sheet and prose citing a spooled file read back as the real name", () => {
+  const H = "c239d0ce532a94a008318711b0b165f42fe8e7bf8465cc3006f6e248dd784541";
+  const result: any = { rows: [{
+    tag: "AHU-1",
+    reason: `Schedule row "AHU-1" (SCHEDULE on ${H}.pdf#8) cannot be geometrically anchored`,
+    schedule_cite: { sheet: `${H}.pdf#8`, title: "SCHEDULE", row_sheet: `${H}.pdf#8`, row_bbox: { x0: 1, y0: 2, x1: 3, y1: 4 } },
+    plan_other_cites: [{ sheet: `${H}.pdf#3`, at: [1, 2], reason: "repeat_view", counted_on: `${H}.pdf#4` }],
+    cells: { NOTE: "SEE abc.pdf" },
+  }] };
+  remapGraphSheetKeys(result, new Map([[H, "nv-central.pdf"]]));
+  const row = result.rows[0];
+  assert.equal(row.schedule_cite.row_sheet, "nv-central.pdf#8");
+  assert.equal(row.plan_other_cites[0].counted_on, "nv-central.pdf#4");
+  assert.match(row.reason, /SCHEDULE on nv-central\.pdf#8\)/);
+  // ordinary text (a real filename, cell content) is untouched
+  assert.equal(row.cells.NOTE, "SEE abc.pdf");
+  // an unknown spool name stays as it is rather than being guessed
+  const other: any = { note: `see ${"f".repeat(64)}.pdf#2` };
+  remapGraphSheetKeys(other, new Map([[H, "nv-central.pdf"]]));
+  assert.equal(other.note, `see ${"f".repeat(64)}.pdf#2`);
+});

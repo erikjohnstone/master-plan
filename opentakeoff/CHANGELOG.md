@@ -1,5 +1,36 @@
 # Changelog
 
+- **Count untagged units on the plans from Review.** A line whose units are drawn without tags had nothing to
+  count from: itd-d1-lab's diffusers and return grilles are drawn as symbols only, so 10 of its 11 diffuser and
+  grille lines carried a schedule row and no quantity. Review now offers **Count on plans…** (P) on every line. It
+  opens the canvas with the Symbol tool on a condition tied to the line; whatever the estimator commits there
+  (a Symbol sweep or Count clicks) is the line's count ("Counted on plans"), in the header's "EA with your counts" and
+  in exports as Estimator qty. The count follows the condition's count marks: an undo or a deleted mark lowers it,
+  and deleting the condition removes it. Review logic in `web/src/lib/lineReview.js` (`recordCanvasCount`,
+  `syncCanvasCounts`); the counting itself is the canvas's own Symbol and Count tools.
+
+- **Production fixes found by running the whole estimator flow on every corpus set.**
+  - Schedules lost on multi-table sheets: the side-by-side split read each half of a sheet through a copy that carried
+    no linework, so every one- or two-row schedule failed its drawn-grid check and the sheet was never split.
+    016_NY's M-601 kept 3 of its 10 schedules (expansion tank, convector, condensing unit, boiler, pump, fan and roof
+    ventilator schedules vanished); all 10 read again. The drawn-grid check also joins a column wall drawn cell by cell,
+    so a ruled two-row table (13_MI's DATA DEVICE SCHEDULE) is no longer refused. The B-34 guard against a control
+    diagram's callouts reading as a table still holds (21_VA's sheet 52 reads exactly as before). Shared sheet graph.
+  - A multi-building room key ("A-134" beside BUILDING A) carries its building again; a newer letter-led room rule
+    returned first and dropped it, so such rooms resolved under "no building".
+  - A pipe-hanger or duct table's size rows ("1 - 2 [25 - 50]") are no longer equipment lines: 054_NV's whole takeoff
+    was three of them. 0 of 5,486 marks in the corpus snapshots have that shape.
+  - Reconcile lines cite their schedule row by the uploaded file's own name. The schedule-row sheet and reasons named
+    the server's content-hash spool file, so Review thumbnails and "Open" failed for those lines.
+  - Importing a colleague's takeoff file into a project that already has work merges their line-review decisions
+    (yours win where you had already decided) instead of dropping them.
+  - A failed compile now says what failed and that nothing partial was counted, in place of internal pipeline text.
+  - Units drawn on the plans with no schedule row read are no longer invisible: the reconcile always listed them
+    (`unscheduled_units`) and nothing showed them. They now appear as review lines under "Drawn on plans — no schedule
+    row read", one per mark with every printed tag, counted only when the estimator checks and counts them
+    (federal-mech: CU-1 to CU-5, whose condensing unit schedule the takeoff never read).
+  - A compile that finds no schedule rows says what it read and counted nothing, instead of "No finished takeoff yet".
+
 - **Count air devices from their printed tags.**
   - An air-distribution plan titled by its devices ("GROUND FLOOR AIR TERMINALS") is a plan. Its sheet note
     "...SEE ARCHITECTURAL PLANS AND DETAILS." made federal-mech's M2.2 a detail sheet, so its 236 type tags (S1-1 ×61,

@@ -18,6 +18,12 @@
 //   geometry verified) carries no installed count. The estimator can check
 //   each tag and count them: "counted" records how many of the line's tags
 //   they kept (the ones they excluded, by box), as their count.
+// - A line whose units are drawn without tags can be counted on the plans
+//   instead: the estimator counts its symbols on the canvas (Symbol tool or
+//   Count clicks) under a condition tied to the line. That "counted" record
+//   names the condition (condition_id) and its count follows the condition's
+//   count marks live (syncCanvasCounts): deleting a mark lowers it, removing
+//   the condition removes the count.
 //
 // Pure and dependency-free so the canvas, exports and tests share one rule.
 
@@ -92,12 +98,15 @@ export function sanitizeLineReviews(raw) {
     // A correction is only a correction with its count and its reason.
     if (rec.decision === "corrected" && (!validQty(rec.qty) || typeof rec.note !== "string" || !rec.note.trim())) continue;
     // A tag count is only a count with its number and the tags it left out.
-    if (rec.decision === "counted" && (!validQty(rec.qty) || !Array.isArray(rec.excluded) || !rec.excluded.every((k) => typeof k === "string"))) continue;
+    // A plan count is only a count with its number and the canvas condition it follows.
+    const canvas = typeof rec.condition_id === "string" && rec.condition_id !== "";
+    if (rec.decision === "counted" && (!validQty(rec.qty) || (!canvas && (!Array.isArray(rec.excluded) || !rec.excluded.every((k) => typeof k === "string"))))) continue;
     out.records[key] = {
       decision: rec.decision,
       sig: rec.sig,
       ...(rec.decision === "corrected" || rec.decision === "counted" ? { qty: rec.qty } : {}),
-      ...(rec.decision === "counted" ? { excluded: rec.excluded.slice(0, 100000) } : {}),
+      ...(rec.decision === "counted" && canvas ? { condition_id: rec.condition_id } : {}),
+      ...(rec.decision === "counted" && !canvas ? { excluded: rec.excluded.slice(0, 100000) } : {}),
       ...(typeof rec.note === "string" && rec.note.trim() ? { note: rec.note.trim().slice(0, 2000) } : {}),
       ...(typeof rec.at === "string" ? { at: rec.at } : {}),
       ...(typeof rec.tag === "string" ? { tag: rec.tag } : {}),
@@ -172,6 +181,51 @@ export function tagCount(line, excluded = []) {
   return { qty: tags.length - out.length, excluded: out };
 }
 
+/** True when a record is a count made on the plans (it follows a canvas condition). */
+export function countedOnPlans(record) {
+  return record?.decision === "counted" && typeof record.condition_id === "string" && record.condition_id !== "";
+}
+
+/**
+ * Record a count made on the plans for one line (immutable update): the
+ * line's units counted on the canvas under `condition_id`, `qty` marks so far.
+ * `link` is what the canvas kept when counting began: the line's key, the
+ * evidence signature it was shown on, and its tag. The decision is bound to
+ * that signature, so a line whose evidence has since changed reads stale.
+ * @param {any} reviews
+ * @param {{ key: string | null, sig: string, tag?: string }} link
+ * @param {string} condition_id @param {number} qty
+ */
+export function recordCanvasCount(reviews, link, condition_id, qty, { at = new Date().toISOString() } = {}) {
+  if (!link?.key || !String(link.key).startsWith("tag:") || typeof link.sig !== "string" || !link.sig) throw new Error("This count is not tied to a takeoff line.");
+  if (typeof condition_id !== "string" || !condition_id) throw new Error("A plan count needs its condition.");
+  if (!validQty(qty)) throw new Error("A plan count is a whole number of 0 or more.");
+  return { schema: LINE_REVIEW_SCHEMA, records: { ...(reviews?.records || {}),
+    [link.key]: { decision: "counted", sig: link.sig, qty, condition_id, at, ...(link.tag ? { tag: String(link.tag) } : {}) } } };
+}
+
+/**
+ * Keep every plan count equal to its condition's live count marks.
+ * `counts` maps each existing condition id to its count; a record whose
+ * condition no longer exists is removed (its count is gone). Returns the same
+ * object when nothing changed, so it is safe to run on every shape change.
+ * @param {any} reviews @param {Record<string, number>} counts
+ */
+export function syncCanvasCounts(reviews, counts) {
+  if (!reviews?.records) return reviews;
+  let next = null;
+  for (const [key, rec] of Object.entries(reviews.records)) {
+    if (!countedOnPlans(rec)) continue;
+    const has = Object.prototype.hasOwnProperty.call(counts || {}, rec.condition_id);
+    const live = has ? counts[rec.condition_id] : null;
+    if (has && live === rec.qty) continue;
+    next ??= { schema: LINE_REVIEW_SCHEMA, records: { ...reviews.records } };
+    if (!has || !validQty(live)) delete next.records[key];
+    else next.records[key] = { ...rec, qty: live };
+  }
+  return next || reviews;
+}
+
 /** Remove the decision for each line (immutable update). */
 export function clearLineReviews(reviews, lines) {
   const next = { schema: LINE_REVIEW_SCHEMA, records: { ...(reviews?.records || {}) } };
@@ -193,6 +247,7 @@ export function summarizeLineReviews(lines, reviews) {
 }
 
 const STATE_LABEL = { confirmed: "Confirmed", flagged: "Flagged", corrected: "Corrected", counted: "Counted from tags", stale: "Changed since review", unreviewed: "Not reviewed" };
+const stateLabel = (state, record) => (state === "counted" && countedOnPlans(record) ? "Counted on plans" : STATE_LABEL[state]);
 
 /**
  * The quantity the estimate carries for a line: the estimator's correction or
@@ -211,7 +266,7 @@ export function withReviewColumns(lines, reviews) {
     const { state, record } = lineReviewState(line, reviews);
     return {
       ...line,
-      review_state: STATE_LABEL[state],
+      review_state: stateLabel(state, record),
       review_qty: state === "corrected" || state === "counted" ? record.qty : "",
       review_note: record?.note || "",
       review_at: record && state !== "stale" ? record.at || "" : "",
