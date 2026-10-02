@@ -1,5 +1,12 @@
 # Changelog
 
+- **Grid snapping no longer grows with the square of a sheet's rules.** `_snap_grid`, run on every page the table
+  reader sees, compared each rule coordinate with every cluster head made so far, sorting them all by distance, so its
+  cost grew with the square of a sheet's distinct coordinates: 3 s of a 5 s read on 056_NY's ink-lettered plan sheet.
+  Coordinates arrive in ascending order, so only heads within the tolerance below a coordinate can take it; those are
+  now the only ones asked, nearest first and in creation order on a tie, exactly as the full sort asked them. Output
+  is byte-identical: 120 random corpus pages, 0 differences, snapping 13.9 s → 1.6 s over them.
+
 - **A fan terminal unit schedule is a VAV schedule.** 020_MO's M-601 (lettered in ink, read by the ink reader
   below) prints an FTU FAN TERMINAL UNIT- ELECTRIC HEATING SCHEDULE of 19 boxes (FTU-r102, FTU-x104, FTU-n110,
   FTU-1201 ...): a fan terminal unit is a fan-powered box, but the VAV family's title rule read only FAN POWERED, and

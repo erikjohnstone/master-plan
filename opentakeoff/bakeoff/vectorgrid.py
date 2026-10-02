@@ -555,11 +555,21 @@ def _snap_grid(segs: list[tuple], tol: float = SNAP_TOL) -> list[tuple]:
     x 2058.36 while the row rule beside it starts at x 2058.37.
     """
     def heads(rules: dict) -> dict:
-        """rules: coordinate -> list of (lo, hi) spans on the other axis."""
+        """rules: coordinate -> list of (lo, hi) spans on the other axis.
+
+        Coordinates arrive in ascending order, so every head is one already
+        seen and no greater than v, and `order` holds them ascending. Only a
+        head within tol can take v; those are asked nearest first, and on a
+        tie in the order they were made, which is what sorting every head by
+        its distance asked (a stable sort over `acc`, in that same order) at
+        a cost that grew with the square of a sheet's distinct coordinates:
+        3 s of a 5 s read on 056_NY's ink-lettered plan sheet."""
         out: dict = {}
         acc: dict = {}                       # head -> spans accumulated
+        order: list = []                     # acc's keys, ascending
         for v in sorted(rules):
-            for h in sorted(acc, key=lambda h: abs(h - v)):
+            near = order[bisect_left(order, v - 2 * tol):]
+            for h in sorted(near, key=lambda h: abs(h - v)):
                 if abs(v - h) > tol:
                     continue
                 if any(min(a1, b1) - max(a0, b0) > SNAP_OVERLAP
@@ -571,6 +581,7 @@ def _snap_grid(segs: list[tuple], tol: float = SNAP_TOL) -> list[tuple]:
             else:
                 out[v] = v
                 acc[v] = list(rules[v])
+                order.append(v)
         return out
 
     vr: dict = {}
