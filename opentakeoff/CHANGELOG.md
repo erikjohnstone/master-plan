@@ -1,5 +1,11 @@
 # Changelog
 
+- **Tank, glycol and pot-feeder schedules by their own marks.** 07_MO's pictured EXPANSION & BUFFER TANK SCHEDULE
+  (EXT-1, EXT-2, CBT-1) was refused by both tank families, each excluding the other's word; its GLYCOL FEED SYSTEM
+  (GF-1) and CHEMICAL POT FEEDER SCHEDULE (CPF-1) printed marks the families did not read. A title naming both
+  tanks is now read by each kind's marks, a GLYCOL FEED title is the glycol make-up family's, and EXT, CBT/HBT, GF
+  and CPF marks are read under their family's title only. Saved graphs: 07_MO +5 (all in its key), 015_VA +1
+  (GFS-1, a scheduled glycol feed system its older partial key omits); nothing lost.
 - **A title the rules cut into pieces, and REMARKS notes above the header.** 096_IN's DIFFUSER / GRILLE SCHEDULE
   prints its title in two cells ("DIFFUSER / GRILLE" | "SCHEDULE") over a REMARKS: label and a numbered note
   ("1. BRANCH DUCTWORK…"); the note joined ten of its sixteen column names. The vector-grid adapter reads a row 0

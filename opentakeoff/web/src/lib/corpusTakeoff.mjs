@@ -2512,16 +2512,20 @@ export const HVAC_FAMILY_SPECS = {
   EXPANSION_TANK: {
     // OCR: EPANSIONANDCOPRESSIONTANKSCHEDULE (bldg5406) — expansion + compression.
     // EXPANSION SYSTEM SCHEDULE is the same vessel family on chiller plants.
-    titleRe: /EXPANSION\s+TANK|EXPANSION\s+SYSTEM(?:\s+SCHEDULE)?|COMPRESSION\s+TANK|EPANSION|DRAWDOWN\s+TANK\s+SCHEDULE/i,
-    exclude: /POINTS\s*LIST|DDC|BUFFER/i,
+    titleRe: /EXPANSION\s+TANK|EXPANSION\s*(?:&|AND)\s*BUFFER\s+TANK|EXPANSION\s+SYSTEM(?:\s+SCHEDULE)?|COMPRESSION\s+TANK|EPANSION|DRAWDOWN\s+TANK\s+SCHEDULE/i,
+    // A schedule of both kinds (07_MO's EXPANSION & BUFFER TANK SCHEDULE) is
+    // read by each kind's marks: EXT-1, EXT-2 here, its buffer tank CBT-1 there.
+    exclude: /POINTS\s*LIST|DDC|(?<!EXPANSION\s*(?:&|AND)?\s*)BUFFER/i,
     // ET-1 / ET-A1 / DT-* — digit required so "ETC. NOT SHOWN…" never matches.
     keyRe: /^(?:ET|XT|DT)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
+    titledKeyRe: /^EXT[\s\-]?\d/i,
   },
   BUFFER_TANK: {
     titleRe: /BUFFER\s+TANK\s+SCHEDULE/i,
-    exclude: /POINTS\s*LIST|DDC|EXPANSION/i,
+    exclude: /POINTS\s*LIST|DDC|EXPANSION(?!\s*(?:&|AND)?\s*BUFFER)/i,
     // BT-*; GST-* glycol/storage vessels listed on buffer-tank schedules.
     keyRe: /^(?:BT|GST)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
+    titledKeyRe: /^[CH]BT[\s\-]?\d/i,
   },
   FLASH_TANK: {
     titleRe: /FLASH\s+TANK\s+SCHEDULE/i,
@@ -2558,12 +2562,14 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /(?:CHEMICAL\s+)?POT\s+FEEDER(?:\s+SCHEDULE)?|CHEMICAL\s+BYPASS\s+FEEDER/i,
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^PF[\s\-]/i,
+    titledKeyRe: /^CPF[\s\-]?\d/i,
   },
   // Glycol makeup / dosing units (GMU-*).
   GLYCOL_MAKEUP: {
-    titleRe: /GLYCOL\s+MAKE[\s\-]*UP(?:\s+UNIT)?(?:\s+SCHEDULE)?|\bGMU\b.*SCHEDULE/i,
+    titleRe: /GLYCOL\s+MAKE[\s\-]*UP(?:\s+UNIT)?(?:\s+SCHEDULE)?|\bGMU\b.*SCHEDULE|GLYCOL\s+FEED(?:ER)?(?:\s+(?:SYSTEM|UNIT))?/i,
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^GMU[\s\-]/i,
+    titledKeyRe: /^G(?:F|FS)[\s\-]?\d/i,
   },
   // Basket / y-strainers (STR-*). Do not claim FTR-* (fin-tube or filter panels).
   STRAINER: {

@@ -941,3 +941,27 @@ describe("a row heading a section of a schedule's units", () => {
     assert.deepEqual(cats.GRD.items.map((i) => i.tag).sort(), ["RG-1", "SD-1", "SD-2", "SD-3"]);
   });
 });
+
+describe("tanks, glycol and pot feeders under their own titles (07_MO's pictured schedules)", () => {
+  const table = (title: string, keys: string[]) => ({
+    sheet: "m.pdf#1", title: { text: title }, headers: ["MARK"], kind: "equipment",
+    rows: keys.map((k) => ({ key: k, cells: { MARK: { text: k } } })),
+  });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+  it("reads an EXPANSION & BUFFER TANK SCHEDULE by each kind's marks", () => {
+    const tags = compile([table("EXPANSION & BUFFER TANK SCHEDULE", ["EXT-1", "EXT-2", "CBT-1"])]);
+    assert.deepEqual(tags("EXPANSION_TANK"), ["EXT-1", "EXT-2"]);
+    assert.deepEqual(tags("BUFFER_TANK"), ["CBT-1"]);
+    // Each kind's own schedule still refuses the other's title.
+    assert.deepEqual(compile([table("BUFFER TANK SCHEDULE", ["BT-1"])])("EXPANSION_TANK"), []);
+    assert.deepEqual(compile([table("EXPANSION TANK SCHEDULE", ["ET-1"])])("BUFFER_TANK"), []);
+  });
+  it("reads a GLYCOL FEED SYSTEM and a CHEMICAL POT FEEDER SCHEDULE by their marks, under their titles only", () => {
+    assert.deepEqual(compile([table("GLYCOL FEED SYSTEM", ["GF-1"])])("GLYCOL_MAKEUP"), ["GF-1"]);
+    assert.deepEqual(compile([table("CHEMICAL POT FEEDER SCHEDULE", ["CPF-1"])])("CHEMICAL_POT_FEEDER"), ["CPF-1"]);
+    assert.deepEqual(compile([table("", ["EXT-1", "CPF-1", "GF-1"])])("EXPANSION_TANK"), []);
+  });
+});
