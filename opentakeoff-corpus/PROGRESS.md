@@ -240,10 +240,11 @@ leading notes rows dropped) and the table builder (a row under a header label
 that runs down, whose own labels each sit in one column, is the leaf tier;
 titled tables only). Plus "SPLIT SYSTEM OUTDOOR UNIT" → CONDENSING_UNIT.
 
-New instrument (scratchpad, method recorded here): grid replay. For every
+New instrument: grid replay (`opentakeoff/scripts/grid-replay/`). For every
 table-bearing page of the 45 saved graphs (344 pages), vectorgrid replies were
-saved once (`grids/replay.py`, ~1 s/page) and both versions of
-vectorGridTableToScheduleTable are run over every table (`grids/ab.mts`).
+saved once (`pages.mjs` lists pages, `replay.py` saves replies, ~1 s/page) and
+both versions of vectorGridTableToScheduleTable are run over every table
+(`ab.mts`), seconds per A/B instead of rebuilding graphs.
 Final: 1,930 tables, 13 changed, none lost a unit: 032_PA read; titles found
 (014_MT, 020_MO); header-label rows (MARK, SYMBOL) and one-row header-only
 fragments no longer data; headers cleaned. Rejected on the way: (a) merging the
