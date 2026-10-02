@@ -46,12 +46,21 @@ try {
   // All three scorers are independent readers. Run them together so the
   // default two-worker fan-out in each script fills all four CPU cores
   // instead of leaving half the machine idle and paying the passes serially.
-  await Promise.all([
-    run("takeoff + reference", "takeoff-eval.mjs", [...args, "--with-reference"]),
-    run("sheet graph", "graph-eval.mjs", args.filter((arg) => arg !== "--with-reference")),
-    run("table recall", "table-recall-eval.mjs", args.filter((arg) => arg !== "--with-reference" && arg !== "--report")),
-    run("tag census", "tag-eval.mjs", args.filter((arg) => arg !== "--with-reference" && arg !== "--report")),
-  ]);
+  const stages = [
+    ["takeoff + reference", "takeoff-eval.mjs", [...args, "--with-reference"]],
+    ["sheet graph", "graph-eval.mjs", args.filter((arg) => arg !== "--with-reference")],
+    ["table recall", "table-recall-eval.mjs", args.filter((arg) => arg !== "--with-reference" && arg !== "--report")],
+    ["tag census", "tag-eval.mjs", args.filter((arg) => arg !== "--with-reference" && arg !== "--report")],
+  ];
+  // OPENTAKEOFF_EVAL_SERIAL=1 runs the scorers one after another. In parallel
+  // (eight graph-building children plus their table sidecars) a 16 GB machine
+  // OOM-kills children mid-set, and a killed set reads as an ERROR row that an
+  // A/B would wrongly attribute to the code (navfac, 2026-10-02).
+  if (process.env.OPENTAKEOFF_EVAL_SERIAL === "1") {
+    for (const [label, script, scriptArgs] of stages) await run(label, script, scriptArgs);
+  } else {
+    await Promise.all(stages.map(([label, script, scriptArgs]) => run(label, script, scriptArgs)));
+  }
   console.error(`\n=== complete corpus evaluation finished in ${((performance.now() - started) / 1000).toFixed(1)}s ===`);
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));

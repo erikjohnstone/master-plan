@@ -11,13 +11,16 @@ archive as current.** `STATE.md` (2026-09-13) is also stale; this file supersede
   it was discarded).
 - A full corpus eval (`cd opentakeoff/mcp && npm run eval:corpus -- <corpus>`) reports takeoff, reference and
   graph metrics together; compare A/B on the same machine and environment, never against an old baseline.
+- On this 16 GB container run the eval with `OPENTAKEOFF_EVAL_SERIAL=1`: the four scorers in parallel OOM-kill
+  their own children (navfac read "ERROR: child process exited null" on 2026-10-02), which an A/B would misread as
+  a code regression.
 - Do not run browser sweeps beside a corpus eval on this 16 GB container: Chrome is OOM-killed (29 of 54 sweep
   sets were lost that way on 2026-10-01; those results were discarded, not counted).
 
 ## Verified baseline
 
-**Pending.** A full corpus eval at `aed8849`-era HEAD with the production environment is running
-(`scratchpad/evalab2/new.log`), followed by the same run at `302cf34` for A/B. This section is filled from that
+**Pending.** A full corpus eval at HEAD with the production environment, scorers run one after another, is
+running (`scratchpad/evalab3/new.log`), followed by the same run at `302cf34` for A/B. This section is filled from that
 run, not from the archive.
 
 ## Current goal
