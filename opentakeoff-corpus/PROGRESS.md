@@ -14,6 +14,8 @@ archive as current.** `STATE.md` (2026-09-13) is also stale; this file supersede
 - On this 16 GB container run the eval with `OPENTAKEOFF_EVAL_SERIAL=1`: the four scorers in parallel OOM-kill
   their own children (navfac read "ERROR: child process exited null" on 2026-10-02), which an A/B would misread as
   a code regression.
+- One heavy job at a time on this container (eval, MCP test suite, browser sweep): any two together OOM-kill
+  something, and a killed set or test reads as a failure. The 2026-10-02 sweep re-run lost 21 of 29 sets this way.
 - Do not run browser sweeps beside a corpus eval on this 16 GB container: Chrome is OOM-killed (29 of 54 sweep
   sets were lost that way on 2026-10-01; those results were discarded, not counted).
 
@@ -57,6 +59,18 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 - 095_UT: the RTU schedule shares a legend sheet beside a symbol legend; the takeoff reads nothing there. The
   empty state points the estimator to Count.
 - 052_IL, 057_US: no equipment schedules in the set; empty takeoff is correct.
+
+## Known failing tests (pre-existing, not from this goal's work)
+
+- MCP `conformance.test.ts` "sheet graph (#87) … find_schedule": room 134's EAST finish no longer chains to its
+  material-schedule definition (`SMOKEY MOUNTAIN AC-18` expected, undefined). Fails identically at the PR #108
+  merge `4255465`, before any of this goal's commits.
+
+## Sweep re-run (OOM-lost sets)
+
+8 of 29 re-swept clean on 2026-10-02 (038_NC, 073_MT, 029_ME, 077_MT, 096_IN 235 lines, 13_MI, 087_US,
+016_NY 24 lines / 10 schedules): no product problems. 21 crashed again (Chrome OOM, see rules) and are still
+unverified.
 
 ## Active work / next queue
 
