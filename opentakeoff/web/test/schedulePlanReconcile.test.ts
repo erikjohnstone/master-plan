@@ -22,6 +22,7 @@ import {
   unscheduledUnitCandidates,
   planOtherCites,
   isUnitFamilyTable,
+  markWithoutTrailingStatus,
   markZeroRespellings,
   rowNamesEachUnitOnce,
   rowNamesOneUnitOnce,
@@ -2577,6 +2578,22 @@ test("a mark's zero respellings: its numbers unpadded, its last number padded, a
   assert.deepEqual(markZeroRespellings("EF-12"), []);
   assert.deepEqual(markZeroRespellings("FCU-00"), []);
   assert.deepEqual(markZeroRespellings("RTU-A"), []);
+});
+
+// A plan tags an existing unit bare where its schedule prints the status
+// after the mark (012_MO's "VFD-CT-1 (EXIST.)", tagged VFD-CT-1).
+test("a mark without the status its schedule prints after it", () => {
+  assert.equal(markWithoutTrailingStatus("VFD-CT-1 (EXIST.)"), "VFD-CT-1");
+  assert.equal(markWithoutTrailingStatus("AHU-1(E)"), "AHU-1");
+  assert.equal(markWithoutTrailingStatus("EF-2 (EXISTING)"), "EF-2");
+  assert.equal(markWithoutTrailingStatus("CU-3 (N)"), "CU-3");
+  assert.equal(markWithoutTrailingStatus("P-1 (RELOCATED)"), "P-1");
+  // no status: a number, a quantity or a note in parentheses is not one
+  assert.equal(markWithoutTrailingStatus("VFD-CT-1"), null);
+  assert.equal(markWithoutTrailingStatus("P-1(1)"), null);
+  assert.equal(markWithoutTrailingStatus("EF-1 (2 REQ'D)"), null);
+  assert.equal(markWithoutTrailingStatus("(E) FC-1"), null);
+  assert.equal(markWithoutTrailingStatus("(EXIST.)"), null);
 });
 
 test("a unit family's row names one unit once: never a typical row, a placeholder mark or a pair (AS-96)", () => {

@@ -673,6 +673,21 @@ export function markZeroRespellings(mark) {
 }
 
 /**
+ * A mark as a plan prints it without the status its schedule prints after it:
+ * 012_MO's VFD SCHEDULE lists "VFD-CT-1 (EXIST.)" and its plans tag VFD-CT-1.
+ * The row keeps its status (it tells an existing unit from a new one of the
+ * same mark), so the sweep tries the bare mark last, and only where no row of
+ * the set is named so, as it tries a zero respelling (AS-97). Null when no
+ * status in parentheses ends the mark.
+ * @param {string} mark
+ * @returns {string|null}
+ */
+export function markWithoutTrailingStatus(mark) {
+  const m = String(mark || "").trim().match(/^(.*?[A-Za-z0-9])\s*\(\s*(?:E|EX|EXIST\.?|EXISTING|N|NEW|R|RELOC\.?|RELOCATED)\s*\)$/i);
+  return m ? m[1].trim() : null;
+}
+
+/**
  * A mark's letter and number groups, joined by hyphens (AS-111): the form two
  * spellings of one mark share where only their separators differ (EF-1, EF 1
  * and EF1 read EF-1), never where a number group does, as the run-together

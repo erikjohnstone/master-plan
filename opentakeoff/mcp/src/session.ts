@@ -53,7 +53,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
-import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markZeroRespellings, rowIdentityTag, rowNamesEachUnitOnce, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark, planTitleLevels, typicalLevelMarks, typicalLevelsOfRow } from '../../web/src/lib/schedulePlanReconcile.mjs';
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markWithoutTrailingStatus, markZeroRespellings, rowIdentityTag, rowNamesEachUnitOnce, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark, planTitleLevels, typicalLevelMarks, typicalLevelsOfRow } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -4972,6 +4972,13 @@ export class Session {
       // digits, last, where no row of the set is named so (AS-97).
       const rowNamed = new Set(graph.tables.flatMap((x) => x.rows.map((row) => canonKey(identityOf(row)))));
       for (const variant of markZeroRespellings(t)) if (!rowNamed.has(canonKey(variant))) addCand(variant);
+      // A status the schedule prints after the mark, which the plans leave off
+      // (012_MO's "VFD-CT-1 (EXIST.)" tagged VFD-CT-1): the bare mark, last,
+      // where no row of the set is named so.
+      for (const printedForm of [tRaw, selectedRowIdentity]) {
+        const bare = markWithoutTrailingStatus(String(printedForm || ""));
+        if (bare && !rowNamed.has(canonKey(bare))) addCand(bare);
+      }
       const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
       if (opts.planKey) {
         t = canonKey(opts.planKey);

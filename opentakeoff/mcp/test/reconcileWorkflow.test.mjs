@@ -313,21 +313,19 @@ test("Vermillion County Jail bulk VAV reconcile: all 58 scheduled tags MATCH (Vo
   }
 });
 
-test("Vol2 chiller upgrade 012: ACC + PUMP all MATCH, pump VFDs MATCH (multipart rejoin)", async (t) => {
+test("Vol2 chiller upgrade 012: ACC + PUMP + VFD all MATCH, existing drives too (multipart rejoin)", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.compile.json"),
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
-  for (const family of ["AIR_COOLED_CHILLER", "PUMP"]) {
+  // The VFD SCHEDULE prints three existing drives "VFD-CT-1 (EXIST.)" and the
+  // plans tag them bare: the sweep tries the mark without its status, so all
+  // 16 drives MATCH.
+  for (const family of ["AIR_COOLED_CHILLER", "PUMP", "VARIABLE_FREQUENCY_DRIVE"]) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
-  // The VFD SCHEDULE prints three existing drives VFD-CT-1..3 "(EXIST.)" and the
-  // plans tag them bare; a parenthesized status stays on the row's mark (it can
-  // tell an existing unit from a new one of the same mark), so those three stay
-  // schedule-only and the 13 pump drives MATCH.
-  await assertFamilyStatusCounts(session, graph, key, "VARIABLE_FREQUENCY_DRIVE", { match: 13, schedule_only: 3 });
 });
 
 test("Vol2 FL airport 089: DOAS + FCU families with plan-drawn MATCH (multipart rejoin)", async (t) => {

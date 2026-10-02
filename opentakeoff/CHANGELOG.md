@@ -1,5 +1,12 @@
 # Changelog
 
+- **An existing unit's mark matches its bare plan tag.** A schedule can print a status after a mark that its plans
+  leave off: 012_MO's VFD SCHEDULE lists VFD-CT-1..3 "(EXIST.)", tagged VFD-CT-1..3 on the plans. The row keeps its
+  status (it tells an existing unit from a new one of the same mark), so the three drives read schedule-only. The
+  plan sweep now also tries the mark without a trailing (E)/(EXIST.)/(EXISTING)/(N)/(NEW)/(R)/(RELOCATED), last, and
+  only where no row of the set is named that way (as it tries a zero respelling, AS-97). 012_MO's drives 13/16 →
+  16/16 MATCH; no other saved corpus graph has such a row.
+
 - **Schedules read by the names they print (vocabulary batch, task #278).** Titles and marks the takeoff missed while
   re-keying stale sets from their drawings, each adopted only after an offline A/B over saved sheet graphs (compile
   is a pure function of the graph): SPLIT SYSTEM INDOOR UNITS and DAC/SS/FCC/ACU/BCU/IDU marks as fan coils; CU, DCU,

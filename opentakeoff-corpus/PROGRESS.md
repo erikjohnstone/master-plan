@@ -211,7 +211,7 @@ VAV-2-xx 25, all 57 MATCH plan tags), AHU 2, FCU 1 + CONDENSING_UNIT 3 (ACU-1/AC
 GRD 12 (AIR DISTRIBUTION DEVICE SCHEDULE marks, not read). reconcileWorkflow: 7/7 against the new key.
 
 012_MO re-keyed (task #246): VFD 16 (the E-sheet VFD SCHEDULE's 13 pump drives + VFD-CT-1..3 "(EXIST.)"), + AIR_SEPARATOR 2,
-EXPANSION_TANK 1. Open reconcile gap: a row mark printed with a trailing status ("VFD-CT-1 (EXIST.)") keeps it (it can
+EXPANSION_TANK 1. Fixed since (sweep tries the bare mark): a row mark printed with a trailing status ("VFD-CT-1 (EXIST.)") keeps it (it can
 tell an existing unit from a new one of the same mark), so it does not match the plan's bare VFD-CT-1 and stays
 schedule-only; the test now asserts 13 MATCH + 3 SCHEDULE_ONLY. Also seen while A/B-ing: 032_PA's SPLIT SYSTEM OUTDOOR
 UNIT (CONDENSER) table reads untitled because its region swallows the indoor table's notes band above it.
