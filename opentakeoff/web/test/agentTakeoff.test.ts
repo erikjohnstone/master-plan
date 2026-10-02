@@ -1334,6 +1334,9 @@ test("reconciled tag-only line carries every printed tag for the estimator to ch
   assert.deepEqual(linePlanTagCite(s11)?.bbox_px, [10, 10, 30, 20]);
   assert.equal(s11.schedule_sheet_id, "m.pdf#15", "an occurrence never stands in for the schedule sheet");
   assert.deepEqual(vav.plan_tag_occurrences, []);
+  // the panel's merge keeps each tag (they share a tag, field and sheet)
+  const merged = compileAgentTakeoff(mergeTakeoffRows([], rows)).find((l) => l.tag === "S1-1");
+  assert.equal(merged?.plan_tag_occurrences.length, 3);
 });
 
 test("reconciled line exposes authored diagram evidence without promoting it to installed quantity", () => {

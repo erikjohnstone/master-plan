@@ -1180,6 +1180,8 @@ export function dedupeTakeoffRows(rows) {
       row.sheet_id || "",
       row.column || "",
       row.table_title || "",
+      // each printed tag of a line is its own row on the same sheet
+      row.field === "plan_tag_occurrence" ? JSON.stringify(row.bbox_px) : "",
     ].join("\u0000");
     if (seen.has(key)) continue;
     seen.add(key);

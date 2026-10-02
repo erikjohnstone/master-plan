@@ -7,7 +7,7 @@
  * CHANGELOG + reset to 0/5.
  */
 import { scheduleTitleMatches, familyRuleTitle } from "./scheduleTitleMatch.mjs";
-import { scheduledQtyStatusFromRow } from "./schedulePlanReconcile.mjs";
+import { scheduledQtyStatusFromRow, isRepeatableAirDeviceSchedule } from "./schedulePlanReconcile.mjs";
 import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
 import { disciplineOfSheetNumber } from "./symbolsweep.ts";
 
@@ -1996,7 +1996,10 @@ function uniqueFamily(graph, spec, family, onEmit = null) {
         // merges plan-drawn counts onto this same tag — status here is a
         // compile-time-only disclosure (not a ReconcileStatus value) and is
         // superseded once that merge happens.
-        const qtyStatus = scheduledQtyStatusFromRow(row, { marks: sameKindMarks(tagList, one) });
+        // A grille/register/diffuser row defines a repeatable type, not a
+        // quantity — the reconcile's own rule, so the two producers agree
+        // (federal-mech's 21 types each read "scheduled 1" here).
+        const qtyStatus = scheduledQtyStatusFromRow(row, { marks: sameKindMarks(tagList, one), typeDefinition: isRepeatableAirDeviceSchedule(title) });
         // A count-keyed table's rows are pieces named by where they are, no unit's mark.
         if (!countKeyedIdentCol) onEmit?.(row, one, sameKindMarks(tagList, one));
         items.push({

@@ -12,6 +12,13 @@
     "EA with your counts" and in exports as Estimator qty. The machine's quantity is unchanged.
   - Fixed: a line with tag sightings and no scheduled quantity took the plan sheet as its schedule sheet, so its
     **Schedule row** cite opened the plan page.
+  - Fixed: the takeoff compile read each grille, register or diffuser schedule row as "scheduled 1", while the
+    reconcile reads the same row as a type definition with no quantity. The compile now uses the reconcile's rule, so
+    a type is no longer a unit in the EA total (federal-mech: 128 EA → 105 before review; 23 types were 23 phantom
+    units). Shared compile (`web/src/lib/corpusTakeoff.mjs`).
+  - Browser proof on federal-mech: S1-1 offers its 61 tags, the check view renders its first 20 tag tiles in 2.9 s,
+    leaving 2 out records "Your count 59 of 61 tags", R1-2 counts 35 by keyboard, the header reads 105 → 199 EA with
+    your counts, the CSV carries the count, and counts survive a reload and recompile.
 
 - **Review the takeoff on one screen, and keep the record.**
   - A schedule's **Review** shows every line as a tile with its own drawing evidence. Confirm, or flag with a note,
