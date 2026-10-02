@@ -163,9 +163,9 @@ the takeoff read at 2c1ba16:
 | 100_OH, 28_WA, 046_MI | 7, 4, 4 | 7, 4, 4 | all | — |
 | 087_US | 3 | 1 | 1 | PCH-1/2 chilled water pumps |
 | 064_MT, 073_MT | 2, 2 | 2, 2 | all | — |
-| 056_NY | 35 | 0 | 0 | ink-only SCHEDULES sheets (task #276) |
-| 08_ME | 9 | 0 | 0 | ink-only M102 and P103 (task #276) |
-| 19_CA | 6 | 0 | 0 | ink-only E-6.2 (task #276) |
+| 056_NY | 35 | 0 → 2 | 0 → 2 | ink-only SCHEDULES sheets: read since #276; VAV/LAB/GRD titles wait on #278 |
+| 08_ME | 9 | 0 → 2 | 0 → 2 | ink-only M102 fan schedule read since #276; cove heaters, louvers, P103 not yet |
+| 19_CA | 6 | 0 → 5 | (marks OCR'd with a space: cu 1, FC 1) | ink-only E-6.2 read since #276 |
 
 651 keyed units; the takeoff read 447 of them (and 3 the keys do not hold). The vocabulary and picture gaps above are
 task #278: each rule gets a census over every cached graph before it is adopted.
@@ -185,6 +185,24 @@ SCHEDULES sheets lettered entirely in ink: air handling unit, humidifier, pump, 
 control valve and CAV/VAV schedules) and 08_ME (M102's fan, cove heater and louver schedules, in ink): neither page
 has any text, so neither was ever a sheet (task #276). 086_CA (a scanned existing-equipment schedule) and 15_IA
 (pictures on a control diagram sheet): see Known limits.
+
+### Ink-only pages are sheets (task #276, 2026-10-02)
+
+A page with no text layer was never a sheet (`buildSheetGraph` kept only pages with text): 96 such pages on 12 keyed
+sets, among them 056_NY's two SCHEDULES sheets, 08_ME's M102 and 19_CA's E-6.2. Every page is now a sheet; an
+ink-only page gets role `unknown` and reaches the table reader as a text-starved drawing. A sidecar glance through
+MuPDF's path list (letters dropped) answers a word-less, picture-less page with no schedule-shaped ink grid without
+pdfplumber's parse; verified on all 97 ink-only pages: 72 answered by the glance, 0 that the full read would read.
+The verdict is cached with the picture cache. Grid snapping made linear-ish in the same pass (c637a3d,
+byte-identical on 120 random pages, 13.9 s → 1.6 s).
+
+Cold A/B over the 12 sets (HEAD vs HEAD+change, picture cache off): units 361 → 370 (056_NY H-1, P-1; 08_ME EF-2,
+EF-I; 19_CA cu 1, cu 2, EF 2, FC 1, FC 2), build 1,387 s → 2,424 s. The added time is the picture reader on ink
+grids, most of them tables no family claims (22_GA: door, finish and occupant load schedules, 45 → 382 s; 17_FL:
+door and window schedules, 51 → 199 s). With the picture cache warm, 17_FL reopens in 49 s and 056_NY in 58 s.
+056_NY's other three tables (air inlets/outlets 9, air flow control valves 11, CAV/VAV 10) wait on the vocabulary
+batch (#278). Known cost: a set whose architectural sheets are lettered in ink pays the picture reader for their
+tables on its first open; a title-band pre-read that skips non-mechanical tables is the open option.
 
 ## Active work / next queue
 

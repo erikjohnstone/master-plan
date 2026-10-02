@@ -9496,7 +9496,18 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     const groups = [...new Set(partSheets.map((sheet) => drawingGroupBySheet.get(sheet)).filter((group): group is string => !!group))];
     if (groups.length === 1) table.drawing_group = groups[0];
   }
-  const outSheets: SheetGraphSheet[] = withText.map((s) => {
+  // A PAGE LETTERED IN INK IS STILL A SHEET. A CAD export can plot every
+  // letter of a page as outlines, title block included: 056_NY's two
+  // SCHEDULES sheets (air handling unit, humidifier, pump, air flow control
+  // valve and terminal unit schedules) and 08_ME's M102 (fan, cove heater
+  // and louver schedules) carry no text at all. Left out here they were
+  // never a sheet, so the vector pipeline never offered them to vectorgrid,
+  // whose ink reader reads exactly such a grid. Every text reader above ran
+  // on the sheets with text only, and a set with no text anywhere is still
+  // unavailable; a sheet without text is only listed, with the role its
+  // empty text gives it.
+  for (const s of sheets) if (!roles.has(s.key)) roles.set(s.key, classifySheetRole(s));
+  const outSheets: SheetGraphSheet[] = sheets.map((s) => {
     const role = roles.get(s.key)!;
     const schedules: SheetGraphSchedule[] = [];
     for (const t of tables) {

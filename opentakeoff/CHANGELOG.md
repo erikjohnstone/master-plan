@@ -1,5 +1,20 @@
 # Changelog
 
+- **A page lettered entirely in ink is a sheet.** `buildSheetGraph` kept only pages with text, so a page plotted
+  with every letter as strokes never became a sheet and its schedules were never offered to any reader: 056_NY's
+  two SCHEDULES sheets (air inlets/outlets, humidifier, pump, air flow control valve, CAV/VAV), 08_ME's M102 fan
+  schedule, 19_CA's mechanical equipment schedule on E-6.2. 96 such pages across 12 keyed sets. Every page is now a
+  sheet (an ink-only one with role `unknown`), routed to the table reader as a text-starved drawing, where a grid
+  shaped like a schedule and lettered in ink is read from its pixels as before. Before the full read, a page with no
+  words and no picture is first looked at through MuPDF's path list without its letters (`_glance_at_ink_only_page`);
+  a page with no schedule-shaped grid lettered in ink is answered from that glance, as the full read would answer it
+  (no tables). Over the 97 ink-only pages: 72 answered by the glance, 0 that the full read would have read. The
+  verdict is kept with the picture cache, keyed by the set's bytes, the page and the readers' source.
+  Measured cold over the 12 sets (picture cache off): units 361 → 370 (056_NY H-1, P-1; 08_ME EF-2, EF-I; 19_CA
+  CU-1/2, EF-2, FC-1/2), build time 1,387 s → 2,424 s; the time is the picture reader on ink grids, including
+  tables no family claims (22_GA's door, finish and occupant load schedules, 17_FL's door and window schedules).
+  Sets with no ink-only page are unchanged.
+
 - **Grid snapping no longer grows with the square of a sheet's rules.** `_snap_grid`, run on every page the table
   reader sees, compared each rule coordinate with every cluster head made so far, sorting them all by distance, so its
   cost grew with the square of a sheet's distinct coordinates: 3 s of a 5 s read on 056_NY's ink-lettered plan sheet.

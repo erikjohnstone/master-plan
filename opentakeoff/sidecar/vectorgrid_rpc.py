@@ -85,6 +85,10 @@ def extract_grid(pdf_path: str, page_no: int = 1) -> dict:
     """-> {space, page, tables: [{bbox, rows, cols, cells, raster, ...}]}"""
     from vectorgrid import find_tables              # noqa: E402
 
+    glance = _glance_at_ink_only_page(pdf_path, page_no)
+    if glance is not None:
+        return glance
+
     found = find_tables(pdf_path, page_no)
     pdf = Path(pdf_path)
     out: list = []
@@ -180,6 +184,138 @@ class _InkLettering:
         if 3 * inside(self._words) >= faces:
             return False
         return inside(self._ink) >= INK_LETTERS_PER_FACE * faces
+
+
+def _glance_at_ink_only_page(pdf_path: str, page_no: int) -> dict | None:
+    """A PAGE WITH NO WORDS AT ALL can give a table only two ways: a pasted
+    picture, or a ruled grid lettered in ink (_InkLettering), because every
+    other grid is read by the words that fall in its faces and it has none.
+    Such a page is a whole sheet plotted with its letters as strokes, and
+    pdfplumber spends seconds on those strokes before the grid finder sees a
+    rule: 056_NY's ink-only plan sheet carries 455,901 path items, 10.8 s of
+    parsing for no table. So a page with no words and no picture is first
+    looked at through MuPDF's path list, without its letters (paths no bigger
+    than a letter, INK_LETTER_PT, that are no rule), by the grid finder and
+    the same two tests the full read applies (_schedule_shaped, unprinted).
+    A grid that passes reads the page as before; none, and the reply is the
+    one the full read gives (no tables) in a fraction of the time.
+
+    Measured over the 96 ink-only pages of the 12 keyed sets holding any:
+    the glance finds every grid the full read offers the picture reader.
+    Returns None whenever the full read must run.
+
+    The verdict is kept beside the picture reader's (_picture_cache_dir, keyed
+    by the set's bytes, the page and the readers' own source), so a drawing
+    set opened again is not glanced at again: 22_GA's 41 ink-only pages cost
+    the glance about 3 s each on every open."""
+    import json
+    from celltext import page_words                  # noqa: E402
+
+    if page_words(Path(pdf_path), page_no):
+        return None
+    hit = None
+    try:
+        cache = _picture_cache_dir()
+        hit = cache / f"glance-{_picture_cache_key(pdf_path, page_no, [-1, -1, -1, -1])}.json" if cache else None
+    except Exception:  # noqa: BLE001 — no cache is never a failure
+        hit = None
+    if hit is not None and hit.is_file():
+        try:
+            kept = json.loads(hit.read_text())
+            return kept or None
+        except (OSError, ValueError):
+            pass
+    reply = _glance(pdf_path, page_no)
+    if hit is not None:
+        try:
+            hit.parent.mkdir(parents=True, exist_ok=True)
+            tmp = hit.with_suffix(".tmp")
+            tmp.write_text(json.dumps(reply or {}))
+            tmp.replace(hit)
+        except OSError:
+            pass
+    return reply
+
+
+def _glance(pdf_path: str, page_no: int) -> dict | None:
+    """_glance_at_ink_only_page's own look, on a page that has no words."""
+    import pdfplumber
+    import pymupdf
+    from vectorgrid import (                         # noqa: E402
+        _effective_box, _snap_grid, raster_regions, tables_from_segments,
+    )
+
+    if raster_regions(pdf_path, page_no):
+        return None
+    with pymupdf.open(pdf_path) as doc:
+        segs = _snap_grid(_ink_page_rules(doc[page_no - 1]))
+    # The box only: pdfplumber reads a page's content stream lazily, on the
+    # first object asked for, and its box is what the full read reports.
+    with pdfplumber.open(pdf_path) as doc:
+        x0, y0, x1, y1 = _effective_box(doc.pages[page_no - 1])
+    page_w, page_h = x1 - x0, y1 - y0
+    found = tables_from_segments(segs, [], page_w, page_h)
+    lettering = _InkLettering(pdf_path, page_no)
+    if any(t.get("cells") and lettering.unprinted(t) for t in found["tables"]):
+        return None
+    return {
+        "space": "pdf-points-topleft",
+        "page": page_no,
+        "pageWidth": page_w,
+        "pageHeight": page_h,
+        "tables": [],
+        "diagnostics": {"segments": len(segs), "page_w": page_w, "page_h": page_h, "ink_only_glance": True},
+    }
+
+
+def _ink_page_rules(page) -> list:
+    """The rules of a page lettered in ink, as segments_from_page gives them
+    (x0, y0, x1, y1, width), read from MuPDF's path list: a thin path is a
+    rule along its length (the CAD sliver idiom), a stroked rect or quad its
+    four walls, a line itself; a path too small to hold a rule (MIN_LEN) or
+    no bigger than a letter is skipped whole. Coordinates are MuPDF's, with
+    the page's rotation applied, as _InkLettering reads the ink."""
+    from vectorgrid import AXIS_TOL, MIN_LEN, THIN_RECT, _q    # noqa: E402
+
+    segs: list = []
+    rot = page.rotation_matrix
+
+    def add(x0, y0, x1, y1, w):
+        dx, dy = abs(x1 - x0), abs(y1 - y0)
+        if dx <= AXIS_TOL and dy >= MIN_LEN:
+            x = _q((x0 + x1) / 2)
+            segs.append((x, _q(min(y0, y1)), x, _q(max(y0, y1)), w))
+        elif dy <= AXIS_TOL and dx >= MIN_LEN:
+            y = _q((y0 + y1) / 2)
+            segs.append((_q(min(x0, x1)), y, _q(max(x0, x1)), y, w))
+
+    for d in page.get_drawings():
+        r = d["rect"] * rot
+        w = float(d.get("width") or 0.0)
+        cw, ch = r.x1 - r.x0, r.y1 - r.y0
+        if ch <= THIN_RECT and cw >= MIN_LEN:
+            add(r.x0, (r.y0 + r.y1) / 2, r.x1, (r.y0 + r.y1) / 2, max(w, ch))
+            continue
+        if cw <= THIN_RECT and ch >= MIN_LEN:
+            add((r.x0 + r.x1) / 2, r.y0, (r.x0 + r.x1) / 2, r.y1, max(w, cw))
+            continue
+        stroked = d.get("type") in ("s", "fs")
+        if max(cw, ch) <= INK_LETTER_PT and (not stroked or any(it[0] == "c" for it in d["items"])):
+            continue
+        for it in d["items"]:
+            if it[0] == "l":
+                a, b = it[1] * rot, it[2] * rot
+                add(a.x, a.y, b.x, b.y, w)
+            elif it[0] == "re" and stroked:
+                q = it[1] * rot
+                add(q.x0, q.y0, q.x1, q.y0, w); add(q.x0, q.y1, q.x1, q.y1, w)
+                add(q.x0, q.y0, q.x0, q.y1, w); add(q.x1, q.y0, q.x1, q.y1, w)
+            elif it[0] == "qu" and stroked:
+                qd = it[1]
+                pts = [p * rot for p in (qd.ul, qd.ur, qd.lr, qd.ll)]
+                for a, b in zip(pts, pts[1:] + pts[:1]):
+                    add(a.x, a.y, b.x, b.y, w)
+    return segs
 
 
 def _schedule_shaped(faces: list) -> bool:

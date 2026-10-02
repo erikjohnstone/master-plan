@@ -51,7 +51,13 @@ import vectorgrid_rpc
 print(json.dumps(vectorgrid_rpc.extract_grid(sys.argv[2], 1)))
 `;
 
-function read(mode: string): Array<{ ocr?: boolean; cells: Array<{ text?: string }> }> {
+interface Reply { tables: Array<{ ocr?: boolean; cells: Array<{ text?: string }> }>; diagnostics: { ink_only_glance?: boolean } }
+
+function read(mode: string): Reply["tables"] {
+  return reply(mode).tables;
+}
+
+function reply(mode: string): Reply {
   const dir = mkdtempSync(join(tmpdir(), "ot-ink-"));
   try {
     const pdf = join(dir, "sheet.pdf");
@@ -62,7 +68,7 @@ function read(mode: string): Array<{ ocr?: boolean; cells: Array<{ text?: string
       env: { ...process.env, OPENTAKEOFF_PICTURE_CACHE: "0" },
     });
     assert.equal(r.status, 0, r.stderr);
-    return JSON.parse(r.stdout.trim().split("\n").pop()!).tables;
+    return JSON.parse(r.stdout.trim().split("\n").pop()!);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -85,5 +91,17 @@ describe("a drawn table lettered in ink is read from its pixels", { skip: ready 
   });
   it("does not read a small box lettered in ink: a keynote is no schedule", () => {
     assert.ok(read("box").every((t) => !t.ocr));
+  });
+  it("answers a page with no words and no schedule from a glance at its paths", () => {
+    // The keynote page has no word and no grid shaped like a schedule, so the
+    // full read (pdfplumber's parse of every stroke) is skipped: the reply is
+    // the full read's own, no tables, marked as the glance's.
+    const box = reply("box");
+    assert.deepEqual(box.tables, []);
+    assert.equal(box.diagnostics.ink_only_glance, true);
+    // A schedule lettered in ink still gets the full read, and a page with words
+    // never takes the glance.
+    assert.notEqual(reply("ink").diagnostics.ink_only_glance, true);
+    assert.notEqual(reply("text").diagnostics.ink_only_glance, true);
   });
 });

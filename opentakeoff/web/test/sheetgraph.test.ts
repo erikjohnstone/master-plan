@@ -1138,6 +1138,18 @@ test("the failure modes REFUSE with reasons — never silent omission", () => {
   const scanned = buildSheetGraph([{ key: "scan.pdf#1", spans: [] }]);
   assert.equal(scanned.available, false);
   assert.deepEqual(scanned.rooms, []);
+  // ...but a page lettered in ink in a set with text is still one of its
+  // sheets (056_NY's SCHEDULES sheets plot every letter as outlines): listed
+  // with the role its empty text gives it, so the vector pipeline can offer
+  // it to vectorgrid's ink reader; no text reader finds anything on it.
+  const inked = buildSheetGraph([planSheet, { key: "set.pdf#9", spans: [] }, schedSheet]);
+  assert.equal(inked.available, true);
+  assert.deepEqual(inked.sheets.map((s) => s.key), ["set.pdf#1", "set.pdf#9", "set.pdf#2"]);
+  const ink = inked.sheets.find((s) => s.key === "set.pdf#9")!;
+  assert.equal(ink.role, "unknown");
+  assert.deepEqual(ink.schedules, []);
+  assert.deepEqual(inked.tables.map((t) => t.sheet), g.tables.map((t) => t.sheet), "the text sheets read as before");
+  assert.ok(!(inked.tags ?? []).some((t) => t.sheet === "set.pdf#9"));
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
