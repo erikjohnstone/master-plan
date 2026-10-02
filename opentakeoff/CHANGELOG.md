@@ -1,5 +1,14 @@
 # Changelog
 
+- **A fan terminal unit schedule is a VAV schedule.** 020_MO's M-601 (lettered in ink, read by the picture reader
+  above) prints an FTU FAN TERMINAL UNIT- ELECTRIC HEATING SCHEDULE of 19 boxes (FTU-r102, FTU-x104, FTU-n110,
+  FTU-1201 ...): a fan terminal unit is a fan-powered box, but the VAV family's title rule read only FAN POWERED, and
+  its mark rule read SFTU/PFTU and no bare FTU, nor a status letter (x existing, r relocated, n new) before the
+  number. The VAV family now reads a title that begins with a fan terminal unit (after an optional FTU caption and
+  SERIES/PARALLEL/ELECTRIC/HOT WATER), never its controls, wiring, points, sequence or details, and under its own
+  title an FTU mark with or without a status letter. Census over the corpus text layer: no other table title says
+  FAN TERMINAL UNIT, and FTU marks appear only in 020_MO.
+
 - **Schedules lettered in ink are read.** A CAD export can keep only the title block and a few callouts as text
   and plot every other letter as strokes or filled outlines; such a sheet's schedules had nothing for any reader to
   see. 29_TX's M9.01 prints its WATER COOLED CHILLER SCHEDULE and COOLING COIL SCHEDULE that way and the takeoff read

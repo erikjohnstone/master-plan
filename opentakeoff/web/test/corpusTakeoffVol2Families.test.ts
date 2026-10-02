@@ -612,6 +612,22 @@ describe("AS-69 a fan-powered terminal unit schedule is a VAV schedule", () => {
     assert.deepEqual(compile([table("m.pdf#4", "", ["FPB-3-11", "VAV-1"])])("VAV"), ["VAV-1"]);
     assert.deepEqual(compile([table("m.pdf#2", "SHEET INDEX", ["FP101", "M101"], "reference")])("VAV"), []);
   });
+
+  it("reads a fan terminal unit schedule and its FTU marks, status letters included (020_MO, read from ink)", () => {
+    // 020_MO M-601 letters its schedules in ink; OCR splits a word of the title.
+    const tags = compile([
+      table("m.pdf#12", "FTU FAN TERMIN AL UNIT- ELECTRIC HEATING SCHEDULE", ["FTU-r102", "FTU-x104", "FTU-n110", "FTU-1201"]),
+      table("m.pdf#13", "SERIES FAN TERMINAL UNIT SCHEDULE", ["FTU-3"]),
+    ]);
+    assert.deepEqual(tags("VAV"), ["FTU-1201", "FTU-3", "FTU-n110", "FTU-r102", "FTU-x104"]);
+    // Not its controls, wiring or a detail callout, and not FTU marks untitled.
+    assert.deepEqual(compile([
+      table("m.pdf#20", "FAN TERMINAL UNIT CONTROL DIAGRAM", ["FTU-1"]),
+      table("m.pdf#21", "FAN TERMINAL UNIT WIRING DETAIL", ["FTU-2"]),
+      table("m.pdf#22", "UNDERFLOOR FAN TERMINAL UNIT WITH/WITHOUT HEATING COIL", ["FTU-4"]),
+      table("m.pdf#4", "", ["FTU-5"]),
+    ])("VAV"), []);
+  });
 });
 
 // AS-96: a terminal air box schedule is a VAV schedule (040_IL's TERMINAL AIR
