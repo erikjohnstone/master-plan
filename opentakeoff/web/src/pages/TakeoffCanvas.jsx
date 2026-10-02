@@ -40,6 +40,7 @@ import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
 import { sanitizeAssembliesState } from "../lib/assemblies/projectState";
+import { sanitizeLineReviews } from "../lib/lineReview.js";
 import { loadStarterLibrary } from "../lib/assemblies/starterLibrary";
 import { takeoffNavigationBadge } from "../lib/completeBasPresentation.js";
 import { renderPdfCitationPreview } from "../lib/citationComparison.js";
@@ -457,6 +458,9 @@ export default function TakeoffCanvas() {
   // /__ot/assemblies-project and never saved. The partner's library is the
   // profile's (store), beside the read-only starter.
   const [assembliesState, setAssembliesState] = useState(null);
+  // Estimator line review (lineReview.js): confirm/flag decisions on finished
+  // takeoff lines, saved with the project like the assemblies state.
+  const [lineReviews, setLineReviews] = useState(null);
   const [assembliesProject, setAssembliesProject] = useState(null);
   // The drawing set the project was read from (files, revisions, epoch): the
   // panel names what changed since (AS-58).
@@ -2027,6 +2031,9 @@ export default function TakeoffCanvas() {
     // gate drops is named, never lost silently.
     const loadedAssemblies = sanitizeAssembliesState(a.assemblies);
     setAssembliesState(loadedAssemblies.state);
+    // additive `line_reviews` — sanitize-gated; else-clear.
+    const loadedReviews = sanitizeLineReviews(a.line_reviews);
+    setLineReviews(Object.keys(loadedReviews.records).length ? loadedReviews : null);
     setAssembliesProject(null);
     setAssembliesSource(null);
     setAssembliesStatus({});
@@ -2882,7 +2889,7 @@ export default function TakeoffCanvas() {
     // units is additive and diff-only (the sheet_levels convention): imperial —
     // the default — omits the key, so an old imperial project's payload is
     // byte-identical on round-trip; only a metric project carries the field.
-    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(assembliesState ? { assemblies: assembliesState } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(linearSettings).length ? { linear_settings: linearSettings } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
+    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(assembliesState ? { assemblies: assembliesState } : {}), ...(lineReviews && Object.keys(lineReviews.records || {}).length ? { line_reviews: lineReviews } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(linearSettings).length ? { linear_settings: linearSettings } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
   };
   // Runtime restore of a saved payload — the Revisions panel's Restore lands
   // here. A runtime load (unlike mount) can interrupt work in
@@ -3125,7 +3132,7 @@ export default function TakeoffCanvas() {
     // state it serializes, so listing buildPayload (a new identity each render)
     // would fire a save on every render instead of only on a real change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, linearSettings, layerOverrides, lastGroup, openTabs, stitches, assembliesState, projectName, clientInfo, units, basWorkflow]);
+  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, linearSettings, layerOverrides, lastGroup, openTabs, stitches, assembliesState, lineReviews, projectName, clientInfo, units, basWorkflow]);
   useEffect(() => { saveStateRef.current = saveState; }, [saveState]);
 
   // Flush a pending debounced save on navigate-away (unmount), and warn before a
@@ -14326,6 +14333,19 @@ export default function TakeoffCanvas() {
             state: assembliesState, onStateChange: setAssembliesState,
           }}
           rows={agentTakeoffRows}
+          lineReviews={lineReviews}
+          onLineReviewsChange={setLineReviews}
+          onRenderReviewPreview={async (citation, kind) => {
+            const source = parseSheetKey(citation.sheet_id);
+            const doc = await docFor(source.file);
+            if (!doc || source.page < 1 || source.page > doc.numPages) return { error: `${citation.sheet_id} is not loaded` };
+            const pdfPage = await doc.getPage(source.page);
+            return renderPdfCitationPreview(pdfPage, citation.bbox_px, {
+              renderScale: RENDER_SCALE, color: kind === 'schedule' ? '#c47a10' : '#1f3fc7',
+              kind: kind === 'schedule' ? 'schedule' : 'thumb',
+              maxSize: { width: 640, height: 360 },
+            });
+          }}
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}
           canExportToHit={!!lastControlValveTakeoff}
@@ -14477,12 +14497,19 @@ export default function TakeoffCanvas() {
             };
             try {
               const drawingKind = plan.evidence_kind || 'plan';
-              const planOverlays = drawingKind === 'plan' ? [
-                { role: 'symbol', label: 'Physical symbol', color: '#1f3fc7', bbox: plan.bbox_px, citation: plan },
-                ...(planTag?.sheet_id === plan.sheet_id && planTag?.bbox_px
-                  ? [{ role: 'tag', label: 'Printed plan tag', color: '#c47a10', bbox: planTag.bbox_px, citation: planTag }]
-                  : []),
-              ] : [];
+              // A tag-grounded line cites the printed tag itself; drawing a
+              // second "Physical symbol" box there would claim an outline the
+              // engine never verified (planLocation.mjs).
+              const tagIsPlan = planTag?.sheet_id === plan.sheet_id && planTag?.bbox_px
+                && JSON.stringify(planTag.bbox_px) === JSON.stringify(plan.bbox_px);
+              const planOverlays = drawingKind === 'plan' ? (tagIsPlan
+                ? [{ role: 'tag', label: 'Printed plan tag', color: '#c47a10', bbox: planTag.bbox_px, citation: planTag }]
+                : [
+                  { role: 'symbol', label: 'Physical symbol', color: '#1f3fc7', bbox: plan.bbox_px, citation: plan },
+                  ...(planTag?.sheet_id === plan.sheet_id && planTag?.bbox_px
+                    ? [{ role: 'tag', label: 'Printed plan tag', color: '#c47a10', bbox: planTag.bbox_px, citation: planTag }]
+                    : []),
+                ]) : [];
               const [planPreview, schedulePreview] = await Promise.all([
                 preview(plan, drawingKind, planOverlays),
                 preview(schedule, 'schedule', [

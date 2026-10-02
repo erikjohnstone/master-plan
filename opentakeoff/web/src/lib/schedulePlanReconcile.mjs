@@ -5,6 +5,7 @@
  *
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
+import { planLocationFromMatch, scheduleRowLocation } from "./planLocation.mjs";
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark, expandEquipMarkRange, expandMarkList, expandEquipMarks, markLetters,
   familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, setDrawnMarks, tableRangeEvidence, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey,
@@ -1170,6 +1171,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = [], { sheetTitle
             title: item.schedule.title,
             kind: item.schedule.kind,
             ...(item.schedule.drawing_group ? { drawing_group: item.schedule.drawing_group } : {}),
+            ...(item.schedule.row_bbox ? { row_sheet: item.schedule.row_sheet || item.schedule.sheet, row_bbox: item.schedule.row_bbox } : {}),
           }
         : null,
       plan_cites: (hasGeometryEvidence ? (item.drawing_locations || []) : []).map((loc) => ({
@@ -1177,6 +1179,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = [], { sheetTitle
         at: loc.at,
         ...(loc.bbox ? { bbox: loc.bbox } : {}),
         ...(loc.tag_bbox ? { tag_bbox: loc.tag_bbox } : {}),
+        ...(loc.attached_geometry_bbox ? { attached_geometry_bbox: loc.attached_geometry_bbox } : {}),
         ...(Number.isFinite(loc.score) ? { score: loc.score } : {}),
         ...(loc.attachment_via ? { attachment_via: loc.attachment_via } : {}),
         ...(Number.isFinite(loc.attachment_distance_px) ? { attachment_distance_px: loc.attachment_distance_px } : {}),
@@ -1515,6 +1518,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
             title: table.title?.text || null,
             kind: table.kind,
             ...(table.drawing_group ? { drawing_group: table.drawing_group } : {}),
+            ...scheduleRowLocation(row, table.sheet),
           },
           plan_cites: sweep.planCites || [],
           plan_tag_cites: sweep.planTagCites || [],
@@ -1766,16 +1770,8 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
       }
       const installedQtyBasis = r.anchor?.grounding_basis || "symbol_fingerprint";
       const matchedCites = (r.sheets || []).flatMap((ps) =>
-        (ps.matches || []).flatMap((m) => Array.from({ length: m.multiplier ?? 1 }, () => ({
-          sheet: ps.sheet,
-          at: m.at,
-          ...(m.geometry_bbox || m.tag_at ? { bbox: m.geometry_bbox || m.tag_at } : {}),
-          ...(m.tag_at ? { tag_bbox: m.tag_at } : {}),
-          ...(Number.isFinite(m.score) ? { score: m.score } : {}),
-          ...(m.attachment_via ? { attachment_via: m.attachment_via } : {}),
-          ...(Number.isFinite(m.attachment_distance_px) ? { attachment_distance_px: m.attachment_distance_px } : {}),
-          ...(m.counted_from === "explicit_label" ? { counted_from: "explicit_label" } : {}),
-        }))),
+        (ps.matches || []).flatMap((m) => Array.from({ length: m.multiplier ?? 1 }, () =>
+          planLocationFromMatch(ps.sheet, m, installedQtyBasis))),
       );
       const planTagCites = matchedCites.filter((cite) =>
         installedQtyBasis === "exact_plan_tag" || cite.counted_from === "explicit_label");

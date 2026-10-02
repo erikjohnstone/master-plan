@@ -44,6 +44,15 @@ export function citationPreviewRegion(bbox, width, height, { kind = 'plan' } = {
     const [ry0, ry1] = centeredSpan((y0 + y1) / 2, cropHeight, height);
     return { x0: rx0, y0: ry0, x1: rx0 + cropWidth, y1: ry1 };
   }
+  if (kind === 'thumb') {
+    // A review tile: close enough to read the tag and the unit beside it
+    // (leaders run a few tag-widths), at the tile's 16:9.
+    const cropWidth = Math.min(width, Math.max(300, boxWidth * 6, boxHeight * 16));
+    const cropHeight = Math.min(height, cropWidth * 9 / 16);
+    const [rx0, rx1] = centeredSpan((x0 + x1) / 2, cropWidth, width);
+    const [ry0, ry1] = centeredSpan((y0 + y1) / 2, cropHeight, height);
+    return { x0: rx0, y0: ry0, x1: rx1, y1: ry1 };
+  }
   // Tiny plan tags need nearby duct/equipment context; long schedule rows need
   // their headers and neighboring rows. Bounded multipliers preserve both.
   const cropWidth = Math.min(width, Math.max(520, boxWidth * 4, boxHeight * 5));
@@ -53,13 +62,13 @@ export function citationPreviewRegion(bbox, width, height, { kind = 'plan' } = {
   return { x0: rx0, y0: ry0, x1: rx1, y1: ry1 };
 }
 
-export async function renderPdfCitationPreview(page, bbox, { renderScale, color, kind = 'plan', overlays = [] }) {
+export async function renderPdfCitationPreview(page, bbox, { renderScale, color, kind = 'plan', overlays = [], maxSize = { width: 1600, height: 900 } }) {
   const original = page.getViewport({ scale: renderScale });
   const drawnOverlays = overlays.length ? overlays : [{ bbox, color }];
   const focus = citationFocusBox(drawnOverlays.map((overlay) => overlay.bbox));
   const region = citationPreviewRegion(focus, original.width, original.height, { kind });
   const regionWidth = region.x1 - region.x0, regionHeight = region.y1 - region.y0;
-  const previewScale = Math.min(2, 1600 / regionWidth, 900 / regionHeight);
+  const previewScale = Math.min(2, maxSize.width / regionWidth, maxSize.height / regionHeight);
   const canvas = document.createElement('canvas');
   canvas.width = Math.max(1, Math.round(regionWidth * previewScale));
   canvas.height = Math.max(1, Math.round(regionHeight * previewScale));

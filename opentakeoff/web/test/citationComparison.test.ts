@@ -25,3 +25,12 @@ test('comparison focus includes both the physical symbol and its printed plan ta
     [2566.8, 2019.7, 2703.3, 2044.8],
   ]), [2566.8, 1922.4, 2752.6, 2044.8]);
 });
+
+test("a review thumbnail crops close to a small tag at 16:9", async () => {
+  const { citationPreviewRegion } = await import("../src/lib/citationComparison.js");
+  const r = citationPreviewRegion([1000, 1000, 1045, 1019], 5000, 4000, { kind: "thumb" });
+  const w = r.x1 - r.x0, h = r.y1 - r.y0;
+  assert.equal(w, 304);
+  assert.ok(Math.abs(w / h - 16 / 9) < 0.01);
+  assert.ok(r.x0 <= 1000 && r.x1 >= 1045 && r.y0 <= 1000 && r.y1 >= 1019);
+});

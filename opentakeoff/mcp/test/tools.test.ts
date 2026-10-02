@@ -3352,14 +3352,18 @@ test("the reconcile's reasons count a unit's own tags, never a bare prefix anoth
     { tag: "CP-1", status: "MATCH", installed_qty: 1 },
   ]);
   assert.match(pumps.data.rows[1].reason, /cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
-  assert.deepEqual(pumps.data.rows[2].plan_cites.map((c: any) => c.bbox), [{ x0: 600, y0: 584, x1: 648, y1: 624 }]);
+  // The body it was verified against rides as attached_geometry_bbox; the
+  // cite itself is the printed tag (planLocation.mjs).
+  assert.deepEqual(pumps.data.rows[2].plan_cites.map((c: any) => c.attached_geometry_bbox), [{ x0: 600, y0: 584, x1: 648, y1: 624 }]);
+  assert.ok(pumps.data.rows[2].plan_cites.every((c: any) => JSON.stringify(c.bbox) === JSON.stringify(c.tag_bbox)));
 
   // B-1's stacked "B" over "1" alone, verified against the boiler over it:
   // the bare "B" callouts are no B-1
   const boilers = await call(client, "reconcile_schedule_plan", { family: "BOILER" });
   assert.equal(boilers.isError, false);
   assert.deepEqual(boilers.data.rows.map(row), [{ tag: "B-1", status: "MATCH", installed_qty: 1 }]);
-  assert.deepEqual(boilers.data.rows[0].plan_cites.map((c: any) => c.bbox), [{ x0: 240, y0: 376, x1: 288, y1: 424 }]);
+  assert.deepEqual(boilers.data.rows[0].plan_cites.map((c: any) => c.attached_geometry_bbox), [{ x0: 240, y0: 376, x1: 288, y1: 424 }]);
+  assert.ok(boilers.data.rows[0].plan_cites.every((c: any) => JSON.stringify(c.bbox) === JSON.stringify(c.tag_bbox)));
 
   // the air device type S keeps its own two tags, never SP-1's; a type
   // mark's tags stay tag text: cited and counted as observed, installed

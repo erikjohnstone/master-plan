@@ -569,6 +569,40 @@ condition properties still closes them. Drawing shortcuts and actions are unchan
 Takeoff retains its existing exports. The separate legacy per-condition report is
 available from **⋯ → Measurement report**, not a primary navigation tab.
 
+### Reviewing the takeoff (Takeoff → Review)
+
+Every finished takeoff line cites its own evidence. **Schedule row** opens the
+row on its schedule sheet. **Plan tag** opens the printed tag on the plan that
+the unit is counted from. A tag-grounded line counts the tag; the unit drawn
+beside it is located by its leader or by adjacency, and its outline is not
+verified, so the cite opens the tag rather than a guessed device box. A line
+matched by a repeated symbol keeps separate **Symbol** and **Tag** cites.
+**Compare** puts the schedule row and the plan evidence side by side.
+
+To check a whole schedule at once, choose **Review** beside its title. Each
+line appears as a tile with its plan tag (or, without one, its schedule row) on
+the drawing. Confirm the lines that are right and flag the ones that are not:
+
+- **C** confirms the focused tile and moves on; **F** flags it with an optional
+  note; **E** corrects its count; **U** clears the decision; **Enter** opens the
+  evidence on the drawing; the arrow keys move between tiles.
+- **Correct…** records your own count for a line with a required reason (for
+  example, a second box drawn without its tag). The read count stays beside it;
+  the Takeoff header adds an **EA with your corrections** total, and exports
+  carry both counts.
+- **Confirm N shown** confirms every shown line that is not already confirmed,
+  flagged or corrected.
+- The filters show **Not reviewed**, **Flagged**, **Changed** or **Confirmed**
+  lines.
+
+A decision records the evidence it was made on. If a later run produces a
+different quantity, status or cited box for the line, it reads **Changed since
+review** until you look again; a correction made on the old evidence stops
+counting until then. Confirmations and flags never change a quantity. Decisions
+are saved with the project, show as counts in the Takeoff header, and export as
+**Review**, **Estimator qty**, **Review note** and **Reviewed at** columns in
+CSV and Excel (and **Review** and **Estimator qty** in PDF).
+
 ### Controls assemblies (Takeoff → Assemblies)
 
 **Takeoff → Assemblies** turns the set's scheduled HVAC equipment into a controls

@@ -1,5 +1,27 @@
 # Changelog
 
+- **Review the takeoff on one screen, and keep the record.**
+  - A schedule's **Review** shows every line as a tile with its own drawing evidence. Confirm, or flag with a note,
+    from the keyboard (C, F, U, arrows, Enter) or for every shown line at once. Each decision is bound to the
+    evidence it was made on: a later run that changes the line's quantity, status or cited box marks it "Changed since
+    review". Decisions are saved with the project, counted in the Takeoff header and exported as Review columns.
+    Confirmations and flags never change a quantity.
+  - **Correct…** (or E) records the estimator's own count for a line with a required reason. The read count stays
+    beside it; the header adds an "EA with your corrections" total and exports carry both as Qty and Estimator qty.
+    A correction made on evidence that later changes stops counting until reviewed again.
+    (`web/src/lib/lineReview.js`, `web/src/components/LineReviewGrid.jsx`.)
+  - A reconcile line now cites its schedule row (`schedule_cite.row_bbox`, the union of the row's cells, on the sheet
+    that carries it), so **Schedule row** and **Compare** work on it. Before, a reconcile line named only the
+    schedule sheet.
+- **A tag-grounded unit cites its printed tag, not a guessed device box.** The vector body attached beside a plan tag
+  was presented as the unit's "Symbol". Against hand-drawn keys it was off the drawn unit on 72 of 102 federal-mech
+  tags and fit it on 2; on itd-d1-lab and 011_IL it was a leader's arrowhead, the tag's own hexagon or diamond, or a
+  door swing. The count was right because the tag was: on 538 reconcile rows the installed count equals the tag count.
+  Now the plan cite of a `tag_attached_vector` line is the tag, the panel shows one **Plan tag** button, Compare draws
+  the tag, and the attached body stays in the data as `attached_geometry_bbox`, labeled unverified. A line matched by
+  a repeated symbol template keeps its matched box. No count changes: federal-mech's 58 VAV boxes reconcile 58 MATCH
+  before and after. One helper builds the location for the takeoff and the reconcile
+  (`web/src/lib/planLocation.mjs`).
 - **A row naming two units as "X N-M" counts both when the set draws them so.** 043_FL schedules its pumps as "HWP 1-2"
   and "CWP 9-10"; the takeoff counted two units, HWP1-2 and CWP9-10. Where the set's own drawings tag every one of X-N
   to X-M and never X-N-M, and no two of the table's ranges overlap, the row names each: HWP-1, HWP-2, CWP-9, CWP-10.

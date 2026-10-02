@@ -1,6 +1,8 @@
 // Takeoff UI — industry-standard finished takeoff + workflow audit.
 // Takeoff tab = compiled quantity schedule (contractor document).
 // Workflow data = raw EAV evidence trail. Chat stays conversational.
+import LineReviewGrid from "./LineReviewGrid.jsx";
+import { summarizeLineReviews, lineReviewState, withReviewColumns, effectiveLineQty } from "../lib/lineReview.js";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import {
@@ -91,6 +93,14 @@ function familyLabel(family) {
   return String(family);
 }
 
+function sameCiteBox(a, b) {
+  if (a?.sheet_id !== b?.sheet_id) return false;
+  const p = a?.bbox_px, q = b?.bbox_px;
+  if (!p || !q) return false;
+  const keys = Array.isArray(p) ? [0, 1, 2, 3] : ["x0", "y0", "x1", "y1"];
+  return keys.every((k) => Math.abs(Number(p[k]) - Number(q[k])) < 0.5);
+}
+
 function shortSheet(sheet) {
   const s = String(sheet || "");
   if (!s) return "—";
@@ -103,6 +113,10 @@ function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, com
   const schedule = lineScheduleCite(line);
   const plan = linePlanCite(line);
   const planTag = linePlanTagCite(line);
+  // A tag-grounded line cites the printed tag itself (planLocation.mjs): its
+  // plan cite and tag cite are one box, shown as one "Plan tag" button. A line
+  // matched by a repeated template keeps its separate Symbol and Tag cites.
+  const planIsTag = Boolean(plan && planTag && sameCiteBox(plan, planTag));
   const diagram = lineDiagramCite(line);
   const drawing = plan || diagram;
   const hasPair = Boolean(schedule && drawing);
@@ -136,9 +150,12 @@ function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, com
       type="button"
       onClick={() => onOpenCitation?.(plan)}
       style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0, color: "var(--cobalt)", borderColor: "var(--cobalt)" }}
-      title={`Open the grounded plan match on ${line.plan_sheet_id}`}
+      title={planIsTag
+        ? `Open the printed plan tag on ${line.plan_sheet_id}. It is counted; the unit's outline beside it is not verified.`
+        : `Open the grounded plan match on ${line.plan_sheet_id}`}
+      data-plan-cite={planIsTag ? "tag" : "symbol"}
     >
-      Symbol · {shortSheet(line.plan_sheet_id)}
+      {planIsTag ? 'Plan tag' : 'Symbol'} · {shortSheet(line.plan_sheet_id)}
     </button> : planTag ? <button
       type="button"
       onClick={() => onOpenCitation?.(planTag)}
@@ -148,7 +165,7 @@ function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, com
     >
       Tag only · {shortSheet(planTag.sheet_id)}
     </button> : line.status && <span data-no-plan-match style={{ color: "var(--ink-muted)" }}>No verified plan symbol</span>}
-    {plan && planTag && <button
+    {plan && planTag && !planIsTag && <button
       type="button"
       onClick={() => onOpenCitation?.(planTag)}
       data-plan-tag-evidence
@@ -206,6 +223,11 @@ export default function TakeoffDataPanel({
   onClose,
   onOpenCitation: onCanvasCitation,
   onCompareCitations,
+  // Estimator line review (lineReview.js): the decisions, their setter, and a
+  // renderer for one cite's drawing preview (the review grid's thumbnails).
+  lineReviews = null,
+  onLineReviewsChange,
+  onRenderReviewPreview,
 }) {
   const [sourceView, setSourceView] = useState(null);
   const [sourceComparison, setSourceComparison] = useState(null);
@@ -351,6 +373,11 @@ export default function TakeoffDataPanel({
   };
 
   const lines = useMemo(() => compileAgentTakeoff(rows), [rows]);
+  const [reviewFamily, setReviewFamily] = useState(null);
+  const canReview = typeof onLineReviewsChange === "function";
+  const reviewSummary = useMemo(() => summarizeLineReviews(lines, lineReviews), [lines, lineReviews]);
+  const reviewGroups = useMemo(() => groupTakeoffByFamily(lines, { uiSpecMax: UI_SPEC_MAX }), [lines]);
+  const reviewLines = reviewFamily ? (reviewGroups.find((g) => familyLabel(g.family) === reviewFamily)?.lines || []) : [];
 
   const visibleLines = useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -401,6 +428,17 @@ export default function TakeoffDataPanel({
     return any ? n : null;
   }, [visibleLines]);
 
+  // The same total with the estimator's corrected counts standing in.
+  const correctedTotal = useMemo(() => {
+    if (!reviewSummary.corrected) return null;
+    let n = 0, any = false;
+    for (const line of visibleLines) {
+      const q = effectiveLineQty(line, lineReviews);
+      if (typeof q === "number" && (line.unit || "EA") === "EA") { n += q; any = true; }
+    }
+    return any ? n : null;
+  }, [visibleLines, lineReviews, reviewSummary.corrected]);
+
   const lockedTotal = corpusMeta?.totals?.items
     ?? corpusMeta?.totals?.rows
     ?? null;
@@ -418,7 +456,8 @@ export default function TakeoffDataPanel({
     setErr("");
     setBusy(kind);
     const mode = tab === "workflow" ? "workflow" : "compiled";
-    const payload = mode === "workflow" ? visibleRows : visibleLines;
+    const reviewed = mode !== "workflow" && Object.keys(lineReviews?.records || {}).length > 0;
+    const payload = mode === "workflow" ? visibleRows : reviewed ? withReviewColumns(visibleLines, lineReviews) : visibleLines;
     try {
       if (kind === "csv") downloadTakeoffCsv(payload, undefined, { mode });
       else if (kind === "xlsx") await downloadTakeoffXlsx(payload, undefined, { mode });
@@ -475,7 +514,11 @@ export default function TakeoffDataPanel({
       >
         {readingSource && <BasSourceReader workflow={basWorkflow} request={sourceView.request} adapter={adapter} onBack={closeSource} />}
         {sourceComparison && <BasSourceComparison comparison={sourceComparison} onBack={closeSourceComparison} onOpenCitation={onOpenCitation} />}
-        <div hidden={readingSource || !!sourceComparison} style={{ display: readingSource || sourceComparison ? 'none' : 'contents' }}>
+        {reviewFamily && !readingSource && !sourceComparison && <LineReviewGrid
+          title={reviewFamily} lines={reviewLines} reviews={lineReviews}
+          onReviewsChange={onLineReviewsChange} renderPreview={onRenderReviewPreview}
+          onOpenCitation={onOpenCitation} onBack={() => setReviewFamily(null)} />}
+        <div hidden={readingSource || !!sourceComparison || !!reviewFamily} style={{ display: readingSource || sourceComparison || reviewFamily ? 'none' : 'contents' }}>
         <header style={{
           display: "flex", alignItems: "flex-start", gap: 12,
           padding: "16px 20px 0", borderBottom: "1px solid var(--ink-faint)",
@@ -540,6 +583,12 @@ export default function TakeoffDataPanel({
                 {qtyTotal != null && (
                   <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
                 )}
+                {correctedTotal != null && correctedTotal !== qtyTotal && (
+                  <span data-takeoff-ea-corrected={correctedTotal} title="EA total with your corrected counts in place of the read ones"
+                    style={{ color: "var(--cobalt)" }}>
+                    <strong style={{ fontWeight: 650 }}>{correctedTotal}</strong> EA with your corrections
+                  </span>
+                )}
               </>}
               {lockedTotal != null && !corpusMeta?.bas_math && (
                 <span style={{ color: compiledOk ? "var(--ink)" : "var(--c-danger)" }}>
@@ -547,6 +596,16 @@ export default function TakeoffDataPanel({
                 </span>
               )}
               <span>{rows.length} cited source fields</span>
+              {canReview && lines.length > 0 && (
+                <span data-takeoff-review data-confirmed={reviewSummary.confirmed} data-flagged={reviewSummary.flagged} data-corrected={reviewSummary.corrected}
+                  data-stale={reviewSummary.stale} data-total={reviewSummary.total}
+                  style={{ color: reviewSummary.confirmed === reviewSummary.total ? "var(--c-positive, #1f6b4a)" : undefined }}>
+                  <strong style={{ color: "var(--ink)", fontWeight: 650 }}>{reviewSummary.confirmed}/{reviewSummary.total}</strong> lines confirmed
+                  {reviewSummary.flagged ? ` · ${reviewSummary.flagged} flagged` : ""}
+                  {reviewSummary.corrected ? ` · ${reviewSummary.corrected} corrected` : ""}
+                  {reviewSummary.stale ? ` · ${reviewSummary.stale} changed since review` : ""}
+                </span>
+              )}
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
               {tab === "assemblies" ? "Each scheduled unit's controls typical and hook-up, from your assembly library. Exceptions come first: an unresolved unit names what it waits for. Every line cites its schedule row and its rule. A printed points list that names a unit stands instead of its typical's point lines."
@@ -751,6 +810,15 @@ export default function TakeoffDataPanel({
                           ? ` · ${specs.length}${group.specTotal > specs.length ? `/${group.specTotal}` : ""} fields`
                           : ""}
                       </span>
+                      {canReview && (() => {
+                        const fam = summarizeLineReviews(reviewGroups.find((g) => familyLabel(g.family) === name)?.lines || group.lines, lineReviews);
+                        return <button type="button" data-family-review={name} onClick={() => setReviewFamily(name)}
+                          title="Check every line of this schedule against its own drawing evidence, on one screen"
+                          style={{ ...btnStyle, padding: "3px 9px", fontSize: "var(--fs-xs)", textTransform: "none", letterSpacing: 0,
+                            color: fam.confirmed === fam.total ? "var(--c-positive, #1f6b4a)" : "var(--cobalt)", borderColor: "currentColor" }}>
+                          Review · {fam.confirmed}/{fam.total} confirmed{fam.flagged ? ` · ${fam.flagged} flagged` : ""}{fam.corrected ? ` · ${fam.corrected} corrected` : ""}
+                        </button>;
+                      })()}
                     </h3>
                     <div style={{
                       overflowX: "auto",
@@ -816,7 +884,16 @@ export default function TakeoffDataPanel({
                                 );
                               })}
                               <td style={{ ...td, fontSize: "var(--fs-xs)", color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
-                                <SourceComparisonActions line={line} onOpenCitation={onOpenCitation} onCompareCitations={openSourceComparison} comparisonBusy={comparisonBusy} />
+                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                  {canReview && (() => {
+                                    const { state, record } = lineReviewState(line, lineReviews);
+                                    if (state === "unreviewed") return null;
+                                    const look = { confirmed: ["✓ Confirmed", "var(--c-positive, #1f6b4a)"], flagged: ["⚑ Flagged", "var(--c-danger, #b03a26)"],
+                                      corrected: [`✎ Your count ${record?.qty}`, "var(--cobalt)"], stale: ["Changed since review", "var(--warning, #9a5a00)"] }[state];
+                                    return <span data-line-review={state} title={record?.note || look[0]} style={{ color: look[1], fontWeight: 650 }}>{look[0]}</span>;
+                                  })()}
+                                  <SourceComparisonActions line={line} onOpenCitation={onOpenCitation} onCompareCitations={openSourceComparison} comparisonBusy={comparisonBusy} />
+                                </div>
                               </td>
                               {specs.map((c) => {
                                 const v = lineSpecValue(line, c);

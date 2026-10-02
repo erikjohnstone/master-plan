@@ -40,6 +40,7 @@ import {
   isUnitFamilyTable,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
+import { planLocationFromMatch, scheduleRowLocation } from "../../web/src/lib/planLocation.mjs";
 import { HVAC_FAMILY_SPECS, isBasPointsListTable, scheduleTableView, takeoffUnitsByRow } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
@@ -83,7 +84,7 @@ export interface TakeoffItem {
   tag: string;
   equipment_type: string | null;       // matched hvacTaxonomy component name, or null if unclassified
   category: string | null;             // HvacCategory, or null
-  schedule: { sheet: string; kind: string; title: string | null; drawing_group?: string } | null;
+  schedule: { sheet: string; kind: string; title: string | null; drawing_group?: string; row_sheet?: string; row_bbox?: { x0: number; y0: number; x1: number; y1: number } } | null;
   schedule_row: Record<string, string> | null;
   quantity: number;
   /** Number of distinct grounded plan callouts before authored `(N)`/TYP
@@ -499,6 +500,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       schedule: {
         sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null,
         ...(tb.drawing_group ? { drawing_group: tb.drawing_group } : {}),
+        ...scheduleRowLocation(row, tb.sheet),
       },
       schedule_row: cellsRaw,
       ...(rowMarks > 1 ? { row_marks: rowMarks } : {}),
@@ -575,16 +577,8 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       }
       const quantityBasis = r.anchor?.grounding_basis ?? "symbol_fingerprint";
       const matchedLocations = (r.sheets || []).flatMap((ps: any) =>
-        (ps.matches || []).flatMap((m: any) => Array.from({ length: m.multiplier ?? 1 }, () => ({
-          sheet: ps.sheet,
-          at: m.at as [number, number],
-          ...(m.geometry_bbox || m.tag_at ? { bbox: m.geometry_bbox || m.tag_at } : {}),
-          ...(m.tag_at ? { tag_bbox: m.tag_at } : {}),
-          ...(Number.isFinite(m.score) ? { score: m.score } : {}),
-          ...(m.attachment_via ? { attachment_via: m.attachment_via as "adjacent" | "leader" } : {}),
-          ...(Number.isFinite(m.attachment_distance_px) ? { attachment_distance_px: m.attachment_distance_px } : {}),
-          ...(m.counted_from === "explicit_label" ? { counted_from: "explicit_label" as const } : {}),
-        }))));
+        (ps.matches || []).flatMap((m: any) => Array.from({ length: m.multiplier ?? 1 }, () =>
+          planLocationFromMatch(ps.sheet, m, quantityBasis))));
       const planTagLocations = matchedLocations.filter((loc: any) =>
         quantityBasis === "exact_plan_tag" || loc.counted_from === "explicit_label");
       const geometryLocations = matchedLocations.filter((loc: any) =>

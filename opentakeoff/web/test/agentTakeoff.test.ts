@@ -100,7 +100,7 @@ test("rowsFromToolResult: sweep_schedule_row quarantines tag-only qty + preserve
   assert.ok(!rows.some((r) => r.field === "MARK"));
 });
 
-test("rowsFromToolResult: tag-attached vector sweep exposes separate symbol and tag citations", () => {
+test("rowsFromToolResult: tag-attached vector sweep cites the printed tag, not the attached body", () => {
   const rows = rowsFromToolResult("sweep_schedule_row", { tag: "VAV-1" }, {
     tag: "VAV-1",
     found: 1,
@@ -123,8 +123,12 @@ test("rowsFromToolResult: tag-attached vector sweep exposes separate symbol and 
   const installed = rows.find((row) => row.field === "installed_quantity");
   const tag = rows.find((row) => row.field === "plan_tag_observation");
   assert.equal(installed?.quantity_basis, "tag_attached_vector");
-  assert.deepEqual(installed?.bbox_px, [40, 50, 60, 70]);
+  // The attached body (geometry_bbox) is a position hint: hand keys put it off
+  // the drawn unit on 72 of 102 federal-mech tags (planLocation.mjs). The
+  // count-bearing cite is the exact printed tag.
+  assert.deepEqual(installed?.bbox_px, [10, 20, 30, 40]);
   assert.deepEqual(tag?.bbox_px, [10, 20, 30, 40]);
+  assert.match(tag?.note || "", /outline is not verified/);
   assert.equal(tag?.evidence_binding_status, "geometry_verified");
 });
 
@@ -1474,4 +1478,24 @@ test("control_valves: a plan_paint hint row must not hand the Schedule row cite 
   // still be the quantity row's own sheet, never the hint's
   const stale = rows.map((r) => r.field === "plan_paint_prefer_schedule_title" ? { ...r, sheet_id: spooled } : r);
   assert.equal(lineScheduleCite(compileAgentTakeoff(stale).find((l) => l.tag === "CV-AHU-A1-CHW"))?.sheet_id, "atc-tower.pdf#47");
+});
+
+test("reconcile line cites its schedule row and its printed plan tag", () => {
+  const rows = rowsFromToolResult("reconcile_schedule_plan", {}, {
+    rows: [{
+      tag: "VAV-7", status: "MATCH", scheduled_qty: 1, scheduled_qty_basis: "one_per_unique_schedule_row",
+      installed_qty: 1, installed_qty_basis: "tag_attached_vector",
+      schedule_cite: { sheet: "m.pdf#14", title: "VAV SCHEDULE", kind: "equipment", row_sheet: "m.pdf#14", row_bbox: { x0: 100, y0: 500, x1: 2200, y1: 520 } },
+      plan_cites: [{ sheet: "m.pdf#4", at: [900, 300], bbox: { x0: 850, y0: 280, x1: 890, y1: 294 }, tag_bbox: { x0: 850, y0: 280, x1: 890, y1: 294 },
+        attached_geometry_bbox: { x0: 870, y0: 320, x1: 910, y1: 360 }, attachment_via: "leader" }],
+    }],
+  }, { workflow: "reconcile" });
+  const [line] = compileAgentTakeoff(rows).filter((l) => l.tag === "VAV-7");
+  const schedule = lineScheduleCite(line);
+  assert.equal(schedule?.sheet_id, "m.pdf#14");
+  assert.deepEqual(schedule?.bbox_px, [100, 500, 2200, 520]);
+  const plan = linePlanCite(line);
+  const planTag = linePlanTagCite(line);
+  assert.deepEqual(plan?.bbox_px, [850, 280, 890, 294]);
+  assert.deepEqual(planTag?.bbox_px, plan?.bbox_px);
 });

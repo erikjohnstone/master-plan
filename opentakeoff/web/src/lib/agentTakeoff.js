@@ -2,6 +2,7 @@
 // Structured quantities/schedule fields from any agent workflow land here so
 // the chat stays conversational while the Takeoff UI aggregates exportable rows.
 
+import { planLocationFromMatch } from "./planLocation.mjs";
 import { csvEsc as esc } from "./csv.js";
 import { downloadText } from "./totals.js";
 import { buildXlsx } from "./xlsx.js";
@@ -226,7 +227,8 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
         table_title: data.row?.table || null,
         bbox_px: tagOnly
           ? data.tag_citations?.[0]?.bbox || null
-          : firstMatch?.match?.geometry_bbox || data.tag_citations?.[0]?.bbox || null,
+          : (firstMatch ? planLocationFromMatch(firstMatch.sheet, firstMatch.match, quantityBasis).bbox : null)
+            || data.tag_citations?.[0]?.bbox || null,
         source_tool: name,
         quantity_basis: quantityBasis,
         note: tagOnly
@@ -242,7 +244,7 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
           workflow, runId, tag, field: "plan_tag_observation", value: tag,
           sheet_id: firstMatch.sheet, table_title: data.row?.table || null,
           bbox_px: firstMatch.match.tag_at, source_tool: name,
-          note: `Exact authored plan tag attached to the verified vector body by ${firstMatch.match.attachment_via || "local geometry"}.`,
+          note: `Exact printed plan tag, counted; the unit beside it was located by ${firstMatch.match.attachment_via || "local geometry"} and its outline is not verified.`,
           evidence_kind: "plan_tag_text",
           evidence_binding_status: "geometry_verified",
         }));
@@ -287,13 +289,17 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
     for (const row of data.rows || []) {
       if (!row?.tag) continue;
       const tag = row.tag;
-      const scheduleSheet = row.schedule_cite?.sheet || null;
+      // The schedule row's own box (reconcile `schedule_cite.row_bbox`) on the
+      // sheet that carries it, so the line cites its row, not just the sheet.
+      const scheduleRowBbox = row.schedule_cite?.row_bbox || null;
+      const scheduleSheet = (scheduleRowBbox && row.schedule_cite?.row_sheet) || row.schedule_cite?.sheet || null;
       const scheduleTitle = row.schedule_cite?.title || null;
       const planCite = row.plan_cites?.[0] || null;
       if (typeof row.scheduled_qty === "number") {
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "scheduled_quantity", value: row.scheduled_qty, unit: "EA",
           sheet_id: scheduleSheet, table_title: scheduleTitle, source_tool: name,
+          row_bbox_px: scheduleRowBbox,
           quantity_basis: row.scheduled_qty_basis || "printed_schedule_quantity",
         }));
       }
@@ -341,7 +347,7 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
       if (row.status) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "plan_status", value: tagOnlyInstalledClaim ? "AMBIGUOUS" : row.status,
-          sheet_id: scheduleSheet, table_title: scheduleTitle,
+          sheet_id: scheduleSheet, table_title: scheduleTitle, row_bbox_px: scheduleRowBbox,
           note: tagOnlyInstalledClaim
             ? "Exact plan tag text was reported as installed quantity, but symbol geometry was not verified; the Agent quarantined the claim for review."
             : row.reason || null,
@@ -359,7 +365,7 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
             workflow, runId, tag, field: "plan_tag_observation", value: tag,
             sheet_id: planCite.sheet, table_title: scheduleTitle,
             bbox_px: planCite.tag_bbox, source_tool: name,
-            note: `Exact authored plan tag attached to the verified vector body by ${planCite.attachment_via || "local geometry"}.`,
+            note: `Exact printed plan tag, counted; the unit beside it was located by ${planCite.attachment_via || "local geometry"} and its outline is not verified.`,
             evidence_kind: "plan_tag_text",
             evidence_binding_status: "geometry_verified",
           }));
@@ -2083,10 +2089,15 @@ export function compiledTakeoffToCsv(lines) {
   // One CSV with union of columns — Excel export prefers per-family sheets.
   const lead = takeoffLeadColumns(lines);
   const specCols = takeoffSpecColumns(lines);
+  // Review columns ride only when the caller attached them (lineReview.js
+  // withReviewColumns) — an export of unreviewed lines keeps its old shape.
+  const reviewed = (lines || []).some((r) => r.review_state);
   const header = [
     ...lead.map((c) => c.label),
     ...specCols,
-    "Verified plan sheet", "Tag-only plan sheet", "Schedule sheet", "Schedule", "Status", "Notes", "Workflow",
+    "Verified plan sheet", "Tag-only plan sheet", "Schedule sheet", "Schedule", "Status",
+    ...(reviewed ? ["Review", "Estimator qty", "Review note", "Reviewed at"] : []),
+    "Notes", "Workflow",
   ];
   const out = [header.map(esc).join(",")];
   for (const r of lines || []) {
@@ -2098,6 +2109,7 @@ export function compiledTakeoffToCsv(lines) {
       r.schedule_sheet_id || "",
       r.table_title || "",
       r.status || "",
+      ...(reviewed ? [r.review_state || "", r.review_qty ?? "", r.review_note || "", r.review_at || ""] : []),
       r.notes || "",
       r.workflow || "",
     ].map(esc).join(","));
@@ -2154,10 +2166,13 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "takeoff.xlsx"
     sheets = (groups.length ? groups : [{ family: "Takeoff", lines: [], leadColumns: [], specColumns: [] }]).map((g) => {
       const lead = g.leadColumns || takeoffLeadColumns(g.lines);
       const cols = g.specColumns || takeoffSpecColumns(g.lines);
+      const reviewed = (g.lines || []).some((r) => r.review_state);
       const header = [
         ...lead.map((c) => c.label),
         ...cols,
-        "Verified plan sheet", "Tag-only plan sheet", "Schedule sheet", "Status", "Notes",
+        "Verified plan sheet", "Tag-only plan sheet", "Schedule sheet", "Status",
+        ...(reviewed ? ["Review", "Estimator qty", "Review note", "Reviewed at"] : []),
+        "Notes",
       ];
       return {
         name: g.family || "Takeoff",
@@ -2173,6 +2188,7 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "takeoff.xlsx"
             r.plan_tag_sheet_id || "",
             r.schedule_sheet_id || "",
             r.status || "",
+            ...(reviewed ? [r.review_state || "", r.review_qty ?? "", r.review_note || "", r.review_at || ""] : []),
             r.notes || "",
           ]),
         ],
@@ -2266,7 +2282,8 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
       y -= 14;
       const lead = (group.leadColumns || takeoffLeadColumns(group.lines)).filter((c) => c.key !== "unit");
       const specs = (group.specColumns || []).slice(0, Math.max(2, 6 - lead.length));
-      const headers = [...lead.map((c) => c.label), ...specs, "Verified plan", "Tag only", "Status"];
+      const reviewed = group.lines.some((r) => r.review_state);
+      const headers = [...lead.map((c) => c.label), ...specs, "Verified plan", "Tag only", "Status", ...(reviewed ? ["Review", "Estimator qty"] : [])];
       const usable = pageWidth - margin * 2;
       const n = headers.length;
       const base = Math.floor(usable / Math.max(n, 1));
@@ -2291,6 +2308,7 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
           ...lead.map((c) => lineLeadValue(r, c.key)),
           ...specs.map((c) => lineSpecValue(r, c)),
           r.plan_sheet_id || "", r.plan_tag_sheet_id || "", r.status || "",
+          ...(reviewed ? [r.review_state || "", r.review_qty ?? ""] : []),
         ];
         let xx = margin;
         vals.forEach((v, i) => {
