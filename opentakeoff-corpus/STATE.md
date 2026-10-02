@@ -1,3 +1,5 @@
+> **Stale (last updated 2026-09-13).** Current state: `PROGRESS.md`.
+
 # OpenTakeoff — where this actually stands
 
 **One goal: an autonomous HVAC/BAS takeoff platform.** An estimator uploads a
