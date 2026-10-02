@@ -767,3 +767,125 @@ it("a rooftop unit titled by what it packages is a rooftop unit (095_UT's ROOFTO
   assert.equal(familyTableGate(table("ROOFTOP EXHAUST FAN SCHEDULE"), rtu, "RTU"), null);
   assert.equal(familyTableGate(table("ROOFTOP CURB SCHEDULE"), rtu, "RTU"), null);
 });
+
+// A schedule titled by its unit's plain name. 056_NY's SCHEDULES sheets,
+// lettered in ink, print "CAV/VAV Schedule Basis of Design: Titus or
+// Approved Equal" (VAV-1..10), an AIR FLOW CONTROL VALVE SCHEDULE (the
+// pharmacy's eleven exhaust valves, tagged VAV-02R..VAV-01R3; AFCV in the VA
+// abbreviations) and an AIR INLETS/ OUTLETS SCHEDULE: each names its family.
+describe("a VAV, air flow control valve or air inlet/outlet schedule by its plain name", () => {
+  const row = (key: string) => ({ key, cells: { TAG: { text: key } } });
+  const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+
+  it("reads VAV SCHEDULE and CAV/VAV SCHEDULE as VAV schedules, never a VAV points list", () => {
+    const tags = compile([
+      table("m.pdf#4", "CAV/VAV Schedule Basis fo Design: Titus or Approved Equal", ["VAV-1", "VAV-2"]),
+      table("m.pdf#5", "VAV SCHEDULE", ["VAV-3"]),
+    ]);
+    assert.deepEqual(tags("VAV"), ["VAV-1", "VAV-2", "VAV-3"]);
+    assert.deepEqual(compile([table("m.pdf#20", "VAV SCHEDULE - DDC POINTS LIST", ["VAV-4"])])("VAV"), []);
+  });
+
+  it("reads an air flow control valve schedule's valves as air valves, whatever their letters", () => {
+    const tags = compile([table("m.pdf#4", "AIR FLOW CONTROL VALVE SCHEDULE", ["VAV-02R", "VAV-01R1"])]);
+    assert.deepEqual(tags("LAB_AIR_VALVE"), ["VAV-01R1", "VAV-02R"]);
+    assert.deepEqual(tags("VAV"), [], "an air valve tagged VAV- is still the valve schedule's");
+    assert.deepEqual(tags("CHW_CONTROL_VALVE"), []);
+    assert.deepEqual(compile([table("m.pdf#5", "HOT WATER CONTROL VALVE SCHEDULE", ["CV-1"])])("LAB_AIR_VALVE"), []);
+    // A pressure independent hydronic valve's CV-1 stays out: only the air flow
+    // control valve title reads any mark.
+    assert.deepEqual(compile([table("m.pdf#5", "PRESSURE INDEPENDENT CONTROL VALVE SCHEDULE", ["CV-1"])])("LAB_AIR_VALVE"), []);
+  });
+
+  it("reads air inlets and outlets printed with a slash as air devices", () => {
+    const tags = compile([table("m.pdf#3", "AIR INLETS/ OUTLETS SCHEDULE BASIS OF DESIGN: \"TITUS\" OR APPROVED EQUAL", ["CD1", "CD2"])]);
+    assert.deepEqual(tags("GRD"), ["CD1", "CD2"]);
+  });
+});
+
+// Schedules the takeoff read none of (re-keyed from the renders, 2026-10-02):
+// 038_NC's building 47 prints MINI-SPLIT INDOOR and OUTDOOR UNIT schedules
+// (47-IDU-A301, 47-ODU-BC101), a DC CRAC UNIT SCHEDULE (47-CRAC-1A), a FAN
+// SCHEDULE (47-IF-1) and a DIFFUSERS, REGISTERS, & GRILLES SCHEDULE; 036_LA a
+// "VRV- INDOOR UNIT SCHEDULE" (07-1-EU-1) and a COMPUTER ROOM AIR
+// CONDITIONING table (07-EVAP-1); D_25_CO a SPLIT SYSTEM INDOOR UNIT
+// SCHEDULE (AC-1).
+describe("split, VRV, CRAC, inline fan and grille schedules by the names they print", () => {
+  const row = (key: string) => ({ key, cells: { TAG: { text: key } } });
+  const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+
+  it("strips a building number before a family token whose number leads with letters", () => {
+    assert.equal(markCoreForKeyRe("47-IDU-A301"), "IDU-A301");
+    assert.equal(markCoreForKeyRe("47-ODU-BC143C"), "ODU-BC143C");
+    assert.equal(markCoreForKeyRe("47-CU-1A"), "CU-1A");
+    assert.equal(markCoreForKeyRe("07-1-EU-1"), "EU-1");
+    // A catalog model is still no mark (TPLFY-EP15NEM4), nor a unit's own
+    // part (AHU-1-SF-1).
+    assert.equal(markCoreForKeyRe("TPLFY-EP15NEM4"), "TPLFY-EP15NEM4");
+    assert.equal(markCoreForKeyRe("AHU-1-SF-1"), "AHU-1-SF-1");
+    // After a lettered token the number may not lead with letters: an
+    // untitled valve grid's CV-FCU-A2-HHW is a valve (AS-79).
+    assert.equal(markCoreForKeyRe("CV-FCU-A2-HHW"), "CV-FCU-A2-HHW");
+  });
+
+  it("reads a mini-split's indoor and outdoor units in their own families", () => {
+    const tags = compile([
+      table("m.pdf#20", "MINI-SPLIT INDOOR UNIT SCHEDULE", ["47-IDU-A301", "47-IDU-BF107"]),
+      table("m.pdf#20", "MINI-SPLIT OUTDOOR UNIT SCHEDULE", ["47-ODU-BC101", "47-ODU-BC143C"]),
+    ]);
+    assert.deepEqual(tags("FCU"), ["47-IDU-A301", "47-IDU-BF107"]);
+    assert.deepEqual(tags("CONDENSING_UNIT"), ["47-ODU-BC101", "47-ODU-BC143C"]);
+    assert.deepEqual(tags("VRF_INDOOR"), []);
+    // An IDU-* names an indoor unit under a split title only.
+    assert.deepEqual(compile([table("m.pdf#21", "PUMP SCHEDULE", ["IDU-1"])])("FCU"), []);
+  });
+
+  it("reads a VRV indoor unit schedule as VRF indoor units, an EU-* only under its title", () => {
+    const tags = compile([table("m.pdf#62", "VRV- INDOOR UNIT SCHEDULE", ["07-1-EU-1", "07-B-EU-1", "09-3-EU-1"])]);
+    assert.deepEqual(tags("VRF_INDOOR"), ["07-1-EU-1", "07-B-EU-1", "09-3-EU-1"]);
+    assert.deepEqual(tags("FCU"), []);
+    assert.deepEqual(compile([table("m.pdf#63", "EQUIPMENT SCHEDULE", ["EU-1"])])("VRF_INDOOR"), []);
+  });
+
+  it("reads a computer room air conditioner as one, never its condenser", () => {
+    assert.deepEqual(compile([table("m.pdf#20", "DC CRAC UNIT SCHEDULE", ["47-CRAC-1A", "47-CRAC-1B"])])("CRAH"), ["47-CRAC-1A", "47-CRAC-1B"]);
+    assert.deepEqual(compile([table("m.pdf#62", "COMPUTER ROOM AIR CONDITIONING", ["07-EVAP-1"])])("CRAH"), ["07-EVAP-1"]);
+    assert.deepEqual(compile([table("m.pdf#51", "COMPUTER ROOM UNIT SCHEDULE", ["CRAC-1", "CRAC-2"])])("CRAH"), ["CRAC-1", "CRAC-2"]);
+    assert.deepEqual(compile([table("m.pdf#62", "CRAC CONDENSER SCHEDULE", ["CDU-1"])])("CRAH"), []);
+    assert.deepEqual(compile([table("m.pdf#62", "CRAC DDC POINTS LIST", ["CRAC-1"])])("CRAH"), []);
+  });
+
+  it("reads an inline fan under a fan schedule title, and a split system's indoor unit schedule by name", () => {
+    assert.deepEqual(compile([table("m.pdf#20", "FAN SCHEDULE", ["47-IF-1"])])("FAN"), ["47-IF-1"]);
+    assert.deepEqual(compile([table("m.pdf#20", "PUMP SCHEDULE", ["IF-1"])])("FAN"), []);
+    assert.deepEqual(compile([table("m.pdf#2", "SPLIT SYSTEM INDOOR UNIT SCHEDULE", ["AC-1"])])("FCU"), ["AC-1"]);
+  });
+
+  it("reads an infrared heater schedule's heaters as unit heaters, and coils titled by their kind", () => {
+    assert.deepEqual(compile([table("m.pdf#2", "INFRA-RED TUBE HEATER SCHEDULE", ["IRH-1", "IRH-2"])])("UNIT_HEATER"), ["IRH-1", "IRH-2"]);
+    // An abbreviation list's "INFRARED HEATER" is no schedule.
+    assert.deepEqual(compile([table("m.pdf#1", "INFRARED HEATER", ["IRH-1"])])("UNIT_HEATER"), []);
+    const coils = compile([
+      table("m.pdf#11", "HYDRONIC COILS (HC)", ["CC-1", "CC-2"]),
+      table("m.pdf#11", "ELECTRIC HEATING COIL (EHC)", ["EHC-1"]),
+    ]);
+    assert.deepEqual(coils("DUCT_MOUNTED_COIL"), ["CC-1", "CC-2", "EHC-1"]);
+    assert.deepEqual(compile([table("m.pdf#11", "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE", ["CHWC"])])("DUCT_MOUNTED_COIL"), []);
+    assert.deepEqual(compile([table("m.pdf#20", "CRAC UNIT CONTROL DIAGRAM (CRAC 01 & 02)", ["CRAC-01"])])("CRAH"), []);
+  });
+
+  it("reads diffusers, registers and grilles in that order as air devices", () => {
+    assert.deepEqual(compile([table("m.pdf#20", "DIFFUSERS, REGISTERS, & GRILLES SCHEDULE", ["H14x14", "H18x12"])])("GRD"), ["H14x14", "H18x12"]);
+    assert.deepEqual(compile([table("m.pdf#3", "AIR DISTRIBUTION", ["LS-1", "SD-1"])])("GRD"), ["LS-1", "SD-1"]);
+    // A sheet or system heading that only begins with it is no schedule.
+    assert.deepEqual(compile([table("m.pdf#3", "AIR DISTRIBUTION SYSTEM NOTES", ["1"])])("GRD"), []);
+  });
+});

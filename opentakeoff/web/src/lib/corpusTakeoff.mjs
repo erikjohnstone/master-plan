@@ -460,10 +460,11 @@ export function normalizeEquipMark(raw) {
  */
 
 /** A short equipment mark: a family token, optional lettered segments, a
- * number of at most four digits and one short trailing segment of up to six
+ * number of at most four digits, perhaps ending in one letter (038_NC's
+ * 47-CU-1A, 47-ODU-BC143C), and one short trailing segment of up to six
  * letters and digits, such as a room code (ET-1, SH1, CC-15-6, S-A-1,
  * TU-28-1, AHU-3001, 030_NY's FCU-01-CG06A; AS-63) — never a catalog model. */
-const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,6})?$/;
+const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}[A-Z]?(?:-[A-Z0-9]{1,6})?$/;
 
 /**
  * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1), including
@@ -485,8 +486,14 @@ export function markCoreForKeyRe(tag) {
   // A numbered or coded building may be followed by its floor (a number of
   // at most two digits) or wing (one letter): 01-1-DAC-1 → DAC-1,
   // 05-B-DAC-1 → DAC-1 (AS-64). A lettered token is never a building there,
-  // so a unit's own mark (AHU-1-SF-1) keeps the reading it had.
-  const building = canon.replace(/^(?:[A-Z]{2,8}|\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  // so a unit's own mark (AHU-1-SF-1) keeps the reading it had. After a
+  // numbered building the unit's number may lead with a letter or two, its
+  // row or area (038_NC's 47-IDU-A301, 47-ODU-BC101 → IDU-A301, ODU-BC101);
+  // after a lettered token it may not: an untitled valve grid's
+  // CV-FCU-A2-HHW is a valve, not fan coil FCU-A2 (AS-79).
+  const lettered = canon.replace(/^(?:[A-Z]{2,8}|\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  const building = lettered !== canon ? lettered
+    : canon.replace(/^\d{1,3}-(?=[A-Z]{2,8}-[A-Z]{1,2}\d)/, "");
   const stripped = building !== canon ? building
     : canon.replace(/^(?:\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?:\d{1,2}|[A-Z])-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
   if (stripped === canon) return canon;
@@ -2114,7 +2121,9 @@ export const HVAC_FAMILY_SPECS = {
   // Split-system indoor AC-* (bldg5406 AC-1/ACCU-1) — not AHU (AHU titles differ).
   // "SPLIT SYSTEM HEAT PUMPS" (Klamath) lists indoor FC-* beside outdoor HP-*.
   FCU: {
-    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    // Or a split system's indoor units by that name (D_25_CO's SPLIT SYSTEM
+    // INDOOR UNIT SCHEDULE, AC-1).
+    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|SPLIT[\s\-]*SYSTEM\s+INDOOR\s+UNITS?|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
     // Under a split or ductless title: DAC-* ductless units, SS-* split
@@ -2124,8 +2133,10 @@ export const HVAC_FAMILY_SPECS = {
     // lists BCU-P3-1 and BCU-2-1 beside FCU-P2-2; AS-141). And an air
     // conditioning unit, the indoor half
     // a split system's title pairs with its outdoor unit (21_VA's DUCTLESS
-    // SPLIT SYSTEM UNIT SCHEDULE's ACU-1 / ACCU-3; AS-145).
-    titledKeyRe: /^(?:(?:DAC|SS|FCC|ACU)[\s\-]?\d|BCU[\s\-]?(?:[A-Z]{1,2})?\d)/i,
+    // SPLIT SYSTEM UNIT SCHEDULE's ACU-1 / ACCU-3; AS-145). And an indoor
+    // unit, IDU-*, its number led by its row or area letters (038_NC's
+    // MINI-SPLIT INDOOR UNIT SCHEDULE, 47-IDU-A301 .. 47-IDU-BF107).
+    titledKeyRe: /^(?:(?:DAC|SS|FCC|ACU)[\s\-]?\d|(?:BCU|IDU)[\s\-]?(?:[A-Z]{1,2})?\d)/i,
     // A bare F-* is a fan coil under the family's title only: 016_NY's fans
     // F-1 and F-2, in an untitled panel schedule, and 041_IL's F0535, a
     // utility cart in an architectural list, were fan coils too (AS-66).
@@ -2142,7 +2153,9 @@ export const HVAC_FAMILY_SPECS = {
     splitKeyRe: /^(?:(?:FCU|FC|EV|DFC|DAC|SS)[\s\-]?\d|AC[\s\-])/i,
   },
   VAV: {
-    // A VAV box or terminal schedule (009_FL's VAV TERMINAL SCHEDULE, 033_MN's
+    // A VAV schedule by the box's name alone (056_NY's "CAV/VAV Schedule Basis
+    // of Design: Titus or Approved Equal", read from ink), or a VAV box or
+    // terminal schedule (009_FL's VAV TERMINAL SCHEDULE, 033_MN's
     // VAV BOX WITH HOT WATER REHEAT SCHEDULE) and a variable volume terminal
     // (061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE; AS-68), and a
     // title that begins with a fan-powered terminal, box or unit (26_CA's FAN
@@ -2151,7 +2164,7 @@ export const HVAC_FAMILY_SPECS = {
     // TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2, AIR TERMINAL BOX in
     // the other order; AS-96), never a box's connections, wiring, points or
     // details.
-    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|\bTERMINAL\s+AIR\s+BOX(?:ES)?\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL|^\s*(?:(?:SERIES|PARALLEL|VAV|HOT\s+WATER|ELECTRIC)\s+){0,2}FAN[\s\-]*POWERED\s+(?:VAV\s+|AIR\s+)?(?:TERMINAL(?:\s+UNITS?)?|BOX(?:ES)?|UNITS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|^\s*(?:(?:[SP]?FTU|FPTU)\s+)?(?:(?:SERIES|PARALLEL|ELECTRIC|HOT\s+WATER)\s+){0,2}FAN\s+TERMINAL\s+UNITS?(?!.*(?:CONNECTION|ELECTRICAL|WIRING|CONTROL|POINT|SEQUENCE|DIAGRAM|DETAIL))/i,
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|\bTERMINAL\s+AIR\s+BOX(?:ES)?\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\b(?:CAV\s*\/\s*)?VAV(?:\s*\/\s*CAV)?\s+SCHEDULES?\b|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL|^\s*(?:(?:SERIES|PARALLEL|VAV|HOT\s+WATER|ELECTRIC)\s+){0,2}FAN[\s\-]*POWERED\s+(?:VAV\s+|AIR\s+)?(?:TERMINAL(?:\s+UNITS?)?|BOX(?:ES)?|UNITS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|^\s*(?:(?:[SP]?FTU|FPTU)\s+)?(?:(?:SERIES|PARALLEL|ELECTRIC|HOT\s+WATER)\s+){0,2}FAN\s+TERMINAL\s+UNITS?(?!.*(?:CONNECTION|ELECTRICAL|WIRING|CONTROL|POINT|SEQUENCE|DIAGRAM|DETAIL))/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor;
     // TU-* terminal units numbered under an AIR TERMINAL UNIT title (AS-62).
@@ -2196,8 +2209,9 @@ export const HVAC_FAMILY_SPECS = {
     // Split indoor/outdoor SYMBOL columns ("F-1 , CU-1" / "DFC-1 , DCU-1"):
     // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
     altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
-    // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63).
-    altKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
+    // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63),
+    // and outdoor units ODU-* (038_NC's MINI-SPLIT OUTDOOR UNIT SCHEDULE).
+    altKeyRe: /^(?:CU|DCU|ACCU|SSCU|ODU)[\s\-]/i,
     // A split system's outdoor units by its header shape (AS-144): 26_CA's
     // ACCU-P3-1 under CONDENSER DESIGNATION.
     splitKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
@@ -2237,17 +2251,19 @@ export const HVAC_FAMILY_SPECS = {
   // Or its terminal units (22_GA's VARIABLE REFRIGERANT FLOW TERMINAL DEVICE
   // SCHEDULE, VRFC-1 to VRFC-13; AS-145).
   VRF_INDOOR: {
-    titleRe: /VRF\s+(?:INDOOR|TERMINAL)(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+(?:INDOOR|TERMINAL)/i,
+    // VRV, Daikin's name for it, too (036_LA's "VRV- INDOOR UNIT SCHEDULE").
+    titleRe: /VR[FV][\s\-]+(?:INDOOR|TERMINAL)(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+(?:FLOW|VOLUME)\s+(?:INDOOR|TERMINAL)/i,
     exclude: /POINTS\s*LIST|DDC|OUTDOOR/i,
     keyRe: /^(?:IDU|IU|VI)[\s\-]?/i,
-    // Under its own title, a VRF unit's mark (VRFC-1, a cassette; AS-145).
-    titledKeyRe: /^VRF[A-Z]{0,2}[\s\-]?\d/i,
+    // Under its own title, a VRF unit's mark (VRFC-1, a cassette; AS-145), or
+    // an evaporator unit's, EU-* (036_LA's 07-1-EU-1 .. 09-3-EU-1).
+    titledKeyRe: /^(?:VRF[A-Z]{0,2}|EU)[\s\-]?\d/i,
     altTitleRe: /VRF\s+SYSTEM\s+SCHEDULE/i,
     altKeyRe: /^AC[\s\-]/i,
     titledOnly: true,
   },
   VRF_OUTDOOR: {
-    titleRe: /VRF\s+OUTDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+OUTDOOR/i,
+    titleRe: /VR[FV][\s\-]+OUTDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+(?:FLOW|VOLUME)\s+OUTDOOR/i,
     exclude: /POINTS\s*LIST|DDC|INDOOR/i,
     keyRe: /^(?:ODU|OU|VO)[\s\-]?/i,
     titledOnly: true,
@@ -2367,8 +2383,9 @@ export const HVAC_FAMILY_SPECS = {
     // Under a FAN SCHEDULE title: E-A-* zone-lettered fans (017_MD's RETURN
     // FAN SCHEDULE), bare F-* (016_NY) and BF-* (096_IN; AS-63); EXF-* (097_UT's
     // VENTILATION FANS) and transfer fans TF-* (26_CA's TF-P2-1; AS-68);
-    // relief fans RLF-* (07_MO's FAN SCHEDULE, RLF 1 beside EXF 1-3; AS-155).
-    titledKeyRe: /^(?:(?:E-[A-Z]-|F|BF|EXF|RLF)[\s\-]?\d|TF[\s\-])/i,
+    // relief fans RLF-* (07_MO's FAN SCHEDULE, RLF 1 beside EXF 1-3; AS-155);
+    // inline fans IF-* (038_NC's FAN SCHEDULE, 47-IF-1).
+    titledKeyRe: /^(?:(?:E-[A-Z]-|F|BF|EXF|RLF|IF)[\s\-]?\d|TF[\s\-])/i,
     // Read by its mark alone, EG-* is an exhaust grille (096_IN's untitled
     // diffuser and grille schedule lists EG2 and EG3; AS-66).
     titledOnlyRe: /^EG[\s\-]?\d/i,
@@ -2384,14 +2401,16 @@ export const HVAC_FAMILY_SPECS = {
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: {
     // Connection-schedule duct-heater panels (EDH-*) use the same family marks.
-    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?/i,
+    // Or a gas-fired infrared heater's schedule (D_25_CO's INFRA-RED TUBE
+    // HEATER SCHEDULE, IRH-1 and IRH-2): a space heater as a unit heater is.
+    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?|INFRA[\s\-]*RED\s+(?:(?:TUBE|GAS[\s\-]*FIRED)\s+)*HEATERS?\s+SCHEDULE/i,
     exclude: /CABINET|POINTS\s*LIST|DDC/i,
     // UH/CUH/EH room heaters; EDH-* duct-mounted electric; ECUH-* electric
     // cabinet/unit; HWUH-* hot-water; GUH/NUH-* gas/natural unit heaters.
     keyRe: /^(?:UH|CUH|EH|EDH|ECUH|HWUH|HUH|EUH|GUH|NUH)[\s\-]?/i,
     // Under a unit heater title: EWH-* electric wall heaters (baker-county-eoc;
     // a water heater anywhere else) and SUH-* suspended (033_MN; AS-63).
-    titledKeyRe: /^(?:EWH|SUH)[\s\-]?\d/i,
+    titledKeyRe: /^(?:EWH|SUH|IRH|IR)[\s\-]?\d/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {
@@ -2417,7 +2436,13 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:FTR|F)[\s\-]?\d/i,
     titledOnly: true,
   },
-  CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
+  // A computer room air conditioner too (038_NC's DC CRAC UNIT SCHEDULE,
+  // 036_LA's COMPUTER ROOM AIR CONDITIONING, 21_VA's COMPUTER ROOM UNIT SCHEDULE); not its condenser's schedule,
+  // its sequence or its control diagram.
+  CRAH: {
+    titleRe: /COMPUTER\s+ROOM\s+(?:AIR\s+(?:HANDL|CONDITION)|UNITS?\b)|\bCRA[HC]\b/i,
+    exclude: /CONDENS|SEQUENCE|CONTROL/i,
+  },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
   // HUM-*; bare H-* on humidifier / blank titles. EH-* only via altTitleRe
   // ELECTRIC HUMIDIFIER (EH on MISC stays UNIT_HEATER — Douglas EH-20/30).
@@ -2475,13 +2500,16 @@ export const HVAC_FAMILY_SPECS = {
   },
   DUCT_MOUNTED_COIL: {
     // Electric duct-coil boards (DH-*) sit with hydronic CC/HC/RHC schedules.
-    titleRe: /DUCT\s+MOUNTED\s+COIL|ELECTRIC\s+DUCT\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE/i,
+    // Or coils titled by their kind alone (091_IL's HYDRONIC COILS (HC) and
+    // ELECTRIC HEATING COIL (EHC), the air handlers' coil sections scheduled
+    // and supplied apart).
+    titleRe: /DUCT\s+MOUNTED\s+COIL|ELECTRIC\s+DUCT\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE|^\s*HYDRONIC\s+COILS?\b|ELECTRIC\s+HEATING\s+COILS?\b/i,
     exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE|DUCT\s+HEATER/i,
     // CC/HC/RC coils; HWC-* hot-water; PHC/RHC preheat/reheat; DH-* electric duct coil.
     keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC|DH)[\s\-]?/i,
     // Under a coil schedule title: RH-* reheat, SHC-* steam heating and DXC-*
-    // direct expansion coils (05_MO; AS-63).
-    titledKeyRe: /^(?:RH|SHC|DXC)[\s\-]?\d/i,
+    // direct expansion coils (05_MO; AS-63), EHC-* electric heating coils.
+    titledKeyRe: /^(?:RH|SHC|DXC|EHC)[\s\-]?\d/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,
@@ -2628,9 +2656,17 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /PRESSURE\s+INDEPENDENT.{0,60}VALVE|(?:ROOM\s+SUPPLY|GENERAL\s+EXHAUST|SNORKEL\s+EXHAUST)\s+VALVE\s+SCHEDULE/i,
     exclude: /BYPASS|HHW|CHW|HOT\s+WATER|CHILLED\s+WATER|REHEAT|POINTS\s*LIST|DDC/i,
     keyRe: /^(?:SAV|GEV|SEV)[\s\-]/i,
+    // An air flow control valve schedule (056_NY's pharmacy exhaust valves,
+    // AFCV in the VA abbreviations) lists only air valves, whatever their tag
+    // (VAV-02R, VAV-01R1): under that title alone, any short mark is one.
+    altTitleRe: /\bAIR\s*FLOW\s+CONTROL\s+VALVES?\s+SCHEDULE/i,
+    altKeyRe: /^[A-Z]{2,4}[\s\-]?\d/i,
   },
   GRD: {
-    titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|GRILLE\s+SCHEDULE|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+DEVICE\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND)\s*OUTLETS?/i,
+    // In any order of its three words (038_NC's DIFFUSERS, REGISTERS, &
+    // GRILLES SCHEDULE), or an air distribution schedule, its whole title
+    // (082_OR's AIR DISTRIBUTION: LS-1, RG-1, SD-1 ...).
+    titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|GRILLE\s+SCHEDULE|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSERS?[,\s]*REGISTERS?[,\s]*(?:&|AND)?\s*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+DEVICE\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND|\/)\s*OUTLETS?|^\s*AIR\s+DISTRIBUTION(?:\s+DEVICES?)?(?:\s+SCHEDULE)?\s*$/i,
   },
   RANGE_HOOD: {
     titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE|SNORKEL\s+HOOD\s+SCHEDULE/i,

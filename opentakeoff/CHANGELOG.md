@@ -1,5 +1,17 @@
 # Changelog
 
+- **Schedules read by the names they print (vocabulary batch, task #278).** Titles and marks the takeoff missed while
+  re-keying stale sets from their drawings, each adopted only after an offline A/B over saved sheet graphs (compile
+  is a pure function of the graph): SPLIT SYSTEM INDOOR UNITS and DAC/SS/FCC/ACU/BCU/IDU marks as fan coils; CU, DCU,
+  ACCU, SSCU and ODU marks as condensing units; VRV as well as VRF indoor and outdoor schedules; a computer room air
+  conditioner / CRAC / COMPUTER ROOM UNIT schedule as CRAH (never its condenser, sequence or control diagram); IF
+  inline fans; infrared tube heaters and hydronic / electric heating coils; VAV and CAV/VAV schedules by their plain
+  name; an AIR FLOW CONTROL VALVE schedule as lab air valves; DIFFUSERS, REGISTERS & GRILLES and AIR DISTRIBUTION
+  (DEVICE) schedules as grilles (not their notes); and a building prefix before a letter-led mark (47-IDU-A301).
+  A/B over the first 21 saved graphs (the sets whose titles the census flagged first): +145 units on 9 sets, 0 lost,
+  every family closer to its key or unchanged (056_NY +30: 10 VAV, 11 lab air valves, 9 grilles; 032_PA +46;
+  038_NC +30; 036_LA +16; 21_VA +6; D_25_CO, 083_MA, 091_IL, 082_OR). The sweep over the remaining graphs runs on.
+
 - **A page lettered entirely in ink is a sheet.** `buildSheetGraph` kept only pages with text, so a page plotted
   with every letter as strokes never became a sheet and its schedules were never offered to any reader: 056_NY's
   two SCHEDULES sheets (air inlets/outlets, humidifier, pump, air flow control valve, CAV/VAV), 08_ME's M102 fan
