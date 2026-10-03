@@ -837,7 +837,7 @@ def _opens_with_title(members, cells, letters, origin=(0.0, 0.0)) -> bool:
     return sorted(title)[len(title) // 2] >= sorted(body)[len(body) // 2] * TITLE_TYPE_RATIO
 
 
-def _split_at_title_bands(members, cells, chars=()) -> list[list]:
+def _split_at_title_bands(members, cells, chars=(), origin=(0.0, 0.0)) -> list[list]:
     """Break a block wherever a SECOND title band begins.
 
     A schedule opens with an undivided full-width row — the band its title is
@@ -899,10 +899,12 @@ def _split_at_title_bands(members, cells, chars=()) -> list[list]:
     # block's, or the band is shallow (under two rows — 042_VA#9 cuts on a 0.4
     # row-high band of body text and needs to). It is refused only for a band
     # that is BOTH body-sized text AND two or more rows deep, which no title is.
+    ox, oy = origin
+
     def body_type(x0, y0, x1, y1) -> float | None:
         g = sorted(c["height"] for c in chars
-                   if x0 <= (c["x0"] + c["x1"]) / 2 <= x1
-                   and y0 <= (c["top"] + c["bottom"]) / 2 <= y1)
+                   if x0 <= (c["x0"] + c["x1"]) / 2 - ox <= x1
+                   and y0 <= (c["top"] + c["bottom"]) / 2 - oy <= y1)
         return g[len(g) // 2] if g else None
 
     cuts = [k for idx, k in enumerate(keys)
@@ -938,8 +940,8 @@ def _split_at_title_bands(members, cells, chars=()) -> list[list]:
             b0 = cells[rows[k][0]].bounds
             if b0[3] - b0[1] >= med_ * 0.5:
                 return False
-            if any(b0[0] <= (c["x0"] + c["x1"]) / 2 <= b0[2]
-                   and b0[1] <= (c["top"] + c["bottom"]) / 2 <= b0[3] for c in chars):
+            if any(b0[0] <= (c["x0"] + c["x1"]) / 2 - ox <= b0[2]
+                   and b0[1] <= (c["top"] + c["bottom"]) / 2 - oy <= b0[3] for c in chars):
                 return False
             above = edges(i for i in members if round(cells[i].bounds[1]) < k)
             below = edges(i for i in members if round(cells[i].bounds[1]) > k)
@@ -1662,7 +1664,7 @@ def tables_from_segments(segs: list[tuple], chars, page_w: float, page_h: float,
     _dbg = _os.environ.get("VG_DEBUG")
     tables = []
     cands = []
-    blocks = [p for m in groups.values() for p in _split_at_title_bands(m, cells, chars)]
+    blocks = [p for m in groups.values() for p in _split_at_title_bands(m, cells, chars, (page_ox, page_oy))]
     for members in blocks:
         if _dbg:
             _b = [cells[i].bounds for i in members]

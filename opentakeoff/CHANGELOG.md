@@ -1,5 +1,12 @@
 # Changelog
 
+- **A table on a page whose box does not start at the corner is cut as it would be anywhere else.** A PDF page's box
+  can start away from (0,0) (197 pages of 12 keyed sets do), and pdfplumber reports such a page's letters in the PDF's
+  own space while the table extractor builds cells in the page's. The title-band splitter compared the two unshifted,
+  so its type tests read no letter: a table that labels its own bands in body type (004_MO's FINISH LEGEND, one header
+  over BASE, CEILINGS, DOOR/FRAME, FLOORING and PAINT bands) was cut at every band, and every piece after the first
+  lost its header. The splitter now reads the letters where the cells are. On those 197 pages the tables change on 21
+  (004_MO's legend; title-block strips, junk either way), and every set they touch compiles the same, unit for unit.
 - **A list stacked under another on the same columns is its own table.** 061_IA's M-502 prints its HEATING HOT WATER
   PLANT POINTS LIST 26 pt under its TYPICAL VARIABLE AIR VOLUME ZONE POINTS LIST, column for column. The table
   extractor joined the two as one list continued over a gap and could not part them at the plant list's title: each
