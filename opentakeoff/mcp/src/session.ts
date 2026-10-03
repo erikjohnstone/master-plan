@@ -53,6 +53,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
+import { tagSymbolMark } from '../../web/src/lib/corpusTakeoff.mjs';
 import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markWithoutTrailingStatus, markZeroRespellings, rowIdentityTag, rowNamesEachUnitOnce, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark, planTitleLevels, typicalLevelMarks, typicalLevelsOfRow } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -5029,8 +5030,17 @@ export class Session {
         if (bare && !rowNamed.has(canonKey(bare))) addCand(bare);
       }
       const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
+      // A mark column headed by its tag symbol names the unit by the symbol's
+      // letters and the mark, as its plans tag it: 16_NV's furnace B1, under
+      // F ~, is tagged F over B1, and its condensing unit's B1, under CU ~,
+      // CU over B1 on the same plan. Where the plans draw that tag, the
+      // placements are its own; where they letter the mark alone (16_NV's
+      // damper OA1, "BELOW CD-OA2"), the mark's.
+      const symbolMark = readByMark ? null : tagSymbolMark(tb, r, selectedRowIdentity);
       if (opts.planKey) {
         t = canonKey(opts.planKey);
+      } else if (symbolMark && hasOcc(canonKey(symbolMark))) {
+        t = canonKey(symbolMark);
       } else {
         // A row standing for one unit on each typical level it lists, its
         // unit drawn by each level's own mark (AS-139): 26_CA's AHU-(6-33)-1

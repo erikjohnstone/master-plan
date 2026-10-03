@@ -8,7 +8,7 @@
 import { planLocationFromMatch, scheduleRowLocation } from "./planLocation.mjs";
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark, expandEquipMarkRange, expandMarkList, expandEquipMarks, markLetters,
-  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, notApplicableMark, setDrawnMarks, tableRangeEvidence, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey,
+  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, notApplicableMark, setDrawnMarks, tableRangeEvidence, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey, tableUnitKey,
   HVAC_FAMILY_SPECS,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
@@ -1360,6 +1360,10 @@ export function summarizeReconcile(rows) {
   return summary;
 }
 
+/** An electrical connection schedule's title: it lists units other schedules
+ * define, by their marks, for their power. */
+const CONNECTION_SCHEDULE_TITLE_RE = /\bCONNECTIONS?\b/i;
+
 /**
  * Schedule-side reconcile scaffold from extracted graph tables (no plan sweep).
  * Used when sweeps are supplied separately via sweepByTag map.
@@ -1382,6 +1386,9 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   const seen = new Set();
   // The marks the scaffold holds a row for, in any table (AS-62).
   const held = new Set();
+  // The units it holds a row for, by the takeoff's unit key in each drawing
+  // group, with the row each one cites.
+  const heldUnits = new Map();
   // Parity with compile uniqueFamily: a reading of the mark as printed ranks
   // above a widened one, so the scan first finds every unit a printed
   // reading holds.
@@ -1454,6 +1461,23 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         // HWP-A-1 in a general EQUIPMENT SCHEDULE, is the same pump. Nor for a
         // unit a printed reading holds anywhere, in whichever table comes first.
         if (read === 1 && (held.has(canon) || printedCanons.has(canon))) continue;
+        // A unit listed again is the unit held, as the compile counts it once:
+        // in its table's continuation on the same sheet (061_IA's AHU-A in its
+        // CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)), in a table no title of
+        // the family vouches for (an untitled copy, a general EQUIPMENT
+        // SCHEDULE, another family's host schedule) or in an electrical
+        // connection schedule (009_FL's EQUIPMENT CONNECTION SCHEDULE - DUCT
+        // HEATERS lists the five EDH its ELECTRIC DUCT HEATER schedule
+        // defines). Each listing had its own row, swept from its own sheet,
+        // so 061_IA's EF-2 read 1 installed on one row and 4 on the other.
+        // Two schedules titled as the family on two sheets keep a row each, and
+        // a tag symbol's letters name two units where the mark alone is one:
+        // 16_NV's furnace F-B1 and duct furnace DF-B1 both print B1, under F ~
+        // and DF ~.
+        const unitScope = `${tableUnitKey(table, row, canonTag)}\0${table.drawing_group || "(unscoped)"}`;
+        const heldRowId = heldUnits.get(unitScope);
+        if (heldRowId && (heldRowId === rowId || gate.pass === 2 || gate.catchAll || CONNECTION_SCHEDULE_TITLE_RE.test(title))) continue;
+        if (!heldRowId) heldUnits.set(unitScope, rowId);
         seen.add(scopeIdentity);
         held.add(canon);
         const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);

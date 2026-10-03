@@ -34,7 +34,7 @@ import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
   inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks, markSpellings, unitMarkKey, familyMarkRead,
   isControlValveHeaderShape, expandMarkList, expandEquipMarks, rowMarkText, normalizeEquipMark, plainMark, isGroupedMarkHeader,
-  takeoffUnitsByRow,
+  takeoffUnitsByRow, tagSymbolMark, tableUnitKey,
 } from "../src/lib/corpusTakeoff.mjs";
 import { rowKeyAnswersFor, rowKeyOf } from "../src/lib/sheetgraph.ts";
 import { classifyGrid } from "../src/lib/gridClassify.mjs";
@@ -836,8 +836,8 @@ test("reconcile scaffold reads marks under a building token or letter, one row p
   // HWP-A-2 are read in one of their forms, so each unit the takeoff counts
   // has its row. Such a mark adds no second row for a unit already held (the
   // untitled copy of 1-CP-1 and 1-EF-36, HWP-A-1 in a general EQUIPMENT
-  // SCHEDULE); a mark read as printed keeps its row per table as before (P-1,
-  // EF-2), which is the scaffold's own identity rule and not this one's.
+  // SCHEDULE), and nor does a mark read as printed there (P-1, EF-2): the
+  // general schedule lists the units the titled ones define.
   const table = (sheet: string, title: string, keys: string[]) => ({
     kind: "equipment", sheet, title: { text: title },
     rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
@@ -855,9 +855,77 @@ test("reconcile scaffold reads marks under a building token or letter, one row p
   assert.deepEqual(rowsOf("AHU"), ["1-AC-15@m.pdf#3", "40-AHU-2@m.pdf#3", "AHU-3@m.pdf#3"]);
   assert.deepEqual(rowsOf("PUMP"), [
     "1-CP-1@m.pdf#4", "HWP-A-1@m.pdf#4", "P-1@m.pdf#4",
-    "1-CP-2@e.pdf#9", "HWP-A-2@e.pdf#10", "P-1@e.pdf#10",
+    "1-CP-2@e.pdf#9", "HWP-A-2@e.pdf#10",
   ]);
-  assert.deepEqual(rowsOf("FAN"), ["EF-2@m.pdf#4", "1-EF-36@m.pdf#4", "EF-2@e.pdf#10"]);
+  assert.deepEqual(rowsOf("FAN"), ["EF-2@m.pdf#4", "1-EF-36@m.pdf#4"]);
+});
+
+test("reconcile scaffold: a unit listed again is the unit held; two schedules titled as the family on two sheets keep a row each", () => {
+  // 061_IA's AHU-A is printed in its schedule and that schedule's (CONT.) on
+  // the same sheet, and its EF-2 in its fan schedule and the general
+  // EQUIPMENT SCHEDULE; 009_FL's EDH-1 in its ELECTRIC DUCT HEATER schedule
+  // and an EQUIPMENT CONNECTION SCHEDULE; 082_OR's DOAS-1 in its schedule and
+  // an untitled copy. Each is one unit, as the takeoff counts it, with the
+  // row of the schedule that defines it. 16_NV's furnace F-B1 and duct
+  // furnace DF-B1 both print B1, each under its own furnace schedule on its
+  // own sheet: two units, two rows.
+  const table = (sheet: string, title: string, keys: string[], extra: Record<string, string> = {}) => ({
+    kind: "equipment", sheet, title: { text: title },
+    rows: keys.map((key) => ({
+      key, cells: { MARK: { text: key }, ...Object.fromEntries(Object.entries(extra).map(([h, text]) => [h, { text }])) },
+    })),
+  });
+  const graph = { tables: [
+    table("m.pdf#58", "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE", ["AHU-A"]),
+    table("m.pdf#58", "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)", ["AHU-A"]),
+    table("m.pdf#58", "EXHAUST FAN SCHEDULE", ["EF-2", "EF-3"]),
+    table("m.pdf#71", "EQUIPMENT SCHEDULE", ["SF-1", "EF-2"]),
+    table("m.pdf#18", "ELECTRIC DUCT HEATER", ["EDH-1", "EDH-2"]),
+    table("e.pdf#31", "EQUIPMENT CONNECTION SCHEDULE - DUCT HEATERS", ["EDH-1", "EDH-2"]),
+    table("m.pdf#2", "DEDICATED OUTDOOR AIR SYSTEM", ["DOAS-1"]),
+    table("m.pdf#3", "", ["DOAS-1"], { "SUPPLY AIR CFM": "1200" }),
+    table("m.pdf#3", "2-STAGE, GAS FIRED FURNACE SCHEDULE", ["B1", "B2"]),
+    table("m.pdf#4", "GAS-FIRED INDOOR DUCT FURNACE SCHEDULE", ["B1"]),
+  ] };
+  const rowsOf = (family: string) => reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
+    .map((r: any) => `${r.tag}@${r.row_id.split("::")[0]}`);
+  assert.deepEqual(rowsOf("AHU"), ["AHU-A@m.pdf#58"]);
+  assert.deepEqual(rowsOf("FAN"), ["EF-2@m.pdf#58", "EF-3@m.pdf#58", "SF-1@m.pdf#71"]);
+  assert.deepEqual(rowsOf("UNIT_HEATER"), ["EDH-1@m.pdf#18", "EDH-2@m.pdf#18"]);
+  assert.deepEqual(rowsOf("DOAS"), ["DOAS-1@m.pdf#2"]);
+  assert.deepEqual(rowsOf("FURNACE"), ["B1@m.pdf#3", "B2@m.pdf#3", "B1@m.pdf#4"]);
+  // The takeoff counts each listed unit once too.
+  const items = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+  for (const family of ["AHU", "FAN", "UNIT_HEATER", "DOAS"]) {
+    assert.equal(items[family].items.length, rowsOf(family).length, `${family}: one row per unit the takeoff counts`);
+  }
+});
+
+test("a mark column headed by its tag symbol names the unit by the symbol's letters: furnace F-B1 and duct furnace DF-B1 are two units", () => {
+  // 16_NV heads its furnace marks F ~ (the hexagon tag, F over the mark) and
+  // its duct furnace's DF ~; both rows print B1.
+  const table = (sheet: string, title: string, header: string, keys: string[]) => ({
+    kind: "equipment", sheet, title: { text: title }, headers: [header, "SERVICE"],
+    rows: keys.map((key) => ({ key, cells: { [header]: { text: key }, SERVICE: { text: "CLASSROOM" } } })),
+  });
+  const furnaces = table("m.pdf#3", "2-STAGE, GAS FIRED FURNACE SCHEDULE", "GENERAL UNIT DATA F ~", ["B1", "B2"]);
+  const duct = table("m.pdf#4", "GAS-FIRED INDOOR DUCT FURNACE SCHEDULE", "UNIT GENERAL DATA DF ~", ["B1"]);
+  const graph = { tables: [furnaces, duct] };
+  assert.equal(tagSymbolMark(duct, duct.rows[0], "B1"), "DF-B1");
+  assert.equal(tagSymbolMark(furnaces, furnaces.rows[1], "B2"), "F-B2");
+  // No symbol header, a mark the column does not print, or one already
+  // lettered: no symbol mark.
+  const plain = { ...furnaces, headers: ["MARK", "SERVICE"], rows: [{ key: "B1", cells: { MARK: { text: "B1" } } }] };
+  assert.equal(tagSymbolMark(plain, plain.rows[0], "B1"), null);
+  assert.equal(tagSymbolMark(furnaces, furnaces.rows[0], "B2"), null);
+  assert.equal(tagSymbolMark(furnaces, { key: "F-B1", cells: { "GENERAL UNIT DATA F ~": { text: "F-B1" } } }, "F-B1"), null);
+  assert.equal(tableUnitKey(duct, duct.rows[0], "B1"), "DF-B1");
+  assert.equal(tableUnitKey(plain, plain.rows[0], "B1"), unitMarkKey("B1"));
+  const takeoff = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string; sheet_id: string }> }>;
+  assert.deepEqual(takeoff.FURNACE.items.map((i) => `${i.tag}@${i.sheet_id}`).sort(), ["B1@m.pdf#3", "B1@m.pdf#4", "B2@m.pdf#3"]);
+  const rows = reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FURNACE")!)
+    .map((r: any) => `${r.tag}@${r.row_id.split("::")[0]}`);
+  assert.deepEqual(rows, ["B1@m.pdf#3", "B2@m.pdf#3", "B1@m.pdf#4"]);
 });
 
 test("reconcile scaffold reads what the compile reads under a title and in a host schedule (AS-63)", () => {

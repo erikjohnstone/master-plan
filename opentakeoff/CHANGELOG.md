@@ -1,5 +1,21 @@
 # Changelog
 
+- **One reconcile row a unit.** The family reconcile held a row for each table that listed a unit, though the takeoff
+  counts it once: 061_IA's AHU-A in its schedule and that schedule's (CONT.), its EF-2 and EF-3 in their fan schedule
+  and the general EQUIPMENT SCHEDULE, 009_FL's five duct heaters in their schedule and an EQUIPMENT CONNECTION SCHEDULE.
+  Each row was swept from its own sheet, so 061_IA's EF-2 read 1 installed on one row and 4 on the other. A unit listed
+  again is now the unit held when the later listing is its table's continuation on the same sheet, a table no title of
+  the family vouches for (untitled, a general equipment schedule, another family's) or an electrical connection
+  schedule. Two schedules titled as the family on two sheets keep a row each. Over 119 saved graphs the reconcile now
+  holds exactly the takeoff's units on every open set; 15 duplicate rows on 5 open sets are gone.
+- **A schedule's tag symbol names its unit.** 16_NV heads each schedule's mark column with its tag symbol, the
+  hexagon's letters over a blank (F ~ for furnaces, CU ~ for condensing units, DF ~ for the duct furnace), and prints
+  only the number (B1). The takeoff read furnace F-B1 and duct furnace DF-B1 as one B1, and the sweep matched every
+  family's B1 to whatever B1 tag a plan drew: CU over B1 on sheet 12 was cited for the furnace, the condensing unit,
+  the outdoor air unit and the duct furnace alike. A row under a tag-symbol header is now the symbol's letters and its
+  mark: the takeoff counts DF-B1 apart (16_NV furnaces 21 -> 22, re-keyed from the render), and the sweep finds the
+  unit's own tag (F over B1, DF over B1) where the plans draw it, else the mark as before. Only 16_NV prints such
+  headers in the corpus.
 - **A demolition sheet that also draws its new work.** A sheet whose titles or notes call it demolition was read
   whole as demolition views, so units tagged on the new work plan beside its demolition plan were never swept as
   installed. 066_MT's M100 draws its FIRST FLOOR HVAC DEMOLITION PLAN, the existing (E) HP-2 on it, beside its

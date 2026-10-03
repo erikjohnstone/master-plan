@@ -2,18 +2,18 @@
   "set_id": "16_NV_CarsonValleyMS_HVAC_Replacement",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk corpus school HVAC set \u2014 ERV, furnace, condensing unit, RTU alternate, outdoor air unit, hoods, CONTROL DAMPER OA1/OA2 (B1 building mark on same table excluded by keyRe). Proves user-upload path beyond NAVFAC-shaped titles.",
+  "notes": "Bulk corpus school HVAC set \u2014 ERV, furnace, condensing unit, RTU alternate, outdoor air unit, hoods, CONTROL DAMPER OA1/OA2 (B1 building mark on same table excluded by keyRe). Proves user-upload path beyond NAVFAC-shaped titles. Re-keyed 2026-10-03 from the render of sheet 4: its GAS-FIRED INDOOR DUCT FURNACE SCHEDULE schedules DF-B1 (Modine DFP250, serving OAU-B1 and OAU-B2, on unistrut support), a unit apart from furnace F-B1; both print B1 under their tag symbols (F ~, DF ~). FURNACE 21 -> 22, items 58 -> 59.",
   "categories": {
     "OUTDOOR_AIR_UNIT": 2,
     "RTU": 4,
     "ERV": 2,
-    "FURNACE": 21,
+    "FURNACE": 22,
     "CONDENSING_UNIT": 23,
     "CONTROL_DAMPER": 2,
     "RANGE_HOOD": 4
   },
   "totals": {
-    "items": 58
+    "items": 59
   },
   "bas_points": {
     "rows": 0

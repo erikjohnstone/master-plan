@@ -524,16 +524,24 @@ test("Vol2 NC VRF chiller 047: plant + VRF families all MATCH (GRD SO)", async (
   }
 });
 
-test("Vol2 Ames Harley Wilhelm 061: AHU/FCU/fan/HX MATCH; pump 6/7", async (t) => {
+test("Vol2 Ames Harley Wilhelm 061: AHU/FCU/HX MATCH; fans 11 MATCH, SF-6 ambiguous; pump 6/7", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.compile.json"),
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
-  for (const family of ["FAN", "AHU", "FCU", "HEAT_EXCHANGER"]) {
+  // One row a unit: AHU-A's (CONT.) table and EF-2 and EF-3 in the general
+  // EQUIPMENT SCHEDULE add none.
+  for (const family of ["AHU", "FCU", "HEAT_EXCHANGER"]) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
+  // The supply fan array's third pair is lettered SF-5 and SF-5 on the plan:
+  // SF-6 is named there only by its VFD's label.
+  await assertFamilyStatusCounts(session, graph, key, "FAN", {
+    match: 11,
+    ambiguous: 1,
+  });
   await assertFamilyStatusCounts(session, graph, key, "PUMP", {
     match: 6,
     schedule_only: 1,
@@ -564,15 +572,19 @@ test("Vol2 IL sterile expand 040: GRD + fan + louver MATCH (UH/pump SO)", async 
   }
 });
 
-test("Vol2 IL sterile expand 040: PRV honest SCHEDULE_ONLY (tags not plan text)", async (t) => {
+test("Vol2 IL sterile expand 040: PRV-3 MATCH on the piping plan; the paired stations honest SCHEDULE_ONLY", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.compile.json"),
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
+  // FIRST FLOOR - PIPING - ALL PHASES tags PRV-3 at its station; its paired
+  // stations are lettered as pairs ("PRV-1A/1B"), a tag naming two valves,
+  // which the sweep does not read as either.
   await assertFamilyStatusCounts(session, graph, key, "PRESSURE_REDUCING_VALVE", {
-    schedule_only: key.categories.PRESSURE_REDUCING_VALVE,
+    match: 1,
+    schedule_only: key.categories.PRESSURE_REDUCING_VALVE - 1,
   });
 });
 
@@ -1686,6 +1698,10 @@ test("Carson prefer-schedule: shared B*/C* marks MATCH (unscoped stays AMBIGUOUS
     return;
   }
   const { session, graph } = loaded;
+  // Each family's B1 is swept by its own tag, the schedule's tag symbol over
+  // the mark (F over B1, CU over B1, DF over B1): no plan tag is cited for two
+  // units.
+  const citedBy = new Map();
 
   // Negative: bare sweep without a preferred schedule must still refuse
   // cross-family building-letter collisions.
@@ -1717,6 +1733,16 @@ test("Carson prefer-schedule: shared B*/C* marks MATCH (unscoped stays AMBIGUOUS
       result.rows.every((r) => (r.installed_qty || 0) >= 1),
       `${fam} installed ≥ 1`,
     );
+    for (const row of result.rows) {
+      for (const cite of row.plan_cites || []) {
+        const box = cite.tag_bbox || cite.bbox;
+        if (!box) continue;
+        const at = `${cite.sheet}|${[box.x0, box.y0, box.x1, box.y1].map((v) => Math.round(v)).join(",")}`;
+        const unit = `${fam} ${row.tag} (${row.schedule_cite?.title || ""})`;
+        assert.ok(!citedBy.has(at) || citedBy.get(at) === unit, `${unit} cites the plan tag ${citedBy.get(at)} cites`);
+        citedBy.set(at, unit);
+      }
+    }
   }
 });
 

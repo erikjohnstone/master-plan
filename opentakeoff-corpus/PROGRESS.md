@@ -78,6 +78,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 9b6a05a, de3ada9, 87c3149, 56e73fc | Temporary units (AS-157); split pairs under family-naming titles; convectors and dotted marks; rated inputs, luminaire schedules, stacked marks |
 | 249d98b, aad2c5c | Keys re-keyed from the renders; the reviewed-corrections overlay folded into the keys |
 | 2952ce3, ce0b768, 58f6cb9, 0d229c6, ea2acad | Keys re-keyed from the renders (068_US, 18_OR, 053_VA, 01_NY and five pipeline sets) and stale reconcile expectations corrected; a pump lettered pump-first (PCH-n) on an untitled table; a silencer schedule titled by its word alone |
+| 7c3105c | A sheet's keynotes heading is no sheet list (053_VA TU26-40 swept); a demolition sheet that also draws its new work is read view by view (066_MT, 01_NY) |
 
 ## Known limits (documented, not fixed)
 
@@ -135,8 +136,16 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 - MCP `reconcileWorkflow` "Vol2 WEAK leftovers": 067_CA (walled; totals only) holds 1 HEAT_EXCHANGER reconcile row
   against its key's 2 (a key written at 6fabaeb, 2026-09-13). The takeoff reads 1 on its graph built at 09:02 on
   2026-10-03, before that day's graph-side edits, as on one built at the current code. Not investigated (a walled
-  set: no row reads, no renders), and the key is not edited to pass. The test's other sets pass (033_MN; 066_MT,
-  moved to its own test when its remodel plan was swept); 013_MO now runs before 067_CA.
+  set: no row reads, no renders), and the key is not edited to pass. 013_MO (run before 067_CA) fails too, at the
+  pushed head as with this change: its one VFD-1 is ambiguous where the test (rightly) expects schedule-only. VFD-1
+  is printed only on its schedule sheet; the plan sweep's bare-prefix shorthand (a family's whole letters standing
+  for the set's only unit of them) reads the "VFD" of an ABBREVIATIONS list ("VFD  VARIABLE FREQUENCY DRIVE") on the
+  reflected ceiling plan (page 5) as its tag. Queued: a bare prefix followed on its line by the words it abbreviates
+  is a legend entry. 033_MN passes; 066_MT moved to its own test when its remodel plan was swept.
+- MCP `reconcileWorkflow` "Vol2 sterile 041": 041_IL's key is an early [WEAK] pipeline key (FCU 2, PUMP 1, GRD 1, from
+  6fabaeb); the takeoff reads 19 units (AHU, VAV 5, CU, PUMP, FAN 2, ET, coils 3, compressor, GRD 2: SD-1 and EG-1 in
+  the SUPPLY and RETURN & EXHAUST air device schedules), the test asserts the key's GRD 1 and fails on 2 rows, at the
+  pushed head as now. Queued: re-key from the renders.
 - MCP `conformance.test.ts` "sheet graph (#87) … find_schedule": room 134's EAST finish no longer chains to its
   material-schedule definition (`SMOKEY MOUNTAIN AC-18` expected, undefined). Fails identically at the PR #108
   merge `4255465`, before any of this goal's commits. Cause (2026-10-03): the MATERIAL SCHEDULE's WALLS box prints
@@ -389,6 +398,37 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   Phase 1 plan's air devices now counted with Phase 2's (two areas of the floor, checked on the renders); 13 terminal
   units now cite M103.1, each still 1. 041_IL's MH-102-3 (a humidifier piping detail under its new plan) and 031_MO,
   039_TX, 050_IL, 052_IL, 061_IA, 073_MT, 077_MT, 080_CA, 095_UT and 15_IA: unchanged. 066_MT has its own test now.
+- One reconcile row a unit, as the takeoff counts it. A parity census over 111 saved graphs (the family reconcile's
+  scaffold rows against the takeoff's units, per family) found no row without a unit and no unit without a row, but
+  units held twice: 16 on 6 open sets, 66 on 7 walled ones. The scaffold keyed a row by mark, table title and drawing
+  group, so a unit listed in two tables got two rows, each swept from its own sheet (061_IA's EF-2 read 1 installed on
+  one, 4 on the other). By kind of the second listing: open, 7 in an untitled table (016_NY B-1/B-2, 082_OR DOAS-1..4,
+  26_CA ET-35-1), 5 in an EQUIPMENT CONNECTION SCHEDULE (009_FL EDH-1..5), 2 in the general EQUIPMENT SCHEDULE (061_IA
+  EF-2/EF-3), 1 its schedule's (CONT.) on the same sheet (061_IA AHU-A), 1 a second schedule titled as the family on
+  another sheet (16_NV B1); walled, 9 untitled, 32 general, 3 continuations, 29 two titled schedules. A later listing
+  is now the unit held unless both are schedules titled as the family on two sheets. Where a walled key counts such a
+  family (2 sets), it agrees with two rows, not the takeoff's one (GRD key 10: takeoff 9, rows 10; PUMP key 11:
+  takeoff 8, rows 9), so those stay two rows; the takeoff's merge there is left as it is (walled: no row reads).
+  After, on the same 111 graphs: open sets hold one row a unit (surplus rows 16 -> 0, none extra or missing; the
+  census, keyed by printed mark, still flags 16_NV's B1, two units F-B1 and DF-B1 below), walled surplus 73 -> 29,
+  the 29 two-titled-schedule listings on 3 sets kept; the 8 graphs built since hold none.
+- 16_NV is the open case: its 2-STAGE GAS FIRED FURNACE SCHEDULE and GAS-FIRED INDOOR DUCT FURNACE SCHEDULE both print
+  B1, under F ~ and DF ~, each schedule's mark column headed by its tag symbol (the hexagon's letters over a blank):
+  furnace F-B1 and duct furnace DF-B1 (Modine DFP250 serving OAU-B1/B2, on unistrut support; render of sheet 4). The
+  takeoff now keys a unit by its tag symbol's letters where its mark column prints them (tableUnitKey): FURNACE 21 ->
+  22, and 16_NV is re-keyed 22 (items 59). Only 16_NV prints such headers (11 tables; none on walled sets); a takeoff
+  A/B over 119 graphs changes only this unit. The sweep had matched each family's B1 to any B1 a plan drew: CU over
+  B1 on sheet 12 was cited for the furnace, the condensing unit, the outdoor air unit and the duct furnace alike. A
+  row under a tag-symbol header is now swept by its qualified mark (F-B1, CU-B1, DF-B1) where the plans draw it, the
+  mark otherwise (the damper OA1 is lettered alone, "BELOW CD-OA2"). 16_NV: every family still all MATCH, each cite
+  now the unit's own tag (DF-B1 on 13, OAU-B1/B2 on 13, ERV-C1/C2 on 18, CU-B6/B8 on 14), and intake hood B, IH over B
+  on sheet 14, schedule-only -> MATCH. The Carson test now also asserts no plan tag is cited for two units.
+- Stale test expectations met on the way (each the same at the pushed head): 061_IA's supply fan array labels its
+  third pair SF-5 and SF-5 (render of sheet 67; six VFDs SF-1 to SF-6), so SF-6 is ambiguous, named only by its VFD;
+  040_IL's FIRST FLOOR - PIPING plan tags PRV-3 at its station (render), a MATCH the test called schedule-only. A
+  slash-combined plan tag ("PRV-1A/1B") names two valves the sweep reads as neither. A first census of such tags (one
+  text run, or two joined) over the open sets' plans found 18, 7 naming units with no tag of their own, on 2 sets,
+  mostly in notes; it misses lettering in three runs (040_IL's own "PRV", "-", "1A/1B"), so it undercounts. Open.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

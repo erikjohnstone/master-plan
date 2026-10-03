@@ -1810,6 +1810,43 @@ export function unitMarkKey(canon) {
   return String(canon || "").toUpperCase().replace(/\s+/g, "").replace(/^([A-Z]{1,8})-?(?=\d)/, "$1-");
 }
 
+// A mark column headed by its tag symbol: the symbol's letters over a blank
+// for the mark ("F ~", the hexagon 16_NV draws with F over its number).
+const TAG_SYMBOL_HEADER_RE = /(?:^|\s)([A-Z]{1,6})\s*[~∼˜]$/;
+
+/**
+ * A row's mark as its plans tag it, where its mark column is headed by its tag
+ * symbol: the symbol's letters and the mark (16_NV's F ~ over B1 is F-B1, its
+ * plans' hexagon with F over B1). Null where the column prints no symbol, or
+ * the mark is not that column's.
+ * @param {object} table a schedule table (headers, rows' cells by header)
+ * @param {object} row one of its rows
+ * @param {string} mark the row's mark
+ * @returns {string|null}
+ */
+export function tagSymbolMark(table, row, mark) {
+  const symbolHeaders = (table?.headers || []).filter((header) => TAG_SYMBOL_HEADER_RE.test(headerName(header)));
+  if (symbolHeaders.length !== 1) return null;
+  const letters = headerName(symbolHeaders[0]).match(TAG_SYMBOL_HEADER_RE)[1];
+  const printed = lettersAndDigits(row?.cells?.[symbolHeaders[0]]?.text);
+  const own = String(mark || "").trim().toUpperCase();
+  if (!printed || printed !== lettersAndDigits(own) || lettersAndDigits(own).startsWith(letters)) return null;
+  return `${letters}-${own}`;
+}
+
+/**
+ * A unit's key in its table: its mark's (unitMarkKey), as its tag symbol
+ * names it where its mark column prints one (tagSymbolMark). 16_NV schedules
+ * furnace F-B1 and duct furnace DF-B1 as B1 under F ~ and DF ~: two units,
+ * where the mark alone would make them one.
+ * @param {object} table a schedule table, as scheduleTableView gives it
+ * @param {object} row one of its rows
+ * @param {string} canon the row's mark, upper-cased without spaces
+ */
+export function tableUnitKey(table, row, canon) {
+  return unitMarkKey(tagSymbolMark(table, row, canon) || canon);
+}
+
 const QUOTES_RE = /^["'\s]+|["'\s]+$/g;
 
 /**
@@ -2109,9 +2146,11 @@ function uniqueFamily(graph, spec, family, onEmit = null) {
           keys.add(`${canon}#${table.sheet}#${rowIdx}`);
         } else {
           // One unit however the separator after its letters is spelled in
-          // each table that lists it (AS-82: 26_CA's ET-35-1 and ET 35-1).
-          if (keys.has(unitMarkKey(canon))) continue;
-          keys.add(unitMarkKey(canon));
+          // each table that lists it (AS-82: 26_CA's ET-35-1 and ET 35-1),
+          // and by its tag symbol's letters where its mark column prints them.
+          const unitKey = tableUnitKey(table, row, canon);
+          if (keys.has(unitKey)) continue;
+          keys.add(unitKey);
         }
         const bbox = identityHeaderRe
           ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)
