@@ -2,14 +2,23 @@
   "set_id": "01_NY_VA_Northport_Dialysis_100CD",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/01_NY_VA_Northport_Dialysis_100CD.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk VA dialysis — AHU + RF-1/RF-2 (TAG \"RF-1 & 2\", not glued RF-12) + H-3 + AIR INLETS & OUTLETS (12 GRD). Title hunt must not steal numbered-note SCHEDULED prose.",
+  "notes": "Bulk VA dialysis — AHU + RF-1/RF-2 (TAG \"RF-1 & 2\", not glued RF-12) + H-3 + AIR INLETS & OUTLETS (12 GRD). Title hunt must not steal numbered-note SCHEDULED prose. [RE-KEYED 2026-10-03 from the render] M701 (page 88) prints the set's schedules, each titled by its word alone: AIR HANDLING UNIT AHU-1 (two rows marked by circled notes 3 and 4, one unit); STEAM HUMIDIFIERS H-1 (not H-3; Condair SAM-E in AHU-1); AIR INLETS & OUTLETS D-1 to D-7 and R-1 to R-4: GRD 11 (was 12); FANS RF-1 & 2 (two fans in the AHU casing); PUMPS P-1 (inline circulator, chilled water coil freeze protection): PUMP 1 (was 0); SOUND ATTENUATORS SA-1 (Price PERM84/8A, AHU-1 return): DUCT_SILENCER 1 (was 0); SINGLE DUCT AIR TERMINAL UNITS VAV-1 to VAV-25 with hot water reheat: VAV 25 (was 0). Not counted: the EX FAN REBALANCE SCHEDULE's existing EX AC-1 (rebalanced only) and the steam traps EMD-1 and ST-1 (no family). Totals 42.",
   "categories": {
     "AHU": 1,
     "FAN": 2,
     "HUMIDIFIER": 1,
-    "GRD": 12
+    "GRD": 11,
+    "PUMP": 1,
+    "VAV": 25,
+    "DUCT_SILENCER": 1
   },
-  "totals": { "items": 16 },
-  "bas_points": { "rows": 0 },
-  "control_valves": { "items": 0 }
+  "totals": {
+    "items": 42
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
 }

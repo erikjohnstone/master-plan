@@ -1,5 +1,11 @@
 # Changelog
 
+- **A silencer schedule titled by its word alone.** 01_NY's M701 titles each schedule by its word (PUMPS, FANS, SOUND
+  ATTENUATORS), and the silencer family read only titles ending in SCHEDULE, so its SA-1 (Price PERM84/8A on AHU-1's
+  return) was no unit. A title that is only SOUND ATTENUATORS, SILENCERS or SOUND TRAPS now reads as one, as PUMPS and
+  COOLING TOWERS already do (AS-141); within a sentence or a note it does not. Over 212 cached and 85 freshly built
+  graphs only 01_NY changes (+SA-1). Its pipeline key is re-keyed from the render: 42 units (25 terminal units, P-1,
+  SA-1 and 11 air devices beside AHU-1, RF-1 and RF-2, and H-1), all of which the takeoff reads.
 - **A chilled water pump lettered pump-first.** 087_US's CHILLED WATER PUMP SCHEDULE draws its title in ink, so the
   sheet graph gives the table no title, and its rows PCH-1 and PCH-2 were read only by PUMP's rule for untitled tables,
   which knew P, CP, CWP, CHWP and the like but not PCH. PCH-n now reads as a pump there too (a PCH word, PCHW or PCH-A

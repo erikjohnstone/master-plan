@@ -2853,7 +2853,9 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE|SNORKEL\s+HOOD\s+SCHEDULE/i,
   },
   DUCT_SILENCER: {
-    titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE|SOUND\s+TRAP\s+SCHEDULE/i,
+    // Or the word alone, as the sheet's other schedules are titled (01_NY's
+    // SOUND ATTENUATORS beside its PUMPS and FANS; AS-141).
+    titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE|SOUND\s+TRAP\s+SCHEDULE|^\s*(?:SOUND\s+ATTENUATORS?|(?:DUCT\s+)?SILENCERS?|SOUND\s+TRAPS?)\s*$/i,
   },
   // Wall / intake louvers (LV-* / L-*). Titled-only — no keyRe so catch-all
   // cannot steal L-* lamp/luminaire marks. LOUER = OCR miss (bldg5406).

@@ -318,6 +318,13 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   are 01_NY's notes and 043_FL's panelboard loads). PCH (a pump lettered pump-first, chilled water) joins the untitled
   rule; A/B over 210 cached and 82 new graphs: only 087_US changes (+PCH-1, +PCH-2), 3 of 3. The ink-drawn title itself
   stays unread (a title band OCR would serve this one table).
+- 01_NY (an early pipeline key: AHU 1, FAN 2, HUMIDIFIER 1, GRD 12): M701 (page 88) titles each schedule by its word
+  alone. It schedules SINGLE DUCT AIR TERMINAL UNITS VAV-1 to VAV-25, PUMPS P-1 (an inline circulator for chilled water
+  coil freeze protection), SOUND ATTENUATORS SA-1 and AIR INLETS & OUTLETS D-1 to D-7 and R-1 to R-4 (11, not 12).
+  Re-keyed VAV 25, PUMP 1, DUCT_SILENCER 1, GRD 11, totals 42. The silencer family now reads a title that is only
+  SOUND ATTENUATORS, SILENCERS or SOUND TRAPS (as PUMPS, AS-141); A/B over 212 cached and 85 new graphs: only 01_NY
+  (+SA-1), which now reads all 42. Not counted: the existing EX AC-1 on an EX FAN REBALANCE SCHEDULE (rebalanced only;
+  053_VA's existing terminal units count because they sit in the family's own schedule) and the steam traps.
 - One mark on two rows of one schedule: the takeoff counts a mark once (`uniqueFamily`'s `keys`), so a later row that
   prints the same mark adds no unit. A census over 79 documents (the best graph of each) finds 26 such rows on 9
   documents whose cells differ from the first row's. All but one are one unit printed on two rows: 031_MO's fans, coils

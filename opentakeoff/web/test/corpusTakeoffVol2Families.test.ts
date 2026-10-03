@@ -1208,3 +1208,17 @@ describe("pump marks lettered pump-first on a table with no title", () => {
     assert.deepEqual(cats.PUMP.items.map((i) => i.tag).sort(), ["PCH-1", "PCH-2"]);
   });
 });
+
+// A silencer schedule titled by its word alone, as the sheet titles its others
+// (01_NY's SOUND ATTENUATORS beside PUMPS and FANS; AS-141's bare titles).
+describe("a silencer schedule titled by its word alone", () => {
+  it("reads SOUND ATTENUATORS, SILENCERS and SOUND TRAPS as whole titles, never inside a sentence", () => {
+    const { titleRe } = HVAC_FAMILY_SPECS.DUCT_SILENCER;
+    for (const t of ["SOUND ATTENUATORS", "SOUND ATTENUATOR", "SILENCERS", "DUCT SILENCERS", "SOUND TRAPS", "SOUND ATTENUATOR SCHEDULE"]) assert.equal(titleRe.test(t), true, t);
+    for (const t of ["PROVIDE SOUND ATTENUATORS AT EACH FAN", "SOUND ATTENUATOR NOTES", "SILENCER DETAIL"]) assert.equal(titleRe.test(t), false, t);
+    const row = (key: string) => ({ key, cells: { "UNIT NO": { text: key }, CFM: { text: "4210" } } });
+    const graph = { tables: [{ kind: "equipment", sheet: "m.pdf#88", title: { text: "SOUND ATTENUATORS" }, rows: ["SA-1"].map(row) }] };
+    const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual(cats.DUCT_SILENCER.items.map((i) => i.tag), ["SA-1"]);
+  });
+});
