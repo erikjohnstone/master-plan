@@ -1279,11 +1279,13 @@ export function tableRangeEvidence(table, drawn) {
  * no cell prints the row's name (itd-d1-lab's canopy hoods print theirs in
  * the key alone), the key is all there is. Or two marks a cell stacks, one
  * line each: 11_CA's GWH-1 over GWH-2, AC-1 over AC-2, CP-1 over CP-2, two
- * units a row each, read as their first alone. The family letters and
- * separator printed twice are two marks; a mark printing them once (B12,
- * AHU-1A) is one. */
+ * units a row each, read as their first alone; 041_IL's 40-HM-1 over 40-HM-2,
+ * the family letters after a building's number. The family letters (and
+ * building number) and separator printed twice are two marks; a mark
+ * printing them once (B12, AHU-1A) is one. A building's number is set off by
+ * a hyphen or space: a model number (48HJD007) or a size (18X12) has none. */
 function runTogetherMarks(raw) {
-  const m = String(raw || "").trim().match(/^([A-Z]{1,8})([\s-]?)(\d{1,4}[A-Z]?)\s*\1\2(\d{1,4}[A-Z]?)$/i);
+  const m = String(raw || "").trim().match(/^((?:\d{1,3}[\s-])?[A-Z]{1,8})([\s-]?)(\d{1,4}[A-Z]?)\s*\1\2(\d{1,4}[A-Z]?)$/i);
   return m ? [`${m[1]}${m[2]}${m[3]}`, `${m[1]}${m[2]}${m[4]}`] : null;
 }
 
@@ -2534,6 +2536,9 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|BOILER/i,
     // GWH: a gas water heater (004_MO's GAS WATER HEATER SCHEDULE GWH-1, GWH-2).
     keyRe: /^(?:DWH|WH|WHW|EWH|GWH)[\s\-]/i,
+    // HWH: a hot water heater, under a water heater title only (041_IL's
+    // ELECTRIC DOMESTIC WATER HEATER SCHEDULE 40-HWH-02).
+    titledKeyRe: /^HWH[\s\-]?\d/i,
   },
   WATER_SOFTENER: {
     titleRe: /WATER\s+SOFTENER\s+SCHEDULE/i,
@@ -2653,10 +2658,11 @@ export const HVAC_FAMILY_SPECS = {
     // "SHT. NO." never match. Bare H-* still requires hyphen (H-A-3) so
     // HC-/HP-/HWC-* coils are not stolen. WHSE-SH1 works via markCoreForKeyRe.
     keyRe: /^(?:(?:HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
-    // HF-* under a humidifier title (094_FL; AS-63), and HUM with one
-    // letter for its number (061_IA's HUM-A; AS-64): the digit keyRe asks for
-    // keeps sheet headers out, which a humidifier title already does.
-    titledKeyRe: /^(?:HF[\s\-]?\d|HUM[\s\-]?[A-Z]$)/i,
+    // HF-* under a humidifier title (094_FL; AS-63), HM-* (041_IL's
+    // 40-HM-1), and HUM with one letter for its number (061_IA's HUM-A;
+    // AS-64): the digit keyRe asks for keeps sheet headers out, which a
+    // humidifier title already does.
+    titledKeyRe: /^(?:H[FM][\s\-]?\d|HUM[\s\-]?[A-Z]$)/i,
     altTitleRe: /ELECTRIC\s+HUMIDIFI?ER/i,
     altKeyRe: /^(?:(?:EH|HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
   },
@@ -2714,13 +2720,16 @@ export const HVAC_FAMILY_SPECS = {
     // Or coils titled by their kind alone (091_IL's HYDRONIC COILS (HC) and
     // ELECTRIC HEATING COIL (EHC), the air handlers' coil sections scheduled
     // and supplied apart).
-    titleRe: /DUCT\s+MOUNTED\s+COIL|ELECTRIC\s+DUCT\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE|^\s*HYDRONIC\s+COILS?\b|ELECTRIC\s+HEATING\s+COILS?\b/i,
+    // Or a run-around loop's ENERGY RECOVERY COIL (041_IL's GLYCOL WATER
+    // ENERGY RECOVERY COIL SCHEDULE 40-ERC-1).
+    titleRe: /DUCT\s+MOUNTED\s+COIL|ELECTRIC\s+DUCT\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE|^\s*HYDRONIC\s+COILS?\b|ELECTRIC\s+HEATING\s+COILS?\b|ENERGY\s+RECOVERY\s+COILS?\b/i,
     exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE|DUCT\s+HEATER/i,
     // CC/HC/RC coils; HWC-* hot-water; PHC/RHC preheat/reheat; DH-* electric duct coil.
     keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC|DH)[\s\-]?/i,
     // Under a coil schedule title: RH-* reheat, SHC-* steam heating and DXC-*
-    // direct expansion coils (05_MO; AS-63), EHC-* electric heating coils.
-    titledKeyRe: /^(?:RH|SHC|DXC|EHC)[\s\-]?\d/i,
+    // direct expansion coils (05_MO; AS-63), EHC-* electric heating coils,
+    // ERC-* energy recovery coils.
+    titledKeyRe: /^(?:RH|SHC|DXC|EHC|ERC)[\s\-]?\d/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,

@@ -1084,13 +1084,13 @@ test("Vol2 sterile 041: the air side MATCH; the specialty schedule's eyewash is 
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
-  for (const family of ["AHU", "VAV", "CONDENSING_UNIT", "AIR_COMPRESSOR", "GRD"]) {
+  // The coils with the glycol energy recovery coil 40-ERC-1, the humidifiers
+  // stacked in one cell (40-HM-1 over 40-HM-2) and the water heater 40-HWH-02.
+  for (const family of ["AHU", "VAV", "CONDENSING_UNIT", "AIR_COMPRESSOR", "GRD", "DUCT_MOUNTED_COIL", "HUMIDIFIER", "WATER_HEATER"]) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
-  // The coils the takeoff reads, 3 of the key's 4 (the GLYCOL WATER ENERGY
-  // RECOVERY COIL SCHEDULE names no coil family), all MATCH; of the fans,
-  // 40-SF-1 does and 40-EF-01's one plan tag is not verified against a fan.
-  await assertFamilyStatusCounts(session, graph, key, "DUCT_MOUNTED_COIL", { match: 3 }, { rows: 3 });
+  // Of the fans, 40-SF-1 MATCHes and 40-EF-01's one plan tag is not verified
+  // against a fan.
   await assertFamilyStatusCounts(session, graph, key, "FAN", { match: 1, ambiguous: 1 });
   // P2000 in the architectural Specialty Equipment Schedule is an eyewash
   // station, no pump: the key holds none, and neither does the reconcile.

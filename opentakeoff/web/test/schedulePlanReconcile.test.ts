@@ -2188,6 +2188,12 @@ test("a list of one family's marks names each unit, however it is spelled (AS-86
   assert.deepEqual(expandEquipMarks("GWH-1 GWH-2"), ["GWH-1", "GWH-2"]);
   assert.deepEqual(expandEquipMarks("AC-1  AC-2"), ["AC-1", "AC-2"]);
   assert.deepEqual(expandEquipMarks("AHU 1 AHU 2"), ["AHU 1", "AHU 2"]);
+  // After a building's number too (041_IL's 40-HM-1 over 40-HM-2), stacked
+  // or run together; a model number or a size is no building's.
+  assert.deepEqual(expandEquipMarks("40-HM-1 40-HM-2"), ["40-HM-1", "40-HM-2"]);
+  assert.deepEqual(expandEquipMarks("40-HM-140-HM-2"), ["40-HM-1", "40-HM-2"]);
+  assert.deepEqual(expandEquipMarks("1-VAV-01 1-VAV-02"), ["1-VAV-01", "1-VAV-02"]);
+  for (const one of ["48HJD007 48HJD005", "18X12 18X12", "40-HM-1 41-HM-2", "40-HM-140"]) assert.deepEqual(expandEquipMarks(one), [one], one);
   for (const one of ["B12", "EF-12", "AHU-1A", "FOP-8AB", "CV-CHW-BP-A", "SF-P1-12", "AHU-1 A", "EF-1 2", "AHU-1 HP-1", "EF-1 EXHAUST"]) assert.deepEqual(expandEquipMarks(one), [one], one);
   // A printed list of one family's marks is read as printed, not as the key
   // the extraction ran together; two families' still give way to the key.

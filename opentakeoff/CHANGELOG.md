@@ -1,5 +1,12 @@
 # Changelog
 
+- **A building's stacked units; HM, HWH and ERC under their own titles.** 041_IL's STEAM HUMIDIFER SCHEDULE stacks
+  40-HM-1 over 40-HM-2 in one MARK cell. Two stacked marks were read as two units only with letters alone before their
+  numbers (GWH-1 over GWH-2), so the building's number hid both; a building's number set off by a hyphen or space now
+  counts too (a model number, 48HJD007, or a duct size, 18X12, has no such separator and stays one). And under their
+  own titles only: HM-n is a humidifier, HWH-n a water heater, ERC-n an energy recovery coil (a GLYCOL WATER ENERGY
+  RECOVERY COIL SCHEDULE is a coil schedule). Over 119 saved graphs only 041_IL changes: HUMIDIFIER 0 -> 2,
+  WATER_HEATER 0 -> 1, DUCT_MOUNTED_COIL 3 -> 4, each MATCHed on the plans; it now reads all 20 keyed units.
 - **A detail's title lettered under its grid names it.** Points lists drawn as details print their title below the
   grid, with the scale under it ("(7) VAV TERMINAL POINTS LIST / Scale: N.T.S."); the sheet graph looked for a title
   above or beside a grid only, so such a list, untitled, was no table at all. A title ending SCHEDULE or POINTS LIST

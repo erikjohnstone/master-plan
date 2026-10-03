@@ -287,6 +287,43 @@ describe("AS-64 a building and its floor or wing before the mark; ACCH, FCC and 
   });
 });
 
+// 041_IL's STEAM HUMIDIFER SCHEDULE stacks its two humidifiers in one MARK
+// cell, "40-HM-1" over "40-HM-2", which the extraction keys 40-HM-140-HM-2.
+describe("a humidifier's HM-n, a hot water heater's HWH-n, an energy recovery coil's ERC-n under their titles; two stacked after a building's number", () => {
+  it("reads both humidifiers, and HM-n under no other title", () => {
+    const table = (sheet: string, title: string, rows: Array<[string, string]>) => ({
+      kind: "equipment", sheet, title: { text: title }, rows: rows.map(([key, mark]) => ({ key, cells: { MARK: { text: mark } } })),
+    });
+    const cats = compileHvacTakeoff(null, { tables: [
+      table("m.pdf#26", "STEAM HUMIDIFER SCHEDULE", [["40-HM-140-HM-2", "40-HM-1 40-HM-2"]]),
+      table("m.pdf#27", "EQUIPMENT SCHEDULE", [["HM-3", "HM-3"]]),
+      table("m.pdf#28", "EXHAUST FAN SCHEDULE", [["HM-4", "HM-4"]]),
+    ] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual((cats.HUMIDIFIER?.items || []).map((i) => i.tag).sort(), ["40-HM-1", "40-HM-2"]);
+    const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
+    for (const t of ["HM-3", "HM-4"]) assert.equal(all.includes(t), false, t);
+  });
+
+  // 041_IL's ELECTRIC DOMESTIC WATER HEATER SCHEDULE (40-HWH-02) and GLYCOL
+  // WATER ENERGY RECOVERY COIL SCHEDULE (40-ERC-1).
+  it("reads a hot water heater HWH-n and an energy recovery coil ERC-n under their titles alone", () => {
+    const table = (sheet: string, title: string, keys: string[]) => ({
+      kind: "equipment", sheet, title: { text: title }, rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+    });
+    const cats = compileHvacTakeoff(null, { tables: [
+      table("m.pdf#17", "ELECTRIC DOMESTIC WATER HEATER SCHEDULE", ["40-HWH-02"]),
+      table("m.pdf#26", "GLYCOL WATER ENERGY RECOVERY COIL SCHEDULE", ["40-ERC-1"]),
+      table("m.pdf#27", "EQUIPMENT SCHEDULE", ["HWH-3", "ERC-3"]),
+      table("m.pdf#28", "EXHAUST FAN SCHEDULE", ["HWH-4", "ERC-4"]),
+    ] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual((cats.WATER_HEATER?.items || []).map((i) => i.tag), ["40-HWH-02"]);
+    assert.deepEqual((cats.DUCT_MOUNTED_COIL?.items || []).map((i) => i.tag), ["40-ERC-1"]);
+    assert.deepEqual(cats.ERV?.items || [], []);
+    const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
+    for (const t of ["HWH-3", "ERC-3", "HWH-4", "ERC-4"]) assert.equal(all.includes(t), false, t);
+  });
+});
+
 describe("AS-63 marks a schedule's title vouches for, and units listed in another family's schedule", () => {
   const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
   const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });

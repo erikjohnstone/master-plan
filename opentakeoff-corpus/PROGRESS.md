@@ -437,13 +437,13 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   21_VA's lone plumbing-plan "WH" (wall hydrants) are not abbreviation entries and stay as they were.
 - 041_IL re-keyed from its renders (pages 17, 24, 25, 26): 20 units in 10 families (AHU 1, VAV 5, CONDENSING_UNIT 1,
   FAN 2, HUMIDIFIER 2, WATER_HEATER 1, EXPANSION_TANK 1, DUCT_MOUNTED_COIL 4, AIR_COMPRESSOR 1, GRD 2) and 43 BAS
-  points; the earlier [WEAK] key held FCU 2, PUMP 1, GRD 1. Kept out by precedent: the heat pipe's two coil
-  sections (05_MO's heat pipe is no family's) and the air handler's filter sections. The takeoff reads 16 of the 20
-  (missing the two humidifiers, stacked in one MARK cell and read as one glued mark "40-HM-140-HM-2", the water
-  heater 40-HWH-02 and the glycol energy recovery coil 40-ERC-1, whose title names no coil family) and none of the
-  43 points: the sheet graph read no table from M-502-3 (read since: a detail's title under its grid, below). Its reconcile: AHU, VAV, CU, coils,
-  compressor and GRD all MATCH; 40-SF-1 MATCH, 40-EF-01 ambiguous (its one plan tag unverified against a fan);
-  40-ET-02 schedule-only.
+  points; the earlier [WEAK] key held FCU 2, PUMP 1, GRD 1. Kept out by precedent: the heat pipe's two coil sections
+  (05_MO's heat pipe is no family's) and the air handler's filter sections. The takeoff read 16 of the 20 (missing the
+  two humidifiers, stacked in one MARK cell and read as one glued mark "40-HM-140-HM-2", the water heater 40-HWH-02
+  and the glycol energy recovery coil 40-ERC-1, whose title names no coil family; all 20 read since, below) and none
+  of the 43 points: the sheet graph read no table from M-502-3 (read since: a detail's title under its grid, below).
+  Its reconcile: AHU, VAV, CU, coils, compressor and GRD all MATCH; 40-SF-1 MATCH, 40-EF-01 ambiguous (its one plan
+  tag unverified against a fan); 40-ET-02 schedule-only.
 - A SPECIALTY EQUIPMENT SCHEDULE whose title does not say MECHANICAL (or HVAC) holds no unit. 041_IL's architectural
   Specialty Equipment Schedule (TYPE MARK, DESCRIPTION: utility carts, scope cabinets, an EYEWASH STATION P2000) was
   read as a catch-all and P2000 counted as a pump by its mark's shape. A census of units read from catch-all
@@ -483,13 +483,23 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   untyped points with a typed ID in another cell over 119 saved graphs and the new 041_IL graph: 26 points, all on
   that list. Typing A/B: those 26 change (AI 9, BI 9, AO 7, BO 1, each matching its printed ID), nothing else; walled
   0. 041_IL now reads all 43 keyed points (AI 13, AO 9, BI 9, BO 1; 11 untyped: the VAV list's 10 software points and
-  the air handler list's AIRFLOW MONITORING - SA, which prints no ID).
+  the air handler list's AIRFLOW MONITORING - SA, whose ID FT-1, a flow transmitter's, names no point type).
 - 039_TX, 050_IL and 053_VA re-keyed from their renders (BAS only): 039_TX page 31's MODBUS UNIT INTEGRATION POINTS
   LIST (8 points) and FAN COIL UNIT POINTS LIST (11), 19 (was 0); 050_IL page 17's VAV TERMINAL POINTS LIST, 16 (was
   0); 053_VA page 11's VAV TERMINAL UNIT POINT LIST, 19 (was 0). Each list's printed TOTAL HARDWARE (n) equals the
   points ticked under its hardware columns. No other points list in any of the three sets (their only other I/O text
   is an abbreviations entry; 039_TX's page 32 says the electronic points list comes from the VA at award). WP1
   acceptance on the rebuilt graphs: 039_TX, 050_IL, 053_VA PASS; 041_IL FAIL on HVAC total (16 of 20, as above).
+- 041_IL's last four units, by general rules on the shared path (`corpusTakeoff` `runTogetherMarks`; the HUMIDIFIER,
+  WATER_HEATER and DUCT_MOUNTED_COIL specs): two stacked marks after a building's number ("40-HM-1 40-HM-2", keyed
+  40-HM-140-HM-2) are two units, the number set off by a hyphen or space; under their own titles HM-n is a humidifier,
+  HWH-n a water heater, ERC-n an energy recovery coil, and an ENERGY RECOVERY COIL title a coil schedule's. Census
+  over 119 saved graphs: each shape occurs on 041_IL alone (without the separator, the stacked-pair pattern also took
+  086_CA's model pair 48HJD007 48HJD005 and 26_CA's duct sizes 18X12 18X12 in a legend; with it, neither). Takeoff
+  A/B: 041_IL alone, HUMIDIFIER 0 -> 2, WATER_HEATER 0 -> 1, DUCT_MOUNTED_COIL 3 -> 4; walled 0. Reconcile: all seven
+  MATCH, and the 041 reconcile test now asserts every coil, humidifier and the water heater MATCH. WP1 on the rebuilt
+  graph: 041_IL PASS (20 units, 43 points). Mutants (letters-only stacked pattern; no HM; no HWH/ERC) each fail a
+  test.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
