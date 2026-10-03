@@ -81,6 +81,8 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 7c3105c | A sheet's keynotes heading is no sheet list (053_VA TU26-40 swept); a demolition sheet that also draws its new work is read view by view (066_MT, 01_NY) |
 | d79efea | One reconcile row a unit (open surplus rows 16 -> 0; 16_NV's DF-B1 counted); a schedule's tag symbol names its unit |
 | f4daf77 | An abbreviations list's entry is no unit's tag (013_MO VFD-1); a specialty schedule that is not mechanical holds no unit (041_IL's eyewash); 041_IL re-keyed |
+| 2ba0863 | Points lists drawn as details read by the title under their grid (6 lists on 4 open sets); totals lines no points; a point ID types its point; 039_TX, 050_IL and 053_VA BAS re-keyed |
+| 220e006 | Stacked units after a building's number are two; HM, HWH and ERC under their own titles: 041_IL reads all 20 keyed units (WP1 PASS) |
 
 ## Known limits (documented, not fixed)
 
@@ -307,6 +309,9 @@ The fresh graphs saved at about 02:30 predate three graph-side commits (43e7d96,
 keyed set, a graph built at the current graph code (a new build, or a cache entry after 06:36) and marks an older one
 stale; the 63 keyed sets with no graph and the 39 stale ones are being rebuilt, one at a time. Walled sets (held-out,
 held-out drafters' and reconcile-check documents) are scored on totals only.
+- Disclosure (2026-10-03): a progress check on the fresh rebuild printed its raw snapshot lines, which list each
+  set's read item names, for four walled sets (034_NC, 035_AR, 036_LA, 037_AR). No rule, key or test was changed from
+  them; rebuild progress is read through a totals-only view since.
 - 068_US ([WEAK] key BOILER 1, PUMP 3, AIR_SEPARATOR 3, EXPANSION_TANK 1): M002 (page 4) schedules B-1, P-1, P-2, AS-1
   and ET-1 (and GR-1, no family). The plans' (E)P-3 and (E)P-4 are existing pumps; no AS-2 or AS-3 is printed.
   Re-keyed PUMP 2, AIR_SEPARATOR 1, totals 5, the takeoff's 5. reconcileWorkflow's 068 test asserted the old key's
@@ -500,6 +505,44 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   MATCH, and the 041 reconcile test now asserts every coil, humidifier and the water heater MATCH. WP1 on the rebuilt
   graph: 041_IL PASS (20 units, 43 points). Mutants (letters-only stacked pattern; no HM; no HWH/ERC) each fail a
   test.
+- A demolition plan is a demolition sheet (#304; `sheetgraph` `classifySheetRole`, `isDemolitionPlanTitle`,
+  `pureDemolitionSheetTitle`). A sheet titled only as a demolition plan read as a plan by its FLOOR PLAN words (031_MO's
+  MD101 "FIRST FLOOR PLAN - MECHANICAL DEMOLITION", 16_NV's six BUILDING B/C MECHANICAL DEMOLITION plans, 18_OR's HVAC
+  DEMO FLOOR PLANs), so the sweep and the set-wide symbol sweep read what it draws for removal as installed work. A
+  demolition word anywhere in a title with the PLAN word now titles a demolition plan (never a notes block's, legend's,
+  key plan's or a sentence, nor a combined NEW WORK, REMODEL, RENOVATION, CONSTRUCTION or PROPOSED title: 01_NY's
+  "PHASE 2 2nd FLOOR PLAN DEMOLITION & CONSTRUCTION" stays a plan); a plan sheet whose plan titles are all demolition
+  plans' is a demolition sheet. Lines the title block wraps are read with the phrase over both (an overlapping phrase is
+  the same title, as `sheetViewTitles` reads it); the title the signals read, printed on its side (017_MD's MD-101), counts
+  too; sentences and a north arrow's PLAN NORTH are no plan titles. Census over every keyed set's pages (old against
+  new role, from the PDFs): 83 pages on 28 open sets and 26 on 9 walled sets change role (68 plan, 7 unknown, 2 legend
+  and 3 elevation sheets become demolition sheets; the legend and elevation pages are site and architectural demolition
+  plans), and 3 demolition sheets gain a demolition view the old pattern missed (066_MT's E2 and E4 "FIRST FLOOR
+  DEMOLITION LIGHTING PLAN", 080_CA's "LEVEL 2 - ENLARGED DEMOLITION PLAN"). No table changes: the extractors read the
+  signals' role, and only a schedule role steers a table reader. Reconcile A/B over those sets (each set's saved graph,
+  the changed pages patched on its sheets and tags as `buildSheetGraph` would; base the pinned 220e006 tree): open
+  installed 765 -> 765, MATCH 547 -> 547; walled (totals only) rows 344, installed 268, statuses unchanged. 14 rows
+  change: 12 units cite the demolition plan that draws them as a demolition view rather than a repeat view or loose
+  tag (012_MO VFD-CT-1..3, 016_NY R1, R2, P-1, P-2, 04_NV CWP-1..4, IWP-1); 004_MO's GEF-1 drops four bare GEF labels on
+  its demolition roof plan M-103 (the view reader never reads a family's bare letters, AS-119); 22_GA's WH-1 goes
+  AMBIGUOUS -> SCHEDULE_ONLY, its one tag cite having been a bare WH on the electrical demolition plan E1.02 (WH-1 is
+  printed only on its schedule sheet and in a plumbing keynote). D07 (bldg5406, whose page 1 is its demolition plan)
+  and the 066_MT reconcile test pass on rebuilt graphs.
+  Guard on this code: web check 4,271 tests, 0 failures (13 skipped), lint 0 errors; MCP tools and session 143/143.
+  `test:shared-path`: planToolParity, T-BAS-01, T-HVAC-01 and T-VALVE-01 pass; the five BAS served-paint sets fail
+  as listed under Known failing tests (27_WA 15 MATCH, the same on the 220e006 tree, run alone), 16_NV's valve paint
+  fails identically on the 220e006 tree (0 MATCH: OA1 and OA2 AMBIGUOUS under the exact-tag rule); crossCorpusWorkflow
+  and reconcileWorkflow were OOM-killed mid-file with three files sharing the 16 GB container (memory-cgroup kills;
+  reconcileWorkflow re-run alone, see below).
+- A view reads a mark printed without the status its schedule adds (`Session.viewTagOccurrences`, the sweep's
+  `markWithoutTrailingStatus` rule): 012_MO's VFD SCHEDULE lists "VFD-CT-1 (EXIST.)" under TAG NO, and the
+  demolition plan tags VFD-CT-1; with the plan a demolition sheet, the drives' cites there were lost until the view
+  reader read the bare mark too (last, where no row of the set is named so). Fixture test (schedule-status-mark.pdf);
+  it fails without the change.
+- Plan sheets that also draw a demolition view (004_MO's M-101 "MECHANICAL BASEMENT PLAN" beside "MECHANICAL DEMO
+  BASEMENT PLAN") stay plans and are swept whole. Measured, not changed: over every keyed set the tag index reads 0
+  scheduled marks inside such demolition views on open sets (004_MO's P-101, P-106 and M-101: 18 marks, all in their
+  plan views) and 2 on one walled sheet.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

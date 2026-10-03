@@ -3750,6 +3750,22 @@ test("reconcile_schedule_plan reads a mark a demolition plan zero-pads as its ro
   assert.ok(!drawn.some((text: string) => /^EF-0\d$/.test(text)), `the review list never calls a respelled mark unscheduled: ${drawn.join(", ")}`);
 });
 
+// A status the schedule prints after a unit's mark, which the drawings leave
+// off: 012_MO's VFD SCHEDULE lists "VFD-CT-1 (EXIST.)" and tags VFD-CT-1 on its
+// demolition plan. The sweep reads the bare mark on the duct plan; the
+// demolition plan's tag links to the row as a demolition view, read so too.
+const STATUS = fileURLToPath(new URL("./fixtures/schedule-status-mark.pdf", import.meta.url));
+test("reconcile_schedule_plan links a demolition plan's tag to its row printed with a status after its mark", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: STATUS });
+  const all = await call(client, "reconcile_schedule_plan", { family: "VFD" });
+  assert.equal(all.isError, false);
+  assert.deepEqual(all.data.rows.map((r: any) => [r.tag, r.status, r.installed_qty]), [["VFD-CT-1 (EXIST.)", "MATCH", 1], ["VFD-CT-2 (EXIST.)", "MATCH", 1]]);
+  for (const r of all.data.rows) {
+    assert.deepEqual((r.plan_other_cites ?? []).map((c: any) => [c.sheet.replace(/^.*#/, "#"), c.reason]), [["#2", "demolition_view"]], r.tag);
+  }
+});
+
 // A unit family's schedule printed on its side, read as a reference table, and
 // a table that only names one of its units printed before it (AS-114): 040_IL's
 // AIR HANDLING UNIT SCHEDULE lists AHU-15 in a column, and its FAN INTERLOCK

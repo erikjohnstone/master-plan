@@ -1,5 +1,25 @@
 # Changelog
 
+- **A demolition plan is a demolition sheet.** A sheet titled only as a demolition plan read as a plan by its FLOOR
+  PLAN words: 031_MO's "FIRST FLOOR PLAN - MECHANICAL DEMOLITION", 16_NV's "BUILDING B MECHANICAL DEMOLITION FLOOR
+  PLAN", 18_OR's "HVAC DEMO FLOOR PLAN - LEVEL 1". The sweep took what such a sheet draws for removal as installed
+  work, and the set-wide symbol sweep counted its symbols. A demolition word anywhere in a title with the PLAN word now
+  titles a demolition plan (never a notes block's, a legend's, a key plan's or a sentence, nor a combined DEMOLITION AND
+  NEW WORK or DEMOLITION & CONSTRUCTION title), and a sheet whose plan titles are all demolition plans' is a demolition
+  sheet: its title block's wrapped lines ("FIRST FLOOR PLAN - MECHANICAL" over "DEMOLITION") and its title printed on
+  its side (017_MD's MD-101) read as that title. A sheet that also titles any other plan stays a plan. The same reading
+  finds demolition views beside new work that the old pattern missed (066_MT's "FIRST FLOOR DEMOLITION LIGHTING PLAN",
+  080_CA's "LEVEL 2 - ENLARGED DEMOLITION PLAN"). Tables are read as before: the extractors read the signals' role. A
+  census over every keyed set: 83 pages on 28 open sets and 26 on 9 walled sets change role (68 plan, 7 unknown, 2
+  legend and 3 elevation sheets become demolition sheets), and 3 demolition sheets gain a demolition view. Reconcile
+  A/B over those sets: installed quantities unchanged (765 open, 268 walled), MATCH unchanged (547 open); 12 units now
+  cite the demolition plan that draws them as a demolition view rather than as a repeat or a loose tag (012_MO's
+  existing drives, 016_NY's grilles and pumps, 04_NV's pumps), and 004_MO's GEF-1 no longer cites four bare GEF labels
+  on its demolition roof plan. 22_GA's WH-1 reads SCHEDULE_ONLY rather than AMBIGUOUS: its one "plan tag" was a bare
+  WH on the electrical demolition plan.
+- **A view reads a mark printed without the status its schedule adds.** 012_MO's VFD SCHEDULE lists "VFD-CT-1
+  (EXIST.)" and its plans tag VFD-CT-1. The sweep reads the bare mark (last, where no row is named so); the demolition
+  and reference view reader now does too, so the three existing drives link to the demolition plan as demolition views.
 - **A building's stacked units; HM, HWH and ERC under their own titles.** 041_IL's STEAM HUMIDIFER SCHEDULE stacks
   40-HM-1 over 40-HM-2 in one MARK cell. Two stacked marks were read as two units only with letters alone before their
   numbers (GWH-1 over GWH-2), so the building's number hid both; a building's number set off by a hyphen or space now

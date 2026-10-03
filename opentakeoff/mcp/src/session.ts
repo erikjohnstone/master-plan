@@ -4420,6 +4420,12 @@ export class Session {
     const respellings = /^[A-Z]+[\s-]+\d/i.test(key) && scheduleRowsReadingMark(graph, key).length
       ? markZeroRespellings(key).filter((variant) => !named.has(variant.trim().toUpperCase().replace(/\s+/g, "")))
       : [];
+    // A status the schedule prints after the mark, which the drawings leave
+    // off (012_MO's "VFD-CT-1 (EXIST.)", tagged VFD-CT-1 on its demolition
+    // plan): the bare mark, last, where no row of the set is named so, as the
+    // sweep reads a plan's.
+    const bare = markWithoutTrailingStatus(key);
+    if (bare && !named.has(bare.toUpperCase().replace(/\s+/g, ""))) respellings.push(bare);
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key);
       if (!role) continue;

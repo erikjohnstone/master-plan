@@ -614,8 +614,24 @@ export function sheetPlanViewTitle(sheet: SheetSpans): Evidence | null {
 
 // A demolition view's own title: a demolition plan's, never a notes block's
 // heading over it ("DEMOLITION PLAN NOTES") nor a detail's or legend's.
-const DEMOLITION_VIEW_TITLE_RE = /\b(?:DEMOLITION|DEMO)\s+PLANS?\b/;
 const NOT_A_VIEW_TITLE_RE = /\b(?:NOTES?|KEYNOTES?|LEGENDS?|SCHEDULES?|DETAILS?|SECTIONS?|ELEVATIONS?|DIAGRAMS?|RISERS?|KEY\s+PLAN)\b/;
+// A sentence is no view's title: "SEE DEMOLITION FLOOR PLAN FOR...",
+// "FIXTURES TO BE REMOVED OR REMAIN AND NEW WORK PLANS".
+const SENTENCE_WORD_RE = /\b(?:SHALL|SEE|REFER|PROVIDE|VERIFY|COORDINATE|INSTALL|FOR|TO|FROM|THE|THIS|ARE|IS|BE|NOT)\b/;
+// nor a combined title a demolition plan's own: "DEMOLITION AND NEW WORK
+// PLAN", 01_NY's "PHASE 2 2nd FLOOR PLAN DEMOLITION & CONSTRUCTION"
+const NOT_A_DEMOLITION_TITLE_RE = new RegExp(`${SENTENCE_WORD_RE.source}|\\b(?:NEW|REMODEL|RENOVATION|CONSTRUCTION|PROPOSED)\\b`);
+/** A demolition plan's title: a demolition word with the PLAN word anywhere
+ * in it ("MECHANICAL DEMOLITION FLOOR PLAN - NORTH", "FIRST FLOOR PLAN -
+ * MECHANICAL DEMOLITION", "HVAC DEMO FLOOR PLAN - LEVEL 1", "FIRST FLOOR
+ * ENLARGED MECHANICAL REMOVAL PLAN"), or one with no PLAN word
+ * (isLevelDisciplineDemolitionTitle, AS-101). Never a notes block's, a
+ * legend's or a key plan's heading, nor a sentence. */
+function isDemolitionPlanTitle(u: string): boolean {
+  if (NOT_A_VIEW_TITLE_RE.test(u) || REFERENCE_RE.test(u)) return false;
+  return (DEMOLITION_WORD_RE.test(u) && /\bPLANS?\b/.test(u) && !NOT_A_DEMOLITION_TITLE_RE.test(u))
+    || isLevelDisciplineDemolitionTitle(u);
+}
 // A view that is neither plan nor demolition plan: a detail, section,
 // elevation, diagram or riser drawn on the same sheet ("STEAM HUMIDIFIER
 // PIPING DETAIL", "AIR HANDLING UNIT DRAIN TRAP DETAIL1").
@@ -639,7 +655,7 @@ export function sheetViewTitles(sheet: SheetSpans): SheetViewTitles | null {
   for (const { text, bbox } of phrases) {
     const u = norm(text).replace(/\s+/g, " ");
     if (u.length < 4 || u.length > 60 || REFERENCE_RE.test(u)) continue;
-    if ((DEMOLITION_VIEW_TITLE_RE.test(u) || isLevelDisciplineDemolitionTitle(u)) && !NOT_A_VIEW_TITLE_RE.test(u)) demolition.push(bbox);
+    if (isDemolitionPlanTitle(u)) demolition.push(bbox);
     else if (PLAN_TITLE_WITH_QUALIFIERS_RE.test(u) || isLevelDisciplineTitle(u)) plan.push(bbox);
     else if (OTHER_VIEW_TITLE_RE.test(u) && !/\b(?:NOTES?|KEYNOTES?|LEGENDS?|SCHEDULES?)\b/.test(u)) other.push(bbox);
   }
@@ -690,18 +706,59 @@ function titleHeightPhrases(sheet: SheetSpans): Array<{ text: string; bbox: Bbox
   return titlePhrases(sheet.spans).filter(({ h }) => h >= minTitleHeight);
 }
 
-/** A demolition plan's own title on a sheet (isLevelDisciplineDemolitionTitle),
- * printed as a title (titleHeightPhrases); AS-101. */
+/** A demolition plan's own title on a sheet (isDemolitionPlanTitle), printed
+ * as a title (titleHeightPhrases); AS-101. */
 function sheetDemolitionViewTitle(sheet: SheetSpans): Evidence | null {
   const title = titleHeightPhrases(sheet)?.find(({ text }) => {
     const u = norm(text).replace(/\s+/g, " ");
-    return u.length >= 4 && u.length <= 60 && !REFERENCE_RE.test(u) && isLevelDisciplineDemolitionTitle(u);
+    return u.length >= 4 && u.length <= 60 && isDemolitionPlanTitle(u);
   });
   return title ? { sheet: sheet.key, text: title.text, bbox: title.bbox } : null;
 }
 
+/** A demolition plan's title on a sheet that prints no other plan's title:
+ * among its title-height phrases a demolition plan's title
+ * (isDemolitionPlanTitle) and none other with the PLAN word, nor any plan
+ * title sheetPlanViewTitle reads. 031_MO's "FIRST FLOOR PLAN - MECHANICAL
+ * DEMOLITION" and 16_NV's "BUILDING B MECHANICAL DEMOLITION FLOOR PLAN"
+ * read as plans by their FLOOR PLAN words, so the units they draw for
+ * removal counted as installed work. A sheet that also titles a new work
+ * plan keeps its plan role. A line of a demolition title the title block
+ * wraps ("FIRST FLOOR PLAN - MECHANICAL" over "DEMOLITION", read whole as
+ * the phrase over both) is that title's, as sheetViewTitles reads it; a
+ * sentence ("... AND NEW WORK PLANS FOR FINAL SLOPING.") and a north arrow's
+ * PLAN NORTH title no plan. The title the signals read the plan from counts
+ * too where it is a demolition plan's, though printed on its side in the
+ * title block (017_MD's MD-101 "DEMOLITION FLOOR PLAN - MECHANICAL"). */
+function pureDemolitionSheetTitle(sheet: SheetSpans, signal: Evidence | null): Evidence | null {
+  const phrases = titleHeightPhrases(sheet);
+  if (!phrases) return null;
+  const demolition: Array<{ text: string; bbox: Bbox }> = [];
+  const isTitle = (u: string) => u.length >= 4 && u.length <= 60 && isDemolitionPlanTitle(u);
+  if (signal && isTitle(norm(signal.text).replace(/\s+/g, " "))) demolition.push({ text: signal.text, bbox: signal.bbox });
+  const others: Bbox[] = [];
+  for (const { text, bbox } of phrases) {
+    const u = norm(text).replace(/\s+/g, " ");
+    if (u.length < 4 || u.length > 60) continue;
+    if (isTitle(u)) demolition.push({ text, bbox });
+    else if (/\bPLANS?\b/.test(u) && !NOT_A_VIEW_TITLE_RE.test(u) && !REFERENCE_RE.test(u)
+      && !SENTENCE_WORD_RE.test(u) && !/\bPLAN\s+NORTH\b/.test(u)) others.push(bbox);
+  }
+  if (!demolition.length) return null;
+  const overlaps = (a: Bbox, b: Bbox) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+  if (others.some((b) => !demolition.some((d) => overlaps(b, d.bbox)))) return null;
+  return sheetPlanViewTitle(sheet) ? null : { sheet: sheet.key, text: demolition[0].text, bbox: demolition[0].bbox };
+}
+
 export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
   const bySignals = classifySheetRoleBySignals(sheet);
+  // A plan the signals read from a demolition plan's title, on a sheet that
+  // titles no other plan, is a demolition sheet (pureDemolitionSheetTitle).
+  // Plan and demolition sheets read their tables alike, so no table changes.
+  if (bySignals.role === "plan") {
+    const demolition = pureDemolitionSheetTitle(sheet, bySignals.evidence);
+    return demolition ? { role: "demolition", confidence: 0.9, evidence: demolition } : bySignals;
+  }
   // an index page's own SHEET INDEX title (unknown at 0.95) stands too
   if (PLAN_TITLE_DEFERS_TO.has(bySignals.role) || (bySignals.role === "unknown" && bySignals.confidence > 0)) return bySignals;
   // A plan title first, then a demolition plan's title (AS-101). Neither pass

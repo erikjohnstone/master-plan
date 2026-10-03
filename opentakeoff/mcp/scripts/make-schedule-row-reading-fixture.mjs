@@ -71,6 +71,7 @@ const OUT_REFERENCE = join(FIXTURES, "schedule-reference-view.pdf");
 const OUT_PADDED = join(FIXTURES, "schedule-padded-mark.pdf");
 const OUT_VIEW_GATES = join(FIXTURES, "schedule-view-gates.pdf");
 const OUT_VIEW_TRADE = join(FIXTURES, "schedule-view-trade.pdf");
+const OUT_STATUS = join(FIXTURES, "schedule-status-mark.pdf");
 
 const fmt = (v) => (Math.round(v * 100) / 100).toString();
 function place(segs, [px, py]) {
@@ -494,3 +495,20 @@ const VIEW_TRADE_PAGES = [
   ],
 ];
 writePdf(OUT_VIEW_TRADE, VIEW_TRADE_PAGES);
+
+// A status the schedule prints after a unit's mark, which the drawings leave
+// off: 012_MO's VFD SCHEDULE lists "VFD-CT-1 (EXIST.)" under TAG NO and tags
+// VFD-CT-1 on its new work and demolition plans. The sweep counts the duct
+// plan's VFD-CT-1 and VFD-CT-2 as the rows'; the demolition plan's are views
+// of them.
+const STATUS_PAGES = [
+  fanPlan("LEVEL 1 - MECHANICAL HVAC DUCT PLAN", ["VFD-CT-1", "VFD-CT-2"]),
+  fanPlan("LEVEL 1 - MECHANICAL DEMOLITION PLAN", ["VFD-CT-1", "VFD-CT-2"]),
+  [
+    title("VARIABLE FREQUENCY DRIVE SCHEDULE"),
+    cell("TAG NO", 50, 540), cell("HP", 200, 540), cell("VOLTAGE", 280, 540), cell("SERVES", 360, 540),
+    cell("VFD-CT-1 (EXIST.)", 50, 515), cell("5", 200, 515), cell("460", 280, 515), cell("CT-1", 360, 515),
+    cell("VFD-CT-2 (EXIST.)", 50, 490), cell("7.5", 200, 490), cell("460", 280, 490), cell("CT-2", 360, 490),
+  ],
+];
+writePdf(OUT_STATUS, STATUS_PAGES);

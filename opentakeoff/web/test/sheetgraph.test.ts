@@ -395,6 +395,63 @@ test("sheet roles: a demolition plan's title with no PLAN word decides a sheet t
   assert.equal(both.role, "plan");
 });
 
+// #304: a demolition plan's title read as a plan by its FLOOR PLAN words
+// (031_MO's "FIRST FLOOR PLAN - MECHANICAL DEMOLITION", 16_NV's "BUILDING B
+// MECHANICAL DEMOLITION FLOOR PLAN"): the units it draws for removal counted
+// as installed work.
+test("sheet roles: a plan sheet titled only as a demolition plan is a demolition sheet; one titling a new work plan stays a plan (#304)", () => {
+  const sheet = (...titles: string[]) => ({ key: "d", sheet_number: "MD101", spans: [...notes(12), ...titles.map((t, i) => tsp(t, 400 + 2400 * i, 3000, 38))] });
+  for (const title of [
+    "FIRST FLOOR PLAN - MECHANICAL DEMOLITION", "BUILDING B MECHANICAL DEMOLITION FLOOR PLAN", "HVAC DEMO FLOOR PLAN - LEVEL 1",
+    "FIRST FLOOR ENLARGED MECHANICAL REMOVAL PLAN", "BUILDING 2 - LEVEL 1 FLOOR PLAN DEMOLITION", "DEMOLITION FLOOR PLAN - MECHANICAL",
+  ]) {
+    const r = classifySheetRole(sheet(title));
+    assert.deepEqual([r.role, r.evidence?.text], ["demolition", title], title);
+    assert.equal(classifySheetRoleBySignals(sheet(title)).role, "plan", `${title}: what the signals say, and every extractor reads, is a plan's`);
+  }
+  // two demolition plans on one sheet
+  assert.equal(classifySheetRole(sheet("BUILDING B MECHANICAL DEMOLITION FLOOR PLAN", "BUILDING B MECHANICAL DEMOLITION ROOF PLAN")).role, "demolition");
+  // a sheet that also titles its new work plan, or any other plan, stays a plan
+  for (const other of ["FIRST FLOOR MECHANICAL PLAN", "FIRST FLOOR PLAN - NEW WORK", "EXISTING FLOOR PLAN", "FIRST FLOOR - HVAC", "FIRST FLOOR PLAN"]) {
+    assert.equal(classifySheetRole(sheet("FIRST FLOOR PLAN - MECHANICAL DEMOLITION", other)).role, "plan", other);
+  }
+  // the title block wrapping the demolition title over two lines (031_MO's
+  // MD101), a note's sentence and a north arrow's PLAN NORTH title no other plan
+  const wrapped = { key: "w", sheet_number: "MD101", spans: [
+    ...notes(12), tsp("FIRST FLOOR PLAN - MECHANICAL DEMOLITION", 2500, 3040, 50),
+    tsp("FIRST FLOOR PLAN - MECHANICAL", 4680, 2928, 41), tsp("DEMOLITION", 4680, 2974, 41),
+    tsp("FIXTURES TO BE REMOVED OR REMAIN AND NEW WORK PLANS", 400, 1200, 38), tsp("PLAN NORTH", 3620, 3270, 50),
+  ] };
+  assert.equal(classifySheetRoleBySignals(wrapped).role, "plan");
+  assert.equal(classifySheetRole(wrapped).role, "demolition");
+  // the title the signals read, printed on its side in the title block
+  // (017_MD's MD-101), its notes headings the only titles beside it
+  const side = (...titles: string[]) => ({ key: "r", sheet_number: "MD-101", spans: [
+    ...notes(12), tsp("DEMOLITION WORK GENERAL NOTES", 3026, 3130, 38), tsp("DEMOLITION WORK PLAN NOTES", 3920, 3130, 38),
+    tsp("DEMOLITION FLOOR PLAN - MECHANICAL", 5840, 3560, 20, 90), ...titles.map((t) => tsp(t, 400, 3000, 38)),
+  ] });
+  assert.equal(classifySheetRoleBySignals(side()).role, "plan");
+  assert.equal(classifySheetRole(side()).role, "demolition");
+  assert.equal(classifySheetRole(side("FIRST FLOOR MECHANICAL PLAN")).role, "plan");
+  // a notes block's, a legend's or a combined title, or a sentence, is no demolition plan's
+  for (const title of ["DEMO ROOF PLAN KEYED NOTES", "DEMOLITION FLOOR PLAN LEGEND", "DEMOLITION AND NEW WORK FLOOR PLAN", "SEE DEMOLITION FLOOR PLAN FOR EXISTING"]) {
+    assert.equal(classifySheetRole(sheet("FIRST FLOOR PLAN", title)).role, "plan", title);
+  }
+  // a demolition plan's title printed small (a note's line) never decides
+  const small = { key: "s", sheet_number: "M101", spans: [...notes(12), tsp("FIRST FLOOR MECHANICAL PLAN", 400, 3000, 38), tsp("MECHANICAL DEMOLITION FLOOR PLAN", 4000, 900, 20)] };
+  assert.equal(classifySheetRole(small).role, "plan");
+});
+
+test("sheetViewTitles: a demolition view titled with the PLAN word anywhere is a demolition view (#304)", () => {
+  // 004_MO's P-101: "PLUMBING BASEMENT PLAN" beside "PLUMBING DEMO MECHANICAL ROOM PLAN"
+  const views = sheetViewTitles({ key: "p", sheet_number: "P-101", spans: [
+    ...notes(12), tsp("PLUMBING BASEMENT PLAN", 400, 3000, 38), tsp("PLUMBING DEMO MECHANICAL ROOM PLAN", 2800, 3000, 38),
+  ] })!;
+  assert.deepEqual([views.plan.length, views.demolition.length], [1, 1]);
+  assert.equal(viewKindAt(views, 3500, 2000), "demolition");
+  assert.equal(viewKindAt(views, 1200, 2000), "plan");
+});
+
 // AS-108: 26_CA's schedules sheet M0.09 titles each table with the
 // specification section of its equipment and prints SCHEDULES only in its
 // title block; the reference read as a section drawing (detail, 0.6) over the
