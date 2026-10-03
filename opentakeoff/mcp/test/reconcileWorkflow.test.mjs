@@ -957,24 +957,20 @@ test("Vol2 Harrison extruder 063: GRD MATCH; VAV honest SO", async (t) => {
   });
 });
 
-test("Vol2 Antelope Valley 068: boiler MATCH; pumps/AS/ET partial-or-SO", async (t) => {
+test("Vol2 Antelope Valley 068: boiler MATCH; pumps/AS/ET drawn on no plan, none MATCH", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "068_US_Antelope_Valley_College_Applied_Arts_Math.compile.json"),
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
+  // B-1 is tagged on its structural pad plan.
   await assertFamilyAllMatch(session, graph, key, "BOILER");
-  await assertFamilyStatusCounts(session, graph, key, "PUMP", {
-    schedule_only: key.categories.PUMP,
-  });
-  await assertFamilyStatusCounts(session, graph, key, "AIR_SEPARATOR", {
-    match: 1,
-    schedule_only: 2,
-  });
-  await assertFamilyStatusCounts(session, graph, key, "EXPANSION_TANK", {
-    schedule_only: key.categories.EXPANSION_TANK,
-  });
+  // M002 schedules P-1, P-2, AS-1 and ET-1; no plan tags them (the boiler room
+  // plan names them in its notes, beside the existing pumps' (E)P-1 to (E)P-4).
+  for (const family of ["PUMP", "AIR_SEPARATOR", "EXPANSION_TANK"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, { match: 0 });
+  }
 });
 
 test("Vol2 NY EHRM 030: pumps 14 MATCH · 1 SO (scaffold 15 rows)", async (t) => {

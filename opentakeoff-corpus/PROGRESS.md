@@ -290,6 +290,31 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### The scoreboard on the current graph code; 068_US and 18_OR re-keyed; one mark on two rows (2026-10-03)
+
+The fresh graphs saved at about 02:30 predate three graph-side commits (43e7d96, ce83ccb and 04d6d4b, the last at 06:36):
+009_FL reads 71 of its 75 points on its 02:33 graph and all 75 on the 07:02 cached one. The scoreboard now takes, per
+keyed set, a graph built at the current graph code (a new build, or a cache entry after 06:36) and marks an older one
+stale; the 63 keyed sets with no graph and the 39 stale ones are being rebuilt, one at a time. Walled sets (held-out,
+held-out drafters' and reconcile-check documents) are scored on totals only.
+- 068_US ([WEAK] key BOILER 1, PUMP 3, AIR_SEPARATOR 3, EXPANSION_TANK 1): M002 (page 4) schedules B-1, P-1, P-2, AS-1
+  and ET-1 (and GR-1, no family). The plans' (E)P-3 and (E)P-4 are existing pumps; no AS-2 or AS-3 is printed.
+  Re-keyed PUMP 2, AIR_SEPARATOR 1, totals 5, the takeoff's 5. reconcileWorkflow's 068 test asserted the old key's
+  counts (3 pump rows; separators 1 MATCH and 2 schedule-only) and failed on the drawing's 2 pumps; it now asserts what
+  the drawings show: B-1 MATCH on its structural pad tag, and no MATCH for the pumps, separator or tank, which no plan
+  tags (the boiler room plan names them only in its notes).
+- 18_OR: M5.1 (page 18) prints INDOOR FAN COIL UNITS FC-1 to FC-4 under its DUCTLESS MULTI-SPLIT SYSTEM HEAT PUMP UNIT
+  SCHEDULE (Daikin FTXS wall-mounted indoor units on HP-5 and HP-6). Re-keyed FCU 4, totals 25, the takeoff's 25.
+- One mark on two rows of one schedule: the takeoff counts a mark once (`uniqueFamily`'s `keys`), so a later row that
+  prints the same mark adds no unit. A census over 79 documents (the best graph of each) finds 26 such rows on 9
+  documents whose cells differ from the first row's. All but one are one unit printed on two rows: 031_MO's fans, coils
+  and heat exchangers (a SELECTION CRITERIA row and an OPERATING CONDITION row, or a continuation line), D_25_CO's RTU-2
+  (its supply and exhaust fans), 01_NY's AHU-1 (two rows marked by circled notes 3 and 4), garbled extractions on
+  013_MO and 26_CA, and 07_MO's OCR-read CV7 against a CV-7 THRU 35 range. The exception is 18_OR's ELECTRIC HEATER
+  SCHEDULE, whose two EH-4 rows are two heaters (STORAGE 134, Qmark MUH03; OFFICE 127, Qmark AWH series): a duplicated
+  mark, keyed by mark (UNIT_HEATER 4) and documented as a ceiling. Counting or flagging every such row would add 25
+  false units or notices to catch 1; not adopted.
+
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
 A compile-only WP1 scoreboard over the graphs on disk (the fresh build, else the newest cached graph; 60 of 116 keys

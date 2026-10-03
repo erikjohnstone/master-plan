@@ -2,15 +2,15 @@
   "set_id": "068_US_Antelope_Valley_College_Applied_Arts_Math",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/068_US_Antelope_Valley_College_Applied_Arts_Math.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 AVC Applied Arts \u2014 boiler/pump/AS/ET.",
+  "notes": "[WEAK] Vol2 AVC Applied Arts — boiler/pump/AS/ET. [RE-KEYED 2026-10-03 from the render] Sheet M002 (page 4) prints the set's only equipment schedules: HOT WATER BOILER B-1 (Lochinvar FTXL725N), HEATING HOT WATER PUMP P-1, P-2 (Bell & Gossett e-90, in-line, serving B-1), AIR SEPARATORS AS-1 (B&G IAS-2-1/2), EXPANSION TANK ET-1 (Wessels NLA-130) and GAS REGULATORS GR-1 (no family). BOILER 1, PUMP 2 (was 3), AIR_SEPARATOR 1 (was 3), EXPANSION_TANK 1: totals 5. The plans' (E)P-3 and (E)P-4 are existing pumps to remain (the electrical demolition plan: 'EXISTING SWITCHES P-1, P-2, P-3, AND P-4'), not scheduled; no AS-2 or AS-3 is printed anywhere in the set.",
   "categories": {
     "BOILER": 1,
-    "PUMP": 3,
-    "AIR_SEPARATOR": 3,
+    "PUMP": 2,
+    "AIR_SEPARATOR": 1,
     "EXPANSION_TANK": 1
   },
   "totals": {
-    "items": 8
+    "items": 5
   },
   "bas_points": {
     "rows": 0

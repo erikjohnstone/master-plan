@@ -2,7 +2,7 @@
   "set_id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk school — MAU + ERV ERU-1 (keyRe) + outdoor HP-4 from ERV WITH HEAT PUMP comma-split + AHU heat pumps (AIR HANDLER HEAT PUMP AHU-* + HP-*) + ELECTRIC HEATER (EH-*) + fans + GRD. HEAT_PUMP:6 includes HP-4.",
+  "notes": "Bulk school — MAU + ERV ERU-1 (keyRe) + outdoor HP-4 from ERV WITH HEAT PUMP comma-split + AHU heat pumps (AIR HANDLER HEAT PUMP AHU-* + HP-*) + ELECTRIC HEATER (EH-*) + fans + GRD. HEAT_PUMP:6 includes HP-4. [RE-KEYED 2026-10-03 from the render] M5.1 (page 18) also prints, under the DUCTLESS MULTI-SPLIT SYSTEM HEAT PUMP UNIT SCHEDULE, its INDOOR FAN COIL UNITS FC-1, FC-2 (on HP-5) and FC-3, FC-4 (on HP-6), Daikin FTXS wall-mounted indoor units: FCU 4 (was 0), totals 25. The ELECTRIC HEATER SCHEDULE prints EH-4 on two rows for two different heaters (STORAGE 134, Qmark MUH03; OFFICE 127, Qmark AWH series): a duplicated mark, keyed by mark (UNIT_HEATER 4, EH-1 to EH-4); the takeoff counts a mark once, so the second EH-4 heater is a documented ceiling.",
   "categories": {
     "OUTDOOR_AIR_UNIT": 1,
     "AHU": 3,
@@ -10,9 +10,16 @@
     "HEAT_PUMP": 6,
     "FAN": 2,
     "UNIT_HEATER": 4,
-    "GRD": 4
+    "GRD": 4,
+    "FCU": 4
   },
-  "totals": { "items": 21 },
-  "bas_points": { "rows": 0 },
-  "control_valves": { "items": 0 }
+  "totals": {
+    "items": 25
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
 }
