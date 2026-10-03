@@ -575,6 +575,17 @@ have one) listed the sets the takeoff over-reads. Checked by render, each small 
   move those keys too.
 Left as documented: 26_CA and 096_IN (stale partial keys, over-reads are real schedules), 21_VA (RF1/RF2 from a
 technology sheet), 001_NC (BAS 546 for a terse pre-render key of 122; held-out twin of navfac, not opened).
+- 03_FL and 040_IL, found by the fresh rebuild's scoreboard (graphs at 220e006): 03_FL read 30 against a key of 13,
+  040_IL 63 against 32. Both keys were short, not the takeoff. 03_FL's key (2026-09-13) came from pipeline output: M1
+  (page 64) and M2 (page 65) schedule an air-cooled chiller (N)ACC-2 (keyed a condensing unit), AHU-1 and AHU-2, the
+  AIR TERMINAL UNIT SCHEDULE's (E)ATU A to H and (N)ATU I, J, K1, K2, L, M, N (15; the key had 2), boiler B-1, pumps
+  CHWP-1, HWP-1 and BP-1, AS-1, ET-1, fans EF-1 to EF-3 and SF-1, and the ductless split DAC-1 with its outdoor DCU-1:
+  re-keyed 30. 040_IL's re-key earlier the same day read M600 only; M601 (page 48) prints the TERMINAL AIR BOX
+  SCHEDULEs: 22 single-duct and 8 exhaust boxes in the base bid, the bid alternate schedules re-list base-bid boxes for
+  balancing and alternate 3 adds TAB-119E: VAV 31, re-keyed 63. Both PASS. reconcileWorkflow's "Hurlburt VAV" test
+  asserted the old key (rows ATU K1 and K2 alone) and failed on the 15 scheduled units; it now asserts each new unit (I
+  to N) MATCH on the new work plans, and the row count; the existing A to G sweep AMBIGUOUS under the exact-tag rule,
+  H MATCH.
 
 ### Keys and the reviewed-corrections overlay; seven keys re-keyed; ratings, luminaires and stacked marks (2026-10-03)
 

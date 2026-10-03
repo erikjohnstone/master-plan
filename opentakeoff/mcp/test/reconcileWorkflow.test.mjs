@@ -1782,7 +1782,7 @@ test("Colville ERV: titled-first cite → ERV-1 MATCH (not blank seismic AMBIGUO
   assert.ok((result.rows[0].installed_qty || 0) >= 1);
 });
 
-test("Hurlburt VAV: NATUK1 schedule ↔ plan ATU K1/K2 MATCH", async () => {
+test("Hurlburt VAV: the schedule's (N)ATU K1 links to the plan's ATU K1; every new terminal unit MATCH", async () => {
   const keyPath = resolve(CROSS, "03_FL_HurlburtField_ChildDevCenter.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
@@ -1801,13 +1801,16 @@ test("Hurlburt VAV: NATUK1 schedule ↔ plan ATU K1/K2 MATCH", async () => {
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
   });
+  // M1's AIR TERMINAL UNIT SCHEDULE (AHU 2) prints (E)ATU A to H and
+  // (N)ATU I, J, K1, K2, L, M, N (re-keyed from the render 2026-10-03; the
+  // old key held K1 and K2 alone). The new units are tagged on the new work
+  // plans; the existing ones are left to the exact-tag review rule.
   assert.equal(result.rows.length, key.categories.VAV);
-  assert.deepEqual(result.rows.map((r) => r.tag).sort(), ["ATU K1", "ATU K2"]);
-  assert.ok(
-    result.rows.every((r) => r.status === "MATCH"),
-    `Hurlburt ATU all MATCH (got ${result.rows.map((r) => r.tag + ":" + r.status).join(",")})`,
-  );
-  assert.ok(result.rows.every((r) => (r.installed_qty || 0) >= 1));
+  const byTag = new Map(result.rows.map((r) => [r.tag, r]));
+  for (const tag of ["ATU I", "ATU J", "ATU K1", "ATU K2", "ATU L", "ATU M", "ATU N"]) {
+    assert.equal(byTag.get(tag)?.status, "MATCH", `${tag} (got ${byTag.get(tag)?.status})`);
+    assert.ok((byTag.get(tag)?.installed_qty || 0) >= 1, `${tag} installed`);
+  }
 });
 
 test("SDSU EngSciences FAN reconcile: all scheduled tags MATCH (lab EF + TEF/GX)", async () => {

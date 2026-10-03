@@ -2,7 +2,7 @@
   "set_id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 sterile expand — UH/FAN/PUMP/GRD/louver + PRV schedule. [RE-KEYED 2026-10-03 from the render] M600 (page 47) also prints the AIR HANDLING UNIT SCHEDULE across its columns, one unit AHU-15 (NEW SPS, 26,000 CFM): AHU 1; and the SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE's one row SS-1/SSCU-1 (IT ROOM, 24 MBH, Mitsubishi PKA-A24KA7/PUZ-A24NHA7), the indoor unit and its outdoor condensing unit: FCU 1, CONDENSING_UNIT 1; totals 32. Not keyed: the TRAP SCHEDULE T-1 to T-8, the UNFIRED CLEAN STEAM GENERATOR HX-1, the CONDENSATE PUMP TRAP PT-1 (no family). Found by the AS-63/AS-65 review recorded in ground_truth/hvac/cross-set-compile-reviewed-corrections.json; the key now carries them.",
+  "notes": "[MEAT] Vol2 sterile expand — UH/FAN/PUMP/GRD/louver + PRV schedule. [RE-KEYED 2026-10-03 from the render] M600 (page 47) also prints the AIR HANDLING UNIT SCHEDULE across its columns, one unit AHU-15 (NEW SPS, 26,000 CFM): AHU 1; and the SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE's one row SS-1/SSCU-1 (IT ROOM, 24 MBH, Mitsubishi PKA-A24KA7/PUZ-A24NHA7), the indoor unit and its outdoor condensing unit: FCU 1, CONDENSING_UNIT 1; totals 32. Not keyed: the TRAP SCHEDULE T-1 to T-8, the UNFIRED CLEAN STEAM GENERATOR HX-1, the CONDENSATE PUMP TRAP PT-1 (no family). Found by the AS-63/AS-65 review recorded in ground_truth/hvac/cross-set-compile-reviewed-corrections.json; the key now carries them. [RE-KEYED 2026-10-03 from the render, page 48] M601 MECHANICAL SCHEDULES prints the TERMINAL AIR BOX SCHEDULEs the re-key above (page 47 only) missed: SINGLE DUCT - PHASE 2 TAB-101 to TAB-109, TAB-201, TAB-202 (11); SINGLE DUCT - PHASE 4 TAB-110 to TAB-120 (11); EXHAUST - PHASE 2 TAB-101E, -102E, -104E, -107E, -108E (5); EXHAUST - PHASE 4 TAB-112E, -115E, -116E (3). The BID ALTERNATE 1, 1X and 3 schedules re-list base-bid boxes for balancing (TAB-112, -113, -115, -116, -119, -112E, -115E, -116E) and alternate 3 adds TAB-119E ('PROVIDE TAB-119E'), which counts as the keys count alternates: VAV 31; totals 63.",
   "categories": {
     "PUMP": 2,
     "FAN": 6,
@@ -12,10 +12,11 @@
     "LOUVER": 2,
     "AHU": 1,
     "FCU": 1,
-    "CONDENSING_UNIT": 1
+    "CONDENSING_UNIT": 1,
+    "VAV": 31
   },
   "totals": {
-    "items": 32
+    "items": 63
   },
   "bas_points": {
     "rows": 0
