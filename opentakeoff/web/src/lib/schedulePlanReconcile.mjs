@@ -8,7 +8,7 @@
 import { planLocationFromMatch, scheduleRowLocation } from "./planLocation.mjs";
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark, expandEquipMarkRange, expandMarkList, expandEquipMarks, markLetters,
-  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, setDrawnMarks, tableRangeEvidence, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey,
+  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, notApplicableMark, setDrawnMarks, tableRangeEvidence, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey,
   HVAC_FAMILY_SPECS,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
@@ -792,7 +792,7 @@ export function unscheduledTagsAndAliasCandidates(graph) {
     const table = scheduleTableView(printed);
     for (const row of table.rows || []) {
       for (const raw of [row?.key, rowIdentityTag(row)]) {
-        if (!raw) continue;
+        if (!raw || notApplicableMark(raw)) continue;
         for (const part of markKey(raw).split("/").filter(Boolean)) rowKeys.add(part);
         for (const mark of splitRowMarks(String(raw), true, false, tableRangeEvidence(table, setDrawnMarks(graph)))) {
           const key = markKey(mark);
@@ -1418,6 +1418,8 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       const willFilter = Boolean(gate.catchAll || gate.filterRe);
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
       const working = rowMarkText(rawTag, rowKey, willFilter);
+      // A row whose mark says N/A names no unit, as the takeoff reads it.
+      if (notApplicableMark(working || rawTag)) continue;
       const tagList = splitRowMarks(working, willFilter, gate.wordsNamed, tableRangeEvidence(table, setDrawnMarks(graph)))
         .map((t) => normalizeEquipMark(t))
         .filter(Boolean);

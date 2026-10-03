@@ -20,6 +20,7 @@ import {
   stackFragments,
   dropNumberedNotes,
   widenLeadingProse,
+  pictureMarkDigits,
   type VectorGridContext,
 } from "../src/lib/vectorGridAdapter.ts";
 import type { VectorGridTable } from "../src/lib/vectorGridClient.ts";
@@ -392,5 +393,18 @@ describe("vectorGridAdapter — a title and notes beside a notes column", () => 
       cell(0, 0, "COOLING", [100, 200, 250, 220], 1, 3), cell(0, 3, "HEATING", [250, 200, 400, 220], 1, 3),
       ...CONDENSERS.cells.filter((c) => c.row >= 3)] };
     assert.equal(widenLeadingProse(groups), groups);
+  });
+});
+
+describe("a mark read from a picture with its 1 as the letter I", () => {
+  it("reads its number's I, l and O as the digits a single-stroke font drew (08_ME's EF-I, CH-I, ET-I)", () => {
+    assert.equal(pictureMarkDigits("EF-I"), "EF-1");
+    assert.equal(pictureMarkDigits("CH-I"), "CH-1");
+    assert.equal(pictureMarkDigits("ET-I"), "ET-1");
+    assert.equal(pictureMarkDigits("AHU-IO"), "AHU-10");
+    assert.equal(pictureMarkDigits("EF l"), "EF 1");
+  });
+  it("leaves a mark that reads as a number, a word or no mark alone", () => {
+    for (const keep of ["EF-2", "CH-12", "SS-1", "MOTOR", "LIGHTING", "AHU-A", "N/A", ""]) assert.equal(pictureMarkDigits(keep), keep);
   });
 });

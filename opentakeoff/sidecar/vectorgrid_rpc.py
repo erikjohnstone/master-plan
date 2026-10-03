@@ -331,10 +331,20 @@ def _schedule_shaped(faces: list) -> bool:
     the lattice empty (07_MO's framing detail fills 0.17, an enlarged plan
     0.20), and a keynote box, a callout or a title strip is a few faces or
     one row. Of 07_MO's 262 boxes lettered in ink, one is shaped like a
-    schedule: its EQUIPMENT DATA SCHEDULE (525 faces, 0.92)."""
-    if len(faces) < INK_TABLE_MIN_FACES:
-        return False
+    schedule: its EQUIPMENT DATA SCHEDULE (525 faces, 0.92).
+
+    A grid as wide as a schedule's columns (INK_WIDE_TABLE_PT) needs fewer
+    faces: a one-unit schedule under a two-tier header has 17 (08_ME's
+    ELECTRIC WATER HEATER and ELECTRIC HEAT TRACE schedules, 671 and 864pt
+    wide; its two-louver LOUVER SCHEDULE 19). Of the 135 ink-only pages of
+    the corpus, the grids lettered in ink with 17 to 19 faces at that width
+    are those three, 11_CA's separation-distance table and 22_GA's footing
+    schedule; every drawing with as few faces is at most 107pt wide, and the
+    one wide drawing with fewer (11_CA's riser diagram) has 16."""
     xs = {round(float(f[0]), 0) for f in faces} | {round(float(f[2]), 0) for f in faces}
+    wide = max(xs, default=0) - min(xs, default=0) >= INK_WIDE_TABLE_PT
+    if len(faces) < (INK_WIDE_TABLE_MIN_FACES if wide else INK_TABLE_MIN_FACES):
+        return False
     ys = {round(float(f[1]), 0) for f in faces} | {round(float(f[3]), 0) for f in faces}
     cols, rows = len(xs) - 1, len(ys) - 1
     if cols < INK_TABLE_MIN_COLS or rows < 2:
@@ -343,6 +353,8 @@ def _schedule_shaped(faces: list) -> bool:
 
 
 INK_TABLE_MIN_FACES = 20
+INK_WIDE_TABLE_MIN_FACES = 17
+INK_WIDE_TABLE_PT = 300.0
 INK_TABLE_MIN_COLS = 3
 INK_TABLE_MIN_FILL = 0.3
 

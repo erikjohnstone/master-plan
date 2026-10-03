@@ -1,5 +1,24 @@
 # Changelog
 
+- **A double rule under a schedule's header does not split it; ink-lettered one-unit schedules are read.** 08_ME's
+  M102 and P103 are lettered in ink and rule every schedule with a double rule under its header. No vertical
+  crosses the slot between the two rules, so the slot was one full-width face, and the grid finder's title-band
+  splitter read it as a second schedule's title: each table came back as a header and a body, neither shaped like a
+  schedule, and nothing on either sheet but the fan schedule was read. A slot thinner than half a row, with no letter
+  in it, a divided row under it and the same column edges above and below, now parts nothing; a spacer over a title
+  still cuts. A grid lettered in ink at least 300pt wide needs 17 faces to be read as a schedule (20 otherwise): a
+  one-unit schedule under a two-tier header has 17. On picture-read tables, a mark whose number OCR read with the
+  letter I (or l) for 1 and O for 0 reads as the digits (EF-I is EF-1). An ELECTRIC COVE HEATER SCHEDULE is the unit
+  heater family's (its CH marks under that title only), and a WATER or PLUMBING SPECIALTIES schedule hosts an
+  expansion tank's ET and a mixing valve's MV marks and nothing else (its WH wall hydrants are no water heaters). A
+  row whose mark says N/A, or holds no letter or digit, names no unit, for the takeoff and the reconcile alike
+  (023_US's pump schedule, now read whole, ends in a blank row printing N/A that split into pumps N and A).
+  Censuses: title-band cuts over 388 table-bearing pages (the slot rule removes cuts on 10 pages of 8 sets); the
+  grids of all 135 ink-only pages of the corpus (the slot rule and the 17-face floor change only 08_ME's, plus two
+  non-HVAC tables the floor admits, 11_CA's separation distances and 22_GA's footing schedule). Rebuilt graphs,
+  before vs after: 08_ME 2 → 8 units (FAN 2, UNIT_HEATER 2, LOUVER 2, EXPANSION_TANK 1, MIXING_VALVE 1; key 9),
+  023_US, 02_UT, 062_ID and 21_VA unchanged in units (023_US's pump schedule keeps all 23 columns, not 11); the 50
+  saved graphs compile unchanged.
 - **Louvers listed in an air device schedule are louvers.** 082_OR's AIR DISTRIBUTION schedule lists LV-1 and LV-2
   beside its grilles and diffusers, and the grille family read all its rows. The louver family now reads LV marks in
   an air device / distribution schedule (a host title), and the grille family yields them (a new yieldKeyRe, read in

@@ -275,8 +275,30 @@ export function vectorGridTableToScheduleTable(
   });
   // A picture read by OCR says so on the table (AS-153): sheet_graph,
   // find_schedule and the takeoff's items carry it to whoever reads them.
-  if (table && t.ocr) table.read_from_picture = true;
+  if (table && t.ocr) {
+    table.read_from_picture = true;
+    for (const row of table.rows) {
+      const key = String(row.key ?? "");
+      const read = pictureMarkDigits(key);
+      if (read === key) continue;
+      row.key = read;
+      for (const cell of Object.values(row.cells || {})) if (cell && cell.text === key) cell.text = read;
+    }
+  }
   return table;
+}
+
+/** A mark read from a picture with its number's 1 as the letter I (or l, or
+ * a bar) and its 0 as O. A CAD single-stroke font draws a 1 as a bare stroke,
+ * and OCR reads it as a letter: 08_ME's ink-lettered M102 and P103 came back
+ * EF-I, CH-I, ET-I and MV-I beside EF-2 and CH-2, and ET-I was no expansion
+ * tank. Only a picture's marks: a mark printed as text says what it says. Of
+ * the corpus's picture-read tables, 08_ME's are the only ones with such a mark. */
+const PICTURE_MARK_RE = /^([A-Z]{1,5}[\s-])([0-9IOl|]{1,3})$/;
+export function pictureMarkDigits(text: string): string {
+  const m = PICTURE_MARK_RE.exec(text.trim());
+  if (!m || !/[IOl|]/.test(m[2])) return text;
+  return m[1] + m[2].replace(/[Il|]/g, "1").replace(/O/g, "0");
 }
 
 /** Do the two processes describe the same page? "size" is a different page

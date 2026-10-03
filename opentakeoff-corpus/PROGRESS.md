@@ -140,6 +140,10 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   identically at c637a3d and at HEAD, and the valve totals equal the keys at both (001_NC 163, 015_VA 36,
   062_ID 31, 021_XX 2, 096_IN 24). The file also never exits after its last test (an open handle), so a runner
   waits out its timeout.
+- MCP `crossCorpusWorkflow` "WP1 keyed compile acceptance": federal-mech (BAS 89 vs 26) and 04_NV (19 vs 16) as
+  above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too) and 21_VA
+  (102 vs 100: the documented RF1/RF2 residual from its technology sheet's AV list; c637a3d read 88). The structural
+  sweep over every corpus PDF passes.
 
 ## Sweep re-run (OOM-lost sets)
 
@@ -241,6 +245,29 @@ being saved as a regression check of the mark-prefix change, which touches every
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
+
+### Double header rules, ink-lettered one-unit schedules, N/A rows (2026-10-03)
+
+08_ME (render-keyed, 9 units) read 2: its ink-lettered M102 and P103 rule every schedule with a double rule under
+the header, and the grid finder's title-band splitter cut each at the slot between the two rules (one full-width
+face). Census of every title-band cut over the 388 replayed table-bearing pages: 157 cuts; a slot (under half a
+row, empty, divided row below, same column edges) on 10 pages of 8 sets: 08_ME, 023_US, 02_UT (electrical panel
+schedules), 062_ID (a gas chart's TOTAL row), 008_MO (overhead-door elevation grids), 016_NY, 21_VA (a grounding
+schedule). On text pages another table source already read 023_US's three schedules whole, so units are unchanged
+there (old vs new graphs rebuilt for 023_US, 02_UT, 062_ID, 08_ME, 21_VA). Ink-only pages (all 135 in the
+corpus): the slot rule and the new 17-face floor for grids at least 300pt wide change only 08_ME's grids and admit
+two non-HVAC tables (11_CA separation distances, 22_GA footings; no units). 023_US's now-whole pump schedule
+exposed a blank row printing N/A, split into pumps N and A: rows whose mark says N/A or holds no letter or digit
+are no unit (takeoff and reconcile). OCR read 08_ME's 1s as I (EF-I, CH-I, ET-I): picture-read marks only, the
+census found no other picture table with such a mark. Cove heaters join UNIT_HEATER; plumbing specialties host ET
+and MV marks (a catch-all reading was tried first and refused: it let 031_MO's architectural furnishings list count
+RF-2, a refrigerator, as a fan). 08_ME 2 → 8 of 9. Residuals: its ELECTRIC WATER HEATER (WH-1) and HEAT TRACE
+schedules on P103 come apart into column strips in the full read (the page's one table pen is its border weight)
+though the glance sees them whole; reading wordless pages with the glance's own rules would touch every ink-lettered
+set's picture reads, not taken. OCR read L-1 as "L 一" (a CJK stroke); the louver count is right. Web suite: 4,229
+tests, 4,215 pass, 0 fail after the AS-153 picture-cache test counts picture reads only (it also counted the
+glance verdict kept beside them since #276; the run that showed 0 failures before had no sidecar Python and skipped
+it).
 
 ### Guard and residuals after the 2026-10-02 batch
 

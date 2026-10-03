@@ -976,3 +976,38 @@ describe("louvers listed in an air device schedule", () => {
     assert.deepEqual(cats.LOUVER.items.map((i) => i.tag).sort(), ["LV-1", "LV-2"]);
   });
 });
+
+describe("a schedule row whose mark reads N/A", () => {
+  it("names no unit, nor does one with no letter or digit (023_US's PUMP SCHEDULE closes with a blank row printing N/A)", () => {
+    const rows = [{ key: "CHWP1/CHWP2", cells: { MARK: { text: "CHWP1&2" }, TYPE: { text: "END-SUCTION" }, GPM: { text: "530" } } },
+      { key: "N/A", cells: { "FLOW [L/S]": { text: "[ ]" }, "NPSH [KPA]": { text: "N/A" } } },
+      { key: "-", cells: { MARK: { text: "-" } } },
+      { key: "[ ]", cells: { MARK: { text: "[ ]" }, GPM: { text: "[ ]" } } }];
+    const table = { sheet: "m.pdf#8", kind: "equipment", title: { text: "PUMP SCHEDULE" }, headers: ["MARK", "TYPE", "GPM"], rows };
+    const cats = compileHvacTakeoff(null, { tables: [table] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual(cats.PUMP.items.map((i) => i.tag).sort(), ["CHWP1", "CHWP2"]);
+  });
+});
+
+describe("cove heaters and plumbing specialties (08_ME's ink-lettered M102 and P103)", () => {
+  const table = (title: string, keys: string[]) => ({
+    sheet: "m.pdf#1", title: { text: title }, headers: ["TAG"], kind: "reference",
+    rows: keys.map((k) => ({ key: k, cells: { TAG: { text: k } } })),
+  });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+  it("reads an ELECTRIC COVE HEATER SCHEDULE's CH marks as unit heaters, under that title only", () => {
+    const heaters = { ...table("ELECTRIC COVE HEATER SCHEDULE", ["CH-1", "CH-2"]), kind: "equipment" };
+    assert.deepEqual(compile([heaters])("UNIT_HEATER"), ["CH-1", "CH-2"]);
+    assert.deepEqual(compile([heaters])("AIR_COOLED_CHILLER"), []);
+    assert.deepEqual(compile([{ ...table("EQUIPMENT SCHEDULE", ["CH-1"]), kind: "equipment" }])("UNIT_HEATER"), []);
+  });
+  it("reads a WATER SPECIALTIES SCHEDULE's expansion tank and mixing valve by their marks, and nothing else", () => {
+    const tags = compile([table("WATER SPECIALTIES SCHEDULE", ["ET-1", "MV-1", "WH-1", "HB-1"])]);
+    assert.deepEqual(tags("EXPANSION_TANK"), ["ET-1"]);
+    assert.deepEqual(tags("MIXING_VALVE"), ["MV-1"]);
+    assert.deepEqual(tags("WATER_HEATER"), []);
+  });
+});

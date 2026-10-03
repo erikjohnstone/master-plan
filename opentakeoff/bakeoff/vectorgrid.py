@@ -872,6 +872,48 @@ def _split_at_title_bands(members, cells, chars=()) -> list[list]:
     cuts = [k for idx, k in enumerate(keys)
             if idx > 0 and full[k] and not full[keys[idx - 1]]]
 
+    # A DOUBLE RULE IS NOT A TITLE BAND. A schedule drawn with a double rule
+    # under its header leaves a slot between the two rules that no vertical
+    # crosses, so the slot is ONE face across the full width: an undivided
+    # row by the test above. 08_ME's M102 and P103 rule every schedule that
+    # way, 5.4pt slots under 15pt rows, and each table came out as a header
+    # and a body that are both too small to be a schedule on their own (its
+    # ELECTRIC COVE HEATER, LOUVER, WATER SPECIALTIES and ELECTRIC WATER
+    # HEATER schedules). A title's band holds a line of type; a slot thinner
+    # than half the block's median row, with no letter in it, a divided row
+    # under it and the same column edges above and below, holds none and
+    # parts nothing. A spacer over a title is followed by the title, not a
+    # divided row, so it still cuts.
+    if cuts:
+        hs_ = sorted(cells[i].bounds[3] - cells[i].bounds[1] for i in members)
+        med_ = hs_[len(hs_) // 2] or 1.0
+
+        def edges(ms) -> set:
+            es = set()
+            for i in ms:
+                bx0, _by0, bx1, _by1 = cells[i].bounds
+                es.add(round(bx0)); es.add(round(bx1))
+            return es
+
+        def slot(k) -> bool:
+            idx = keys.index(k)
+            if idx + 1 >= len(keys) or full[keys[idx + 1]]:
+                return False
+            b0 = cells[rows[k][0]].bounds
+            if b0[3] - b0[1] >= med_ * 0.5:
+                return False
+            if any(b0[0] <= (c["x0"] + c["x1"]) / 2 <= b0[2]
+                   and b0[1] <= (c["top"] + c["bottom"]) / 2 <= b0[3] for c in chars):
+                return False
+            above = edges(i for i in members if round(cells[i].bounds[1]) < k)
+            below = edges(i for i in members if round(cells[i].bounds[1]) > k)
+            if not above or not below:
+                return False
+            same = len({e for e in above if any(abs(e - f) <= 2 for f in below)})
+            return same >= 0.9 * min(len(above), len(below))
+
+        cuts = [k for k in cuts if not slot(k)]
+
     # THE TEST VETOES THE WHOLE SPLIT; it does not filter individual cuts.
     # Dropping one cut and keeping the rest is worse than either extreme: on
     # 047_NC#21 the AIR DEVICE SCHEDULE has band labels SUPPLY AIR and RETURN

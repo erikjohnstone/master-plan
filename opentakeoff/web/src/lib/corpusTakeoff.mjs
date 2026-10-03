@@ -1866,6 +1866,19 @@ export function rowMarkText(text, rowKey, willFilter) {
  * (`drawn`, setDrawnMarks), a mark "X N-M" the set draws as X-N to X-M names
  * them (AS-116).
  */
+/**
+ * A row whose mark text says only "not applicable", or holds no letter or
+ * digit at all (a dash, the "[ ]" of a blacked-out metric cell), names no
+ * unit, for the takeoff and the reconcile alike. 023_US's PUMP SCHEDULE
+ * closes with a blank row whose one printed cell reads N/A, and its slash
+ * split it into pumps N and A.
+ * @param {string} text
+ */
+export function notApplicableMark(text) {
+  const s = String(text ?? "").trim();
+  return !/[A-Z0-9]/i.test(s) || /^(?:N\s*\/\s*A|N\.\s*A\.?|NOT\s+APPLICABLE)$/i.test(s);
+}
+
 export function splitRowMarks(text, willFilter, wordsNamed = false, drawn = null) {
   // In plain type (AS-85), so a range or list printed with another dash
   // glyph reads as one printed with a hyphen.
@@ -1989,6 +2002,7 @@ function uniqueFamily(graph, spec, family, onEmit = null) {
       // families keep row.key when SYMBOL is a comma list (Baker ERU-1, HP-4).
       const willFilter = Boolean(catchAllFilter || filterRe);
       const working = rowMarkText(tag, rowKey, willFilter);
+      if (notApplicableMark(working || tag)) continue;
       // A count-keyed table's identifier is a descriptive NOUN PHRASE
       // ("GROUP REHEARSAL 123 - SUPPLY/RETURN"), never a compound tag list —
       // splitting it on "/" the way CWP-1/CWP-2 is split shreds one real
@@ -2451,14 +2465,17 @@ export const HVAC_FAMILY_SPECS = {
     // Connection-schedule duct-heater panels (EDH-*) use the same family marks.
     // Or a gas-fired infrared heater's schedule (D_25_CO's INFRA-RED TUBE
     // HEATER SCHEDULE, IRH-1 and IRH-2): a space heater as a unit heater is.
-    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?|INFRA[\s\-]*RED\s+(?:(?:TUBE|GAS[\s\-]*FIRED)\s+)*HEATERS?\s+SCHEDULE/i,
+    // Or an electric cove heater's schedule (08_ME's ELECTRIC COVE HEATER
+    // SCHEDULE, CH-1 and CH-2): a room heater on the wall, as a unit heater is.
+    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?|INFRA[\s\-]*RED\s+(?:(?:TUBE|GAS[\s\-]*FIRED)\s+)*HEATERS?\s+SCHEDULE|(?:ELECTRIC\s+)?COVE\s+HEATERS?(?:\s+SCHEDULE)?/i,
     exclude: /CABINET|POINTS\s*LIST|DDC/i,
     // UH/CUH/EH room heaters; EDH-* duct-mounted electric; ECUH-* electric
     // cabinet/unit; HWUH-* hot-water; GUH/NUH-* gas/natural unit heaters.
     keyRe: /^(?:UH|CUH|EH|EDH|ECUH|HWUH|HUH|EUH|GUH|NUH)[\s\-]?/i,
     // Under a unit heater title: EWH-* electric wall heaters (baker-county-eoc;
-    // a water heater anywhere else) and SUH-* suspended (033_MN; AS-63).
-    titledKeyRe: /^(?:EWH|SUH|IRH|IR)[\s\-]?\d/i,
+    // a water heater anywhere else), SUH-* suspended (033_MN; AS-63) and CH-*
+    // cove heaters (a chiller anywhere else).
+    titledKeyRe: /^(?:EWH|SUH|IRH|IR|CH)[\s\-]?\d/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {
@@ -2530,6 +2547,12 @@ export const HVAC_FAMILY_SPECS = {
     // ET-1 / ET-A1 / DT-* — digit required so "ETC. NOT SHOWN…" never matches.
     keyRe: /^(?:ET|XT|DT)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
     titledKeyRe: /^EXT[\s\-]?\d/i,
+    // A potable water expansion tank listed in a plumbing specialties
+    // schedule, by its ET mark (08_ME's WATER SPECIALTIES SCHEDULE ET-1).
+    host: {
+      titleRe: /^\s*(?:WATER|PLUMBING)\s+SPECIALT(?:Y|IES)(?:\s+SCHEDULE)?\s*$/i,
+      keyRe: /^ET[\s\-]?\d/i,
+    },
   },
   BUFFER_TANK: {
     titleRe: /BUFFER\s+TANK\s+SCHEDULE/i,
@@ -2655,6 +2678,12 @@ export const HVAC_FAMILY_SPECS = {
   MIXING_VALVE: {
     titleRe: /MIXING\s+VALVE\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
+    // A master mixing valve listed in a plumbing specialties schedule, by its
+    // MV mark (08_ME's WATER SPECIALTIES SCHEDULE MV-1).
+    host: {
+      titleRe: /^\s*(?:WATER|PLUMBING)\s+SPECIALT(?:Y|IES)(?:\s+SCHEDULE)?\s*$/i,
+      keyRe: /^(?:MV|TMV)[\s\-]?\d/i,
+    },
     keyRe: /^(?:MX|MV|TMV)[\s\-]/i,
     blankKeyRe: /^(?:MX|MV|TMV)[\s\-]/i,
     blankHeaderRes: [

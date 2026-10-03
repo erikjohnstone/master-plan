@@ -198,7 +198,9 @@ describe("AS-153: a schedule pasted as a picture is read", { skip: ready ? false
       const pdf = draw(dir, fixture("as153-07mo-m601-tanks.png"), [1545, 68, 2181, 370]);
       const first = (await extractGridViaSidecar(pdf, 1)).tables;
       assert.ok(first.some((t) => t.ocr && texts(t).includes("AMTROL")), JSON.stringify(first.map(texts)));
-      const kept = readdirSync(own).filter((f) => f.endsWith(".json"));
+      // The picture's read, not the glance's verdict on a page with no words
+      // (kept beside it, glance-*.json; #276).
+      const kept = readdirSync(own).filter((f) => f.endsWith(".json") && !f.startsWith("glance-"));
       assert.equal(kept.length, 1, JSON.stringify(readdirSync(own)));
       // Mark the kept read: a second read that returns the mark came from it.
       const file = join(own, kept[0]);
