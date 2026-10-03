@@ -1,5 +1,19 @@
 # Changelog
 
+- **A points list that ticks each point's columns.** 012_MO's M701 prints its DDC POINTS LIST SUMMARY as a
+  matrix: a label row under the header groups (DDC HARD WIRED POINTS: DIGITAL INPUTS, DIGITAL OUTPUTS, ANALOG
+  INPUTS, ANALOG OUTPUTS; INTEGRATION: BINARY, ANALOG, MULTISTAGE VARIABLE; GUI APPLICATION: TREND LOGGING; the
+  ALARMING SCENARIOS and ALARM PRIORITIES columns), then each point ticks X in its own columns. The BAS compile
+  counted the label row as a point and typed none of the 101: no mark prefix, no POINT TYPE cell. A tick under a
+  column whose label names a type now types its point (DIGITAL reads B, as DI does), with the column's label kept
+  as the printed type and its X cell as the cite; ticks under two types, or one that disagrees with the mark's
+  type, leave the point untyped as a conflict. A tick under a BINARY / ANALOG / MULTISTAGE VARIABLE (or VALUE)
+  column marks a software point, soft; a typed point is hardwired only when its column's label says HARD WIRED
+  (or PHYSICAL, FIELD I/O); ticks under a TREND or ALARM column are the point's trend and alarm. The label row,
+  naming two or more types where a point names one, is skipped. Over 150 cached graphs only 012_MO changes: 102
+  rows, none typed → 101 (AI 33, AO 21, BI 23, BO 14; alarm 65, trend 101, hardwired 91, soft 9), each count
+  checked by eye on all 101 points of the render, and its BAS points re-keyed from it (the key said 0 rows). No
+  other cached list prints a tick matrix, by full type words or by AI/AO/BI/BO columns.
 - **A points list whose caption lost its spaces; a section label is no point.** 021_XX's M-803 letters its hot
   water boiler list's caption with no space glyphs, so it reads DDCCONTROLLERINPUTOUTPUTSUMMARY, and the BAS title
   gate refused it while the chiller list beside it, spaced, was read: 19 rows unread. A caption with no space at

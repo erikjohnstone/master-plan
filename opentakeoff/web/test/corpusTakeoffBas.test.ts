@@ -370,6 +370,90 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.equal(bas.totals.rows, 4);
   });
 
+  it("reads a points matrix that ticks each point's type, software, trend and alarm columns (012_MO's M701)", () => {
+    const HW = "DDC HARD WIRED POINTS";
+    const point = (n: string, name: string, ticks: Record<string, { text: string; bbox?: number[] }>) => ({
+      key: name,
+      cells: { COL1: { text: n }, COL2: { text: name }, ...ticks },
+    });
+    const X = { text: "X" };
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#20", number: 20 }],
+      tables: [{
+        sheet: "set.pdf#20",
+        title: { text: "DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM", bbox: [0, 0, 10, 10] },
+        headers: ["COL1", "COL2", HW, `${HW} 2`, `${HW} 3`, `${HW} 4`, "INTEGRATION", "INTEGRATION 2", "INTEGRATION 3",
+          "GUI APPLICATION", "ALARMING SCENARIOS", "ALARM PRIORITIES"],
+        rows: [
+          {
+            key: "CONTROL POINTS",
+            cells: {
+              COL1: { text: "#" }, COL2: { text: "CONTROL POINTS" },
+              [HW]: { text: "DIGITAL INPUTS" }, [`${HW} 2`]: { text: "DIGITAL OUTPUTS" },
+              [`${HW} 3`]: { text: "ANALOG INPUTS" }, [`${HW} 4`]: { text: "ANALOG OUTPUTS" },
+              INTEGRATION: { text: "BINARY VARIABLE" }, "INTEGRATION 2": { text: "ANALOG VARIABLE" },
+              "INTEGRATION 3": { text: "MULTISTAGE VARIABLE" }, "GUI APPLICATION": { text: "TREND LOGGING" },
+              "ALARMING SCENARIOS": { text: "POINT STATUS" }, "ALARM PRIORITIES": { text: "MAJOR" },
+            },
+          },
+          point("1", "CHILLED WATER SYSTEM ENABLE", { "GUI APPLICATION": X }),
+          point("2", "CHILLER 1 - REMOTE ENABLE", { [`${HW} 2`]: { text: "X", bbox: [40, 20, 44, 24] }, "GUI APPLICATION": X, "ALARM PRIORITIES": X }),
+          point("3", "CHILLER 1 - STATUS", { "INTEGRATION 3": X, "GUI APPLICATION": X, "ALARMING SCENARIOS": X }),
+          point("4", "CHILLED WATER SUPPLY TEMPERATURE", { [`${HW} 3`]: X, "GUI APPLICATION": X }),
+          point("5", "CHILLED WATER BYPASS VALVE", { [`${HW} 4`]: X }),
+          point("6", "CHILLER 1 - FLOW SWITCH", { [HW]: X }),
+          point("7", "PUMP 1 - SPEED", { [`${HW} 3`]: X, [`${HW} 4`]: X }),
+        ],
+      }],
+    });
+    const { rows, AI, AO, BI, BO, alarm, trend, hardwired, soft } = bas.totals;
+    // The label row is no point; PUMP 1 - SPEED ticks two types and stays untyped.
+    assert.deepEqual({ rows, AI, AO, BI, BO, alarm, trend, hardwired, soft },
+      { rows: 7, AI: 1, AO: 1, BI: 1, BO: 1, alarm: 2, trend: 4, hardwired: 4, soft: 1 });
+    const items = bas.categories.points_lists.lists[0].items;
+    const enable = items.find((item: { tag: string }) => item.tag === "CHILLER 1 - REMOTE ENABLE")!;
+    assert.deepEqual(
+      [enable.point_type, enable.point_type_raw, enable.point_type_basis, enable.wiring, enable.alarm, enable.trend, enable.point_type_bbox_px],
+      ["BO", "DIGITAL OUTPUTS", "ticked_point_type_column", "hardwired", "X", "X", [40, 20, 44, 24]],
+    );
+    const status = items.find((item: { tag: string }) => item.tag === "CHILLER 1 - STATUS")!;
+    assert.deepEqual([status.point_type, status.wiring], [null, "soft"]);
+    const gui = items.find((item: { tag: string }) => item.tag === "CHILLED WATER SYSTEM ENABLE")!;
+    assert.deepEqual([gui.point_type, gui.wiring, gui.trend, gui.alarm], [null, null, "X", null]);
+    const speed = items.find((item: { tag: string }) => item.tag === "PUMP 1 - SPEED")!;
+    assert.deepEqual([speed.point_type, speed.point_type_status, speed.wiring], [null, "REFUSED_POINT_TYPE_CONFLICT", null]);
+  });
+
+  it("types a ticked point without inventing its wiring; a row naming one type twice is a point, not the labels", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#9", number: 9 }],
+      tables: [{
+        sheet: "set.pdf#9",
+        title: { text: "AHU-1 POINTS LIST", bbox: [0, 0, 10, 10] },
+        headers: ["MARK", "DESCRIPTION", "POINT TYPE", "ANALOG INPUT", "BINARY OUTPUT"],
+        rows: [
+          {
+            key: "AI-1",
+            cells: {
+              MARK: { text: "AI-1" }, DESCRIPTION: { text: "SPARE ANALOG INPUT" },
+              "POINT TYPE": { text: "ANALOG INPUT" }, "ANALOG INPUT": { text: "X" },
+            },
+          },
+          { key: "SF-S", cells: { MARK: { text: "SF-S" }, DESCRIPTION: { text: "SUPPLY FAN START/STOP" }, "BINARY OUTPUT": { text: "X" } } },
+          // The mark says AI; the tick says BO.
+          { key: "AI-2", cells: { MARK: { text: "AI-2" }, DESCRIPTION: { text: "MIXED AIR TEMPERATURE" }, "BINARY OUTPUT": { text: "X" } } },
+        ],
+      }],
+    });
+    const items = bas.categories.points_lists.lists[0].items;
+    assert.deepEqual(
+      items.map((item: { tag: string; point_type: string | null; point_type_status: string; wiring: string | null }) =>
+        [item.tag, item.point_type, item.point_type_status, item.wiring]),
+      [["AI-1", "AI", "typed", null], ["SF-S", "BO", "typed", null], ["AI-2", null, "REFUSED_POINT_TYPE_CONFLICT", null]],
+    );
+    assert.deepEqual([bas.totals.rows, bas.totals.hardwired, bas.totals.soft], [3, 0, 0]);
+  });
+
   it("counts device I/O rows and skips the TAG header", () => {
     const graph = {
       sheets: [{ key: "set.pdf#1", number: 1 }],

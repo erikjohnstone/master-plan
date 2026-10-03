@@ -266,6 +266,34 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### A points list that ticks each point's columns; 012_MO's BAS points re-keyed (2026-10-03)
+
+012_MO's key said 0 BAS rows; the takeoff read 102, none typed. M701 (sheet 20) prints one DDC POINTS LIST SUMMARY -
+CHILLED WATER SYSTEM: header groups (DDC HARD WIRED POINTS, INTEGRATION, GUI APPLICATION, ALARMING SCENARIOS, ALARM
+PRIORITIES, SUPPLEMENTARY NOTES), a CONTROL POINTS row printing each column's label under its group (DIGITAL INPUTS
+... ANALOG OUTPUTS; BINARY, ANALOG, MULTISTAGE VARIABLE, READ ONLY, RED / WRITE; TREND LOGGING ...; OUT OF RANGE ...
+CRITICAL), then 101 numbered points ticking X in their columns. The label row was counted as a point, and nothing read
+a tick as a type.
+
+Rule (corpusTakeoff.mjs `basTickColumns` / `basTickEvidence`, in `compileBasTakeoff`): a column's label is its header
+plus the label row's cell; the label row is the one of a list's first three that names two or more distinct I/O types
+(a point names one), and it is skipped. A tick (X, check, filled dot) under a column whose label ends in a type
+(DIGITAL / BINARY / DISCRETE / ANALOG INPUT(S) / OUTPUT(S)) types an untyped point, the label kept as its printed type
+and the X cell as its cite; ticks under two types, or one that disagrees with the mark's type, are a conflict
+(untyped). Hardwired only when the ticked type column's label says HARD WIRED, PHYSICAL or FIELD I/O; soft when the
+point ticks a BINARY / ANALOG / MULTISTAGE / MULTI-STATE VARIABLE or VALUE column and no type; ticks under labels with
+TREND or ALARM are its trend and alarm. A printed ALARM / TREND / WIRING cell still wins.
+
+Census over 150 cached graphs: 012_MO's list is the only tick matrix, by full type words or by AI/AO/BI/BO/DI/DO
+column labels (0), so no abbreviated-column rule was added. A/B: only 012_MO's 5 cached graphs change, 102 rows → 101
+(AI 33, AO 21, BI 23, BO 14; alarm 65, trend 101, hardwired 91, soft 9).
+
+012_MO re-keyed from the render, all 101 points checked by eye: DIGITAL INPUTS 23, DIGITAL OUTPUTS 14, ANALOG INPUTS
+33, ANALOG OUTPUTS 21 (91, all under DDC HARD WIRED POINTS); 9 integration variables (points 3-5, 17-19, 31-33);
+point 1 (CHILLED WATER SYSTEM ENABLE) ticks only GUI APPLICATION columns, so it is neither hardwired nor soft and has
+no I/O type; every point ticks TREND LOGGING; 65 tick an ALARMING SCENARIOS or ALARM PRIORITIES column (19, 18, 15
+and 13 in the render's four bands of rows).
+
 ### A points list whose caption lost its spaces; 021_XX re-keyed (2026-10-03)
 
 021_XX's key (written from pipeline output) read 63 BAS rows; the takeoff read 109. The renders (M-803 to M-805)

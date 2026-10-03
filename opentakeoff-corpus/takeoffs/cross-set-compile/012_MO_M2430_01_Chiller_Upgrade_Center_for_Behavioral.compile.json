@@ -3,7 +3,7 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
   "kind": "hvac_equipment",
-  "notes": "[KEYED 2026-10-02 from the drawings] Chiller upgrade, Center for Behavioral Medicine (MO), rejoined multipart. M601: chillers CH-1..3, cooling towers CT-1..3, PUMP SCHEDULE CWP-1..3, PCHP-1..3, PHWP-1..3, SCHP-1/2, SHWP-1/2 (13), AIR SEPARATOR SCHEDULE AS-1/2, EXPANSION TANK SCHEDULE ET-1. E-sheet VFD SCHEDULE: 16 drives, the 13 pump drives and VFD-CT-1..3 printed (EXIST.) (existing units count by the keys' convention; the plans print them bare, so the reconcile leaves those three schedule-only). The earlier key (VFD 13, no AS/ET) was written from pipeline output.",
+  "notes": "[KEYED 2026-10-02 from the drawings] Chiller upgrade, Center for Behavioral Medicine (MO), rejoined multipart. M601: chillers CH-1..3, cooling towers CT-1..3, PUMP SCHEDULE CWP-1..3, PCHP-1..3, PHWP-1..3, SCHP-1/2, SHWP-1/2 (13), AIR SEPARATOR SCHEDULE AS-1/2, EXPANSION TANK SCHEDULE ET-1. E-sheet VFD SCHEDULE: 16 drives, the 13 pump drives and VFD-CT-1..3 printed (EXIST.) (existing units count by the keys' convention; the plans print them bare, so the reconcile leaves those three schedule-only). The earlier key (VFD 13, no AS/ET) was written from pipeline output. [RE-KEYED 2026-10-03 from the render] BAS: M701 (sheet 20) prints one DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM of 101 numbered points under a CONTROL POINTS label row (no point). Each point ticks X in its own columns: DDC HARD WIRED POINTS DIGITAL INPUTS 23 (BI), DIGITAL OUTPUTS 14 (BO), ANALOG INPUTS 33 (AI), ANALOG OUTPUTS 21 (AO), 91 hardwired; INTEGRATION BINARY / ANALOG / MULTISTAGE VARIABLE 9 (points 3-5, 17-19, 31-33: soft, no I/O type); point 1 CHILLED WATER SYSTEM ENABLE ticks only GUI APPLICATION columns (no I/O type, neither hardwired nor soft). Every point ticks TREND LOGGING (trend 101); 65 tick an ALARMING SCENARIOS or ALARM PRIORITIES column (alarm 65). All 101 points checked by eye against the render. The earlier bas_points rows 0 was written when the list was not read.",
   "categories": {
     "AIR_COOLED_CHILLER": 3,
     "PUMP": 13,
@@ -16,7 +16,15 @@
     "items": 38
   },
   "bas_points": {
-    "rows": 0
+    "rows": 101,
+    "AI": 33,
+    "AO": 21,
+    "BI": 23,
+    "BO": 14,
+    "alarm": 65,
+    "trend": 101,
+    "hardwired": 91,
+    "soft": 9
   },
   "control_valves": {
     "items": 0

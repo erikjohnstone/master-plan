@@ -3424,6 +3424,68 @@ function isBasSectionLabelRow(row) {
   return /\b(?:TAG|MARK)\b/i.test(header) && !/\bDESCRIPTION\b/i.test(header);
 }
 
+/** A point's I/O type named at the end of a column label (DIGITAL INPUTS;
+ * DDC HARD WIRED POINTS ANALOG OUTPUTS). */
+const BAS_TYPE_LABEL_RE = /\b(DIGITAL|BINARY|DISCRETE|ANALOG)\s+(INPUT|OUTPUT)S?$/i;
+/** A software point's kind named at the end of a column label (BACnet's
+ * binary, analog and multistate values are software objects). */
+const BAS_SOFT_LABEL_RE = /\b(?:BINARY|ANALOG|MULTI[\s-]?STATE|MULTISTAGE)\s+(?:VARIABLE|VALUE)S?$/i;
+/** A type column's label that says its points are wired to the controller. */
+const BAS_HARDWIRED_LABEL_RE = /\bHARD\s*-?\s*WIRED\b|\bPHYSICAL\b|\bFIELD\s*I\s*\/?\s*O\b/i;
+/** A tick in a points matrix's cell. */
+const BAS_TICK_RE = /^(?:X|\u2713|\u2714|\u25CF|\u2022)$/i;
+
+function basLabelType(text) {
+  const io = String(text || "").replace(/\s+/g, " ").trim().match(BAS_TYPE_LABEL_RE);
+  return io ? `${/^ANALOG$/i.test(io[1]) ? "A" : "B"}${/^INPUT$/i.test(io[2]) ? "I" : "O"}` : null;
+}
+
+/**
+ * The columns of a points list that mark each point with a tick (012_MO's
+ * DDC POINTS LIST SUMMARY: X under DIGITAL INPUTS ... ANALOG OUTPUTS, BINARY,
+ * ANALOG or MULTISTAGE VARIABLE, TREND LOGGING and its alarm columns), with
+ * what a tick there says of the point. A column's label is its header, and
+ * the row that prints the labels when the header names only their groups
+ * (DDC HARD WIRED POINTS, INTEGRATION). That row names two or more point
+ * types where a point has one, and it is no point.
+ */
+function basTickColumns(table) {
+  const labelRow = (table?.rows || []).slice(0, 3).find((row) => new Set(Object.values(row.cells || {})
+    .map((cell) => basLabelType(cell?.text)).filter(Boolean)).size >= 2) || null;
+  const columns = [];
+  for (const header of table?.headers || []) {
+    const printed = String(labelRow?.cells?.[header]?.text || "").replace(/\s+/g, " ").trim();
+    const label = `${header} ${printed}`.replace(/\s+/g, " ").trim();
+    const type = basLabelType(label);
+    const soft = !type && BAS_SOFT_LABEL_RE.test(label);
+    const trend = /\bTREND/i.test(label);
+    const alarm = /\bALARM/i.test(label);
+    if (type || soft || trend || alarm) {
+      columns.push({ header, label: printed || header, type, hardwired: Boolean(type) && BAS_HARDWIRED_LABEL_RE.test(label), soft, trend, alarm });
+    }
+  }
+  return { labelRow, columns };
+}
+
+/** What a row's ticks say: its type when one type column is ticked (two is a
+ * conflict) and whether that column's label says it is hard wired, a
+ * software point when only a variable column is, and its trend and alarm. */
+function basTickEvidence(row, columns) {
+  const ticked = columns.filter((col) => BAS_TICK_RE.test(String(row.cells?.[col.header]?.text || "").trim()));
+  const typed = ticked.filter((col) => col.type);
+  const types = [...new Set(typed.map((col) => col.type))];
+  const raw = (col) => (col ? String(row.cells[col.header].text).trim() : null);
+  return {
+    type: types.length === 1 ? types[0] : null,
+    typeColumn: types.length === 1 ? typed[0] : null,
+    hardwired: types.length === 1 && typed.every((col) => col.hardwired),
+    conflict: types.length > 1,
+    soft: !types.length && ticked.some((col) => col.soft),
+    trend: raw(ticked.find((col) => col.trend)),
+    alarm: raw(ticked.find((col) => col.alarm)),
+  };
+}
+
 /** Column-label rows that are not countable I/O or points marks. */
 function isBasPointsHeaderRow(tag) {
   return !tag || /^(?:TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?|(?:ANALOG|BINARY|DIGITAL)\s+(?:INPUT|OUTPUT))$/i.test(tag);
@@ -3606,6 +3668,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
     const extras = { alarm: 0, trend: 0, hardwired: 0, soft: 0 };
     const items = [];
+    const tickColumns = basTickColumns(table);
     for (const row of table.rows || []) {
       // The MARK cell is authored point identity. `row.key` is an extractor
       // convenience and can retain a section-prefix fragment (for example
@@ -3616,11 +3679,20 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
       if (isBasSectionLabelRow(row)) continue;
+      if (row === tickColumns.labelRow) continue;
       // Some templates print a literal placeholder mark (BI#, BI##, BO#)
       // for a repeated or field-numbered point. It is still an authored
       // typed point row; the wildcard is not a reason to demote it to
       // `other` or invent a number for it.
-      const pointType = basPointTypeEvidence(row, tag);
+      let pointType = basPointTypeEvidence(row, tag);
+      // A tick under a type column types the point; ticks under two types,
+      // or one that disagrees with the mark's type, leave it untyped.
+      const ticks = tickColumns.columns.length ? basTickEvidence(row, tickColumns.columns) : null;
+      if (ticks?.conflict || (ticks?.type && pointType.type && ticks.type !== pointType.type)) {
+        pointType = { type: null, raw: null, basis: "ticked_point_type_columns_conflict", status: "REFUSED_POINT_TYPE_CONFLICT" };
+      } else if (ticks?.type && pointType.status === "untyped") {
+        pointType = { type: ticks.type, raw: ticks.typeColumn.label, basis: "ticked_point_type_column", status: "typed" };
+      }
       if (pointType.type) {
         counts[pointType.type] += 1;
       } else if (pointType.status === "REFUSED_POINT_TYPE_CONFLICT") {
@@ -3641,6 +3713,12 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       }
       const { cells, description } = scheduleAttrs(row);
       const pointExtras = basPointExtras(row);
+      if (ticks) {
+        pointExtras.alarm ||= ticks.alarm;
+        pointExtras.trend ||= ticks.trend;
+        if (!pointExtras.wiring && ticks.hardwired && ticks.type === pointType.type) pointExtras.wiring = "hardwired";
+        else if (!pointExtras.wiring && ticks.soft) pointExtras.wiring = "soft";
+      }
       const servedEquipment = servedEquipmentFromBasRow(row, title);
       if (pointExtras.alarm) extras.alarm += 1;
       if (pointExtras.trend) extras.trend += 1;
@@ -3676,7 +3754,8 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         point_type_raw: pointType.raw,
         point_type_basis: pointType.basis,
         point_type_status: pointType.status,
-        point_type_bbox_px: cellBbox(row, BAS_POINT_TYPE_HEADER_RE),
+        point_type_bbox_px: cellBbox(row, BAS_POINT_TYPE_HEADER_RE)
+          || (pointType.basis === "ticked_point_type_column" ? row.cells?.[ticks.typeColumn.header]?.bbox || null : null),
         cells,
         alarm: pointExtras.alarm,
         trend: pointExtras.trend,
@@ -3773,7 +3852,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). Conflicting authored types remain untyped. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). A tick (X) under a column labelled with a type (DIGITAL INPUTS, ANALOG OUTPUTS) types its row; ticks under two types, or one that disagrees with the mark, leave the row untyped, as conflicting authored types do. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present, and ticks under columns labelled TREND, ALARM, a software variable (BINARY / ANALOG / MULTISTAGE VARIABLE: soft) or a type whose label says HARD WIRED (hardwired) (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,
