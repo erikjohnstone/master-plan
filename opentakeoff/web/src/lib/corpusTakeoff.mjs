@@ -1406,6 +1406,15 @@ function identifierColumnByCardinality(table) {
 // a general schedule, where only a family's mark rule may claim a row.
 const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i;
 
+/** A SPECIALTY EQUIPMENT SCHEDULE whose printed title does not say MECHANICAL
+ * (or HVAC) lists the building's specialties, no family's units: 041_IL's
+ * prints its eyewash station P2000 (no pump) beside utility carts and scope
+ * cabinets, 23_GA's its extinguishers, grab bars and bleachers. 062_ID's
+ * MECHANICAL SPECIALTY EQUIPMENT SCHEDULE is a general one. */
+function isBuildingSpecialtiesTitle(title, ruleTitle) {
+  return /^SPECIALTY\s+EQUIPMENT\s+SCHEDULE$/i.test(ruleTitle) && !/\b(?:MECHANICAL|HVAC)\b/i.test(title);
+}
+
 /** A schedule title that says the table is not work in this contract: not in
  * contract (N.I.C.), or existing units printed for reference only (16_NV's
  * EXISTING ... ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)). A new unit's
@@ -1489,7 +1498,7 @@ export function familyTableGate(table, spec, family = null) {
   // family's blank-title handling (LOUVER, FIN_TUBE, etc.) is touched.
   const genericValveTitle = Boolean(blankServiceHint) && !blankTitle
     && isGenericControlValveTitle(ruleTitle);
-  const catchAll = CATCH_ALL_SCHEDULE_RE.test(ruleTitle);
+  const catchAll = CATCH_ALL_SCHEDULE_RE.test(ruleTitle) && !isBuildingSpecialtiesTitle(title, ruleTitle);
   const blankGate = blankKeyRe || keyRe;
   const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
   const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);

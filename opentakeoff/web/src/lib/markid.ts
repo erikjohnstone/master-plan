@@ -172,6 +172,37 @@ export function markLetters(want: string): string {
   return /^[A-Z]+/.exec((want || "").trim().toUpperCase())?.[0] ?? "";
 }
 
+/** Words a spelled-out name carries that its abbreviation's letters skip
+ * ("CFM" for CUBIC FEET PER MINUTE). */
+const ABBREVIATION_CONNECTORS = new Set(["OF", "AND", "&", "PER", "THE", "FOR", "TO", "WITH"]);
+
+/** Is the span an abbreviations list's entry rather than a tag: its text a
+ * family's bare letters, two or more, and the words lettered next after it
+ * on its line, a column's gap away at most (8 text heights), spelling them
+ * out ("VFD  VARIABLE FREQUENCY DRIVE", "WH = WALL HYDRANT")? A drafter's
+ * shorthand for the one unit of a family is lettered at the unit, never
+ * followed by what its letters stand for. The spelled-out name is read
+ * across the spans that continue it at word spacing (1.5 text heights). */
+export function isAbbreviationEntry(span: MarkBox, spans: readonly MarkBox[]): boolean {
+  const letters = markKey(span.str);
+  if (letters.length < 2 || !/^[A-Z]+$/.test(letters)) return false;
+  const h = Math.max(span.y1 - span.y0, 1);
+  const cy = (span.y0 + span.y1) / 2;
+  const after = spans
+    .filter((o) => o !== span && Math.abs((o.y0 + o.y1) / 2 - cy) < 0.5 * h && o.x0 >= span.x1 - 1)
+    .sort((a, b) => a.x0 - b.x0);
+  const words: string[] = [];
+  let end = span.x1;
+  for (const o of after) {
+    if (o.x0 - end > (words.length ? 1.5 : 8) * h) break;
+    words.push(...o.str.toUpperCase().split(/[^A-Z0-9&]+/).filter(Boolean));
+    end = Math.max(end, o.x1);
+  }
+  const initials = (ws: string[]) => ws.map((w) => w[0]).join("");
+  return initials(words).startsWith(letters)
+    || initials(words.filter((w) => !ABBREVIATION_CONNECTORS.has(w))).startsWith(letters);
+}
+
 /** Every drawn occurrence of `want` on the sheet, after alias clustering.
  * Twin spellings of the same mark sitting on one device collapse to one
  * hit (the longer original text wins). Far-apart alias spellings stay

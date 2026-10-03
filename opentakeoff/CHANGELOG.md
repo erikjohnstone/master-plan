@@ -1,5 +1,19 @@
 # Changelog
 
+- **An abbreviations list's entry is no unit's tag.** Where a set schedules one unit of a family, the plan sweep lets
+  the family's letters lettered alone stand for it, a drafter's shorthand ("ET" for the only ET-1). 013_MO's only
+  drive VFD-1 is printed on its schedule sheet alone, yet read ambiguous: its reflected ceiling plan lists "VFD
+  VARIABLE FREQUENCY DRIVE" among its abbreviations. Letters followed on their line, a column's gap away at most, by
+  the words they stand for are now a legend's entry, never the shorthand. Of 438 such lone letters on the plans of
+  31 open sets, a census found 6 legend entries on 5 sets; a reconcile A/B over those 31 sets changes one row:
+  013_MO's VFD-1, ambiguous -> schedule-only.
+- **A specialty equipment schedule that is not mechanical holds no unit.** 041_IL's architectural Specialty Equipment
+  Schedule (eyewash station, utility carts, scope cabinets) was read as a general schedule, and its eyewash station
+  P2000 counted as a pump by its mark's shape. A SPECIALTY EQUIPMENT SCHEDULE whose title does not say MECHANICAL (or
+  HVAC) now lists the building's specialties; a MECHANICAL SPECIALTY EQUIPMENT SCHEDULE is still a general one. Only
+  041_IL's and 23_GA's (extinguishers, grab bars) carry that title in the corpus; the takeoff changes only by
+  041_IL's pump. 041_IL is re-keyed from its renders: 20 units in 10 families and 43 BAS points (two points lists the
+  graph reads no table from), where the early key held 4.
 - **One reconcile row a unit.** The family reconcile held a row for each table that listed a unit, though the takeoff
   counts it once: 061_IA's AHU-A in its schedule and that schedule's (CONT.), its EF-2 and EF-3 in their fan schedule
   and the general EQUIPMENT SCHEDULE, 009_FL's five duct heaters in their schedule and an EQUIPMENT CONNECTION SCHEDULE.

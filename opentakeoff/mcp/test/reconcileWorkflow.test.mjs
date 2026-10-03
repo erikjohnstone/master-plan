@@ -1077,19 +1077,24 @@ test("Vol2 sterile expand 049: air compressors all MATCH", async (t) => {
   await assertFamilyAllMatch(session, graph, key, "AIR_COMPRESSOR");
 });
 
-test("Vol2 sterile 041: GRD MATCH; FCU/pump honest SO", async (t) => {
+test("Vol2 sterile 041: the air side MATCH; the specialty schedule's eyewash is no pump", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "041_IL_VA_Project_537_17_115_Sterile_Processing.compile.json"),
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
-  await assertFamilyAllMatch(session, graph, key, "GRD");
-  for (const family of ["FCU", "PUMP"]) {
-    await assertFamilyStatusCounts(session, graph, key, family, {
-      schedule_only: key.categories[family],
-    });
+  for (const family of ["AHU", "VAV", "CONDENSING_UNIT", "AIR_COMPRESSOR", "GRD"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
   }
+  // The coils the takeoff reads, 3 of the key's 4 (the GLYCOL WATER ENERGY
+  // RECOVERY COIL SCHEDULE names no coil family), all MATCH; of the fans,
+  // 40-SF-1 does and 40-EF-01's one plan tag is not verified against a fan.
+  await assertFamilyStatusCounts(session, graph, key, "DUCT_MOUNTED_COIL", { match: 3 }, { rows: 3 });
+  await assertFamilyStatusCounts(session, graph, key, "FAN", { match: 1, ambiguous: 1 });
+  // P2000 in the architectural Specialty Equipment Schedule is an eyewash
+  // station, no pump: the key holds none, and neither does the reconcile.
+  await assertFamilyStatusCounts(session, graph, key, "PUMP", {}, { rows: 0 });
 });
 
 test("Vol2 ITD D2 lab 069: plant families honest SCHEDULE_ONLY", async (t) => {

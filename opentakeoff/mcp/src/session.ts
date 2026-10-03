@@ -361,7 +361,7 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
 import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, canonicalLabelFamily, LABEL_TOKEN_RE, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
-import { isBarePrefix, markKey, markLetters, spanAnswersFor } from "../../web/src/lib/markid.ts";
+import { isAbbreviationEntry, isBarePrefix, markKey, markLetters, spanAnswersFor } from "../../web/src/lib/markid.ts";
 import { isEquipTag } from "../../web/src/lib/equiptags.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
@@ -4221,11 +4221,14 @@ export class Session {
       ? familyQuorumFragmentedTagOcc(spans, key)
       : fragmentedTagOcc(spans, key);
     const deepHyphen = (): TagOcc[] => deepHyphenChainTagOcc(spans, key);
-    // Last, a bare prefix as the key's shorthand: its family's letters whole.
+    // Last, a bare prefix as the key's shorthand: its family's letters whole,
+    // never an abbreviations list's entry (isAbbreviationEntry): 013_MO's
+    // ceiling plan lists "VFD  VARIABLE FREQUENCY DRIVE", not its VFD-1.
     const letters = markLetters(key);
     const shorthand = (): TagOcc[] => barePrefix && barePrefix !== "never" && letters.length >= 2
       ? answering
-        .filter((sp) => isBarePrefix(sp.str, key) && markKey(sp.str) === letters && spanAnswersFor(sp.str, key, barePrefix.marks))
+        .filter((sp) => isBarePrefix(sp.str, key) && markKey(sp.str) === letters && spanAnswersFor(sp.str, key, barePrefix.marks)
+          && !isAbbreviationEntry(sp, spans))
         .map(occurrenceOf)
       : [];
     const orShorthand = (found: TagOcc[]): TagOcc[] => (found.length ? found : shorthand());

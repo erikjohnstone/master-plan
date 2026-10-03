@@ -2,17 +2,24 @@
   "set_id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/041_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 sterile processing \u2014 thin FCU/PUMP/GRD (honest WEAK).",
+  "notes": "Vol2 sterile processing. [RE-KEYED 2026-10-03 from the renders] M-601-3 (page 25): AIR TERMINAL UNIT SIZING SCHEDULE 40-VAV-01 to 40-VAV-05 (VAV 5); AIR DEVICE SCHEDULE (SUPPLY) SD-1 and (RETURN & EXHAUST) EG-1 (GRD 2); FAN SCHEDULE 40-EF-01. M-602-3 (page 26): AIR HANDLING UNIT SCHEDULE 40-AHU-2 (one pre-engineered VAV unit whose row names each section by its mark); FAN SCHEDULE 40-SF-1 (its supply fan; with 40-EF-01, FAN 2); DIRECT EXPANSION COOLING COIL 40-CC-1, CHILLED WATER COOLING COIL 40-CC-2, HOT WATER HEATING COIL 40-HC-1 and GLYCOL WATER ENERGY RECOVERY COIL 40-ERC-1, each a piped coil (DUCT_MOUNTED_COIL 4); AIR COOLED CONDENSING UNIT SCHEDULE (REFRIGERATION SERVICE) 40-CU-1; STEAM HUMIDIFER SCHEDULE, one row for 40-HM-1 and 40-HM-2 stacked in its MARK cell (250 LBS/HR, 125 per humidifier: HUMIDIFIER 2). P-601-3 (page 17): ELECTRIC DOMESTIC WATER HEATER SCHEDULE 40-HWH-02; EXPANSION TANK SCHEDULE 40-ET-02; AIR COMPRESSOR SCHEDULE 40-COM-1. Not keyed: the HEAT PIPE PRECOOLING and HEAT PIPE REHEATING COIL SCHEDULEs' 40-HPPCC-1 and 40-HPRHC-1 (the two sections of one wrap-around heat pipe, unpiped; 05_MO's heat pipe is likewise no family's), the AIR FILTER SCHEDULE's 40-PF-1, 40-AF-1 and 40-FF-1 (the air handler's filter sections, as 05_MO, 017_MD and 031_MO), the PLUMBING FIXTURE SCHEDULE and the architectural Specialty Equipment Schedule (pages 8 and 11), whose P2000 is an EYEWASH STATION, no pump. BAS: M-502-3 (page 24) prints a VAV TERMINAL POINTS LIST (16 points: hardware AI 4, AO 2; software AV 3, BV 1, with trends and alarms) and a 40-AHU-2 POINTS LIST (27 points: AI-1 to AI-9, BI-1 to BI-9, AO-1 to AO-7, BO-1, FT-1): bas_points rows 43; the graph reads no table on that sheet. No control valve schedule. The earlier key (FCU 2, PUMP 1, GRD 1) was an early [WEAK] pipeline key.",
   "categories": {
-    "FCU": 2,
-    "PUMP": 1,
-    "GRD": 1
+    "AHU": 1,
+    "VAV": 5,
+    "CONDENSING_UNIT": 1,
+    "FAN": 2,
+    "HUMIDIFIER": 2,
+    "WATER_HEATER": 1,
+    "EXPANSION_TANK": 1,
+    "DUCT_MOUNTED_COIL": 4,
+    "AIR_COMPRESSOR": 1,
+    "GRD": 2
   },
   "totals": {
-    "items": 4
+    "items": 20
   },
   "bas_points": {
-    "rows": 0
+    "rows": 43
   },
   "control_valves": {
     "items": 0

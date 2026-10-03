@@ -483,6 +483,24 @@ describe("AS-66 a table no title vouches for: notes, indexes and lists hold no u
     assert.deepEqual(titled("ERV"), ["C1"]);
   });
 
+  it("reads no unit in a specialty equipment schedule that does not say mechanical", () => {
+    // 041_IL's Specialty Equipment Schedule prints its eyewash station P2000
+    // (no pump) beside utility carts and scope cabinets, as 23_GA's prints its
+    // extinguishers and grab bars: the building's specialties.
+    const specialties = compile([table("a.pdf#8", "Specialty Equipment Schedule", ["P2000", "F0535", "AHU-9"])]);
+    for (const f of ["PUMP", "FCU", "AHU"]) assert.deepEqual(specialties(f), [], f);
+    // A mechanical specialty schedule and a general equipment schedule are
+    // still read by the families' marks.
+    const general = compile([
+      table("m.pdf#14", "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE", ["ET-1", "AS-1"]),
+      table("m.pdf#15", "EQUIPMENT SCHEDULE", ["P-1"]),
+      table("m.pdf#16", "MECHANICAL EQUIPMENT SCHEDULE", ["CWP-9"]),
+    ]);
+    assert.deepEqual(general("EXPANSION_TANK"), ["ET-1"]);
+    assert.deepEqual(general("AIR_SEPARATOR"), ["AS-1"]);
+    assert.deepEqual(general("PUMP"), ["CWP-9", "P-1"]);
+  });
+
   it("reads no legend heading as a unit", () => {
     // 047_NC's legend sheet: "-CONDENSING UNIT" read as a title over "PIPING LEGEND".
     assert.equal(isScheduleHeaderJunkMark("PIPINGLEGEND"), true);

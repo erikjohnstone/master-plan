@@ -5,6 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   markKey, marksEqual, dedupeMarks, spanAnswersFor, isBarePrefix, markLetters, pickMarkHits, compoundTagOcc, MARK_CLUSTER_K,
+  isAbbreviationEntry,
 } from "../src/lib/markid.ts";
 
 const box = (str: string, x0: number, y0: number, w = str.length * 5, h = 8) =>
@@ -99,6 +100,30 @@ test("markLetters: the letters a mark's family is written with, up to its first 
   assert.equal(markLetters("EG"), "EG");
   assert.equal(markLetters("1-VAV-1"), "");
   assert.equal(markLetters(""), "");
+});
+
+test("isAbbreviationEntry: a family's letters spelled out after them on their line are a legend's entry, not a tag", () => {
+  // an abbreviations list: the letters, a column's gap, the words they stand for
+  const vfd = box("VFD", 100, 500, 30, 10);
+  assert.equal(isAbbreviationEntry(vfd, [vfd, box("VARIABLE FREQUENCY DRIVE", 150, 500, 220, 10)]), true);
+  // spelled out across spans at word spacing, after a separator, with a connector the letters skip
+  const wh = box("WH", 100, 500, 20, 10);
+  assert.equal(isAbbreviationEntry(wh, [wh, box("=", 128, 500, 6, 10), box("WALL", 140, 500, 40, 10), box("HYDRANT", 190, 500, 70, 10)]), true);
+  const cfm = box("CFM", 100, 500, 30, 10);
+  assert.equal(isAbbreviationEntry(cfm, [cfm, box("CUBIC FEET PER MINUTE", 150, 500, 200, 10)]), true);
+  // a tag lettered alone, or beside other words, or its name farther than a column's gap
+  assert.equal(isAbbreviationEntry(vfd, [vfd]), false);
+  assert.equal(isAbbreviationEntry(vfd, [vfd, box("ABOVE CEILING", 150, 500, 120, 10)]), false);
+  assert.equal(isAbbreviationEntry(vfd, [vfd, box("VARIABLE FREQUENCY DRIVE", 240, 500, 220, 10)]), false);
+  // a name on another line, or one that begins elsewhere ("FIRE PROTECTION ... TAMPER SWITCH" for TS)
+  assert.equal(isAbbreviationEntry(vfd, [vfd, box("VARIABLE FREQUENCY DRIVE", 150, 520, 220, 10)]), false);
+  const ts = box("TS", 100, 500, 20, 10);
+  assert.equal(isAbbreviationEntry(ts, [ts, box("FIRE PROTECTION SPRINKLER TAMPER SWITCH", 150, 500, 300, 10)]), false);
+  // only a family's bare letters, two or more, can be an entry
+  const one = box("E", 100, 500, 10, 10);
+  assert.equal(isAbbreviationEntry(one, [one, box("EXHAUST", 130, 500, 60, 10)]), false);
+  const mark = box("EF-1", 100, 500, 40, 10);
+  assert.equal(isAbbreviationEntry(mark, [mark, box("EXHAUST FAN", 160, 500, 100, 10)]), false);
 });
 
 test("pickMarkHits: twin-alias spellings on ONE device collapse to one hit", () => {

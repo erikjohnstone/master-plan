@@ -79,6 +79,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 249d98b, aad2c5c | Keys re-keyed from the renders; the reviewed-corrections overlay folded into the keys |
 | 2952ce3, ce0b768, 58f6cb9, 0d229c6, ea2acad | Keys re-keyed from the renders (068_US, 18_OR, 053_VA, 01_NY and five pipeline sets) and stale reconcile expectations corrected; a pump lettered pump-first (PCH-n) on an untitled table; a silencer schedule titled by its word alone |
 | 7c3105c | A sheet's keynotes heading is no sheet list (053_VA TU26-40 swept); a demolition sheet that also draws its new work is read view by view (066_MT, 01_NY) |
+| d79efea | One reconcile row a unit (open surplus rows 16 -> 0; 16_NV's DF-B1 counted); a schedule's tag symbol names its unit |
 
 ## Known limits (documented, not fixed)
 
@@ -136,16 +137,9 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 - MCP `reconcileWorkflow` "Vol2 WEAK leftovers": 067_CA (walled; totals only) holds 1 HEAT_EXCHANGER reconcile row
   against its key's 2 (a key written at 6fabaeb, 2026-09-13). The takeoff reads 1 on its graph built at 09:02 on
   2026-10-03, before that day's graph-side edits, as on one built at the current code. Not investigated (a walled
-  set: no row reads, no renders), and the key is not edited to pass. 013_MO (run before 067_CA) fails too, at the
-  pushed head as with this change: its one VFD-1 is ambiguous where the test (rightly) expects schedule-only. VFD-1
-  is printed only on its schedule sheet; the plan sweep's bare-prefix shorthand (a family's whole letters standing
-  for the set's only unit of them) reads the "VFD" of an ABBREVIATIONS list ("VFD  VARIABLE FREQUENCY DRIVE") on the
-  reflected ceiling plan (page 5) as its tag. Queued: a bare prefix followed on its line by the words it abbreviates
-  is a legend entry. 033_MN passes; 066_MT moved to its own test when its remodel plan was swept.
-- MCP `reconcileWorkflow` "Vol2 sterile 041": 041_IL's key is an early [WEAK] pipeline key (FCU 2, PUMP 1, GRD 1, from
-  6fabaeb); the takeoff reads 19 units (AHU, VAV 5, CU, PUMP, FAN 2, ET, coils 3, compressor, GRD 2: SD-1 and EG-1 in
-  the SUPPLY and RETURN & EXHAUST air device schedules), the test asserts the key's GRD 1 and fails on 2 rows, at the
-  pushed head as now. Queued: re-key from the renders.
+  set: no row reads, no renders), and the key is not edited to pass. 013_MO (run before 067_CA) passes since an
+  abbreviations list's entry is no unit's tag (below): its one VFD-1 is schedule-only again, as the test expects.
+  033_MN passes; 066_MT moved to its own test when its remodel plan was swept.
 - MCP `conformance.test.ts` "sheet graph (#87) … find_schedule": room 134's EAST finish no longer chains to its
   material-schedule definition (`SMOKEY MOUNTAIN AC-18` expected, undefined). Fails identically at the PR #108
   merge `4255465`, before any of this goal's commits. Cause (2026-10-03): the MATERIAL SCHEDULE's WALLS box prints
@@ -429,6 +423,34 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   slash-combined plan tag ("PRV-1A/1B") names two valves the sweep reads as neither. A first census of such tags (one
   text run, or two joined) over the open sets' plans found 18, 7 naming units with no tag of their own, on 2 sets,
   mostly in notes; it misses lettering in three runs (040_IL's own "PRV", "-", "1A/1B"), so it undercounts. Open.
+- An abbreviations list's entry is no unit's shorthand (markid `isAbbreviationEntry`, used by the sweep's bare-prefix
+  fallback). A census of the open keyed sets' plan pages found 438 lone spans that are a set's only unit's whole
+  letters on 31 sets; 6 of them, on 5 sets, are followed on their line by the words they abbreviate (013_MO "VFD
+  VARIABLE FREQUENCY DRIVE", 041_IL "EG EQUIPMENT GROUND", 061_IA "AHU AIR HANDLING UNIT - (ARCH)" and "FCU FAN COIL
+  UNIT (ARCH)", 13_MI "TS TIME SWITCH", 21_VA "WH WALL HYDRANT"); the spelled-out name sits 2 to 6 text heights
+  after the letters, the next column 8 or more. Rule: letters (two or more) whose next words on the line, at most 8
+  heights on and continued at word spacing, have those initials (connectors such as OF/PER skipped). A/B over the 31
+  sets' families holding such a unit (217 rows): one row changes, 013_MO's VFD-1 AMBIGUOUS -> SCHEDULE_ONLY; the
+  other five entries move no row (why each was never swept was not traced). Walled sets (status counts only): 34
+  sets, 260 rows, the same on both sides. The legend-like "TS FIRE PROTECTION SPRINKLER TAMPER SWITCH" (13_MI) and
+  21_VA's lone plumbing-plan "WH" (wall hydrants) are not abbreviation entries and stay as they were.
+- 041_IL re-keyed from its renders (pages 17, 24, 25, 26): 20 units in 10 families (AHU 1, VAV 5, CONDENSING_UNIT 1,
+  FAN 2, HUMIDIFIER 2, WATER_HEATER 1, EXPANSION_TANK 1, DUCT_MOUNTED_COIL 4, AIR_COMPRESSOR 1, GRD 2) and 43 BAS
+  points; the earlier [WEAK] key held FCU 2, PUMP 1, GRD 1. Kept out by precedent: the heat pipe's two coil
+  sections (05_MO's heat pipe is no family's) and the air handler's filter sections. The takeoff reads 16 of the 20
+  (missing the two humidifiers, stacked in one MARK cell and read as one glued mark "40-HM-140-HM-2", the water
+  heater 40-HWH-02 and the glycol energy recovery coil 40-ERC-1, whose title names no coil family) and none of the
+  43 points: the sheet graph reads no table from M-502-3 (task #309). Its reconcile: AHU, VAV, CU, coils,
+  compressor and GRD all MATCH; 40-SF-1 MATCH, 40-EF-01 ambiguous (its one plan tag unverified against a fan);
+  40-ET-02 schedule-only.
+- A SPECIALTY EQUIPMENT SCHEDULE whose title does not say MECHANICAL (or HVAC) holds no unit. 041_IL's architectural
+  Specialty Equipment Schedule (TYPE MARK, DESCRIPTION: utility carts, scope cabinets, an EYEWASH STATION P2000) was
+  read as a catch-all and P2000 counted as a pump by its mark's shape. A census of units read from catch-all
+  schedules on the open sets found P2000 the only one that is not its family's (043_FL's pumps, 061_IA's fans,
+  062_ID's and 14_OR's hydronic accessories, 19_CA's split units all are); the corpus prints that exact title twice,
+  041_IL's and 23_GA's (extinguishers, grab bars, bleachers; no unit read), no walled set at all. Takeoff A/B over
+  119 graphs: one change, 041_IL PUMP 1 -> 0. The discipline word is read from the printed title, since the
+  family-rule title drops it (MECHANICAL SPECIALTY EQUIPMENT SCHEDULE stays general: 062_ID).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
