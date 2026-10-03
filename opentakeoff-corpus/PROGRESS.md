@@ -134,6 +134,12 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   on saved graphs gives the same totals at c637a3d (before the 2026-10-02 batch) and at c7e48ee (021_XX 109/109,
   015_VA 75/75), so the batch changed nothing here. The key needs re-counting from the drawings' point lists
   before this test means anything; not edited to pass.
+- MCP `valvePlanPaint.regression` (6 of 7 sets) fails its MATCH floor: every valve target sweeps to AMBIGUOUS,
+  "Exact plan tag text was found, but matching symbol geometry was not verified" (062_ID 31 of 31, need >= 10
+  MATCH). That verdict is `classifyBasServedSweepOutcome`'s rule from #94 (13dea24). 062_ID run alone fails
+  identically at c637a3d and at HEAD, and the valve totals equal the keys at both (001_NC 163, 015_VA 36,
+  062_ID 31, 021_XX 2, 096_IN 24). The file also never exits after its last test (an open handle), so a runner
+  waits out its timeout.
 
 ## Sweep re-run (OOM-lost sets)
 
