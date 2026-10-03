@@ -2,7 +2,7 @@
   "set_id": "050_IL_VA_Project_537_17_115_Sterile_Processing",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/050_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 IL VA sterile processing — thin GRD. [RE-KEYED 2026-10-03 from the render] Page 14's AIR COMPRESSOR SCHEDULE prints 1-COM-1 (instrument air, simplex oilless scroll, Powerex LSE2005): AIR_COMPRESSOR 1; page 17 prints an AIR DEVICE SCHEDULE (SUPPLY) of SD-2 (GRD 1, as keyed) and an AIR TERMINAL UNIT SIZING SCHEDULE of 1-VAV-01 (hot water reheat): VAV 1. Totals 3.",
+  "notes": "[WEAK] Vol2 IL VA sterile processing — thin GRD. [RE-KEYED 2026-10-03 from the render] Page 14's AIR COMPRESSOR SCHEDULE prints 1-COM-1 (instrument air, simplex oilless scroll, Powerex LSE2005): AIR_COMPRESSOR 1; page 17 prints an AIR DEVICE SCHEDULE (SUPPLY) of SD-2 (GRD 1, as keyed) and an AIR TERMINAL UNIT SIZING SCHEDULE of 1-VAV-01 (hot water reheat): VAV 1. Totals 3. [BAS RE-KEYED 2026-10-03 from the render] Page 17 prints a VAV TERMINAL POINTS LIST (a detail titled under its grid, Scale: N.T.S.) of 16 points: ZONE TEMPERATURE, ZONE TEMPERATURE SETPOINT, AIRFLOW and DISCHARGE AIR TEMPERATURE ticked AI, ZONE DAMPER and REHEATING VALVE ticked AO, and ten software points (setpoints, HEATING MODE, four temperature alarms); its totals line reads TOTAL HARDWARE (6), TOTAL SOFTWARE (18). bas_points rows 16 (was 0). The set prints no other points list (its only other I/O text is the abbreviations entry I/O INPUT/OUTPUT on page 15).",
   "categories": {
     "GRD": 1,
     "VAV": 1,
@@ -12,7 +12,7 @@
     "items": 3
   },
   "bas_points": {
-    "rows": 0
+    "rows": 16
   },
   "control_valves": {
     "items": 0

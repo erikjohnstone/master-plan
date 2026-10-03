@@ -376,6 +376,47 @@ function isVerticalCaptionSpan(sp: GraphSpan): boolean {
   return spanText(sp).length >= 2 && sp.h > Math.max(12, 1.8 * sp.w);
 }
 
+/** A detail's title lettered under the grid it titles, its scale right below
+ * it: 041_IL's M-502-3 prints "(7) VAV TERMINAL POINTS LIST / Scale: N.T.S."
+ * under its points list's grid, and "(3) 40-AHU-2 POINTS LIST / Scale: No
+ * Scale" under the air handler's. A title ending SCHEDULE or POINTS LIST (a
+ * detail named for equipment, 030_NY's "FLOOR MOUNTED CHILLED WATER FAN COIL
+ * UNIT", is a drawing, never a table's title), its top at most three of its
+ * heights below the grid's bottom (or a quarter of the grid's height), over
+ * the grid for most of its width, with a SCALE line starting within one and a
+ * half of its heights below its top and under its first words. The nearest
+ * one titles the grid. */
+function detailTitleBelow(spans: GraphSpan[], region: Bbox): NearbyScheduleCaption | null {
+  const [rx0, , rx1, ry1] = region;
+  const rh = Math.max(1, region[3] - region[1]);
+  const scales = spans.filter((sp) => !isVerticalCaptionSpan(sp) && /^SCALE\b/i.test(spanText(sp)));
+  if (!scales.length) return null;
+  let best: { text: string; bbox: Bbox; dy: number } | null = null;
+  for (const sp of spans) {
+    if (isVerticalCaptionSpan(sp)) continue;
+    const text = spanText(sp).replace(/\s+/g, " ").trim();
+    if (!(isScheduleCaptionText(text) && SCHEDULE_CAPTION_RE.test(text)) && !isPointsListCaptionText(text)) continue;
+    const h = Math.max(1, sp.h);
+    const dy = sp.y - ry1;
+    if (dy < -0.5 * h || dy > Math.max(3 * h, 0.25 * rh)) continue;
+    const xOverlap = Math.max(0, Math.min(sp.x + sp.w, rx1) - Math.max(sp.x, rx0));
+    if (xOverlap < 0.6 * Math.max(1, sp.w)) continue;
+    const scaled = scales.some((sc) => sc.y > sp.y && sc.y - sp.y <= 1.5 * h
+      && sc.x >= sp.x - 2 * h && sc.x <= sp.x + 0.5 * sp.w);
+    if (!scaled) continue;
+    if (!best || dy < best.dy) best = { text, bbox: [sp.x, sp.y, sp.x + sp.w, sp.y + sp.h], dy };
+  }
+  return best ? { text: best.text, bbox: best.bbox } : null;
+}
+
+/** A points list's caption: its title ends with POINTS LIST or POINT LIST
+ * ("VAV TERMINAL POINTS LIST", "40-AHU-2 POINTS LIST"). */
+function isPointsListCaptionText(text: string): boolean {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  return normalized.length >= 8 && normalized.length <= 78
+    && !CAPTION_XREF_RE.test(normalized) && /\bPOINTS?\s*LIST$/i.test(normalized);
+}
+
 /** Recover the printed title physically attached to one already-detected
  * schedule grid. CAD exports routinely place that title outside the ruled
  * table and, for narrow schedule strips, rotate it 90 degrees and split it
@@ -528,7 +569,9 @@ export function nearbyScheduleCaption(
       && shallowTitleTier
       && dy <= Math.max(360, 0.75 * rh);
   });
-  if (!eligible.length) return null;
+  // Nothing above or beside it: a detail's title lettered under the grid,
+  // where the grid has no title of its own (detailTitleBelow).
+  if (!eligible.length) return currentCompact && !currentIsGeneric ? null : detailTitleBelow(spans, region);
 
   eligible.sort((a, b) => {
     const gap = (candidate: NearbyScheduleCaption & { vertical: boolean; parts: number; strongHead: boolean }): number => {

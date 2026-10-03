@@ -1,5 +1,24 @@
 # Changelog
 
+- **A detail's title lettered under its grid names it.** Points lists drawn as details print their title below the
+  grid, with the scale under it ("(7) VAV TERMINAL POINTS LIST / Scale: N.T.S."); the sheet graph looked for a title
+  above or beside a grid only, so such a list, untitled, was no table at all. A title ending SCHEDULE or POINTS LIST
+  lettered just under a grid that has no title of its own, over most of its width, with a SCALE line right beneath it,
+  now titles it (a detail named for equipment, "FLOOR MOUNTED CHILLED WATER FAN COIL UNIT", never does). A census of
+  every keyed set's pages found that shape on 4 open sets (6 titles) and 4 walled sets (5); graphs rebuilt before and
+  after read 6 more lists on the open sets and change no unit: 041_IL's 40-AHU-2 POINTS LIST and VAV TERMINAL POINTS
+  LIST (43 points), 050_IL's and 053_VA's VAV terminal lists (16 and 19), 039_TX's fan coil and Modbus unit lists
+  (19); on the walled sets, 2 more lists on one (13 points), units unchanged.
+- **A points list's totals line is no point.** "TOTAL HARDWARE (6)", "TOTAL SOFTWARE (18)" and "TOTAL POINTS BY
+  TYPE:" close the lists above; each was counted as a point. TOTAL or TOTALS followed only by the counts' names
+  (hardware, software, points, I/O, a type, BY TYPE) and a count is now no point; a point named for the total it
+  measures (TOTAL AIRFLOW) still is. Over 119 saved graphs no list changes; on the new lists it drops 7 lines.
+- **A point named in words takes its type from its ID column.** 041_IL's air handler list names each point and
+  prints its ID beside it (SUPPLY AIR TEMPERATURE | AI-1 | SA-T); its type columns are ticked with drawn dots that
+  carry no text, so its 26 hardware points were untyped. A column that prints a typed ID (AI-1, BO 3, DI12) on at
+  least three of a list's rows and on most of them now types each point it names, unless the point's type cell or
+  tick says otherwise (then no type, as before). 039_TX, 050_IL and 053_VA are re-keyed from their renders (BAS 19,
+  16 and 19 points, where the keys, written before these lists could be read, said 0).
 - **An abbreviations list's entry is no unit's tag.** Where a set schedules one unit of a family, the plan sweep lets
   the family's letters lettered alone stand for it, a drafter's shorthand ("ET" for the only ET-1). 013_MO's only
   drive VFD-1 is printed on its schedule sheet alone, yet read ambiguous: its reflected ceiling plan lists "VFD

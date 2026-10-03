@@ -2,7 +2,7 @@
   "set_id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/039_TX_VA_Project_580_22_201_Replace_and_Upgrade.pdf",
   "kind": "hvac_equipment",
-  "notes": "[KEYED 2026-10-02 from the render] VA Houston (Michael E. DeBakey) replace and upgrade building automation system. M-601 MECHANICAL SCHEDULES (text): BLDG 109 AIR TERMINAL UNIT SCHEDULE (two panels) lists 186 tagged terminal units, TU-101C/TU-101H .. TU-241C/TU-241H: 93 cold-duct (C) and 93 hot-duct (H) air valves, each with its own tag, inlet size and airflow; note 3 has each C/H pair operate as one dual duct box (93 boxes). Counted as the 186 terminal units the schedule tags. BAS CONTROLLER SCHEDULE (NAE/NCE/NIE controllers) and ENERGY METER SCHEDULE (meters) list no HVAC units. The earlier [ZERO] key was written from pipeline output, not from the drawing.",
+  "notes": "[KEYED 2026-10-02 from the render] VA Houston (Michael E. DeBakey) replace and upgrade building automation system. M-601 MECHANICAL SCHEDULES (text): BLDG 109 AIR TERMINAL UNIT SCHEDULE (two panels) lists 186 tagged terminal units, TU-101C/TU-101H .. TU-241C/TU-241H: 93 cold-duct (C) and 93 hot-duct (H) air valves, each with its own tag, inlet size and airflow; note 3 has each C/H pair operate as one dual duct box (93 boxes). Counted as the 186 terminal units the schedule tags. BAS CONTROLLER SCHEDULE (NAE/NCE/NIE controllers) and ENERGY METER SCHEDULE (meters) list no HVAC units. The earlier [ZERO] key was written from pipeline output, not from the drawing. [BAS RE-KEYED 2026-10-03 from the render] Page 31 prints two points lists, details titled under their grids (Scale: No Scale): MODBUS UNIT INTEGRATION POINTS LIST, 8 points (6 AI, FAN STATUS BI, ENABLE / DISABLE BO; TOTAL HARDWARE (8)), and FAN COIL UNIT POINTS LIST, 11 points (6 AI, COOLING COIL CONTROL VALVE AO, FAN STATUS and two WATER DETECTION ALARMs BI, FAN ON/OFF BO; TOTAL HARDWARE (11)); each closes with a TOTAL POINTS BY TYPE: counts line, no point. bas_points rows 19 (was 0). Page 32's note 3: the contractor requests the electronic points list from the VA at award; page 7's only I/O text is the abbreviations entry I/O INPUT/OUTPUT.",
   "categories": {
     "VAV": 186
   },
@@ -10,7 +10,7 @@
     "items": 186
   },
   "bas_points": {
-    "rows": 0
+    "rows": 19
   },
   "control_valves": {
     "items": 0

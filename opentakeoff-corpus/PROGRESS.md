@@ -80,6 +80,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 2952ce3, ce0b768, 58f6cb9, 0d229c6, ea2acad | Keys re-keyed from the renders (068_US, 18_OR, 053_VA, 01_NY and five pipeline sets) and stale reconcile expectations corrected; a pump lettered pump-first (PCH-n) on an untitled table; a silencer schedule titled by its word alone |
 | 7c3105c | A sheet's keynotes heading is no sheet list (053_VA TU26-40 swept); a demolition sheet that also draws its new work is read view by view (066_MT, 01_NY) |
 | d79efea | One reconcile row a unit (open surplus rows 16 -> 0; 16_NV's DF-B1 counted); a schedule's tag symbol names its unit |
+| f4daf77 | An abbreviations list's entry is no unit's tag (013_MO VFD-1); a specialty schedule that is not mechanical holds no unit (041_IL's eyewash); 041_IL re-keyed |
 
 ## Known limits (documented, not fixed)
 
@@ -440,7 +441,7 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   sections (05_MO's heat pipe is no family's) and the air handler's filter sections. The takeoff reads 16 of the 20
   (missing the two humidifiers, stacked in one MARK cell and read as one glued mark "40-HM-140-HM-2", the water
   heater 40-HWH-02 and the glycol energy recovery coil 40-ERC-1, whose title names no coil family) and none of the
-  43 points: the sheet graph reads no table from M-502-3 (task #309). Its reconcile: AHU, VAV, CU, coils,
+  43 points: the sheet graph read no table from M-502-3 (read since: a detail's title under its grid, below). Its reconcile: AHU, VAV, CU, coils,
   compressor and GRD all MATCH; 40-SF-1 MATCH, 40-EF-01 ambiguous (its one plan tag unverified against a fan);
   40-ET-02 schedule-only.
 - A SPECIALTY EQUIPMENT SCHEDULE whose title does not say MECHANICAL (or HVAC) holds no unit. 041_IL's architectural
@@ -451,6 +452,44 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   041_IL's and 23_GA's (extinguishers, grab bars, bleachers; no unit read), no walled set at all. Takeoff A/B over
   119 graphs: one change, 041_IL PUMP 1 -> 0. The discipline word is read from the printed title, since the
   family-rule title drops it (MECHANICAL SPECIALTY EQUIPMENT SCHEDULE stays general: 062_ID).
+- A detail's title lettered under its grid names it (`scheduleLanguageScan` `detailTitleBelow`, used by
+  `nearbyScheduleCaption` on the sheet graph's shared build path). 041_IL's M-502-3 draws its two points lists as
+  details: "(3) 40-AHU-2 POINTS LIST / Scale: No Scale" and "(7) VAV TERMINAL POINTS LIST / Scale: N.T.S." lettered
+  under each grid, nothing above it; the caption reader looked above and beside a grid only, and the ODL adapter
+  refuses an untitled table of unknown kind, so the graph held no table on the sheet. Rule: where a grid has no title
+  of its own, a title ending SCHEDULE, POINTS LIST or POINT LIST lettered at most three of its heights
+  under the grid's bottom (or a quarter of the grid's height), over the grid for most of its width, with a SCALE line
+  starting within one and a half of its heights below it and under its first words, titles the grid; the nearest wins.
+  Census of every keyed set's pages for that shape: 4 open sets (039_TX p31, 041_IL p24, 050_IL p17, 053_VA p11; 6
+  titles), 4 walled sets (5 titles, 2 of them points lists); a title ending in an equipment collection ("... FAN COIL
+  UNIT", which the caption reader also takes) shows that shape only under three detail drawings (004_MO's TYPICAL
+  FRAMING FOR ROOFTOP UNITS, 030_NY's FLOOR MOUNTED CHILLED WATER FAN COIL UNIT, 041_IL's DUCT CONNECTIONS - AIR
+  TERMINAL UNITS), so the rule takes a title ending SCHEDULE or POINTS LIST alone. Graphs rebuilt at d79efea and with
+  the rule: 6 more tables on the open sets, all points lists, no unit and no other table changed (041_IL 37 -> 39
+  tables, 050_IL 14 -> 15, 053_VA 7 -> 8, 039_TX 14 -> 16); walled: one set reads 2 more tables, both points lists
+  (BAS rows 0 -> 13), its units unchanged; the other three are unchanged; WP1 fails on HVAC total on all four, before
+  and after.
+- A points list's totals line is no point (`compileBasTakeoff`, `isBasTotalsRow`): TOTAL or TOTALS followed only by
+  the counts' names (HARDWARE, SOFTWARE, POINTS, I/O, INPUTS/OUTPUTS, a point type, BY, PER, TYPE) and a count in
+  parentheses or a colon. TOTAL AIRFLOW and the like stay points. A/B over 119 saved graphs: no list changes; on the
+  new lists it drops 7 lines (041_IL's, 050_IL's and 053_VA's TOTAL HARDWARE (n); 039_TX's TOTAL POINTS BY TYPE: and
+  TOTAL HARDWARE (n) under each of its two lists).
+- A point named in words takes its type from its list's point-ID column (`basPointIdColumn`): a column other than the
+  points' names that prints a typed ID (AI-1, BO 3, DI12; DI/DO read as BI/BO) on at least three rows and on most of
+  them. The ID's type yields to a conflicting POINT TYPE cell or tick (then REFUSED_POINT_TYPE_CONFLICT, as for a
+  mark), and is disclosed as basis point_id_column with the ID as its raw token and its cell as the type's box.
+  041_IL's 40-AHU-2 POINTS LIST names each point in its first column and prints its ID in the next (SUPPLY AIR
+  TEMPERATURE | AI-1 | SA-T); its type columns tick each point with a drawn dot that carries no text. Census of
+  untyped points with a typed ID in another cell over 119 saved graphs and the new 041_IL graph: 26 points, all on
+  that list. Typing A/B: those 26 change (AI 9, BI 9, AO 7, BO 1, each matching its printed ID), nothing else; walled
+  0. 041_IL now reads all 43 keyed points (AI 13, AO 9, BI 9, BO 1; 11 untyped: the VAV list's 10 software points and
+  the air handler list's AIRFLOW MONITORING - SA, which prints no ID).
+- 039_TX, 050_IL and 053_VA re-keyed from their renders (BAS only): 039_TX page 31's MODBUS UNIT INTEGRATION POINTS
+  LIST (8 points) and FAN COIL UNIT POINTS LIST (11), 19 (was 0); 050_IL page 17's VAV TERMINAL POINTS LIST, 16 (was
+  0); 053_VA page 11's VAV TERMINAL UNIT POINT LIST, 19 (was 0). Each list's printed TOTAL HARDWARE (n) equals the
+  points ticked under its hardware columns. No other points list in any of the three sets (their only other I/O text
+  is an abbreviations entry; 039_TX's page 32 says the electronic points list comes from the VA at award). WP1
+  acceptance on the rebuilt graphs: 039_TX, 050_IL, 053_VA PASS; 041_IL FAIL on HVAC total (16 of 20, as above).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

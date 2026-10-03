@@ -2,7 +2,7 @@
   "set_id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 VA ER expand — GRD + HHW valve schedule (38 valves); air-device CFM bands as GRD rows (no MIN. header). [RE-KEYED 2026-10-03 from the render] MH601 (page 12) prints a SINGLE DUCT AIR TERMINAL UNIT SCHEDULE of 20 units (TU26-11, -12, -34, -40, -41, -46, -52, -60 to -72; remark 3, 'existing terminal unit information provided for rebalancing purposes only', marks TU26-11, -12, -34, -40, -46 and -52) and a SERIES FAN POWERED AIR TERMINAL UNIT SCHEDULE of one (TU26-73): VAV 21 (was 0; scheduled existing units count, as in other keys). Its three AIR DEVICE SCHEDULEs list 8 types: SD-A, SD-B (supply), RG-A to RG-D (return), EG-A, EG-B (exhaust): GRD 8 (was 5). The VALVE SCHEDULE's 38 HHW valves as keyed. Totals 67.",
+  "notes": "[MEAT] Vol2 VA ER expand — GRD + HHW valve schedule (38 valves); air-device CFM bands as GRD rows (no MIN. header). [RE-KEYED 2026-10-03 from the render] MH601 (page 12) prints a SINGLE DUCT AIR TERMINAL UNIT SCHEDULE of 20 units (TU26-11, -12, -34, -40, -41, -46, -52, -60 to -72; remark 3, 'existing terminal unit information provided for rebalancing purposes only', marks TU26-11, -12, -34, -40, -46 and -52) and a SERIES FAN POWERED AIR TERMINAL UNIT SCHEDULE of one (TU26-73): VAV 21 (was 0; scheduled existing units count, as in other keys). Its three AIR DEVICE SCHEDULEs list 8 types: SD-A, SD-B (supply), RG-A to RG-D (return), EG-A, EG-B (exhaust): GRD 8 (was 5). The VALVE SCHEDULE's 38 HHW valves as keyed. Totals 67. [BAS RE-KEYED 2026-10-03 from the render] Page 11 prints a VAV TERMINAL UNIT POINT LIST (a detail titled under its grid) of 19 points: the 16 of the VA VAV terminal template plus HIGH ZONE HUMIDITY (alarm), ZONE HUMIDITY and ZONE HUMIDITY SETPOINT (ticked AI); its totals line reads TOTAL HARDWARE (8), TOTAL SOFTWARE (21). bas_points rows 19 (was 0). The set prints no other points list (its only other I/O text is the abbreviations entry I/O INPUT/OUTPUT on page 1).",
   "categories": {
     "HHW_CONTROL_VALVE": 38,
     "GRD": 8,
@@ -12,7 +12,7 @@
     "items": 67
   },
   "bas_points": {
-    "rows": 0
+    "rows": 19
   },
   "control_valves": {
     "items": 38,

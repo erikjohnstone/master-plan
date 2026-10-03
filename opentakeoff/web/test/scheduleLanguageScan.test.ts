@@ -87,6 +87,32 @@ describe("nearbyScheduleCaption", () => {
     });
   });
 
+  it("reads a detail title lettered under its grid, its scale beneath it", () => {
+    // 041_IL's M-502-3: "(7) VAV TERMINAL POINTS LIST / Scale: N.T.S." under
+    // the points list's grid (span space, 2x the page's points).
+    const grid: [number, number, number, number] = [714, 2928, 2060, 3522];
+    const title = { str: "VAV TERMINAL POINTS LIST", x: 732, y: 3627, w: 524, h: 37.8 };
+    const scale = { str: "Scale: N.T.S.", x: 752, y: 3679, w: 153, h: 25.1 };
+    const bubble = { str: "7", x: 662, y: 3648, w: 21, h: 37.9 };
+    assert.deepEqual(nearbyScheduleCaption([bubble, title, scale], grid, ""), {
+      text: "VAV TERMINAL POINTS LIST",
+      bbox: [732, 3627, 1256, 3664.8],
+    });
+    // A schedule's detail title too, and the nearest of two under the grid.
+    const fans = { str: "EXHAUST FAN SCHEDULE", x: 732, y: 3540, w: 400, h: 37.8 };
+    const fanScale = { str: "SCALE: NONE", x: 740, y: 3590, w: 150, h: 25 };
+    assert.equal(nearbyScheduleCaption([title, scale, fans, fanScale], grid, "")?.text, "EXHAUST FAN SCHEDULE");
+    // Not without its scale line, not beside the grid, not far below it, and
+    // never over an in-grid title of its own.
+    assert.equal(nearbyScheduleCaption([title], grid, ""), null);
+    assert.equal(nearbyScheduleCaption([{ ...title, x: 2400 }, { ...scale, x: 2420 }], grid, ""), null);
+    assert.equal(nearbyScheduleCaption([{ ...title, y: 3800 }, { ...scale, y: 3852 }], grid, ""), null);
+    assert.equal(nearbyScheduleCaption([title, scale], grid, "AHU-1 POINTS LIST"), null);
+    // A note that is no title is never one, nor a detail named for equipment.
+    assert.equal(nearbyScheduleCaption([{ ...title, str: "SEE POINTS LIST" }, scale], grid, ""), null);
+    assert.equal(nearbyScheduleCaption([{ ...title, str: "FLOOR MOUNTED CHILLED WATER FAN COIL UNIT" }, scale], grid, ""), null);
+  });
+
   it("never replaces a complete existing schedule title", () => {
     const spans = [{ str: "SUPPLY FAN SCHEDULE", x: 770, y: 260, w: 12, h: 120, rot: 90 }];
     assert.equal(nearbyScheduleCaption(spans, region, "AIR HANDLING UNIT SCHEDULE"), null);

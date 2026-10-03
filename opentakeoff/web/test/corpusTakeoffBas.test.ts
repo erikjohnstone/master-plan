@@ -366,6 +366,73 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.deepEqual(few.not_points, []);
   });
 
+  // 041_IL's VAV TERMINAL POINTS LIST closes with its totals line, "TOTAL
+  // HARDWARE (6)" under its hardware columns and "TOTAL SOFTWARE (18)" under
+  // its software ones.
+  it("does not count a points list's totals line as a point", () => {
+    const point = (key: string, cells: Record<string, string> = {}) => ({
+      key, cells: Object.fromEntries(Object.entries({ COL1: key, ...cells }).map(([h, text]) => [h, { text }])),
+    });
+    const list = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#24", number: 24 }],
+      tables: [{
+        kind: "reference", sheet: "set.pdf#24", title: { text: "VAV TERMINAL POINTS LIST" },
+        headers: ["COL1", "HARDWARE POINTS", "SOFTWARE POINTS"],
+        rows: [
+          point("ZONE TEMPERATURE", { "HARDWARE POINTS": "X" }),
+          point("TOTAL AIRFLOW", { "SOFTWARE POINTS": "X" }),
+          point("TOTAL HARDWARE (6)", { "HARDWARE POINTS": "4" }),
+          point("TOTAL SOFTWARE (18)"),
+          point("TOTAL POINTS BY TYPE:", { "HARDWARE POINTS": "6" }),
+          point("TOTALS:"),
+        ],
+      }],
+    }).categories.points_lists.lists[0];
+    // A point named for the total it measures is a point.
+    assert.deepEqual(list.items.map((i: { tag: string }) => i.tag), ["ZONE TEMPERATURE", "TOTAL AIRFLOW"]);
+    assert.equal(list.rows, 2);
+  });
+
+  // 041_IL's 40-AHU-2 POINTS LIST: SUPPLY AIR TEMPERATURE | AI-1 | SA-T, its
+  // type columns ticked with drawn dots no text reads.
+  it("types a point named in words by its list's point-ID column", () => {
+    const point = (key: string, cells: Record<string, string>) => ({
+      key, cells: Object.fromEntries(Object.entries({ COL1: key, ...cells }).map(([h, text]) => [h, { text, bbox: [0, 0, 1, 1] }])),
+    });
+    const list = (rows: ReturnType<typeof point>[]) => compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#24", number: 24 }],
+      tables: [{ kind: "reference", sheet: "set.pdf#24", title: { text: "40-AHU-2 POINTS LIST" }, headers: ["COL1", "COL2", "COL3", "POINT TYPE"], rows }],
+    }).categories.points_lists.lists[0];
+    const typed = list([
+      point("SUPPLY AIR TEMPERATURE", { COL2: "AI-1", COL3: "SA-T" }),
+      point("SUPPLY FAN START/STOP", { COL2: "BO-1", COL3: "SF-SS" }),
+      point("SUPPLY FAN STATUS", { COL2: "DI 3", COL3: "SF-S" }),
+      point("HEATING VALVE", { COL2: "AO-2", COL3: "HV", "POINT TYPE": "AI" }),
+      point("SPARE INPUT", { COL3: "SP" }),
+    ]);
+    assert.deepEqual(
+      typed.items.map((i: { point_type: string | null; point_type_raw: string | null; point_type_basis: string | null }) => [i.point_type, i.point_type_raw, i.point_type_basis]),
+      [
+        ["AI", "AI-1", "point_id_column"],
+        ["BO", "BO-1", "point_id_column"],
+        ["BI", "DI 3", "point_id_column"],
+        // The ID and the type cell disagree: no type.
+        [null, "AI", "conflicting_mark_and_point_type_cell"],
+        // A row with no ID is untyped.
+        [null, null, null],
+      ],
+    );
+    assert.deepEqual([typed.AI, typed.AO, typed.BI, typed.BO], [1, 0, 1, 1]);
+    // An ID on two rows proves no column.
+    const few = list([
+      point("SUPPLY AIR TEMPERATURE", { COL2: "AI-1" }),
+      point("SUPPLY FAN STATUS", { COL2: "BI-1" }),
+      point("ZONE TEMPERATURE", { COL2: "ZN-T" }),
+      point("MIXED AIR TEMPERATURE", { COL2: "MA-T" }),
+    ]);
+    assert.deepEqual(few.items.map((i: { point_type: string | null }) => i.point_type), [null, null, null, null]);
+  });
+
   it("refuses conflicting MARK and explicit point-type evidence", () => {
     const graph = {
       sheets: [{ key: "set.pdf#1", number: 1 }],

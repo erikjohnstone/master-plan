@@ -3705,6 +3705,16 @@ function basRowCountsIo(row) {
   return sumNumericCells(row, /^ANALOG\b/i) > 0 || sumNumericCells(row, /^DIGITAL\b/i) > 0;
 }
 
+/** A points list's totals line, no point: TOTAL or TOTALS and the counts'
+ * names after it, with a count ("TOTAL HARDWARE (6)" and "TOTAL SOFTWARE (18)"
+ * under 041_IL's VAV TERMINAL POINTS LIST; 039_TX's "TOTAL POINTS BY TYPE:"
+ * over each type column's count). A point named for a total it measures
+ * (TOTAL AIRFLOW, TOTAL BUILDING KW) is a point. */
+function isBasTotalsRow(tag) {
+  return /^TOTALS?(?:\s+(?:HARDWARE|SOFTWARE|POINTS?|I\s*\/\s*O|INPUTS?|OUTPUTS?|AI|AO|BI|BO|DI|DO|BY|PER|TYPES?))*\s*(?:\(\s*\d+\s*\))?\s*:?$/i
+    .test(String(tag || "").replace(/\s+/g, " ").trim());
+}
+
 /** Column-label rows that are not countable I/O or points marks. */
 function isBasPointsHeaderRow(tag) {
   return !tag || /^(?:TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?|(?:ANALOG|BINARY|DIGITAL)\s+(?:INPUT|OUTPUT))$/i.test(tag);
@@ -3718,6 +3728,28 @@ const BAS_POINT_TYPE_HEADER_RE = /^(?:HARDWARE\s+)?(?:POINT|I\s*\/?\s*O)\s+TYPE$
  * refused point type. */
 const BAS_BARE_TYPE_HEADER_RE = /^TYPE$/i;
 
+/** A typed point ID: an I/O type and its number (AI-1, BO 3, DI12). */
+const BAS_POINT_ID_RE = /^(AI|AO|BI|BO|DI|DO)[\s\-]?\d{1,3}[A-Z]?$/i;
+const BAS_ID_TYPE = { AI: "AI", AO: "AO", BI: "BI", BO: "BO", DI: "BI", DO: "BO" };
+
+/** A points list's point-ID column: a column other than its points' names
+ * that prints a typed point ID on at least three of its rows and on most of
+ * them. 041_IL's 40-AHU-2 POINTS LIST names each point in its first column
+ * and prints its ID in the next (SUPPLY AIR TEMPERATURE | AI-1 | SA-T); its
+ * type columns tick each point with a drawn dot no text reads. */
+function basPointIdColumn(table, rows) {
+  let best = null;
+  for (const header of table.headers || []) {
+    let typed = 0;
+    for (const row of rows) {
+      const text = String(row.cells?.[header]?.text || "").trim();
+      if (BAS_POINT_ID_RE.test(text) && text !== basRowTag(row, table)) typed++;
+    }
+    if (typed >= 3 && typed * 2 > rows.length && (!best || typed > best.typed)) best = { header, typed };
+  }
+  return best?.header || null;
+}
+
 /**
  * Resolve one printed BAS point type without guessing from the point name.
  * The public takeoff vocabulary uses BI/BO; drawings commonly print the
@@ -3725,8 +3757,13 @@ const BAS_BARE_TYPE_HEADER_RE = /^TYPE$/i;
  * BI/BO while the unmodified source token remains on the item. Conflicting
  * MARK and type-cell evidence is deliberately left untyped.
  */
-function basPointTypeEvidence(row, tag) {
-  const markType = String(tag || "").toUpperCase().match(/^(AI|AO|BI|BO)[\s\-]?(?:\d|#+)/)?.[1] || null;
+function basPointTypeEvidence(row, tag, idHeader = null) {
+  const tagType = String(tag || "").toUpperCase().match(/^(AI|AO|BI|BO)[\s\-]?(?:\d|#+)/)?.[1] || null;
+  // A point named in words takes its type from its ID column (basPointIdColumn).
+  const idText = idHeader && !tagType ? String(row.cells?.[idHeader]?.text || "").trim() : "";
+  const idType = BAS_ID_TYPE[idText.toUpperCase().match(BAS_POINT_ID_RE)?.[1]] || null;
+  const markType = tagType || idType;
+  const markBasis = tagType ? "mark_prefix" : "point_id_column";
   const named = String(cellText(row, BAS_POINT_TYPE_HEADER_RE) || "").trim();
   const bare = named ? "" : String(cellText(row, BAS_BARE_TYPE_HEADER_RE) || "").trim();
   const raw = named || bare;
@@ -3757,9 +3794,9 @@ function basPointTypeEvidence(row, tag) {
     };
   }
   if (markType && explicitType) {
-    return { type: markType, raw, basis: "mark_prefix_and_explicit_point_type_cell", status: "typed" };
+    return { type: markType, raw, basis: `${markBasis}_and_explicit_point_type_cell`, status: "typed" };
   }
-  if (markType) return { type: markType, raw: null, basis: "mark_prefix", status: "typed" };
+  if (markType) return { type: markType, raw: idType ? idText : null, basis: markBasis, status: "typed" };
   if (explicitType) return { type: explicitType, raw, basis: "explicit_point_type_cell", status: "typed" };
   if (bare) return { type: null, raw: null, basis: null, status: "untyped" };
   return {
@@ -3905,7 +3942,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       const tag = basRowTag(row, table);
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       return !isBasPointsHeaderRow(tag) && !isBasSectionLabelRow(row) && !isBasBlankNumberedRow(row)
-        && row !== tickColumns.labelRow;
+        && !isBasTotalsRow(tag) && row !== tickColumns.labelRow;
     });
     // A PLC I/O LIST counts each device's I/O under its ANALOG and DIGITAL
     // columns: a device it counts none for is wired to no input or output
@@ -3916,13 +3953,14 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const ioCountList = !tickColumns.columns.length && (table.headers || []).some((h) => /^(?:ANALOG|DIGITAL)\b/i.test(String(h)));
     const counted = ioCountList ? candidates.filter(basRowCountsIo).length : 0;
     const countsItsIo = counted >= 2 && counted * 2 >= candidates.length;
+    const idHeader = basPointIdColumn(table, candidates);
     for (const row of candidates) {
       const tag = basRowTag(row, table);
       // Some templates print a literal placeholder mark (BI#, BI##, BO#)
       // for a repeated or field-numbered point. It is still an authored
       // typed point row; the wildcard is not a reason to demote it to
       // `other` or invent a number for it.
-      let pointType = basPointTypeEvidence(row, tag);
+      let pointType = basPointTypeEvidence(row, tag, idHeader);
       if (countsItsIo && pointType.status === "untyped" && !basRowCountsIo(row)) {
         notPoints.push({ tag, reason: "an I/O list's device row that counts no analog or digital I/O where its other rows do (a network device)" });
         continue;
@@ -3997,6 +4035,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         point_type_basis: pointType.basis,
         point_type_status: pointType.status,
         point_type_bbox_px: cellBbox(row, BAS_POINT_TYPE_HEADER_RE)
+          || (pointType.basis === "point_id_column" ? row.cells?.[idHeader]?.bbox || null : null)
           || (pointType.raw && pointType.basis !== "ticked_point_type_column" ? cellBbox(row, BAS_BARE_TYPE_HEADER_RE) : null)
           || (pointType.basis === "ticked_point_type_column" ? row.cells?.[ticks.typeColumn.header]?.bbox || null : null),
         cells,
