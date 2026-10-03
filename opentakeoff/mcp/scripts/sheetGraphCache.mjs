@@ -30,7 +30,11 @@ import { homedir } from "node:os";
 import { basename, dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import cacache from "cacache";
-import { resolveVectorGridMode } from "../../web/src/lib/vectorGridMode.mjs";
+import {
+  resolveVectorGridMode,
+  resolveVectorGridPython,
+  vectorGridPythonConfigured,
+} from "../../web/src/lib/vectorGridMode.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP_ROOT = resolve(HERE, "..");
@@ -143,6 +147,15 @@ export async function cachedSheetGraph(pdfPath, opts) {
     // key and served each other's graphs. Every warm A/B after that compared
     // an answer against itself and reported no difference — silent and total.
     .update(`vg:${resolveVectorGridMode()}`)
+    // THE ENGINE'S INTERPRETER IS PART OF THE KEY TOO. Unconfigured, the
+    // engine runs under the system python3, which mostly lacks its modules:
+    // every sheet falls back to the weaker reader, and that graph was cached
+    // under the same key as a run whose engine works. Found live: a test run
+    // without the sidecar's interpreter read 015_VA's guard-booth DUCTLESS
+    // SPLIT SYSTEM SCHEDULE with its header tiers scrambled (no OUTDOOR UNIT
+    // MARK, so no CU-4), and any later run on the same code would have been
+    // served that graph whatever interpreter it had.
+    .update(`py:${resolveVectorGridPython()}`)
     // L3.5 topology is opt-in (vectorTakeoffPipeline.ts topologyRequested):
     // a graph built without it must never answer a run that asked for it.
     .update(`topo:${process.env.OPENTAKEOFF_TOPOLOGY === "on" ? "on" : "off"}`)
@@ -151,12 +164,39 @@ export async function cachedSheetGraph(pdfPath, opts) {
   const key = keyHash.digest("hex");
   try {
     const hit = await cacache.get(CACHE_DIR, key);
-    return JSON.parse(hit.data.toString("utf8"));
+    const cached = JSON.parse(hit.data.toString("utf8"));
+    if (!engineFailedOnSomeSheet(cached)) return cached;
   } catch {
-    const result = await compute();
-    await cacache.put(CACHE_DIR, key, JSON.stringify(result)).catch(() => {});
-    return result;
+    // a miss: build it
   }
+  const result = await compute();
+  if (!engineFailedOnSomeSheet(result)) {
+    await cacache.put(CACHE_DIR, key, JSON.stringify(result)).catch(() => {});
+  }
+  return result;
+}
+
+// The engine's refusals that are the page's, the same on every run
+// (VectorGridSpaceError: a viewport that is no uniform scale, a page box the
+// engine measures otherwise).
+const GEOMETRY_REFUSAL_RE = /viewport transform is not a uniform scale\+rotation|: vectorgrid measured \S+pt /;
+
+/**
+ * Whether a graph's table engine, run under an interpreter that was chosen
+ * for it, failed on some sheet for a reason that is not the page's own: a
+ * missing module, a crash, a kill. Those sheets were read by the weaker
+ * fallback, so the graph is not the engine's answer; it is neither kept nor
+ * served, and the next run tries the engine again. Under the system default
+ * the engine is not expected to run, and its graph is kept under that key.
+ * @param {any} graph
+ * @param {NodeJS.ProcessEnv} [env]
+ */
+export function engineFailedOnSomeSheet(graph, env = process.env) {
+  if (!vectorGridPythonConfigured(env)) return false;
+  const report = graph?.vector_pipeline;
+  if (!(Number(report?.vectorgrid?.refused) > 0)) return false;
+  const reasons = (report.notes || []).map(String).filter((note) => note.includes("L2 vectorgrid did not run"));
+  return !reasons.length || reasons.some((note) => !GEOMETRY_REFUSAL_RE.test(note));
 }
 
 export function sheetGraphCacheDir() {

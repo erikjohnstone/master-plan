@@ -20,3 +20,20 @@ export function resolveVectorGridMode(env = process.env) {
   if (v === "shadow") return "shadow";
   return "on";
 }
+
+/**
+ * THE INTERPRETER THE TABLE ENGINE RUNS UNDER, by the one rule the client
+ * spawns it with: its own variable, else the table sidecar's, else the
+ * system python3, which on most machines lacks the engine's modules (every
+ * sheet then falls back to the weaker reader). The sheet-graph cache keys by
+ * it for the reason it keys by the mode: a graph built where the engine could
+ * not run must never answer a run where it can.
+ */
+export function resolveVectorGridPython(env = process.env) {
+  return env.OPENTAKEOFF_VECTORGRID_PYTHON || env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON || "python3";
+}
+
+/** Whether the engine's interpreter was chosen, not the system default. */
+export function vectorGridPythonConfigured(env = process.env) {
+  return Boolean(env.OPENTAKEOFF_VECTORGRID_PYTHON || env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON);
+}

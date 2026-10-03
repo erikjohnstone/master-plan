@@ -4,7 +4,7 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { cachedSheetGraph } from "../scripts/sheetGraphCache.mjs";
+import { cachedSheetGraph, engineFailedOnSomeSheet } from "../scripts/sheetGraphCache.mjs";
 
 test("sheet graph cache hits on unchanged PDF identity; misses on sha change", async () => {
   const prev = process.env.OPENTAKEOFF_GRAPH_NO_CACHE;
@@ -74,6 +74,61 @@ test("SAME BYTES UNDER A DIFFERENT NAME GET THEIR OWN GRAPH", async () => {
   } finally {
     if (prev === undefined) delete process.env.OPENTAKEOFF_GRAPH_NO_CACHE;
     else process.env.OPENTAKEOFF_GRAPH_NO_CACHE = prev;
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test("A GRAPH BUILT WHERE THE TABLE ENGINE COULD NOT RUN NEVER ANSWERS A RUN WHERE IT CAN", async () => {
+  // Found live: a test run without the sidecar's interpreter (the engine fell
+  // back to the system python3, which lacks its modules) cached 015_VA's graph
+  // with its guard-booth schedule read by the weaker fallback, under the same
+  // key a run with the engine's interpreter would look up.
+  const saved = {
+    noCache: process.env.OPENTAKEOFF_GRAPH_NO_CACHE,
+    vg: process.env.OPENTAKEOFF_VECTORGRID_PYTHON,
+    side: process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON,
+  };
+  delete process.env.OPENTAKEOFF_GRAPH_NO_CACHE;
+  delete process.env.OPENTAKEOFF_VECTORGRID_PYTHON;
+  delete process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON;
+  const dir = await mkdtemp(join(tmpdir(), "ot-graph-cache-engine-"));
+  const restore = (name, value) => (value === undefined ? delete process.env[name] : (process.env[name] = value));
+  try {
+    const pdf = join(dir, "plan.pdf");
+    const bytes = `%PDF-engine-${Date.now()}`;
+    await writeFile(pdf, bytes);
+    const sha = createHash("sha256").update(bytes).digest("hex");
+    const failed = (why) => ({
+      vector_pipeline: { vectorgrid: { mode: "on", sheets: 0, refused: 1 }, notes: [`plan.pdf#1: L2 vectorgrid did not run — ${why}`] },
+    });
+    let computes = 0;
+    const engineMissing = async () => ({ ...failed("No module named 'pdfplumber'"), run: ++computes });
+
+    // Unconfigured: the system interpreter's fallback graph is kept under its own key.
+    const a = await cachedSheetGraph(pdf, { expectedSha256: sha, compute: engineMissing });
+    const b = await cachedSheetGraph(pdf, { expectedSha256: sha, compute: engineMissing });
+    assert.equal(a.run, 1);
+    assert.equal(b.run, 1, "the default interpreter's graph is served again");
+
+    // Configured: a different key, and a graph whose engine failed is not kept.
+    process.env.OPENTAKEOFF_VECTORGRID_PYTHON = "/opt/engine/bin/python";
+    const c = await cachedSheetGraph(pdf, { expectedSha256: sha, compute: engineMissing });
+    assert.equal(c.run, 2, "the configured interpreter does not see the fallback graph");
+    const d = await cachedSheetGraph(pdf, { expectedSha256: sha, compute: engineMissing });
+    assert.equal(d.run, 3, "an engine failure is retried, not served from the cache");
+
+    // A refusal that is the page's own is the same on every run, and is kept.
+    const geometry = async () => ({ ...failed("viewport transform is not a uniform scale+rotation: [1, 0, 0, 2, 0, 0]"), run: ++computes });
+    process.env.OPENTAKEOFF_VECTORGRID_PYTHON = "/opt/engine2/bin/python";
+    const e = await cachedSheetGraph(pdf, { expectedSha256: sha, compute: geometry });
+    const f = await cachedSheetGraph(pdf, { expectedSha256: sha, compute: geometry });
+    assert.equal(f.run, e.run, "a geometry refusal is cached");
+    assert.equal(engineFailedOnSomeSheet(failed("vectorgrid sidecar exited (1)")), true);
+    assert.equal(engineFailedOnSomeSheet({ vector_pipeline: { vectorgrid: { sheets: 3, refused: 0 }, notes: [] } }), false);
+  } finally {
+    restore("OPENTAKEOFF_GRAPH_NO_CACHE", saved.noCache);
+    restore("OPENTAKEOFF_VECTORGRID_PYTHON", saved.vg);
+    restore("OPENTAKEOFF_TABLE_SIDECAR_PYTHON", saved.side);
     await rm(dir, { recursive: true, force: true });
   }
 });

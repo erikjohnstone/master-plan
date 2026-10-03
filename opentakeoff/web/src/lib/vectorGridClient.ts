@@ -18,7 +18,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { createInterface } from "node:readline";
 import { existsSync } from "node:fs";
-import { resolveVectorGridMode } from "./vectorGridMode.mjs";
+import { resolveVectorGridMode, resolveVectorGridPython } from "./vectorGridMode.mjs";
 import { vectorGridServerPath } from "./vectorGridRuntime.mjs";
 
 const SERVER = vectorGridServerPath(import.meta.url);
@@ -90,10 +90,7 @@ const pending = new Map<number, { resolve: (v: unknown) => void; reject: (e: Err
 
 function ensureProc(): ChildProcessWithoutNullStreams {
   if (proc) return proc;
-  const py = process.env.OPENTAKEOFF_VECTORGRID_PYTHON
-    || process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON
-    || "python3";
-  const child = spawn(py, [SERVER], {
+  const child = spawn(resolveVectorGridPython(), [SERVER], {
     stdio: ["pipe", "pipe", "pipe"],
     env: { ...process.env, PYTHONUNBUFFERED: "1" },
   });
