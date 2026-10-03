@@ -842,9 +842,16 @@ describe("split, VRV, CRAC, inline fan and grille schedules by the names they pr
     // floor + wing + room: 038_NC's 47-IDU-1A137, 47-ODU-2E202A.
     assert.equal(markCoreForKeyRe("47-IDU-1A137"), "IDU-1A137");
     assert.equal(markCoreForKeyRe("47-ODU-2E202A"), "ODU-2E202A");
-    // Only after a numbered building: a lettered or coded token keeps its mark.
+    // Or by a room numbered in two parts: 030_NY's 016-AC-01-16-12, unit
+    // AC-01 in room 16-12, and its outdoor unit 016-CU-01-16-12.
+    assert.equal(markCoreForKeyRe("016-AC-01-16-12"), "AC-01-16-12");
+    assert.equal(markCoreForKeyRe("016-CU-01-16-12"), "CU-01-16-12");
+    // Only after a numbered building: a lettered or coded token keeps its mark,
+    // and so does a run of three more numbers (a model or a date, not a room).
     assert.equal(markCoreForKeyRe("CV-FCU-1A137"), "CV-FCU-1A137");
     assert.equal(markCoreForKeyRe("B950-FCU-1A137"), "B950-FCU-1A137");
+    assert.equal(markCoreForKeyRe("AHU-AC-01-16-12"), "AHU-AC-01-16-12");
+    assert.equal(markCoreForKeyRe("016-AC-01-16-12-3"), "016-AC-01-16-12-3");
     const tags = compile([table("m.pdf#20", "MINI-SPLIT INDOOR UNIT SCHEDULE", ["47-IDU-A301", "47-IDU-1A137"])]);
     assert.deepEqual(tags("FCU"), ["47-IDU-1A137", "47-IDU-A301"]);
   });

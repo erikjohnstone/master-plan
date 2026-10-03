@@ -266,6 +266,26 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### A split system under a title whose family reads none of it; two-part room suffixes; 030_NY 45 → 47 (2026-10-03)
+
+Rules (shared path: `familyTableGate` and `markCoreForKeyRe`, which the takeoff and the reconcile both read):
+- `corpusTakeoff.mjs titleReadsSplitTable`: AS-144's split-pair header shape vouched only where the title names no
+  family. It now also vouches where no family the title names (by its title or other title) reads a row of the table,
+  each judged by its own gate (re-entry guarded); a host title keeps its reading (its family reads its half by the
+  host rule, so the shape would read only the other half). The title's own family is never read by the shape.
+- `corpusTakeoff.mjs markCoreForKeyRe`: after a numbered facility, a mark may end in the room it serves in two numeric
+  parts (016-AC-01-16-12 → AC-01-16-12), beside the one-part room rule (47-IDU-1A137 → IDU-1A137).
+
+Census: 6 split-shaped tables in the fresh and cached graphs (030_NY, 036_LA, 089_FL, 096_IN, 26_CA, 27_WA); only
+030_NY's HEAT PUMP UNIT SCHEDULE was read by nothing, the others through their titles or with no family-naming title.
+2 marks of the facility + unit + two-part room shape, both 030_NY's. A/B (base fa2b857, compile only; 50 fresh and 200
+cached graphs): only 030_NY changes, +FCU 016-AC-01-16-12 and +CONDENSING_UNIT 016-CU-01-16-12, as keyed from the render; WP1 on its fresh graph:
+FAIL 47 of 49 (was 45; the remaining two are the DOAS coils, whose 001-DHC-01 tags `sheetgraph.rowKeyOf` refuses: a
+graph-side change, left for a batch with other graph changes since it invalidates every cached graph). Mutants: the
+old title check, no host clause, the shape vouching under any title, and no two-part room form, each killed. The
+AS-144 test is revised: a HEAT PUMP SCHEDULE over AC-1 / CU-1 now reads both halves, over AC-1 / HP-1 the heat pump
+only. 280 takeoff, BAS, reconcile, split and title tests pass; typecheck and lint clean.
+
 ### Point types labelled direction first; an alarm column beside the point's own type (2026-10-03)
 
 Rules (shared path: `compileBasTakeoff`, which the UI and MCP both read):

@@ -67,23 +67,36 @@ test("AS-144: an outdoor heat pump beside its indoor fan coil", () => {
   assert.deepEqual(tags(graph, "CONDENSING_UNIT"), []);
 });
 
-test("AS-144: the shape vouches only where no title names a family, never for a general schedule, an untitled table or half a pair", () => {
+test("AS-144: the shape vouches where no title names a family or none it names reads the table, never for a general schedule, an untitled table or half a pair", () => {
   const pair = [{ "INDOOR UNIT MARK": "AC-1", "OUTDOOR UNIT MARK": "CU-1" }];
-  const splitOk = (title: string | null, family: string) =>
-    familyTableGate(table(title, pair), (HVAC_FAMILY_SPECS as any)[family], family)?.splitOk ?? false;
+  const heatPumpPair = [{ "INDOOR UNIT MARK": "AC-1", "OUTDOOR UNIT MARK": "HP-1" }];
+  const splitOk = (title: string | null, family: string, rows = pair) =>
+    familyTableGate(table(title, rows), (HVAC_FAMILY_SPECS as any)[family], family)?.splitOk ?? false;
   for (const family of ["FCU", "CONDENSING_UNIT", "HEAT_PUMP"]) {
     assert.equal(splitOk("AIR CONDITIONING UNITS", family), true, family);
     // A title naming a family (its own title, another's, or a host's) keeps
-    // the reading it gives; so do a general schedule and an untitled table.
-    assert.equal(splitOk("HEAT PUMP SCHEDULE", family), false, family);
+    // the reading it gives where that family reads a row (the heat pump's
+    // HP-1, a VRF system's indoor AC-1); so does a host title, which reads
+    // its family's half by its own rule; so do a general schedule and an
+    // untitled table.
+    assert.equal(splitOk("HEAT PUMP SCHEDULE", family, heatPumpPair), false, family);
     assert.equal(splitOk("SPLIT SYSTEM AIR HANDLER SCHEDULE", family), false, family);
     assert.equal(splitOk("VRF SYSTEM SCHEDULE", family), false, family);
     assert.equal(splitOk("MECHANICAL EQUIPMENT SCHEDULE", family), false, family);
     assert.equal(splitOk(null, family), false, family);
   }
+  // 030_NY's HEAT PUMP UNIT SCHEDULE: the heat pump family its title names
+  // reads neither half (AC-1 indoors, CU-1 outdoors), so the shape reads each
+  // half by its own family, as under a title that names none. The title's own
+  // family is never read by the shape.
+  assert.deepEqual(["FCU", "CONDENSING_UNIT", "HEAT_PUMP"].map((family) => splitOk("HEAT PUMP SCHEDULE", family)), [true, true, false]);
   const named = { tables: [table("HEAT PUMP SCHEDULE", pair)] };
-  assert.deepEqual(tags(named, "FCU"), []);
-  assert.deepEqual(tags(named, "CONDENSING_UNIT"), []);
+  assert.deepEqual(tags(named, "FCU"), ["AC-1"]);
+  assert.deepEqual(tags(named, "CONDENSING_UNIT"), ["CU-1"]);
+  assert.deepEqual(tags(named, "HEAT_PUMP"), []);
+  const read = { tables: [table("HEAT PUMP SCHEDULE", heatPumpPair)] };
+  assert.deepEqual(tags(read, "HEAT_PUMP"), ["HP-1"]);
+  assert.deepEqual(tags(read, "FCU"), []);
   // A split host title names the families it lists (its indoor FCU-*, its
   // outdoor HP-*); a condensing unit there is not read by the shape.
   const hosted = { tables: [table("SPLIT SYSTEM AIR HANDLER SCHEDULE", [{ "INDOOR UNIT MARK": "FCU-1", "OUTDOOR UNIT MARK": "CU-1" }])] };

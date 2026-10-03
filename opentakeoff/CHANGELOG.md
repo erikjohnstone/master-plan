@@ -1,5 +1,17 @@
 # Changelog
 
+- **A split system under a title whose family reads none of it; a facility tag ending in a two-part room.** 030_NY's
+  HEAT PUMP UNIT SCHEDULE prints one LG split system, its wall-mounted indoor unit 016-AC-01-16-12 under INDOOR UNIT
+  (WALL MOUNTED) EQUIPMENT TAG and its outdoor unit 016-CU-01-16-12 under OUTDOOR UNIT EQUIPMENT TAG. A split system's
+  header shape vouches for each half's family only where the title names no family, and this title names heat pumps,
+  whose rules read neither mark, so nothing read the row. The shape now vouches too where no family the title names
+  reads a row of the table (a host title, such as SPLIT SYSTEM AIR HANDLER, still keeps its reading: it reads its own
+  half by its own rule, and the shape would read only the other). And after a numbered facility, a unit's mark may end
+  in the room it serves numbered in two parts (016-AC-01-16-12 is unit AC-01 in room 16-12), as one numbered in one
+  part already did. The indoor unit now reads as a fan coil and the outdoor unit as a condensing unit, as keyed: 030_NY
+  reads 47 of its 49 units (its two DOAS coils' tags are still refused as row keys). The fresh and cached graphs hold six
+  split-shaped tables and two such facility tags; a compile A/B over 50 freshly built and 200 cached graphs changes
+  only 030_NY.
 - **Point types labelled direction first; a type's alarm column beside the point's own type.** 017_MD's three DDC
   INPUT/OUTPUT POINT SCHEDULEs tick each device under INPUT TO DDC or OUTPUT FROM DDC, then ANALOG or BINARY, then
   what it measures or commands (TEMPERATURE, STATUS, SPEED, ON / OFF), and 05_MO's four AHU POINTS LISTs under SYSTEM

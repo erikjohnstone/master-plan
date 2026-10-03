@@ -510,8 +510,10 @@ export function markCoreForKeyRe(tag) {
     return stripped;
   }
   // After a numbered building the unit's number may be the room it serves,
-  // floor + wing + room (038_NC's 47-IDU-1A137, 47-ODU-2E202A → IDU-1A137).
-  if (/^\d{1,3}-/.test(canon) && /^[A-Z]{2,8}-\d{1,2}[A-Z]{1,2}\d{2,4}[A-Z]?$/.test(stripped)) {
+  // floor + wing + room (038_NC's 47-IDU-1A137, 47-ODU-2E202A → IDU-1A137),
+  // or be followed by a room numbered in two parts (030_NY's 016-AC-01-16-12,
+  // unit AC-01 in room 16-12 → AC-01-16-12).
+  if (/^\d{1,3}-/.test(canon) && /^[A-Z]{2,8}-(?:\d{1,2}[A-Z]{1,2}\d{2,4}[A-Z]?|\d{1,4}-\d{1,3}-\d{1,3})$/.test(stripped)) {
     return stripped;
   }
   return canon;
@@ -1488,9 +1490,10 @@ export function familyTableGate(table, spec, family = null) {
   // marks its split rule reads (an evaporator's AC-*, a condenser's ACCU-*),
   // each in its own half's column (rowIdentityText reads a grouped mark
   // column for the family that reads it; AS-95), after the schedules titled
-  // as its own. A title that names any family keeps its own reading.
-  const splitOk = Boolean(splitKeyRe) && !blankTitle && !catchAll && !titleNamesFamily(ruleTitle)
-    && isSplitPairHeaderShape(table);
+  // as its own. A title that names a family keeps its own reading where that
+  // family reads a row of the table (titleReadsSplitTable).
+  const splitOk = Boolean(splitKeyRe) && !blankTitle && !catchAll && !(titleOk || altOk || hostOk)
+    && isSplitPairHeaderShape(table) && !titleReadsSplitTable(table, ruleTitle);
   // Read by its marks alone: no title vouches for the family here (AS-66).
   const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAll);
   let pass = 2;
@@ -1603,6 +1606,38 @@ function titleNamesFamily(title) {
   ].some(([re, exclude]) => Boolean(re) && scheduleTitleMatches(title, re, exclude)));
   TITLE_NAMES_FAMILY.set(title, named);
   return named;
+}
+
+// The split-shaped tables whose title's reading is being taken, so that no
+// family's gate asks it again of the same table.
+const SPLIT_TITLE_READS = new WeakSet();
+
+/**
+ * Whether a family a split system's title names reads one of its rows
+ * (AS-144): the title then keeps its own reading. 030_NY's HEAT PUMP UNIT
+ * SCHEDULE names the heat pump family, whose rules read neither half of its
+ * one split system (indoor unit 016-AC-01-16-12, outdoor unit
+ * 016-CU-01-16-12), so its header shape vouches for each half's family as
+ * under a title that names none.
+ * @param {object} table a schedule table, as scheduleTableView gives it
+ * @param {string} title the title the family rules read (familyRuleTitle)
+ */
+function titleReadsSplitTable(table, title) {
+  if (!titleNamesFamily(title)) return false;
+  if (SPLIT_TITLE_READS.has(table)) return true;
+  SPLIT_TITLE_READS.add(table);
+  try {
+    return Object.entries(HVAC_FAMILY_SPECS).some(([family, spec]) => {
+      const gate = familyTableGate(table, spec, family);
+      // A host title (SPLIT SYSTEM AIR HANDLER) reads its family's half by the
+      // host's own rule, so the shape would read only the other half.
+      if (gate?.hostOk) return true;
+      return Boolean(gate && (gate.titleOk || gate.altOk)) && (table.rows || []).some((row) =>
+        familyRowRead(gate, row, table) && gate.identity.marksRead(rowIdentityText(row, gate.identity)).length > 0);
+    });
+  } finally {
+    SPLIT_TITLE_READS.delete(table);
+  }
 }
 
 // The families each title names, with the mark rule each reads its rows by.
