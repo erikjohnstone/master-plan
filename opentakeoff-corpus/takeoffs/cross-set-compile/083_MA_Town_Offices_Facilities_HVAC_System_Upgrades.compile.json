@@ -2,16 +2,16 @@
   "set_id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 Town Offices facilities HVAC \u2014 FCU/ERV/HP/GRD. [2026-10-02, from the drawing] + ELECTRIC HEATING COIL SCHEDULE on sheet 4: EHC-1 serving ERV-1 (INDEECO QUZ), DUCT_MOUNTED_COIL 1; the other families unchanged.",
+  "notes": "[MEAT] Vol2 Town Offices facilities HVAC — FCU/ERV/HP/GRD. [2026-10-02, from the drawing] + ELECTRIC HEATING COIL SCHEDULE on sheet 4: EHC-1 serving ERV-1 (INDEECO QUZ), DUCT_MOUNTED_COIL 1; the other families unchanged. [RE-KEYED 2026-10-03 from the render] Sheet 4's COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE lists three Daikin heat pumps: HP-1 (LIBRARY, RXLQ144TATJU), HP-2 (NURSE, RXYMQ36PVJU) and HP-3 (RXTQ60TAVJUA, 57.5 MBH cooling, serving the Swegon unit: 'CONNECT TO OXYGEN 8 DX COIL, PROVIDE AHU INTEGRATION KIT'), a separate outdoor unit to provide: HEAT_PUMP 3 (was 2). The other families as keyed.",
   "categories": {
     "FCU": 4,
     "ERV": 2,
-    "HEAT_PUMP": 2,
+    "HEAT_PUMP": 3,
     "GRD": 4,
     "DUCT_MOUNTED_COIL": 1
   },
   "totals": {
-    "items": 13
+    "items": 14
   },
   "bas_points": {
     "rows": 0

@@ -2,13 +2,14 @@
   "set_id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 unheated storage \u2014 GUH/LOUVER only (honest WEAK).",
+  "notes": "[WEAK] Vol2 unheated storage — GUH/LOUVER only (honest WEAK). [RE-KEYED 2026-10-03 from the render] Sheet 23's FAN SCHEDULE (* EQUAL TO GREENHECK) lists EF-1, a CUE-090-VG direct-drive exhaust fan, 280 CFM, 115/1/60, with a gravity damper: FAN 1 (the key had no fan). Unit heaters and the louver as keyed.",
   "categories": {
     "UNIT_HEATER": 2,
-    "LOUVER": 1
+    "LOUVER": 1,
+    "FAN": 1
   },
   "totals": {
-    "items": 3
+    "items": 4
   },
   "bas_points": {
     "rows": 0

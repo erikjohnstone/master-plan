@@ -266,6 +266,24 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Over-reads against the keys, checked on the renders (2026-10-03)
+
+A compile-only WP1 scoreboard over the graphs on disk (the fresh build, else the newest cached graph; 60 of 116 keys
+have one) listed the sets the takeoff over-reads. Checked by render, each small one is a key that missed a unit:
+- 083_MA: sheet 4's COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE lists HP-1, HP-2 and HP-3 (Daikin RXTQ60TAVJUA,
+  serving the Swegon unit's DX coil, a separate outdoor unit); the key had 2. Re-keyed HEAT_PUMP 3, totals 14. PASS.
+- 008_MO: sheet 23's FAN SCHEDULE lists EF-1 (Greenheck CUE-090-VG, 280 CFM); the [WEAK] key had no fan. Re-keyed
+  FAN 1, totals 4. PASS.
+- 004_MO: its 2026-10-03 re-key added TMV-1 to the categories but not to control_valves, which 08_ME's and 089_FL's
+  keys fill for their mixing valves. control_valves 1 (MIXING_VALVE). PASS.
+- 038_NC: totals equal (53), but its key families 47-ODU-BC143C (a Daikin outdoor unit rated for heating) as a heat
+  pump, while the takeoff reads all 20 mini-split outdoor units as condensing units by their ODU marks. 015_VA's and
+  030_NY's keys family their heat-pump outdoor units (CU-1, 016-CU-01-16-12) by mark as condensing units, so the keys
+  disagree with each other; not changed either way, recorded here. Reading a family from a row's heating rating would
+  move those keys too.
+Left as documented: 26_CA and 096_IN (stale partial keys, over-reads are real schedules), 21_VA (RF1/RF2 from a
+technology sheet), 001_NC (BAS 546 for a terse pre-render key of 122; held-out twin of navfac, not opened).
+
 ### A points list's bare TYPE column; 045_FL's BAS re-keyed (2026-10-03)
 
 Rule (shared path: `compileBasTakeoff`): `basPointTypeEvidence` reads a column headed TYPE alone
