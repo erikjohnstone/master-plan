@@ -354,16 +354,21 @@ test("Vol2 Phoenix Sky Harbor 088: plan-drawn plant + terminal families MATCH", 
   }
 });
 
-test("Vol2 Eglin AFB 019: dense VAV set — all scheduled families MATCH", async (t) => {
+test("Vol2 Eglin AFB 019: dense VAV set — scheduled families MATCH; the chiller and air devices AMBIGUOUS", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.compile.json"),
   );
   if (!ctx) return;
   const { key, session, graph } = ctx;
-  for (const family of Object.keys(key.categories)) {
+  for (const family of Object.keys(key.categories).filter((f) => f !== "AIR_COOLED_CHILLER" && f !== "GRD")) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
+  // CH-1's one plan tag is not verified against a symbol's geometry, and the
+  // 23 air device types print their marks 1 to 61 times each, none verified:
+  // their installed totals stay unknown rather than guessed.
+  await assertFamilyStatusCounts(session, graph, key, "AIR_COOLED_CHILLER", { ambiguous: 1 });
+  await assertFamilyStatusCounts(session, graph, key, "GRD", { ambiguous: 23 });
 });
 
 test("Vol2 Jonesboro 093: VRF indoor/outdoor + WH all MATCH (multipart rejoin)", async (t) => {

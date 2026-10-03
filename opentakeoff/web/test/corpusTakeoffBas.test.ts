@@ -429,6 +429,39 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.deepEqual([speed.point_type, speed.point_type_status, speed.wiring], [null, "REFUSED_POINT_TYPE_CONFLICT", null]);
   });
 
+  it("reads a filled square as a tick under a point function schedule's alarm and TREND columns, its types from POINT TYPE (019_FL's M8.3)", () => {
+    const TICK = { text: "■" };
+    const point = (n: string, name: string, tag: string, type: string, ticks: Record<string, { text: string }>) => ({
+      key: n,
+      cells: { COL1: { text: n }, "POINT NAME": { text: name }, "HARDWARE TAG": { text: tag }, "HARDWARE POINT TYPE": { text: type }, ...ticks },
+    });
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#19", number: 19 }],
+      tables: [{
+        sheet: "set.pdf#19",
+        title: { text: "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - CHW SYSTEM", bbox: [0, 0, 10, 10] },
+        headers: ["COL1", "POINT NAME", "HARDWARE TAG", "HARDWARE POINT TYPE", "SOFTWARE MAINTENANCE ALARM",
+          "SOFTWARE ALARM INSTRUCTIONS", "SOFTWARE MAINTENANCE WORK ORDER", "SOFTWARE ALARM LIMITS", "SOFTWARE TREND",
+          "ALARM LIMITS LOW LIMIT"],
+        rows: [
+          point("1", "CHWR TEMPERATURE", "T-1", "AI", { "SOFTWARE ALARM INSTRUCTIONS": TICK, "SOFTWARE ALARM LIMITS": TICK, "SOFTWARE TREND": TICK }),
+          point("3", "CHILLER ALARM STATUS", "AX-1", "DI", { "SOFTWARE MAINTENANCE ALARM": TICK, "SOFTWARE MAINTENANCE WORK ORDER": TICK }),
+          point("5", "CHILLER POWER CONSUMPTION", "CI-1", "AO", {}),
+          point("12", "DIFFERENTIAL PRESSURE", "DP-1", "AI", { "SOFTWARE ALARM INSTRUCTIONS": TICK, "SOFTWARE TREND": TICK,
+            "ALARM LIMITS LOW LIMIT": { text: "5 PSI" } }),
+          point("15", "PUMP STATUS", "CSR-1", "DI", { "SOFTWARE TREND": TICK }),
+          // An empty box is a box left unticked.
+          point("16", "PUMP START/STOP", "SS-1", "DO", { "SOFTWARE TREND": { text: "□" } }),
+        ],
+      }],
+    });
+    const { rows, AI, AO, BI, BO, alarm, trend } = bas.totals;
+    assert.deepEqual({ rows, AI, AO, BI, BO, alarm, trend }, { rows: 6, AI: 2, AO: 1, BI: 2, BO: 1, alarm: 3, trend: 3 });
+    const items = bas.categories.points_lists.lists[0].items;
+    assert.deepEqual(items.map((item: { alarm: string | null; trend: string | null }) => [item.alarm, item.trend]),
+      [["■", "■"], ["■", null], [null, null], ["■", "■"], [null, "■"], [null, null]]);
+  });
+
   it("reads ticks under abbreviated type columns, a HARDWARE / SOFTWARE POINTS label row, and no blank numbered line (028_TX's BAS INPUT/OUTPUT POINT LISTs)", () => {
     const X = { text: "X" };
     const bas = compileBasTakeoff(null, {
@@ -484,6 +517,44 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.deepEqual(grouped.items.map((item: { tag: string; point_type: string | null; wiring: string | null }) =>
       [item.tag, item.point_type, item.wiring]),
     [["1", "AI", "hardwired"], ["2", null, "soft"], ["3", null, null]]);
+  });
+
+  it("names a point by its lead cell where a name printed twice keyed its rows with a tick (033_MN's PUMP CONTROL POINTS)", () => {
+    // PUMP-12 VFD FAULT is a status point and, under the list's ALARM label,
+    // an alarm: no one column tells the rows apart, so the table builder
+    // keyed each from the name and the BI column's tick.
+    const X = { text: "X" };
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#71", number: 71 }],
+      tables: [{
+        sheet: "set.pdf#71",
+        title: { text: "PUMP CONTROL POINTS", bbox: [0, 0, 10, 10] },
+        headers: ["COL1", "HARDWARE POINTS", "HARDWARE POINTS 2", "HARDWARE POINTS 3", "SOFTWARE POINTS", "SOFTWARE POINTS 2"],
+        rows: [
+          {
+            key: "POINT NAME BI",
+            cells: {
+              COL1: { text: "POINT NAME" }, "HARDWARE POINTS": { text: "AI" }, "HARDWARE POINTS 2": { text: "AO" },
+              "HARDWARE POINTS 3": { text: "BI" }, "SOFTWARE POINTS": { text: "TREND" }, "SOFTWARE POINTS 2": { text: "ALARM" },
+            },
+          },
+          { key: "PUMP-12 STATUS X", cells: { COL1: { text: "PUMP-12 STATUS" }, "HARDWARE POINTS 3": X, "SOFTWARE POINTS": X } },
+          { key: "PUMP-12 VFD FAULT X", cells: { COL1: { text: "PUMP-12 VFD FAULT" }, "HARDWARE POINTS 3": X } },
+          { key: "PUMP-12 VFD SPEED", cells: { COL1: { text: "PUMP-12 VFD SPEED" }, "HARDWARE POINTS 2": X } },
+          { key: "PUMP-12 VFD FAULT", cells: { COL1: { text: "PUMP-12 VFD FAULT" }, "SOFTWARE POINTS 2": X } },
+          // A key that is more than its lead cell and a tick stays the key.
+          { key: "PUMP-13 STATUS LEAD", cells: { COL1: { text: "PUMP-13 STATUS" }, "HARDWARE POINTS 2": { text: "LEAD" } } },
+        ],
+      }],
+    });
+    const items = bas.categories.points_lists.lists[0].items;
+    assert.deepEqual(items.map((item: { tag: string; point_type: string | null; alarm: unknown }) => [item.tag, item.point_type, Boolean(item.alarm)]), [
+      ["PUMP-12 STATUS", "BI", false],
+      ["PUMP-12 VFD FAULT", "BI", false],
+      ["PUMP-12 VFD SPEED", "AO", false],
+      ["PUMP-12 VFD FAULT", null, true],
+      ["PUMP-13 STATUS LEAD", null, false],
+    ]);
   });
 
   it("types a ticked point without inventing its wiring; a row naming one type twice is a point, not the labels", () => {

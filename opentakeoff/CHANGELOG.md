@@ -1,5 +1,35 @@
 # Changelog
 
+- **A points matrix's alarms under an ALARM label; a header band ruled a column short of its points; a filled square
+  as a tick; a first point that ticks a column; an air terminal schedule's grilles; a glycol feeder lettered for its
+  wing.** 033_MN's PUMP CONTROL POINTS prints six alarms under an ALARM label ruled across the matrix, and the table
+  engine returned the label and the alarms as a face of their own: a table titled ALARM whose first alarm became its
+  header, which no points list claimed (11 of the list's 17 points read). A face that opens with a lone ALARM label
+  spanning the grid now continues the same-grid points matrix directly above it when that matrix prints its type
+  columns (AI, AO, BI, BO); the label is dropped as a divider. A name the list prints twice (PUMP-12 VFD FAULT, a
+  status point and an alarm) keys its rows by name and tick; each point keeps its printed name. 019_FL's AHU-1 point
+  list (M8.5) numbers its points in a narrow first column; the header band above draws that column's rule, but the
+  engine returned the band with the number and name columns as one, 29 columns over the points' 30, and stacked only
+  fragments of one grid: the band, its 62 points and the 7 ruled under GLOBAL POINTS a label's line (34pt) below were
+  all refused, and the sheet read nothing. A band of labels directly above headerless points, whose every column edge
+  is one of the points', is now put on the points' columns (a label alone in a merged column over the one under its
+  centre, POINT NAME over the names) and stacked, and fragments of one grid stack across a section label's line (40pt,
+  from 30): one list of 69 points. Its five lists tick a filled square (■) under their alarm columns and TREND, and a
+  tick was an X, a check or a dot, so their points read no alarm and no trend; a filled square is now a tick (82 alarm
+  points, 103 trended, every row checked by eye; no other set prints one). 05_MO's sheet 54 AHU POINTS LIST prints its
+  first point, COOLING VALVE V-1, right under its leaf labels; two of its five texts read as header words (CLG, a
+  ceiling's abbreviation), so the row cleared the header vocabulary bar and was folded into the column names. A row
+  that prints a tick mark alone in a cell is now a row of data. 014_MT's AIR TERMINAL SCHEDULE (no UNIT or BOX in its
+  title) lists two exhaust grilles and a return grille; under such a title a grille's, register's or diffuser's mark
+  is an air device's, never a VAV box's. Its AUTOMATIC GLYCOL FEEDER GLF-A1 is now read under its title. A replay of
+  405 saved table-engine pages and 18,350 cached ODL tables changes only 033_MN's page 71, 05_MO's page 54, 019_FL's
+  page 21 and three 016_NY architectural schedules, which keep their titles (rows unchanged); the compile, over 49
+  freshly built and 161 cached graphs, changes only 014_MT (+4 units). Re-keyed from renders: 033_MN (36 units; 51
+  points, every field checked by eye), 014_MT (66 units) and 030_NY (49 units, of which the takeoff reads 45: its two
+  DOAS coil schedules' facility-prefixed two-segment tags are refused as row keys, and a split heat pump under a HEAT
+  PUMP title is read by no family), and 019_FL with federal-mech, one PDF under two names (128 units, with the 23
+  grilles and two expansion tanks their keys lacked; 158 points, every type, alarm and trend checked by eye, of which
+  the takeoff read 89, untyped by alarm or trend). 05_MO's points now read its key's 111.
 - **Points lists ticked under abbreviated columns; captions that lost a space or say CONTROL POINTS; blank
   numbered lines.** 028_TX's BAS INPUT/OUTPUT POINT LISTs head their tick columns AI | AO | DI | DO | ALARM, or group
   them as HARDWARE POINTS (AI, AO, DI, DO) and SOFTWARE POINTS (AV, BV, TREND, ALARM) over a label row, as 033_MN's VAV,

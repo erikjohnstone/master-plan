@@ -901,6 +901,14 @@ describe("split, VRV, CRAC, inline fan and grille schedules by the names they pr
     // A sheet or system heading that only begins with it is no schedule.
     assert.deepEqual(compile([table("m.pdf#3", "AIR DISTRIBUTION SYSTEM NOTES", ["1"])])("GRD"), []);
   });
+
+  it("reads an air terminal schedule that names no unit or box by its grilles' marks only (014_MT's EG-1, EG-2, RG-1)", () => {
+    const terminals = compile([table("m.pdf#3", "AIR TERMINAL SCHEDULE", ["EG-1", "EG-2", "RG-1", "SD-4", "VAV-1", "TU-2", "CAV-3"])]);
+    assert.deepEqual(terminals("GRD"), ["EG-1", "EG-2", "RG-1", "SD-4"]);
+    // An air terminal unit's schedule lists boxes, never grilles.
+    assert.deepEqual(compile([table("m.pdf#3", "AIR TERMINAL UNIT SCHEDULE", ["VAV-1", "RG-1"])])("GRD"), []);
+    assert.deepEqual(compile([table("m.pdf#3", "AIR TERMINAL BOX SCHEDULE", ["SD-1"])])("GRD"), []);
+  });
 });
 
 describe("a VRF system's outdoor units titled as condensing units", () => {
@@ -963,6 +971,9 @@ describe("tanks, glycol and pot feeders under their own titles (07_MO's pictured
   });
   it("reads a GLYCOL FEED SYSTEM and a CHEMICAL POT FEEDER SCHEDULE by their marks, under their titles only", () => {
     assert.deepEqual(compile([table("GLYCOL FEED SYSTEM", ["GF-1"])])("GLYCOL_MAKEUP"), ["GF-1"]);
+    // A feeder lettered for its wing (014_MT's AUTOMATIC GLYCOL FEEDER GLF-A1).
+    assert.deepEqual(compile([table("AUTOMATIC GLYCOL FEEDER SCHEDULE", ["GLF-A1"])])("GLYCOL_MAKEUP"), ["GLF-A1"]);
+    assert.deepEqual(compile([table("", ["GLF-A1"])])("GLYCOL_MAKEUP"), []);
     assert.deepEqual(compile([table("CHEMICAL POT FEEDER SCHEDULE", ["CPF-1"])])("CHEMICAL_POT_FEEDER"), ["CPF-1"]);
     assert.deepEqual(compile([table("", ["EXT-1", "CPF-1", "GF-1"])])("EXPANSION_TANK"), []);
   });

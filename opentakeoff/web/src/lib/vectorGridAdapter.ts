@@ -359,10 +359,14 @@ const FRAGMENT_X_TOL = 3;
 /** How far a fragment's own edge may sit from its neighbour's, in EITHER
  * direction. Real, measured (028_TX page 1): adjacent faces there overlap by
  * up to ~20pt rather than touching cleanly, because a divider row straddling
- * the split lands partly in each piece's own measured bounds. Generous
- * enough for that; tight enough that a genuinely separate table an inch or
- * more down the page never qualifies. */
-const FRAGMENT_GAP_TOL = 30;
+ * the split lands partly in each piece's own measured bounds. The other way,
+ * a section label printed between two ruled blocks of one list leaves a
+ * line's gap: 34pt on 019_FL's M8.5, between its AHU-1 points and its
+ * GLOBAL POINTS, and on 009_FL's page 22. Over every saved reply, the gaps
+ * between a headerless block and a same-grid block above it run 31-39pt and
+ * then 52pt and more. Generous enough for both; tight enough that a
+ * genuinely separate table an inch or more down the page never qualifies. */
+const FRAGMENT_GAP_TOL = 40;
 
 function sameColumnGrid(a: VectorGridTable, b: VectorGridTable): boolean {
   return a.cols === b.cols
@@ -489,6 +493,51 @@ function stackFragments(a: VectorGridTable, b: VectorGridTable): VectorGridTable
   return stripInteriorDividerRows(concatFragments(a, b));
 }
 
+// A HEADER BAND RULED WITH ONE COLUMN FEWER THAN ITS DATA. 019_FL's AHU-1
+// point list (M8.5) numbers its points in a narrow first column. The header
+// band above draws that column's rule too, but vectorgrid returns the band
+// with the number and name columns as one, 29 columns over the data's 30,
+// and the rescue above stacks only fragments of one column grid: the band
+// and the 62 points under it were each refused alone, and the list was never
+// read (M8.3's and M8.4's lists, whose bands come back with 30 columns,
+// are). A band of labels refused for having no data rows, directly above a
+// headerless data fragment, whose every column edge is one of the data's, is
+// put on the data's columns before it is stacked: a cell keeps the data
+// columns between its edges, and a label alone in a band column that covers
+// several data columns takes the one under its centre, as a column's label is
+// printed over it (POINT NAME over the names, not the numbers).
+/** A fragment's column edges left to right, read off its own cells; null
+ * when a column has no cell to say where it starts or ends. */
+function columnEdges(t: VectorGridTable): number[] | null {
+  const edges: Array<number | undefined> = new Array(t.cols + 1).fill(undefined);
+  for (const c of t.cells) {
+    const end = c.col + (c.colSpan || 1);
+    if (edges[c.col] === undefined) edges[c.col] = c.bbox[0];
+    if (edges[end] === undefined) edges[end] = c.bbox[2];
+  }
+  return edges.every((e) => e !== undefined) ? (edges as number[]) : null;
+}
+
+// exported for tests
+function regridHeaderBand(band: VectorGridTable, data: VectorGridTable): VectorGridTable | null {
+  if (band.cols >= data.cols) return null;
+  const bandEdges = columnEdges(band), dataEdges = columnEdges(data);
+  if (!bandEdges || !dataEdges) return null;
+  // Each band edge on a data edge, in order, the outer two on the data's own.
+  const at = bandEdges.map((x) => dataEdges.findIndex((y) => Math.abs(x - y) <= FRAGMENT_X_TOL));
+  if (at[0] !== 0 || at[at.length - 1] !== data.cols || at.some((k, i) => i > 0 && k <= at[i - 1])) return null;
+  const cells = band.cells.map((c): VectorGridCell => {
+    const span = c.colSpan || 1;
+    const from = at[c.col], to = at[c.col + span];
+    if (span > 1 || to - from === 1 || span >= band.cols) return { ...c, col: from, colSpan: to - from };
+    const centre = (c.bbox[0] + c.bbox[2]) / 2;
+    let col = from;
+    while (col < to - 1 && dataEdges[col + 1] <= centre) col++;
+    return { ...c, col, colSpan: 1, bbox: [dataEdges[col], c.bbox[1], dataEdges[col + 1], c.bbox[3]] };
+  });
+  return { ...band, cols: data.cols, cells };
+}
+
 // A POINT LIST'S LATER I/O SECTION DRAWN AS ITS OWN FACE. 015_VA's points
 // lists (AM703-AM706) rule each section apart: vectorgrid returns the title
 // band, the header with the ANALOG INPUT points, then "ANALOG OUTPUT" and its
@@ -525,6 +574,41 @@ function isPointSectionFragment(t: VectorGridTable): boolean {
   const heading = isPointSectionHeadingRow(t, 0) ? 0
     : leadsWithPointMark(t, 0) && isPointSectionHeadingRow(t, 1) ? 1 : -1;
   return heading >= 0 && leadsWithPointMark(t, heading + 1);
+}
+
+// A POINTS MATRIX'S ALARM SECTION DRAWN AS ITS OWN FACE. 033_MN's PUMP
+// CONTROL POINTS (M702) prints its alarms under an ALARM label ruled across
+// the matrix, and vectorgrid returns the label and the six alarms as a face
+// of their own. Read alone, it took the label for a title and the first alarm
+// for a header: a table titled ALARM that no points list claimed (11 of 17
+// points read). The label names no I/O type and the alarms print names, not
+// marks, so the I/O section rule above does not take it. The list it
+// continues is the same-grid points matrix directly above, whose label row
+// prints its type columns (AI, AO, BI, BO); a face of names under an ALARM
+// label beside anything else is not stacked.
+const POINT_ALARM_SECTION_HEADING_RE = /^ALARMS?(?: POINTS?)?$/;
+/** A points matrix's type column label (DI and DO for BI and BO; AV, BV). */
+const POINT_TYPE_COLUMN_RE = /^(?:[ABD][IO]|[AB]V)$/;
+
+// exported for tests
+function isPointAlarmSectionFragment(t: VectorGridTable): boolean {
+  if (t.cols < 2 || t.rows < 2) return false;
+  const heading = textedCells(t, 0);
+  if (heading.length !== 1 || (heading[0].colSpan || 1) < t.cols - 1) return false;
+  if (!POINT_ALARM_SECTION_HEADING_RE.test(heading[0].text.replace(/\s+/g, " ").trim().toUpperCase())) return false;
+  const lead = t.cells.find((c) => c.row === 1 && c.col === 0);
+  return Boolean(lead && (lead.text || "").trim());
+}
+
+/** A row of the face prints three or more distinct point type columns. */
+function printsPointTypeColumns(t: VectorGridTable): boolean {
+  for (let row = 0; row < t.rows; row++) {
+    const types = new Set(textedCells(t, row)
+      .map((c) => c.text.replace(/\s+/g, " ").trim().toUpperCase())
+      .filter((text) => POINT_TYPE_COLUMN_RE.test(text)));
+    if (types.size >= 3) return true;
+  }
+  return false;
 }
 
 /** Run vectorgrid for one sheet. Throws on an engine failure or a coordinate
@@ -582,16 +666,31 @@ export function scheduleTablesFromVectorGridReply(
     let mergedThisRound = false;
     outer: for (let i = 0; i < attempts.length; i++) {
       const cand = attempts[i];
-      const section = isPointSectionFragment(cand.raw);
+      const alarms = isPointAlarmSectionFragment(cand.raw);
+      const section = alarms || isPointSectionFragment(cand.raw);
       if (!section && (cand.built || !isMergeEligibleFragment(cand.raw, cand.why))) continue;
       for (let j = 0; j < attempts.length; j++) {
         if (j === i) continue;
         const other = attempts[j];
-        if (!isFragmentAdjacent(cand.raw, other.raw)) continue;
+        let candRaw = cand.raw, otherRaw = other.raw;
+        if (!isFragmentAdjacent(cand.raw, other.raw)) {
+          // A header band ruled with one column fewer than its data, put on
+          // the data's columns (above).
+          const [upper, lower] = cand.raw.bbox[1] <= other.raw.bbox[1] ? [cand, other] : [other, cand];
+          const band = !section && !upper.built && upper.why.startsWith("no keyed data rows")
+            && !lower.built && lower.why.startsWith("no header block above the data")
+            && verticallyAdjacent(upper.raw, lower.raw) ? regridHeaderBand(upper.raw, lower.raw) : null;
+          if (!band) continue;
+          if (upper === other) otherRaw = band;
+          else candRaw = band;
+        }
         // A section continues the list above it, never one below, nor
-        // another section that has not yet found its list.
-        if (section && (other.raw.bbox[1] >= cand.raw.bbox[1] || isPointSectionFragment(other.raw))) continue;
-        const mergedRaw = stackFragments(other.raw, cand.raw);
+        // another section that has not yet found its list. Alarms continue
+        // only a matrix that prints its point types.
+        if (section && (other.raw.bbox[1] >= cand.raw.bbox[1] || isPointSectionFragment(other.raw)
+          || isPointAlarmSectionFragment(other.raw))) continue;
+        if (alarms && !printsPointTypeColumns(other.raw)) continue;
+        const mergedRaw = stackFragments(otherRaw, candRaw);
         const rebuilt = vectorGridTableToScheduleTable(mergedRaw, page, ctx, scale);
         if (rebuilt) {
           attempts[j] = { raw: mergedRaw, built: rebuilt, why: "" };
@@ -617,4 +716,4 @@ export function scheduleTablesFromVectorGridReply(
 }
 
 export type { Bbox };
-export { isFragmentAdjacent, isPointSectionFragment, stackFragments };
+export { isFragmentAdjacent, isPointAlarmSectionFragment, isPointSectionFragment, regridHeaderBand, stackFragments };

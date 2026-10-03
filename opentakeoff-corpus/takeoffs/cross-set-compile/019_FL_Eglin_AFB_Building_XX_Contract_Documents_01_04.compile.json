@@ -2,7 +2,7 @@
   "set_id": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 Eglin \u2014 AHU/FCU/VAV-heavy MEAT.",
+  "notes": "Vol2 Eglin AFB Building XX, the same drawings as federal-mech (a byte-identical PDF). [RE-KEYED 2026-10-03 from the render] M7.1 (page 14): AIR HANDLING UNIT SCHEDULE AHU-1; CHILLER SCHEDULE (ELECTRIC AIR-COOLED) CH-1; HOT WATER CONDENSING BOILER SCHEDULE B-1, B-2; PUMP SCHEDULE CP-1 to CP-6, CWP-1, CWP-2, HWP-1, HWP-2, HWRP-1 (11); GENERAL FAN SCHEDULE EF-1 to EF-4; AIR SEPARATOR SCHEDULE AS-1, AS-2. Not keyed: the AIR HANDLING UNIT FAN SCHEDULE's RF-1, RF-2, SF-1, SF-2 and the AIR HANDLING UNIT HYDRONIC COIL SCHEDULE's CHWC and HWC (SYSTEM AHU-1: the unit's own fans, SF and RF QTY 2 on its row, and its coils). M7.2 (page 15): GRILLE, REGISTER, AND DIFFUSER SCHEDULE S1-1 to S1-4, S3-1, S2-1, S2-2, S2-4 to S2-7 (no S2-3 is printed), S4-1, R1-1 to R1-5, R3-1 to R3-3, E1-1 to E1-3: GRD 23; HOT WATER FAN COIL UNIT SCHEDULE FCU-1 and DX FAN COIL UNIT SCHEDULE EV-1 to EV-6: FCU 7; AIR-COOLED CONDENSING UNIT SCHEDULE CU-1 to CU-6; EXPANSION TANK SCHEDULE ET-1, ET-2; UNIT HEATER SCHEDULE (HOT WATER) 2; SILENCER SCHEDULE 2; FIN TUBE RADIATION SCHEDULE FTR-1 to FTR-4; ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE 3. M7.3 (page 16): VOLUME CONTROL BOX SCHEDULE VAV-1 to VAV-58. BAS: five HVAC CONTROLS - BMS POINT FUNCTION SCHEDULEs number their points: M8.3 (page 19) CHW SYSTEM 21 (1 to 22, no 13), M8.4 (page 20) HHW SYSTEM 32, M8.5 (page 21) AHU-1 with GLOBAL POINTS, HVAC ZONES and SPACE DIFFERENTIAL PRESSURE SENSORS 69 (1 to 70, no 41), M8.7 (page 23) VAV BOXES 15, M8.8 (page 24) MISCELLANEOUS 21: 158 points, POINT TYPE AI 59, AO 33, DI 41, DO 25; ticked with a filled square, 82 under MAINTENANCE ALARM, CRITICAL ALARM, ALARM INSTRUCTIONS or ALARM LIMITS (alarm; CHW 10, HHW 19, AHU-1 38, VAV 9, MISC 6) and 103 under TREND (8, 13, 66, 9, 7), each row read by eye. M8.1's BMS POINT FUNCTION DESCRIPTIONS prints the schedule's header alone, no points. The earlier key (no GRD, ET or BAS) was written before the takeoff read those families and lists.",
   "categories": {
     "AHU": 1,
     "FCU": 7,
@@ -15,14 +15,22 @@
     "UNIT_HEATER": 2,
     "FIN_TUBE_RADIATION": 4,
     "AIR_SEPARATOR": 2,
+    "EXPANSION_TANK": 2,
     "DUCT_SILENCER": 2,
-    "LOUVERED_PENTHOUSE": 3
+    "LOUVERED_PENTHOUSE": 3,
+    "GRD": 23
   },
   "totals": {
-    "items": 103
+    "items": 128
   },
   "bas_points": {
-    "rows": 0
+    "rows": 158,
+    "AI": 59,
+    "AO": 33,
+    "BI": 41,
+    "BO": 25,
+    "alarm": 82,
+    "trend": 103
   },
   "control_valves": {
     "items": 0

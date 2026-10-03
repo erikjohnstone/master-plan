@@ -17,7 +17,9 @@ import {
   pageBoxAgrees,
   viewportScale,
   isFragmentAdjacent,
+  isPointAlarmSectionFragment,
   isPointSectionFragment,
+  regridHeaderBand,
   scheduleTablesFromVectorGridReply,
   stackFragments,
   dropNumberedNotes,
@@ -570,3 +572,120 @@ describe("a points list whose I/O sections are ruled apart (015_VA's AM703-AM706
   });
 });
 
+
+describe("a points matrix whose alarms are ruled apart under an ALARM label (033_MN's PUMP CONTROL POINTS)", () => {
+  // The matrix is one face (title, type columns, points); the ALARM label and
+  // the alarms under it another, the same grid directly below.
+  const W = [100, 220, 250, 280, 310, 350, 390];
+  const row = (r: number, y: number, texts: string[]) =>
+    texts.map((text, col) => cell(r, col, text, [W[col], y, W[col + 1], y + 20])).filter((c) => c.text);
+  const band = (r: number, y: number, text: string) => cell(r, 0, text, [100, y, 390, y + 20], 1, 6);
+  const face = (top: number, rows: Array<ReturnType<typeof cell> | ReturnType<typeof cell>[]>): VectorGridTable => {
+    const cells = rows.flat();
+    const bottom = Math.max(...cells.map((c) => c.bbox[3]));
+    return { bbox: [100, top, 390, bottom], rows: rows.length, cols: 6, raster: false, assigned: cells.length, orphan: 0, straddle: 0, cells };
+  };
+  const MATRIX = face(100, [band(0, 100, "PUMP CONTROL POINTS"),
+    row(1, 120, ["POINT NAME", "AI", "BI", "BO", "TREND", "ALARM"]),
+    row(2, 140, ["PUMP-12 STATUS", "", "X", "", "X", ""]),
+    row(3, 160, ["PUMP-12 START/STOP", "", "", "X", "X", ""]),
+    row(4, 180, ["DIFFERENTIAL PRESSURE", "X", "", "", "X", ""])]);
+  const ALARMS = face(200, [band(0, 200, "ALARM"),
+    row(1, 220, ["PUMP-12 FAILURE", "", "", "", "", "X"]),
+    row(2, 240, ["HIGH DIFFERENTIAL PRESSURE", "", "", "", "", "X"])]);
+  const read = (tables: VectorGridTable[]) => scheduleTablesFromVectorGridReply(tables, 71, ctx(), 3).tables
+    .map((t) => ({ title: t.title?.text ?? "", names: t.rows.map((r) => r.cells[t.headers[0]]?.text ?? "") }));
+
+  it("reads the alarms as the matrix's own points, the label dropped", () => {
+    assert.equal(isPointAlarmSectionFragment(ALARMS), true);
+    assert.deepEqual(read([MATRIX, ALARMS]), [{
+      title: "PUMP CONTROL POINTS",
+      names: ["PUMP-12 STATUS", "PUMP-12 START/STOP", "DIFFERENTIAL PRESSURE", "PUMP-12 FAILURE", "HIGH DIFFERENTIAL PRESSURE"],
+    }]);
+  });
+
+  it("stacks alarms onto no face that prints no point types", () => {
+    // The same grid above, a fan schedule's columns in place of the types.
+    const schedule = face(100, [band(0, 100, "EXHAUST FAN SCHEDULE"),
+      row(1, 120, ["MARK", "CFM", "RPM", "HP", "VOLTS", "PHASE"]),
+      row(2, 140, ["EF-1", "400", "1100", "1/4", "120", "1"]),
+      row(3, 160, ["EF-2", "250", "1100", "1/6", "120", "1"]),
+      row(4, 180, ["EF-3", "900", "1725", "1/2", "120", "1"])]);
+    assert.ok(isFragmentAdjacent(schedule, ALARMS));
+    assert.deepEqual(read([schedule, ALARMS]).find((t) => t.title === "EXHAUST FAN SCHEDULE")?.names, ["EF-1", "EF-2", "EF-3"]);
+  });
+
+  it("takes no face whose label is no ALARM, spans part of the grid, or has nothing under it", () => {
+    assert.equal(isPointAlarmSectionFragment(face(200, [band(0, 200, "SECOND FLOOR"),
+      row(1, 220, ["PUMP-12 FAILURE", "", "", "", "", "X"])])), false);
+    assert.equal(isPointAlarmSectionFragment(face(200, [cell(0, 0, "ALARM", [100, 200, 250, 220], 1, 2),
+      row(1, 220, ["PUMP-12 FAILURE", "", "", "", "", "X"])])), false);
+    assert.equal(isPointAlarmSectionFragment(face(200, [band(0, 200, "ALARM")])), false);
+    assert.equal(isPointAlarmSectionFragment(MATRIX), false);
+  });
+});
+
+describe("a header band ruled with one column fewer than its points (019_FL's M8.5)", () => {
+  // The band's first column holds both the data's number and name columns;
+  // an unruled AHU-1 label sits between the band and the points, and GLOBAL
+  // POINTS between the points and the section ruled below them.
+  const W = [100, 115, 300, 340, 370, 400, 430];
+  const points = (row0: number, top: number, rows: string[][]) => rows.flatMap((texts, i) =>
+    texts.map((text, col) => cell(row0 + i, col, text, [W[col], top + 15 * i, W[col + 1], top + 15 * (i + 1)])));
+  const face = (cols: number, cells: ReturnType<typeof cell>[]): VectorGridTable => ({
+    bbox: [100, Math.min(...cells.map((c) => c.bbox[1])), 430, Math.max(...cells.map((c) => c.bbox[3]))],
+    rows: Math.max(...cells.map((c) => c.row)) + 1, cols, raster: false, assigned: cells.length, orphan: 0, straddle: 0, cells,
+  });
+  const TITLE = "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE";
+  const BAND = face(5, [
+    cell(0, 0, TITLE, [100, 100, 430, 120], 1, 5),
+    cell(1, 1, "HARDWARE", [300, 120, 370, 135], 1, 2),
+    cell(2, 1, "TAG", [300, 135, 340, 175], 2),
+    cell(2, 2, "POINT TYPE", [340, 135, 370, 175], 2),
+    cell(2, 3, "TREND", [370, 135, 400, 175], 2),
+    cell(3, 0, "POINT NAME", [100, 162, 300, 175]),
+    cell(3, 4, "NOTES", [400, 162, 430, 175]),
+  ]);
+  const AHU = face(6, points(0, 193, [
+    ["1", "DUCT STATIC PRESSURE", "SP-1", "AI", "\u25A0", ""],
+    ["2", "SUPPLY AIR ISOLATION DAMPER", "D-1", "AO", "", ""],
+    ["3", "FREEZESTAT STATUS", "FZ-1", "DI", "\u25A0", ""],
+  ]));
+  const GLOBAL = face(6, points(0, 272, [
+    ["64", "WHEEL ENTERING TEMPERATURE", "T-1", "AI", "\u25A0", ""],
+    ["65", "OUTSIDE AIR CO2 LEVEL", "CO2-X", "AI", "\u25A0", ""],
+  ]));
+  const read = (tables: VectorGridTable[]) => scheduleTablesFromVectorGridReply(tables, 21, ctx(), 3).tables
+    .map((t) => ({ title: t.title?.text ?? "", keys: t.rows.map((r) => r.key), names: t.rows.map((r) => r.cells["POINT NAME"]?.text ?? "") }));
+
+  it("reads the band, the points under it and the section below as one list, each point under its name", () => {
+    assert.deepEqual(read([BAND, AHU, GLOBAL]), [{
+      title: TITLE,
+      keys: ["1", "2", "3", "64", "65"],
+      names: ["DUCT STATIC PRESSURE", "SUPPLY AIR ISOLATION DAMPER", "FREEZESTAT STATUS", "WHEEL ENTERING TEMPERATURE", "OUTSIDE AIR CO2 LEVEL"],
+    }]);
+  });
+
+  it("puts the band on the points' columns: spans by their edges, a label alone in a merged column over the one under its centre", () => {
+    const band = regridHeaderBand(BAND, AHU);
+    assert.ok(band);
+    assert.equal(band.cols, 6);
+    const at = (text: string) => band.cells.filter((c) => c.text === text).map((c) => [c.col, c.colSpan]);
+    assert.deepEqual([at(TITLE), at("HARDWARE"), at("TAG"), at("POINT NAME"), at("NOTES")],
+      [[[0, 6]], [[2, 2]], [[2, 1]], [[1, 1]], [[5, 1]]]);
+  });
+
+  it("stacks no band whose rules are not the points', and no band ruled under them", () => {
+    const offGrid = face(5, BAND.cells.map((c) => (c.text === "TAG" ? { ...c, bbox: [300, 135, 320, 175] as [number, number, number, number] }
+      : c.text === "POINT TYPE" ? { ...c, bbox: [320, 135, 370, 175] as [number, number, number, number] } : c)));
+    assert.equal(regridHeaderBand(offGrid, AHU), null);
+    assert.deepEqual(read([offGrid, AHU]), []);
+    const below = face(5, BAND.cells.map((c) => ({ ...c, bbox: [c.bbox[0], c.bbox[1] + 160, c.bbox[2], c.bbox[3] + 160] as [number, number, number, number] })));
+    assert.deepEqual(read([AHU, below]), []);
+  });
+
+  it("stacks a section a label's line below the points, never one an inch below", () => {
+    const far = face(6, points(0, 320, [["64", "WHEEL ENTERING TEMPERATURE", "T-1", "AI", "\u25A0", ""]]));
+    assert.deepEqual(read([BAND, AHU, far]).map((t) => t.keys), [["1", "2", "3"]]);
+  });
+});

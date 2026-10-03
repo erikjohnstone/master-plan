@@ -4728,6 +4728,45 @@ describe("scheduleTableFromODL: a point list's I/O section heading is a divider,
   });
 });
 
+describe("scheduleTableFromODL: a row that ticks a column is a point, never a header row (05_MO's AHU POINTS LIST, sheet 54)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1, rowSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20 * rowSpan],
+    "row number": row, "column number": col, "row span": rowSpan, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+  const row = (n: number, texts: string[]) => ({
+    type: "table row" as const, "row number": n, id: n, cells: texts.map((text, i) => odlCell(n, i + 1, text)),
+  });
+  // The list's labels run two rows tall beside SYSTEM OUTPUTS and its leaf
+  // labels; its first point's tag and abbreviation (CLG-V1, a ceiling's CLG
+  // to the header vocabulary) put it over the vocabulary bar.
+  const list = (first: string[]): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 300, 140],
+    "number of rows": 6, "number of columns": 5,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "AHU POINTS LIST", 5)] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "EQUIPMENT DESCRIPTION", 1, 2), odlCell(2, 2, "CONTROL POINT TAG", 1, 2),
+        odlCell(2, 3, "ABBREVIATION", 1, 2), odlCell(2, 4, "SYSTEM OUTPUTS", 2)] },
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 4, "VALVE POSITION"), odlCell(3, 5, "DAMPER POSITION")] },
+      row(4, first),
+      row(5, ["EXHAUST AIR DAMPER", "D-3", "EAD", "", "\u25CF"]),
+      row(6, ["DISCHARGE AIR HUMIDITY", "DAH-1", "DAH", "", ""]),
+    ],
+  });
+
+  it("keeps its first point a row and its labels as printed", () => {
+    const t = scheduleTableFromODL(list(["COOLING VALVE V-1", "CLG-V1", "CLG-V1", "\u25CF", ""]), "05_MO_test.pdf#54", IDENTITY, {});
+    assert.ok(t, "the list must build");
+    assert.deepEqual(t!.headers.slice(0, 3), ["EQUIPMENT DESCRIPTION", "CONTROL POINT TAG", "ABBREVIATION"]);
+    assert.ok(!t!.headers.some((h) => /CLG|\u25CF/.test(h)), JSON.stringify(t!.headers));
+    assert.equal(t!.rows.length, 3, JSON.stringify(t!.rows.map((r) => r.key)));
+    assert.equal(t!.rows[0].cells["EQUIPMENT DESCRIPTION"]?.text, "COOLING VALVE V-1");
+  });
+});
+
 describe("scheduleTableFromODL: a caption drawn OUTSIDE the ruled grid still names the table (goal VECTORGRID_TABLE_BOXES.md, 2026-09-12)", () => {
   const IDENTITY = [1, 0, 0, 1, 0, 0];
   let nextId = 1;

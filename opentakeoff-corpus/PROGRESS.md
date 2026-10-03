@@ -266,6 +266,71 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### ALARM sections, header bands a column short, filled-square ticks, ticked first rows, air terminal grilles, glycol feeders; 033_MN, 014_MT, 030_NY, 019_FL and federal-mech re-keyed (2026-10-03)
+
+Rules (shared path; graph construction is shared by the UI and MCP, the compile by both):
+- `vectorGridAdapter.ts`: a face that opens with a lone ALARM(S) label spanning the grid, over a point name, continues
+  the same-grid points matrix directly above it when that matrix prints three or more type columns (AI, AO, BI, BO, DI,
+  DO, AV, BV). 033_MN's PUMP CONTROL POINTS: 11 → 17 points; its ALARM table is gone.
+- `vectorGridAdapter.ts`: a header band (refused: no keyed data rows) directly above a headerless data fragment (refused:
+  no header block above the data), whose every column edge is one of the data's, is put on the data's columns and
+  stacked; a label alone in a band column covering several data columns takes the one under its centre. And the
+  stacking gap tolerance is 40pt (from 30): a section label's line between two ruled blocks of one list. 019_FL's M8.5
+  AHU-1 point list: vectorgrid returns its band with the number and name columns as one (29 over 30 columns) and the
+  GLOBAL POINTS block 34pt below the AHU-1 points; nothing on the sheet was read, now one list of 69 points with
+  M8.3's own column names (COL1, POINT NAME, HARDWARE TAG ...).
+- `corpusTakeoff.mjs basPointName`: a points list whose rows the builder keyed by name and tick (a name printed twice)
+  names each point by its lead cell.
+- `corpusTakeoff.mjs BAS_TICK_RE`: a filled square (■, U+25A0) is a tick. 019_FL's (and federal-mech's) five BMS
+  POINT FUNCTION SCHEDULEs tick it under MAINTENANCE ALARM, CRITICAL ALARM, ALARM INSTRUCTIONS, ALARM LIMITS and TREND;
+  their 158 points read alarm 0, trend 0, now 82 and 103, every row read by eye on composites of the name, alarm and
+  trend columns (CHW 10/8, HHW 19/13, AHU-1 38/66, VAV 9/9, MISC 6/7). Glyph census of every cached and fresh graph's
+  points-list tick columns: X 3,750, ■ 1,798 (this drawing set only), ● 791, YES/NO and Yes/No words, N/A once.
+  The header rule's tick glyphs (sheetgraph `TICK_MARK_CELL_RE`) still exclude it; nothing needs it there.
+- `sheetgraph.ts`: a row printing a tick mark alone in a cell (dot, bullet, check) is a row of data, never a header
+  tier. 05_MO's sheet 54 AHU POINTS LIST: its first point (COOLING VALVE V-1, CLG-V1) had cleared the 40% header
+  vocabulary bar at exactly 2 of 5 texts (CLG, a ceiling's abbreviation) and was folded into the column names; the
+  same list on sheet 50 ticks a third column and fell under the bar. 05_MO BAS 110 → 111, its key's count.
+- `corpusTakeoff.mjs` GRD: AIR TERMINAL(S) [DEVICE] SCHEDULE alone (no UNIT or BOX) reads grille, register and diffuser
+  marks (SD, RG, EG, TG, LD, CD, S1, R-2 ...), never VAV-, TU-, CAV- (014_MT's EG-1, EG-2, RG-1). GLYCOL_MAKEUP: GLF- and
+  zone-lettered GF- marks under its own title (014_MT's GLF-A1).
+
+Censuses (cached + fresh graphs): tables titled ALARM(S): only 033_MN's; AIR TERMINAL titles without UNIT/BOX: only
+014_MT's (the others are VAV terminal units). Replays (base 95f4f10's code): 405 saved vectorgrid pages, only 033_MN p71,
+05_MO p54, 019_FL p21 (+69 points) and 016_NY p3 to p5 change (its DOOR, WINDOW and ROOM FINISH SCHEDULEs keep their
+titles, from bands overlapping their grids by 33pt; rows unchanged); 18,350 cached ODL tables, only 05_MO p54 (six
+cached copies). Census of the wider stacking over every saved reply: same-grid gaps between 30pt and an inch run
+31-39pt (019_FL p21, 009_FL p22, three legends that still build nothing) and then 52pt and more (009_FL p20, 015_VA
+p25, 013_MO p21's points-list sections stay apart: a candidate for a rule that reads a section label's line, not a
+wider tolerance); a band coarser than its data: 15 pairs, of which only 019_FL p21 is a band above headerless data.
+Compile A/B against 95f4f10 (corpusTakeoff only): 49 freshly built and 161 cached graphs, only 014_MT changes
+(+GLF-A1, EG-1, EG-2, RG-1).
+
+Re-keyed from renders: 033_MN (HVAC 36: AHU-6, 18 VAV boxes incl. VAV-C0C as printed, 3 exhaust fans, 2 pumps, 2 VFDs,
+1 suspended unit heater, 4 air device types, 5 wall louvers; 39 convectors have no family; BAS 51 with all eight
+fields), 014_MT (66: the old key lacked the condensing units, cabinet heaters, two coils, 17 control dampers, four
+louvers, the air separator, grilles and glycol feeder; ECUH-B1 to B7 print TYPE CABINET under ELECTRIC UNIT HEATER and
+count as UNIT_HEATER by title, as 096_IN's CUH rows do; three gas-fired steam generators have no family), 030_NY (49;
+the takeoff reads 45), 019_FL and federal-mech (one PDF under two names, byte-identical: 128 units, the old keys
+lacking the 23 grille, register and diffuser marks of M7.2 (S2-3 is not printed) and ET-1, ET-2; 158 BMS points over
+five lists numbered with gaps, 1-22 without 13 and 1-70 without 41, AI 59, AO 33, DI 41, DO 25, alarm 82, trend 103,
+every cell read by eye). WP1 at this batch's final code: 033_MN, 05_MO (111 points),
+014_MT, 019_FL and federal-mech PASS; 030_NY stays red on its two documented gaps.
+
+`reconcileWorkflow.test.mjs`'s Eglin 019 case was already red at 95f4f10 (not in `npm test`): CH-1's one plan tag is
+AMBIGUOUS, not verified against a symbol's geometry. With GRD keyed, its 23 air device types are AMBIGUOUS too (1 to
+61 unverified plan tags each, installed unknown). The case now asserts MATCH for the other 13 families (all MATCH,
+probed one by one) and pins those two families' AMBIGUOUS counts.
+
+030_NY's open gaps, next: (1) its DOAS HOT WATER HEATING / CHILLED WATER COOLING COIL faces are refused (`rowKeyOf`
+takes a facility-prefixed tag only with three segments after the facility, 001-FCU-01-CG06A; 001-DHC-01 has two, the
+shape the confirmed-building gate guards as 1-RH-1); a zero-padded facility number is no dimension, which may be the
+narrow rule; the coil family also needs DHC/DCC under a coil title. (2) Its HEAT PUMP UNIT SCHEDULE prints an LG
+split system's indoor 016-AC-01-16-12 and outdoor 016-CU-01-16-12 on one row: the split-pair reading (AS-144) is
+skipped under a title naming a family, and `markCoreForKeyRe` keeps the building prefix of a tag with a two-part room
+suffix. Not adopted yet: a row-level CABINET type moving a unit heater schedule's rows to CABINET_UNIT_HEATER (096_IN
+CUH-1 to 5, 014_MT ECUH-B1 to B7; 12 units, 2 sets).
+
 ### Abbreviated tick columns, glued and CONTROL POINTS captions, blank numbered lines; 028_TX re-keyed (2026-10-03)
 
 028_TX's key (from pipeline output) said DOAS 3, chiller 1, boiler 1, FAN 3, UNIT_HEATER 2, BAS 0. The renders: page 9

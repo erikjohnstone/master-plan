@@ -10052,6 +10052,8 @@ function odlBboxToProjectSpace(b: number[], pageViewportTransform: number[]): Bb
 }
 
 const ALL_HEADER_WORDS_ARR = [...ALL_HEADER_WORDS];
+/** A schedule cell holding a tick mark alone (a dot, bullet or check). */
+const TICK_MARK_CELL_RE = /^[\u25CF\u2022\u2713\u2714\u221A]$/;
 
 // B-38: a closed set of unit/leaf-tier labels a table's own bottom header
 // tier prints instead of a per-column NAME — physical units and the handful
@@ -11022,6 +11024,15 @@ function scheduleTableFromODLRead(
     }
     const { fullCoverage, grouped } = classifyBodyRow(r, ownCells);
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
+    // A ROW THAT TICKS A COLUMN IS A ROW OF DATA. 05_MO's AHU POINTS LIST
+    // (sheet 54) prints its first point, COOLING VALVE V-1 | CLG-V1 | CLG-V1,
+    // with a dot under VALVE POSITION and GRAPHIC DISPLAY, right under its
+    // leaf labels. Two of its five texts read as header words (CLG, a
+    // ceiling's abbreviation), so it cleared the vocabulary bar, its values
+    // were folded into the column names and the list lost its first point;
+    // the same list on sheet 50 ticks a third column and fell under the bar.
+    // A header names its columns; it never prints a tick mark alone in one.
+    if (!headerCandidateChecked && [...ownCells].some((cl) => TICK_MARK_CELL_RE.test(odlCellText(cl).trim()))) break;
     if (!headerCandidateChecked) {
       const { texts, hitRate } = headerVocabHitRate(ownCells);
       const unitHit = opts.unitLabelSubHeader ? unitLabelHitRate(ownCells) : null;

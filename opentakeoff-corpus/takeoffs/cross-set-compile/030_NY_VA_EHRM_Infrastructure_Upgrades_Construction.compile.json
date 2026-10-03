@@ -3,14 +3,23 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 multipart NY VA EHRM \u2014 FCU/pumps/GRD (rejoined).",
+  "notes": "Vol2 multipart NY VA EHRM \u2014 FCU/pumps/GRD (rejoined). [RE-KEYED 2026-10-03 from the render] M-601 (sheet 84): TWO-PIPE FAN COIL UNIT SCHEDULE 001-FCU-01-CG06A to 001-FCU-13-C907, 002-FCU-01-BT03 and ROME-FCU-01-G120 (14); HEAT PUMP UNIT SCHEDULE one LG split system, its wall mounted indoor unit 016-AC-01-16-12 and outdoor unit 016-CU-01-16-12 on one row (FCU +1 and CONDENSING_UNIT +1, each half by its own mark as a split system's schedule is read: FCU 15); CRAC UNIT SCHEDULE 001-CRAC-01-DC2, -02 (CRAH 2); CRAC AIR-COOLED CONDENSING UNIT 001-CU-01-ROOF, -02 (CONDENSING_UNIT 3 with the heat pump's); GRILLE AND DIFFUSER SCHEDULE types EG, RG, SG (GRD 3). M-602 (sheet 85): DOAS 001-DOAS-01-DC9; DOAS HOT WATER HEATING COIL 001-DHC-01 and CHILLED WATER COOLING COIL 001-DCC-01 (DUCT_MOUNTED_COIL 2); DOAS HEAT EXCHANGER 001-DHX-01; HUMIDIFIER 001-SH-01-DC9; LOUVER 001-L-01-DC9; DEHUMIDIFIER 001-DH-01-DC2, -02. M-603 (sheet 86): HOT WATER UNIT HEATER 001-UH-01-DC5, -DC9; CONDENSATE PUMP 001-FCP-01-CG06A ... ROME-FCP-01-G120 (14). P-601 (sheet 23): BOOSTER PUMP 001-BP-01-DC9, -02 (domestic water; PUMP 16 with the condensate pumps). Not keyed (no family): the CHILLED BEAM SCHEDULE's 001-CB-01 to -05, the pressure relief (2), blast suppression (2), fire (2) and fire/smoke (1) dampers, GRAVITY VENTILATOR 001-GV-01 to -03, heat trace (5), steam traps (3), the domestic drawdown tank and roof drains. The takeoff reads 45 of these 49: the two DOAS coil schedules' faces are refused (their two-segment facility-prefixed tags, 001-DHC-01, are no row key) and the heat pump schedule's halves are read by no family (a split pair under a heat pump title; tags carry a two-part room suffix). No points list (BAS 0). The earlier key (FCU 1, PUMP 14, GRD 3) was written from pipeline output.",
   "categories": {
-    "FCU": 1,
-    "PUMP": 14,
-    "GRD": 3
+    "DOAS": 1,
+    "FCU": 15,
+    "CONDENSING_UNIT": 3,
+    "PUMP": 16,
+    "UNIT_HEATER": 2,
+    "CRAH": 2,
+    "DEHUMIDIFIER": 2,
+    "HUMIDIFIER": 1,
+    "HEAT_EXCHANGER": 1,
+    "DUCT_MOUNTED_COIL": 2,
+    "GRD": 3,
+    "LOUVER": 1
   },
   "totals": {
-    "items": 18
+    "items": 49
   },
   "bas_points": {
     "rows": 0

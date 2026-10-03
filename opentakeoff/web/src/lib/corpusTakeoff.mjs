@@ -2626,7 +2626,9 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /GLYCOL\s+MAKE[\s\-]*UP(?:\s+UNIT)?(?:\s+SCHEDULE)?|\bGMU\b.*SCHEDULE|GLYCOL\s+FEED(?:ER)?(?:\s+(?:SYSTEM|UNIT))?/i,
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^GMU[\s\-]/i,
-    titledKeyRe: /^G(?:F|FS)[\s\-]?\d/i,
+    // Under its own title, a feeder's GF-, GFS- or GLF- mark, lettered for
+    // its building or wing (014_MT's AUTOMATIC GLYCOL FEEDER GLF-A1).
+    titledKeyRe: /^G(?:L?F|FS)(?:[\s\-]+[A-Z]{1,2})?[\s\-]*\d/i,
   },
   // Basket / y-strainers (STR-*). Do not claim FTR-* (fin-tube or filter panels).
   STRAINER: {
@@ -2774,6 +2776,13 @@ export const HVAC_FAMILY_SPECS = {
     // (082_OR's AIR DISTRIBUTION: LS-1, RG-1, SD-1 ...).
     titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|GRILLE\s+SCHEDULE|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSERS?[,\s]*REGISTERS?[,\s]*(?:&|AND)?\s*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+DEVICE\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND|\/)\s*OUTLETS?|^\s*AIR\s+DISTRIBUTION(?:\s+DEVICES?)?(?:\s+SCHEDULE)?\s*$/i,
     yieldKeyRe: /^(?:LV|LVR)[\s\-]?\d/i,
+    // An air terminal schedule that names no unit or box (014_MT's AIR
+    // TERMINAL SCHEDULE: EG-1, EG-2 exhaust grilles, RG-1 a return grille)
+    // lists the air outlets and inlets; "air terminal" also names a VAV box,
+    // so under that title only a grille's, register's or diffuser's mark is
+    // one (an AIR TERMINAL UNIT or BOX schedule is the VAV family's).
+    altTitleRe: /^\s*AIR\s+TERMINALS?(?:\s+DEVICES?)?\s+SCHEDULES?\s*$/i,
+    altKeyRe: /^(?:[SRE][DGR]?|TG|L[DRS]|C[DG]|S[LSE]|SWG|SRG)[\s\-]*\d/i,
   },
   RANGE_HOOD: {
     titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE|SNORKEL\s+HOOD\s+SCHEDULE/i,
@@ -3442,6 +3451,18 @@ function isBasBlankNumberedRow(row) {
   return /^\d{1,3}$/.test(number) && String(row?.key ?? number).trim() === number;
 }
 
+/** A point's name, when the table builder keyed its row by its lead cell and
+ * a tick. A list that prints one name twice has no one column that tells its
+ * rows apart, so the builder keys every row from two (033_MN's PUMP CONTROL
+ * POINTS: PUMP-12 VFD FAULT is a status point and, under the list's ALARM
+ * label, an alarm; its rows key as "PUMP-12 STATUS X"). The tick is not part
+ * of the name the list prints. */
+function basPointName(row, table, tag) {
+  const lead = String(row?.cells?.[table?.headers?.[0]]?.text || "").replace(/\s+/g, " ").trim();
+  if (!lead || tag === lead || !tag.startsWith(`${lead} `)) return tag;
+  return BAS_TICK_RE.test(tag.slice(lead.length + 1).trim()) ? lead : tag;
+}
+
 /** A point's I/O type named at the end of a column label (DIGITAL INPUTS;
  * DDC HARD WIRED POINTS ANALOG OUTPUTS), or abbreviated as the label's last
  * word (028_TX's AI | AO | DI | DO columns, HARDWARE POINTS DI). */
@@ -3452,8 +3473,10 @@ const BAS_TYPE_ABBR_RE = /(?:^|\s)(AI|AO|BI|BO|DI|DO)$/i;
 const BAS_SOFT_LABEL_RE = /\b(?:BINARY|ANALOG|MULTI[\s-]?STATE|MULTISTAGE)\s+(?:VARIABLE|VALUE)S?$|(?:^|\s)(?:AV|BV|MV|MSV)$/i;
 /** A type column's label that says its points are wired to the controller. */
 const BAS_HARDWIRED_LABEL_RE = /\bHARD\s*-?\s*WIRED\b|\bHARDWARE\b|\bPHYSICAL\b|\bFIELD\s*I\s*\/?\s*O\b/i;
-/** A tick in a points matrix's cell. */
-const BAS_TICK_RE = /^(?:X|\u2713|\u2714|\u25CF|\u2022)$/i;
+/** A tick in a points matrix's cell: an X, a check, a dot, or a filled square
+ * (019_FL's BMS POINT FUNCTION SCHEDULEs tick ■ under TREND and their alarm
+ * columns). */
+const BAS_TICK_RE = /^(?:X|\u2713|\u2714|\u25CF|\u2022|\u25A0)$/i;
 
 function basLabelType(text) {
   const label = String(text || "").replace(/\s+/g, " ").trim();
@@ -3698,7 +3721,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       // "BI BI#") even when the cited MARK cell correctly reads "BI#".
       // Prefer the evidence-bearing cell so type counts, exports, and Agent
       // citations all refer to the same printed token.
-      const tag = String(cellText(row, /^MARK$/i) || row.key || "").trim();
+      const tag = basPointName(row, table, String(cellText(row, /^MARK$/i) || row.key || "").trim());
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
       if (isBasSectionLabelRow(row)) continue;
