@@ -10,7 +10,7 @@
 import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, classifySheetRoleBySignals, sheetPlanViewTitle, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, stripBasPointSectionHeadingRows, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, classifySheetRoleBySignals, sheetPlanViewTitle, sheetViewTitles, viewKindAt, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBasPointFunctionSchedule, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, scheduleTableFromODL, sheetDrawingGroup, stripBasPointSectionHeadingRows, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow, type ODLTable, type ODLTableCell } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -304,6 +304,72 @@ test("sheetPlanViewTitle: a schedule sheet that also draws a plan keeps its sche
   // the extraction role is the signals' role wherever the plan-title pass decides
   const unknownPlan = { key: "p24", sheet_number: "M2.34", spans: [...notes(12), tsp("MECHANICAL LEVEL", 5477, 3946, 51), tsp("34 PLAN", 5627, 4003, 51)] };
   assert.deepEqual([classifySheetRole(unknownPlan).role, classifySheetRoleBySignals(unknownPlan).role], ["plan", "unknown"]);
+});
+
+// 053_VA's interstitial supply plan: a note naming the AIR DEVICE SCHEDULE
+// gives it the schedule role, and its "SHEET KEY NOTES:" heading, read as a
+// sheet list, hid its plan title, so its terminal unit tags went unswept.
+test("sheetPlanViewTitle: a sheet's keynotes heading is no sheet list; a sheet key, index or drawing list still is", () => {
+  const plan = (heading: string) => ({ key: "p7", sheet_number: "MH101", spans: [
+    ...notes(12), tsp("NECK/DUCT CONNECTION SPECIFIED IN THE AIR", 5100, 380, 19), tsp("DEVICE SCHEDULE.", 5432, 398, 19),
+    tsp(heading, 5498, 1304, 38), tsp("FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN", 300, 3700, 38),
+  ] });
+  for (const heading of ["SHEET KEY NOTES:", "SHEET KEY NOTE", "DRAWING KEY-NOTES", "SHEET KEYNOTES:"]) {
+    const sheet = plan(heading);
+    assert.equal(classifySheetRole(sheet).role, "schedule", heading);
+    assert.equal(sheetPlanViewTitle(sheet)?.text, "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN", heading);
+  }
+  for (const heading of ["MECHANICAL SHEET KEY", "SHEET INDEX", "DRAWING LIST"]) assert.equal(sheetPlanViewTitle(plan(heading)), null, heading);
+});
+
+// A demolition sheet that also draws its new work: 066_MT's M100 draws its
+// HVAC demolition plan beside its HVAC remodel plan, the existing (E) HP-2 on
+// one and the new HP-2 on the other, and every tag on it was a demolition
+// view; 01_NY's M103.1 is a new work plan its notes' "REFER TO DEMO PLANS"
+// line called demolition.
+test("sheetViewTitles / viewKindAt: a demolition sheet's own plan views, each tag in the view titled under it", () => {
+  // side by side: each title under its drawing at its left edge
+  const sideBySide = { key: "m100", sheet_number: "M100", spans: [
+    ...notes(12), tsp("FIRST FLOOR HVAC DEMOLITION PLAN", 718, 2765, 38), tsp("FIRST FLOOR HVAC REMODEL PLAN", 2742, 2795, 38),
+  ] };
+  assert.equal(classifySheetRole(sideBySide).role, "demolition");
+  const views = sheetViewTitles(sideBySide)!;
+  assert.deepEqual([views.plan.length, views.demolition.length], [1, 1]);
+  assert.equal(viewKindAt(views, 1890, 1679), "demolition", "(E) HP-2 on the demolition plan");
+  assert.equal(viewKindAt(views, 3778, 1977), "plan", "HP-2 on the remodel plan");
+  assert.equal(viewKindAt(views, 2560, 1500), "plan", "the remodel drawing reaches left of its title's text");
+  assert.equal(viewKindAt(views, 300, 1500), "demolition", "left of every title: the nearest title's view");
+  // stacked: the new work plan under the demolition plan
+  const stacked = { key: "s", sheet_number: "M101", spans: [
+    ...notes(12), tsp("LEVEL 1 HVAC DEMOLITION PLAN", 400, 1500, 38), tsp("LEVEL 1 HVAC NEW WORK PLAN", 400, 3100, 38),
+  ] };
+  const stackedViews = sheetViewTitles(stacked)!;
+  assert.equal(viewKindAt(stackedViews, 1500, 900), "demolition");
+  assert.equal(viewKindAt(stackedViews, 1500, 2400), "plan");
+  // a new work plan its notes call demolition draws no demolition view
+  const noteOnly = { key: "m103", sheet_number: "M103.1", spans: [
+    ...notes(12), tsp("DEMO PLANS FOR TEMPORARY EXHAUST DUCTWORK. INSTALL", 4000, 700, 20), tsp("THIRD FLOOR - HVAC - NEW WORK - PHASE 1", 300, 3100, 38),
+  ] };
+  assert.equal(classifySheetRole(noteOnly).role, "demolition");
+  const noteViews = sheetViewTitles(noteOnly)!;
+  assert.deepEqual([noteViews.plan.length, noteViews.demolition.length], [1, 0]);
+  assert.equal(viewKindAt(noteViews, 900, 900), "plan");
+  // a detail drawn under the new work plan is no plan view (041_IL's MH-102-3)
+  const withDetail = { key: "mh", sheet_number: "MH-102-3", spans: [
+    ...notes(12), tsp("THIRD FLOOR HVAC DEMOLITION PLAN", 2121, 2731, 38), tsp("THIRD FLOOR HVAC PLAN", 3847, 2731, 38),
+    tsp("AIR HANDLING UNIT DRAIN TRAP DETAIL1", 3847, 3830, 38),
+  ] };
+  const detailViews = sheetViewTitles(withDetail)!;
+  assert.deepEqual([detailViews.plan.length, detailViews.demolition.length, detailViews.other.length], [1, 1, 1]);
+  assert.equal(viewKindAt(detailViews, 4300, 2000), "plan");
+  assert.equal(viewKindAt(detailViews, 4300, 3400), "other", "a tag in the detail under the plan");
+  // a demolition title's first line reads as no plan view of its own
+  const twoLine = { key: "md", sheet_number: "MD-100", spans: [
+    ...notes(12), tsp("LEVEL 2 - MECHANICAL HVAC", 400, 3000, 38), tsp("DEMOLITION PLAN", 400, 3042, 38),
+  ] };
+  assert.equal(sheetViewTitles(twoLine), null);
+  // a demolition plan alone draws no plan view
+  assert.equal(sheetViewTitles({ key: "d", sheet_number: "MD101", spans: [...notes(12), tsp("FIRST FLOOR HVAC DEMOLITION PLAN", 400, 3000, 38)] }), null);
 });
 
 // AS-101: a demolition plan's title needs no PLAN word. 040_IL's five phase

@@ -12,7 +12,7 @@ import { tableRegionViaSidecar, tableStructureViaSidecar } from "../../web/src/l
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, classifySheetRoleBySignals, sheetPlanViewTitle, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, classifySheetRoleBySignals, sheetPlanViewTitle, sheetViewTitles, viewKindAt, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type SheetViewTitles, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
 import { pageRegions, type PageRegion } from "../../web/src/lib/controlIntent/zonePlan.ts";
 import type { AnswerEvent } from "../../web/src/lib/controlIntent/journal.ts";
@@ -3009,6 +3009,8 @@ export class Session {
           const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
           const h = Math.max(sp.y1 - sp.y0, 6);
           if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
+          // a demolition view beside a new work plan draws what is removed
+          if (this.outsidePlanViews(graph, sh.key, cx, cy)) continue;
           // Two real, distinct pairing shapes (see the function's own header
           // comment): a value stacked BELOW the tag, or a value beside it on
           // the SAME baseline in a two-cell box row ("CD-1 | 85" — real,
@@ -4279,18 +4281,58 @@ export class Session {
     keys = new Set<string>();
     for (const g of graph.sheets) {
       if (g.role === "plan") { keys.add(g.key); continue; }
+      if (g.role === "demolition") {
+        if (this.demolitionSheetViews(graph).has(g.key)) keys.add(g.key);
+        continue;
+      }
       if (g.role !== "schedule") continue;
-      const state = this.sheets.get(g.key);
-      if (!state) continue;
-      if (!state.spans) state.spans = textSpans(state.page);
-      const spans: GraphSpan[] = state.spans.map((span) => ({
-        str: span.str, x: span.x0, y: span.y0, w: span.x1 - span.x0, h: span.y1 - span.y0,
-        ...(span.rot ? { rot: span.rot } : {}),
-      }));
-      if (sheetPlanViewTitle({ key: g.key, sheet_number: state.sheetNumber, spans })) keys.add(g.key);
+      const sheet = this.sheetSpansOf(g.key);
+      if (sheet && sheetPlanViewTitle(sheet)) keys.add(g.key);
     }
     this.planViewCache.set(graph, keys);
     return keys;
+  }
+
+  /** A sheet's text as the sheet graph reads it, or null for a sheet not loaded. */
+  private sheetSpansOf(key: string): SheetSpans | null {
+    const state = this.sheets.get(key);
+    if (!state) return null;
+    if (!state.spans) state.spans = textSpans(state.page);
+    const spans: GraphSpan[] = state.spans.map((span) => ({
+      str: span.str, x: span.x0, y: span.y0, w: span.x1 - span.x0, h: span.y1 - span.y0,
+      ...(span.rot ? { rot: span.rot } : {}),
+    }));
+    return { key, sheet_number: state.sheetNumber, spans };
+  }
+
+  private demolitionViewsCache = new WeakMap<SheetGraph, Map<string, SheetViewTitles>>();
+  /** The demolition sheets that also draw their new work, with their views'
+   * titles (sheetViewTitles): 066_MT's M100 draws its HVAC demolition plan
+   * beside its HVAC remodel plan; 01_NY's M103.1 is a new work plan its
+   * notes' "REFER TO DEMO PLANS" line called demolition. Their plan views
+   * are swept as plans (planViewSheetKeys); their demolition, detail and
+   * other views stay views (outsidePlanViews), each tag in the view whose
+   * title is printed under it (viewKindAt). */
+  private demolitionSheetViews(graph: SheetGraph): Map<string, SheetViewTitles> {
+    let views = this.demolitionViewsCache.get(graph);
+    if (views) return views;
+    views = new Map();
+    for (const g of graph.sheets) {
+      if (g.role !== "demolition") continue;
+      const sheet = this.sheetSpansOf(g.key);
+      const titles = sheet ? sheetViewTitles(sheet) : null;
+      if (titles) views.set(g.key, titles);
+    }
+    this.demolitionViewsCache.set(graph, views);
+    return views;
+  }
+
+  /** Whether a point on a demolition sheet that also draws its new work lies
+   * outside its plan views: in a demolition view, or in a detail, section or
+   * other view drawn beside them; false on every other sheet. */
+  private outsidePlanViews(graph: SheetGraph, key: string, x: number, y: number): boolean {
+    const views = this.demolitionSheetViews(graph).get(key);
+    return !!views && viewKindAt(views, x, y) !== "plan";
   }
 
   /** A unit's mark drawn on the set's demolition plans (AS-101), read as the
@@ -4388,8 +4430,13 @@ export class Session {
         found = this.tagOccurrencesOnSheet(sh, variant, false, marks, "never");
       }
       const chars = printed.replace(/[^A-Z0-9]/gi, "").length;
+      // a demolition sheet that also draws its new work: its plan views are
+      // swept as installed work (planViewSheetKeys), only its demolition
+      // views are demolition views
+      const splitViews = role === "demolition" && this.demolitionSheetViews(graph).has(sh.key);
       for (const o of found) {
         if (regions.some((r) => o.cx >= r[0] && o.cx <= r[2] && o.cy >= r[1] && o.cy <= r[3])) continue;
+        if (splitViews && !this.outsidePlanViews(graph, sh.key, o.cx, o.cy)) continue;
         if (!viewLegible(sh.spans ?? [], o.bbox, chars)) continue;
         if (!viewPrintsMarkAsRow(sh.spans ?? [], o.bbox, printed)) continue;
         out.push({ sheet: sh.key, role, at: [round1(o.cx), round1(o.cy)], bbox: Session.wireBox(o.bbox) });
@@ -4930,14 +4977,16 @@ export class Session {
     }
     // A tag inside a schedule is its text (scheduleRegionsOn), never a
     // placement, on a plan sheet with a corner schedule as on a schedule
-    // sheet's own plan view.
+    // sheet's own plan view; nor is a tag in a demolition view beside a new
+    // work plan (outsidePlanViews), the existing unit it removes.
     const regionsBySheet = new Map<string, Bbox[]>();
     const outsideTables = (sh: SheetState, found: TagOcc[]): TagOcc[] => {
       let regions = regionsBySheet.get(sh.key);
       if (!regions) regionsBySheet.set(sh.key, regions = this.scheduleRegionsOn(graph, sh.key));
-      return regions.length
+      const kept = regions.length
         ? found.filter((o) => !regions!.some((r) => o.cx >= r[0] && o.cx <= r[2] && o.cy >= r[1] && o.cy <= r[3]))
         : found;
+      return kept.filter((o) => !this.outsidePlanViews(graph, sh.key, o.cx, o.cy));
     };
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
       outsideTables(sh, this.tagOccurrencesOnSheet(sh, key, airDeviceTable, markVocab, setMarkVocab));
@@ -8907,6 +8956,7 @@ export class Session {
       for (const span of sheet.spans) {
         const match = pattern.exec(span.str);
         if (!match) continue;
+        if (this.outsidePlanViews(graph, sheet.key, (span.x0 + span.x1) / 2, (span.y0 + span.y1) / 2)) continue;
         const level = match[1].toUpperCase();
         const key = `${tag.trim().toUpperCase()}\0${level}`;
         if (!byLevel.has(key)) {

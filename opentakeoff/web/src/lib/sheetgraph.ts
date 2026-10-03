@@ -586,8 +586,10 @@ function enlargedPlanTitle(sheetNumber: string | null | undefined, phrases: Arra
 const PLAN_TITLE_DEFERS_TO = new Set<SheetRole>(["schedule", "demolition", "plan"]);
 // A sheet list prints other sheets' titles ("M211 FIRST FLOOR - SECTOR A -
 // HVAC" in a legend sheet's SHEET KEY), so a page carrying one never takes
-// its role from a plan title.
-const SHEET_LIST_TITLE_RE = /\b(?:SHEET|DRAWING)S?\s+(?:INDEX|LIST|KEY|SCHEDULE)\b|\b(?:INDEX|LIST)\s+OF\s+(?:DRAWINGS|SHEETS)\b/;
+// its role from a plan title. A sheet's own keynotes list no sheets: "SHEET
+// KEY NOTES" is "SHEET KEYNOTES" spelled apart (053_VA's interstitial supply
+// plan, whose terminal unit tags went unswept).
+const SHEET_LIST_TITLE_RE = /\b(?:SHEET|DRAWING)S?\s+(?:INDEX|LIST|KEY(?![\s-]*NOTES?\b)|SCHEDULE)\b|\b(?:INDEX|LIST)\s+OF\s+(?:DRAWINGS|SHEETS)\b/;
 
 /** A plan view's own title on a sheet, whatever role the signals give it: a
  * plan title with qualifiers or a level-and-discipline title, printed as a
@@ -608,6 +610,73 @@ export function sheetPlanViewTitle(sheet: SheetSpans): Evidence | null {
       && (PLAN_TITLE_WITH_QUALIFIERS_RE.test(u) || isLevelDisciplineTitle(u));
   }) ?? enlargedPlanTitle(sheet.sheet_number, phrases);
   return title ? { sheet: sheet.key, text: title.text, bbox: title.bbox } : null;
+}
+
+// A demolition view's own title: a demolition plan's, never a notes block's
+// heading over it ("DEMOLITION PLAN NOTES") nor a detail's or legend's.
+const DEMOLITION_VIEW_TITLE_RE = /\b(?:DEMOLITION|DEMO)\s+PLANS?\b/;
+const NOT_A_VIEW_TITLE_RE = /\b(?:NOTES?|KEYNOTES?|LEGENDS?|SCHEDULES?|DETAILS?|SECTIONS?|ELEVATIONS?|DIAGRAMS?|RISERS?|KEY\s+PLAN)\b/;
+// A view that is neither plan nor demolition plan: a detail, section,
+// elevation, diagram or riser drawn on the same sheet ("STEAM HUMIDIFIER
+// PIPING DETAIL", "AIR HANDLING UNIT DRAIN TRAP DETAIL1").
+const OTHER_VIEW_TITLE_RE = /\b(?:DETAIL|SECTION|ELEVATION|DIAGRAM|RISER|SCHEMATIC|ISOMETRIC)/;
+
+export interface SheetViewTitles { plan: Bbox[]; demolition: Bbox[]; other: Bbox[] }
+
+/** The views a demolition sheet draws when it also draws its new work: the
+ * title-height titles (sheetPlanViewTitle's) of its plan views, of its
+ * demolition views and of its other views (details, sections...), on a sheet
+ * that prints a plan view's title; null on a sheet that prints none.
+ * 066_MT's M100 draws its FIRST FLOOR HVAC DEMOLITION PLAN beside its FIRST
+ * FLOOR HVAC REMODEL PLAN, the existing (E) HP-2 on one and the new HP-2 on
+ * the other; 01_NY's M103.1 is a new work plan alone, called demolition by
+ * its notes' "...REFER TO DEMO PLANS FOR TEMPORARY EXHAUST DUCTWORK" line.
+ * viewKindAt reads which view a point is in. */
+export function sheetViewTitles(sheet: SheetSpans): SheetViewTitles | null {
+  const phrases = titleHeightPhrases(sheet);
+  if (!phrases) return null;
+  const plan: Bbox[] = [], demolition: Bbox[] = [], other: Bbox[] = [];
+  for (const { text, bbox } of phrases) {
+    const u = norm(text).replace(/\s+/g, " ");
+    if (u.length < 4 || u.length > 60 || REFERENCE_RE.test(u)) continue;
+    if ((DEMOLITION_VIEW_TITLE_RE.test(u) || isLevelDisciplineDemolitionTitle(u)) && !NOT_A_VIEW_TITLE_RE.test(u)) demolition.push(bbox);
+    else if (PLAN_TITLE_WITH_QUALIFIERS_RE.test(u) || isLevelDisciplineTitle(u)) plan.push(bbox);
+    else if (OTHER_VIEW_TITLE_RE.test(u) && !/\b(?:NOTES?|KEYNOTES?|LEGENDS?|SCHEDULES?)\b/.test(u)) other.push(bbox);
+  }
+  if (!plan.length) {
+    const enlarged = enlargedPlanTitle(sheet.sheet_number, phrases);
+    if (enlarged) plan.push(enlarged.bbox);
+  }
+  // A demolition title's own first line is no plan title: "LEVEL 2 -
+  // MECHANICAL HVAC" over "DEMOLITION PLAN" (011_IL's MD-100).
+  const overlaps = (a: Bbox, b: Bbox) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+  const own = plan.filter((b) => !demolition.some((d) => overlaps(b, d)) && !other.some((d) => overlaps(b, d)));
+  return own.length ? { plan: own, demolition, other } : null;
+}
+
+/** Which of a sheet's views (sheetViewTitles) a point is in. A view's title
+ * is printed under its drawing at its left edge, the drawing reaching a few
+ * title heights left of the title's text (its view number bubble), so a
+ * point is in the view of the nearest title below it that starts left of it,
+ * and among the titles of one row, the one furthest right; a point no title
+ * is below and left of is in the nearest title's view. */
+export function viewKindAt(views: SheetViewTitles, x: number, y: number): "plan" | "demolition" | "other" {
+  if (!views.demolition.length && !views.other.length) return "plan";
+  const titles = [
+    ...views.plan.map((b) => ({ b, kind: "plan" as const })),
+    ...views.demolition.map((b) => ({ b, kind: "demolition" as const })),
+    ...views.other.map((b) => ({ b, kind: "other" as const })),
+  ];
+  const cy = (b: Bbox) => (b[1] + b[3]) / 2;
+  const h = (b: Bbox) => Math.max(1, b[3] - b[1]);
+  const candidates = titles.filter(({ b }) => cy(b) >= y && b[0] - 6 * h(b) <= x);
+  if (candidates.length) {
+    const nearest = Math.min(...candidates.map(({ b }) => cy(b)));
+    const row = candidates.filter(({ b }) => cy(b) - nearest <= 2 * h(b));
+    return row.reduce((best, t) => (t.b[0] > best.b[0] ? t : best)).kind;
+  }
+  const dist = ({ b }: { b: Bbox }) => Math.hypot(Math.max(b[0] - x, 0, x - b[2]), Math.max(b[1] - y, 0, y - b[3]));
+  return titles.reduce((best, t) => (dist(t) < dist(best) ? t : best)).kind;
 }
 
 /** The phrases printed as a title on a sheet: among its largest text (at

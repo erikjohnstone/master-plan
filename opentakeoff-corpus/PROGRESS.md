@@ -77,6 +77,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | ce83ccb, fbeac08, 4b6049f, 95f4f10, 04d6d4b, 4c27684, fa2b857, b40444b, 4e864d5 | BAS points lists: I/O sections, glued captions, ticked matrices, abbreviated tick columns, ALARM sections, short header bands, filled-square ticks, policy tables, seam-continued faces, direction-first types, bare TYPE columns, an I/O list's unwired devices |
 | 9b6a05a, de3ada9, 87c3149, 56e73fc | Temporary units (AS-157); split pairs under family-naming titles; convectors and dotted marks; rated inputs, luminaire schedules, stacked marks |
 | 249d98b, aad2c5c | Keys re-keyed from the renders; the reviewed-corrections overlay folded into the keys |
+| 2952ce3, ce0b768, 58f6cb9, 0d229c6, ea2acad | Keys re-keyed from the renders (068_US, 18_OR, 053_VA, 01_NY and five pipeline sets) and stale reconcile expectations corrected; a pump lettered pump-first (PCH-n) on an untitled table; a silencer schedule titled by its word alone |
 
 ## Known limits (documented, not fixed)
 
@@ -131,6 +132,11 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 
 ## Known failing tests (pre-existing, not from this goal's work)
 
+- MCP `reconcileWorkflow` "Vol2 WEAK leftovers": 067_CA (walled; totals only) holds 1 HEAT_EXCHANGER reconcile row
+  against its key's 2 (a key written at 6fabaeb, 2026-09-13). The takeoff reads 1 on its graph built at 09:02 on
+  2026-10-03, before that day's graph-side edits, as on one built at the current code. Not investigated (a walled
+  set: no row reads, no renders), and the key is not edited to pass. The test's other sets pass (033_MN; 066_MT,
+  moved to its own test when its remodel plan was swept); 013_MO now runs before 067_CA.
 - MCP `conformance.test.ts` "sheet graph (#87) … find_schedule": room 134's EAST finish no longer chains to its
   material-schedule definition (`SMOKEY MOUNTAIN AC-18` expected, undefined). Fails identically at the PR #108
   merge `4255465`, before any of this goal's commits. Cause (2026-10-03): the MATERIAL SCHEDULE's WALLS box prints
@@ -357,6 +363,32 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   SCHEDULE, whose two EH-4 rows are two heaters (STORAGE 134, Qmark MUH03; OFFICE 127, Qmark AWH series): a duplicated
   mark, keyed by mark (UNIT_HEATER 4) and documented as a ceiling. Counting or flagging every such row would add 25
   false units or notices to catch 1; not adopted.
+- 053_VA's TU26-40 (the one terminal unit of 21 that read schedule-only) is tagged only on MH103, the FIRST FLOOR
+  INTERSTITIAL HVAC SUPPLY PLAN. MH103 and MH104 (the exhaust/return plan) each print the note "NECK/DUCT CONNECTION
+  SPECIFIED IN THE AIR DEVICE SCHEDULE.", whose second line gives the sheet the schedule role (0.25); a schedule sheet
+  is swept when it prints its own plan title (AS-94), and both do, but both head their keynotes "SHEET KEY NOTES:",
+  which the sheet-list rule read as a SHEET KEY (a legend sheet's list of other sheets' titles), so their titles were
+  never read. KEY followed by NOTE(S) is no longer a sheet list. A census over every page of the 115 keyed sets (4,799
+  pages, 170 carrying a sheet-list heading under the old rule): only MH103 and MH104 change, both gaining their plan
+  view, and no page's role changes, so no graph changes. 053_VA on its saved graph: VAV 20 MATCH + 1 SCHEDULE_ONLY ->
+  21 MATCH (TU26-11, -12 and -46 now cite the supply plan rather than the piping plan; each still 1); air devices and
+  HHW valves unchanged. Its reconcile test now asserts the terminal units.
+- A demolition sheet that also draws its new work is read view by view. 066_MT's M100 draws its FIRST FLOOR HVAC
+  DEMOLITION PLAN, the existing (E) HP-2 on it, beside its FIRST FLOOR HVAC REMODEL PLAN, which tags the new HP-2, the
+  humidifier H-1 and the air devices; the sheet's role is demolition, so none of them was swept and all six read
+  schedule-only (the WEAK leftovers test asserted that as a ceiling). 01_NY's M103.1 is a new work plan alone (THIRD
+  FLOOR - HVAC - NEW WORK - PHASE 1), given the demolition role by its notes' "REFER TO DEMO PLANS ..." line. Now a
+  demolition-role sheet that prints a plan view's own title is swept like a plan (Session.planViewSheetKeys), except
+  what lies in its demolition views and in the details and sections beside them: each text belongs to the view whose
+  title is printed under it at its left (sheetViewTitles / viewKindAt), and the sweep, count_marks, the installation
+  notes and the demolition-view links all read it so. Census over every keyed set's demolition-role pages: 54 print a
+  plan view's own title (20 on 13 open sets, 34 on 4 walled ones); on the open ones 71 scheduled-mark texts lie in
+  plan views, 3 in demolition views and 5 in details. Reconcile A/B on saved graphs, 13 affected open sets: only
+  053_VA (above) and 066_MT change (HP-2, H-1, S-1, S-2, R-1, T-1: schedule-only -> MATCH on M100; HP-2 once, its (E)
+  unit on the demolition plan not counted). 01_NY alone: GRD 8 MATCH, 2 schedule-only, 1 ambiguous -> 11 MATCH, the
+  Phase 1 plan's air devices now counted with Phase 2's (two areas of the floor, checked on the renders); 13 terminal
+  units now cite M103.1, each still 1. 041_IL's MH-102-3 (a humidifier piping detail under its new plan) and 031_MO,
+  039_TX, 050_IL, 052_IL, 061_IA, 073_MT, 077_MT, 080_CA, 095_UT and 15_IA: unchanged. 066_MT has its own test now.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

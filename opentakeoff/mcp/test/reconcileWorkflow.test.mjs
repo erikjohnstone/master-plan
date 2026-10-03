@@ -685,7 +685,7 @@ test("Vol2 warehouse 031: GRD partial 12 MATCH · 47 SCHEDULE_ONLY", async (t) =
   assert.equal(key.categories.GRD, 59);
 });
 
-test("Vol2 VA ER 053: HHW valves honest SCHEDULE_ONLY; air device types tagged, count unverified", async (t) => {
+test("Vol2 VA ER 053: terminal units all MATCH; HHW valves honest SCHEDULE_ONLY; air device types tagged, count unverified", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "053_VA_Renovate_Expand_Emergency_Room_System_VA.compile.json"),
@@ -701,6 +701,9 @@ test("Vol2 VA ER 053: HHW valves honest SCHEDULE_ONLY; air device types tagged, 
   await assertFamilyStatusCounts(session, graph, key, "GRD", {
     ambiguous: key.categories.GRD,
   });
+  // TU26-40 is tagged only on the interstitial supply plan (page 7), whose note
+  // names the AIR DEVICE SCHEDULE and whose SHEET KEY NOTES is no sheet list.
+  await assertFamilyAllMatch(session, graph, key, "VAV");
 });
 
 test("Vol2 Salinity Lab 023: chiller plant honest SCHEDULE_ONLY", async (t) => {
@@ -885,12 +888,30 @@ test("Vol2 Bldg 615 reno 028: plant families honest SCHEDULE_ONLY", async (t) =>
   }
 });
 
-test("Vol2 WEAK leftovers: honest SCHEDULE_ONLY ceilings (066/033/067/013)", async (t) => {
+// M100 draws its FIRST FLOOR HVAC DEMOLITION PLAN, the existing (E) HP-2 on
+// it, beside its FIRST FLOOR HVAC REMODEL PLAN, which tags the new HP-2, H-1
+// and the air devices; the sheet's role is demolition, and only its remodel
+// plan's tags are installed work.
+test("Vol2 Barnard lithography 066: heat pump, humidifier and air devices MATCH on the remodel plan beside the demolition plan", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["HEAT_PUMP", "HUMIDIFIER", "GRD"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HEAT_PUMP");
+  const { rows } = await reconcileScheduleFamilyWithSweeps(session, graph, needle, { evaluationFast: true });
+  assert.equal(rows[0].installed_qty, 1, "HP-2 once: the demolition plan's (E) HP-2 is the unit it replaces");
+});
+
+test("Vol2 WEAK leftovers: honest SCHEDULE_ONLY ceilings (033/013/067)", async (t) => {
   const cases = [
-    ["066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.compile.json", ["HEAT_PUMP", "HUMIDIFIER", "GRD"]],
     ["033_MN_VA_Project_656_18_301_Construct_Replace.compile.json", ["AHU", "PUMP"]],
-    ["067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.compile.json", ["HEAT_EXCHANGER", "GRD"]],
     ["013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.compile.json", ["VARIABLE_FREQUENCY_DRIVE"]],
+    ["067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.compile.json", ["HEAT_EXCHANGER", "GRD"]],
   ];
   for (const [file, families] of cases) {
     const ctx = await loadKeySessionOrSkip(t, resolve(CROSS, file));

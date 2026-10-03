@@ -1,5 +1,23 @@
 # Changelog
 
+- **A demolition sheet that also draws its new work.** A sheet whose titles or notes call it demolition was read
+  whole as demolition views, so units tagged on the new work plan beside its demolition plan were never swept as
+  installed. 066_MT's M100 draws its FIRST FLOOR HVAC DEMOLITION PLAN, the existing (E) HP-2 on it, beside its
+  FIRST FLOOR HVAC REMODEL PLAN, which tags the new HP-2, the humidifier H-1 and the air devices: all six read
+  schedule-only. 01_NY's M103.1 is a new work plan (THIRD FLOOR - HVAC - NEW WORK - PHASE 1) whose notes' "REFER TO
+  DEMO PLANS FOR TEMPORARY EXHAUST DUCTWORK" line gave it the demolition role. A demolition sheet that prints a plan
+  view's own title is now read view by view: each tag belongs to the view whose title is printed under it at its
+  left (the nearest title row below the tag, and in it the right-most title starting left of it). Tags in its plan
+  views are installed work. Tags in its demolition views, and in details or sections beside them, stay views of the
+  unit, never installed. 066_MT's HP-2, H-1 and four air devices now MATCH; HP-2 counts once, since the (E) HP-2 it
+  replaces is on the demolition plan. 01_NY's D-5, D-6 and R-1 MATCH on M103.1.
+- **A sheet's keynotes heading is no sheet list.** A page that prints a sheet list (SHEET INDEX, DRAWING LIST, a
+  legend sheet's SHEET KEY) never takes a plan view from its titles, since the list prints other sheets' titles; and
+  "SHEET KEY NOTES:" read as one. 053_VA's interstitial supply and exhaust/return plans (MH103, MH104) head their
+  keynotes that way, and a note naming the AIR DEVICE SCHEDULE gives each the schedule role, so neither plan was swept
+  and TU26-40, tagged only on the supply plan, read as scheduled but not drawn. KEY followed by NOTE or NOTES no longer
+  reads as a sheet list. 053_VA's 21 terminal units now all match their plan tags. Over 4,799 pages of 115 keyed sets
+  only those two pages change, and no sheet's role changes.
 - **A silencer schedule titled by its word alone.** 01_NY's M701 titles each schedule by its word (PUMPS, FANS, SOUND
   ATTENUATORS), and the silencer family read only titles ending in SCHEDULE, so its SA-1 (Price PERM84/8A on AHU-1's
   return) was no unit. A title that is only SOUND ATTENUATORS, SILENCERS or SOUND TRAPS now reads as one, as PUMPS and
