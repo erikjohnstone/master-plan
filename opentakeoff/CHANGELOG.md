@@ -1,5 +1,16 @@
 # Changelog
 
+- **Points lists ticked under abbreviated columns; captions that lost a space or say CONTROL POINTS; blank
+  numbered lines.** 028_TX's BAS INPUT/OUTPUT POINT LISTs head their tick columns AI | AO | DI | DO | ALARM, or group
+  them as HARDWARE POINTS (AI, AO, DI, DO) and SOFTWARE POINTS (AV, BV, TREND, ALARM) over a label row, as 033_MN's VAV,
+  exhaust fan, unit heater and pump lists do. The tick rule read full words only; it now reads a type abbreviated as a
+  label's last word (DI and DO as BI and BO), AV, BV and MV as software values (soft), and a type under HARDWARE POINTS
+  as hardwired. One 028_TX list's caption prints POINTLIST without its space and 033_MN captions its pump list PUMP
+  CONTROL POINTS: both now read as points lists. A numbered row printing nothing but its number, its key, is a blank line,
+  not a point (028_TX's outdoor sensor list, rows 4 to 6). Over 42 freshly built and 158 cached graphs only 028_TX and
+  033_MN change, their BAS only: 028_TX 183 untyped rows → 190 (AI 37, AO 19, BI 24, BO 32; alarm 57, trend 31,
+  hardwired 4, soft 15), every point checked by eye on its render and re-keyed, with the 23 fan coils and 16 silencer
+  rows its key lacked; 033_MN 37 → 45 (its 3 label rows out, its 11 pump points in), not yet re-keyed.
 - **A temporary unit is its family's unit (AS-157).** 05_MO's phased east wing schedules a temporary air handler
   1-AC-36TEMP beside 1-AC-36, its coils 1-CC-36TEMP and 1-SHC-36TEMP and its fans 1-SF-36TEMP and 1-EF-36TEMPA to C,
   each on its own row. A short mark's number ended in at most one letter, so the building number before them was never

@@ -2,19 +2,29 @@
   "set_id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 Bldg 615 \u2014 DOAS OUTSIDE AIR + chiller/boiler/UH/FAN.",
+  "notes": "[MEAT] Vol2 Bldg 615 \u2014 DOAS OUTSIDE AIR + chiller/boiler/UH/FAN. [RE-KEYED 2026-10-03 from the render] Page 9: CHILLED WATER FAN COIL UNIT SCHEDULE 23 (FCC 1-1, 1-2, FCU 1-3 to 1-9, FCU 2-1, FCC 2-2 to 2-7, FCU 2-8, FCC 2-9 to 2-12, FCU 2-13, 2-14); DEDICATED OUTSIDE AIR SYSTEM DOAS-1 to 3; BOILER B-1; UNIT HEATER UH-1 & UH-2 (one row, two units); AIR-COOLED CHILLER CH-1; EXHAUST FAN EF-1 to 3. Page 1: NOISE CONTROL DUCT SILENCER SCHEDULE, 16 rows named by location and airflow (no marks), each with a QTY of 1 or 2 (23 silencers): the takeoff counts the rows and carries each row's QTY as its scheduled quantity; the EXTERNAL STATIC PRESSURE SCHEDULE beside it lists units already counted. BAS: BAS INPUT/OUTPUT POINT LISTs on pages 2, 3, 4, 6, 7 and 8 (page 5 is sequences only), 190 points, each ticking X under AI / AO / DI / DO (DI and DO read as BI and BO), AV / BV (software values), TREND and ALARM: AI 37, AO 19, BI 24, BO 32, alarm 57, trend 31; the meter and outdoor sensor lists group AI..DO under HARDWARE POINTS (4 hardwired) and AV..ALARM under SOFTWARE POINTS (15 soft, the electric meter's values). Every point checked by eye. One list's caption prints POINTLIST without its space; the outdoor sensor list's numbered rows 4 to 6 are blank, not points. The earlier key (no FCU, no silencers, BAS 0) was written from pipeline output.",
   "categories": {
     "DOAS": 3,
+    "FCU": 23,
     "AIR_COOLED_CHILLER": 1,
     "BOILER": 1,
     "FAN": 3,
-    "UNIT_HEATER": 2
+    "UNIT_HEATER": 2,
+    "DUCT_SILENCER": 16
   },
   "totals": {
-    "items": 10
+    "items": 49
   },
   "bas_points": {
-    "rows": 0
+    "rows": 190,
+    "AI": 37,
+    "AO": 19,
+    "BI": 24,
+    "BO": 32,
+    "alarm": 57,
+    "trend": 31,
+    "hardwired": 4,
+    "soft": 15
   },
   "control_valves": {
     "items": 0

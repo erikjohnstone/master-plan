@@ -3351,9 +3351,10 @@ export function isBasPointsListTitle(title) {
   // A controls narrative may call an explanatory section "POINT LIST
   // TABLE" without printing a typed point grid. Keep that known narrative
   // caption out while accepting both common authored table spellings:
-  // POINTS LIST and POINT LIST.
-  if (/\bPOINT\s+LIST\s+TABLE\b/i.test(t)) return false;
-  if (/\bPOINTS?\s+LIST\b/i.test(t)) return true;
+  // POINTS LIST and POINT LIST, and either one whose space the text layer
+  // dropped (028_TX's BAS INPUT/OUTPUT POINTLIST beside its spaced twins).
+  if (/\bPOINT\s*LIST\s+TABLE\b/i.test(t)) return false;
+  if (/\bPOINTS?\s*LIST\b/i.test(t)) return true;
   if (/\bDDC\s+POINTS\b/i.test(t)) return true;
   if (/\bI\s*\/\s*O\s+LIST\b/i.test(t)) return true;
   if (/\bIO\s+LIST\b/i.test(t)) return true;
@@ -3367,6 +3368,9 @@ export function isBasPointsListTitle(title) {
   // "point list table" narratives — those lack the SCHEDULE token).
   if (/\bPOINTS?\s+FUNCTION\s+SCHEDULE\b/i.test(t)) return true;
   if (/\bPOINTS?\s+SCHEDULE\b/i.test(t)) return true;
+  // A list captioned by its points' kind: 033_MN's PUMP CONTROL POINTS,
+  // printed beside its EXHAUST FAN POINTS LIST in the same grid.
+  if (/\bCONTROL\s+POINTS\b/i.test(t)) return true;
   // A CAPTION THE TEXT LAYER PRINTS WITH NO SPACES. 021_XX's M-803 letters
   // its boiler list's caption with no space glyphs, so it reads
   // DDCCONTROLLERINPUTOUTPUTSUMMARY: the rules above refused it while the
@@ -3426,20 +3430,37 @@ function isBasSectionLabelRow(row) {
   return /\b(?:TAG|MARK)\b/i.test(header) && !/\bDESCRIPTION\b/i.test(header);
 }
 
+/** A numbered line of a points list left blank: its number, which is the
+ * row's key, is its one printed cell (028_TX's outdoor sensor list numbers
+ * rows 4 to 6 and prints nothing else on them). A point has a name, a type or
+ * a tick; this has none. A device row keyed by its tag (TE-300) whose one
+ * cell is a quantity is a point. */
+function isBasBlankNumberedRow(row) {
+  const printed = Object.values(row?.cells || {}).filter((cell) => String(cell?.text || "").trim());
+  if (printed.length !== 1) return false;
+  const number = String(printed[0].text).trim();
+  return /^\d{1,3}$/.test(number) && String(row?.key ?? number).trim() === number;
+}
+
 /** A point's I/O type named at the end of a column label (DIGITAL INPUTS;
- * DDC HARD WIRED POINTS ANALOG OUTPUTS). */
+ * DDC HARD WIRED POINTS ANALOG OUTPUTS), or abbreviated as the label's last
+ * word (028_TX's AI | AO | DI | DO columns, HARDWARE POINTS DI). */
 const BAS_TYPE_LABEL_RE = /\b(DIGITAL|BINARY|DISCRETE|ANALOG)\s+(INPUT|OUTPUT)S?$/i;
+const BAS_TYPE_ABBR_RE = /(?:^|\s)(AI|AO|BI|BO|DI|DO)$/i;
 /** A software point's kind named at the end of a column label (BACnet's
- * binary, analog and multistate values are software objects). */
-const BAS_SOFT_LABEL_RE = /\b(?:BINARY|ANALOG|MULTI[\s-]?STATE|MULTISTAGE)\s+(?:VARIABLE|VALUE)S?$/i;
+ * binary, analog and multistate values are software objects: AV, BV, MV). */
+const BAS_SOFT_LABEL_RE = /\b(?:BINARY|ANALOG|MULTI[\s-]?STATE|MULTISTAGE)\s+(?:VARIABLE|VALUE)S?$|(?:^|\s)(?:AV|BV|MV|MSV)$/i;
 /** A type column's label that says its points are wired to the controller. */
-const BAS_HARDWIRED_LABEL_RE = /\bHARD\s*-?\s*WIRED\b|\bPHYSICAL\b|\bFIELD\s*I\s*\/?\s*O\b/i;
+const BAS_HARDWIRED_LABEL_RE = /\bHARD\s*-?\s*WIRED\b|\bHARDWARE\b|\bPHYSICAL\b|\bFIELD\s*I\s*\/?\s*O\b/i;
 /** A tick in a points matrix's cell. */
 const BAS_TICK_RE = /^(?:X|\u2713|\u2714|\u25CF|\u2022)$/i;
 
 function basLabelType(text) {
-  const io = String(text || "").replace(/\s+/g, " ").trim().match(BAS_TYPE_LABEL_RE);
-  return io ? `${/^ANALOG$/i.test(io[1]) ? "A" : "B"}${/^INPUT$/i.test(io[2]) ? "I" : "O"}` : null;
+  const label = String(text || "").replace(/\s+/g, " ").trim();
+  const io = label.match(BAS_TYPE_LABEL_RE);
+  if (io) return `${/^ANALOG$/i.test(io[1]) ? "A" : "B"}${/^INPUT$/i.test(io[2]) ? "I" : "O"}`;
+  const abbr = label.match(BAS_TYPE_ABBR_RE)?.[1].toUpperCase();
+  return abbr ? abbr.replace(/^D/, "B") : null;
 }
 
 /**
@@ -3681,6 +3702,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
       if (isBasSectionLabelRow(row)) continue;
+      if (isBasBlankNumberedRow(row)) continue;
       if (row === tickColumns.labelRow) continue;
       // Some templates print a literal placeholder mark (BI#, BI##, BO#)
       // for a repeated or field-numbered point. It is still an authored

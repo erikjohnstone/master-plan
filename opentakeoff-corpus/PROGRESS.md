@@ -266,6 +266,32 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Abbreviated tick columns, glued and CONTROL POINTS captions, blank numbered lines; 028_TX re-keyed (2026-10-03)
+
+028_TX's key (from pipeline output) said DOAS 3, chiller 1, boiler 1, FAN 3, UNIT_HEATER 2, BAS 0. The renders: page 9
+schedules 23 fan coils (FCC/FCU 1-1 to 2-14), DOAS-1 to 3, B-1, UH-1 & UH-2 (one row), CH-1 and EF-1 to 3; page 1 a NOISE
+CONTROL DUCT SILENCER SCHEDULE of 16 rows by location, each with a QTY (23 silencers; the takeoff counts rows and carries
+QTY as each row's scheduled quantity). The takeoff read all 49 rows right; the key lacked FCU and DUCT_SILENCER.
+
+BAS: BAS INPUT/OUTPUT POINT LISTs on pages 2 to 4 and 6 to 8 tick X under AI | AO | DI | DO | ALARM, or under HARDWARE
+POINTS (AI, AO, DI, DO) and SOFTWARE POINTS (AV, BV, TREND, ALARM) printed as a label row. The tick rule (4b6049f) knew
+full words only, so all 183 rows read untyped. Rules (corpusTakeoff.mjs, compileBasTakeoff, shared path):
+- `basLabelType`: a type abbreviated as a label's last word (AI, AO, BI, BO; DI and DO read as BI and BO).
+- `BAS_SOFT_LABEL_RE`: AV, BV, MV, MSV are software values (soft). `BAS_HARDWIRED_LABEL_RE`: HARDWARE as well as HARD
+  WIRED, PHYSICAL, FIELD I/O.
+- `isBasPointsListTitle`: POINT(S) LIST with its space dropped (POINTLIST), and CONTROL POINTS (033_MN's PUMP CONTROL
+  POINTS beside its EXHAUST FAN POINTS LIST); a POINTLIST TABLE narrative stays out.
+- `isBasBlankNumberedRow`: a row whose one printed cell is its number, its key, is a blank line (a device row keyed by
+  its tag whose one cell is a quantity stays a point).
+
+Censuses: abbreviated tick matrices only in 028_TX (11 lists) and 033_MN (3 + the pump list) of 42 fresh and 158 cached
+graphs; blank numbered rows only 028_TX's 3 (73 sets); CONTROL POINTS titles: 033_MN's pump list and 045_FL's CONTROL
+POINTS SCHEDULE (already read as a POINTS SCHEDULE). A/B (base 9b6a05a): only 028_TX and 033_MN change, BAS only. 028_TX:
+183 → 190 rows, AI 37, AO 19, BI 24, BO 32, alarm 57, trend 31, hardwired 4 (the meters' and outdoor sensors' AI under
+HARDWARE POINTS), soft 15 (the electric meter's AV), every point checked by eye on pages 2, 3, 4, 6, 7, 8 (page 5 is
+sequences only); re-keyed with HVAC 49 and BAS as read. 033_MN: 37 → 45 rows (the three POINT NAME label rows out, the
+pump list's 11 in; the six alarm points under its ALARM label row come out as a separate table titled ALARM, next); its key (AHU 1, PUMP 2, BAS 0, [WEAK]) is next to re-key from its renders. Final A/B on the committed code: 45 fresh graphs, 2 changed (028_TX, 033_MN); 159 cached, 1 changed (028_TX). Web suite 4,233 tests, 0 failed; MCP test:bas and TAKEOFF-BAS-01 pass.
+
 ### A temporary unit is its family's unit (AS-157); 05_MO re-keyed; the fresh scoreboard's stale keys (2026-10-03)
 
 The fresh scoreboard (38 of 50 keyed sets rebuilt with current code; 12 still building) reads 16 units under and 308

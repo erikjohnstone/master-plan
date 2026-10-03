@@ -23,6 +23,11 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("I/O LIST WHITE STURGEON PLC"), true);
     assert.equal(isBasPointsListTitle("IO LIST PANEL A"), true);
     assert.equal(isBasPointsListTitle("DDC CONTROLLER INPUT/OUTPUT SUMMARY"), true);
+    // A caption whose POINT LIST lost its space in the text layer (028_TX); a
+    // narrative POINT LIST TABLE stays out however it is spaced.
+    assert.equal(isBasPointsListTitle("BAS INPUT/OUTPUT POINTLIST"), true);
+    assert.equal(isBasPointsListTitle("AHU-1 POINTLIST TABLE"), false);
+    assert.equal(isBasPointsListTitle("PUMP CONTROL POINTS"), true);
     assert.equal(isBasPointsListTitle("DDC CONTROLLER INPUT/OUTPUT LEGEND"), true);
     assert.equal(isBasPointsListTitle("CONTROLLER I/O SUMMARY"), true);
     assert.equal(isBasPointsListTitle("MISCELLANEOUS POINTS SCHEDULE"), true);
@@ -422,6 +427,63 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.deepEqual([gui.point_type, gui.wiring, gui.trend, gui.alarm], [null, null, "X", null]);
     const speed = items.find((item: { tag: string }) => item.tag === "PUMP 1 - SPEED")!;
     assert.deepEqual([speed.point_type, speed.point_type_status, speed.wiring], [null, "REFUSED_POINT_TYPE_CONFLICT", null]);
+  });
+
+  it("reads ticks under abbreviated type columns, a HARDWARE / SOFTWARE POINTS label row, and no blank numbered line (028_TX's BAS INPUT/OUTPUT POINT LISTs)", () => {
+    const X = { text: "X" };
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#2", number: 2 }],
+      tables: [
+        {
+          sheet: "set.pdf#2",
+          title: { text: "BAS INPUT/OUTPUT POINT LIST", bbox: [0, 0, 10, 10] },
+          headers: ["TAG", "POINT NAME", "AI", "AO", "DI", "DO", "ALARM"],
+          rows: [
+            { key: "1", cells: { TAG: { text: "1" }, "POINT NAME": { text: "FAN ON/OFF" }, DO: X } },
+            { key: "2", cells: { TAG: { text: "2" }, "POINT NAME": { text: "FAN STATUS" }, DI: X } },
+            { key: "3", cells: { TAG: { text: "3" }, "POINT NAME": { text: "FAN FAILURE" }, ALARM: X } },
+            { key: "4", cells: { TAG: { text: "4" }, "POINT NAME": { text: "SUPPLY AIR TEMPERATURE" }, AI: X } },
+            { key: "5", cells: { TAG: { text: "5" }, "POINT NAME": { text: "OUTSIDE AIR DAMPER" }, AO: X } },
+          ],
+        },
+        {
+          sheet: "set.pdf#2",
+          // The text layer dropped the caption's space (POINTLIST).
+          title: { text: "BAS INPUT/OUTPUT POINTLIST", bbox: [0, 20, 10, 30] },
+          headers: ["COL1", "COL2", "HARDWARE POINTS", "HARDWARE POINTS 2", "HARDWARE POINTS 3", "HARDWARE POINTS 4",
+            "SOFTWARE POINTS", "SOFTWARE POINTS 2", "SOFTWARE POINTS 3", "SOFTWARE POINTS 4"],
+          rows: [
+            {
+              key: "TAG",
+              cells: {
+                COL1: { text: "TAG" }, COL2: { text: "POINT NAME" }, "HARDWARE POINTS": { text: "AI" }, "HARDWARE POINTS 2": { text: "AO" },
+                "HARDWARE POINTS 3": { text: "DI" }, "HARDWARE POINTS 4": { text: "DO" }, "SOFTWARE POINTS": { text: "AV" },
+                "SOFTWARE POINTS 2": { text: "BV" }, "SOFTWARE POINTS 3": { text: "TREND" }, "SOFTWARE POINTS 4": { text: "ALARM" },
+              },
+            },
+            { key: "1", cells: { COL1: { text: "1" }, COL2: { text: "WATER FLOW RATE" }, "HARDWARE POINTS": X, "SOFTWARE POINTS 3": X } },
+            { key: "2", cells: { COL1: { text: "2" }, COL2: { text: "DEMAND" }, "SOFTWARE POINTS": X, "SOFTWARE POINTS 3": X } },
+            { key: "3", cells: { COL1: { text: "3" }, COL2: { text: "METER FAILURE" }, "SOFTWARE POINTS 4": X } },
+            // Numbered lines left blank are no points.
+            { key: "4", cells: { COL1: { text: "4" } } },
+            { key: "5", cells: { COL1: { text: "5" }, COL2: { text: "" } } },
+          ],
+        },
+      ],
+    });
+    assert.equal(bas.categories.points_lists.lists.length, 2);
+    const { rows, AI, AO, BI, BO, alarm, trend, hardwired, soft } = bas.totals;
+    // DI and DO read as BI and BO; AV is a software value; only the column
+    // under HARDWARE POINTS says its point is wired.
+    assert.deepEqual({ rows, AI, AO, BI, BO, alarm, trend, hardwired, soft },
+      { rows: 8, AI: 2, AO: 1, BI: 1, BO: 1, alarm: 2, trend: 2, hardwired: 1, soft: 1 });
+    const [plain, grouped] = bas.categories.points_lists.lists;
+    assert.deepEqual(plain.items.map((item: { point_type: string | null; point_type_raw: string | null; wiring: string | null }) =>
+      [item.point_type, item.point_type_raw, item.wiring]),
+    [["BO", "DO", null], ["BI", "DI", null], [null, null, null], ["AI", "AI", null], ["AO", "AO", null]]);
+    assert.deepEqual(grouped.items.map((item: { tag: string; point_type: string | null; wiring: string | null }) =>
+      [item.tag, item.point_type, item.wiring]),
+    [["1", "AI", "hardwired"], ["2", null, "soft"], ["3", null, null]]);
   });
 
   it("types a ticked point without inventing its wiring; a row naming one type twice is a point, not the labels", () => {
