@@ -2,14 +2,16 @@
   "set_id": "12_MT_MSU_ReidHall_Renovation",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk campus reno — dual-duct VAV + cabinet unit heaters + FINNED PIPE RADIATION (FT-*) + GRD.",
+  "notes": "Bulk campus reno — dual-duct VAV + cabinet unit heaters + FINNED PIPE RADIATION (FT-*) + GRD. [RE-KEYED 2026-10-03 from the render] M0.1 (sheet 28) also prints a SPLIT SYSTEM HEAT PUMP SCHEDULE the key had not counted: outdoor units HP-1 and HP-2 (Daikin RXTQ36TBVJU, 36 MBH), HP-1 serving the ceiling cassettes FC-1A, FC-1B and FC-1C (FXZQ07TB) and HP-2 the wall heads FC-4A and FC-4B (FXAQ12P). A split system counts its indoor and outdoor units, as the other keys do: FCU 5, HEAT_PUMP 2. The sheet's other schedules as keyed (DUAL DUCT VAV 4, GRD 2, FINNED PIPE RADIATION 4, CABINET UNIT HEATER 2); no other mechanical schedule in the set. 12 -> 19.",
   "categories": {
     "VAV": 4,
     "CABINET_UNIT_HEATER": 2,
     "FIN_TUBE_RADIATION": 4,
-    "GRD": 2
+    "GRD": 2,
+    "FCU": 5,
+    "HEAT_PUMP": 2
   },
-  "totals": { "items": 12 },
+  "totals": { "items": 19 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

@@ -2,14 +2,20 @@
   "set_id": "22_GA_Valdosta_FireStation8_100CD",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/22_GA_Valdosta_FireStation8_100CD.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk fire station — DOAS + recirculator pump + fans (EF + TEF toilet exhaust) + GRILLE SCHEDULE type marks (A–F and siblings).",
+  "notes": "Bulk fire station — DOAS + recirculator pump + fans (EF + TEF toilet exhaust) + GRILLE SCHEDULE type marks (A–F and siblings). [RE-KEYED 2026-10-03 from the render] M0.02 (sheet 64) also schedules, uncounted before: the SPLIT SYSTEM AIR HANDLER UNIT SCHEDULE's eight pairs FCU-1 / HP-1 to FCU-8 / HP-8 (FCU 8, HEAT_PUMP 8; a split system counts indoor and outdoor units); the VARIABLE REFRIGERANT FLOW TERMINAL DEVICE SCHEDULE's cassettes VRFC-1 to VRFC-13 (VRF_INDOOR 13); its VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE's VRHP-1 (Trane PUHY-EP120, remark HEAT PUMP; keyed a condensing unit, as its schedule names it); the DUCTLESS SPLIT SYSTEM SCHEDULE's indoor DAC-1 and outdoor DCU-1 (FCU 1, CONDENSING_UNIT 1); the ENERGY RECOVERY VENTILATOR SCHEDULE's ERV-1. P-sheet 57's DOMESTIC WATER HEATER SCHEDULE lists WH-1 (119 gallons, electric, 36 kW; WATER_HEATER 1, as the keys count water heaters). DOAS-1, RP-1, EF-1, EF-2, TEF-1 and the 12 grille types as keyed; no other HVAC schedule in the set. 17 -> 51.",
   "categories": {
     "DOAS": 1,
     "PUMP": 1,
     "FAN": 3,
-    "GRD": 12
+    "GRD": 12,
+    "FCU": 9,
+    "HEAT_PUMP": 8,
+    "VRF_INDOOR": 13,
+    "CONDENSING_UNIT": 2,
+    "ERV": 1,
+    "WATER_HEATER": 1
   },
-  "totals": { "items": 17 },
+  "totals": { "items": 51 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

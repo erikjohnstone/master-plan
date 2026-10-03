@@ -595,6 +595,15 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   existing prefix, links each tag to its box by its leader. The test failed at daafc4e (both rows MATCH, 0 of 2
   schedule-only), and with the #316 working tree the same; it now asserts both MATCH, as the render shows (GRD still
   MATCH). Run alone: 1/1.
+- 12_MT and 22_GA keys were short (found by the fresh scoreboard's open over-reads, each checked on its render).
+  12_MT's M0.1 (sheet 28) prints a SPLIT SYSTEM HEAT PUMP SCHEDULE the key never counted: outdoor HP-1 and HP-2
+  (Daikin RXTQ36TBVJU), HP-1 serving the cassettes FC-1A to FC-1C and HP-2 the wall heads FC-4A and FC-4B; re-keyed
+  12 -> 19 (FCU 5, HEAT_PUMP 2, a split system counting indoor and outdoor units as the other keys do). 22_GA's M0.02
+  (sheet 64) schedules the split-system air handlers FCU-1 / HP-1 to FCU-8 / HP-8, the VRF cassettes VRFC-1 to 13,
+  the VRF CONDENSING UNIT SCHEDULE's VRHP-1 (keyed a condensing unit, as its schedule names it, though its remark
+  reads HEAT PUMP), the ductless split DAC-1 / DCU-1 and ERV-1; sheet 57 its electric water heater WH-1 (119 gal);
+  re-keyed 17 -> 51. Neither graph holds another HVAC schedule. Both WP1 PASS on their fresh graphs (the takeoff read
+  exactly these units before the re-key).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
