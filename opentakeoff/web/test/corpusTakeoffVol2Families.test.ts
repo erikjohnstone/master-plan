@@ -1139,3 +1139,24 @@ describe("a unit heater schedule captioned by the family's name alone", () => {
     assert.deepEqual(heaters("CABINET UNIT HEATER"), []);
   });
 });
+
+describe("a convector schedule (033_MN's CONVECTOR SCHEDULE, 016_NY's C-1)", () => {
+  const read = (title: string, marks: string[], header = "EQUIPMENT TAG") => {
+    const categories = compileHvacTakeoff(null, { tables: [{
+      sheet: "m.pdf#69", title: { text: title }, headers: [header, "LOCATION", "TYPE"], kind: "equipment",
+      rows: marks.map((k) => ({ key: k, cells: { [header]: { text: k }, LOCATION: { text: "2 FEMALE LOCKER" }, TYPE: { text: "WALL-MOUNTED" } } })),
+    }] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    const tags = (family: string) => (categories[family]?.items || []).map((i) => i.tag).sort();
+    return { convectors: tags("CONVECTOR"), valves: [...tags("CHW_CONTROL_VALVE"), ...tags("HHW_CONTROL_VALVE")] };
+  };
+  it("reads each convector under the family's title, by its room-numbered or plain mark", () => {
+    assert.deepEqual(read("CONVECTOR SCHEDULE", ["CV-2.1", "CV-2A", "CV-4C.1"]).convectors, ["CV-2.1", "CV-2A", "CV-4C.1"]);
+    assert.deepEqual(read("CONVECTOR SCHEDULE", ["C-1"], "UNIT NO.").convectors, ["C-1"]);
+  });
+  it("reads no CV mark as a convector anywhere else: a control valve's, or an untitled table's", () => {
+    assert.deepEqual(read("CONTROL VALVE SCHEDULE", ["CV-1", "CV-2"]).convectors, []);
+    assert.deepEqual(read("", ["CV-1", "CV-2"]).convectors, []);
+    assert.deepEqual(read("CONVECTOR VALVE SCHEDULE", ["CV-1"]).convectors, []);
+    assert.deepEqual(read("CONVECTOR SCHEDULE", ["CV-2.1"]).valves, []);
+  });
+});

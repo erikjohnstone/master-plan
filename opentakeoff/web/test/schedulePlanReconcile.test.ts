@@ -2011,6 +2011,24 @@ test("a key the extraction ran together is read as its mark column prints it, un
     { __key: "SAC-1", TAG: "SAC - 1", "CORRESPONDING OUTDOOR UNIT": "SCU - 1", "NOMINAL COOLING (MBH)": "12.2" },
   ])] };
   assert.deepEqual(tags(spaced, "HEAT_PUMP"), { compile: ["SAC-1"], reconcile: ["SAC-1"] });
+  // A point between two numbers is no spacing: 033_MN's CV-2.1, keyed CV-21,
+  // is convector 1 of room 2, and CV-21 would be another convector. A point
+  // the key keeps (CV-4C.1) or a mark printed without one stays as it is, and
+  // a point beside a letter or after the mark separates no numbers: the key
+  // stays.
+  const pointed = { tables: [as77Table("m.pdf#69", "CONVECTOR SCHEDULE", ["EQUIPMENT TAG", "LOCATION"], [
+    { __key: "CV-21", "EQUIPMENT TAG": "CV-2.1", LOCATION: "2 FEMALE LOCKER" },
+    { __key: "CV-910", "EQUIPMENT TAG": "CV-9.10", LOCATION: "9 PATIENT ROOM" },
+    { __key: "CV-4C.1", "EQUIPMENT TAG": "CV-4C.1", LOCATION: "4C OFFICE" },
+    { __key: "CV-21A", "EQUIPMENT TAG": "CV-21A", LOCATION: "21A BATH" },
+    { __key: "CV-19", "EQUIPMENT TAG": "CV - 19", LOCATION: "19 STORAGE" },
+    { __key: "CV-20", "EQUIPMENT TAG": "CV-20.", LOCATION: "20 CORRIDOR" },
+    { __key: "CV-3B", "EQUIPMENT TAG": "CV-3.B", LOCATION: "3B OFFICE" },
+  ])] };
+  const { compile: pointedCompile, reconcile: pointedReconcile } = tags(pointed, "CONVECTOR");
+  const printedMarks = ["CV-19", "CV-2.1", "CV-20", "CV-21A", "CV-3B", "CV-4C.1", "CV-9.10"];
+  assert.deepEqual([...(pointedCompile ?? [])].sort(), printedMarks);
+  assert.deepEqual([...pointedReconcile].sort(), printedMarks);
   // So does a key the family reads beside a cell of its letters and digits
   // that the family reads no mark in.
   assert.deepEqual(as77Marks(keyed("EXHAUST FAN SCHEDULE", "TAG", "EF-4", "E.F.4")), { FAN: { compile: ["EF4"], reconcile: ["EF4"] } });

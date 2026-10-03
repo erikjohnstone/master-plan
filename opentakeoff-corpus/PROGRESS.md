@@ -266,6 +266,33 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Convectors on their own schedule; a point between two numbers in a printed mark; 033_MN and 016_NY re-keyed (2026-10-03)
+
+Rules (shared path: the compile, which the UI and MCP both read, and the row identity the reconcile shares with it):
+- `corpusTakeoff.mjs HVAC_FAMILY_SPECS.CONVECTOR`: titled only (CONVECTOR or CONVECTORS, not a POINTS LIST, DDC or VALVE
+  title), marks CONV-, CV- or C- before a number. CV- is a control valve's mark everywhere else, so no untitled or
+  other-titled table reads it as a convector (negative controls in the test: a CONTROL VALVE SCHEDULE, an untitled
+  table, a CONVECTOR VALVE SCHEDULE, and no valve read from a convector row). 033_MN p69 CONVECTOR SCHEDULE: 39 (CV-2.1
+  to CV-4D.2, each under its room); 016_NY's: C-1 under UNIT NO. Census: these are the only two convector-titled
+  tables in 50 freshly built and 188 cached graphs (each in its fresh build and two cached copies).
+- `corpusTakeoff.mjs markLettersAndDigits`, in the gate's `marksRead` that `rowIdentityText` compares (AS-84): a point
+  between two digits is kept. The extraction's row key (`sheetgraph.rowKeyOf`) strips points, so 24 of 033_MN's
+  convectors were keyed CV-21 for a cell printing CV-2.1, and AS-84 kept the key as it keeps SAC-1 beside SAC - 1. The
+  printed EQUIPMENT TAG now names those rows (CV-2.1, CV-9.10, CV-12.1, CV-21.1 ...), in the takeoff and the reconcile;
+  a point beside a letter (CV-3.B) or after a mark leaves the key. The graph is unchanged (rowKeyOf untouched, so no
+  rebuild): plan tags and row keys still match by letters and digits.
+
+A/B (base: the convector lib before the point rule; compile only): 50 fresh graphs change only 033_MN (24 convectors
+renamed to their printed marks), 193 cached graphs only its two copies. The family itself, against 4c27684: 033_MN +39
+and 016_NY +1, nothing else. Mutants: comparing letters and digits only (the old rule) fails the new AS-84 case;
+keeping every point fails its CV-3.B case. 232 tests across the takeoff, BAS, harness, header-geometry and reconcile
+files pass.
+
+Re-keyed from the renders: 033_MN (CONVECTOR 39, totals 75) and 016_NY (CONVECTOR 1, totals 25; its STATIONARY ROOF
+VENTILATOR SRV-1 still has no family). WP1 at the final code: 033_MN PASS (75 units, BAS 51, on its graph rebuilt at
+4c27684; a graph saved at 03:42, before the ALARM-section rule, reads 45 points) and 016_NY PASS. Web typecheck and lint
+clean.
+
 ### Point-type policy tables; seam-continued faces, nearest face first; 016_NY, 031_MO, 011_IL and 009_FL re-keyed (2026-10-03)
 
 Rules (shared path: the compile and graph construction are what the UI and MCP both read):

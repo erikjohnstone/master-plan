@@ -116,6 +116,10 @@ export function isSplitPairHeaderShape(table) {
 }
 /** A name's letters and digits, as the extraction runs a row's key together. */
 const lettersAndDigits = (text) => String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+/** A mark's letters and digits with any point between two numbers, which
+ * separates them as no space does: 033_MN's CV-2.1 is convector 1 of room 2,
+ * and the extraction's key CV-21 another mark. */
+const markLettersAndDigits = (text) => String(text || "").toUpperCase().replace(/[^A-Z0-9.]/g, "").replace(/(?<!\d)\.|\.(?!\d)/g, "");
 const UNIT_MARK_HEADER_RE = /^UNIT\s*MARK$/i;
 const VALVE_MARK_HEADER_RE = /^VALVE\s*MARK$/i;
 
@@ -1556,11 +1560,11 @@ export function familyTableGate(table, spec, family = null) {
   };
   // The marks the family reads in a row's name, as it reads the row's marks
   // (AS-84): the name split as the takeoff splits it, each mark read by
-  // familyMarkRead, in its letters and digits.
+  // familyMarkRead, in its letters and digits and the points between numbers.
   identity.marksRead = (text) => splitRowMarks(String(text || ""), Boolean(catchAll || filterRe), wordsNamed)
     .map((one) => normalizeEquipMark(one)).filter(Boolean)
     .filter((one) => familyMarkRead(gate, spec, one, markCanon(one)) > 0)
-    .map((one) => lettersAndDigits(one));
+    .map((one) => markLettersAndDigits(one));
   return gate;
 }
 
@@ -1820,7 +1824,8 @@ export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeader
   // extraction's key drops what a cell prints around them, a status before
   // the mark (063_MT's (E) EF- 4 is keyed EEF-4, 067_CA's (N) B950A-AS-1001
   // NB950A-AS-1001) or the ampersand between two (028_TX's UH-1 & UH-2,
-  // UH-1UH-2), and the cell is the key as printed. Where it only spaces them
+  // UH-1UH-2) or the point between two numbers (033_MN's CV-2.1, keyed
+  // CV-21), and the cell is the key as printed. Where it only spaces them
   // otherwise (09_ME's SAC - 1, keyed SAC-1), the key stays.
   if (marksRead) {
     const synonyms = headers.filter((header) => header !== markHeader && (MARK_HEADER_SYNONYM_RE.test(headerName(header)) || isGroupedMarkHeader(header)));
@@ -2511,6 +2516,16 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:FTR|FT)[\s\-]/i,
     // Titled-only: FTR-* also appears on FILTER & STRAINER / vibration tables
     // (Colville) and must not join via blank/catch-all keyRe.
+    titledOnly: true,
+  },
+  // Convectors on their own schedule: 033_MN's CONVECTOR SCHEDULE (wall
+  // convectors CV-2.1 to CV-4D.2, each under its room) and 016_NY's C-1. A
+  // terminal heater of its own kind, not fin-tube radiation. Titled-only: CV-*
+  // is a control valve's mark everywhere else.
+  CONVECTOR: {
+    titleRe: /\bCONVECTORS?\b/i,
+    exclude: /POINTS\s*LIST|DDC|VALVE/i,
+    keyRe: /^(?:CONV|CV|C)[\s\-]?\d/i,
     titledOnly: true,
   },
   // Filter panels on FILTER & STRAINER / AIR FILTER / FILTER schedules.

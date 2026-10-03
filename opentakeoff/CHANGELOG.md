@@ -1,5 +1,16 @@
 # Changelog
 
+- **Convectors on their own schedule; a point between two numbers in a printed mark.** 033_MN's CONVECTOR SCHEDULE
+  lists 39 wall convectors, CV-2.1 to CV-4D.2, each under its room, and 016_NY's lists one, C-1, under UNIT NO.; no
+  family read either. A table titled CONVECTOR (not a points list, DDC or valve table) now reads its units by their
+  CONV-, CV- or C- marks, and only there: CV- is a control valve's mark everywhere else. 24 of 033_MN's convectors
+  then came out under the extraction's row key, which runs a mark's letters and digits together (CV-2.1 is keyed
+  CV-21): the takeoff kept a key that matches the printed EQUIPMENT TAG cell letter for letter and digit for digit,
+  as it keeps 09_ME's SAC-1 beside a cell printing SAC - 1. A point between two numbers now separates them, as no space
+  does, so the printed mark names the unit (CV-2.1, CV-9.10, CV-21.1) in the takeoff and the reconcile alike; a point
+  beside a letter or after a mark still leaves the key. Only these two schedules are titled CONVECTOR in 50 freshly
+  built and 188 cached graphs, and a compile A/B over them changes only 033_MN (+39 convectors, 24 of them under their
+  printed marks) and 016_NY (+1). Re-keyed: 033_MN (75 units) and 016_NY (25).
 - **A points list caption over a table of point types; a list's last face that repeats its seam row; a fragment
   stacks onto the face it touches.** 011_IL's MH-300 prints a POINTS LIST - STANDARD TRENDING INTERVALS whose rows are
   point types (AI, BI, AO, BO, CALC), each with a trend interval and durations: a policy for every point of a type,

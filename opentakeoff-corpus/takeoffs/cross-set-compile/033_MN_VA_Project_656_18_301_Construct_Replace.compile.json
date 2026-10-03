@@ -3,7 +3,7 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/033_MN_VA_Project_656_18_301_Construct_Replace.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/033_MN_VA_Project_656_18_301_Construct_Replace",
   "kind": "hvac_equipment",
-  "notes": "Vol2 multipart MN VA construct/replace \u2014 AHU+pumps (rejoined). [RE-KEYED 2026-10-03 from the render] Sheet 68: AIR HANDLING UNIT SCHEDULE AHU-6; VAV BOX WITH HOT WATER REHEAT SCHEDULE VAV-C0C (printed with a zero), C2, C3, 2, 4B to 4E, 6 to 9, 9A, 12, 19, 21, 21A, 21B (18); EXHAUST FAN SCHEDULE EF-2, EF-2A, EF-19 (3); DIFFUSER, GRILLE, AND REGISTER SCHEDULE types A to D (GRD 4); WALL LOUVER SCHEDULE WL-1 to WL-5 (5). Sheet 69: PUMP SCHEDULE P-12, P-13; VARIABLE FREQUENCY DRIVES VFD-P-12, VFD-P-13; SUSPENDED UNIT HEATER SCHEDULE SUH-1. Not keyed: the CONVECTOR SCHEDULE's 39 rows (CV-21 ...; no convector family). BAS: M702 (sheet 71) SUPPLY VAV TERMINAL UNIT POINTS LIST 17, EXHAUST FAN POINTS LIST 6 and PUMP CONTROL POINTS 17 (11 points and, under its ALARM label, 6 alarms); sheet 72's SUSPENDED UNIT HEATER POINTS LIST 11: 51 points, each ticked under AI | AO | BI | BO (HARDWARE POINTS) and AV | BV | SCHED | TREND | ALARM (SOFTWARE POINTS): AI 8, AO 6, BI 8, BO 5, alarm 16, trend 25, hardwired 27 (each point typed under HARDWARE POINTS; the pump list's DIFFERENTIAL PRESSURE SETPOINT ticks AI and AV and reads AI), soft 5 (AV/BV ticks; SCHED ticks are neither), every point checked by eye. The earlier key (AHU 1, PUMP 2, BAS 0) was written from pipeline output.",
+  "notes": "Vol2 multipart MN VA construct/replace \u2014 AHU+pumps (rejoined). [RE-KEYED 2026-10-03 from the render] Sheet 68: AIR HANDLING UNIT SCHEDULE AHU-6; VAV BOX WITH HOT WATER REHEAT SCHEDULE VAV-C0C (printed with a zero), C2, C3, 2, 4B to 4E, 6 to 9, 9A, 12, 19, 21, 21A, 21B (18); EXHAUST FAN SCHEDULE EF-2, EF-2A, EF-19 (3); DIFFUSER, GRILLE, AND REGISTER SCHEDULE types A to D (GRD 4); WALL LOUVER SCHEDULE WL-1 to WL-5 (5). Sheet 69: PUMP SCHEDULE P-12, P-13; VARIABLE FREQUENCY DRIVES VFD-P-12, VFD-P-13; SUSPENDED UNIT HEATER SCHEDULE SUH-1. CONVECTOR SCHEDULE CV-2.1 to CV-4D.2, 39 wall convectors each under its room: CONVECTOR 39 (keyed 2026-10-03 with the family). BAS: M702 (sheet 71) SUPPLY VAV TERMINAL UNIT POINTS LIST 17, EXHAUST FAN POINTS LIST 6 and PUMP CONTROL POINTS 17 (11 points and, under its ALARM label, 6 alarms); sheet 72's SUSPENDED UNIT HEATER POINTS LIST 11: 51 points, each ticked under AI | AO | BI | BO (HARDWARE POINTS) and AV | BV | SCHED | TREND | ALARM (SOFTWARE POINTS): AI 8, AO 6, BI 8, BO 5, alarm 16, trend 25, hardwired 27 (each point typed under HARDWARE POINTS; the pump list's DIFFERENTIAL PRESSURE SETPOINT ticks AI and AV and reads AI), soft 5 (AV/BV ticks; SCHED ticks are neither), every point checked by eye. The earlier key (AHU 1, PUMP 2, BAS 0) was written from pipeline output.",
   "categories": {
     "AHU": 1,
     "VAV": 18,
@@ -12,10 +12,11 @@
     "UNIT_HEATER": 1,
     "VARIABLE_FREQUENCY_DRIVE": 2,
     "GRD": 4,
-    "LOUVER": 5
+    "LOUVER": 5,
+    "CONVECTOR": 39
   },
   "totals": {
-    "items": 36
+    "items": 75
   },
   "bas_points": {
     "rows": 51,
