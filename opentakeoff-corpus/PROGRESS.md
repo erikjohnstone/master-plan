@@ -96,6 +96,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | c9ca965 | A table ruled in dashes reads row by row: 061_IA's M-502 points lists, BAS 0 -> 180; every other set the rule touches compiles the same (#316) |
 | 102dcbc | Graph builds keep each sheet's figures packed: 01_NY heap held after the build 1,640 -> 641 MB, peak RSS 3,205 -> 2,390 MB, graphs identical (#322) |
 | 391400c | OCR readings outlive a change to the table code: ten pictured pages read again in 109 s against 1,617 s, the same tables (#323) |
+| b03fa4e | A list stacked under another is its own table: 061_IA's plant points under their own title, 16_NV's three OUTSIDE AIR CALCULATION tables; every open set it touches compiles the same (#317) |
 
 ## Known limits (documented, not fixed)
 
@@ -757,6 +758,25 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   table; an untitled continuation still joins; three legends stacked as 12_MT's sheet 38 stacks them, none joined to
   the next); the first fails on #316's code (one table), the third on the refusal without the guard. Sidecar tests 80
   (with these three), compile 156: all pass; typecheck clean, lint as at HEAD.
+- The title-band splitter reads characters where the cells are (#319; vectorgrid `_split_at_title_bands`). A PDF
+  page's box can start away from (0,0): 197 pages of 12 keyed sets do (009_FL's sheets sit at (-1512, 1080), 004_MO's
+  at (-1296, 864)). pdfplumber reports such a page's characters in the PDF's own space, while vectorgrid builds its
+  cells from strokes already moved to the page's corner (`segments_from_page`), and the splitter compared the two
+  unshifted: on such a page its type tests read no letter. A table that labels its own bands in body type was then cut
+  at every band, where the veto (body-sized text two or more rows deep is no title) should have held: 004_MO's FINISH
+  LEGEND (sheet 18), one header over its BASE, CEILINGS, DOOR/FRAME, FLOORING and PAINT bands, was read as 8 tables,
+  every piece after the first without the header; it is now one table of 113 cells. The splitter now subtracts the
+  page's corner as the dashed-rule pass and the title refusal (#316, #317) do; no other reader of the page's
+  characters in vectorgrid compares them with cells. Page A/B over the 197 pages (base #316 + #317): tables change on
+  21 pages, no errors. 004_MO: sheet 18 (above), sheets 5 and 43 (drawing linework, a framing detail and a wall plan,
+  re-cut as junk either way); 066_MT: the title-block strip of sheets 2 to 17 (logo, drawn and reviewed by, revision
+  table, seal, sheet number), junk either way; walled sets: 2 pages (totals only). Graphs built at daafc4e and at this
+  batch's code (#316, #317, this): 004_MO's differ only on sheet 18 (34 -> 32 tables) and compile the same, unit for
+  unit (HVAC 28, BAS, valves 1); 066_MT's hold the same 7 tables and compile the same, unit for unit (HVAC 6); the
+  walled set's differ on one sheet (10 -> 2 tables) and compile the same (totals only). Test: vectorGridPageOrigin (a
+  header over a band two rows deep that labels the rows under it, read on a page at (0,0) and on the same page placed
+  at (-1512, 1080): the same tables); it fails on the code before it. Sidecar tests 81 (with this one), compile 156:
+  all pass; typecheck clean, lint as at HEAD.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
