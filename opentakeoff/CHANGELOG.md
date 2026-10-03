@@ -1,5 +1,25 @@
 # Changelog
 
+- **A mark printed in two columns, its letters under ABB. and its number under NO.** 091_IL's M4.01 prints ten
+  schedules as pictures, each tag split into ABB. and NO. columns ("AHU" | "3A-01"). Its RTU and AHU schedules were
+  refused: every unit takes two lines (its cooling and electric coils, its second compressor circuit), AS-146's
+  two-line test wanted a mark in the first cell and found only "AHU", and the AHU's NONE merged across its
+  return-fan section read as a column grouping, so each unit row went into the header. Where the header prints the
+  ABB. / NO. pair, the two cells are the row's mark (keyed joined, AHU-3A-01, as the plans print it; the other
+  tables of the sheet read CC-1, CU-1... where they read "CC 1" by the collision rule, and RF-1B-1 where they read
+  "RF"); a line under such a mark that owns a quarter of the columns or fewer is the unit's second line; a cell
+  merged across columns that says NONE, N/A, NOT USED or a dash is a value, not a group's name (any other merged
+  cell still makes the row a grouping tier, as AS-146 tests). Grid replay over 2,359 tables of 388 saved pages:
+  only 091_IL's eight split-tag tables change (a panel schedule's NOTES | # columns join no mark). 091_IL rebuilt:
+  30 → 34 units (= key: RTU 1, AHU 3 added).
+- **A mark column under a group heading keys a table nothing else keyed.** 056_NY's untitled fan table (lettered in
+  ink, read from its picture) prints QTY and MARK under a MARK INFORMATION band, so its joined header names the mark
+  column "MARKINFORMATION MARK": no column was named exactly for its marks, the first column (QTY, "1") keyed
+  nothing, a one-row table proves no column by its rows, and the table and its fan EF-2A were refused. When no pass
+  keys a row and exactly one column's header ends in a mark column's name (MARK, TAG, SYMBOL, DESIGNATION, UNIT
+  TAG/NO., EQUIP TAG), that column keys the rows; two such columns (a split system's halves) key nothing. Grid
+  replay over 2,359 tables of 388 saved pages: two tables change, 056_NY's fan table and 016_NY's untitled window
+  type table (TYPE MARK: W2, W3, W4, which no HVAC family reads). 056_NY rebuilt: 32 → 33 units (FAN EF-2A; key 35).
 - **A unit named by the unit it serves and its role there.** 043_FL's FAN SCHEDULE lists ED-203-SF and ED-203-RF,
   the supply and return fans of air handler ED-203; the fan family's mark rule wants the role first (SF-1) and read
   neither. Under the family's own title, a mark whose last segment is the family's token (its mark rule reads it

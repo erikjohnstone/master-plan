@@ -3,17 +3,18 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
   "kind": "hvac_equipment",
-  "notes": "[KEYED 2026-10-02 from the render] VA 637 EHRM infrastructure, sheet 20 (building 47): MINI-SPLIT INDOOR UNIT SCHEDULE lists 20 indoor units (47-IDU-A301 ... 47-IDU-BF107, counted as FCU, the takeoff's family for ductless and mini-split indoor units); MINI-SPLIT OUTDOOR UNIT SCHEDULE lists their 20 outdoor units, 19 cooling only (CONDENSING_UNIT) and 47-ODU-BC143C (Daikin, 40,000 Btu/h heating, HSPF2 10; HEAT_PUMP); DC CRAC UNIT SCHEDULE lists 47-CRAC-1A/1B/2A/2B (computer room air conditioners, counted as CRAH) and DC CONDENSING UNIT SCHEDULE their condensing units 47-CU-1A/1B/2A/2B; FAN SCHEDULE lists IF-1 (inline fan); DIFFUSERS, REGISTERS, & GRILLES SCHEDULE lists two return grille types, H14x14 and H18x12. Every mark carries the building number 47-. The earlier [ZERO] key was written from pipeline output; a compile at 2c1ba16 read 6 of these units.",
+  "notes": "[KEYED 2026-10-02 from the render] VA 637 EHRM infrastructure, sheet 20 (building 47): MINI-SPLIT INDOOR UNIT SCHEDULE lists 20 indoor units (47-IDU-A301 ... 47-IDU-BF107, counted as FCU, the takeoff's family for ductless and mini-split indoor units); MINI-SPLIT OUTDOOR UNIT SCHEDULE lists their 20 outdoor units, 19 cooling only (CONDENSING_UNIT) and 47-ODU-BC143C (Daikin, 40,000 Btu/h heating, HSPF2 10; HEAT_PUMP); DC CRAC UNIT SCHEDULE lists 47-CRAC-1A/1B/2A/2B (computer room air conditioners, counted as CRAH) and DC CONDENSING UNIT SCHEDULE their condensing units 47-CU-1A/1B/2A/2B; FAN SCHEDULE lists IF-1 (inline fan); DIFFUSERS, REGISTERS, & GRILLES SCHEDULE lists two return grille types, H14x14 and H18x12. Every mark carries the building number 47-. The earlier [ZERO] key was written from pipeline output; a compile at 2c1ba16 read 6 of these units. [RE-KEYED 2026-10-03 from the render] Sheet 54 (electrical schedules) prints a MECHANICAL EQUIPMENT SCHEDULE listing the same units plus 47-CP-1 and 47-CP-2, CONDENSATE PUMP, 120 V, 1/30 HP (receptacle connected; sheet 39's data center plan tags both and its note puts a condensate pump in the crawl space). They are scheduled units of the mechanical trade found on no mechanical sheet, so PUMP 2 is added, as 19_CA's key counts the units of its electrical MECHANICAL EQUIPMENT SCHEDULE. The takeoff read them before this change.",
   "categories": {
     "FCU": 20,
     "CONDENSING_UNIT": 23,
     "HEAT_PUMP": 1,
     "CRAH": 4,
     "FAN": 1,
-    "GRD": 2
+    "GRD": 2,
+    "PUMP": 2
   },
   "totals": {
-    "items": 51
+    "items": 53
   },
   "bas_points": {
     "rows": 0

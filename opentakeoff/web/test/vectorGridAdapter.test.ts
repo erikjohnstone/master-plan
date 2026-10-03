@@ -408,3 +408,99 @@ describe("a mark read from a picture with its 1 as the letter I", () => {
     for (const keep of ["EF-2", "CH-12", "SS-1", "MOTOR", "LIGHTING", "AHU-A", "N/A", ""]) assert.equal(pictureMarkDigits(keep), keep);
   });
 });
+
+describe("a mark column under a group heading keys a table no other column keys", () => {
+  // 056_NY's untitled fan table, lettered in ink and read from its picture:
+  // QTY and MARK under MARK INFORMATION, the fan's and the motor's data under
+  // their own bands, one unit. The joined header names the mark column
+  // "MARKINFORMATION MARK", and its first column (QTY) holds "1".
+  const x = [1577, 1615, 1792, 2026, 2079, 2210, 2255, 2332, 2390];
+  const span = (c0: number, c1: number, y0: number, y1: number): [number, number, number, number] => [x[c0], y0, x[c1], y1];
+  const fans = (bands: [string, string, string], marks: [string, string]): VectorGridTable => ({
+    bbox: [1577, 673, 2390, 746], rows: 3, cols: 8, raster: false, assigned: 19, orphan: 0, straddle: 0, ocr: true,
+    cells: [
+      cell(0, 0, bands[0], span(0, 2, 673, 689), 1, 2),
+      cell(0, 2, bands[1], span(2, 5, 673, 689), 1, 3),
+      cell(0, 5, bands[2], span(5, 8, 673, 689), 1, 3),
+      ...["QTY", marks[0], "MODEL", "VOLUME (CFM)", "FAN RPM", "SIZE (HP)", "V/C/P", marks[1]]
+        .map((text, c) => cell(1, c, text, span(c, c + 1, 689, 729))),
+      ...["1", "EF-2A", "VEKTOR-H-18", "2,810", "1,966", "5", "460/60/3", ""]
+        .map((text, c) => cell(2, c, text, span(c, c + 1, 729, 746))),
+    ],
+  } as VectorGridTable);
+
+  it("keys the fan's row by its MARK under MARK INFORMATION", () => {
+    const built = vectorGridTableToScheduleTable(fans(["MARKINFORMATION", "FANINFORMATION", "MOTORINFORMATION"], ["MARK", "ENCLOSURE"]), 3, ctx(), 3);
+    assert.ok(built, "the table must build");
+    assert.deepEqual(built.rows.map((r) => r.key), ["EF-2A"]);
+  });
+
+  it("does not choose between two such columns", () => {
+    // Two mark columns under their own headings are a split system's halves,
+    // which the takeoff reads apart (AS-144); the rescue keys neither.
+    const reasons: string[] = [];
+    const built = vectorGridTableToScheduleTable(
+      fans(["INDOOR UNIT", "FANINFORMATION", "OUTDOOR UNIT"], ["MARK", "MARK"]), 3, ctx(), 3, (r) => reasons.push(r));
+    assert.ok(!built?.rows.some((r) => r.key === "EF-2A"), JSON.stringify(built?.rows.map((r) => r.key)));
+  });
+});
+
+describe("a mark printed in two columns, its letters under ABB. and its number under NO.", () => {
+  // 091_IL's pictured AIR HANDLING UNITS: each unit takes two lines (its
+  // cooling and electric coils), its mark is "AHU" | "3A-01", and a unit with
+  // no return fan prints NONE merged across that section's columns.
+  const x = [100, 130, 170, 260, 320, 380, 410, 440, 500, 540];
+  const y = [100, 120, 135, 150, 165, 180, 195, 210, 225];
+  const box = (c0: number, c1: number, r0: number, r1: number): [number, number, number, number] => [x[c0], y[r0], x[c1], y[r1]];
+  const units = (tagHeads: [string, string], marks: [string, string][]): VectorGridTable => {
+    const cells = [
+      cell(0, 0, "AIR HANDLING UNITS (AHU)", box(0, 9, 0, 1), 1, 9),
+      cell(1, 0, "EQUIP. TAG", box(0, 2, 1, 2), 1, 2),
+      cell(1, 2, "GENERAL", box(2, 4, 1, 2), 1, 2),
+      cell(1, 4, "SUPPLY FAN", box(4, 7, 1, 2), 1, 3),
+      cell(1, 7, "RETURN/EXHAUST FAN", box(7, 9, 1, 2), 1, 2),
+      cell(2, 0, tagHeads[0], box(0, 1, 2, 4), 2, 1),
+      cell(2, 1, tagHeads[1], box(1, 2, 2, 4), 2, 1),
+      cell(2, 2, "SERVICE", box(2, 3, 2, 4), 2, 1),
+      cell(2, 3, "HYDRONIC COILS", box(3, 4, 2, 4), 2, 1),
+      cell(2, 4, "TOTAL AIRFLOW (CFM)", box(4, 5, 2, 4), 2, 1),
+      cell(2, 5, "MOTOR", box(5, 7, 2, 3), 1, 2),
+      cell(3, 5, "HP", box(5, 6, 3, 4)),
+      cell(3, 6, "BHP", box(6, 7, 3, 4)),
+      cell(2, 7, "AIRFLOW (CFM)", box(7, 8, 2, 4), 2, 1),
+      cell(2, 8, "HP", box(8, 9, 2, 4), 2, 1),
+    ];
+    marks.forEach(([abb, no], i) => {
+      const r = 4 + 2 * i;
+      cells.push(
+        cell(r, 0, abb, box(0, 1, r, r + 2), 2, 1),
+        cell(r, 1, no, box(1, 2, r, r + 2), 2, 1),
+        cell(r, 2, "STADIUM CLUB", box(2, 3, r, r + 2), 2, 1),
+        cell(r, 3, `CC-${i + 1}`, box(3, 4, r, r + 1)),
+        cell(r + 1, 3, `EHC-${i + 1}`, box(3, 4, r + 1, r + 2)),
+        cell(r, 4, "14300", box(4, 5, r, r + 2), 2, 1),
+        cell(r, 5, "20", box(5, 6, r, r + 2), 2, 1),
+        cell(r, 6, "15.1", box(6, 7, r, r + 2), 2, 1),
+        cell(r, 7, "NONE", box(7, 9, r, r + 2), 2, 2),
+      );
+    });
+    return { bbox: [100, 100, 540, 165 + 30 * marks.length], rows: 4 + 2 * marks.length, cols: 9, raster: false,
+      assigned: cells.length, orphan: 0, straddle: 0, ocr: true, cells } as VectorGridTable;
+  };
+
+  it("keys each unit by its joined mark, once, its second line folded into it", () => {
+    const built = vectorGridTableToScheduleTable(units(["ABB.", "NO."], [["AHU", "3A-01"], ["AHU", "3A-02"]]), 11, ctx(), 3);
+    assert.ok(built, "the table must build");
+    assert.deepEqual(built.rows.map((r) => r.key), ["AHU-3A-01", "AHU-3A-02"]);
+  });
+
+  it("keys a schedule of one unit by its joined mark too", () => {
+    const built = vectorGridTableToScheduleTable(units(["ABB.", "NO."], [["RTU", "1"]]), 11, ctx(), 3);
+    assert.deepEqual(built?.rows.map((r) => r.key), ["RTU-1"]);
+  });
+
+  it("joins no mark where the header prints no ABB. and NO. (a panel's NOTES and # columns)", () => {
+    const built = vectorGridTableToScheduleTable(units(["NOTES", "#"], [["EX", "1"], ["EX", "3"]]), 11, ctx(), 3);
+    assert.ok(!built?.rows.some((r) => /^EX-\d/.test(r.key)), JSON.stringify(built?.rows.map((r) => r.key)));
+  });
+});

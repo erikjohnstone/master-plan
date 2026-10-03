@@ -144,6 +144,15 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too) and 21_VA
   (102 vs 100: the documented RF1/RF2 residual from its technology sheet's AV list; c637a3d read 88). The structural
   sweep over every corpus PDF passes.
+- MCP `reconcileWorkflow` "Vol2 ITD D1 lab 062: plan-drawn HVAC families MATCH": FCU (DFC-1, F-1), LOUVER (L-1,
+  L-2), LOUVERED_PENTHOUSE (PH-1) and GRD R-2 sweep to AMBIGUOUS under the same exact-tag rule, and GRD holds 11
+  reconcile rows against the key's 7. Identical at 6a3e08a (graph rebuilt with that code) and at 45e69db.
+- MCP `reconcileWorkflow` "Vol2 Salinity Lab 023: chiller plant honest SCHEDULE_ONLY" (CH-1 and CH-2 now MATCH;
+  BT-1 AMBIGUOUS under the exact-tag rule) and "Vol2 unheated repair 008: UH + louver all MATCH" (L-1 AMBIGUOUS, same
+  rule): identical at 6a3e08a and at 45e69db, graphs rebuilt with each.
+- MCP `reconcileWorkflow` "SDSU EngSciences VAV reconcile ... (honest SO ceiling)": its negative control
+  ECAV-NB-1 ("not plan text") sweeps to MATCH, at 6a3e08a (graph rebuilt with that code) as at HEAD; the other 14
+  sampled tags MATCH as the test expects.
 
 ## Sweep re-run (OOM-lost sets)
 
@@ -245,6 +254,57 @@ being saved as a regression check of the mark-prefix change, which touches every
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
+
+### A mark column under a group heading; 038_NC's condensate pumps (2026-10-03)
+
+056_NY (render-keyed, 35 units) read 32 with the current sidecar (the saved graph predated the ink fixes). Its
+untitled fan table prints MARK under a MARK INFORMATION band; the joined header "MARKINFORMATION MARK" matched no key
+column, QTY keyed nothing, and the one-row table was refused. Now a table no pass keyed is keyed by the one column
+whose header ends in a mark column's name (two such columns key nothing). Grid replay, 2,359 tables on 388 pages:
+056_NY's fan table and 016_NY's window type table (W2..W4, no HVAC family) change, nothing else. 056_NY rebuilt
+32 → 33 (FAN EF-2A). Residuals: AHU-PHARMACY-1 is printed wrapped in a narrow cell ("AHU-PHA" over "RMACY-1") and
+its middle segment has 8 letters, past the 6 the tag shape allows; a census of every corpus text layer found no
+equipment mark with a 7+ letter segment (only prose such as VENT-THROUGH-ROOF), and with the shape widened the
+table is still refused (its one unit row is read into its four-tier header). Not taken. The HCD laminar flow
+diffuser on MH6001 is not read either (GRD 9/10).
+
+038_NC re-keyed from the render: sheet 54's electrical MECHANICAL EQUIPMENT SCHEDULE lists 47-CP-1 and 47-CP-2,
+CONDENSATE PUMP (120 V, 1/30 HP), tagged on sheet 39 and found on no mechanical sheet. The key, written from
+mechanical sheet 20, lacked them; PUMP 2 added (as 19_CA's key counts its electrical equipment schedule). The
+takeoff read them before the change.
+
+091_IL (render-keyed, 34 units) read 30: M4.01 prints ten pictured schedules whose tags are split into ABB. and
+NO. columns ("AHU" | "3A-01"). Its RTU and AHU schedules were refused, each unit row read into the header: the units
+take two lines (cooling and electric coils; a second compressor circuit), AS-146's two-line test wanted a mark in
+the first cell, and the AHU's NONE merged across its return-fan columns read as a column grouping. Now, where the
+header prints ABB. over NO., the pair is the row's mark (keyed AHU-3A-01), a line under it owning a quarter of the
+columns or fewer is its second line, and a merged NONE / N/A / NOT USED / dash is a value, not a group (AS-146's
+own test of a merged real value still holds). Grid replay: only 091_IL's eight split-tag tables change (a first
+version without the header check joined a panel schedule's NOTES | # into EX-1, EX-3; reverted to the header
+gate). 091_IL rebuilt: 30 → 34 = key (RTU-1, AHU-3A-01/3A-02/6B-01; RF-1B-1 now keyed whole; CC-1, CU-1... keyed
+with their hyphen).
+
+043_FL's pictured schedules now all build with the current sidecar, but the AHU's one row is ED-203 and the
+humidifier's ED-203-HC (the unit named by its system, no family letters), and a family's title alone does not
+make a row its unit. Census over 50 saved graphs of titled one-to-three-row tables whose marks the titled family
+does not read: 20, mixed (units another family already counts, such as DOAS-1, HP-2, CRAH-T1A; junk rows "NO",
+"NOTES"; possible key gaps, 004_MO's GWH-1/2 under GAS WATER HEATER and 032_PA's NET A/B under EXPANSION TANK).
+No rule taken; 043_FL AHU 0/1 and HUMIDIFIER 0/1 stay.
+
+036_LA CONDENSING_UNIT 33/34: its COMPUTER ROOM AIR CONDITIONING row pairs 07-EVAP-1 (INDOOR UNIT MARK NO.) with
+07-COND-1 (OUTDOOR UNIT MARK NO.), the key's 34th condensing unit. Reading it takes three changes: the split-pair
+header rule accepting a trailing NO. (only this table in the 50 saved graphs), a split reading under a title that
+names another family (AS-144 keeps a titled table's own reading on purpose), and COND as a condenser's split mark.
+One unit; not taken.
+
+19_CA FAN 1/2: E-6.2's ink schedule prints its marks in hexagons; the outline eraser removes the slanted sides,
+but a faint residue of the top edge touches "EF", and OCR reads EF-1's cell as "F" (a re-read of the cell alone
+reads "F" and "1" too). Same class as 07_MO's hexagon marks; retuning the cleaning re-reads every pictured table
+of the corpus. Not taken.
+
+Scoreboard over the 50 saved graphs (current lib): key 2,171 units, 76 under, 692 over. Most "over" is the stale
+partial keys listed above (26_CA 283, 096_IN 81, 05_MO 60, 028_TX 39, 014_MT 32, 030_NY 27, 019_FL 25, 016_NY 23);
+several saved graphs predate later fixes (032_PA, 08_ME, 056_NY), so a fresh rebuild is the next measurement.
 
 ### Role-suffixed marks under a family title (2026-10-03)
 

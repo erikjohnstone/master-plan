@@ -1398,6 +1398,10 @@ const UNIT_TAG_HEADER_RE = /^UNIT\s*(?:TAG|NO\.?|NUMBER|#)$/i;
  * (Hawthorn Psych AHU SCHEDULE). Distinct from UNIT MARK / VALVE MARK
  * (cross-references): EQUIP TAG names THIS row's equipment mark. */
 const EQUIP_TAG_HEADER_RE = /^EQUIP\.?\s*TAG$/i;
+// A key column's own name at the end of a header that also carries the group
+// band printed over it ("MARK INFORMATION MARK"): scheduleTableFromODL keys a
+// table by it only when no column is named exactly and nothing else keyed.
+const GROUPED_KEY_HEADER_RE = /\S\s+(?:MARK|TAG|SYMBOL|DESIGNATION|UNIT\s+(?:TAG|NO\.?)|EQUIP(?:\.|MENT)?\s+TAG)$/;
 
 function isItemNoHeader(text: string | null | undefined): boolean {
   return ITEM_NO_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
@@ -10767,6 +10771,31 @@ function scheduleTableFromODLRead(
   // opts.headerLookahead) can classify a CANDIDATE row further down the
   // table with the exact same rule the main loop uses, rather than a
   // second, driftable copy of it.
+  // A MARK PRINTED IN TWO COLUMNS, its letters under ABB. and its number
+  // under NO.: 091_IL's pictured schedules print "AHU" | "3A-01". The joined
+  // mark ("AHU-3A-01") when the two cells start on the same row, else "".
+  // Only where the header itself prints the pair, ABB. over the letters and
+  // NO. over the number: a panel schedule's NOTES and # columns ("EX" | "1")
+  // are no mark.
+  const splitTagHeader = (() => {
+    for (let r = bodyStart; r < R; r++) {
+      for (let c = 0; c + 1 < C; c++) {
+        const a = grid[r][c], b = grid[r][c + 1];
+        if (!a || !b || a === b || a["row number"] - 1 !== r || b["row number"] - 1 !== r) continue;
+        if (/^ABB(?:R|REV)?\.?$/i.test(odlCellText(a).trim()) && /^(?:NO\.?|NUMBER)$/i.test(odlCellText(b).trim())) return true;
+      }
+    }
+    return false;
+  })();
+  const splitMarkAt = (r: number, c: number): string => {
+    if (!splitTagHeader) return "";
+    const a = grid[r]?.[c], b = grid[r]?.[c + 1];
+    if (!a || !b || a === b || a["row number"] !== b["row number"]) return "";
+    const letters = odlCellText(a).trim(), number = odlCellText(b).trim();
+    if (!/^[A-Z]{1,6}$/i.test(letters) || !number || /\s/.test(number)) return "";
+    const joined = `${letters}-${number}`;
+    return printsAMark(joined) ? joined : "";
+  };
   // THE SECOND LINE OF A UNIT'S ROW (AS-146): a grid row whose key cell spans
   // down from the row above, where that cell prints a mark, and which prints
   // no mark of its own. 014_MT's AHU-A1 carries its coils' second line
@@ -10775,7 +10804,19 @@ function scheduleTableFromODLRead(
   // serves two fan coils, and FC-2's line is a unit of its own.
   const isSecondLine = (r: number, keyCol: number): boolean => {
     const keyCell = grid[r][keyCol];
-    if (!keyCell || keyCell["row number"] - 1 >= r || !printsAMark(odlCellText(keyCell))) return false;
+    if (!keyCell || keyCell["row number"] - 1 >= r) return false;
+    // A split mark running down holds the lines under it that own a quarter
+    // of the columns or fewer: 091_IL's AHU-3A-01 prints its electric coil
+    // (EHC-1) alone on a second line beside its cooling coil (CC-1).
+    if (splitMarkAt(r, keyCol)) {
+      let own = 0;
+      for (let c = 0; c < C; c++) {
+        const cell = grid[r][c];
+        if (cell && cell["row number"] - 1 === r) own += cell["column span"] || 1;
+      }
+      return own * 4 <= C;
+    }
+    if (!printsAMark(odlCellText(keyCell))) return false;
     for (let c = 0; c < C; c++) {
       const cell = grid[r][c];
       if (cell && cell["row number"] - 1 === r && printsAMark(odlCellText(cell))) return false;
@@ -10808,8 +10849,17 @@ function scheduleTableFromODLRead(
     // A grouping tier groups COLUMNS; a row whose spans run down only and whose
     // first cell prints a mark is a unit's row, however many lines it takes.
     const lead = grid[r][0];
-    const tallUnitRow = ownsLeadCell && !!lead && spanning.every((cl) => (cl["column span"] || 1) === 1)
-      && printsAMark(odlCellText(lead));
+    // A mark printed in two columns, its letters under ABB. and its number
+    // under NO. (091_IL's pictured AIR HANDLING UNITS: "AHU" | "3A-01"), is the
+    // row's mark as well.
+    const splitMark = ownsLeadCell && !!splitMarkAt(r, 0);
+    // "NONE" merged across a section the unit lacks (all nine RETURN/EXHAUST
+    // FAN columns of the same schedule) is a value, not a group's name; any
+    // other cell merged across columns makes the row a grouping tier.
+    const groupsColumns = spanning.some((cl) => (cl["column span"] || 1) > 1
+      && !/^(?:NONE|N\/?A|NOT\s+(?:USED|APPLICABLE)|[-–—]*)$/i.test(odlCellText(cl).trim()));
+    const tallUnitRow = ownsLeadCell && !!lead && !groupsColumns
+      && (printsAMark(odlCellText(lead)) || splitMark);
     const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size) && !tallUnitRow;
     return { fullCoverage, grouped };
   };
@@ -11583,7 +11633,12 @@ function scheduleTableFromODLRead(
       if (!printed) continue;
       if (rows.some((existing) => existing.key === printed)) continue;
     }
-    const rawKey = texts[keyCol] || "";
+    // A mark split over ABB. and NO. columns keys its row joined (AHU-3A-01),
+    // as the plans print it; a NO. column alone tells such rows apart only
+    // when several share their letters (resolveKeyCollisions), and a
+    // one-unit table (091_IL's RTU-1) would key its letters alone.
+    const split = !printedKeys && /(?:^|\s)(?:NO\.?|NUMBER|#)$/.test(norm(headers[keyCol + 1] ?? "")) ? splitMarkAt(r, keyCol) : "";
+    const rawKey = split || texts[keyCol] || "";
     // GOAL.md rule 22: ODL already knows this row's own real column grid —
     // a far cleaner corroboration signal than the geometric extractor's own
     // banded-token heuristic (see rowKeyOf's own comment) for the same bare
@@ -12087,6 +12142,23 @@ function scheduleTableFromODLRead(
     if (evidenced.length) {
       buildRows(evidenced, true);
       keyedBy = evidenced;
+    }
+  }
+  // A MARK COLUMN UNDER A GROUP HEADING KEYS A TABLE NOTHING ELSE KEYED.
+  //
+  // A two-tier header joins each column's name to the band printed over it.
+  // 056_NY's untitled fan table prints QTY and MARK under MARK INFORMATION, so
+  // its mark column is named "MARKINFORMATION MARK": the exact names above
+  // find no key column, the first column (QTY, "1") keys nothing, a table of
+  // one row proves no column by its rows, and EF-2A was refused with its table.
+  // Only where no pass keyed a row, and only through the one column whose name
+  // ends in a mark column's own: two would be a split system's halves under
+  // their own headings, which the takeoff reads apart (AS-144).
+  if (!rows.length && keyColIdx < 0) {
+    const grouped = headers.flatMap((h, c) => (GROUPED_KEY_HEADER_RE.test(norm(h)) ? [c] : []));
+    if (grouped.length === 1) {
+      buildRows(grouped, false);
+      if (rows.length) keyedBy = grouped;
     }
   }
   // A ROW THE NAMED KEY COLUMN SCHEDULES BY RANGE OR LIST IS A ROW (AS-142).
