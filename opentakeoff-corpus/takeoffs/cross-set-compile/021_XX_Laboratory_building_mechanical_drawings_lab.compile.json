@@ -2,29 +2,26 @@
   "set_id": "021_XX_Laboratory_building_mechanical_drawings_lab",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/021_XX_Laboratory_building_mechanical_drawings_lab.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 lab mechanical \u2014 rich HVAC MEAT + PRV schedule + DDC CONTROLLER INPUT/OUTPUT SUMMARY/LEGEND \u2192 BAS lists=3 rows=63 (device tags, AI/BI rollup not MARK-prefix).",
+  "notes": "[MEAT] Vol2 lab mechanical \u2014 rich HVAC MEAT + PRV schedule + DDC CONTROLLER INPUT/OUTPUT SUMMARY/LEGEND \u2192 BAS lists=3 rows=63 (device tags, AI/BI rollup not MARK-prefix). [RE-KEYED 2026-10-03 from the render] M-601 (sheet 13) schedules AHU-1..AHU-6; FCU-1..FCU-3; boilers B-1A, B-1B, B-2A, B-2B; fans SF-7, SF-8, EF-1..EF-17 (19); UH-1 and CUH-1 under UNIT HEATER SCHEDULE; PRV-1, PRV-2; air devices CD-1, LD-1, LD-2, SR-1, R-1, R-2 (GRD 6); sound attenuators SA-1, SA-2, SA-4..SA-18 even (10); AIR COOLED CHILLER CH-1..CH-4 (4, scroll, each printed on a chilled-water and an ice-making line; no heat recovery chiller is scheduled); PUMP P-1A,B..P-6A,B (two pumps a row, 12) and CP-1..CP-6 (18); TANK SCHEDULE T-1..T-4 (REMARKS: EXPANSION TANK, 4) and AS-1, AS-2 (AIR SEPARATOR, 2). The takeoff does not read a general TANK SCHEDULE's rows by their REMARKS (0 of these 6 read). T-7, T-8 (STORAGE TANK) and the ICE STORAGE TANK SCHEDULE's T-5, T-6 have no takeoff family and are not counted. The lab air valves (SAV/EAV/HEV by size, and the WEST and EAST WING LAB AND LAB SUPPORT AIR VALVES listed room by room) and the AIR TERMINAL UNIT SCHEDULE's VVR sizes are scheduled as types and are not keyed. BAS: seven DDC CONTROLLER INPUT/OUTPUT SUMMARY lists, 128 rows: M-803 hot water boiler 19 and air cooled chiller 34 (23 tagged devices, 11 chiller interface rows); M-804 VAV AHU 100% outside air with fume hoods 32 (its FUME HOOD label row is not a point), lab fume hood exhaust 5, general exhaust 5; M-805 administration AHU-3 & 6 30, VAV with return air 3. Each row marks its I/O type, trending and alarms with drawn circles (physical or logical point) that the text layer does not carry: AI/AO/BI/BO, alarm, trend, hardwired and soft are not keyed.",
   "categories": {
     "AHU": 6,
     "FCU": 3,
-    "AIR_COOLED_CHILLER": 1,
-    "HEAT_RECOVERY_CHILLER": 1,
+    "AIR_COOLED_CHILLER": 4,
     "BOILER": 4,
-    "PUMP": 12,
+    "PUMP": 18,
     "FAN": 19,
     "UNIT_HEATER": 2,
     "PRESSURE_REDUCING_VALVE": 2,
     "GRD": 6,
-    "DUCT_SILENCER": 10
+    "DUCT_SILENCER": 10,
+    "EXPANSION_TANK": 4,
+    "AIR_SEPARATOR": 2
   },
   "totals": {
-    "items": 66
+    "items": 80
   },
   "bas_points": {
-    "rows": 63,
-    "alarm": 0,
-    "trend": 0,
-    "hardwired": 0,
-    "soft": 0
+    "rows": 128
   },
   "control_valves": {
     "items": 2,

@@ -6,7 +6,7 @@
  * Versioned: changing family rules after VALIDATING starts requires a truth
  * CHANGELOG + reset to 0/5.
  */
-import { scheduleTitleMatches, familyRuleTitle } from "./scheduleTitleMatch.mjs";
+import { scheduleTitleMatches, familyRuleTitle, compactScheduleTitle } from "./scheduleTitleMatch.mjs";
 import { scheduledQtyStatusFromRow, isRepeatableAirDeviceSchedule } from "./schedulePlanReconcile.mjs";
 import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
 import { disciplineOfSheetNumber } from "./symbolsweep.ts";
@@ -3333,6 +3333,10 @@ export function basEstimatorStatus({ lists, totals, sheets, product = null }) {
   };
 }
 
+/** isBasPointsListTitle's captions with spaces and punctuation dropped. */
+const BAS_POINTS_LIST_COMPACT_TITLE_RE =
+  /POINTS?LIST|DDCPOINTS|IOLIST|DDCCONTROLLERINPUTOUTPUT|CONTROLLERIO(?:SUMMARY|LEGEND|LIST)|BACNETINTERFACESCHEDULE|POINTS?(?:FUNCTION)?SCHEDULE/;
+
 /**
  * Shared UI+MCP gate for T-BAS-01 list titles.
  * Covers NAVFAC-shaped POINTS/DDC lists and PLC panel I/O LIST / IO LIST
@@ -3361,6 +3365,17 @@ export function isBasPointsListTitle(title) {
   // "point list table" narratives — those lack the SCHEDULE token).
   if (/\bPOINTS?\s+FUNCTION\s+SCHEDULE\b/i.test(t)) return true;
   if (/\bPOINTS?\s+SCHEDULE\b/i.test(t)) return true;
+  // A CAPTION THE TEXT LAYER PRINTS WITH NO SPACES. 021_XX's M-803 letters
+  // its boiler list's caption with no space glyphs, so it reads
+  // DDCCONTROLLERINPUTOUTPUTSUMMARY: the rules above refused it while the
+  // chiller list beside it, spaced, was read. A title with no space at all
+  // is read by its letters, as a family's schedule title is
+  // (AIRHANDLINGUNITSCHEDULE); one with spaces is read as printed.
+  if (!/\s/.test(t)) {
+    const compact = compactScheduleTitle(t);
+    if (/POINTLISTTABLE/.test(compact)) return false;
+    return BAS_POINTS_LIST_COMPACT_TITLE_RE.test(compact);
+  }
   return false;
 }
 
@@ -3390,6 +3405,23 @@ export function inferBasListTitle(table) {
   if (/\bPOINTS?\s+SCHEDULE\b/i.test(blob)) return "POINTS SCHEDULE (header-inferred)";
   if (/\bPOINTS?\s+LIST\b/i.test(blob)) return "POINTS LIST (header-inferred)";
   return "BAS POINTS TABLE (header-inferred)";
+}
+
+/**
+ * A points list's section label, printed alone in its tag column: 021_XX's
+ * VAV AHU list prints FUME HOOD there above the hood's own devices (PT-1,
+ * VFD-1 to VFD-3...), with no description and nothing in any type column. A
+ * point prints its mark with a number, or a description: the same list's
+ * chiller interface rows (SELF DIAGNOSTIC, OIL PRESSURE) print a description
+ * alone and are points. A SPARE or FUTURE slot is a point too.
+ */
+function isBasSectionLabelRow(row) {
+  const printed = Object.entries(row?.cells || {}).filter(([, cell]) => String(cell?.text || "").trim());
+  if (printed.length !== 1) return false;
+  const [header, cell] = printed[0];
+  const text = String(cell.text).trim();
+  if (/\d/.test(text) || /^(?:SPARE|FUTURE)\b/i.test(text)) return false;
+  return /\b(?:TAG|MARK)\b/i.test(header) && !/\bDESCRIPTION\b/i.test(header);
 }
 
 /** Column-label rows that are not countable I/O or points marks. */
@@ -3583,6 +3615,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       const tag = String(cellText(row, /^MARK$/i) || row.key || "").trim();
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
+      if (isBasSectionLabelRow(row)) continue;
       // Some templates print a literal placeholder mark (BI#, BI##, BO#)
       // for a repeated or field-numbered point. It is still an authored
       // typed point row; the wildcard is not a reason to demote it to

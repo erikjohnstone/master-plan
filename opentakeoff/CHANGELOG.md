@@ -1,5 +1,17 @@
 # Changelog
 
+- **A points list whose caption lost its spaces; a section label is no point.** 021_XX's M-803 letters its hot
+  water boiler list's caption with no space glyphs, so it reads DDCCONTROLLERINPUTOUTPUTSUMMARY, and the BAS title
+  gate refused it while the chiller list beside it, spaced, was read: 19 rows unread. A caption with no space at
+  all is now read by its letters, as a family's schedule title already is (AIRHANDLINGUNITSCHEDULE); one printed
+  with spaces is read as printed. On M-804, FUME HOOD printed alone in a list's TAG ID column, above the hood's own
+  devices, was counted as a point; a row whose one printed cell is a word in the tag column is a section label (a
+  description alone, as a chiller's interface rows print, is still a point, and so is a SPARE). Over 147 cached
+  graphs only 021_XX changes: 109 → 127 rows of the drawings' 128 (the fume hood's VFD-1, its text the same as the
+  air handler's VFD-1, is dropped as a repeated row when the table is built). 021_XX re-keyed from its renders: 4
+  air-cooled chillers and 18 pumps where its key (written from pipeline output) had 1 + 1 heat recovery and 12,
+  its tank schedule's 4 expansion tanks and 2 air separators (unread: the general TANK SCHEDULE names each row's
+  kind only in REMARKS), and 128 BAS rows; the lists' I/O types, alarms and trends are drawn circles, not keyed.
 - **A points list printed in I/O sections reads whole.** 015_VA's AM703–AM706 print nine points lists, each in
   sections (ANALOG INPUT, ANALOG OUTPUT, BINARY INPUT, BINARY OUTPUT) under MARK | DESCRIPTION | ALARM | TREND. The
   table engine rules each section off as a face of its own, and only a list's first face carries its title and

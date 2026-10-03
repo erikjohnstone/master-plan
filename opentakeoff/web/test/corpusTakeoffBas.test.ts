@@ -39,6 +39,16 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("INPUT OUTPUT SUMMARY"), false);
     assert.equal(isBasPointsListTitle(""), false);
   });
+
+  it("reads a caption the text layer printed with no spaces (021_XX's M-803)", () => {
+    assert.equal(isBasPointsListTitle("DDCCONTROLLERINPUTOUTPUTSUMMARY"), true);
+    assert.equal(isBasPointsListTitle("CRAHDDCPOINTSLIST"), true);
+    assert.equal(isBasPointsListTitle("AHU-1POINTLISTTABLE"), false);
+    assert.equal(isBasPointsListTitle("AIRHANDLINGUNITSCHEDULE"), false);
+    assert.equal(isBasPointsListTitle("INPUTOUTPUTSUMMARY"), false);
+    // A caption printed with its spaces is read as printed, never compacted.
+    assert.equal(isBasPointsListTitle("RADIO LIST"), false);
+  });
 });
 
 describe("compileBasTakeoff row semantics", () => {
@@ -333,6 +343,31 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.equal(bas.totals.BO, 0);
     assert.equal(bas.categories.points_lists.lists[0].items[0].point_type, null);
     assert.equal(bas.categories.points_lists.lists[0].items[0].point_type_status, "REFUSED_POINT_TYPE_CONFLICT");
+  });
+
+  it("does not count a section label printed alone in the tag column (021_XX's FUME HOOD)", () => {
+    const TAG = "DDC CONTROLLER INPUT/OUTPUT LEGEND CONTROL DEVICE TAG ID";
+    const DESC = "DDC CONTROLLER INPUT/OUTPUT LEGEND CONTROL DEVICE DESCRIPTION";
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#18", number: 18 }],
+      tables: [{
+        kind: "equipment",
+        sheet: "set.pdf#18",
+        title: { text: "DDC CONTROLLER INPUT/OUTPUT SUMMARY", bbox: [0, 0, 10, 10] },
+        rows: [
+          { key: "V-2", cells: { [TAG]: { text: "V-2" }, [DESC]: { text: "VALVE MODULATION 2" } } },
+          { key: "FUMEHOOD", cells: { [TAG]: { text: "FUME HOOD" }, [DESC]: { text: "" } } },
+          { key: "PT-1", cells: { [TAG]: { text: "PT-1" }, [DESC]: { text: "SUPPLY AIR DUCT STATIC PRESSURE" } } },
+          { key: "SPARE", cells: { [TAG]: { text: "SPARE" } } },
+          { key: "OIL PRESSURE", cells: { [DESC]: { text: "OIL PRESSURE" } } },
+        ],
+      }],
+    });
+    assert.deepEqual(
+      bas.categories.points_lists.lists[0].items.map((item: { tag: string }) => item.tag),
+      ["V-2", "PT-1", "SPARE", "OIL PRESSURE"],
+    );
+    assert.equal(bas.totals.rows, 4);
   });
 
   it("counts device I/O rows and skips the TAG header", () => {

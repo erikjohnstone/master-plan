@@ -136,8 +136,9 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   before this test means anything; not edited to pass. 015_VA was re-counted from its renders on 2026-10-03 (117
   points, which the takeoff now reads) and passes the row check, then fails the next: 2 of 35 served targets MATCH
   (floor 15), 25 AMBIGUOUS by the exact-tag rule below ("matching symbol geometry was not verified"), 8
-  SCHEDULE_ONLY. The sweep is identical at e157911 (75 points; the same 35 targets and tallies). 021_XX is still to
-  re-count.
+  SCHEDULE_ONLY. The sweep is identical at e157911 (75 points; the same 35 targets and tallies). 021_XX was
+  re-counted from its renders the same day (128 rows); the takeoff reads 127, the fume hood's VFD-1 dropped as a
+  repeated row (see "A points list whose caption lost its spaces" below).
 - MCP `valvePlanPaint.regression` (6 of 7 sets) fails its MATCH floor: every valve target sweeps to AMBIGUOUS,
   "Exact plan tag text was found, but matching symbol geometry was not verified" (062_ID 31 of 31, need >= 10
   MATCH). That verdict is `classifyBasServedSweepOutcome`'s rule from #94 (13dea24). 062_ID run alone fails
@@ -147,7 +148,13 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 - MCP `crossCorpusWorkflow` "WP1 keyed compile acceptance": federal-mech (BAS 89 vs 26) and 04_NV (19 vs 16) as
   above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too) and 21_VA
   (102 vs 100: the documented RF1/RF2 residual from its technology sheet's AV list; c637a3d read 88). The structural
-  sweep over every corpus PDF passes.
+  sweep over every corpus PDF passes. 021_XX (re-keyed 2026-10-03) misses EXPANSION_TANK 0 of 4 and AIR_SEPARATOR 0
+  of 2 (a general TANK SCHEDULE naming each row's kind in REMARKS) and BAS rows 127 of 128.
+- MCP `reconcileWorkflow` "Vol2 lab mech 021: HVAC families honest SCHEDULE_ONLY": 11 AHU reconcile rows against
+  6. An untitled duct pressure-class table on sheet 9 (rows "AHU-1,2, 4 ＆ 5", AHU-3, AHU-6 under NEGATIVE
+  PRESSURES) is read as AHU rows; its full-width ＆ also hides AHU-5. The takeoff's AHU count (6, by mark) is
+  unaffected. Identical at e157911 with the old key; the other families match the re-keyed counts (FCU 3, PUMP 18,
+  FAN 19, BOILER 4, GRD 6, all SCHEDULE_ONLY).
 - MCP `reconcileWorkflow` "Vol2 ITD D1 lab 062: plan-drawn HVAC families MATCH": FCU (DFC-1, F-1), LOUVER (L-1,
   L-2), LOUVERED_PENTHOUSE (PH-1) and GRD R-2 sweep to AMBIGUOUS under the same exact-tag rule, and GRD holds 11
   reconcile rows against the key's 7. Identical at 6a3e08a (graph rebuilt with that code) and at 45e69db.
@@ -258,6 +265,40 @@ being saved as a regression check of the mark-prefix change, which touches every
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
+
+### A points list whose caption lost its spaces; 021_XX re-keyed (2026-10-03)
+
+021_XX's key (written from pipeline output) read 63 BAS rows; the takeoff read 109. The renders (M-803 to M-805)
+print seven DDC CONTROLLER INPUT/OUTPUT SUMMARY lists, one device or chiller interface point a row, 128 rows: hot
+water boiler 19, air cooled chiller 34 (23 tagged, 11 interface rows printing a description alone), VAV AHU 100%
+outside air with fume hoods 32 (under a FUME HOOD label row), lab fume hood exhaust 5, general exhaust 5,
+administration AHU-3 & 6 30, VAV with return air 3. Three readers fell short:
+
+- The boiler list's caption has no space glyphs (DDCCONTROLLERINPUTOUTPUTSUMMARY), and the BAS title gate wanted
+  spaces. Rule (corpusTakeoff.mjs `isBasPointsListTitle`): a caption with no space at all is read by its letters
+  (POINTSLIST, DDCCONTROLLERINPUTOUTPUT, ...), as family titles already are; a spaced caption is read as printed.
+  Census over 147 cached graphs (4,525 tables): this is the one table the compact form newly admits.
+- FUME HOOD, printed alone in the TAG ID column, was counted as a point. Rule (`isBasSectionLabelRow`): one printed
+  cell, under a TAG or MARK header (not DESCRIPTION), no digit, not SPARE or FUTURE, is a section label. Census
+  over 518 cached points lists (11,227 rows): one such row; the 10 description-only rows are 021_XX's chiller
+  interface points and stay.
+- Not fixed: the fume hood's VFD-1 prints the same text as the air handler's VFD-1 (its circles differ only by
+  position), and the ODL reader drops a row whose key and every cell repeat an emitted row (B-20, written for a
+  phantom row a hairline splits off a real one). Census of that rule over 388 saved replies and 18,334 cached ODL
+  tables: 313 rows dropped; 83 whose key cell spans down from the row above (B-20's shape), 230 owning their key
+  cell, 85 of those more than three rows from the row they repeat (panel circuits, mullion and message schedules,
+  transposed attribute rows like VOLTAGE/PHASE, this VFD-1). Keeping far, key-owning repeats is the likely refinement
+  but touches those 85 rows across many tables; not done here.
+
+The lists mark each point's I/O type, trending and alarms with drawn circles, filled for a physical point and open
+for a logical one; the text layer carries none of them, so AI/AO/BI/BO, alarm and trend read 0 and are not keyed.
+
+021_XX re-keyed from M-601: AIR_COOLED_CHILLER 4 (CH-1..CH-4, each on a chilled-water and an ice-making line; the
+key's HEAT_RECOVERY_CHILLER 1 is not on the drawings), PUMP 18 (P-1A,B..P-6A,B two a row, CP-1..CP-6), and the TANK
+SCHEDULE's EXPANSION_TANK 4 (T-1..T-4) and AIR_SEPARATOR 2 (AS-1, AS-2), each named in REMARKS. The takeoff reads none
+of the 6 (no rule reads a general TANK SCHEDULE's kinds from REMARKS; one such table in the 147 cached graphs).
+Other families as before (AHU 6, FCU 3, BOILER 4, FAN 19, UNIT_HEATER 2, PRV 2, GRD 6, DUCT_SILENCER 10); storage
+and ice storage tanks (no family), lab air valves and VAV sizes (types) are not keyed. BAS: 109 → 127 rows of 128.
 
 ### Points lists printed in I/O sections; 015_VA's BAS points re-keyed (2026-10-03)
 
