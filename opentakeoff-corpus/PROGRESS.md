@@ -305,6 +305,13 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   tags (the boiler room plan names them only in its notes).
 - 18_OR: M5.1 (page 18) prints INDOOR FAN COIL UNITS FC-1 to FC-4 under its DUCTLESS MULTI-SPLIT SYSTEM HEAT PUMP UNIT
   SCHEDULE (Daikin FTXS wall-mounted indoor units on HP-5 and HP-6). Re-keyed FCU 4, totals 25, the takeoff's 25.
+- 053_VA ([MEAT] key HHW_CONTROL_VALVE 38, GRD 5): MH601 (page 12) prints a SINGLE DUCT AIR TERMINAL UNIT SCHEDULE
+  of 20 (TU26-11 to TU26-72; six marked by note 3 as existing units scheduled for rebalancing only) and a SERIES FAN
+  POWERED one (TU26-73), and three AIR DEVICE SCHEDULEs of 8 types (SD-A, SD-B, RG-A to RG-D, EG-A, EG-B). Re-keyed
+  VAV 21, GRD 8, totals 67, the takeoff's 67. Its reconcile test expected 6 air device rows (2 MATCH, 4 schedule-only)
+  and failed on the 8 the takeoff reads; it now asserts all 8 AMBIGUOUS, as the reconcile reads them: page 5's floor
+  plan tags them with their airflow (RG-A 14 times, EG-A 6), but tag text without matching symbol geometry leaves each
+  installed count unknown. 20 of the 21 terminal units MATCH their plan tags; TU26-40 is printed only on page 7.
 - One mark on two rows of one schedule: the takeoff counts a mark once (`uniqueFamily`'s `keys`), so a later row that
   prints the same mark adds no unit. A census over 79 documents (the best graph of each) finds 26 such rows on 9
   documents whose cells differ from the first row's. All but one are one unit printed on two rows: 031_MO's fans, coils

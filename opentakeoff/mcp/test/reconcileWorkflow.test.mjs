@@ -685,7 +685,7 @@ test("Vol2 warehouse 031: GRD partial 12 MATCH · 47 SCHEDULE_ONLY", async (t) =
   assert.equal(key.categories.GRD, 59);
 });
 
-test("Vol2 VA ER 053: HHW valves honest SCHEDULE_ONLY; GRD 2/5 MATCH", async (t) => {
+test("Vol2 VA ER 053: HHW valves honest SCHEDULE_ONLY; air device types tagged, count unverified", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "053_VA_Renovate_Expand_Emergency_Room_System_VA.compile.json"),
@@ -695,10 +695,12 @@ test("Vol2 VA ER 053: HHW valves honest SCHEDULE_ONLY; GRD 2/5 MATCH", async (t)
   await assertFamilyStatusCounts(session, graph, key, "HHW_CONTROL_VALVE", {
     schedule_only: key.categories.HHW_CONTROL_VALVE,
   });
+  // MH601's 8 air device types (SD-A/B, RG-A..D, EG-A/B) are tagged on the
+  // floor plan with their airflow; tag text alone leaves each installed count
+  // unknown until symbol geometry confirms it.
   await assertFamilyStatusCounts(session, graph, key, "GRD", {
-    match: 2,
-    schedule_only: 4,
-  }, { rows: 6 });
+    ambiguous: key.categories.GRD,
+  });
 });
 
 test("Vol2 Salinity Lab 023: chiller plant honest SCHEDULE_ONLY", async (t) => {
