@@ -520,6 +520,45 @@ describe("compileBasTakeoff I/O LIST", () => {
     [["1", "AI", "hardwired"], ["2", null, "soft"], ["3", null, null]]);
   });
 
+  it("types a point by a bare TYPE column where it prints an I/O type, and leaves a TYPE that names what a point senses alone (045_FL's CONTROL POINTS SCHEDULE, 096_IN's MISCELLANEOUS POINTS SCHEDULE)", () => {
+    const row = (mark: string, type: string, description = "") => ({
+      key: mark,
+      cells: { MARK: { text: mark }, TYPE: { text: type, bbox: [10, Number(mark) * 5, 14, Number(mark) * 5 + 4] }, ...(description ? { DESCRIPTION: { text: description } } : {}) },
+    });
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#21", number: 21 }],
+      tables: [
+        {
+          sheet: "set.pdf#21",
+          title: { text: "CONTROL POINTS SCHEDULE (THIS SHEET ONLY)", bbox: [0, 0, 10, 10] },
+          headers: ["MARK", "TYPE", "DESCRIPTION", "NOTES"],
+          rows: [
+            row("1", "AO", "FAN COIL UNITS CHILLED WATER COIL VALVE MODULATION"),
+            row("2", "AI", "FAN COIL UNITS FAN MOTOR CURRENT"),
+            row("3", "DO", "FAN COIL UNITS ON/OFF"),
+            row("4", "SPARE"),
+          ],
+        },
+        {
+          sheet: "set.pdf#21",
+          title: { text: "MISCELLANEOUS POINTS SCHEDULE", bbox: [0, 20, 10, 30] },
+          headers: ["MARK", "TYPE", "DESCRIPTION"],
+          rows: [row("1", "FLOW", "DOMESTIC WATER FLOW"), row("2", "GENERAL ALARM", "GENERATOR")],
+        },
+      ],
+    });
+    const [control, misc] = bas.categories.points_lists.lists;
+    assert.deepEqual(control.items.map((item: { point_type: string | null; point_type_raw: string | null; point_type_status: string }) =>
+      [item.point_type, item.point_type_raw, item.point_type_status]),
+    [["AO", "AO", "typed"], ["AI", "AI", "typed"], ["BO", "DO", "typed"], [null, null, "untyped"]]);
+    assert.deepEqual(control.items[0].point_type_bbox_px, [10, 5, 14, 9]);
+    // A TYPE naming what a point senses or reports is no refused point type.
+    assert.deepEqual(misc.items.map((item: { point_type: string | null; point_type_status: string }) => [item.point_type, item.point_type_status]),
+      [[null, "untyped"], [null, "untyped"]]);
+    const { rows, AI, AO, BI, BO } = bas.totals;
+    assert.deepEqual({ rows, AI, AO, BI, BO }, { rows: 6, AI: 1, AO: 1, BI: 0, BO: 1 });
+  });
+
   it("reads types labelled direction first, and a type's alarm column as the alarm of a point typed beside it (05_MO's AHU POINTS LISTs, 017_MD's DDC INPUT/OUTPUT POINT SCHEDULEs)", () => {
     const dot = { text: "●" };
     const X = { text: "X" };

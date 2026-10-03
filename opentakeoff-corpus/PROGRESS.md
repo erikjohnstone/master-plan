@@ -266,6 +266,23 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### A points list's bare TYPE column; 045_FL's BAS re-keyed (2026-10-03)
+
+Rule (shared path: `compileBasTakeoff`): `basPointTypeEvidence` reads a column headed TYPE alone
+(`BAS_BARE_TYPE_HEADER_RE`) when no POINT TYPE / I/O TYPE column prints one, and only an exact I/O type there types
+the point (the same map: AI, AO, BI, BO, DI, DO and the spelled-out forms); any other value is ignored (status
+untyped, not REFUSED_UNRECOGNIZED_POINT_TYPE). The point's type bbox is its TYPE cell. Census of points lists with a
+bare TYPE column over 50 fresh and 200 cached graphs: 045_FL's two CONTROL POINTS SCHEDULEs (AI, AO, DO, SPARE),
+096_IN's MISCELLANEOUS POINTS SCHEDULE (ALARM, ANALOG, STATUS, GENERAL ALARM, FLOW, TEMPERATURE: unchanged) and a
+27_WA refrigerant table read as a header-inferred list (R-454B: unchanged). A/B: only 045_FL (AI 0 → 6, AO 0 → 1,
+BO 0 → 3). Mutants (no bare read; an unknown bare value refused; no TYPE-cell bbox) each killed. 281 focused tests,
+typecheck and lint pass.
+
+045_FL's key said BAS 0 (written before its points were keyed; its notes already said the two schedules list points).
+Re-keyed from the render of M501 (page 21): 15 printed rows, AI 6, AO 1, BO 3 (printed DO), 5 SPARE lines counted as
+rows and untyped, no alarm, trend or hardware column. WP1: PASS (FAIL on AI 0 of 6 without the rule). First key to
+decide SPARE lines: counted as printed rows, as the takeoff counts them.
+
 ### A split system under a title whose family reads none of it; two-part room suffixes; 030_NY 45 → 47 (2026-10-03)
 
 Rules (shared path: `familyTableGate` and `markCoreForKeyRe`, which the takeoff and the reconcile both read):

@@ -1,5 +1,12 @@
 # Changelog
 
+- **A points list's bare TYPE column.** 045_FL's two CONTROL POINTS SCHEDULEs print MARK | TYPE | DESCRIPTION |
+  NOTES, the TYPE column holding AO, AI, DO or SPARE, and the type reader took a type only from a POINT TYPE or I/O
+  TYPE column, so none of their 15 points was typed. A column headed TYPE alone now types a point where it prints an
+  I/O type the reader knows (DO as BO, as before); anything else it prints stays untyped, never a refused point type:
+  096_IN's MISCELLANEOUS POINTS SCHEDULE heads ALARM, STATUS, FLOW and TEMPERATURE that way, and a refrigerant table
+  read as a points list prints R-454B. 045_FL reads AI 6, AO 1 and BO 3 of 15 (5 SPARE lines untyped); its key, whose
+  BAS said none, is re-keyed from the render. Only 045_FL changes over 50 freshly built and 200 cached graphs.
 - **A split system under a title whose family reads none of it; a facility tag ending in a two-part room.** 030_NY's
   HEAT PUMP UNIT SCHEDULE prints one LG split system, its wall-mounted indoor unit 016-AC-01-16-12 under INDOOR UNIT
   (WALL MOUNTED) EQUIPMENT TAG and its outdoor unit 016-CU-01-16-12 under OUTDOOR UNIT EQUIPMENT TAG. A split system's

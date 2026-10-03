@@ -3633,6 +3633,12 @@ function isBasPointsHeaderRow(tag) {
 }
 
 const BAS_POINT_TYPE_HEADER_RE = /^(?:HARDWARE\s+)?(?:POINT|I\s*\/?\s*O)\s+TYPE$/i;
+/** A points list's column headed TYPE alone (045_FL's CONTROL POINTS
+ * SCHEDULEs: MARK | TYPE | DESCRIPTION, printing AO, AI and DO). It types a
+ * point only where it prints a type the reader knows: another list's TYPE
+ * names what a point senses (096_IN's ALARM, FLOW, TEMPERATURE), and is no
+ * refused point type. */
+const BAS_BARE_TYPE_HEADER_RE = /^TYPE$/i;
 
 /**
  * Resolve one printed BAS point type without guessing from the point name.
@@ -3643,7 +3649,9 @@ const BAS_POINT_TYPE_HEADER_RE = /^(?:HARDWARE\s+)?(?:POINT|I\s*\/?\s*O)\s+TYPE$
  */
 function basPointTypeEvidence(row, tag) {
   const markType = String(tag || "").toUpperCase().match(/^(AI|AO|BI|BO)[\s\-]?(?:\d|#+)/)?.[1] || null;
-  const raw = String(cellText(row, BAS_POINT_TYPE_HEADER_RE) || "").trim();
+  const named = String(cellText(row, BAS_POINT_TYPE_HEADER_RE) || "").trim();
+  const bare = named ? "" : String(cellText(row, BAS_BARE_TYPE_HEADER_RE) || "").trim();
+  const raw = named || bare;
   const normalized = raw.toUpperCase().replace(/[._-]+/g, " ").replace(/\s+/g, " ").trim();
   const explicitType = ({
     AI: "AI",
@@ -3675,6 +3683,7 @@ function basPointTypeEvidence(row, tag) {
   }
   if (markType) return { type: markType, raw: null, basis: "mark_prefix", status: "typed" };
   if (explicitType) return { type: explicitType, raw, basis: "explicit_point_type_cell", status: "typed" };
+  if (bare) return { type: null, raw: null, basis: null, status: "untyped" };
   return {
     type: null,
     raw: raw || null,
@@ -3895,6 +3904,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         point_type_basis: pointType.basis,
         point_type_status: pointType.status,
         point_type_bbox_px: cellBbox(row, BAS_POINT_TYPE_HEADER_RE)
+          || (pointType.raw && pointType.basis !== "ticked_point_type_column" ? cellBbox(row, BAS_BARE_TYPE_HEADER_RE) : null)
           || (pointType.basis === "ticked_point_type_column" ? row.cells?.[ticks.typeColumn.header]?.bbox || null : null),
         cells,
         alarm: pointExtras.alarm,
