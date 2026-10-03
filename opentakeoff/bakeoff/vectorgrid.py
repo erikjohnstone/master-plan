@@ -801,6 +801,42 @@ def vbounds_of(members, cells) -> tuple:
             max(x[2] for x in b), max(x[3] for x in b))
 
 
+TITLE_TYPE_RATIO = 1.15  # a title's type is this much larger than its table's
+
+
+def _opens_with_title(members, cells, letters, origin=(0.0, 0.0)) -> bool:
+    """Whether a block opens with its own title: its top rows are undivided
+    full-width bands, touching one another, and their type is larger than the
+    type below them. `letters` is the page's upright characters as (centre y,
+    centre x, height), sorted, with their centre ys alone beside them, both in
+    pdfplumber's coordinates (`origin` takes them to the cells')."""
+    rows: dict = defaultdict(list)
+    for i in members:
+        rows[round(cells[i].bounds[1])].append(i)
+    keys = sorted(rows)
+    b = [cells[i].bounds for i in members]
+    gx0, gy0, gx1, gy1 = min(t[0] for t in b), min(t[1] for t in b), max(t[2] for t in b), max(t[3] for t in b)
+    top, bottom = [], None
+    for k in keys:
+        ms = rows[k]
+        if len(ms) != 1 or cells[ms[0]].bounds[2] - cells[ms[0]].bounds[0] < (gx1 - gx0) * 0.9:
+            break
+        if bottom is not None and k - bottom > 2:
+            break
+        top.append(k)
+        bottom = cells[ms[0]].bounds[3]
+    if not top or len(top) == len(keys):
+        return False
+    centres, ys = letters
+    title, body = [], []
+    for y, x, h in centres[bisect_left(ys, gy0 + origin[1]):bisect_left(ys, gy1 + origin[1])]:
+        if gx0 <= x - origin[0] <= gx1:
+            (title if y - origin[1] <= bottom else body).append(h)
+    if not title or not body:
+        return False
+    return sorted(title)[len(title) // 2] >= sorted(body)[len(body) // 2] * TITLE_TYPE_RATIO
+
+
 def _split_at_title_bands(members, cells, chars=()) -> list[list]:
     """Break a block wherever a SECOND title band begins.
 
@@ -1436,6 +1472,19 @@ def tables_from_segments(segs: list[tuple], chars, page_w: float, page_h: float,
         bs = [cells[i].bounds for i in members]
         return min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs)
 
+    letters = None   # read once, at the first merge that needs it
+
+    def page_letters():
+        nonlocal letters
+        if letters is None:
+            centres = sorted(((c["top"] + c["bottom"]) / 2, (c["x0"] + c["x1"]) / 2, c["height"])
+                             for c in chars if c.get("upright", True))
+            letters = (centres, [y for y, _, _ in centres])
+        return letters
+
+    def _in_gap(members, lo, hi, x0, x1) -> bool:
+        cx0, cy0, cx1, cy1 = vbounds(members)
+        return cy0 >= lo - 2 and cy1 <= hi + 2 and min(cx1, x1) - max(cx0, x0) >= (x1 - x0) * 0.9
     merged = True
     while merged:
         merged = False
@@ -1526,6 +1575,24 @@ def tables_from_segments(segs: list[tuple], chars, page_w: float, page_h: float,
                     same = len({c for c in ca_ if any(abs(c - d) <= 2 for d in cb_)})
                     if same < 0.9 * max(len(ca_), len(cb_)):
                         continue
+                    # NOR OVER THE LOWER PIECE'S OWN TITLE. A title band drawn as
+                    # a box of its own is a piece of its own, and it can lie in
+                    # the gap between the lower piece and the one above: 12_MT's
+                    # sheet 38 stacks COMMUNICATION DEVICES, SECURITY SYSTEM
+                    # DEVICES and MISCELLANEOUS LEGEND 15 pt apart, each title
+                    # band under a heavy rule. Joining across the band joined
+                    # one legend's body to the next one's, the band was left to
+                    # join the title after it, and no cut parts pieces joined
+                    # that way. A piece lying in the gap the full width that,
+                    # set on the lower piece, opens it with a title is that
+                    # piece's title, and the two do not join over it.
+                    lo, hi = (ay1, by0) if by0 >= ay1 else (by1, ay0)
+                    below = groups[kb] if by0 >= ay1 else groups[ka]
+                    if any(kc != ka and kc != kb
+                           and _in_gap(groups[kc], lo, hi, max(ax0, bx0), min(ax1, bx1))
+                           and _opens_with_title(groups[kc] + below, cells, page_letters(), (page_ox, page_oy))
+                           for kc in groups):
+                        continue
                 if not horiz:
                     overlap = min(ax1, bx1) - max(ax0, bx0)
                     if overlap < min(ax1 - ax0, bx1 - bx0) * 0.6:
@@ -1548,6 +1615,22 @@ def tables_from_segments(segs: list[tuple], chars, page_w: float, page_h: float,
                 cs = {round(cells[i].bounds[0]) for i in both}
                 if len(both) < len(rs) * len(cs) * MIN_FILL_RATIO:
                     continue
+                # A TABLE THAT OPENS WITH ITS OWN TITLE IS NOT THE ONE ABOVE IT
+                # RESUMED. 061_IA's M-502 stacks its HEATING HOT WATER PLANT
+                # POINTS LIST 26 pt under its VAV zone list on the same columns,
+                # and this loop joined them as a continuation. Cutting them back
+                # apart was left to _split_at_title_bands, which could not: each
+                # list ends in an empty undivided row, so the VAV list's last row
+                # and the plant list's title read as one title stack (no cut at
+                # the title), and the plant list's last row cut off a piece too
+                # small to stand, which refuses the whole split. The plant list's
+                # 25 points were read as the VAV list's, a TYPICAL list's. A piece
+                # whose top band is lettered larger than its body (13 pt over
+                # 9.45 pt there) is a table of its own, and is not joined.
+                if not horiz:
+                    lower = groups[kb] if by0 >= ay0 else groups[ka]
+                    if _opens_with_title(lower, cells, page_letters(), (page_ox, page_oy)):
+                        continue
                 # DO NOT RESTART THE SCAN HERE. The original code did
                 # `break; break` back out to `while merged` on the FIRST
                 # merge found, then rescanned every pair from group 0 again.

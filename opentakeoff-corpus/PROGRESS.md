@@ -95,6 +95,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 26051e0 | Graph builds keep each sheet's vertices packed and build its snap grid on the first trace: 01_NY peak heap 3,050 -> 1,755 MB, graphs identical (#321) |
 | c9ca965 | A table ruled in dashes reads row by row: 061_IA's M-502 points lists, BAS 0 -> 180; every other set the rule touches compiles the same (#316) |
 | 102dcbc | Graph builds keep each sheet's figures packed: 01_NY heap held after the build 1,640 -> 641 MB, peak RSS 3,205 -> 2,390 MB, graphs identical (#322) |
+| 391400c | OCR readings outlive a change to the table code: ten pictured pages read again in 109 s against 1,617 s, the same tables (#323) |
 
 ## Known limits (documented, not fixed)
 
@@ -717,6 +718,45 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   Sidecar tests 77 (with this one), compile 156, the other picture tests 17, MCP packaging 5 (its check compares the
   built runtime, `mcp/dist`, gitignored, which was stale at HEAD too until `npm run build`): all pass; typecheck clean,
   lint as at HEAD.
+- A list stacked under another on the same columns is its own table (#317; vectorgrid `_opens_with_title`, the
+  merge-back loop). With #316 061_IA's M-502 read all 180 points but only four lists: vectorgrid's merge-back loop,
+  which rejoins a table broken over a gap (the same left and right edges, the same columns, a gap of at most four
+  rows), joined the HEATING HOT WATER PLANT POINTS LIST to the TYPICAL VARIABLE AIR VOLUME ZONE POINTS LIST 26 pt
+  above it. `_split_at_title_bands`, which is meant to cut such a pair back apart at the lower title, could not: each
+  list ends in an empty full-width row, so the zone list's last row (y 1354) and the plant list's title (1393) were
+  one run of undivided rows (only a run's first row cuts), and the plant list's own last row (1793) cut a one-cell
+  piece, which refuses the whole split. The plant's 25 points carried the TYPICAL zone list's title, so a binder
+  reading that title would give each VAV box the plant's points. A merge is now refused when the lower piece opens
+  with its own title: its top rows are full-width bands, touching, lettered larger than the rows under them (13 pt
+  over 9.45 pt there; 1.15 times, the splitter's own title test). A piece that carries a list on with no title of its
+  own still joins it. The refusal alone was not enough where a title band is boxed as a piece of its own: 12_MT's
+  sheet 38 stacks COMMUNICATION DEVICES, SECURITY SYSTEM DEVICES and MISCELLANEOUS LEGEND 15 pt apart, each title band
+  under a heavy rule, and the loop joined one legend's body to the next one's across the band between them (the body
+  below opens with no title; its title is the band). So a piece is also not joined across a full-width piece lying in
+  the gap that, set on the lower piece, opens it with a title. 061_IA p57: five tables (598, 192, 234, 94 and 185
+  cells), each list under its own title; rebuilt with #316 and this, its BAS compile reads five lists, 180 points (AI
+  63, AO 44, BI 40, BO 26), the plant's 25 under HEATING HOT WATER PLANT POINTS LIST, and its HVAC (43) and valves (0)
+  are unchanged. Page A/B over every page of every keyed set's PDFs (001_NC skipped): 115 sets, 4,799 pages, no
+  errors; the refusal or the guard fires on 130 pages and changes the tables on 91 of them, 51 on 15 open sets. Open
+  sets, each looked at: 061_IA p57 (above); 16_NV p2, one table of 680 cells read as the three OUTSIDE AIR CALCULATION
+  tables the sheet prints, each under its own title; 12_MT p38 (the three legends), p29 and p35 (a legend box's last
+  band, titled on its own, no longer joined to it); 073_MT p21 and p22 and 064_MT p12, a LEGEND box parted from the
+  sheet's border band (073_MT's graph now holds its FOUNDATION LEGEND and EXISTING FLOOR LEGEND); title blocks on 33
+  of 26_CA's 64 sheets (their last three cells) and strips on 004_MO p8 and p41, 06_MO p61, 066_MT p9 and 074_CA p34,
+  junk either way. A heading boxed on its own above a table that opens with its own title is no longer joined to it:
+  the VA's INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX heading over its Type of Construction / Project
+  Activity Table (039_TX p3; 041_IL, 050_IL and 052_IL p2) and 22_GA p69's ELECTRICAL LEGEND over its LIGHTING
+  FIXTURES; the table keeps its own title, and no schedule in the corpus takes its family from such a heading. Walled
+  sets: 40 pages of 11 sets change (totals only). Graphs built at daafc4e and at this batch's code (#316, this, #319)
+  for every open set whose tables change: each compiles the same (HVAC, BAS, valves), apart from 061_IA's BAS lists
+  (#316's 180 points, now in five lists); table counts change on 061_IA's sheet 57, 16_NV's sheet 2 and 073_MT's
+  sheets 21 and 22 (above) and two walled sheets (2 -> 1 and 7 -> 11). Walled sets, totals only: 6 of the 11 whose
+  tables this changes are compared so far, each compiling the same; the other 5 are queued and recorded here when
+  built. The compare checks each category's units (tag and quantity); at #316 it compared totals, and this re-run
+  confirms #316's sets unit for unit. Test: vectorGridStackedTitles (two lists drawn as M-502 draws them, each its own
+  table; an untitled continuation still joins; three legends stacked as 12_MT's sheet 38 stacks them, none joined to
+  the next); the first fails on #316's code (one table), the third on the refusal without the guard. Sidecar tests 80
+  (with these three), compile 156: all pass; typecheck clean, lint as at HEAD.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
