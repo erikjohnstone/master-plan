@@ -1349,7 +1349,9 @@ export class Session {
   async sheetRegions(key: string): Promise<PageRegion[] | null> {
     const state = this.sheets.get(key) ?? (key.endsWith("#1") ? this.sheets.get(key.slice(0, -2)) : undefined);
     if (!state) return null;
-    return pageRegions(await state.page.operatorList(), state.page.viewport.transform, OPS);
+    const regions = pageRegions(await state.page.operatorList(), state.page.viewport.transform, OPS);
+    state.page.cleanup(); // the operator list's cache, as ensureGeometry releases it
+    return regions;
   }
 
   /** Shared text-only BAS evidence seam. Does not build or modify the graph,
@@ -1608,6 +1610,13 @@ export class Session {
     if (!s.geo) {
       const opList = await s.page.operatorList();
       s.geo = extractVectorGeometry(opList, s.page.viewport.transform, OPS);
+      // pdf.js keeps every page's operator list (and the images it decoded)
+      // until the page is cleaned up, and the graph build reads every sheet's
+      // geometry: on 16_NV (47 sheets) those caches held about 1 GB of
+      // buffers and 300 MB of heap to the end of the build, half its peak.
+      // The geometry above is all this path needs; a later render fetches
+      // the list again. Graph unchanged (16_NV peak 2,340 -> 1,236 MB).
+      s.page.cleanup();
       s.snap = buildSnapGrid(s.geo.points, SNAP_CELL);
       // classify this sheet's Optional Content layers (#85): the doc declares
       // id → (name, default visibility); the geometry attributes segments; the
@@ -7721,13 +7730,15 @@ export class Session {
       const inputs: SheetSpans[] = [];
       // The drawn delta-triangle hunt needs linework — but the hunt is a BONUS
       // lane and must never take the graph down. On a monster set (a 287-sheet
-      // combined pricing set is real), extracting-and-retaining every sheet's
-      // vectors OOMs the process, so: only plan/schedule-shaped sheets that
-      // carry a bare 1–2 digit span are hunted, extraction is THROWAWAY (the
-      // cached s.geo is reused when a tool already paid for it, otherwise the
-      // op list is dropped and the page cleaned), and a global vector budget
-      // bounds the whole pass. Sheets past the budget are NAMED in notes —
-      // text markers are still read everywhere.
+      // combined pricing set is real) the hunt's linework is bounded: only
+      // plan/schedule-shaped sheets that carry a bare 1–2 digit span are
+      // hunted, and a global vector budget bounds the whole pass. Sheets past
+      // the budget are NAMED in notes — text markers are still read
+      // everywhere. The linework is the sheet's cached geometry: the vector
+      // stack below reads every sheet's geometry anyway (its sheet contexts),
+      // and a throwaway extraction here read the same segments a second time
+      // and held both copies to the end of the build (012_MO: 27 million
+      // numbers, about 220 MB).
       let vecBudget = 30_000_000; // segments across the whole hunt
       let skippedHeavy = 0;
       // L0/L1 is not free and was never timed. Measured through the UI on a
@@ -7750,12 +7761,9 @@ export class Session {
           const role = classifySheetRoleBySignals({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
           if (role === "plan" || role === "schedule" || role === "demolition" || role === "schematic" || role === "unknown") {
             if (vecBudget <= 0) skippedHeavy++;
-            else if (s.geo) { segs = s.geo.segs; vecBudget -= segs.length / 4; }
             else {
-              const opList = await s.page.operatorList();
-              segs = extractVectorGeometry(opList, s.page.viewport.transform, OPS).segs;
+              segs = (await this.ensureGeometry(s)).segs;
               vecBudget -= segs.length / 4;
-              s.page.cleanup();
             }
           }
         }

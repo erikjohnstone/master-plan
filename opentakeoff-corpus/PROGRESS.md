@@ -84,6 +84,8 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 2ba0863 | Points lists drawn as details read by the title under their grid (6 lists on 4 open sets); totals lines no points; a point ID types its point; 039_TX, 050_IL and 053_VA BAS re-keyed |
 | 220e006 | Stacked units after a building's number are two; HM, HWH and ERC under their own titles: 041_IL reads all 20 keyed units (WP1 PASS) |
 | f100e5f | A demolition plan is a demolition sheet (83 open and 26 walled pages change role; installed and MATCH unchanged; 12 units cite their demolition view); a view reads a mark printed without its schedule's status (012_MO's existing drives) |
+| 9b70ef6 | A unit's mark after a zero-padded facility number keys its row; DCC-n under a coil title: 030_NY reads all 49 keyed units (WP1 PASS) |
+| 10e554f | 03_FL (13 -> 30) and 040_IL (32 -> 63) keys were short; re-keyed from the renders, both WP1 PASS; reconcileWorkflow's Hurlburt VAV test asserts the drawings |
 
 ## Known limits (documented, not fixed)
 
@@ -557,6 +559,17 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   (padded facility keyed; drawing number, unpadded and unconfirmed prefixes not) and the coil family (DCC-n under no
   other title); each fails on the code before it. Guard: web 4,273 tests, 0 failures; tsc and lint 0 errors; MCP
   tools and session 143/143.
+- Graph builds hold one page's drawing at a time (#313; `Session.ensureGeometry`, `Session.sheetRegions`, the
+  `ensureGraph` plan spans). pdf.js keeps each page's operator list, and the images it decoded, until the page is
+  cleaned up; the build reads every sheet's geometry, so on 16_NV (47 sheets) those caches held about 1 GB of buffers
+  and 300 MB of heap to the end of the build, half its peak. A sheet's geometry and regions now release the page's
+  operator list once read (a later render fetches it again), and the plan spans read the sheet's cached geometry
+  instead of extracting the same segments a second time (012_MO: 27 million numbers, about 220 MB, held twice). A/B,
+  each build alone with the graph cache off, HEAD then working tree: peak RSS 16_NV 2,340 -> 1,071 MB, 012_MO 2,794 ->
+  2,065, 020_MO 1,539 -> 1,390, 29_TX 1,040 -> 882; seconds 97 -> 88, 209 -> 206, 180 -> 181, 18 -> 18. Graphs
+  identical apart from stage timings (field diff of each pair). Test: a sheet's geometry or regions read once release
+  its page once each, the cached geometry fetches nothing again, and the sheet still renders; it fails on the code
+  before it (0 releases). MCP session 22/22 and tools 122/122.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

@@ -38,6 +38,27 @@ test("sheet lookup: by key, by title-block number, unknown lists loaded keys", a
   await assert.rejects(() => s.sheetInfo("nope.pdf"), /Unknown sheet .* loaded sheets: sample-plan\.pdf/);
 });
 
+test("reading a sheet's geometry or regions releases its page's pdf.js operator list (#313)", async () => {
+  // pdf.js keeps a page's operator list (and the images it decoded) until the
+  // page is cleaned up; the graph build reads every sheet's geometry, and on
+  // a 47-sheet set those caches were half the build's peak memory.
+  const s = new Session();
+  await s.loadPlan(PLAN);
+  const state = (s as unknown as { sheets: Map<string, { page: { cleanup(): void } }> }).sheets.get(KEY)!;
+  let cleaned = 0;
+  const cleanup = state.page.cleanup.bind(state.page);
+  state.page.cleanup = () => { cleaned++; cleanup(); };
+  const first = await s.sheetInfo(KEY);
+  assert.equal(cleaned, 1, "released once its geometry is read");
+  const again = await s.sheetInfo(KEY);
+  assert.equal(cleaned, 1, "the cached geometry fetches nothing to release");
+  assert.equal(again.seg_count, first.seg_count);
+  assert.ok((await s.sheetRegions(KEY))!.length >= 0);
+  assert.equal(cleaned, 2, "released after its regions are read");
+  // A render after the release fetches the list again.
+  assert.ok(await s.viewSheet(KEY, { px: 400 }));
+});
+
 test("ensureMask: built once, cache identity on the second call", async () => {
   const s = new Session();
   await s.loadPlan(PLAN);

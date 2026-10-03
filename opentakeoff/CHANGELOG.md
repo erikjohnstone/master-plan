@@ -1,5 +1,12 @@
 # Changelog
 
+- **Graph builds hold one page's drawing at a time.** pdf.js keeps every page's operator list, and the images it
+  decoded, until the page is cleaned up, and the graph build reads every sheet's geometry: on 16_NV (47 sheets) those
+  caches held about 1 GB of buffers and 300 MB of heap to the end of the build. A sheet's geometry and its regions now
+  release the page's operator list once read (a later render fetches it again), and the build's plan spans read the
+  sheet's cached geometry rather than extracting the same segments a second time. Peak memory, before -> after, graphs
+  identical apart from stage timings: 16_NV 2,340 -> 1,071 MB, 012_MO 2,794 -> 2,065 MB, 020_MO 1,539 -> 1,390 MB,
+  29_TX 1,040 -> 882 MB; build times unchanged or shorter (16_NV 97 -> 88 s).
 - **A unit's mark after a zero-padded facility number keys its row.** 030_NY's DOAS HOT WATER HEATING COIL and DOAS
   CHILLED WATER COOLING COIL schedules list one coil each, 001-DHC-01 and 001-DCC-01, the number its fan coils carry
   too (001-FCU-01-CG06A). Its text confirms no building by that number, so neither row was kept and neither coil
