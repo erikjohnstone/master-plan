@@ -255,6 +255,16 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Lettered expansion tanks, gas water heaters; 004_MO re-keyed (2026-10-03)
+
+From the titled-row census above: 032_PA's EXPANSION TANK SCHEDULE keys its tanks NET A and NET B (TYPE (N)ET beside
+EQUIPMENT NUMBER A, B; the key counts both). The takeoff now sets aside a glued new-status N before ET as it does
+before AHU, FCU and the rest, and the tank rule reads one letter after a separator (ETC. and ETA still nothing).
+004_MO's GAS WATER HEATER SCHEDULE GWH-1, GWH-2: GWH joins the water heater marks. 004_MO's [MEAT] key, written from
+pipeline output, counted its plumbing sheet's softener and brine tank but none of the rest of P-601: re-keyed from
+the render (PUMP 1 → 2 with SP-1 and HWRP-1; WATER_HEATER 2; MIXING_VALVE 1, TMV-1; EXPANSION_TANK 1, ET-1; GI-1, a
+grease interceptor, has no family). 50 saved graphs, lib A/B: 032_PA ET 0 → 2, 004_MO WH 0 → 2, nothing else.
+
 ### A mark column under a group heading; 038_NC's condensate pumps (2026-10-03)
 
 056_NY (render-keyed, 35 units) read 32 with the current sidecar (the saved graph predated the ink fixes). Its

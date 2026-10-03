@@ -1027,3 +1027,37 @@ describe("a unit named by the unit it serves and its role there", () => {
     assert.deepEqual(fans([table("FAN SCHEDULE", ["ED-203-XQ"])]), []);
   });
 });
+
+describe("expansion tanks of a lettered pair, marked new", () => {
+  // 032_PA's EXPANSION TANK SCHEDULE prints TYPE (N)ET beside EQUIPMENT NUMBER
+  // A and B; the extraction keys its rows NET A and NET B.
+  const tanks = (keys: string[], title = "MECHANICAL - EXPANSION TANK SCHEDULE") => {
+    const table = {
+      sheet: "m.pdf#3", title: { text: title }, headers: ["TYPE", "EQUIPMENT NUMBER", "MANUFACTURER"], kind: "equipment",
+      rows: keys.map((k) => ({ key: k, cells: { TYPE: { text: "(N)ET" }, "EQUIPMENT NUMBER": { text: k.slice(-1) }, MANUFACTURER: { text: "WESSELS" } } })),
+    };
+    return ((compileHvacTakeoff(null, { tables: [table] }).categories as Record<string, { items: Array<{ tag: string }> }>)
+      .EXPANSION_TANK?.items || []).map((i) => i.tag).sort();
+  };
+  it("reads each tank by its letter, the new mark's N set aside", () => {
+    assert.deepEqual(tanks(["NET A", "NET B"]), ["ET A", "ET B"]);
+  });
+  it("still reads no word that only begins with ET", () => {
+    assert.deepEqual(tanks(["ETC."]), []);
+    assert.deepEqual(tanks(["ETA"]), []);
+  });
+});
+
+describe("gas water heaters by their GWH marks", () => {
+  // 004_MO's plumbing sheet: GAS WATER HEATER SCHEDULE GWH-1, GWH-2.
+  const heaters = (title: string, keys: string[]) => ((compileHvacTakeoff(null, { tables: [{
+    sheet: "p.pdf#31", title: { text: title }, headers: ["MARK", "MANUFACTURER"], kind: "equipment",
+    rows: keys.map((k) => ({ key: k, cells: { MARK: { text: k }, MANUFACTURER: { text: "LOCHINVAR" } } })),
+  }] }).categories as Record<string, { items: Array<{ tag: string }> }>).WATER_HEATER?.items || []).map((i) => i.tag).sort();
+  it("reads them under a water heater schedule's title", () => {
+    assert.deepEqual(heaters("GAS WATER HEATER SCHEDULE", ["GWH-1", "GWH-2"]), ["GWH-1", "GWH-2"]);
+  });
+  it("reads no other GW mark there", () => {
+    assert.deepEqual(heaters("GAS WATER HEATER SCHEDULE", ["GW-1"]), []);
+  });
+});

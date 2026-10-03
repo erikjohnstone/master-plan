@@ -436,7 +436,7 @@ export function normalizeEquipMark(raw) {
   if (!t) return t;
   t = t.replace(/^\(([NER])\)\s*/i, "");
   // Glued forms when parentheses were dropped: NACC-2, NATUK1, NAHU-1.
-  const glued = t.match(/^N((?:AHU|ATU|ACC|FCU|VAV|RTU|CU|EF|SF|RF|DOAS|ERV)[\s\-A-Z0-9].*)$/i);
+  const glued = t.match(/^N((?:AHU|ATU|ACC|FCU|VAV|RTU|CU|EF|SF|RF|DOAS|ERV|ET)[\s\-A-Z0-9].*)$/i);
   if (glued) t = glued[1];
   // Building letter + space before equip mark (boiler-plant "B GV-7"). Require
   // a ≥2-letter family token so "G 2 CFM" still reaches the trailer strip below.
@@ -2419,7 +2419,8 @@ export const HVAC_FAMILY_SPECS = {
   WATER_HEATER: {
     titleRe: /(?:INSTANTANEOUS\s+)?(?:GAS\s+)?WATER\s+HEATER\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|BOILER/i,
-    keyRe: /^(?:DWH|WH|WHW|EWH)[\s\-]/i,
+    // GWH: a gas water heater (004_MO's GAS WATER HEATER SCHEDULE GWH-1, GWH-2).
+    keyRe: /^(?:DWH|WH|WHW|EWH|GWH)[\s\-]/i,
   },
   WATER_SOFTENER: {
     titleRe: /WATER\s+SOFTENER\s+SCHEDULE/i,
@@ -2552,8 +2553,10 @@ export const HVAC_FAMILY_SPECS = {
     // A schedule of both kinds (07_MO's EXPANSION & BUFFER TANK SCHEDULE) is
     // read by each kind's marks: EXT-1, EXT-2 here, its buffer tank CBT-1 there.
     exclude: /POINTS\s*LIST|DDC|(?<!EXPANSION\s*(?:&|AND)?\s*)BUFFER/i,
-    // ET-1 / ET-A1 / DT-* — digit required so "ETC. NOT SHOWN…" never matches.
-    keyRe: /^(?:ET|XT|DT)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
+    // ET-1 / ET-A1 / DT-* — digit required so "ETC. NOT SHOWN…" never matches;
+    // or one letter after a separator, a tank of a lettered pair (032_PA's
+    // EXPANSION TANK SCHEDULE: (N)ET A and B).
+    keyRe: /^(?:ET|XT|DT)(?:(?:[\s\-]+[A-Z]+)*[\s\-]*\d|[\s\-]+[A-Z]$)/i,
     titledKeyRe: /^EXT[\s\-]?\d/i,
     // A potable water expansion tank listed in a plumbing specialties
     // schedule, by its ET mark (08_ME's WATER SPECIALTIES SCHEDULE ET-1).

@@ -2,19 +2,22 @@
   "set_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 MO renovation \u2014 DOAS/RTU/FAN + GUH unit heater + softener/brine.",
+  "notes": "[MEAT] Vol2 MO renovation \u2014 DOAS/RTU/FAN + GUH unit heater + softener/brine. [RE-KEYED 2026-10-03 from the render] P-601 PLUMBING SCHEDULES (sheet 31) lists, beside the WATER SOFTENER SCHEDULE's WS-1 and BT-1 this key already counted: SUMP PUMP SP-1 and HOT WATER RETURN PUMP HWRP-1 (PUMP 2, was 1), GAS WATER HEATER GWH-1 and GWH-2 (Lochinvar AWN286PM; WATER_HEATER 2), THERMOSTATIC MIXING VALVE TMV-1 (MIXING_VALVE 1) and EXPANSION TANK ET-1 (Amtrol; EXPANSION_TANK 1), counted as 08_ME's key counts its plumbing sheet's ET, MV and WH; its GREASE INTERCEPTOR GI-1 has no takeoff family. The takeoff read all but the water heaters before this change.",
   "categories": {
     "DOAS": 1,
     "RTU": 7,
-    "PUMP": 1,
+    "PUMP": 2,
     "WATER_SOFTENER": 1,
     "BRINE_TANK": 1,
     "FAN": 3,
     "UNIT_HEATER": 1,
-    "GRD": 8
+    "GRD": 8,
+    "WATER_HEATER": 2,
+    "MIXING_VALVE": 1,
+    "EXPANSION_TANK": 1
   },
   "totals": {
-    "items": 23
+    "items": 28
   },
   "bas_points": {
     "rows": 0

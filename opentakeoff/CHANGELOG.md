@@ -1,5 +1,12 @@
 # Changelog
 
+- **Expansion tanks of a lettered pair; gas water heaters.** 032_PA's EXPANSION TANK SCHEDULE prints its tanks as
+  TYPE (N)ET beside EQUIPMENT NUMBER A and B, keyed NET A and NET B: the takeoff set aside a glued new-status N only
+  before AHU, FCU and other listed tokens, not ET, and the expansion tank rule wanted a number (its digit keeps
+  "ETC." out). The N is set aside before ET too, and one letter after a separator names a tank (ET A, ET-B; ETC.
+  and ETA still read nothing). 004_MO's GAS WATER HEATER SCHEDULE marks its heaters GWH-1 and GWH-2; GWH joins the
+  water heater family's marks. Over 50 saved graphs: 032_PA EXPANSION_TANK 0 → 2 and 004_MO WATER_HEATER 0 → 2, both
+  their keys (004_MO's re-keyed from its plumbing sheet's render), nothing else changes.
 - **A mark printed in two columns, its letters under ABB. and its number under NO.** 091_IL's M4.01 prints ten
   schedules as pictures, each tag split into ABB. and NO. columns ("AHU" | "3A-01"). Its RTU and AHU schedules were
   refused: every unit takes two lines (its cooling and electric coils, its second compressor circuit), AS-146's
