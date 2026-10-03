@@ -4,8 +4,17 @@
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
+import { after } from "node:test";
 import { Session } from "../../src/session.ts";
 import { cachedSheetGraph } from "../../scripts/sheetGraphCache.mjs";
+import { shutdownTableSidecar } from "../../../web/src/lib/tableSidecarClient.ts";
+import { shutdownVectorGrid } from "../../../web/src/lib/vectorGridClient.ts";
+
+// A graph the cache does not hold is built here, which starts the production
+// sidecars (VectorGrid, and the table sidecar where a picture is read). Close
+// them once each test file completes, as loadFixtureGraph does: an idle Python
+// child kept valvePlanPaint.regression from ever exiting after its last test.
+after(async () => { await shutdownVectorGrid(); await shutdownTableSidecar(); });
 
 /** @param {string} corpusRoot absolute opentakeoff-corpus path */
 export async function cachedGraphForKey(corpusRoot, key, identitySuffix = "workflow") {
