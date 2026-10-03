@@ -3,14 +3,15 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 multipart Bruneau shed HVAC \u2014 FCU/fan/UH (rejoined).",
+  "notes": "[WEAK] Vol2 multipart Bruneau shed HVAC \u2014 FCU/fan/UH (rejoined). [RE-KEYED 2026-10-03 from the render] Sheet 8: FAN SCHEDULE EF-1, EF-2, SF-1 (FAN 3); DUCTLESS SPLIT HIGH WALL COOLING & HEATING UNIT SCHEDULE rows \"FC-1, HP-1\" and \"FC-2, HP-2\", each a Carrier indoor unit (45MAHAQ) and its outdoor heat pump (37MAHAQ): a split system counts its indoor unit and its outdoor unit, FCU 2 and HEAT_PUMP 2 (the key had the indoor halves only); GAS-FIRED UNIT HEATER SCHEDULE UH-1 to UH-4 (UNIT_HEATER 4). Not keyed: the VEHICLE EXHAUST GAS DETECTION SYSTEM SCHEDULE's GD-1 (a gas detector, no family). Totals 11.",
   "categories": {
     "FCU": 2,
+    "HEAT_PUMP": 2,
     "FAN": 3,
     "UNIT_HEATER": 4
   },
   "totals": {
-    "items": 9
+    "items": 11
   },
   "bas_points": {
     "rows": 0

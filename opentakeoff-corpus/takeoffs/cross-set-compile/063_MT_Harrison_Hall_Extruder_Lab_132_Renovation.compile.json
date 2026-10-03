@@ -2,13 +2,15 @@
   "set_id": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 Harrison extruder lab \u2014 thin VAV/GRD.",
+  "notes": "[WEAK] Vol2 Harrison extruder lab \u2014 thin VAV/GRD. [RE-KEYED 2026-10-03 from the render] M002 (sheet 9) MECHANICAL SCHEDULES: EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE (E) VAV-105, (E) VAV-106, existing boxes rebalanced (existing units count by the keys' convention): VAV 2; EXHAUST FAN SCHEDULE (E) EF-4, an existing inline fan rebalanced: FAN 1; DEHUMIDIFICATION UNIT SCHEDULE DU-1: DEHUMIDIFIER 1; GRILLE, REGISTER AND DIFFUSER SCHEDULE S-3, R-3: GRD 2. Not keyed (no family): the FILTRATION UNIT SCHEDULE's FU-1, a portable air filtration unit with a power cord. The MEP COORDINATION SCHEDULE repeats DU-1's and FU-1's electrical data. No other mechanical schedule (sheet 15 is the plumbing fixture schedule, sheet 17 a panel schedule). Totals 6.",
   "categories": {
     "VAV": 2,
+    "FAN": 1,
+    "DEHUMIDIFIER": 1,
     "GRD": 2
   },
   "totals": {
-    "items": 4
+    "items": 6
   },
   "bas_points": {
     "rows": 0

@@ -2,16 +2,22 @@
   "set_id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 Ames Harley Wilhelm \u2014 AHU/FCU/pump/fan/HX.",
+  "notes": "[MEAT] Vol2 Ames Harley Wilhelm \u2014 AHU/FCU/pump/fan/HX. [RE-KEYED 2026-10-03 from the render] The key above (pipeline output) counted 23. M-601 MECHANICAL SCHEDULES (sheet 58): CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE AHU-A (its continued schedule gives the supply fan array, quantity 6, and the return fan array, quantity 4): AHU 1; BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE HRU-A (bid alternates count by the keys' convention): ERV 1; HUMIDIFIER SCHEDULE HUM-A: HUMIDIFIER 1; BID ALTERNATE #1 WATER-TO-WATER HEAT PUMP/CHILLER SCHEDULE WWHP-A: HEAT_PUMP 1; SHELL AND TUBE HEAT EXCHANGER SCHEDULE HX-A-1, HX-A-2: HEAT_EXCHANGER 2; HYDRONIC PUMP SCHEDULE GWP-A-1, GWP-A-2, GWP-B-1, GWP-B-2, HWP-A-1, HWP-A-2, HWP-B-1: PUMP 7; EXPANSION TANK SCHEDULE ET-A, ET-B, ET-C: EXPANSION_TANK 3; AIR/DIRT SEPARATOR SCHEDULE AS-A, AS-B, AS-C: AIR_SEPARATOR 3; VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE VAV-A to VAV-K: VAV 11; FAN COIL UNIT SCHEDULE FCU-A: FCU 1; BID ALTERNATE #2 EXHAUST FAN SCHEDULE EF-2, EF-3. EP601 ELECTRICAL SCHEDULES (sheet 71): the EQUIPMENT SCHEDULE lists AHU-A's fans as SF-1 to SF-6 and RF-1 to RF-4, each on its own drive: FAN 12 with EF-2 and EF-3, as the key counted them (the assemblies take them as the air handler's parts, AS-124). Not keyed (no family): the STEAM TRAP SCHEDULE's TP-1, TP-2. Totals 43. BAS: M-502 POINT LISTS (sheet 57) prints five points lists (AHU, bid alternate #2 exhaust fans, bid alternate #1 heat recovery plant, typical variable air volume zone, heating hot water plant) ruled in dashed lines; the takeoff reads none of them. bas_points is not yet keyed from that sheet and stays at the earlier 0 (see PROGRESS).",
   "categories": {
     "AHU": 1,
     "FCU": 1,
+    "VAV": 11,
+    "HEAT_PUMP": 1,
     "PUMP": 7,
     "FAN": 12,
-    "HEAT_EXCHANGER": 2
+    "HUMIDIFIER": 1,
+    "AIR_SEPARATOR": 3,
+    "EXPANSION_TANK": 3,
+    "HEAT_EXCHANGER": 2,
+    "ERV": 1
   },
   "totals": {
-    "items": 23
+    "items": 43
   },
   "bas_points": {
     "rows": 0

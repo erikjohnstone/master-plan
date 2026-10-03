@@ -86,6 +86,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | f100e5f | A demolition plan is a demolition sheet (83 open and 26 walled pages change role; installed and MATCH unchanged; 12 units cite their demolition view); a view reads a mark printed without its schedule's status (012_MO's existing drives) |
 | 9b70ef6 | A unit's mark after a zero-padded facility number keys its row; DCC-n under a coil title: 030_NY reads all 49 keyed units (WP1 PASS) |
 | 10e554f | 03_FL (13 -> 30) and 040_IL (32 -> 63) keys were short; re-keyed from the renders, both WP1 PASS; reconcileWorkflow's Hurlburt VAV test asserts the drawings |
+| 198a460 | Graph builds hold one page's drawing at a time: peak RSS 16_NV 2,340 -> 1,071 MB, 012_MO 2,794 -> 2,065, graphs identical |
 
 ## Known limits (documented, not fixed)
 
@@ -570,6 +571,24 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   identical apart from stage timings (field diff of each pair). Test: a sheet's geometry or regions read once release
   its page once each, the cached geometry fetches nothing again, and the sheet still renders; it fails on the code
   before it (0 releases). MCP session 22/22 and tools 122/122.
+- Dehumidification units and heat recovery units under their own titles (#315; `corpusTakeoff` DEHUMIDIFIER and ERV).
+  The fresh scoreboard's open over-reads, each checked on the render, were keys that missed units: 06_MO's P111
+  (page 68, Alternate #1) schedules SINK PUMP SP-1 and DOMESTIC WATER HEATER DWH-1 (re-keyed 32 -> 34; its E611
+  CEILING FAN SCHEDULE's CF-2 and CF-3 are described as wall packs with light-fixture models and are counted as
+  listed); 063_MT's M002 lists (E) VAV-105, (E) VAV-106, (E) EF-4, DU-1, FU-1 (a portable filtration unit, no
+  family) and grilles S-3, R-3 (re-keyed 4 -> 6); 061_IA's M-601 lists 32 units the [MEAT] key lacked or miscounted
+  (VAV-A to K, WWHP-A, HUM-A, AS-A to C, ET-A to C) and HRU-A (re-keyed 23 -> 43); 098_ID's ductless split schedule
+  pairs FC-1/HP-1 and FC-2/HP-2, Carrier indoor and outdoor heat pump models (re-keyed 9 -> 11). Two of those units
+  were read by no family: DU-1 under DEHUMIDIFICATION UNIT SCHEDULE (the family read only DEHUMIDIFIER SCHEDULE and
+  DH-n) and HRU-A under HEAT RECOVERY UNIT SCHEDULE (the ERV family read ENERGY RECOVERY titles). Census over 119
+  saved graphs: tables titled DEHUMIDIF* are 030_NY's (already read) and 063_MT's on open sets, 3 on walled sets
+  (totals only); HEAT RECOVERY UNIT titles and HRU marks: 061_IA's table and 26_CA's abbreviations list ("HRU", read
+  by neither rule). Compile A/B over the 119 graphs: 061_IA ERV 0 -> 1 (HRU-A), 063_MT DEHUMIDIFIER 0 -> 1 (DU-1),
+  nothing else (walled 0). Test: each mark under its own title, neither under an EQUIPMENT, EXHAUST FAN or HEAT
+  RECOVERY CHILLER title nor in an abbreviations list; it fails on the code before it. 061_IA's M-502 POINT LISTS
+  (sheet 57) prints five points lists ruled in dashed lines (about 245 points); the table extractor drops each
+  dashed row's gaps, so only the solid header bands form grids and no list is read. Its key's bas_points stays at the
+  earlier 0 until the lists are keyed (next queue).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

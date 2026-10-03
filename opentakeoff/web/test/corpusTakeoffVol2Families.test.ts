@@ -344,6 +344,32 @@ describe("a DOAS's heating coil DHC-n and cooling coil DCC-n under their coil ti
   });
 });
 
+describe("a dehumidification unit's DU-n and a heat recovery unit's HRU-n under their titles", () => {
+  it("reads each under its own family's title, and under no other title", () => {
+    const table = (sheet: string, title: string, keys: string[]) => ({
+      kind: "equipment", sheet, title: { text: title }, rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+    });
+    const cats = compileHvacTakeoff(null, { tables: [
+      // 063_MT's sheet 9 and 061_IA's sheet 58, as printed.
+      table("m.pdf#9", "DEHUMIDIFICATION UNIT SCHEDULE - EXTRUDER LAB", ["DU-1"]),
+      table("m.pdf#58", "BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE", ["HRU-A"]),
+      table("m.pdf#10", "DEHUMIDIFIER SCHEDULE", ["DH-2", "DU-3"]),
+      table("m.pdf#11", "HEAT RECOVERY UNIT SCHEDULE", ["HRU-2"]),
+      table("m.pdf#12", "EQUIPMENT SCHEDULE", ["DU-4", "HRU-5"]),
+      table("m.pdf#13", "EXHAUST FAN SCHEDULE", ["DU-6"]),
+      table("m.pdf#14", "HEAT RECOVERY CHILLER SCHEDULE", ["HRU-7"]),
+      // 26_CA's abbreviations list.
+      table("m.pdf#15", "ABBREVIATIONS - MECHANICAL", ["HRU"]),
+    ] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    const tags = (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+    assert.deepEqual(tags("DEHUMIDIFIER"), ["DH-2", "DU-1", "DU-3"]);
+    assert.deepEqual(tags("ERV"), ["HRU-2", "HRU-A"]);
+    const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
+    for (const t of ["DU-4", "HRU-5", "DU-6", "HRU-7", "HRU"]) assert.equal(all.includes(t), false, t);
+    assert.equal(tags("HUMIDIFIER").length, 0, "a dehumidification unit is no humidifier");
+  });
+});
+
 describe("AS-63 marks a schedule's title vouches for, and units listed in another family's schedule", () => {
   const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
   const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });

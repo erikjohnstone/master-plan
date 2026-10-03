@@ -1,5 +1,13 @@
 # Changelog
 
+- **Dehumidification units and heat recovery units read under their own titles.** 063_MT's DEHUMIDIFICATION UNIT
+  SCHEDULE lists DU-1; the dehumidifier family read only a DEHUMIDIFIER SCHEDULE and DH-n marks, so the unit went
+  uncounted. 061_IA's bid alternate CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE lists HRU-A; the energy recovery
+  family read ENERGY RECOVERY titles only. A DEHUMIDIFICATION UNIT schedule is now a dehumidifier schedule, with DU-n
+  its unit, and a HEAT RECOVERY UNIT schedule an energy recovery schedule, with HRU-n its unit; neither mark is read
+  under any other title. Over 119 saved graphs only those two units are added (walled sets: none). Four keys were
+  short and are re-keyed from the drawings: 06_MO 32 -> 34 (its plumbing sheet's sink pump and water heater), 063_MT
+  4 -> 6, 061_IA 23 -> 43 and 098_ID 9 -> 11 (each split system's outdoor heat pump beside its indoor unit).
 - **Graph builds hold one page's drawing at a time.** pdf.js keeps every page's operator list, and the images it
   decoded, until the page is cleaned up, and the graph build reads every sheet's geometry: on 16_NV (47 sheets) those
   caches held about 1 GB of buffers and 300 MB of heap to the end of the build. A sheet's geometry and its regions now

@@ -2360,7 +2360,9 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC\s+POINTS|CONNECTION\s+SCHEDULE/i,
   },
   ERV: {
-    titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|ENERGY\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
+    // Or a HEAT RECOVERY UNIT (061_IA's bid alternate CUSTOM OUTDOOR, HEAT
+    // RECOVERY UNIT SCHEDULE).
+    titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|(?:ENERGY|HEAT)\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     // Titled: ERU-*/ERV-* plus bare letter+digits (Carson C1/C2).
     // Blank: only ERU/ERV — letter+digit blank gates steal finish A1/B1 (Johnson).
@@ -2369,6 +2371,8 @@ export const HVAC_FAMILY_SPECS = {
     // A letter and a number are an ERV's mark under its title only: a general
     // schedule's T1 is a toilet accessory (23_GA; AS-66).
     titledOnlyRe: /^[A-Z]\d{1,3}$/i,
+    // HRU-n, a heat recovery unit, under its title only (061_IA's HRU-A).
+    titledKeyRe: /^HRU[\s\-]?(?:\d|[A-Z]$)/i,
   },
   FURNACE: {
     titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i,
@@ -2647,7 +2651,14 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /COMPUTER\s+ROOM\s+(?:AIR\s+(?:HANDL|CONDITION)|UNITS?\b)|\bCRA[HC]\b/i,
     exclude: /CONDENS|SEQUENCE|CONTROL/i,
   },
-  DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
+  DEHUMIDIFIER: {
+    // Or a DEHUMIDIFICATION UNIT schedule (063_MT's "DEHUMIDIFICATION UNIT
+    // SCHEDULE - EXTRUDER LAB").
+    titleRe: /DEHUMIDIFI(?:ER|CATION)(?:\s+UNITS?)?\s+SCHEDULE/i,
+    keyRe: /^DH[\-]/i,
+    // DU-n is a dehumidification unit under its title only (063_MT's DU-1).
+    titledKeyRe: /^DU[\s\-]?\d/i,
+  },
   // HUM-*; bare H-* on humidifier / blank titles. EH-* only via altTitleRe
   // ELECTRIC HUMIDIFIER (EH on MISC stays UNIT_HEATER — Douglas EH-20/30).
   HUMIDIFIER: {

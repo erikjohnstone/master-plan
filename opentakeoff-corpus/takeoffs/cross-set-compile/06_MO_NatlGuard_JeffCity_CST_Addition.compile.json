@@ -2,7 +2,7 @@
   "set_id": "06_MO_NatlGuard_JeffCity_CST_Addition",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/06_MO_NatlGuard_JeffCity_CST_Addition.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk National Guard — FCU (FAN COIL UNT typo title) + VAV BOX + RTU ACU-6 + HP + UH + EDH duct heater + GRD plurals + LOUVER L-1/L-2 + CEILING FAN CF-1..3. Locks ELECTRIC DUCT HEATER → UNIT_HEATER.",
+  "notes": "Bulk National Guard — FCU (FAN COIL UNT typo title) + VAV BOX + RTU ACU-6 + HP + UH + EDH duct heater + GRD plurals + LOUVER L-1/L-2 + CEILING FAN CF-1..3. Locks ELECTRIC DUCT HEATER → UNIT_HEATER. [RE-KEYED 2026-10-03 from the render] The key above counted 32 and left out the plumbing sheet's two scheduled units. M601 (page 74): ACU-6 (RTU 1); VAV-1 to VAV-9 (VAV 9); GRD R1, R2, S1, S2, S3, TA. M611 (page 75): HP-1, HP-2 (HEAT_PUMP 2); UH-1 to UH-3 and EDH-1 (UNIT_HEATER 4); FCU-1 to FCU-3 (FCU 3); EF-1 (FAN 1); GRD S (GRD 7 with page 74's six); L-1, L-2 (LOUVER 2). E611 (page 85): CEILING FAN SCHEDULE CF-1 to CF-3 (CEILING_FAN 3); CF-2 and CF-3 are described as wall packs with light-fixture models but are scheduled as ceiling fans and counted as listed. P111 (page 68, Alternate #1): SINK PUMP SCHEDULE SP-1 (PUMP 1) and DOMESTIC WATER HEATER SCHEDULE DWH-1 (WATER_HEATER 1); plumbing pumps and water heaters scheduled in the set count by the keys' convention. Totals 34.",
   "categories": {
     "FCU": 3,
     "VAV": 9,
@@ -12,9 +12,11 @@
     "CEILING_FAN": 3,
     "UNIT_HEATER": 4,
     "GRD": 7,
-    "LOUVER": 2
+    "LOUVER": 2,
+    "PUMP": 1,
+    "WATER_HEATER": 1
   },
-  "totals": { "items": 32 },
+  "totals": { "items": 34 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }
