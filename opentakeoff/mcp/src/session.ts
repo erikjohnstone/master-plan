@@ -810,6 +810,12 @@ interface SheetState {
   page: PageHandle;
   // lazy per-sheet caches (built once, reused by identity)
   geo?: VectorGeometry;
+  /** the geometry's vertices, x and y packed (#321): `geo.points` is emptied
+   * once this is read. Only a traced region's corners snap to them, and the
+   * graph build reads every sheet's geometry; as `[x, y]` arrays they were
+   * 160 MB of 061_IA's 620 MB build, and the snap grid over them 76 MB more. */
+  snapXY?: Float64Array;
+  /** built from `snapXY` on the first trace that snaps (`snapGrid`) */
   snap?: ReturnType<typeof buildSnapGrid>;
   /** undefined = not built yet; null = sheet has zero vector segments (a scan) */
   mask?: MaskObj | null;
@@ -1617,7 +1623,18 @@ export class Session {
       // The geometry above is all this path needs; a later render fetches
       // the list again. Graph unchanged (16_NV peak 2,340 -> 1,236 MB).
       s.page.cleanup();
-      s.snap = buildSnapGrid(s.geo.points, SNAP_CELL);
+      // The vertices are kept packed and the snap grid waits for a trace
+      // (snapGrid): a graph build reads every sheet's geometry and snaps
+      // nothing. As [x, y] arrays the vertices are about 70 bytes each, and
+      // held for every sheet they were most of a large set's build heap
+      // (01_NY, 162 sheets: 15 million). Measured, the graph identical: 01_NY's
+      // peak heap 3,050 -> 1,755 MB and 2,910 -> 1,640 MB held once built;
+      // 061_IA (71 sheets) 622 -> 386 MB held.
+      const pts = s.geo.points;
+      const xy = new Float64Array(pts.length * 2);
+      for (let i = 0; i < pts.length; i++) { xy[i * 2] = pts[i][0]; xy[i * 2 + 1] = pts[i][1]; }
+      s.snapXY = xy;
+      s.geo.points = [];
       // classify this sheet's Optional Content layers (#85): the doc declares
       // id → (name, default visibility); the geometry attributes segments; the
       // pure normalizer states each layer's ROLE. Only layers that actually
@@ -1641,6 +1658,20 @@ export class Session {
       }
     }
     return s.geo;
+  }
+
+  /** The sheet's vertex snap grid, built from its packed vertices on the first
+   * trace that snaps (#321) — the same points, in the same order, as the grid
+   * ensureGeometry used to build eagerly. null before geometry is read. */
+  private snapGrid(s: SheetState): ReturnType<typeof buildSnapGrid> | null {
+    if (!s.snap) {
+      const xy = s.snapXY;
+      if (!xy) return null;
+      const pts: Point[] = new Array(xy.length >> 1);
+      for (let i = 0; i < pts.length; i++) pts[i] = [xy[i * 2], xy[i * 2 + 1]];
+      s.snap = buildSnapGrid(pts, SNAP_CELL);
+    }
+    return s.snap;
   }
 
   /** Per-layer role codes for buildMask (#85), with optional include/exclude
@@ -1996,7 +2027,7 @@ export class Session {
     // would corrupt the ring.
     const ring = raster
       ? traceRegion(f, RASTER_RDP_EPS)
-      : snapVertices(traceRegion(f), (px, py, d) => (s.snap ? nearestSnap(s.snap, px, py, d) : null), SNAP_TOL);
+      : snapVertices(traceRegion(f), (px, py, d) => { const grid = this.snapGrid(s); return grid ? nearestSnap(grid, px, py, d) : null; }, SNAP_TOL);
     if (ring.length < 3) throw new UserError("Couldn't trace that space into a polygon.");
     const areaPx2 = ringArea(ring);
     const perimPx = closedMetrics(ring).perim;
@@ -2152,7 +2183,7 @@ export class Session {
         // raster trace differences mirror oneClick (#154): looser eps, no snap
         const r = raster
           ? traceRegion(f, RASTER_RDP_EPS)
-          : snapVertices(traceRegion(f), (px, py, d) => (s.snap ? nearestSnap(s.snap, px, py, d) : null), SNAP_TOL);
+          : snapVertices(traceRegion(f), (px, py, d) => { const grid = this.snapGrid(s); return grid ? nearestSnap(grid, px, py, d) : null; }, SNAP_TOL);
         if (r.length < 3) { sawDegenerate = true; continue; }
         if (isLabelBubblePx(r as [number, number][], lb.bbox)) { sawBubble = true; continue; }
         // harvest the scalar evidence now; the region bitmap goes with `f`

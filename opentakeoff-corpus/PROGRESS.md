@@ -87,6 +87,11 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 9b70ef6 | A unit's mark after a zero-padded facility number keys its row; DCC-n under a coil title: 030_NY reads all 49 keyed units (WP1 PASS) |
 | 10e554f | 03_FL (13 -> 30) and 040_IL (32 -> 63) keys were short; re-keyed from the renders, both WP1 PASS; reconcileWorkflow's Hurlburt VAV test asserts the drawings |
 | 198a460 | Graph builds hold one page's drawing at a time: peak RSS 16_NV 2,340 -> 1,071 MB, 012_MO 2,794 -> 2,065, graphs identical |
+| daafc4e | Dehumidification units (DU-n) and heat recovery units (HRU-n) under their own titles; 06_MO, 063_MT, 061_IA and 098_ID keys re-keyed from the renders |
+| 6256dd1 | 063_MT's reconcile test asserts the drawing: M101 tags both existing VAVs |
+| 1f14392 | 12_MT (12 -> 19) and 22_GA (17 -> 51) keys re-keyed from the renders: split systems, VRF units, an ERV and a water heater the keys missed; both WP1 PASS |
+| b78a9e6 | Tests that build a graph close the sidecars the build starts: valvePlanPaint.regression exits after its last test (it never did) |
+| 0c51888 | Control drawings: a hospital's infection control while it is built on (the VA's ICRA matrix, its dust barriers) is another trade's control, no packet (CI-76, finder v8) |
 
 ## Known limits (documented, not fixed)
 
@@ -141,6 +146,10 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 
 ## Known failing tests (pre-existing, not from this goal's work)
 
+- MCP `conformance.test.ts` "sweep_schedule_row: a mark drawn only on non-plan sheets discloses reference_tags
+  instead of refusing (WP4, real navfac data)": fails identically at 0c51888 with nothing changed, with #316's
+  vectorgrid, and with #321's Session (2026-10-03, its graph built cold each time). navfac is walled, so it is not
+  investigated by row; the test is not edited to pass.
 - MCP `reconcileWorkflow` "Vol2 WEAK leftovers": 067_CA (walled; totals only) holds 1 HEAT_EXCHANGER reconcile row
   against its key's 2 (a key written at 6fabaeb, 2026-09-13). The takeoff reads 1 on its graph built at 09:02 on
   2026-10-03, before that day's graph-side edits, as on one built at the current code. Not investigated (a walled
@@ -606,6 +615,21 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   reads HEAT PUMP), the ductless split DAC-1 / DCU-1 and ERV-1; sheet 57 its electric water heater WH-1 (119 gal);
   re-keyed 17 -> 51. Neither graph holds another HVAC schedule. Both WP1 PASS on their fresh graphs (the takeoff read
   exactly these units before the re-key).
+- Graph builds keep each sheet's vertices packed and build its snap grid on the first trace (#321;
+  `Session.ensureGeometry`, `Session.snapGrid`). The build reads every sheet's vector geometry and kept all of it: the
+  vertices as `[x, y]` arrays (about 70 bytes each; 15.3 million on 01_NY) and a snap grid over them that only an
+  interactive area trace uses. Probe on 061_IA (71 sheets), the graph identical: without the snap grids the heap held
+  after the build drops 622 -> 546 MB, without the vertices too 385 MB. The vertices are now a `Float64Array` (16
+  bytes each, outside the JavaScript heap) and the grid is built from them, the same points in the same order, when a
+  trace first snaps. Each build in its own process, cache off, a 6 GB heap cap, HEAD's Session then this one (both
+  with #316's vectorgrid): 01_NY (162 sheets) peak heap 3,050 -> 1,755 MB, held after 2,910 -> 1,640, peak RSS 3,779
+  -> 3,269 MB; 061_IA held 622 -> 386 MB, peak RSS 1,201 -> 1,035. Graphs identical apart from stage timings. 058_CA
+  (311 sheets) is still too large here: with this change its build passed 6.4 GB RSS within five minutes, the graph
+  queue and an A/B running beside it, and was killed by the kernel (exit 137); to re-measure alone (next queue).
+  Tests: the sheet's vertices are packed, no grid before a trace, a trace builds it and the room's corners snap to the
+  linework's vertices; it fails on the code before it. MCP session, tools, labels, overlap, conformance, raster and
+  parity: 181 of 183 (the two failures fail identically at HEAD: conformance find_schedule, known; the navfac
+  sweep_schedule_row test, added under Known failing tests).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

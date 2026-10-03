@@ -1,5 +1,10 @@
 # Changelog
 
+- **Graph builds hold half the heap on the largest sets.** The build reads every sheet's vector geometry and kept all
+  of it: each sheet's vertices as `[x, y]` arrays, about 70 bytes apiece (15 million on 01_NY), and a snap grid over
+  them that only an interactive area trace uses. The vertices are now packed outside the JavaScript heap and the snap
+  grid is built from them on the first trace that snaps. 01_NY (162 sheets): peak heap 3.0 -> 1.8 GB, peak memory
+  3.8 -> 3.3 GB; the graphs are identical and a traced room snaps to the same corners.
 - **Dehumidification units and heat recovery units read under their own titles.** 063_MT's DEHUMIDIFICATION UNIT
   SCHEDULE lists DU-1; the dehumidifier family read only a DEHUMIDIFIER SCHEDULE and DH-n marks, so the unit went
   uncounted. 061_IA's bid alternate CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE lists HRU-A; the energy recovery

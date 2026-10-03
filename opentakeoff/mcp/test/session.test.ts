@@ -59,6 +59,29 @@ test("reading a sheet's geometry or regions releases its page's pdf.js operator 
   assert.ok(await s.viewSheet(KEY, { px: 400 }));
 });
 
+test("a sheet's vertices are kept packed and its snap grid waits for a trace, which still snaps (#321)", async () => {
+  // The graph build reads every sheet's geometry and snaps nothing. Held as
+  // [x, y] arrays, with a snap grid over them, the vertices ran the largest
+  // sets (01_NY, 058_CA) out of heap.
+  const s = new Session();
+  await s.loadPlan(PLAN);
+  type State = { geo?: { points: unknown[] }; snapXY?: Float64Array; snap?: unknown };
+  const state = (s as unknown as { sheets: Map<string, State> }).sheets.get(KEY)!;
+  await s.sheetInfo(KEY);
+  assert.equal(state.geo!.points.length, 0, "no [x, y] array per vertex");
+  const xy = state.snapXY!;
+  assert.ok(xy.length >= 8, `the vertices, packed: ${xy.length / 2}`);
+  assert.equal(state.snap, undefined, "no snap grid before a trace");
+  s.setScale(KEY, { use_detected: true });
+  const r = await s.oneClick(KEY, 600, 1084, { role: "floor_area", returnVerts: true }) as unknown as { verts: [number, number][] };
+  assert.ok(state.snap, "a trace builds the grid");
+  const onVertex = r.verts.filter(([x, y]) => {
+    for (let i = 0; i < xy.length; i += 2) if (Math.abs(xy[i] - x) <= 0.06 && Math.abs(xy[i + 1] - y) <= 0.06) return true;
+    return false;
+  });
+  assert.ok(onVertex.length >= 3, `the room's corners snap to the linework's vertices: ${onVertex.length} of ${r.verts.length}`);
+});
+
 test("ensureMask: built once, cache identity on the second call", async () => {
   const s = new Session();
   await s.loadPlan(PLAN);
