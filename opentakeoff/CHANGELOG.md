@@ -1,5 +1,27 @@
 # Changelog
 
+- **A points list caption over a table of point types; a list's last face that repeats its seam row; a fragment
+  stacks onto the face it touches.** 011_IL's MH-300 prints a POINTS LIST - STANDARD TRENDING INTERVALS whose rows are
+  point types (AI, BI, AO, BO, CALC), each with a trend interval and durations: a policy for every point of a type,
+  which the takeoff counted as five points. A table captioned as a points list whose every row names a point type in
+  its name column (not a TYPE column) now lists no point; the BAS exclusions say so, and the graph-side harness counts
+  it as the compile does (the only such table in 50 freshly built and 175 cached graphs). 009_FL's CHILLER PLANT DDC
+  POINTS LIST closes on a three-row face (BO3 again, a blank line, MI1) that the table engine refused alone, taking
+  BO3 for its header, so MI1 was lost. A face whose top lies inside the face above it, on the same column grid, and
+  which opens on the row that face closes on now continues it; and a row captured twice at a seam is recognised
+  whether or not one capture holds an empty cell (BO3's ALARM cell is empty above the seam and absent below). A
+  fragment now stacks onto the nearest face that takes it, not the first listed: with 004_MO's FINISH LEGEND read
+  whole down to EXT. BL., a face 26pt under it that belongs under FLOORING was otherwise within reach. A replay of 407
+  saved table-engine pages changes only 009_FL's page 20 (+MI1) and 004_MO's page 18 (the legend gains C-1 and EXT.
+  BL.). Re-keyed from renders: 016_NY (24 units, nine of them control dampers),
+  031_MO (105 units: the old key had none of its 13 room-coded VAV boxes or two drives), 011_IL (20: its 15 existing
+  heat pumps, which the old key took for air device marks, and 5 air devices; no points list) and 009_FL (28 units,
+  with the 7 VAV boxes, two chilled water valves and four air devices the old key lacked; 75 points over eight lists,
+  every type, alarm and trend read by eye). WP1 passes for all four. 017_MD (34 units, 59 points) and 013_MO (25
+  units, 12 valves, 39 points) are re-keyed too, as documented ceilings: 017_MD's six built-up indoor air conditioning
+  units are read by no family and its device-per-row DDC matrices are untyped, with three unit label rows counted as
+  points; 013_MO's boilers, pump, six valves and boiler software points sit in grids interleaved with masked copies,
+  and its cross-tie points list is ruled as three labelled sections.
 - **A points matrix's alarms under an ALARM label; a header band ruled a column short of its points; a filled square
   as a tick; a first point that ticks a column; an air terminal schedule's grilles; a glycol feeder lettered for its
   wing.** 033_MN's PUMP CONTROL POINTS prints six alarms under an ALARM label ruled across the matrix, and the table

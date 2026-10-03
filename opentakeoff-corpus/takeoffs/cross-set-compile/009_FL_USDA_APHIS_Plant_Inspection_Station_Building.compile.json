@@ -2,21 +2,33 @@
   "set_id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 APHIS plant inspection \u2014 AHU/chiller/pump/FAN + EQUIPMENT CONNECTION DUCT HEATERS EDH-* via UNIT_HEATER duct-heater title.",
+  "notes": "Vol2 APHIS plant inspection station, building 63 envelope and HVAC. [RE-KEYED 2026-10-03 from the render] M-601 (page 18) SCHEDULES: AIR HANDLING UNIT AHU-1, AHU-2; VAV TERMINAL SCHEDULE VAV-1-1 to VAV-1-7 (existing units, note 1: information provided for balancing); AIR COOLED CHILLER CH-1; CHILLED WATER PUMP CWP-1, CWP-2; FAN SCHEDULE EF-1, EF-2, EF-3, EF-5, EF-6 (the row between EF-3 and EF-5 is blank: there is no EF-4); ELECTRIC DUCT HEATER EDH-1 to EDH-5 (UNIT_HEATER by the duct-heater title); HYDRONIC CONTROL VALVE SCHEDULE CV-1 (serves AHU-1) and CV-2 (serves AHU-2), chilled water; AIR DEVICE SCHEDULE D, F, H, L: GRD 4. Points lists, rows as printed (NAME types them; TREND and ALARM ticked with dots): M-801 (page 19) VARIABLE FREQUENCY DRIVE BACNET INTERFACE SCHEDULE 18 (AI1-7, AO1, AV1-4, BI1-3, BO1-2, MI1; alarm 4, trend 18); M-802 (page 20) AHU-1 DDC POINTS LIST 17 (AI 10 with AI3 printed twice, AO 4, BI 3; alarm 7, trend 17) and CHILLER PLANT DDC POINTS LIST 11 (AI 4, BI 3, BO 3, MI1 CHILLER INTEGRATION POINTS after the last blank line; alarm 7, trend 10: MI1 has no trend dot); M-803 (page 21) LAB EXHAUST FANS 2 (AI1, AO1; alarm 1), SCHEDULED EXHAUST FAN 2 (BI1, BO1; alarm 1) and AHU-2 11 (AI 5 with AI4 twice, AO 2, BI 3 with BI2 twice, BO 1; alarm 5); M-804 (page 22) ELECTRIC UNIT HEATER 6 (AI1-3, BI1 printed twice, BO1 after blank lines; alarm 3) and VAV TERMINAL 8 (AI 5, AO1, BI1, BO2; alarm 2). Totals 75 rows: AI 35, AO 9, BI 16, BO 9 (AV and MI rows untyped), alarm 30, trend 74. The earlier key (no VAV, valves, grilles or points) predates these reads.",
   "categories": {
     "AHU": 2,
+    "VAV": 7,
     "AIR_COOLED_CHILLER": 1,
     "PUMP": 2,
     "FAN": 5,
-    "UNIT_HEATER": 5
+    "UNIT_HEATER": 5,
+    "CHW_CONTROL_VALVE": 2,
+    "GRD": 4
   },
   "totals": {
-    "items": 15
+    "items": 28
   },
   "bas_points": {
-    "rows": 0
+    "rows": 75,
+    "AI": 35,
+    "AO": 9,
+    "BI": 16,
+    "BO": 9,
+    "alarm": 30,
+    "trend": 74
   },
   "control_valves": {
-    "items": 0
+    "items": 2,
+    "categories": {
+      "CHW_CONTROL_VALVE": 2
+    }
   }
 }

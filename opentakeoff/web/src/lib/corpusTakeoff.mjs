@@ -2819,6 +2819,7 @@ export const HVAC_EXCLUSIONS = [
 
 export const BAS_EXCLUSIONS = [
   "Title-only schematic points lists (non-extractable typed rows)",
+  "Point-type policy tables captioned as points lists (each row names a point type such as AI, BI or CALC with its trend interval; they list no point)",
   "HVAC equipment schedules (counted under T-HVAC-01)",
   "Sequence-of-operations / narrative controls text (not a typed points table — refuse / not done; never invent points from SOO)",
 ];
@@ -3463,6 +3464,37 @@ function basPointName(row, table, tag) {
   return BAS_TICK_RE.test(tag.slice(lead.length + 1).trim()) ? lead : tag;
 }
 
+/** A points list row's name. The MARK cell is authored point identity.
+ * `row.key` is an extractor convenience and can retain a section-prefix
+ * fragment (for example "BI BI#") even when the cited MARK cell correctly
+ * reads "BI#". Preferring the evidence-bearing cell keeps type counts,
+ * exports and Agent citations on the same printed token. */
+function basRowTag(row, table) {
+  return basPointName(row, table, String(cellText(row, /^MARK$/i) || row.key || "").trim());
+}
+
+/** A point type's printed name: an I/O type, a BACnet value object or a
+ * calculated point. */
+const BAS_POINT_TYPE_NAME_RE = /^(?:AI|AO|BI|BO|DI|DO|AV|BV|MV|MSV|CALC(?:ULATED)?)$/i;
+
+/**
+ * A table captioned as a points list whose rows name point types, not points:
+ * 011_IL's POINTS LIST - STANDARD TRENDING INTERVALS prints AI, BI, AO, BO and
+ * CALC under POINT NAME, each with its trend interval and trend durations. It
+ * sets a policy for every point of a type and lists no point. A list that
+ * keys its rows by a TYPE column (AI | SUPPLY AIR TEMP) names its points in
+ * another column and is not one.
+ */
+export function isBasPointTypeTable(table) {
+  const rows = (table?.rows || []).filter((row) => !isBasPointsHeaderRow(basRowTag(row, table)));
+  return rows.length >= 2 && rows.every((row) => {
+    const tag = basRowTag(row, table);
+    if (!BAS_POINT_TYPE_NAME_RE.test(tag)) return false;
+    const header = Object.keys(row.cells || {}).find((h) => String(row.cells[h]?.text || "").trim() === tag);
+    return header !== undefined && !/\bTYPE\b/i.test(header);
+  });
+}
+
 /** A point's I/O type named at the end of a column label (DIGITAL INPUTS;
  * DDC HARD WIRED POINTS ANALOG OUTPUTS), or abbreviated as the label's last
  * word (028_TX's AI | AO | DI | DO columns, HARDWARE POINTS DI). */
@@ -3710,18 +3742,16 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
   for (const table of graph.tables || []) {
     const rawTitle = String(table.title?.text || "");
     if (!isBasPointsListTitle(rawTitle) && !isBasPointsListTable(table)) continue;
+    // A points list caption over a table of point types (a trend policy)
+    // lists no point; BAS_EXCLUSIONS discloses it.
+    if (isBasPointTypeTable(table)) continue;
     const title = rawTitle.trim() || inferBasListTitle(table);
     const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
     const extras = { alarm: 0, trend: 0, hardwired: 0, soft: 0 };
     const items = [];
     const tickColumns = basTickColumns(table);
     for (const row of table.rows || []) {
-      // The MARK cell is authored point identity. `row.key` is an extractor
-      // convenience and can retain a section-prefix fragment (for example
-      // "BI BI#") even when the cited MARK cell correctly reads "BI#".
-      // Prefer the evidence-bearing cell so type counts, exports, and Agent
-      // citations all refer to the same printed token.
-      const tag = basPointName(row, table, String(cellText(row, /^MARK$/i) || row.key || "").trim());
+      const tag = basRowTag(row, table);
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
       if (isBasSectionLabelRow(row)) continue;
@@ -3873,6 +3903,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const tables = (graph.tables || []).filter((t) => t.sheet === key);
     const titles = [...new Set(tables
       .map((t) => {
+        if (isBasPointTypeTable(t)) return "";
         const raw = String(t.title?.text || "").trim();
         if (isBasPointsListTitle(raw)) return raw;
         if (isBasPointsListTable(t)) return inferBasListTitle(t);
@@ -3899,7 +3930,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). A tick (X) under a column labelled with a type (DIGITAL INPUTS, ANALOG OUTPUTS) types its row; ticks under two types, or one that disagrees with the mark, leave the row untyped, as conflicting authored types do. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present, and ticks under columns labelled TREND, ALARM, a software variable (BINARY / ANALOG / MULTISTAGE VARIABLE: soft) or a type whose label says HARD WIRED (hardwired) (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). A tick (X) under a column labelled with a type (DIGITAL INPUTS, ANALOG OUTPUTS) types its row; ticks under two types, or one that disagrees with the mark, leave the row untyped, as conflicting authored types do. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present, and ticks under columns labelled TREND, ALARM, a software variable (BINARY / ANALOG / MULTISTAGE VARIABLE: soft) or a type whose label says HARD WIRED (hardwired) (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists and point-type policy tables (rows naming AI, BI or CALC, not points) excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,

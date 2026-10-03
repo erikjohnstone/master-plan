@@ -2,17 +2,18 @@
   "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 NIST cooling \u2014 SUPPLY FAN S-A-* + HEATING/COOLING COIL HC/CC-A-* + HUMIDIFIER. Zone-lettered FAN keyRe + DUCT_MOUNTED_COIL. RETURN FAN CFM-as-key rows stay unclaimed (honest).",
+  "notes": "Vol2 NIST Gaithersburg building 101 HVAC cooling. [RE-KEYED 2026-10-03 from the render] Page 12: INDOOR AIR CONDITIONING UNIT SCHEDULE ACU-A-1 to ACU-A-6, built-up air handlers whose row names each one's scheduled return fan, supply fan, filter, coils and humidifier: AHU 6 (no family reads this title; the only built-up use of it in the corpus, every other AIR CONDITIONING UNIT title being a split system); SUPPLY FAN SCHEDULE S-A-1 to S-A-6; HEATING COIL SCHEDULE HC-A-1 to HC-A-6. Page 13: COOLING COIL SCHEDULE CC-A-1 to CC-A-6 (with the heating coils, DUCT_MOUNTED_COIL 12); RETURN FAN SCHEDULE E-A-1 to E-A-6 (the ACUs' return fans) and E-A-7, E-A-8, E-A-13 (toilet, mechanical room and sub-basement exhaust): with the supply fans, FAN 15; HUMIDIFIER SCHEDULE H-A-3. Not keyed: the FILTER SCHEDULE's F-A-1 to F-A-6 (the ACUs' filter sections) and the STEAM TRAP SCHEDULE. Page 17: three DDC INPUT/OUTPUT POINT SCHEDULEs (ACU A-3,4,5,6: 23 rows; ACU A-1: 19; ACU A-2: 17) print one device per row, ticked under INPUT TO DDC / OUTPUT FROM DDC, ANALOG / BINARY columns (a row often ticks several, e.g. a fan status sensor's airflow, status and speed), DDC FEATURES and GENERAL: bas_points rows 59, the rows that tick an input or output column; types, alarms and trends not keyed. Each table's unit label row (AIR CONDITIONING UNIT (ACU A-1) ...; ACU A-3,4,5,6's ticks COLOR GRAPHICS only) is not a point; the takeoff counts them (62). The earlier key (FAN 6, no ACUs, BAS 0) predates the return fan and points reads.",
   "categories": {
-    "FAN": 6,
+    "AHU": 6,
+    "FAN": 15,
     "HUMIDIFIER": 1,
     "DUCT_MOUNTED_COIL": 12
   },
   "totals": {
-    "items": 19
+    "items": 34
   },
   "bas_points": {
-    "rows": 0
+    "rows": 59
   },
   "control_valves": {
     "items": 0

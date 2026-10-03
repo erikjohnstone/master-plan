@@ -266,6 +266,63 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Point-type policy tables; seam-continued faces, nearest face first; 016_NY, 031_MO, 011_IL and 009_FL re-keyed (2026-10-03)
+
+Rules (shared path: the compile and graph construction are what the UI and MCP both read):
+- `corpusTakeoff.mjs isBasPointTypeTable`: a table the points-list gate admits whose every data row names a point type
+  (AI, AO, BI, BO, DI, DO, AV, BV, MV, MSV, CALC) in a column not headed TYPE lists no point. `compileBasTakeoff` skips
+  it, its page reads empty for points lists, `BAS_EXCLUSIONS` names the shape, and `pipelineHarness.graphBasTableStats`
+  skips it too (no false "graph has BAS rows but compile returned zero"). 011_IL MH-300's POINTS LIST - STANDARD
+  TRENDING INTERVALS: BAS 5 → 0. Census: the only table whose rows are 30% or more type names among 91 admitted lists
+  in 50 freshly built graphs and 632 in 175 cached ones. Negative controls in the test: a list keyed by its POINT TYPE
+  column with descriptions beside, and the trend table plus one real point, both still count.
+- `vectorGridAdapter.ts continuesAcrossSeam`: a face whose top edge lies inside the face above it, on the same column
+  grid, and which opens on the row that face closes on continues that face whatever it was refused for alone (only
+  that face). `rowSignature` ignores empty cells: the two captures of a seam row need not agree on one. 009_FL's
+  CHILLER PLANT DDC POINTS LIST: 10 → 11 points (MI1 CHILLER INTEGRATION POINTS, after the last blank line; BO3 read
+  once).
+- `vectorGridAdapter.ts`: an eligible fragment tries the nearest face first (vertical distance, overlap 0), not the
+  first in the reply's order. Without it the seam rule cost 004_MO p18's FLOORING its LVT-1/G-1 face to the FINISH
+  LEGEND, which now reaches down to EXT. BL. and sat 26pt above that face.
+
+Replay (base 04d6d4b, 407 saved pages over six directories): only 009_FL p20 (+MI1) and 004_MO p18 (FINISH LEGEND 4 → 6:
+EP-1, VB-1, C-1, C-2, AL-1, EXT. BL., checked on the render; its FLOORING keeps the doubled LVT-1 and misses EP-1, and
+PAINT misses PT-1, as before) change; 12,110 → 12,113 rows. Compile A/B (corpusTakeoff only) over 50 freshly built and
+175 cached graphs: only 011_IL changes. Mutants: 5 on the type-table rule and 4 on the adapter rules (empty cells in the
+seam signature, no seam continuation, index order instead of nearest, no overlap required), each killed by its test.
+Web typecheck, lint and all 4,249 tests (0 fail).
+
+Re-keyed from renders (each key's notes cite its sheets and pages): 016_NY (24 units; C-1 convector and SRV-1 have no
+family), 031_MO (105: 13 room-coded VAV boxes W05-TU-01 to W11-TU-13, two VFDs on E-400, WHSE-SSHX1 clean steam
+generator has no family), 011_IL (HEAT_PUMP 15 existing HP 12-1 to HP 48-15 + GRD 5; BAS 0, its points list being the
+trend policy above) and 009_FL (28 units; 75 points: VFD BACnet interface 18, AHU-1 17, chiller plant 11, lab exhaust
+fans 2, scheduled exhaust fan 2, AHU-2 11, electric unit heater 6, VAV terminal 8; AI 35, AO 9, BI 16, BO 9, alarm 30,
+trend 74). WP1: 016_NY, 031_MO and 011_IL PASS, their pages unchanged by the adapter rules in the replay; 009_FL PASS at
+the final code (73 of 75 points at 04d6d4b's).
+
+017_MD re-keyed from the renders (34 units, BAS rows 59), with two documented gaps the takeoff does not close: (1)
+its INDOOR AIR CONDITIONING UNIT SCHEDULE's ACU-A-1 to ACU-A-6, built-up air handlers whose rows name each one's
+return fan, supply fan, filter, coils and humidifier, are read by no family (census: the only built-up use of the
+title; every other AIR CONDITIONING UNIT title in the corpus is a split system, so no vocabulary was added for one
+set). (2) Its three DDC INPUT/OUTPUT POINT SCHEDULEs (p17) are device-per-row matrices ticked under INPUT TO DDC /
+OUTPUT FROM DDC, ANALOG / BINARY groups; 59 rows tick an input or output, and the takeoff reads 62, counting each
+table's unit label row (ACU A-1; ACU A-2; ACU A-3,4,5,6, which ticks only COLOR GRAPHICS). The type reader expects
+ANALOG INPUT word order, so none of the rows is typed; 05_MO's AHU POINTS LISTs share the direction-first shape
+(SYSTEM OUTPUTS BINARY ...). The RETURN FAN SCHEDULE (E-A-1 to 8, E-A-13) now reads: FAN 15. WP1 at the final code: FAIL on the
+HVAC total (28 of 34, the six ACUs), its BAS at 62 for 59.
+
+013_MO re-keyed from the renders as a documented ceiling (#293 closed as such): HVAC 25 (BOILER 8, PUMP 1, FLOW_METER
+3, VFD 1, HHW_CONTROL_VALVE 12), control valves 12, BAS 39 rows (the cross-tie list's 13: AI 6, AO 1, DI 3, DO 2, one
+COM, alarm 4; and the TYPICAL BOILER BACnet/MSTP SOFTWARE POINTS LIST's 26 printed rows, software points with no type
+column). The takeoff reads 10 units (the flow meters, the drive, CV-7 to CV-12), 6 valves and 3 untyped points. What
+stands between: the masked copies under later white fills (Known limits: CV-1 - CV-6's row, the PUMPS and BOILERS
+grids, and the boiler software list are interleaved with hidden duplicates), and the cross-tie list's shape: three
+ruled sections each opening with a spanning label (HOT WATER LOOP, CROSS-TIE LOOP, CROSS-TIE PUMP), the last ruled
+with POINT ID split into two columns, then lettered notes A to D. The header's seam row differs between its two faces
+(one merges SET POINT RESET RANGE with FAIL POSITION), so both header rows compose the labels and POINT TYPE is no
+longer an exact column name: the 3 read points are untyped. Three narrow rules for one 13-point list was judged the
+wrong trade; recorded instead.
+
 ### ALARM sections, header bands a column short, filled-square ticks, ticked first rows, air terminal grilles, glycol feeders; 033_MN, 014_MT, 030_NY, 019_FL and federal-mech re-keyed (2026-10-03)
 
 Rules (shared path; graph construction is shared by the UI and MCP, the compile by both):

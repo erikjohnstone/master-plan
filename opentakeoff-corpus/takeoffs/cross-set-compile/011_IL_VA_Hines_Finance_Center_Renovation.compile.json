@@ -2,12 +2,13 @@
   "set_id": "011_IL_VA_Hines_Finance_Center_Renovation",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/011_IL_VA_Hines_Finance_Center_Renovation.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 Hines VA \u2014 GRD only; EXISTING HEAT PUMP schedule rows are diffuser marks (honest WEAK).",
+  "notes": "Vol2 Hines VA finance center renovation, one floor. [RE-KEYED 2026-10-03 from the render] MH-101 (page 16): EXISTING HEAT PUMP SCHEDULE HP 12-1 to HP 48-15, each printed with its equipment and model number, capacity and airflow (existing units the new ductwork reconnects, keynote M2): HEAT_PUMP 15; DIFFUSER, REGISTER, AND GRILLE SCHEDULE RG-1 under RETURN and SD-1 to SD-4 under SUPPLY: GRD 5. MH-300 (page 19) prints a sequence and control diagram for the heat pump terminal units and a POINTS LIST - STANDARD TRENDING INTERVALS whose rows are point types (AI, BI, AO, BO, CALC) with their trend intervals: a trend policy that lists no point, so bas_points rows 0. MH-200 prints details and hanger/support tables only. The earlier WEAK key (GRD 5 only) read the heat pump rows as diffuser marks; the render shows 15 scheduled heat pumps.",
   "categories": {
+    "HEAT_PUMP": 15,
     "GRD": 5
   },
   "totals": {
-    "items": 5
+    "items": 20
   },
   "bas_points": {
     "rows": 0

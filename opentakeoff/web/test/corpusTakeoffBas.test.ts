@@ -8,6 +8,7 @@ import {
   compileBasTakeoff,
   detectSooPresence,
   isBasPointsListTitle,
+  isBasPointTypeTable,
   isSooNarrativeTitle,
   ocrFixEquipMark,
   equipMarkFromBasDescription,
@@ -804,5 +805,58 @@ describe("compileBasTakeoff I/O LIST", () => {
     const bas = compileBasTakeoff(null, graph);
     assert.equal(bas.totals.lists, 0);
     assert.equal(bas.totals.rows, 0);
+  });
+
+  it("lists no point from a points list caption over a table of point types (011_IL's STANDARD TRENDING INTERVALS)", () => {
+    const row = (name: string, interval: string, duration: string) => ({
+      key: name,
+      cells: {
+        "POINT NAME": { text: name },
+        "TREND INTERVAL": { text: interval },
+        "OPERATIONAL TREND DURATION": { text: duration },
+      },
+    });
+    const policy = {
+      kind: "reference",
+      sheet: "set.pdf#19",
+      title: { text: "POINTS LIST - STANDARD TRENDING INTERVALS", bbox: [0, 0, 10, 10] },
+      headers: ["POINT NAME", "TREND INTERVAL", "OPERATIONAL TREND DURATION"],
+      rows: [
+        row("AI", "15 MIN.", "24 HOURS"),
+        row("BI", "CHANGE OF VALUE", "24 HOURS"),
+        row("AO", "15 MIN.", "24 HOURS"),
+        row("BO", "CHANGE OF VALUE", "24 HOURS"),
+        row("CALC", "1 HOUR", "30 DAYS"),
+      ],
+    };
+    assert.equal(isBasPointTypeTable(policy), true);
+    const bas = compileBasTakeoff(null, { sheets: [{ key: "set.pdf#19", number: 19 }], tables: [policy] });
+    assert.equal(bas.totals.lists, 0);
+    assert.equal(bas.totals.rows, 0);
+    assert.equal(bas.page_accounting.pages[0].status, "empty_for_bas_points_lists");
+    assert.ok(bas.exclusions.some((note: string) => /point-type policy tables/i.test(note)));
+
+    // A list keyed by its TYPE column names its points in another column.
+    const typed = {
+      sheet: "set.pdf#20",
+      title: { text: "AHU-1 POINTS LIST", bbox: [0, 0, 10, 10] },
+      headers: ["POINT TYPE", "DESCRIPTION"],
+      rows: [
+        { key: "AI", cells: { "POINT TYPE": { text: "AI" }, DESCRIPTION: { text: "SUPPLY AIR TEMPERATURE" } } },
+        { key: "BO", cells: { "POINT TYPE": { text: "BO" }, DESCRIPTION: { text: "SUPPLY FAN START/STOP" } } },
+      ],
+    };
+    assert.equal(isBasPointTypeTable(typed), false);
+    // One point among the type names makes the table a list of points.
+    const mixed = { ...policy, rows: [...policy.rows, row("SAT-1", "15 MIN.", "24 HOURS")] };
+    assert.equal(isBasPointTypeTable(mixed), false);
+    const both = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#19", number: 19 }, { key: "set.pdf#20", number: 20 }],
+      tables: [typed, mixed],
+    });
+    assert.equal(both.totals.lists, 2);
+    assert.equal(both.totals.rows, 8);
+    assert.equal(both.totals.AI, 1);
+    assert.equal(both.totals.BO, 1);
   });
 });

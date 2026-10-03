@@ -43,6 +43,22 @@ describe("pipelineHarness graph stats", () => {
     assert.equal(stats.rows, 1);
   });
 
+  it("counts no rows from a points list caption over point types, as the compile does", () => {
+    const policy = {
+      sheet: "set.pdf#19",
+      kind: "reference",
+      title: { text: "POINTS LIST - STANDARD TRENDING INTERVALS" },
+      headers: ["POINT NAME", "TREND INTERVAL"],
+      rows: ["AI", "BI", "AO", "BO", "CALC"].map((name) => ({
+        key: name,
+        cells: { "POINT NAME": { text: name }, "TREND INTERVAL": { text: "15 MIN." } },
+      })),
+    };
+    const stats = graphBasTableStats({ tables: [policy, BAS_TABLE] });
+    assert.equal(stats.tables, 1);
+    assert.equal(stats.rows, 1);
+  });
+
   it("flags graph-without-compile gaps", () => {
     const snap = pipelineHarnessSnapshot(
       { tables: [VALVE_TABLE], notes: [] },

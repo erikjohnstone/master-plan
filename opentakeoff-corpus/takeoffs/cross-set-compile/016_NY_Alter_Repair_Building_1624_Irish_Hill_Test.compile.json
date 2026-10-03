@@ -2,17 +2,29 @@
   "set_id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 Irish Hill \u2014 single AHU (honest WEAK).",
+  "notes": "Vol2 Irish Hill, Building 1624. [RE-KEYED 2026-10-03 from the render] M-601 (page 18): AIR HANDLING UNIT SCHEDULE AHU-1; AIR COOLED CONDENSING UNIT SCHEDULE ACCU-1; BOILER SCHEDULE (EXISTING) B-1 & 2 (one row, two boilers); PUMP SCHEDULE P-1, P-2; FAN SCHEDULE F-1, F-2; FIN TUBE RADIATION SCHEDULE FT-A; EXPANSION TANK SCHEDULE ET-1; CONTROL DAMPER SCHEDULE (CD) CD-1 to CD-9 (also the valve compile's 9 control dampers); DIFFUSER, REGISTER AND GRILLE SCHEDULE S1, R1, R2, E1. P-001 (page 8): DOMESTIC WATER HEATER SCHEDULE DWH-1. Not keyed: the CONVECTOR SCHEDULE's C-1 and the STATIONARY ROOF VENTILATOR SCHEDULE's SRV-1 (a gravity relief hood), which have no family. No points list is printed. The earlier key (AHU 1, [WEAK]) was written from pipeline output.",
   "categories": {
-    "AHU": 1
+    "AHU": 1,
+    "CONDENSING_UNIT": 1,
+    "BOILER": 2,
+    "PUMP": 2,
+    "WATER_HEATER": 1,
+    "FAN": 2,
+    "FIN_TUBE_RADIATION": 1,
+    "EXPANSION_TANK": 1,
+    "CONTROL_DAMPER": 9,
+    "GRD": 4
   },
   "totals": {
-    "items": 1
+    "items": 24
   },
   "bas_points": {
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 9,
+    "categories": {
+      "CONTROL_DAMPER": 9
+    }
   }
 }

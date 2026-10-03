@@ -2,17 +2,29 @@
   "set_id": "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 boiler phase-2 \u2014 only VFD schedule extractable (honest WEAK). FLOW METER DEVICES not HVAC family.",
+  "notes": "Vol2 boiler replacement phase 2, building 29 (Springfield AVCRAD). [RE-KEYED 2026-10-03 from the render; a documented ceiling, not a target the takeoff meets] M-320 (page 20): CONTROL VALVES CV-1 - CV-6 (B-001 THRU 006), CV-7 - CV-10 (B-7050A,B,C,H) and CV-11,12 (cross-tie isolation), all heating hot water, two-way open/close: HHW_CONTROL_VALVE 12 (the takeoff reads 6: CV-1 - CV-6's row is lost to a masked copy of the sheet under a later white fill); FLOW METER DEVICES FM-HHW1, FM-HHW2, FM-CT1: FLOW_METER 3; TYPICAL BOILER BACnet/MSTP SOFTWARE POINTS LIST, 26 printed rows (BACnet IDs 0 to 88, some rows a range), software points with no type or alarm column (not captured as a table). Page 21: POINTS LIST - BOILER WATER PLANT CROSS-TIE, 13 points in three ruled sections (HOT WATER LOOP, CROSS-TIE LOOP, CROSS-TIE PUMP): AI 6, AO 1, DI 3, DO 2 and CTP-COM (COM), STATUS ALARM ticked on 4 (the takeoff reads its first section's 3 points, untyped: each section is its own face, the last ruled with the POINT ID column split in two, and its lettered notes A to D follow the points). bas_points 39 rows = 13 + 26, DI and DO as BI and BO. M-500 (page 23): VARIABLE FREQUENCY DRIVE SCHEDULE VFD-1 (cross-tie HHW CTP); PUMPS HHW CTP; BOILERS B-001 to B-004 and B-7050A, B-7050B, B-7050C, B-7050H: BOILER 8 (the takeoff reads neither the pump nor the boilers: both grids are interleaved with masked copies). Not keyed: the HYDRONIC SPECIALTIES SCHEDULE's one suction diffuser (Armstrong SG-66, the cross-tie pump's; no mark), the PROJECT LOAD CONDITIONS tables (existing loads served, not this project's units) and the gas load and piping material tables. The earlier WEAK key (VFD 1) predates the flow meter and valve reads.",
   "categories": {
-    "VARIABLE_FREQUENCY_DRIVE": 1
+    "BOILER": 8,
+    "PUMP": 1,
+    "FLOW_METER": 3,
+    "VARIABLE_FREQUENCY_DRIVE": 1,
+    "HHW_CONTROL_VALVE": 12
   },
   "totals": {
-    "items": 1
+    "items": 25
   },
   "bas_points": {
-    "rows": 0
+    "rows": 39,
+    "AI": 6,
+    "AO": 1,
+    "BI": 3,
+    "BO": 2,
+    "alarm": 4
   },
   "control_valves": {
-    "items": 0
+    "items": 12,
+    "categories": {
+      "HHW_CONTROL_VALVE": 12
+    }
   }
 }

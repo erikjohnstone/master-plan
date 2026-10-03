@@ -4,6 +4,7 @@
 import {
   isBasPointsListTable,
   isBasPointsListTitle,
+  isBasPointTypeTable,
   isControlValveHeaderShape,
 } from "./corpusTakeoff.mjs";
 
@@ -44,6 +45,8 @@ export function graphBasTableStats(graph) {
   for (const t of graph?.tables || []) {
     const title = t.title?.text || "";
     if (!isBasPointsListTitle(title) && !isBasPointsListTable(t)) continue;
+    // A trend policy over point types lists no point (compileBasTakeoff).
+    if (isBasPointTypeTable(t)) continue;
     tables += 1;
     rows += t.rows?.length || 0;
     tableTitles.push(title || inferBasTitle(t));

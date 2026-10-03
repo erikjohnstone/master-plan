@@ -12,6 +12,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   VectorGridSpaceError,
+  continuesAcrossSeam,
   vectorGridTableToOdl,
   vectorGridTableToScheduleTable,
   pageBoxAgrees,
@@ -687,5 +688,93 @@ describe("a header band ruled with one column fewer than its points (019_FL's M8
   it("stacks a section a label's line below the points, never one an inch below", () => {
     const far = face(6, points(0, 320, [["64", "WHEEL ENTERING TEMPERATURE", "T-1", "AI", "\u25A0", ""]]));
     assert.deepEqual(read([BAND, AHU, far]).map((t) => t.keys), [["1", "2", "3"]]);
+  });
+});
+
+describe("a points list whose last face repeats its seam row and is refused alone (009_FL's CHILLER PLANT DDC POINTS LIST)", () => {
+  const W = [100, 130, 300, 330, 360, 390];
+  const row = (r: number, top: number, texts: string[]) => texts
+    .map((text, col) => (text === null ? null : cell(r, col, text, [W[col], top, W[col + 1], top + 15])))
+    .filter((c): c is ReturnType<typeof cell> => c !== null);
+  const blank = (r: number, top: number) => cell(r, 0, "", [100, top, 390, top + 15], 1, 5);
+  const DOT = "\u25CF";
+  // The face above closes on BO2 with an empty ALARM cell; the face below
+  // opens on the same printed row without one, then a blank line and MI1.
+  const ABOVE: VectorGridTable = {
+    bbox: [100, 100, 390, 210], rows: 7, cols: 5, raster: false, assigned: 0, orphan: 0, straddle: 0,
+    cells: [
+      cell(0, 0, "CHILLER PLANT DDC POINTS LIST", [100, 100, 390, 120], 1, 5),
+      ...row(1, 120, ["NAME", "DESCRIPTION", "TREND", "ALARM", "GRAPHIC"]),
+      ...row(2, 135, ["AI1", "CHILLED WATER SUPPLY TEMPERATURE", DOT, DOT, DOT]),
+      ...row(3, 150, ["AI2", "CHILLED WATER RETURN TEMPERATURE", DOT, "", DOT]),
+      blank(4, 165),
+      ...row(5, 180, ["BO1", "CHILLER ENABLE / DISABLE", DOT, "", DOT]),
+      ...row(6, 195, ["BO2", "PUMP START/STOP", DOT, "", DOT]),
+    ],
+  };
+  const BELOW: VectorGridTable = {
+    bbox: [100, 195, 390, 240], rows: 3, cols: 5, raster: false, assigned: 0, orphan: 0, straddle: 0,
+    cells: [
+      cell(0, 0, "BO2", [100, 197, 130, 208]),
+      cell(0, 1, "PUMP START/STOP", [130, 197, 300, 208]),
+      cell(0, 2, DOT, [300, 197, 330, 208]),
+      cell(0, 4, DOT, [360, 197, 390, 208]),
+      blank(1, 210),
+      ...row(2, 225, ["MI1", "CHILLER INTEGRATION POINTS", "", DOT, DOT]),
+    ],
+  };
+
+  it("continues the face whose last row it repeats, an empty cell or not, and no other", () => {
+    assert.equal(continuesAcrossSeam(ABOVE, BELOW), true);
+    assert.equal(continuesAcrossSeam(BELOW, ABOVE), false);
+    // A face that starts below the one above, not inside it, shares no seam.
+    const apart = { ...BELOW, bbox: [100, 215, 390, 260] as [number, number, number, number] };
+    assert.equal(continuesAcrossSeam(ABOVE, apart), false);
+    // A face that opens on another row continues nothing.
+    const other = { ...BELOW, cells: BELOW.cells.map((c) => (c.text === "BO2" ? { ...c, text: "BO3" } : c)) };
+    assert.equal(continuesAcrossSeam(ABOVE, other), false);
+  });
+
+  it("reads MI1 under the list, and the seam row once", () => {
+    const tables = scheduleTablesFromVectorGridReply([ABOVE, BELOW], 20, ctx(), 3).tables;
+    assert.deepEqual(tables.map((t) => ({ title: t.title?.text, keys: t.rows.map((r) => r.key) })), [{
+      title: "CHILLER PLANT DDC POINTS LIST",
+      keys: ["AI1", "AI2", "BO1", "BO2", "MI1"],
+    }]);
+  });
+});
+
+describe("a fragment within reach of two tables continues the one it touches (004_MO's FLOORING under its FINISH LEGEND)", () => {
+  const W = [100, 160, 220, 280, 340];
+  const row = (r: number, top: number, texts: string[]) =>
+    texts.map((text, col) => cell(r, col, text, [W[col], top, W[col + 1], top + 12]));
+  const face = (cells: ReturnType<typeof cell>[]): VectorGridTable => ({
+    bbox: [100, Math.min(...cells.map((c) => c.bbox[1])), 340, Math.max(...cells.map((c) => c.bbox[3]))],
+    rows: Math.max(...cells.map((c) => c.row)) + 1, cols: 4, raster: false, assigned: cells.length, orphan: 0, straddle: 0, cells,
+  });
+  const PUMP = face([
+    cell(0, 0, "PUMP SCHEDULE", [100, 105, 340, 117], 1, 4),
+    ...row(1, 117, ["MARK", "GPM", "HEAD (FT)", "HP"]),
+    ...row(2, 129, ["P-1", "120", "60", "5"]),
+    ...row(3, 141, ["P-2", "85", "45", "3"]),
+  ]);
+  const FAN = face([
+    cell(0, 0, "FAN SCHEDULE", [100, 154, 340, 166], 1, 4),
+    ...row(1, 166, ["MARK", "CFM", "ESP", "HP"]),
+    ...row(2, 178, ["EF-1", "2200", "2.00", "2"]),
+  ]);
+  // Its own rows only: 1pt under the fan schedule, and 38pt under the pump
+  // schedule's foot, which the gap tolerance also reaches.
+  const MORE_FANS = face([
+    ...row(0, 191, ["EF-2", "1400", "1.00", "1"]),
+    ...row(1, 203, ["EF-3", "1400", "1.00", "1"]),
+  ]);
+
+  it("stacks the fragment under the fan schedule, not the pump schedule listed first", () => {
+    const tables = scheduleTablesFromVectorGridReply([PUMP, FAN, MORE_FANS], 18, ctx(), 3).tables;
+    assert.deepEqual(tables.map((t) => ({ title: t.title?.text, keys: t.rows.map((r) => r.key) })), [
+      { title: "PUMP SCHEDULE", keys: ["P-1", "P-2"] },
+      { title: "FAN SCHEDULE", keys: ["EF-1", "EF-2", "EF-3"] },
+    ]);
   });
 });

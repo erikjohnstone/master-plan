@@ -379,6 +379,11 @@ function verticallyAdjacent(a: VectorGridTable, b: VectorGridTable): boolean {
     || Math.abs(a.bbox[1] - b.bbox[3]) <= FRAGMENT_GAP_TOL;
 }
 
+/** How far apart two faces sit down the page: 0 when they touch or overlap. */
+function faceDistance(a: VectorGridTable, b: VectorGridTable): number {
+  return Math.max(0, Math.max(a.bbox[1], b.bbox[1]) - Math.min(a.bbox[3], b.bbox[3]));
+}
+
 // exported for tests
 function isFragmentAdjacent(a: VectorGridTable, b: VectorGridTable): boolean {
   return sameColumnGrid(a, b) && verticallyAdjacent(a, b);
@@ -396,18 +401,33 @@ function isMergeEligibleFragment(t: VectorGridTable, why: string): boolean {
   return false;
 }
 
-/** Every cell of one row, as a position-and-text signature independent of
- * cell identity — used only to detect a row captured twice (see
- * `concatFragments`'s own comment). Empty string for a row with no cells at
- * all, which never counts as a match below. */
+/** Every printed cell of one row, as a position-and-text signature
+ * independent of cell identity — used only to detect a row captured twice
+ * (see `concatFragments`'s own comment). A cell with no text prints nothing,
+ * and the two captures of one row need not agree on one: 009_FL's CHILLER
+ * PLANT DDC POINTS LIST's BO3 row is read with an empty ALARM cell by the
+ * face above the seam and without one by the face below. Empty string for a
+ * row that prints nothing, which never counts as a match below. */
 function rowSignature(t: VectorGridTable, row: number): string {
-  const cells = t.cells.filter((c) => c.row === row);
-  if (!cells.length) return "";
-  return cells
-    .slice()
+  return t.cells
+    .filter((c) => c.row === row && (c.text || "").trim())
     .sort((x, y) => x.col - y.col)
     .map((c) => `${c.col}:${(c.text || "").trim()}`)
     .join("|");
+}
+
+/** A face whose top edge lies inside the face above it, on the same column
+ * grid, and which opens on the row that face closes on — the one printed row
+ * both captured whole at the seam (see `concatFragments`) — continues that
+ * face, whatever it was refused for alone. 009_FL's CHILLER PLANT DDC POINTS
+ * LIST closes on a three-row face (BO3 again, a blank line, MI1) that, read
+ * alone, takes BO3 for its header and is refused "unknown kind and no
+ * title"; MI1 was lost with it. */
+function continuesAcrossSeam(above: VectorGridTable, below: VectorGridTable): boolean {
+  if (!sameColumnGrid(above, below)) return false;
+  if (below.bbox[1] <= above.bbox[1] || below.bbox[1] >= above.bbox[3]) return false;
+  const seam = rowSignature(above, above.rows - 1);
+  return seam !== "" && seam === rowSignature(below, 0);
 }
 
 /** Concatenate two fragments' own raw cells top-to-bottom by each one's own
@@ -668,9 +688,21 @@ export function scheduleTablesFromVectorGridReply(
       const cand = attempts[i];
       const alarms = isPointAlarmSectionFragment(cand.raw);
       const section = alarms || isPointSectionFragment(cand.raw);
-      if (!section && (cand.built || !isMergeEligibleFragment(cand.raw, cand.why))) continue;
-      for (let j = 0; j < attempts.length; j++) {
-        if (j === i) continue;
+      const byRefusal = !cand.built && isMergeEligibleFragment(cand.raw, cand.why);
+      // Refused for another reason, a face still continues the one whose
+      // last row it repeats at their seam (above), and only that one.
+      const seamAbove = !section && !cand.built && !byRefusal
+        ? attempts.findIndex((o, j) => j !== i && continuesAcrossSeam(o.raw, cand.raw))
+        : -1;
+      if (!section && !byRefusal && seamAbove < 0) continue;
+      // Nearest face first: a fragment continues the face it touches, not
+      // one past it that the gap tolerance also reaches. 004_MO's FINISH
+      // LEGEND, read whole down to EXT. BL., ends 26pt above the face that
+      // opens on LVT-1 again; FLOORING, which that face overlaps, is its own.
+      const nearest = attempts.map((_, j) => j)
+        .sort((a, b) => faceDistance(cand.raw, attempts[a].raw) - faceDistance(cand.raw, attempts[b].raw));
+      for (const j of nearest) {
+        if (j === i || (seamAbove >= 0 && j !== seamAbove)) continue;
         const other = attempts[j];
         let candRaw = cand.raw, otherRaw = other.raw;
         if (!isFragmentAdjacent(cand.raw, other.raw)) {
@@ -716,4 +748,4 @@ export function scheduleTablesFromVectorGridReply(
 }
 
 export type { Bbox };
-export { isFragmentAdjacent, isPointAlarmSectionFragment, isPointSectionFragment, regridHeaderBand, stackFragments };
+export { continuesAcrossSeam, isFragmentAdjacent, isPointAlarmSectionFragment, isPointSectionFragment, regridHeaderBand, stackFragments };
