@@ -825,7 +825,7 @@ test("Vol2 LAMBDA 060: duct coils MATCH; GRD 6/10", async (t) => {
   });
 });
 
-test("Vol2 West Valley Science 072: FAN 10/11 + ERV MATCH; GRD SO", async (t) => {
+test("Vol2 West Valley Science 072: FAN + ERV all MATCH; GRD SO", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "072_CA_CA07_2627_West_Valley_College_Science_Math.compile.json"),
@@ -833,16 +833,15 @@ test("Vol2 West Valley Science 072: FAN 10/11 + ERV MATCH; GRD SO", async (t) =>
   if (!ctx) return;
   const { key, session, graph } = ctx;
   await assertFamilyAllMatch(session, graph, key, "ERV");
-  await assertFamilyStatusCounts(session, graph, key, "FAN", {
-    match: 10,
-    schedule_only: 1,
-  });
+  // The roof plan tags SF-A-1 to SF-A-9 and M201 tags SF-A-10 and SF-A-11, each
+  // a stacked SF-A over its number in a hexagon on the inline fan: all 11 drawn.
+  await assertFamilyAllMatch(session, graph, key, "FAN");
   await assertFamilyStatusCounts(session, graph, key, "GRD", {
     schedule_only: key.categories.GRD,
   });
 });
 
-test("Vol2 West Valley STEM 074: FAN 10/11 + ERV MATCH; GRD SO", async (t) => {
+test("Vol2 West Valley STEM 074: FAN + ERV all MATCH; GRD SO", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "074_CA_West_Valley_College_STEM_Classroom_HVAC.compile.json"),
@@ -850,10 +849,9 @@ test("Vol2 West Valley STEM 074: FAN 10/11 + ERV MATCH; GRD SO", async (t) => {
   if (!ctx) return;
   const { key, session, graph } = ctx;
   await assertFamilyAllMatch(session, graph, key, "ERV");
-  await assertFamilyStatusCounts(session, graph, key, "FAN", {
-    match: 10,
-    schedule_only: 1,
-  });
+  // The roof plan tags SF-A-1 to SF-A-9 and M201 tags SF-A-10 and SF-A-11, each
+  // a stacked SF-A over its number in a hexagon on the inline fan: all 11 drawn.
+  await assertFamilyAllMatch(session, graph, key, "FAN");
   await assertFamilyStatusCounts(session, graph, key, "GRD", {
     schedule_only: key.categories.GRD,
   });
@@ -887,12 +885,11 @@ test("Vol2 Bldg 615 reno 028: plant families honest SCHEDULE_ONLY", async (t) =>
   }
 });
 
-test("Vol2 WEAK leftovers: honest SCHEDULE_ONLY ceilings (066/033/067/078/013)", async (t) => {
+test("Vol2 WEAK leftovers: honest SCHEDULE_ONLY ceilings (066/033/067/013)", async (t) => {
   const cases = [
     ["066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.compile.json", ["HEAT_PUMP", "HUMIDIFIER", "GRD"]],
     ["033_MN_VA_Project_656_18_301_Construct_Replace.compile.json", ["AHU", "PUMP"]],
     ["067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.compile.json", ["HEAT_EXCHANGER", "GRD"]],
-    ["078_US_CP25028_MSU_Union_Sparty_Store_Renovations.compile.json", ["FAN"]],
     ["013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.compile.json", ["VARIABLE_FREQUENCY_DRIVE"]],
   ];
   for (const [file, families] of cases) {
@@ -1819,7 +1816,7 @@ test("SDSU EngSciences STEAM PRV reconcile: PRV-1A/1B both MATCH", async () => {
   assert.ok(result.rows.every((r) => (r.plan_cites?.length || 0) >= 1));
 });
 
-test("Northport FAN reconcile: RF-1/RF-2 honest SCHEDULE_ONLY (no plan text)", async () => {
+test("Northport FAN reconcile: RF-1/RF-2 MATCH on the penthouse plan, each motor tagged beside its disconnect", async () => {
   const keyPath = resolve(CROSS, "01_NY_VA_Northport_Dialysis_100CD.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
@@ -1840,9 +1837,11 @@ test("Northport FAN reconcile: RF-1/RF-2 honest SCHEDULE_ONLY (no plan text)", a
   });
   assert.equal(result.rows.length, key.categories.FAN);
   assert.deepEqual(result.rows.map((r) => r.tag).sort(), ["RF-1", "RF-2"]);
+  // E205.1, PARTIAL ROOF AND PENTHOUSE FLOOR PLAN - PHASE 1, draws each
+  // return fan's motor with its tag beside its disconnect (DS-RF-1, DS-RF-2).
   assert.ok(
-    result.rows.every((r) => r.status === "SCHEDULE_ONLY"),
-    `Northport RF honest SCHEDULE_ONLY (got ${result.rows.map((r) => r.tag + ":" + r.status).join(",")})`,
+    result.rows.every((r) => r.status === "MATCH"),
+    `Northport RF MATCH (got ${result.rows.map((r) => r.tag + ":" + r.status).join(",")})`,
   );
-  assert.ok(result.rows.every((r) => (r.installed_qty || 0) === 0));
+  assert.ok(result.rows.every((r) => r.installed_qty === 1));
 });

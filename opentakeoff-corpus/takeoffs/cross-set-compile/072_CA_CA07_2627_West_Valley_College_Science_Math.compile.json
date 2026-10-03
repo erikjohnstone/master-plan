@@ -2,19 +2,26 @@
   "set_id": "072_CA_CA07_2627_West_Valley_College_Science_Math",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/072_CA_CA07_2627_West_Valley_College_Science_Math.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 West Valley Science/Math \u2014 ERV/FAN/GRD.",
+  "notes": "[MEAT] Vol2 West Valley Science/Math — ERV/FAN/GRD. [RE-KEYED 2026-10-03 from the render] M002 (page 26) prints the same schedules as 074_CA's M002 (another issue of the building): DUCTED FAN COIL UNITS FC-A-2 to FC-A-8, FC-A-13-1, FC-A-17-1, FC-A-18-1, FC-A-20-1: FCU 11 (was 0); EQUIPMENT CONTROL VALVES, a CV-CC- and a CV-HC- valve per fan coil, keyed by the water each row's SERVICE prints (AS-78): CHW_CONTROL_VALVE 12, HHW_CONTROL_VALVE 10 (CV-HC-FC-A-8 prints 'CHW, EV-A-8', a drafting error, keyed as printed). SUPPLY FANS (11), the ERV and grille CD-3 as keyed. Totals 46.",
   "categories": {
     "ERV": 1,
     "FAN": 11,
-    "GRD": 1
+    "GRD": 1,
+    "FCU": 11,
+    "CHW_CONTROL_VALVE": 12,
+    "HHW_CONTROL_VALVE": 10
   },
   "totals": {
-    "items": 13
+    "items": 46
   },
   "bas_points": {
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 22,
+    "categories": {
+      "CHW_CONTROL_VALVE": 12,
+      "HHW_CONTROL_VALVE": 10
+    }
   }
 }

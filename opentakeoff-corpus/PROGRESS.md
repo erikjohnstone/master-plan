@@ -325,6 +325,29 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   SOUND ATTENUATORS, SILENCERS or SOUND TRAPS (as PUMPS, AS-141); A/B over 212 cached and 85 new graphs: only 01_NY
   (+SA-1), which now reads all 42. Not counted: the existing EX AC-1 on an EX FAN REBALANCE SCHEDULE (rebalanced only;
   053_VA's existing terminal units count because they sit in the family's own schedule) and the steam traps.
+- Five early pipeline keys re-keyed from their renders, each now the takeoff's read: 074_CA and 072_CA (two issues of
+  one West Valley College building; M002 prints the same schedules in both) add DUCTED FAN COIL UNITS FC-A-2 to -8 and
+  FC-A-13-1, -17-1, -18-1, -20-1 (FCU 11) and EQUIPMENT CONTROL VALVES, a cooling and a heating valve per fan coil (22,
+  keyed by the water each row's SERVICE prints, AS-78: CHW 12, HHW 10; CV-HC-FC-A-8 prints 'CHW, EV-A-8' although its
+  mark and FC-A-8's heating coil make it a heating valve, a drafting error keyed as printed): 13 -> 46 each. 049_IL adds
+  CP-1, a domestic hot water circulating pump in P500's PLUMBING MATERIAL LIST (B&G Ecocirc, status to the BMS; 11_CA's
+  key counts its circulating pumps): 2 -> 3; the takeoff reads it from an untitled fragment the extraction cut from the
+  list. 050_IL adds 1-COM-1 (instrument air compressor) and 1-VAV-01 (AIR TERMINAL UNIT SIZING SCHEDULE): 1 -> 3.
+  078_US's FAN 1 was the M-100 legend's exhaust fan symbol: the set prints no equipment schedule (M-100 symbols and notes,
+  M-300 demolition plan; EF-1 only in a panel schedule's circuit names): 1 -> 0, and reconcileWorkflow's WEAK leftovers
+  test no longer asks it for a fan. The West Valley reconcile tests expected 10 of the 11 supply fans to MATCH (an
+  expectation from 2026-09-13); all 11 do, and the drawings agree: the roof plan tags SF-A-1 to SF-A-9 and M201 tags
+  SF-A-10 and SF-A-11, each a stacked SF-A over its number in a hexagon with a leader to the inline fan. Both tests now
+  assert all 11.
+- 26_CA stays a stale key (VAV 7, RAH 2, WFU 1 against 291 read). Its RAH 2 is itself wrong: RAH-64-1 and RAH-64-2 are
+  RELIEF AND INTAKE HOODs (STP relief air, 2,500 CFM gravity hoods on sheet 11), not return air handlers, and the
+  takeoff rightly counts neither. A re-key needs the typical-floor question settled first: AHU-(6-33)-1 is one
+  scheduled row standing for one unit on each of 28 floors (AS-139; #209), and sheets 57 and 58 print per-floor AHU
+  tables. Left for that work.
+- 01_NY's return fans RF-1 and RF-2: reconcileWorkflow's Northport test expects them honest SCHEDULE_ONLY ("no plan
+  text"), but the reconcile at the pushed head (on a saved graph) reads both MATCH on E205.1, the PARTIAL ROOF AND
+  PENTHOUSE FLOOR PLAN - PHASE 1, and the render agrees: it draws each fan's motor tagged RF-1 and RF-2 beside its
+  disconnect (DS-RF-1, DS-RF-2). The test now asserts the match, one each.
 - One mark on two rows of one schedule: the takeoff counts a mark once (`uniqueFamily`'s `keys`), so a later row that
   prints the same mark adds no unit. A census over 79 documents (the best graph of each) finds 26 such rows on 9
   documents whose cells differ from the first row's. All but one are one unit printed on two rows: 031_MO's fans, coils

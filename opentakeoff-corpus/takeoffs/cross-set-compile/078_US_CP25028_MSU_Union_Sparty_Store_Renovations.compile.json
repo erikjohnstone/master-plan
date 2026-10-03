@@ -2,12 +2,10 @@
   "set_id": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 MSU Sparty store \u2014 single FAN schedule hit; thin HVAC scope.",
-  "categories": {
-    "FAN": 1
-  },
+  "notes": "[WEAK] Vol2 MSU Sparty store — single FAN schedule hit; thin HVAC scope. [RE-KEYED 2026-10-03 from the render] The set's mechanical sheets are M-100 (symbols, notes, abbreviations; its legend draws a ceiling and a roof exhaust fan) and M-300 (an HVAC demolition plan); no sheet prints an equipment schedule. EF-1 appears only in an electrical panel schedule's circuit names (MUH-1/EF-1 CONTROLS). FAN 0 (was 1), totals 0.",
+  "categories": {},
   "totals": {
-    "items": 1
+    "items": 0
   },
   "bas_points": {
     "rows": 0

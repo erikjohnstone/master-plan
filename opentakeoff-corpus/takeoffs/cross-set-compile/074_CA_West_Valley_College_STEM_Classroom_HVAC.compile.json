@@ -2,19 +2,26 @@
   "set_id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 West Valley STEM classroom \u2014 ERV/FAN/GRD.",
+  "notes": "[MEAT] Vol2 West Valley STEM classroom — ERV/FAN/GRD. [RE-KEYED 2026-10-03 from the render] M002 (page 25) also prints DUCTED FAN COIL UNITS FC-A-2 to FC-A-8, FC-A-13-1, FC-A-17-1, FC-A-18-1 and FC-A-20-1 (Daikin FCHH, ducted 4-pipe): FCU 11 (was 0); and EQUIPMENT CONTROL VALVES, a cooling (CV-CC-) and a heating (CV-HC-) Belimo ball valve per fan coil: 22 valves, keyed by the water each row's SERVICE prints (as the takeoff reads a valve, AS-78): CHW_CONTROL_VALVE 12, HHW_CONTROL_VALVE 10. CV-HC-FC-A-8's SERVICE prints 'CHW, EV-A-8' although its mark and FC-A-8's heating coil make it a heating valve: a drafting error in the source, keyed as printed. SUPPLY FANS (11), the ERV and the one grille type as keyed. Totals 46.",
   "categories": {
     "ERV": 1,
     "FAN": 11,
-    "GRD": 1
+    "GRD": 1,
+    "FCU": 11,
+    "CHW_CONTROL_VALVE": 12,
+    "HHW_CONTROL_VALVE": 10
   },
   "totals": {
-    "items": 13
+    "items": 46
   },
   "bas_points": {
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 22,
+    "categories": {
+      "CHW_CONTROL_VALVE": 12,
+      "HHW_CONTROL_VALVE": 10
+    }
   }
 }

@@ -2,12 +2,14 @@
   "set_id": "050_IL_VA_Project_537_17_115_Sterile_Processing",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/050_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 IL VA sterile processing \u2014 thin GRD.",
+  "notes": "[WEAK] Vol2 IL VA sterile processing — thin GRD. [RE-KEYED 2026-10-03 from the render] Page 14's AIR COMPRESSOR SCHEDULE prints 1-COM-1 (instrument air, simplex oilless scroll, Powerex LSE2005): AIR_COMPRESSOR 1; page 17 prints an AIR DEVICE SCHEDULE (SUPPLY) of SD-2 (GRD 1, as keyed) and an AIR TERMINAL UNIT SIZING SCHEDULE of 1-VAV-01 (hot water reheat): VAV 1. Totals 3.",
   "categories": {
-    "GRD": 1
+    "GRD": 1,
+    "VAV": 1,
+    "AIR_COMPRESSOR": 1
   },
   "totals": {
-    "items": 1
+    "items": 3
   },
   "bas_points": {
     "rows": 0
