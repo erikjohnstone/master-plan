@@ -68,6 +68,15 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 0881cd7 | One-unit schedule captioned as its unit (095_UT RTU AC-WW, 0 → 1; key re-keyed from render) |
 | 50d2547, f97e7ab | Ink-lettered and pictured schedules on text-starved sheets: 020_MO 0 → 27, 29_TX 0 → 2 (both re-keyed from render); OCR only for schedule-shaped grids; shipped MCP runtime no longer crashes on a picture |
 | e789663 | VAV family reads FAN TERMINAL UNIT schedules and FTU marks with status letters (020_MO's 19 FTU) |
+| f97e7ab, 23cc9c2, c637a3d | Ink lettering read only in schedule-shaped grids; a page lettered entirely in ink is a sheet; grid snapping asks only cluster heads (byte-identical) |
+| f583414, 7922307, 1eb4bdd, acf0f05, de81dfa | Stale keys re-keyed from the drawings: 19 zero keys, then 21_VA, 032_PA, 083_MA, 012_MO, 089_FL |
+| 53073fb, 4cfa4b2, ff21265, 5c05ffd, 60b972f, 66efccd, 205e4e9, 2a258bc, ce691ff | Schedules read by the names they print (split, VRV, CRAC, grilles, coils, VAV); room-numbered marks; OCR titles; transposed letter marks; VRF outdoor units; section-heading rows; two-tier headers; cut titles |
+| 85050a7 | Grid replay instrument for table-conversion A/Bs |
+| 11381b2, 4f48e01, 2d1fabb, cec8c5c, 45e69db, 8328939, 6cc4aa6 | Tanks, glycol and pot feeders by mark; a valve's water from its coil; louvers in air device schedules; double header rules; units named by the unit they serve; mark columns under group headings; lettered tanks, gas water heaters |
+| 43e7d96, e157911 | Graph cache keyed by the table engine's interpreter; split systems by ductless marks |
+| ce83ccb, fbeac08, 4b6049f, 95f4f10, 04d6d4b, 4c27684, fa2b857, b40444b, 4e864d5 | BAS points lists: I/O sections, glued captions, ticked matrices, abbreviated tick columns, ALARM sections, short header bands, filled-square ticks, policy tables, seam-continued faces, direction-first types, bare TYPE columns, an I/O list's unwired devices |
+| 9b6a05a, de3ada9, 87c3149, 56e73fc | Temporary units (AS-157); split pairs under family-naming titles; convectors and dotted marks; rated inputs, luminaire schedules, stacked marks |
+| 249d98b, aad2c5c | Keys re-keyed from the renders; the reviewed-corrections overlay folded into the keys |
 
 ## Known limits (documented, not fixed)
 
@@ -124,7 +133,11 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 
 - MCP `conformance.test.ts` "sheet graph (#87) … find_schedule": room 134's EAST finish no longer chains to its
   material-schedule definition (`SMOKEY MOUNTAIN AC-18` expected, undefined). Fails identically at the PR #108
-  merge `4255465`, before any of this goal's commits.
+  merge `4255465`, before any of this goal's commits. Cause (2026-10-03): the MATERIAL SCHEDULE's WALLS box prints
+  no header of its own (the column header is drawn once, shared), and the graph takes its first row (P-1 | PAINT |
+  BENJAMIN MOORE | ECO SPEC EGGSHELL | WHITE 962) for its header. resolve_tag chains EAST (P-2) to the right row, but
+  its color sits under "WHITE 962", not COLOR, and P-1 loses its definition. Graph-side (a sub-table under a shared
+  header); not pursued here (architectural finishes).
 - `corpusTakeoffWp1Acceptance` federal BAS (89 vs 26 expected) and 04_NV (19 vs 16): identical at 302cf34 and at
   `4255465`. 04_NV's three extra lines are LV-1/LV-2 (louvers) and WS-1 (water softener), read by family rules newer
   than the key; the key was not changed (rule: never edit a key to pass). 16_NV (62 vs 58) is fixed above.
@@ -316,7 +329,8 @@ Re-keyed from the renders (each key's notes cite the sheets):
   EXCHANGER HE-1: totals 20 (was 16; SURGE TANK T-1 has no family). The takeoff reads 19: HE-1's table, titled
   without the word SCHEDULE, is extracted under the WATER SOFTENER SCHEDULE caption of the table above it
   (`nearbyScheduleCaption` takes captions ending in SCHEDULE or UNITS/EQUIPMENT, and the region spans both tables).
-  Graph-side; queued with 030_NY's coil keys for a graph batch.
+  Graph-side. A census of tables sharing one caption box with a table nested inside them finds 2 pairs in 74
+  documents (fresh and newest cached graphs): this one and a title block on 016_NY. Not pursued.
 - 27_WA (a 2026-09-13 pipeline key): PUMP 15 (HWP-1 to 6, BP-1 to 3, CP-1, 2, EP-1 to 4; the BP pumps are one booster
   package's, BS-1 on E-701, not a sixteenth pump), GRD 5 (1S, 2S, 1R, 2R, 1E), totals 56; BAS rows 49: E-702's I/O
   LIST prints 52 device rows, 49 ticking an I/O column (BS-1 PNL, WSHP-1 on BACnet and the hatchery's Modbus panel
