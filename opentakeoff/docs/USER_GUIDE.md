@@ -734,9 +734,10 @@ schedule) gives units only by their marks, so notes, a drawing index or an
 architectural or furnishings list give none, a word such as an abbreviation
 list's SPF is no mark, and a few marks are read under their own family's
 title only: EG-1 is an exhaust fan under a fan title and an exhaust grille
-elsewhere, and a bare F-1 a fan coil under a fan coil title. So a row whose
-mark it still does not read as that family's (a temporary unit's
-1-AC-36TEMP, or 016-AC-01-16-12 with a room code of its own hyphen) is no
+elsewhere, and a bare F-1 a fan coil under a fan coil title. A temporary
+unit, marked TEMP after its number (1-AC-36TEMP beside 1-AC-36), is its
+family's unit under its own mark. So a row whose mark it still does not read
+as that family's (016-AC-01-16-12, with a room code of its own hyphen) is no
 unit either, and nor is an existing unit printed "(E)FC-1" in one schedule
 while a new FC-1 is printed in another: the takeoff drops the "(E)" and
 reads the two as one. The panel names each such schedule in red (its title,

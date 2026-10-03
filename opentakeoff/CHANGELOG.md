@@ -1,5 +1,13 @@
 # Changelog
 
+- **A temporary unit is its family's unit (AS-157).** 05_MO's phased east wing schedules a temporary air handler
+  1-AC-36TEMP beside 1-AC-36, its coils 1-CC-36TEMP and 1-SHC-36TEMP and its fans 1-SF-36TEMP and 1-EF-36TEMPA to C,
+  each on its own row. A short mark's number ended in at most one letter, so the building number before them was never
+  stripped and no family read them: they were named as left out, never counted. A mark's number may now end in TEMP and
+  one letter; the mark keeps it, so the temporary unit and its permanent twin stay two units. Over 40 freshly built and
+  156 cached graphs only 05_MO changes: +7 units, none lost. 05_MO re-keyed from its renders (its key, AHU 1, FCU 1,
+  VAV 12, GRD 16, was written from pipeline output): 97 units, all read, and 111 BAS points, of which the takeoff reads
+  110 (one folded into its table's header).
 - **A points list that ticks each point's columns.** 012_MO's M701 prints its DDC POINTS LIST SUMMARY as a
   matrix: a label row under the header groups (DDC HARD WIRED POINTS: DIGITAL INPUTS, DIGITAL OUTPUTS, ANALOG
   INPUTS, ANALOG OUTPUTS; INTEGRATION: BINARY, ANALOG, MULTISTAGE VARIABLE; GUI APPLICATION: TREND LOGGING; the

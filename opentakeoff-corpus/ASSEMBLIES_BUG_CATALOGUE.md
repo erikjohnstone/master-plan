@@ -8614,3 +8614,39 @@ one mark each with no census, with one of the marks undrawn, with HWP-1-2 drawn,
 schedule's own text; 019_FL's four diffuser types stay four. Five mutants (an X-N-M drawing ignored, some marks drawn
 instead of every, the schedule's own text counted as a drawing, no overlap rule, the takeoff not given the census) each
 fail it.
+
+## AS-157 — a temporary unit's mark (1-AC-36TEMP) read as no unit: 05_MO's temporary air handler, four fans and two coils were never counted (FIXED, this commit)
+
+**Found:** the fresh scoreboard (38 keyed sets rebuilt with current code) put 05_MO's takeoff at 90 units against a key
+of 30 written from pipeline output. Re-keyed from its renders (MH601, MH602), the schedules print 97 units in the
+takeoff's families, and the takeoff read 90 of them, each right. The seven it missed are the temporary units of the east
+wing's phased replacement: air handler 1-AC-36TEMP (EAST WING TEMP, beside 1-AC-36), its coils 1-CC-36TEMP and
+1-SHC-36TEMP, and its fans 1-SF-36TEMP and 1-EF-36TEMPA to C, each on its own row with its capacities, airflow and
+weight. A building number before the family's letters is stripped only where the rest is a short equipment mark (AS-62),
+and a short mark ended its number in at most one letter, so 1-AC-36TEMP kept its "1-" and no family read it. AS-61 named
+them in the left-out list; AS-62, AS-63 and AS-64 pinned "a temporary unit stays no unit" as a guard on their own
+widenings (a longer tail than AS-63's room code stays as printed), not as a ruling on scope: the takeoff counts what the
+schedules print, an existing unit "(EXIST.)" included.
+
+**Change** (`corpusTakeoff.mjs` `SHORT_EQUIP_MARK_RE`): a short mark's number may end in TEMP, and perhaps one letter
+after it (36TEMP, 36TEMPA). The mark keeps TEMP, so 1-AC-36TEMP and 1-AC-36 stay two units. A longer tail stays as
+printed (1-AC-36TEMPORARY, 1-AC-36TEMPAB), as does a room code with its own hyphen (016-AC-01-16-12).
+
+**Measured:** a census of row keys whose number is followed by a word, over the cached and the freshly built graphs:
+TEMP is printed only in 05_MO (11 rows: the 7 units, two filter banks 1-PF-36TEMP-1 and -2, and sheet 67's electrical
+connection copies); the other word tails are cable and rod codes, two marks run together (UH-1UH-2) and point names, none
+a family's. A/B (the pushed tick-matrix commit against this change) over 40 freshly built and 156 cached graphs: only
+05_MO changes, +7 units (AHU 4 → 5, FAN 7 → 11, DUCT_MOUNTED_COIL 19 → 21) and none lost; no BAS total changes. Sheet
+67's untitled copies add none.
+
+**Should this be on the shared path? Yes:** `markCoreForKeyRe` gates the compile's rows and the reconcile scaffold's
+alike (AS-62), so the scaffold holds a row for each temporary unit the compile counts.
+
+Tests: `corpusTakeoffVol2Families` (the AS-62, AS-63 and AS-64 cases: a temporary unit's building token and floor strip,
+its schedule counts it, a longer tail does not), `schedulePlanReconcile` (the scaffold's row for 01-1-DAC-36TEMP). With
+the old rule, 7 of these tests fail; a rule admitting any six letters fails one (on 1-AC-36TEMPAB).
+
+05_MO re-keyed from its renders: AHU 5, FCU 6, VAV 36, CONDENSING_UNIT 1, PUMP 1, FAN 11, DUCT_MOUNTED_COIL 21, GRD 16
+(97; the takeoff now reads all 97) and BAS 111 points on four AHU points lists. The takeoff's BAS compile reads 110: page
+54's first point is folded into its table's header, which the BAS engine recovers from the page text (AS-135) and the
+takeoff's compile, reading the table alone, does not.

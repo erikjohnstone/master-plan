@@ -266,6 +266,28 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### A temporary unit is its family's unit (AS-157); 05_MO re-keyed; the fresh scoreboard's stale keys (2026-10-03)
+
+The fresh scoreboard (38 of 50 keyed sets rebuilt with current code; 12 still building) reads 16 units under and 308
+over the keys. The 12 sets with most of the excess (05_MO 60, 028_TX 39, 033_MN 33, 014_MT 32, 030_NY 27, 019_FL 25,
+016_NY 23, 031_MO 15, 011_IL 15, 009_FL 13, 013_MO 9, 017_MD 9) all have early [MEAT]/[WEAK] keys written from pipeline
+output, none from the drawings, and all are WP1 acceptance keys: their excess is a measure of stale keys until each is
+re-keyed from its renders.
+
+05_MO first (MH601, MH602, points lists on pages 50, 52, 53, 54): its key said AHU 1, FCU 1, VAV 12, GRD 16; the
+schedules print AHU 5, FCU 6, VAV 36, CONDENSING_UNIT 1, PUMP 1, FAN 11, DUCT_MOUNTED_COIL 21, GRD 16 (97), and the
+takeoff read 90, every one right. The seven missing were its temporary units (1-AC-36TEMP, 1-CC-36TEMP, 1-SHC-36TEMP,
+1-SF-36TEMP, 1-EF-36TEMPA to C): AS-157 (catalogue) reads a mark whose number ends in TEMP and one letter, so the
+building number strips and the family reads it; A/B over 40 fresh and 156 cached graphs, only 05_MO changes (+7, none
+lost). BAS: 111 points on four lists, keyed by row count only (their I/O types, alarms and trends are ticks under
+SYSTEM OUTPUTS / INPUTS, BINARY / ANALOG function columns, which the tick-matrix rule does not read: the binary ALARM
+column is ticked on analog sensors too). The takeoff reads 110: page 54's first point (COOLING VALVE V-1) is folded into
+its table's header; the BAS engine recovers it from the page text (AS-135), the takeoff's compile does not. WP1 for
+05_MO now passes every HVAC check and fails only BAS rows (110 vs 111).
+
+Not keyed in 05_MO: the AIR FILTER SCHEDULE's filter banks (PF/FF marks; 2 of 116 keys count FILTER, both standalone
+filters), the steam trap schedule and the heat pipe 1-HRD-36 (no family).
+
 ### A points list that ticks each point's columns; 012_MO's BAS points re-keyed (2026-10-03)
 
 012_MO's key said 0 BAS rows; the takeoff read 102, none typed. M701 (sheet 20) prints one DDC POINTS LIST SUMMARY -

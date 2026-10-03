@@ -909,8 +909,8 @@ test("reconcile scaffold reads what the compile reads under a title and in a hos
 test("reconcile scaffold reads a building and its floor or wing before the mark, and ACCH, FCC and HUM-A under their titles, one row per unit (AS-64)", () => {
   // 036_LA's ductless split units (01-1-DAC-1, 05-B-DAC-1), 087_US's ACCH-1,
   // 028_TX's FCC1-1 and 061_IA's HUM-A get their rows, as the compile counts
-  // them; an untitled copy of 01-1-DAC-1, ACCH-2 or HUM-B adds none, and a
-  // temporary unit reads as no unit.
+  // them, a temporary unit (01-1-DAC-36TEMP) among them (AS-157); an untitled
+  // copy of 01-1-DAC-1, ACCH-2 or HUM-B adds none.
   const table = (sheet: string, title: string, keys: string[]) => ({
     kind: "equipment", sheet, title: { text: title },
     rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
@@ -924,7 +924,7 @@ test("reconcile scaffold reads a building and its floor or wing before the mark,
   ] };
   const rowsOf = (family: string) => reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
     .map((r: any) => `${r.tag}@${r.row_id.split("::")[0]}`);
-  assert.deepEqual(rowsOf("FCU"), ["01-1-DAC-1@m.pdf#63", "05-B-DAC-1@m.pdf#63", "FCC1-1@m.pdf#3", "FCU1-3@m.pdf#3"]);
+  assert.deepEqual(rowsOf("FCU"), ["01-1-DAC-1@m.pdf#63", "05-B-DAC-1@m.pdf#63", "01-1-DAC-36TEMP@m.pdf#63", "FCC1-1@m.pdf#3", "FCU1-3@m.pdf#3"]);
   assert.deepEqual(rowsOf("AIR_COOLED_CHILLER"), ["ACCH-1@m.pdf#2"]);
   assert.deepEqual(rowsOf("HUMIDIFIER"), ["HUM-A@m.pdf#4"]);
 });

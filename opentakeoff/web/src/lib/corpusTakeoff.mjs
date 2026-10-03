@@ -461,10 +461,12 @@ export function normalizeEquipMark(raw) {
 
 /** A short equipment mark: a family token, optional lettered segments, a
  * number of at most four digits, perhaps ending in one letter (038_NC's
- * 47-CU-1A, 47-ODU-BC143C), and one short trailing segment of up to six
- * letters and digits, such as a room code (ET-1, SH1, CC-15-6, S-A-1,
- * TU-28-1, AHU-3001, 030_NY's FCU-01-CG06A; AS-63) — never a catalog model. */
-const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}[A-Z]?(?:-[A-Z0-9]{1,6})?$/;
+ * 47-CU-1A, 47-ODU-BC143C) or in TEMP, a temporary unit, and perhaps a letter
+ * (05_MO's 1-AC-36TEMP beside 1-AC-36, 1-EF-36TEMPA to C), and one short
+ * trailing segment of up to six letters and digits, such as a room code
+ * (ET-1, SH1, CC-15-6, S-A-1, TU-28-1, AHU-3001, 030_NY's FCU-01-CG06A;
+ * AS-63) — never a catalog model. */
+const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}[A-Z]?(?:TEMP[A-Z]?)?(?:-[A-Z0-9]{1,6})?$/;
 
 /**
  * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1), including

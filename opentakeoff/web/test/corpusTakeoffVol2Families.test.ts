@@ -179,11 +179,13 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
 // before EF (096_IN's PEF-1, JEF-1) and TU terminal units.
 describe("AS-62 building tokens, building letters, qualified exhaust fans, TU terminals", () => {
   it("strips a numbered or coded building token, as it strips WHSE-", () => {
-    for (const [mark, core] of [["1-VAV-1", "VAV-1"], ["40-AHU-2", "AHU-2"], ["W05-TU-01", "TU-01"], ["WC01A-TU-05", "TU-05"], ["B950-AHU-3001", "AHU-3001"], ["1-TU-28-1", "TU-28-1"], ["1-CU-28", "CU-28"]]) {
+    for (const [mark, core] of [["1-VAV-1", "VAV-1"], ["40-AHU-2", "AHU-2"], ["W05-TU-01", "TU-01"], ["WC01A-TU-05", "TU-05"], ["B950-AHU-3001", "AHU-3001"], ["1-TU-28-1", "TU-28-1"], ["1-CU-28", "CU-28"],
+      // A temporary unit: TEMP, perhaps a letter, after the number (AS-157).
+      ["1-AC-36TEMP", "AC-36TEMP"], ["1-EF-36TEMPA", "EF-36TEMPA"]]) {
       assert.equal(markCoreForKeyRe(mark), core, mark);
     }
     // Not a building token, or not a short equipment mark after it.
-    for (const mark of ["1-AC-36TEMP", "1-EF-36TEMPA", "1-1/2", "2-WAY", "460-3-60", "10-HP", "1234-AHU-1", "ST-H-3", "TPLFY-EP15NEM4"]) {
+    for (const mark of ["1-1/2", "2-WAY", "460-3-60", "10-HP", "1234-AHU-1", "ST-H-3", "TPLFY-EP15NEM4", "1-AC-36TEMPORARY", "1-AC-36TEMPAB"]) {
       assert.equal(markCoreForKeyRe(mark), mark, mark);
     }
   });
@@ -230,12 +232,12 @@ describe("AS-62 building tokens, building letters, qualified exhaust fans, TU te
     const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
     const tags = (f: string) => cats[f].items.map((i) => i.tag).sort();
     assert.deepEqual(tags("VAV"), ["1-TU-28-1", "ATU-6-1", "W05-TU-01"]);
-    assert.deepEqual(tags("AHU"), ["1-AC-15", "40-AHU-2", "AC-57"]);
+    assert.deepEqual(tags("AHU"), ["1-AC-15", "1-AC-36TEMP", "40-AHU-2", "AC-57"]);
     // BF-1 is no fan mark by FAN's rule, but a FAN SCHEDULE title vouches for it (AS-63).
     assert.deepEqual(tags("FAN"), ["BF-1", "JEF-1", "KEF-1", "PEF-1"]);
     assert.deepEqual(tags("FCU"), ["FC-A-13-1", "FC-A-2"]);
     const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
-    for (const t of ["A", "1-AC-36TEMP", "1-1/2", "2-WAY", "460-3-60"]) assert.equal(all.includes(t), false, t);
+    for (const t of ["A", "1-1/2", "2-WAY", "460-3-60"]) assert.equal(all.includes(t), false, t);
   });
 });
 
@@ -246,15 +248,15 @@ describe("AS-62 building tokens, building letters, qualified exhaust fans, TU te
 // FCC1-1 beside FCU1-3 (028_TX) and a humidifier HUM-A (061_IA).
 describe("AS-64 a building and its floor or wing before the mark; ACCH, FCC and HUM-A under their titles", () => {
   it("strips a building and its floor or wing when the rest is a short equipment mark", () => {
-    for (const [mark, core] of [["01-1-DAC-1", "DAC-1"], ["05-B-DAC-1", "DAC-1"], ["136-1-DAC-1", "DAC-1"], ["07-A-CU-1", "CU-1"], ["A1-2-AHU-1", "AHU-1"], ["2-12-VAV-3", "VAV-3"]]) {
+    for (const [mark, core] of [["01-1-DAC-1", "DAC-1"], ["05-B-DAC-1", "DAC-1"], ["136-1-DAC-1", "DAC-1"], ["07-A-CU-1", "CU-1"], ["A1-2-AHU-1", "AHU-1"], ["2-12-VAV-3", "VAV-3"], ["01-1-AC-36TEMP", "AC-36TEMP"]]) {
       assert.equal(markCoreForKeyRe(mark), core, mark);
     }
     // A unit's own mark before another's is no building (AHU-1-SF-1,
     // CH-1-CHWP-1); three location tokens, a floor of three digits, a wing of
-    // two letters, a temporary unit and numbers are left alone, as is AS-62's
+    // two letters and numbers are left alone, as is AS-62's
     // building token beside a building letter. One prefix is read at a time:
     // an area token, then a building and floor, is left alone.
-    for (const mark of ["AHU-1-SF-1", "CH-1-CHWP-1", "12-3-4-AHU-1", "1-100-AHU-1", "1-AB-AHU-1", "01-1-AC-36TEMP", "460-3-60", "1-2-3", "1-FC-B-4", "WHSE-AB1-2-AHU-1"]) {
+    for (const mark of ["AHU-1-SF-1", "CH-1-CHWP-1", "12-3-4-AHU-1", "1-100-AHU-1", "1-AB-AHU-1", "460-3-60", "1-2-3", "1-FC-B-4", "WHSE-AB1-2-AHU-1"]) {
       assert.equal(markCoreForKeyRe(mark), mark, mark);
     }
   });
@@ -272,16 +274,16 @@ describe("AS-64 a building and its floor or wing before the mark; ACCH, FCC and 
       table("m.pdf#12", "EXHAUST FAN SCHEDULE", ["FCC1-7", "HUM-D"]),
     ] }).categories as Record<string, { items: Array<{ tag: string }> }>;
     const tags = (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
-    assert.deepEqual(tags("FCU"), ["01-1-DAC-1", "05-B-DAC-1", "136-1-DAC-1", "FCC1-1", "FCC2-10", "FCU1-3"]);
+    assert.deepEqual(tags("FCU"), ["01-1-DAC-1", "01-1-DAC-36TEMP", "05-B-DAC-1", "136-1-DAC-1", "FCC1-1", "FCC2-10", "FCU1-3"]);
     assert.deepEqual(tags("AIR_COOLED_CHILLER"), ["ACCH-1"]);
     assert.deepEqual(tags("HUMIDIFIER"), ["HUM-A"]);
     // An untitled table reads a building and floor before the family's own
     // untitled rule, as it reads AS-62's building token (1-CU-28).
     assert.deepEqual(tags("CONDENSING_UNIT"), ["03-1-CU-1"]);
     // Nowhere else: DAC-*, ACCH-*, FCC-* and HUM with a letter are read only
-    // under their own titles, and a temporary unit stays no unit.
+    // under their own titles.
     const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
-    for (const t of ["ACCH-2", "ACCH-4", "02-1-DAC-1", "04-1-DAC-1", "01-1-DAC-36TEMP", "FCC1-5", "FCC1-6", "FCC1-7", "HUM-B", "HUM-C", "HUM-D"]) assert.equal(all.includes(t), false, t);
+    for (const t of ["ACCH-2", "ACCH-4", "02-1-DAC-1", "04-1-DAC-1", "FCC1-5", "FCC1-6", "FCC1-7", "HUM-B", "HUM-C", "HUM-D"]) assert.equal(all.includes(t), false, t);
   });
 });
 
@@ -315,7 +317,7 @@ describe("AS-63 marks a schedule's title vouches for, and units listed in anothe
     assert.deepEqual(tags("FCU"), ["DAC-1", "SS-1"]);
     assert.deepEqual(tags("CONDENSING_UNIT"), ["SSCU-1"]);
     assert.deepEqual(tags("AIR_COOLED_CHILLER"), ["ACC-2", "CH-1"]);
-    assert.deepEqual(tags("DUCT_MOUNTED_COIL"), ["1-DXC-28", "1-RH-1", "1-SHC-28"]);
+    assert.deepEqual(tags("DUCT_MOUNTED_COIL"), ["1-DXC-28", "1-RH-1", "1-SHC-28", "1-SHC-36TEMP"]);
     // Nowhere else: an untitled or general table reads none of them as these
     // families' (ACC-* there is an air-cooled condenser; EWH-* a water heater).
     const loose = compile([
@@ -368,12 +370,12 @@ describe("AS-63 marks a schedule's title vouches for, and units listed in anothe
     assert.equal(cats.DOAS.count, 2);
   });
 
-  it("reads a room code of up to six letters and digits after the number, never a temporary unit", () => {
+  it("reads a room code of up to six letters and digits after the number, and a temporary unit's TEMP", () => {
     // The six-letter limit guards the building token's strip: a longer tail
     // behind a building number leaves the mark as printed, read by no rule.
     const tags = compile([table("m.pdf#30", "TWO-PIPE FAN COIL UNIT SCHEDULE", ["001-FCU-01-CG06A", "001-FCU-02-C106A", "001-FCU-03-ROOM101X"])]);
     assert.deepEqual(tags("FCU"), ["001-FCU-01-CG06A", "001-FCU-02-C106A"]);
-    assert.equal(markCoreForKeyRe("1-AC-36TEMP"), "1-AC-36TEMP");
+    assert.equal(markCoreForKeyRe("1-AC-36TEMP"), "AC-36TEMP");
     assert.equal(markCoreForKeyRe("001-FCU-01-CG06A"), "FCU-01-CG06A");
   });
 });
