@@ -589,6 +589,12 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   (sheet 57) prints five points lists ruled in dashed lines (about 245 points); the table extractor drops each
   dashed row's gaps, so only the solid header bands form grids and no list is read. Its key's bas_points stays at the
   earlier 0 until the lists are keyed (next queue).
+- 063_MT's reconcile test asserted the drawing wrong (#318; `reconcileWorkflow` "Vol2 Harrison extruder 063"). It
+  expected the two existing VAVs to be drawn on no plan (VAV schedule-only 2). M101 (sheet 10, LEVEL 1 - HVAC PLAN)
+  tags both existing boxes, "(E) VAV-105" and "(E) VAV-106", and the sweep, which reads a mark printed with its
+  existing prefix, links each tag to its box by its leader. The test failed at daafc4e (both rows MATCH, 0 of 2
+  schedule-only), and with the #316 working tree the same; it now asserts both MATCH, as the render shows (GRD still
+  MATCH). Run alone: 1/1.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

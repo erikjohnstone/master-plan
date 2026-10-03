@@ -976,7 +976,7 @@ test("Vol2 Bruneau shed 098: FCU + fan + UH all MATCH (rejoin)", async (t) => {
   }
 });
 
-test("Vol2 Harrison extruder 063: GRD MATCH; VAV honest SO", async (t) => {
+test("Vol2 Harrison extruder 063: GRD and VAV MATCH", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
     resolve(CROSS, "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.compile.json"),
@@ -984,9 +984,9 @@ test("Vol2 Harrison extruder 063: GRD MATCH; VAV honest SO", async (t) => {
   if (!ctx) return;
   const { key, session, graph } = ctx;
   await assertFamilyAllMatch(session, graph, key, "GRD");
-  await assertFamilyStatusCounts(session, graph, key, "VAV", {
-    schedule_only: key.categories.VAV,
-  });
+  // M101 (sheet 10) tags both existing boxes, "(E) VAV-105" and "(E) VAV-106";
+  // the sweep reads a mark printed with its existing prefix (render, 2026-10-03).
+  await assertFamilyAllMatch(session, graph, key, "VAV");
 });
 
 test("Vol2 Antelope Valley 068: boiler MATCH; pumps/AS/ET drawn on no plan, none MATCH", async (t) => {
