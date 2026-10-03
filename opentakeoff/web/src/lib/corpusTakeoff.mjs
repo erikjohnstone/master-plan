@@ -1698,6 +1698,14 @@ export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = 
       read = Math.max(markSpelledRead(gate.filterRe, one),
         gate.titledAlso.some((re) => markSpelledRead(re, one)) ? 1 : 0);
     }
+    // Under the family's own title, a unit named by the unit it serves and
+    // its role there, the role last: 043_FL's FAN SCHEDULE lists ED-203-SF
+    // and ED-203-RF, the supply and return fans of air handler ED-203. The
+    // role is the family's token when its mark rule reads it with a number.
+    if (!read && (gate.titleOk || gate.altOk)) {
+      const role = /^[A-Z0-9]+(?:-[A-Z0-9]+)+-([A-Z]{1,4})$/.exec(canon)?.[1];
+      if (role && markMatchesKeyRe(gate.filterRe, `${role}-1`, `${role}-1`)) read = 1;
+    }
   } else if (gate.coTitled?.some((named) => spelledRead(named.markRe, one, canon)
       && !spelledRead(named.titledOnlyRe, one, canon))
     && ![keyRe, blankKeyRe, spec?.altKeyRe, spec?.titledKeyRe].some((re) => markMatchesKeyRe(re, one, canon))) {

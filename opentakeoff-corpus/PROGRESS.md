@@ -246,6 +246,13 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Role-suffixed marks under a family title (2026-10-03)
+
+043_FL FAN 0/2: ED-203-SF and ED-203-RF (the AHU's fans) under its FAN SCHEDULE; read now (titled only, the last
+segment a family token). Census over 50 saved graphs: no other refused row of that shape. Not taken: 043_FL's
+humidifier ED-203-HC (HC is no humidifier token) and its pictured AHU schedule (not read from its picture), and 07_MO's
+hexagon marks (OCR "D" for D-1, "C L" for C-1, a "CH ILER" title), one set's OCR quirks.
+
 ### Double header rules, ink-lettered one-unit schedules, N/A rows (2026-10-03)
 
 08_ME (render-keyed, 9 units) read 2: its ink-lettered M102 and P103 rule every schedule with a double rule under

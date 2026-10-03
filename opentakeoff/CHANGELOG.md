@@ -1,5 +1,10 @@
 # Changelog
 
+- **A unit named by the unit it serves and its role there.** 043_FL's FAN SCHEDULE lists ED-203-SF and ED-203-RF,
+  the supply and return fans of air handler ED-203; the fan family's mark rule wants the role first (SF-1) and read
+  neither. Under the family's own title, a mark whose last segment is the family's token (its mark rule reads it
+  with a number) is the family's, for the takeoff and the reconcile alike (familyMarkRead). A census over 50 saved
+  graphs found these two only; 043_FL FAN 0 → 2 (= key), no other set changes.
 - **A double rule under a schedule's header does not split it; ink-lettered one-unit schedules are read.** 08_ME's
   M102 and P103 are lettered in ink and rule every schedule with a double rule under its header. No vertical
   crosses the slot between the two rules, so the slot was one full-width face, and the grid finder's title-band

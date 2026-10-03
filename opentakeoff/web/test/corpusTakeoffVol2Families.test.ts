@@ -1011,3 +1011,19 @@ describe("cove heaters and plumbing specialties (08_ME's ink-lettered M102 and P
     assert.deepEqual(tags("WATER_HEATER"), []);
   });
 });
+
+describe("a unit named by the unit it serves and its role there", () => {
+  const table = (title: string, keys: string[]) => ({
+    sheet: "m.pdf#20", title: { text: title }, headers: ["MARK"], kind: "equipment",
+    rows: keys.map((k) => ({ key: k, cells: { MARK: { text: k } } })),
+  });
+  const fans = (tables: unknown[]) => ((compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>)
+    .FAN?.items || []).map((i) => i.tag).sort();
+  it("is the family's under its own title (043_FL's FAN SCHEDULE ED-203-SF, ED-203-RF)", () => {
+    assert.deepEqual(fans([table("FAN SCHEDULE", ["ED-203-SF", "ED-203-RF"])]), ["ED-203-RF", "ED-203-SF"]);
+  });
+  it("is not read where no title vouches for the family, nor with a role that is no family token", () => {
+    assert.deepEqual(fans([table("", ["ED-203-SF"])]), []);
+    assert.deepEqual(fans([table("FAN SCHEDULE", ["ED-203-XQ"])]), []);
+  });
+});
