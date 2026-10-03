@@ -83,6 +83,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | f4daf77 | An abbreviations list's entry is no unit's tag (013_MO VFD-1); a specialty schedule that is not mechanical holds no unit (041_IL's eyewash); 041_IL re-keyed |
 | 2ba0863 | Points lists drawn as details read by the title under their grid (6 lists on 4 open sets); totals lines no points; a point ID types its point; 039_TX, 050_IL and 053_VA BAS re-keyed |
 | 220e006 | Stacked units after a building's number are two; HM, HWH and ERC under their own titles: 041_IL reads all 20 keyed units (WP1 PASS) |
+| f100e5f | A demolition plan is a demolition sheet (83 open and 26 walled pages change role; installed and MATCH unchanged; 12 units cite their demolition view); a view reads a mark printed without its schedule's status (012_MO's existing drives) |
 
 ## Known limits (documented, not fixed)
 
@@ -543,6 +544,19 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   BASEMENT PLAN") stay plans and are swept whole. Measured, not changed: over every keyed set the tag index reads 0
   scheduled marks inside such demolition views on open sets (004_MO's P-101, P-106 and M-101: 18 marks, all in their
   plan views) and 2 on one walled sheet.
+- A unit's mark after a zero-padded facility number keys its row (`sheetgraph` `rowKeyOf`; `corpusTakeoff`
+  DUCT_MOUNTED_COIL). 030_NY's last two keyed units, the DOAS coils 001-DHC-01 and 001-DCC-01, each sit alone in a
+  schedule; `rowKeyOf` kept a number before a two-part mark only with the building confirmed by the sheet's text (1-RH-1)
+  or before a three-part mark (001-FCU-01-CG06A), and 030_NY confirms no building "001". The new shape: three digits
+  with a leading zero, then a letter-led code and a one- or two-digit number (001-M-401, the set's drawing number, stays
+  unkeyed). DCC-n joins the coil family's title-gated marks (DHC-n matched its DH prefix already). Census over every
+  keyed set's PDFs (text spans printed whole in the new shape): only 030_NY (001-DHC-01, 001-DCC-01, 001-DHX-01,
+  001-RD-01, 001-RD-02, 001-DS-01); walled 0. Compile A/B of the title rule alone over 119 saved graphs: no change
+  (walled 0). 030_NY rebuilt: tables 27 -> 29 (the two coil schedules, nothing else), DUCT_MOUNTED_COIL [001-DCC-01,
+  001-DHC-01], 49 of 49, WP1 PASS. Tests: rowKeyOf
+  (padded facility keyed; drawing number, unpadded and unconfirmed prefixes not) and the coil family (DCC-n under no
+  other title); each fails on the code before it. Guard: web 4,273 tests, 0 failures; tsc and lint 0 errors; MCP
+  tools and session 143/143.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

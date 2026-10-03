@@ -1,5 +1,14 @@
 # Changelog
 
+- **A unit's mark after a zero-padded facility number keys its row.** 030_NY's DOAS HOT WATER HEATING COIL and DOAS
+  CHILLED WATER COOLING COIL schedules list one coil each, 001-DHC-01 and 001-DCC-01, the number its fan coils carry
+  too (001-FCU-01-CG06A). Its text confirms no building by that number, so neither row was kept and neither coil
+  counted. A number of three digits with a leading zero, before a unit's letters and a one- or two-digit number, now
+  keys the row on its own: no dimension, quantity or callout is printed so, and the set's drawing numbers (001-M-401)
+  carry three digits after their letter and stay unkeyed; an unpadded 1-RH-1 still needs its building confirmed. Under
+  a coil schedule's title DCC-n is a duct-mounted coil, as DHC-n already was. 030_NY reads all 49 keyed units (WP1
+  PASS; it read 47). Over every keyed set's drawings only 030_NY prints a mark of this shape (walled sets: none), and
+  only its two coil schedules gain a row; the coil title rule alone changes no takeoff.
 - **A demolition plan is a demolition sheet.** A sheet titled only as a demolition plan read as a plan by its FLOOR
   PLAN words: 031_MO's "FIRST FLOOR PLAN - MECHANICAL DEMOLITION", 16_NV's "BUILDING B MECHANICAL DEMOLITION FLOOR
   PLAN", 18_OR's "HVAC DEMO FLOOR PLAN - LEVEL 1". The sweep took what such a sheet draws for removal as installed

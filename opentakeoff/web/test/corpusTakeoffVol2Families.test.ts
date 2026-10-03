@@ -324,6 +324,26 @@ describe("a humidifier's HM-n, a hot water heater's HWH-n, an energy recovery co
   });
 });
 
+// 030_NY's DOAS HOT WATER HEATING COIL SCHEDULE and DOAS CHILLED WATER COOLING
+// COIL SCHEDULE list one coil each after the facility's number, 001-DHC-01 and
+// 001-DCC-01 (#312).
+describe("a DOAS's heating coil DHC-n and cooling coil DCC-n under their coil titles", () => {
+  it("reads both coils, and DCC-n under no other title", () => {
+    const table = (sheet: string, title: string, keys: string[]) => ({
+      kind: "equipment", sheet, title: { text: title }, rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+    });
+    const cats = compileHvacTakeoff(null, { tables: [
+      table("m.pdf#40", "DOAS HOT WATER HEATING COIL SCHEDULE", ["001-DHC-01"]),
+      table("m.pdf#40", "DOAS CHILLED WATER COOLING COIL SCHEDULE", ["001-DCC-01"]),
+      table("m.pdf#41", "EQUIPMENT SCHEDULE", ["DCC-3"]),
+      table("m.pdf#42", "EXHAUST FAN SCHEDULE", ["DCC-4"]),
+    ] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual((cats.DUCT_MOUNTED_COIL?.items || []).map((i) => i.tag).sort(), ["001-DCC-01", "001-DHC-01"]);
+    const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
+    for (const t of ["DCC-3", "DCC-4"]) assert.equal(all.includes(t), false, t);
+  });
+});
+
 describe("AS-63 marks a schedule's title vouches for, and units listed in another family's schedule", () => {
   const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
   const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });

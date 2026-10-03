@@ -4021,6 +4021,22 @@ test("rowKeyOf accepts a real VA/GSA numbered-building prefix before an equipmen
   assert.equal(withoutBuilding.length, 0, "an unconfirmed digit prefix must not be guessed at — real refusal, not a fabricated key");
 });
 
+test("rowKeyOf keys a unit's two-part mark after a zero-padded facility number, and no drawing number or unpadded prefix (030_NY's DOAS coils 001-DHC-01, 001-DCC-01; #312)", () => {
+  // 030_NY's DOAS HOT WATER HEATING COIL and CHILLED WATER COOLING COIL
+  // schedules each list one coil after the facility's number, the same
+  // number its fan coils carry (001-FCU-01-CG06A). The set prints no
+  // building its text confirms, so the building gate cannot vouch for it.
+  assert.deepEqual(rowKeyOf("001-DHC-01", "equipment"), { key: "001-DHC-01" });
+  assert.deepEqual(rowKeyOf("001-DCC-01", "equipment"), { key: "001-DCC-01" });
+  assert.deepEqual(rowKeyOf("012-AHU-1A", "equipment"), { key: "012-AHU-1A" });
+  // The same set's drawing numbers: a three-digit number after the code.
+  assert.equal(rowKeyOf("001-M-401", "equipment"), null);
+  // An unpadded number before a two-part mark stays the building gate's.
+  assert.equal(rowKeyOf("1-RH-1", "equipment"), null);
+  assert.deepEqual(rowKeyOf("1-RH-1", "equipment", new Set(["1"])), { key: "1-RH-1", building: "1" });
+  assert.equal(rowKeyOf("100-AHU-1", "equipment"), null);
+});
+
 test("rowKeyOf accepts a real floor+area+room mark (digit before the letter) alongside its letter-first siblings (real bug: 038_NC_VA_Project_637_22_700's own MECHANICAL EQUIPMENT SCHEDULE)", () => {
   // Real, found-live gap (2026-09-03), confirmed against real page
   // coordinates: 16 of 51 real rows on this one real table (47-IDU-1A137,

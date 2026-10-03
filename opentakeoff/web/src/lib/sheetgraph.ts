@@ -4535,6 +4535,15 @@ export function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipmen
     // the plan and what any cross-reference has to match.
     const bmFacility = key.match(/^\d{1,4}-([A-Z][A-Z0-9]*(?:-[A-Z0-9]+){2,})$/);
     if (bmFacility && CODE_RE.test(bmFacility[1])) return { key };
+    // The same facility number before a unit's own two-part mark, zero-padded
+    // to three digits: 030_NY's DOAS HOT WATER HEATING COIL 001-DHC-01 and
+    // CHILLED WATER COOLING COIL 001-DCC-01, beside its 001-FCU-01-CG06A fan
+    // coils. A number padded so is no dimension, quantity or callout, and a
+    // unit's number of one or two digits is no sheet number (001-M-401, the
+    // same set's drawing numbers, stays unkeyed). "1-RH-1", unpadded, is still
+    // the confirmed-building gate's.
+    const bmPadded = key.match(/^0\d{2}-([A-Z][A-Z0-9]*-\d{1,2}[A-Z]?)$/);
+    if (bmPadded && CODE_RE.test(bmPadded[1])) return { key };
     // The same real tag with a numeric FLOOR/zone segment between the
     // facility and the equipment code — "07-1-EU-1" is facility 07, floor 1,
     // energy unit 1. `bmFloor` above knows this three-level shape but gates

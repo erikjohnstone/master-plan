@@ -2728,8 +2728,9 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC|DH)[\s\-]?/i,
     // Under a coil schedule title: RH-* reheat, SHC-* steam heating and DXC-*
     // direct expansion coils (05_MO; AS-63), EHC-* electric heating coils,
-    // ERC-* energy recovery coils.
-    titledKeyRe: /^(?:RH|SHC|DXC|EHC|ERC)[\s\-]?\d/i,
+    // ERC-* energy recovery coils, a DOAS's DHC-* heating and DCC-* cooling
+    // coils (030_NY's 001-DHC-01 and 001-DCC-01).
+    titledKeyRe: /^(?:RH|SHC|DXC|EHC|ERC|DHC|DCC)[\s\-]?\d/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,
