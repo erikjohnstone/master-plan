@@ -1,5 +1,13 @@
 # Changelog
 
+- **An I/O list's device that counts no I/O.** 27_WA's I/O LIST WHITE STURGEON PLC counts each device's I/O under
+  ANALOG and DIGITAL columns (HWP-1: 1 analog, 2 digital), and 49 of its 52 devices count some; BS-1 PNL and WSHP-1,
+  on BACnet, and the hatchery's existing panel, on Modbus, count none, and each was a point. On a list counted that
+  way, where most rows count I/O, a device row that counts none and prints no type is no longer a point, and the list
+  names it under not_points. 27_WA reads 49 points, as keyed from the render. Lists whose rows name points and tick
+  their types are read as before: an unticked row there is still a point (028_TX's OUTDOOR RELATIVE HUMIDITY), and
+  so is one ticked under a column the reader does not type (033_MN's SCHEDULE objects). Over 204 cached and 50
+  freshly built graphs only 27_WA changes.
 - **A unit's rated input is no point; a lighting fixture schedule holds no unit; two marks a cell stacks are two
   units.** 27_WA's untitled heat pump data table (TAG WSHP-1, MFG., MODEL, CAPACITY TONS, INPUT KW, INPUT HP) was read
   as a two-row BAS points list, its electrical ratings taken for I/O columns: an untitled table's I/O words are now read

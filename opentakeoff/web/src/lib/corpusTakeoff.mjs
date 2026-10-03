@@ -3647,6 +3647,12 @@ function basTickEvidence(row, columns) {
   };
 }
 
+/** Whether a PLC I/O LIST's device row counts I/O under its ANALOG or
+ * DIGITAL columns. */
+function basRowCountsIo(row) {
+  return sumNumericCells(row, /^ANALOG\b/i) > 0 || sumNumericCells(row, /^DIGITAL\b/i) > 0;
+}
+
 /** Column-label rows that are not countable I/O or points marks. */
 function isBasPointsHeaderRow(tag) {
   return !tag || /^(?:TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?|(?:ANALOG|BINARY|DIGITAL)\s+(?:INPUT|OUTPUT))$/i.test(tag);
@@ -3841,19 +3847,34 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
     const extras = { alarm: 0, trend: 0, hardwired: 0, soft: 0 };
     const items = [];
+    const notPoints = [];
     const tickColumns = basTickColumns(table);
-    for (const row of table.rows || []) {
+    const candidates = (table.rows || []).filter((row) => {
       const tag = basRowTag(row, table);
       // Skip column-label rows (I/O LIST prints TAG as a data key).
-      if (isBasPointsHeaderRow(tag)) continue;
-      if (isBasSectionLabelRow(row)) continue;
-      if (isBasBlankNumberedRow(row)) continue;
-      if (row === tickColumns.labelRow) continue;
+      return !isBasPointsHeaderRow(tag) && !isBasSectionLabelRow(row) && !isBasBlankNumberedRow(row)
+        && row !== tickColumns.labelRow;
+    });
+    // A PLC I/O LIST counts each device's I/O under its ANALOG and DIGITAL
+    // columns: a device it counts none for is wired to no input or output
+    // (27_WA's I/O LIST counts 49 of its 52 devices'; BS-1 PNL and WSHP-1 on
+    // BACnet and the hatchery's panel on Modbus count none). Read only where
+    // most of its rows count. In a list whose rows name points (FAN FAILURE,
+    // OUTDOOR RELATIVE HUMIDITY) an unticked row is still a point.
+    const ioCountList = !tickColumns.columns.length && (table.headers || []).some((h) => /^(?:ANALOG|DIGITAL)\b/i.test(String(h)));
+    const counted = ioCountList ? candidates.filter(basRowCountsIo).length : 0;
+    const countsItsIo = counted >= 2 && counted * 2 >= candidates.length;
+    for (const row of candidates) {
+      const tag = basRowTag(row, table);
       // Some templates print a literal placeholder mark (BI#, BI##, BO#)
       // for a repeated or field-numbered point. It is still an authored
       // typed point row; the wildcard is not a reason to demote it to
       // `other` or invent a number for it.
       let pointType = basPointTypeEvidence(row, tag);
+      if (countsItsIo && pointType.status === "untyped" && !basRowCountsIo(row)) {
+        notPoints.push({ tag, reason: "an I/O list's device row that counts no analog or digital I/O where its other rows do (a network device)" });
+        continue;
+      }
       // A tick under a type column types the point; ticks under two types,
       // or one that disagrees with the mark's type, leave it untyped.
       const ticks = tickColumns.columns.length ? basTickEvidence(row, tickColumns.columns) : null;
@@ -3949,6 +3970,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       hardwired: extras.hardwired,
       soft: extras.soft,
       items,
+      not_points: notPoints,
     };
     // Vector/ODL table recovery can split one wide or tall authored points
     // list into adjacent fragments. Same page + same normalized title is one
@@ -3969,6 +3991,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       prior.hardwired += compiled.hardwired;
       prior.soft += compiled.soft;
       prior.items.push(...compiled.items);
+      prior.not_points.push(...compiled.not_points);
     } else {
       lists.push({ ...compiled, _merge_key: listKey });
     }
@@ -4023,7 +4046,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). A tick (X) under a column labelled with a type (DIGITAL INPUTS, ANALOG OUTPUTS, or direction first: INPUT TO DDC ANALOG, SYSTEM OUTPUTS BINARY) types its row; a type's ALARM column ticked beside another type column marks that point's alarm, not a second type; ticks under two types, or one that disagrees with the mark, leave the row untyped, as conflicting authored types do. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present, and ticks under columns labelled TREND, ALARM, a software variable (BINARY / ANALOG / MULTISTAGE VARIABLE: soft) or a type whose label says HARD WIRED (hardwired) (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists and point-type policy tables (rows naming AI, BI or CALC, not points) excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). A tick (X) under a column labelled with a type (DIGITAL INPUTS, ANALOG OUTPUTS, or direction first: INPUT TO DDC ANALOG, SYSTEM OUTPUTS BINARY) types its row; a type's ALARM column ticked beside another type column marks that point's alarm, not a second type; ticks under two types, or one that disagrees with the mark, leave the row untyped, as conflicting authored types do. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present, and ticks under columns labelled TREND, ALARM, a software variable (BINARY / ANALOG / MULTISTAGE VARIABLE: soft) or a type whose label says HARD WIRED (hardwired) (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; on an I/O LIST whose device rows mostly count I/O, a device row that counts none and prints no type is a network device, not a point (each list's not_points names them); title-only schematic lists and point-type policy tables (rows naming AI, BI or CALC, not points) excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,

@@ -335,6 +335,37 @@ describe("compileBasTakeoff I/O LIST", () => {
     );
   });
 
+  // 27_WA's I/O LIST counts 49 of its 52 devices' I/O; BS-1 PNL and WSHP-1
+  // on BACnet and the hatchery's panel on Modbus count none.
+  it("does not count an I/O list's device row that counts no I/O where its other rows do", () => {
+    const device = (key: string, cells: Record<string, string>) => ({
+      key, cells: Object.fromEntries(Object.entries({ COL1: key, ...cells }).map(([h, text]) => [h, { text }])),
+    });
+    const headers = ["COL1", "ANALOG", "ANALOG 2", "DIGITAL", "DIGITAL 2", "COMMUNICATION PROTOCOL"];
+    const list = (rows: ReturnType<typeof device>[]) => compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#38", number: 38 }],
+      tables: [{ kind: "equipment", sheet: "set.pdf#38", title: { text: "I/O LIST WHITE STURGEON PLC" }, headers, rows }],
+    }).categories.points_lists.lists[0];
+    const counted = list([
+      device("HWP-1", { "ANALOG 2": "1", DIGITAL: "1", "DIGITAL 2": "1", "COMMUNICATION PROTOCOL": "ETHERNET/IP" }),
+      device("PIT-116", { ANALOG: "1", "COMMUNICATION PROTOCOL": "NONE" }),
+      device("LIFT STATION", { DIGITAL: "4", "DIGITAL 2": "1", "COMMUNICATION PROTOCOL": "NONE" }),
+      device("BS-1 PNL", { "COMMUNICATION PROTOCOL": "BACNET /IP" }),
+      device("WSHP-1", { "COMMUNICATION PROTOCOL": "BACNET /IP" }),
+    ]);
+    assert.equal(counted.rows, 3);
+    assert.deepEqual(counted.items.map((i: { tag: string }) => i.tag), ["HWP-1", "PIT-116", "LIFT STATION"]);
+    assert.deepEqual(counted.not_points.map((n: { tag: string }) => n.tag), ["BS-1 PNL", "WSHP-1"]);
+    // Where most rows count none, the list is read as before: every row.
+    const few = list([
+      device("HWP-1", { ANALOG: "1" }),
+      device("BS-1 PNL", { "COMMUNICATION PROTOCOL": "BACNET /IP" }),
+      device("WSHP-1", { "COMMUNICATION PROTOCOL": "BACNET /IP" }),
+    ]);
+    assert.equal(few.rows, 3);
+    assert.deepEqual(few.not_points, []);
+  });
+
   it("refuses conflicting MARK and explicit point-type evidence", () => {
     const graph = {
       sheets: [{ key: "set.pdf#1", number: 1 }],

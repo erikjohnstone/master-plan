@@ -323,8 +323,9 @@ Re-keyed from the renders (each key's notes cite the sheets):
   tick none); types not keyed (rows tick several). Not keyed: M-603's CONTROL VALVE SCHEDULE (TCV-105 on HWS, TCV-110A
   and B on cold aerated potable water, LCV-135 on effluent), process valves; under a title naming no water only CV-
   marks are read, and reading these would type all four as heating water. The takeoff reads HVAC 57 (BS-1 from E-701
-  as a pump) and BAS 52: the three rows with no tick, and the list's lost INPUT/OUTPUT header tier (types AI 36, BI
-  48, no outputs).
+  as a pump) and BAS 49 since the I/O-count rule below (52 before: the three rows counting no I/O). Its types stay
+  AI 36, BI 48 with no outputs: the list's INPUT/OUTPUT header tier is lost in the graph, and an I/O list's
+  quantities roll analog to AI and digital to BI by the disclosed convention.
 - 11_CA (these families only): PUMP 11 (page 84's six, the condensate CP-1, page 106's circulating CP-1 and CP-2 and
   sewage ejectors SE-1 and SE-2), EXPANSION_TANK 3 (page 84's ET-1, ET-2 and page 106's domestic ET-1), WATER_HEATER
   2 (GWH-1, GWH-2), AIR_COMPRESSOR 2 (AC-1, AC-2): totals 218. The takeoff reads 214: a mark two trades' schedules
@@ -346,6 +347,15 @@ Three compile rules (shared path, `corpusTakeoff.mjs`; takeoff and reconcile ali
 A/B: over 202 to 204 cached graphs the three rules change 11_CA (-9 phantoms, +GWH-2, AC-2, CP-2) and 27_WA's BAS
 (54 -> 52 rows) alone, HVAC, BAS and valves; over the 50 freshly built graphs nothing. Tests: 346 of 346 in the nine
 shared-path web files, tsc and eslint clean; each new case fails on the code before it.
+
+A fourth (`compileBasTakeoff`): an I/O LIST that counts each device's I/O under ANALOG and DIGITAL columns (no tick
+columns), where most rows count some, does not count a device row that counts none and prints no type; each list's
+`not_points` names it. 27_WA: 52 -> 49 rows, its key. Tried first on every list that marks its points in tick
+columns too, and not adopted there: it took 017_MD's unit label rows (62 -> 59, its key) but also 033_MN's SCHEDULE
+rows (ticked under a SOFTWARE POINTS column whose label the reader does not type; key 51 by eye, 51 -> 48) and
+028_TX's OUTDOOR RELATIVE HUMIDITY (a named point printed with no tick, 190 -> 189). In a list whose rows name
+points, an unticked row is still a point. Narrowed, the A/B over 204 cached and 50 fresh graphs changes 27_WA alone;
+017_MD's label rows stay its documented ceiling.
 
 The MCP WP1 file's missing sets: run alone (`--test-name-pattern "WP1 keyed"`) it reported 13 sets in 1,423 s and
 failed with no message; the kernel log shows a memory-cgroup OOM kill of the Python table sidecar (4.4 GB resident)
