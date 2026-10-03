@@ -2186,7 +2186,10 @@ export const HVAC_FAMILY_SPECS = {
   FCU: {
     // Or a split system's indoor units by that name (D_25_CO's SPLIT SYSTEM
     // INDOOR UNIT SCHEDULE, AC-1).
-    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|SPLIT[\s\-]*SYSTEM\s+INDOOR\s+UNITS?|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    // A split system air conditioner's (015_VA's GATEHOUSE SPLIT SYSTEM AIR
+    // CONDITIONER HEAT PUMP SCHEDULE, SS-1), and a heat pump split system's
+    // in that order (07_MO's HEAT PUMP SPLIT SYSTEM, its furnaces F1 and F2).
+    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITION(?:ING|ERS?)|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|HEAT\s+PUMP\s+SPLIT[\s\-]*SYSTEMS?\b|SPLIT[\s\-]*SYSTEM\s+INDOOR\s+UNITS?|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
     // Under a split or ductless title: DAC-* ductless units, SS-* split
@@ -2198,8 +2201,11 @@ export const HVAC_FAMILY_SPECS = {
     // a split system's title pairs with its outdoor unit (21_VA's DUCTLESS
     // SPLIT SYSTEM UNIT SCHEDULE's ACU-1 / ACCU-3; AS-145). And an indoor
     // unit, IDU-*, its number led by its row or area letters (038_NC's
-    // MINI-SPLIT INDOOR UNIT SCHEDULE, 47-IDU-A301 .. 47-IDU-BF107).
-    titledKeyRe: /^(?:(?:DAC|SS|FCC|ACU)[\s\-]?\d|(?:BCU|IDU)[\s\-]?(?:[A-Z]{1,2})?\d)/i,
+    // MINI-SPLIT INDOOR UNIT SCHEDULE, 47-IDU-A301 .. 47-IDU-BF107). And a
+    // ductless split system's DSS-* (015_VA's MINI-SPLIT-SYSTEM HEAT PUMPS
+    // SCHEDULE, DSS-1 beside its outdoor unit CU-1) or its fan coil's DSFC-*
+    // (035_AR's DUCTLESS SPLIT FAN COIL SCHEDULE, DSFC 1).
+    titledKeyRe: /^(?:(?:DAC|SS|FCC|ACU|DSS|DSFC)[\s\-]?\d|(?:BCU|IDU)[\s\-]?(?:[A-Z]{1,2})?\d)/i,
     // A bare F-* is a fan coil under the family's title only: 016_NY's fans
     // F-1 and F-2, in an untitled panel schedule, and 041_IL's F0535, a
     // utility cart in an architectural list, were fan coils too (AS-66).
@@ -2273,10 +2279,12 @@ export const HVAC_FAMILY_SPECS = {
     // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
     // 032_PA's SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE, beside its
     // SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE (the fan coils').
-    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+OUTDOOR\s+UNITS?|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITION(?:ING|ERS?)|SPLIT[\s\-]*SYSTEM\s+OUTDOOR\s+UNITS?|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63),
-    // and outdoor units ODU-* (038_NC's MINI-SPLIT OUTDOOR UNIT SCHEDULE).
-    altKeyRe: /^(?:CU|DCU|ACCU|SSCU|ODU)[\s\-]/i,
+    // outdoor units ODU-* (038_NC's MINI-SPLIT OUTDOOR UNIT SCHEDULE), and a
+    // ductless split condensing unit's DSCU-* (035_AR's DUCTLESS SPLIT
+    // CONDENSER SCHEDULE, DSCU 1).
+    altKeyRe: /^(?:CU|DCU|ACCU|SSCU|ODU|DSCU)[\s\-]/i,
     // A split system's outdoor units by its header shape (AS-144): 26_CA's
     // ACCU-P3-1 under CONDENSER DESIGNATION.
     splitKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
@@ -2300,7 +2308,7 @@ export const HVAC_FAMILY_SPECS = {
     // with an indoor unit (098_ID's DUCTLESS SPLIT HIGH WALL COOLING & HEATING
     // UNIT SCHEDULE's "FC-1 , HP-1"; AS-145), as CONDENSING_UNIT reads its
     // outdoor CU-* there.
-    altTitleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
+    altTitleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITION(?:ING|ERS?)|DUCTLESS\s+(?:MULTI[\s\-]*)?SPLIT|MINI[\s\-]*SPLIT/i,
     altKeyRe: /^HP[\s\-]?\d/i,
     // A split system's outdoor heat pumps by its header shape (AS-144).
     splitKeyRe: /^HP[\s\-]?\d/i,
@@ -2476,7 +2484,9 @@ export const HVAC_FAMILY_SPECS = {
     // HEATER SCHEDULE, IRH-1 and IRH-2): a space heater as a unit heater is.
     // Or an electric cove heater's schedule (08_ME's ELECTRIC COVE HEATER
     // SCHEDULE, CH-1 and CH-2): a room heater on the wall, as a unit heater is.
-    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?|INFRA[\s\-]*RED\s+(?:(?:TUBE|GAS[\s\-]*FIRED)\s+)*HEATERS?\s+SCHEDULE|(?:ELECTRIC\s+)?COVE\s+HEATERS?(?:\s+SCHEDULE)?/i,
+    // Or a caption that is the family's name alone (015_VA's ELECTRIC UNIT
+    // HEATER, UH-1 to UH-4).
+    titleRe: /UNIT HEATER SCHEDULE|\bUNIT\s+HEATERS?\s*$|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?|INFRA[\s\-]*RED\s+(?:(?:TUBE|GAS[\s\-]*FIRED)\s+)*HEATERS?\s+SCHEDULE|(?:ELECTRIC\s+)?COVE\s+HEATERS?(?:\s+SCHEDULE)?/i,
     exclude: /CABINET|POINTS\s*LIST|DDC/i,
     // UH/CUH/EH room heaters; EDH-* duct-mounted electric; ECUH-* electric
     // cabinet/unit; HWUH-* hot-water; GUH/NUH-* gas/natural unit heaters.

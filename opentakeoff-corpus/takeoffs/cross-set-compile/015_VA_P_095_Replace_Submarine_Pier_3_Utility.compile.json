@@ -2,10 +2,10 @@
   "set_id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 pier utility \u2014 FCU/HP/FAN/LOUVER + motorized dampers/isolation valves + BAS 39.",
+  "notes": "[MEAT] Vol2 pier utility \u2014 FCU/HP/FAN/LOUVER + motorized dampers/isolation valves + BAS 39. [RE-KEYED 2026-10-03 from the render] Four schedule sheets. AM601: FAN COIL UNIT SCHEDULE FC-1..FC-4; MINI-SPLIT-SYSTEM HEAT PUMPS SCHEDULE DSS-1, DSS-2 (wall-mounted indoor units, FCU as split indoor units are keyed elsewhere) with their outdoor units CU-1, CU-2 (OUTDOOR UNIT MARK); FAN SCHEDULE EF-1..EF-6; GRILLE, REGISTER, AND DIFFUSER SCHEDULE EG-1, EG-2, RG-1, SG-1, SG-2; ELECTRIC UNIT HEATER UH-1..UH-4; MOTORIZED DAMPER SCHEDULE (MD) MD-1..MD-19; LOUVER SCHEDULE L-1..L-10, L-11A, L-11B, L-11C, L-12..L-15 (17); GRAVITY INTAKE VENT GI-1..GI-3 and GRAVITY RELIEF VENT GR-1..GR-4 (no takeoff family, not counted, as 21_VA's relief hoods). AM602: PUMP SCHEDULE P-1..P-6; EXPANSION TANK ET-1; AIR SEPARATOR AS-1; GLYCOL FEED SYSTEM GFS-1; VALVE SCHEDULE VLV-1..VLV-15; CLOSED CIRCUIT COOLER CCC-1, CCC-2 (no takeoff family, not counted, as 032_PA's dry coolers); MUFFLER SCHEDULE M-1, M-2 (generator mufflers, not HVAC). AM603 (gatehouse): FAN EF-7; SPLIT SYSTEM AIR CONDITIONER HEAT PUMP SCHEDULE SS-1 (horizontal indoor unit, FCU); HEAT PUMP SCHEDULE HP-1 (its split system condensing unit); MOTORIZED DAMPER MD-21, MD-22; GRILLE, REGISTER, AND DIFFUSER CD-1, EG-1, LS-1, RR-1, RR-2; GRAVITY INTAKE VENT GI-1 (not counted); MINI - SPLIT SYSTEM HEAT PUMP SCHEDULE DSS-3 with CU-3. AM107 (guard booth): DUCTLESS SPLIT SYSTEM SCHEDULE DSS-4 with CU-4. The CU-* outdoor units heat (their systems are titled heat pumps); they are keyed CONDENSING_UNIT by their printed CU marks. GRD 10: the gatehouse's EG-1 (12x12 exhaust grille) is not AM601's EG-1 (eggcrate, 10x10 neck); the takeoff merges the two by mark (9). BAS points not re-counted here. The earlier [MEAT] key was written from pipeline output (CONDENSING_UNIT 1, FCU 4).",
   "categories": {
-    "FCU": 4,
-    "CONDENSING_UNIT": 1,
+    "FCU": 9,
+    "CONDENSING_UNIT": 4,
     "HEAT_PUMP": 1,
     "PUMP": 6,
     "FAN": 7,
@@ -13,11 +13,13 @@
     "EXPANSION_TANK": 1,
     "CONTROL_DAMPER": 21,
     "ISOLATION_VALVE": 15,
-    "GRD": 9,
-    "LOUVER": 17
+    "GRD": 10,
+    "LOUVER": 17,
+    "UNIT_HEATER": 4,
+    "GLYCOL_MAKEUP": 1
   },
   "totals": {
-    "items": 83
+    "items": 97
   },
   "bas_points": {
     "rows": 39,

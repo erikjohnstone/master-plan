@@ -1061,3 +1061,68 @@ describe("gas water heaters by their GWH marks", () => {
     assert.deepEqual(heaters("GAS WATER HEATER SCHEDULE", ["GW-1"]), []);
   });
 });
+
+describe("ductless and mini-split systems by their DSS, DSFC and DSCU marks", () => {
+  // 015_VA's MINI-SPLIT-SYSTEM HEAT PUMPS SCHEDULE keys each wall unit DSS-n
+  // beside its outdoor unit's OUTDOOR UNIT MARK CU-n; 035_AR's DUCTLESS SPLIT
+  // FAN COIL and CONDENSER schedules key DSFC n and DSCU n.
+  const read = (title: string, rows: Array<Record<string, string>>, family: string) => {
+    const headers = Object.keys(rows[0]);
+    const table = {
+      sheet: "m.pdf#18", title: { text: title }, headers, kind: "equipment",
+      rows: rows.map((r) => ({ key: r[headers[0]], cells: Object.fromEntries(headers.map((h) => [h, { text: r[h] }])) })),
+    };
+    return ((compileHvacTakeoff(null, { tables: [table] }).categories as Record<string, { items: Array<{ tag: string }> }>)[family]
+      ?.items || []).map((i) => i.tag).sort();
+  };
+  const pairs = [
+    { MARK: "DSS-1", TYPE: "WALL-MOUNTED", "OUTDOOR UNIT MARK": "CU-1" },
+    { MARK: "DSS-2", TYPE: "WALL-MOUNTED", "OUTDOOR UNIT MARK": "CU-2" },
+  ];
+  it("reads a mini-split's wall units as fan coils and its outdoor units as condensing units", () => {
+    assert.deepEqual(read("MINI-SPLIT-SYSTEM HEAT PUMPS SCHEDULE", pairs, "FCU"), ["DSS-1", "DSS-2"]);
+    assert.deepEqual(read("MINI-SPLIT-SYSTEM HEAT PUMPS SCHEDULE", pairs, "CONDENSING_UNIT"), ["CU-1", "CU-2"]);
+  });
+  it("reads the two halves from their own schedules", () => {
+    const coils = [{ "DESIGNATION MARK": "DSFC 1", DESCRIPTION: "2.5 TON WALL COIL UNIT" }];
+    const condensers = [{ "DESIGNATION MARK": "DSCU 1", DESCRIPTION: "SPLIT SYSTEM CONDENSING UNIT" }];
+    assert.deepEqual(read("HVAC -- DUCTLESS SPLIT FAN COIL SCHEDULE", coils, "FCU"), ["DSFC 1"]);
+    assert.deepEqual(read("HVAC -- DUCTLESS SPLIT CONDENSER SCHEDULE", condensers, "CONDENSING_UNIT"), ["DSCU 1"]);
+    assert.deepEqual(read("HVAC -- DUCTLESS SPLIT CONDENSER SCHEDULE", condensers, "FCU"), []);
+  });
+  it("reads no DSS mark under a title that names no split system", () => {
+    assert.deepEqual(read("FAN SCHEDULE", [{ MARK: "DSS-1", TYPE: "INLINE" }], "FCU"), []);
+  });
+});
+
+describe("split system titles in other words", () => {
+  const indoor = (title: string, keys: string[]) => ((compileHvacTakeoff(null, { tables: [{
+    sheet: "m.pdf#20", title: { text: title }, headers: ["MARK", "TYPE"], kind: "equipment",
+    rows: keys.map((k) => ({ key: k, cells: { MARK: { text: k }, TYPE: { text: "HORIZONTAL" } } })),
+  }] }).categories as Record<string, { items: Array<{ tag: string }> }>).FCU?.items || []).map((i) => i.tag).sort();
+  it("reads a split system air conditioner's indoor unit (015_VA's SS-1)", () => {
+    assert.deepEqual(indoor("GATEHOUSE SPLIT SYSTEM AIR CONDITIONER HEAT PUMP SCHEDULE", ["SS-1"]), ["SS-1"]);
+  });
+  it("reads a heat pump split system's furnaces, the title's words in that order (07_MO's F1, F2)", () => {
+    assert.deepEqual(indoor("HEAT PUMP SPLIT SYSTEM", ["F1", "F2"]), ["F1", "F2"]);
+  });
+  it("still reads no bare F mark under a heat pump schedule", () => {
+    assert.deepEqual(indoor("HEAT PUMP SCHEDULE", ["F1"]), []);
+  });
+});
+
+describe("a unit heater schedule captioned by the family's name alone", () => {
+  // 015_VA's AM601 captions its schedule ELECTRIC UNIT HEATER (UH-1 to UH-4).
+  const heaters = (title: string) => ((compileHvacTakeoff(null, { tables: [{
+    sheet: "m.pdf#18", title: { text: title }, headers: ["MARK", "LOCATION"], kind: "equipment",
+    rows: ["UH-1", "UH-2"].map((k) => ({ key: k, cells: { MARK: { text: k }, LOCATION: { text: "GENERATOR ROOM" } } })),
+  }] }).categories as Record<string, { items: Array<{ tag: string }> }>).UNIT_HEATER?.items || []).map((i) => i.tag).sort();
+  it("reads its units", () => {
+    assert.deepEqual(heaters("ELECTRIC UNIT HEATER"), ["UH-1", "UH-2"]);
+    assert.deepEqual(heaters("UNIT HEATERS"), ["UH-1", "UH-2"]);
+    assert.equal(HVAC_FAMILY_SPECS.UNIT_HEATER.titleRe.test("UNIT HEATER CONNECTION DETAIL"), false);
+  });
+  it("leaves a cabinet unit heater caption to its own family", () => {
+    assert.deepEqual(heaters("CABINET UNIT HEATER"), []);
+  });
+});

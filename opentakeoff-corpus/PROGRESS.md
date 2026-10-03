@@ -255,6 +255,38 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Split systems by their ductless marks; 015_VA and 035_AR re-keyed; graph cache keyed by interpreter (2026-10-03)
+
+015_VA's key ([MEAT], from pipeline output) read CONDENSING_UNIT 1 against the takeoff's 4. The renders (AM107,
+AM601, AM602, AM603) schedule four mini-split systems, wall units DSS-1..DSS-4 each beside its outdoor unit CU-1..CU-4,
+and the gatehouse's split system SS-1 with its condensing unit HP-1. A census of split-system schedules over the 50
+saved graphs found the indoor halves unread wherever their marks or titles were new: DSS (015_VA), DSFC and DSCU
+(035_AR), SPLIT SYSTEM AIR CONDITIONER (015_VA SS-1), HEAT PUMP SPLIT SYSTEM (07_MO F1, F2), and the bare caption
+ELECTRIC UNIT HEATER (015_VA UH-1..4). Rules added for each; A/B over 50 graphs changes only those sets (015_VA FCU
+4 → 9, UH 0 → 4; 035_AR FCU 0 → 3, CU 0 → 3; 07_MO FCU 0 → 2 of 3), the grid replay (48 sets, 1,061 tables) changes
+015_VA and 07_MO alone, and 88 sets of snapshot tables change nothing. Re-keyed from the renders: 015_VA (FCU 9,
+CONDENSING_UNIT 4 by their printed CU marks though each heats, UNIT_HEATER 4, GLYCOL_MAKEUP 1, GRD 10) and 035_AR
+(CONDENSING_UNIT 3, FCU 3, LOUVER 3, FAN 1; PL101's lettered equipment list counted for its exhaust fan and wall
+louver only, the water system's process equipment disclosed).
+
+Residuals: 015_VA GRD 9 of 10 (the gatehouse's EG-1 is another grille than AM601's EG-1; the takeoff merges a mark
+across tables). 030_NY's HEAT PUMP UNIT SCHEDULE pairs 016-AC-01-16-12 with 016-CU-01-16-12 under a split header, but
+its title names HEAT_PUMP, so AS-144's header-shape path does not apply; its [MEAT] key (FCU 1 against 14 read)
+needs a re-key first. 017_MD's INDOOR AIR CONDITIONING UNIT SCHEDULE lists ACU-A-1..6, built-up air handlers whose
+fans and coils its key counts apart; not keyed as units. 07_MO's outdoor heat pumps print CUH (the hexagon lost its
+1) and CUH 2. 035_AR's louvers read by type alone (LI, LE).
+
+MCP reconcileWorkflow "Vol2 pier utility 015" fails at 6cc4aa6 (CONDENSING_UNIT 3 rows against the old key's 1;
+dampers 19 of 21 MATCH, MD-6 and MD-11 AMBIGUOUS by the exact-tag verification rule) and after this change (FCU 9 of
+9 MATCH; CONDENSING_UNIT 3 of 4 in the test environment). With the table engine's interpreter configured (as graph
+builds run) the plan-drawn test passes, FCU 9 of 9 and CONDENSING_UNIT 4 of 4 MATCH; the damper test fails as at base.
+The 3 comes from the environment, not the rules: the test
+built its graph with no table-engine interpreter configured, so the system python3 (no pdfplumber) ran the engine,
+every sheet fell back, and AM107's DUCTLESS SPLIT SYSTEM SCHEDULE lost its OUTDOOR UNIT MARK column. That graph was
+cached under the same key a run with the interpreter would read: the graph cache now keys by the interpreter
+(resolveVectorGridPython, shared with the client) and keeps no graph whose configured engine failed on a sheet for a
+reason other than the page's geometry (test in sheetGraphCache.test.mjs; it fails on the old cache).
+
 ### Lettered expansion tanks, gas water heaters; 004_MO re-keyed (2026-10-03)
 
 From the titled-row census above: 032_PA's EXPANSION TANK SCHEDULE keys its tanks NET A and NET B (TYPE (N)ET beside

@@ -1,5 +1,19 @@
 # Changelog
 
+- **Split systems by their ductless marks and other titles; unit heater captions; a graph cache keyed by the
+  table engine's interpreter.** 015_VA's mini-split schedules key each wall unit DSS-n beside its outdoor unit's
+  OUTDOOR UNIT MARK CU-n, and its gatehouse prints SS-1 under SPLIT SYSTEM AIR CONDITIONER HEAT PUMP SCHEDULE;
+  035_AR's DUCTLESS SPLIT FAN COIL and CONDENSER schedules mark DSFC n and DSCU n; 07_MO's HEAT PUMP SPLIT SYSTEM
+  (the words in that order) schedules its furnaces F1 and F2. The fan coil family reads DSS and DSFC under its split
+  titles, the condensing unit family DSCU, and both read the AIR CONDITIONER and HEAT PUMP SPLIT SYSTEM titles.
+  015_VA's ELECTRIC UNIT HEATER (the family's name alone, no SCHEDULE) now names its family. Over 50 saved graphs:
+  015_VA FCU 4 → 9 and UNIT_HEATER 0 → 4, 035_AR FCU 0 → 3 and CONDENSING_UNIT 0 → 3, 07_MO FCU 0 → 2 (key 3),
+  nothing else; the grid replay (1,061 tables) and 88 sets of snapshot tables change nowhere else. 015_VA and
+  035_AR were re-keyed from their renders (their keys were written from pipeline output). The sheet-graph cache
+  keyed the engine's mode but not its interpreter: a run with no interpreter configured (the system python3, missing
+  the engine's modules) cached a graph read by the weaker fallback under the key a working run looks up. The
+  interpreter is now part of the key, and a graph whose configured engine failed on a sheet for a reason not the
+  page's own is neither kept nor served.
 - **Expansion tanks of a lettered pair; gas water heaters.** 032_PA's EXPANSION TANK SCHEDULE prints its tanks as
   TYPE (N)ET beside EQUIPMENT NUMBER A and B, keyed NET A and NET B: the takeoff set aside a glued new-status N only
   before AHU, FCU and other listed tokens, not ET, and the expansion tank rule wanted a number (its digit keeps
