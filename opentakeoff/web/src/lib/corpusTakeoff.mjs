@@ -2463,7 +2463,9 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP|^\s*(?:STEAM\s+)?CONDENSATE\s+(?:RETURN\s+)?PUMPS?(?:\s+SCHEDULE)?\s*$|^\s*PUMPS?\s*$/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i,
     // BS-* = packaged booster pump systems on EQUIPMENT catch-all lists.
-    blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
+    // PCH-* = a chilled water pump lettered pump-first (087_US's PCH-1, PCH-2,
+    // on a schedule whose title is drawn, not printed).
+    blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|PCH|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
   },
   // Lab / medical vacuum pumps on dedicated VACUUM PUMP schedules (SDSU V-1).
   // Separate from hydronic PUMP (title exclude VACUUM) so V-* is not orphaned.

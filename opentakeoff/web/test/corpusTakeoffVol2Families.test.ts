@@ -1189,3 +1189,22 @@ describe("a convector schedule (033_MN's CONVECTOR SCHEDULE, 016_NY's C-1)", () 
     assert.deepEqual(read("CONVECTOR SCHEDULE", ["CV-2.1"]).valves, []);
   });
 });
+
+// A chilled water pump lettered pump-first (087_US's PCH-1 and PCH-2) on a
+// schedule whose title is drawn, not printed: the sheet graph gives the table
+// no title, so only PUMP's untitled rule can read its marks.
+describe("pump marks lettered pump-first on a table with no title", () => {
+  it("reads PCH-n as a pump where no title vouches for it, and no PCH word", () => {
+    const { blankKeyRe } = HVAC_FAMILY_SPECS.PUMP;
+    for (const m of ["PCH-1", "PCH-12", "PCH 2"]) assert.equal(blankKeyRe.test(m), true, m);
+    for (const m of ["PCH", "PCHX-1", "PCHW", "PCH-A"]) assert.equal(blankKeyRe.test(m), false, m);
+    const row = (key: string) => ({ key, cells: { TAG: { text: key }, GPM: { text: "245" }, "FT. HD": { text: "60" } } });
+    const graph = {
+      tables: [
+        { kind: "equipment", sheet: "m.pdf", title: null, headers: ["TAG", "MANUFACTURER & MODEL #", "SERVICE", "GPM", "FT. HD"], rows: ["PCH-1", "PCH-2"].map(row) },
+      ],
+    };
+    const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual(cats.PUMP.items.map((i) => i.tag).sort(), ["PCH-1", "PCH-2"]);
+  });
+});

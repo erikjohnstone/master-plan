@@ -312,6 +312,12 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   and failed on the 8 the takeoff reads; it now asserts all 8 AMBIGUOUS, as the reconcile reads them: page 5's floor
   plan tags them with their airflow (RG-A 14 times, EG-A 6), but tag text without matching symbol geometry leaves each
   installed count unknown. 20 of the 21 terminal units MATCH their plan tags; TU26-40 is printed only on page 7.
+- 087_US reads 1 of its 3 keyed units on its new graph: the CHILLED WATER PUMP SCHEDULE's title is drawn in ink (no
+  text at all), so its table has no title, and PUMP's untitled rule did not know PCH-1 and PCH-2. Of the untitled
+  tables in 89 documents whose rows read as marks the takeoff does not count, only this one holds units (the others
+  are 01_NY's notes and 043_FL's panelboard loads). PCH (a pump lettered pump-first, chilled water) joins the untitled
+  rule; A/B over 210 cached and 82 new graphs: only 087_US changes (+PCH-1, +PCH-2), 3 of 3. The ink-drawn title itself
+  stays unread (a title band OCR would serve this one table).
 - One mark on two rows of one schedule: the takeoff counts a mark once (`uniqueFamily`'s `keys`), so a later row that
   prints the same mark adds no unit. A census over 79 documents (the best graph of each) finds 26 such rows on 9
   documents whose cells differ from the first row's. All but one are one unit printed on two rows: 031_MO's fans, coils

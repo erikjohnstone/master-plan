@@ -1,5 +1,10 @@
 # Changelog
 
+- **A chilled water pump lettered pump-first.** 087_US's CHILLED WATER PUMP SCHEDULE draws its title in ink, so the
+  sheet graph gives the table no title, and its rows PCH-1 and PCH-2 were read only by PUMP's rule for untitled tables,
+  which knew P, CP, CWP, CHWP and the like but not PCH. PCH-n now reads as a pump there too (a PCH word, PCHW or PCH-A
+  does not). 087_US reads its 3 units (ACCH-1, PCH-1, PCH-2), as keyed from the render. Over 210 cached and 82 freshly
+  built graphs only 087_US changes; no other table in the corpus prints a PCH mark.
 - **An I/O list's device that counts no I/O.** 27_WA's I/O LIST WHITE STURGEON PLC counts each device's I/O under
   ANALOG and DIGITAL columns (HWP-1: 1 analog, 2 digital), and 49 of its 52 devices count some; BS-1 PNL and WSHP-1,
   on BACnet, and the hatchery's existing panel, on Modbus, count none, and each was a point. On a list counted that
