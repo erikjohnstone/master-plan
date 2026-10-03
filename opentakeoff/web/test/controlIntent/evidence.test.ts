@@ -108,9 +108,13 @@ test("two sequences one under the other are two packets; a caption keeps its per
   // A title set as a title keeps its closing period; a sentence does not.
   assert.equal(packetKind("LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM.", { titled: true }), "diagram");
   assert.equal(packetKind("LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM."), null);
-  // Seismic, vibration, noise and erosion control are other trades'.
+  // Seismic, vibration, noise, erosion and infection control are other trades'.
   assert.equal(packetKind("SEISMIC AND VIBRATION CONTROL"), null);
   assert.equal(packetKind("NOISE CONTROL DETAILS"), null);
+  // (CI-76) the VA's construction infection control: its ICRA matrix and dust barrier details
+  assert.equal(packetKind("INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF PRECAUTIONS FOR CONSTRUCTION AND RENOVATION"), null);
+  assert.equal(packetKind("TEMP DUST AND INFECTION CONTROL BARRIER TYPES", { titled: true }), null);
+  assert.equal(packetKind("INFECTION CONTROL MEASURES"), null);
 });
 
 test("the title block: a strip of field labels holds no packet; its drawing title is read under DRAWING TITLE", () => {

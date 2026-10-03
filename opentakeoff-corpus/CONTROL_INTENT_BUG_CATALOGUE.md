@@ -2249,3 +2249,24 @@ walled document stops moving would be fitted to it. 040_IL's TAB decisions (CI-7
 way: no CO2 sensor, occupancy sensor or window switch in TAB-A or TAB-B. Only their evidence is narrower than the
 detail. A candidate for a later batch is a box-aware reading of the sequence box, one that needs the drawing's lines,
 not only its text.
+
+## CI-76: a hospital's infection control during construction was read as a controls packet (FIXED, this commit; finder v8)
+
+**Found** while checking a table-reader change on the VA sets' general sheets. Four VA sets in the corpus carry the
+VA's infection control risk assessment sheets: the INFECTION CONTROL RISK MITIGATION RECOMMENDATIONS MATRIX OF
+PRECAUTIONS FOR CONSTRUCTION AND RENOVATION, the TEMP DUST AND INFECTION CONTROL BARRIER TYPES details and INFECTION
+CONTROL MEASURES. `packetKind` read each as a control "detail": CONTROL names the drawing's kind, and INFECTION, RISK,
+MITIGATION and the rest were taken for its subject. These are a contractor's dust and pressure precautions while the
+building is worked on, not a control system's drawings. The finder already refuses the other trades' "control"
+(seismic and vibration, noise, erosion and sediment); infection control joins them (`NOT_PACKET`).
+
+**Measured:**
+- Finder, before against after, on every sheet of the 76 open sets with a saved graph (2,428 sheets; text from the
+  PDFs, table hints from the fresh graphs): packets 545 -> 529. All 16 removed are infection-control titles, 13
+  sheet-and-title pairs on 039_TX, 041_IL, 050_IL and 052_IL: the ICRA matrix on each, INFECTION CONTROL MEASURES (six
+  sheets) and the barrier details (three). No packet is added or changed anywhere else.
+- No binding key (45 files, every tier) names an infection-control packet, and no recorded run of the unseen audit
+  (56 sets) cites one: no keyed binding and no recorded decision stood on these packets.
+
+Test: evidence.test.ts, the other trades' control: the matrix, the barrier details and INFECTION CONTROL MEASURES are
+no packets; it fails without the rule (52 of 53 pass).

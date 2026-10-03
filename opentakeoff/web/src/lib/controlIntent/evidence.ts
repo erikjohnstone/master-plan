@@ -172,8 +172,9 @@ const CONTROL_WORD = rx(`${word("CONTROL", true)}|${word("SEQUENCE", true)}|${wo
 /** Titles that are never control packets: legends, notes, schedules of
  * other things, title-block and index headings, piping and riser diagrams,
  * and the other trades' "control" (seismic and vibration control, noise
- * control, erosion and sediment control). */
-const NOT_PACKET = rx(`${word("LEGEND", true)}|${word("SYMBOL", true)}|${word("ABBREVIATION", true)}|${word("ARCHITECTURE")}|${word("RISER", true)}|${word("NETWORK")}|${word("WIRING")}|${word("SPECIFICATION", true)}|${word("INDEX")}|${word("NOTE", true)}|${word("PIPING")}(?!\\s+${word("AND")}\\s+${word("INSTRUMENTATION")})|${word("FLOW")}\\s+${word("DIAGRAM")}|${word("KEY")}\\s+${word("PLAN")}|${word("SEISMIC")}|${word("VIBRATION")}|${word("NOISE")}|${word("EROSION")}|${word("SEDIMENT")}`);
+ * control, erosion and sediment control, and a hospital's infection control
+ * while it is under construction: the VA's ICRA matrix, its dust barriers). */
+const NOT_PACKET = rx(`${word("LEGEND", true)}|${word("SYMBOL", true)}|${word("ABBREVIATION", true)}|${word("ARCHITECTURE")}|${word("RISER", true)}|${word("NETWORK")}|${word("WIRING")}|${word("SPECIFICATION", true)}|${word("INDEX")}|${word("NOTE", true)}|${word("PIPING")}(?!\\s+${word("AND")}\\s+${word("INSTRUMENTATION")})|${word("FLOW")}\\s+${word("DIAGRAM")}|${word("KEY")}\\s+${word("PLAN")}|${word("SEISMIC")}|${word("VIBRATION")}|${word("NOISE")}|${word("EROSION")}|${word("SEDIMENT")}|${word("INFECTION")}`);
 const SCHEDULE_WORD = rx(word("SCHEDULE", true));
 /** A drawing of how something is built, not how it is controlled. */
 const INSTALLATION = /\b(?:DETAILS?|SECTIONS?|ELEVATIONS?|PLANS?|MOUNTING|INSTALLATION|SUPPORTS?|HANGING|HANGERS?|CONNECTIONS?|PIPING|DUCTWORK|ROUGH-?IN|ENLARGED|ISOMETRIC)\b/;
