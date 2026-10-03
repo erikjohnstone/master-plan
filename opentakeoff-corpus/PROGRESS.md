@@ -94,6 +94,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 0c51888 | Control drawings: a hospital's infection control while it is built on (the VA's ICRA matrix, its dust barriers) is another trade's control, no packet (CI-76, finder v8) |
 | 26051e0 | Graph builds keep each sheet's vertices packed and build its snap grid on the first trace: 01_NY peak heap 3,050 -> 1,755 MB, graphs identical (#321) |
 | c9ca965 | A table ruled in dashes reads row by row: 061_IA's M-502 points lists, BAS 0 -> 180; every other set the rule touches compiles the same (#316) |
+| 102dcbc | Graph builds keep each sheet's figures packed: 01_NY heap held after the build 1,640 -> 641 MB, peak RSS 3,205 -> 2,390 MB, graphs identical (#322) |
 
 ## Known limits (documented, not fixed)
 
@@ -692,6 +693,30 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   MCP session (no figure objects held once the geometry is read, every figure packed, `subpathsOf` gives what a fresh
   extraction makes); both fail on the code before it. MCP session 24, tools 122, trace_run 5, linear parity 12, labels
   13, overlap, raster and parity: all pass; typecheck clean, lint as at HEAD.
+- OCR readings outlive a change to the table code (#323; `rastergrid._read_text`, `rastergrid.OCR_CACHE`, set by
+  `vectorgrid_rpc.read_picture`). The picture reader keeps a picture's tables under a key holding the source of
+  rastergrid, vectorgrid, celltext and vectorgrid_rpc (`_picture_cache_key`), so every edit to vectorgrid.py reads
+  every picture again. 22_GA's first build after #316's vectorgrid read 63 pictures and spent 1,426 s in its table
+  stage, against 89 s with the pictures cached: OCR is most of a read, and the tiles it reads are cut from the
+  picture's own pixels, which a table-code change does not touch. Each RapidOCR call (`Picture.read`'s tiles,
+  `_read_box`'s faces) now goes through `_read_text`, which keeps the reading in the picture cache's `ocr/` folder
+  under a BLAKE2b hash of the engine's identity (rapidocr_onnxruntime and onnxruntime versions, and the source of
+  `_ocr` and `_read_text`, which build the engine and hand it the image), the image's shape and dtype, and its pixels.
+  A reading is stored as JSON (RapidOCR's own lists, strings and floats, which round-trip exactly) and written whole
+  or not at all (a `.part` file renamed into place); one that cannot be told (no version metadata, no source) is not
+  kept, and OPENTAKEOFF_PICTURE_CACHE=0 keeps none. The cost shows on every table-code change: building 16_NV's graphs
+  for #317's A/B, the build at HEAD answered its pictures from the cache (89 s) and the one at the batch's code read
+  them again (948 s). A/B on ten pictured pages (029_ME p7; 07_MO p21 to 23, 40 and 41; 086_CA p4 and p7; 23_GA p6 and
+  p44), each page read whole (`extract_grid`) by the pushed code, by this change with an empty cache, and by this
+  change with only the second run's OCR readings kept (its picture entries gone, as a table-code change leaves them):
+  the tables are identical in all three, 58 of them read by OCR; 1,617 s with the cache empty, 109 s with the readings
+  (852 readings, 745 KB, no partial file left; like the pictures' own entries, readings are never evicted). The first
+  run shared the machine with a three-worker page A/B, so its 2,038 s is no timing baseline. Test:
+  vectorGridPictureSchedule (a picture read, its tables' cache entries removed as a table-code change would leave
+  them, its kept readings marked: the read again returns the mark); it fails on the code before it (no readings kept).
+  Sidecar tests 77 (with this one), compile 156, the other picture tests 17, MCP packaging 5 (its check compares the
+  built runtime, `mcp/dist`, gitignored, which was stale at HEAD too until `npm run build`): all pass; typecheck clean,
+  lint as at HEAD.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

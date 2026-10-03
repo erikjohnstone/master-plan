@@ -1,5 +1,15 @@
 # Changelog
 
+- **A change to the table code no longer reads every pictured schedule again from scratch.** A schedule pasted as a
+  picture is read by OCR, and its tables are kept so the next build of the same set takes them from the cache. That
+  cache is keyed by the source of every module that turns a picture into tables, the table finder's included, so any
+  change to the table code reads every picture again, and OCR is most of a read: 22_GA's first build after one such
+  change read 63 pictures and spent 1,426 s in its table stage, against 89 s. Each OCR reading is now kept too, keyed
+  by the pixels it read and by the engine that read them (its versions and how it is built and called). Where a change
+  leaves a picture's pixels the same, its readings are taken from the cache and give the same tables as a fresh read.
+  Ten pictured pages of four sets, read again as a table-code change leaves them (their tables no longer cached):
+  1,617 s with no readings kept, 109 s with them, and the same 58 OCR-read tables either way, as the code before reads
+  them.
 - **Graph builds hold less again: a sheet's drawn figures stay packed.** With the vertices packed (#321), each
   sheet's figures were most of what a graph build still held: one object per drawn figure, about 170 bytes, and a
   CAD sheet draws nearly one figure per segment (061_IA: 1.07 million figures, 174 MB, against 50 MB for the

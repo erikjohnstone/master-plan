@@ -490,6 +490,11 @@ def read_picture(pdf_path: str, page_no: int, bbox: tuple, page_w: float, page_h
     `ocr` (see _read_picture, which runs this in a child process)."""
     from vectorgrid import _snap_grid, tables_from_segments  # noqa: E402
     import rastergrid                                # noqa: E402
+    # OCR's readings are kept beside the pictures' (#323): this cache is keyed
+    # by the table code's source too, so a change to it reads every picture
+    # again, and the readings let that skip the OCR (rastergrid.OCR_CACHE).
+    cache = _picture_cache_dir()
+    rastergrid.OCR_CACHE = cache / "ocr" if cache else None
     segs, picture = rastergrid.read_region(pdf_path, page_no, tuple(bbox))
     if not segs:
         return []

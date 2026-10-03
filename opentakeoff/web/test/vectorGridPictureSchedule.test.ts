@@ -225,6 +225,43 @@ describe("AS-153: a schedule pasted as a picture is read", { skip: ready ? false
     }
   });
 
+  it("keeps a picture's OCR readings past a change to the table code, which reads the picture again (#323)", async () => {
+    // The picture's read is keyed by the source of the code that turns it into
+    // tables, so any change to vectorgrid.py reads it again. Its OCR readings
+    // are kept by the pixels they read, and that read takes them from there.
+    const dir = mkdtempSync(join(tmpdir(), "ot-323-"));
+    const saved = process.env.OPENTAKEOFF_PICTURE_CACHE;
+    try {
+      await shutdownVectorGrid();
+      const own = join(dir, "cache");
+      process.env.OPENTAKEOFF_PICTURE_CACHE = own;
+      const pdf = draw(dir, fixture("as153-07mo-m601-tanks.png"), [1545, 68, 2181, 370]);
+      const first = (await extractGridViaSidecar(pdf, 1)).tables;
+      assert.ok(first.some((t) => t.ocr && texts(t).includes("AMTROL")), JSON.stringify(first.map(texts)));
+      const ocrDir = join(own, "ocr");
+      const readings = readdirSync(ocrDir).filter((f) => f.endsWith(".json"));
+      assert.ok(readings.length >= 1, JSON.stringify(readdirSync(own)));
+      // A change to the table code: the picture's read is not found again.
+      for (const f of readdirSync(own)) if (f.endsWith(".json") && !f.startsWith("glance-")) rmSync(join(own, f));
+      // Mark the kept readings: a read that returns the mark took them.
+      let marked = 0;
+      for (const f of readings) {
+        const file = join(ocrDir, f);
+        const text = readFileSync(file, "utf8");
+        if (!text.includes("AMTROL")) continue;
+        writeFileSync(file, text.split("AMTROL").join("OCRKEPT"));
+        marked++;
+      }
+      assert.ok(marked >= 1, "a kept reading holds AMTROL");
+      const second = (await extractGridViaSidecar(pdf, 1)).tables;
+      assert.ok(second.some((t) => t.ocr && texts(t).some((s) => s.includes("OCRKEPT"))), JSON.stringify(second.map(texts)));
+    } finally {
+      await shutdownVectorGrid();
+      process.env.OPENTAKEOFF_PICTURE_CACHE = saved;
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it("without OCR, a picture stays a raster region, as before", async () => {
     await shutdownVectorGrid();
     const saved = process.env.OPENTAKEOFF_RASTER_OCR;

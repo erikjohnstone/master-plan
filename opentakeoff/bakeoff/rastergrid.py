@@ -55,6 +55,17 @@ MIN_CONF = 0.5
 
 _engine = None
 
+# Where OCR's readings are kept (#323), set by the caller to a folder of its
+# cache (vectorgrid_rpc.read_picture); None reads afresh. The picture reader's
+# own cache is keyed by the source of every module that turns a picture into
+# tables, the table finder's included, so a change to vectorgrid.py reads every
+# picture again, and OCR is most of a read: 22_GA's first build after one read
+# 63 pictures and spent 1,426 s in its table stage, against 89 s. The tiles
+# OCR reads are cut from the picture's own pixels; where a change leaves a tile
+# the same, its reading is the same, and is taken from here.
+OCR_CACHE = None
+_engine_id = None
+
 
 def available() -> bool:
     if os.environ.get("OPENTAKEOFF_RASTER_OCR", "1") == "0":
@@ -74,6 +85,52 @@ def _ocr():
         from rapidocr_onnxruntime import RapidOCR
         _engine = RapidOCR()
     return _engine
+
+
+def _read_text(gray):
+    """RapidOCR's reading of a grey image, as it returns it: a list of
+    (quad, text, confidence), or None. Kept in OCR_CACHE by a hash of the
+    image's pixels and of what reads them: the engine's versions and the
+    source of _ocr and of this function, which build the engine and hand it
+    the image. The reading is plain lists, strings and floats, and comes back
+    from the cache the same."""
+    import json
+    import numpy as np
+    image = np.stack([gray] * 3, axis=-1)
+    global _engine_id
+    if OCR_CACHE is not None and _engine_id is None:
+        # What cannot be told is not kept: a reading keyed without it could
+        # answer for another engine.
+        try:
+            import inspect
+            from importlib.metadata import version
+            _engine_id = "\n".join([version("rapidocr_onnxruntime"), version("onnxruntime"),
+                                    inspect.getsource(_ocr), inspect.getsource(_read_text)])
+        except Exception:  # noqa: BLE001
+            _engine_id = ""
+    if OCR_CACHE is None or not _engine_id:
+        return _ocr()(image)[0]
+    import hashlib
+    from pathlib import Path
+    h = hashlib.blake2b(digest_size=20)
+    h.update(_engine_id.encode())
+    h.update(repr((gray.shape, str(gray.dtype))).encode())
+    h.update(np.ascontiguousarray(gray).tobytes())
+    hit = Path(OCR_CACHE) / f"{h.hexdigest()}.json"
+    try:
+        return json.loads(hit.read_text())
+    except (OSError, ValueError):
+        pass
+    res = _ocr()(image)[0]
+    # Only a finished reading is kept, written whole or not at all.
+    try:
+        hit.parent.mkdir(parents=True, exist_ok=True)
+        part = hit.with_suffix(f".{os.getpid()}.part")
+        part.write_text(json.dumps(res))
+        os.replace(part, hit)
+    except (OSError, TypeError, ValueError):
+        pass
+    return res
 
 
 def _render(pdf_path: str, page_no: int, bbox: tuple):
@@ -183,7 +240,6 @@ class Picture:
     def read(self, boxes) -> None:
         """OCR the picture inside each box (a table's bbox, page space), in
         tiles cut on blank lines (_tiles)."""
-        import numpy as np
         ox, oy, sx, sy = self.xf
         done: list = []
         for box in boxes:
@@ -196,7 +252,7 @@ class Picture:
                 tile = region[ty0:ty1, tx0:tx1]
                 if tile.size == 0 or tile.min() >= INK:
                     continue
-                res, _elapse = _ocr()(np.stack([tile] * 3, axis=-1))
+                res = _read_text(tile)
                 for quad, text, conf in res or []:
                     text = (text or "").strip()
                     if not text or float(conf) < MIN_CONF:
@@ -272,7 +328,6 @@ def _read_box(clean, xf: tuple, face: tuple) -> list:
     rest (07_MO's VAV marks: "VAV" over "5" in a hairline font, read on their
     own and lost in the whole); a crop this small it enlarges first. Only for
     a face that holds ink and got no words."""
-    import numpy as np
     ox, oy, sx, sy = xf
     x0, y0, x1, y1 = face
     # Inside the face's walls, which the rule mask has already painted out.
@@ -283,7 +338,7 @@ def _read_box(clean, xf: tuple, face: tuple) -> list:
     crop = clean[r0:r1, c0:c1]
     if crop.size == 0 or (crop < INK).sum() < 12:
         return [], []
-    res, _elapse = _ocr()(np.stack([crop] * 3, axis=-1))
+    res = _read_text(crop)
     out, confs = [], []
     for quad, text, conf in res or []:
         text = (text or "").strip().strip("/\\|")
