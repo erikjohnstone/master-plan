@@ -175,8 +175,10 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   "Exact plan tag text was found, but matching symbol geometry was not verified" (062_ID 31 of 31, need >= 10
   MATCH). That verdict is `classifyBasServedSweepOutcome`'s rule from #94 (13dea24). 062_ID run alone fails
   identically at c637a3d and at HEAD, and the valve totals equal the keys at both (001_NC 163, 015_VA 36,
-  062_ID 31, 021_XX 2, 096_IN 24). The file also never exits after its last test (an open handle), so a runner
-  waits out its timeout.
+  062_ID 31, 021_XX 2, 096_IN 24). The file also never exited after its last test: its session helper
+  (`test/helpers/loadKeySession.mjs`) builds a graph the cache does not hold and left the VectorGrid sidecar running,
+  so a runner waited out its timeout. Fixed in b78a9e6: the helper closes the sidecars after each file, as
+  loadFixtureGraph does (a one-page check exits in 3 s with it, and is still running at 90 s without).
 - MCP `crossCorpusWorkflow` "WP1 keyed compile acceptance": federal-mech (BAS 89 vs 26; 158 vs 26 on 2026-10-03,
   the overlay's stale count, folded since) and 04_NV (19 vs 16) as above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too) and 21_VA
   (102 vs 100: the documented RF1/RF2 residual from its technology sheet's AV list; c637a3d read 88). The structural
