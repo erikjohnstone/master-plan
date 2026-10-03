@@ -650,6 +650,53 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   };
 }
 
+// ── 1a. figures packed (#322) ──────────────────────────────────────────────
+// A sheet's figures as objects cost about 170 bytes each, one per drawn
+// figure, and a CAD sheet draws nearly one per segment: 061_IA's 71 sheets
+// hold 1.07 million of them (174 MB), more than the segments themselves
+// (50 MB). A graph build reads every sheet's geometry and none of its figures
+// (Session keeps them packed until a reader asks). Packed they are 43 bytes
+// each, off the JavaScript heap.
+
+/** A geometry's figures as typed arrays: per figure, its segment range (two
+ *  Int32), its box (four Float64), its flags, fill luminance and whether it
+ *  closes (a byte each). */
+export interface PackedSubpaths {
+  range: Int32Array; box: Float64Array; flags: Uint8Array; fillLum: Uint8Array; closed: Uint8Array;
+}
+
+/** `subpaths` packed exactly, or null where a value would not survive its
+ *  array (a flag or a luminance outside a byte, an index outside Int32).
+ *  Extraction never makes one: its flags are the segment's paint flags and pen
+ *  nibble (meta's own byte) and its luminance is rounded to 0–255. */
+export function packSubpaths(subpaths: SubPath[]): PackedSubpaths | null {
+  const n = subpaths.length;
+  const range = new Int32Array(n * 2), box = new Float64Array(n * 4);
+  const flags = new Uint8Array(n), fillLum = new Uint8Array(n), closed = new Uint8Array(n);
+  for (let k = 0; k < n; k++) {
+    const s = subpaths[k];
+    if ((s.i0 | 0) !== s.i0 || (s.i1 | 0) !== s.i1 || (s.flags & 0xff) !== s.flags || (s.fillLum & 0xff) !== s.fillLum) return null;
+    range[k * 2] = s.i0; range[k * 2 + 1] = s.i1;
+    box[k * 4] = s.x0; box[k * 4 + 1] = s.y0; box[k * 4 + 2] = s.x1; box[k * 4 + 3] = s.y1;
+    flags[k] = s.flags; fillLum[k] = s.fillLum; closed[k] = s.closed ? 1 : 0;
+  }
+  return { range, box, flags, fillLum, closed };
+}
+
+/** The figures `packSubpaths` held: the same values in the same order. */
+export function unpackSubpaths(p: PackedSubpaths): SubPath[] {
+  const n = p.flags.length;
+  const out: SubPath[] = new Array(n);
+  for (let k = 0; k < n; k++) {
+    out[k] = {
+      i0: p.range[k * 2], i1: p.range[k * 2 + 1],
+      x0: p.box[k * 4], y0: p.box[k * 4 + 1], x1: p.box[k * 4 + 2], y1: p.box[k * 4 + 3],
+      closed: p.closed[k] === 1, flags: p.flags[k], fillLum: p.fillLum[k],
+    };
+  }
+  return out;
+}
+
 // ── 1b. polyline arc detection ─────────────────────────────────────────────
 // Door swings on many real plans are POLYLINES, not beziers — CAD exports
 // tessellate the arc into lineTo chords — so they carry no SEG_CURVE bit: the

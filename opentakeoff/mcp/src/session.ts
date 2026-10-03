@@ -304,8 +304,9 @@ import { mintTwin, splitFromFamily, variantTag, propagateRowAdd, propagateRowPat
 import { STANDARD_SCALES, RENDER_SCALE, detectScale, extractSheetNumber, type DetectedScale } from "../../web/src/lib/sheets.ts";
 import { buildSheetDxf, type DxfBuild } from "../../web/src/lib/dxf.ts";
 import {
-  extractVectorGeometry, buildMask, traceRegion, snapVertices, ringArea,
+  extractVectorGeometry, buildMask, traceRegion, snapVertices, ringArea, packSubpaths, unpackSubpaths,
   hatchFamilies, MASK_MAX_DIM, SENS_BALANCED, type FloodResult, type MaskObj, type VectorGeometry, type Point, type HatchFamily,
+  type PackedSubpaths, type SubPath,
 } from "../../web/src/lib/oneclick.ts";
 // The trace-confidence module (RFC #60 item D) — the engine's own account of a
 // flood scored 0–1 with named factors. floodSignals is THE adapter from a
@@ -817,6 +818,11 @@ interface SheetState {
   snapXY?: Float64Array;
   /** built from `snapXY` on the first trace that snaps (`snapGrid`) */
   snap?: ReturnType<typeof buildSnapGrid>;
+  /** the geometry's figures, packed (#322): `geo.subpaths` is unset once the
+   * geometry is read. Only the stroke classifier reads them (`subpathsOf`); as
+   * objects, nearly one per segment, they were most of what a graph build held
+   * once the vertices were packed (061_IA: 1.07 million, 174 MB). */
+  subpathsPacked?: PackedSubpaths;
   /** undefined = not built yet; null = sheet has zero vector segments (a scan) */
   mask?: MaskObj | null;
   /** raster-fallback mask (#154): the sheet's rendered pixels thresholded by
@@ -1635,6 +1641,17 @@ export class Session {
       for (let i = 0; i < pts.length; i++) { xy[i * 2] = pts[i][0]; xy[i * 2 + 1] = pts[i][1]; }
       s.snapXY = xy;
       s.geo.points = [];
+      // The figures too (#322): one object per drawn figure, about 170 bytes,
+      // and a CAD sheet draws nearly one per segment. The build reads no
+      // sheet's figures; once #321 packed the vertices they were most of what
+      // it held (01_NY: heap held after the build 1,640 -> 641 MB, the graph
+      // identical). The stroke classifier behind classify_strokes and
+      // trace_run reads them back (subpathsOf).
+      const packed = s.geo.subpaths?.length ? packSubpaths(s.geo.subpaths) : null;
+      if (packed) {
+        s.subpathsPacked = packed;
+        s.geo.subpaths = undefined;
+      }
       // classify this sheet's Optional Content layers (#85): the doc declares
       // id → (name, default visibility); the geometry attributes segments; the
       // pure normalizer states each layer's ROLE. Only layers that actually
@@ -1658,6 +1675,12 @@ export class Session {
       }
     }
     return s.geo;
+  }
+
+  /** The sheet's figures as extraction made them, from their packed copy
+   * (#322): the same values in the same order. */
+  private subpathsOf(s: SheetState): SubPath[] | undefined {
+    return s.subpathsPacked ? unpackSubpaths(s.subpathsPacked) : s.geo?.subpaths;
   }
 
   /** The sheet's vertex snap grid, built from its packed vertices on the first
@@ -3959,7 +3982,7 @@ export class Session {
       const mppf = s.upp ? 1 / s.upp : 0;
       const classes = classifyStrokesPure({
         segs: geo.segs, meta: geo.meta, roleCodes, layerSignal, ftPx: mppf,
-        subpaths: geo.subpaths, texts: s.spans.map((sp) => ({ x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0 })),
+        subpaths: this.subpathsOf(s), texts: s.spans.map((sp) => ({ x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0 })),
         dash: geo.dash, lum: geo.lum, strokeRgb: geo.strokeRgb,
         layerOf: geo.layerOf, layerIds: geo.layerIds, layers: s.layers,
       });

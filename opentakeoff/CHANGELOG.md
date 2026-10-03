@@ -1,5 +1,11 @@
 # Changelog
 
+- **Graph builds hold less again: a sheet's drawn figures stay packed.** With the vertices packed (#321), each
+  sheet's figures were most of what a graph build still held: one object per drawn figure, about 170 bytes, and a
+  CAD sheet draws nearly one figure per segment (061_IA: 1.07 million figures, 174 MB, against 50 MB for the
+  segments). The build reads none of them. They are now packed, 43 bytes each outside the JavaScript heap, and the
+  duct and pipe tracer reads the same figures back from them. 01_NY (162 sheets): peak heap 1.8 -> 0.9 GB, peak
+  memory 3.2 -> 2.4 GB; the graphs are identical.
 - **Graph builds hold half the heap on the largest sets.** The build reads every sheet's vector geometry and kept all
   of it: each sheet's vertices as `[x, y]` arrays, about 70 bytes apiece (15 million on 01_NY), and a snap grid over
   them that only an interactive area trace uses. The vertices are now packed outside the JavaScript heap and the snap

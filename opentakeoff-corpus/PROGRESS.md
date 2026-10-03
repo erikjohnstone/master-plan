@@ -93,6 +93,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | b78a9e6 | Tests that build a graph close the sidecars the build starts: valvePlanPaint.regression exits after its last test (it never did) |
 | 0c51888 | Control drawings: a hospital's infection control while it is built on (the VA's ICRA matrix, its dust barriers) is another trade's control, no packet (CI-76, finder v8) |
 | 26051e0 | Graph builds keep each sheet's vertices packed and build its snap grid on the first trace: 01_NY peak heap 3,050 -> 1,755 MB, graphs identical (#321) |
+| c9ca965 | A table ruled in dashes reads row by row: 061_IA's M-502 points lists, BAS 0 -> 180; every other set the rule touches compiles the same (#316) |
 
 ## Known limits (documented, not fixed)
 
@@ -674,6 +675,23 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   after this lands re-reads its pictured tables (the picture cache is keyed by the sidecar's source; Known limits):
   22_GA's first build at the batch's code re-read 63 pictures, its table stage 1,426 s against 89 s at HEAD's with the
   cache warm (an A/B running beside it).
+- Graph builds keep each sheet's drawn figures packed (#322; `Session.ensureGeometry`, `Session.subpathsOf`,
+  `packSubpaths` / `unpackSubpaths` in web/src/lib/oneclick.ts). With #321's vertices packed, the next largest thing a
+  build held was the figures (`subpaths`): one object per drawn figure, about 170 bytes, and a CAD sheet draws nearly
+  one figure per segment. Probe on 061_IA (every sheet's geometry read, no graph build): 1.07 million figures for 1.32
+  million segments, 174 MB of heap against 50 MB for the segments. The build reads no sheet's figures; the stroke
+  classifier behind classify_strokes and trace_run is their one reader. They are now packed in typed arrays (43 bytes
+  a figure, off the heap), `geo.subpaths` is unset, and the classifier unpacks the same figures in the same order. A
+  lazy accessor in `geo.subpaths`' place was tried first and dropped: redefining the property put the geometry object
+  in V8's dictionary mode (`%HasFastProperties` false, before and after the read), where every hot loop over
+  `geo.segs` looks the property up. Each build in its own process, cache off, a 6 GB heap cap, the pushed head
+  (26051e0) then this change: 01_NY (162 sheets) peak heap 1,777 -> 897 MB, held after the build 1,640 -> 641 MB (the
+  packed figures 253 MB outside the heap), peak RSS 3,205 -> 2,390 MB; 061_IA held 386 -> 212 MB, peak RSS 1,040 ->
+  972 MB. 058_CA (311 sheets) is measured next, alone. Graphs identical apart from stage timings. Tests: web geometry
+  (extraction's figures pack and unpack to the same figures; values a byte or an Int32 cannot hold do not pack) and
+  MCP session (no figure objects held once the geometry is read, every figure packed, `subpathsOf` gives what a fresh
+  extraction makes); both fail on the code before it. MCP session 24, tools 122, trace_run 5, linear parity 12, labels
+  13, overlap, raster and parity: all pass; typecheck clean, lint as at HEAD.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

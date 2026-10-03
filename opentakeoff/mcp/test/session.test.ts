@@ -4,6 +4,8 @@ import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { Session, ANN_SCHEMA, collapseEquivalentPrimaryTables } from "../src/session.ts";
+import { OPS } from "../src/pdf.ts";
+import { extractVectorGeometry, type SubPath } from "../../web/src/lib/oneclick.ts";
 import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 import type { ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 
@@ -80,6 +82,24 @@ test("a sheet's vertices are kept packed and its snap grid waits for a trace, wh
     return false;
   });
   assert.ok(onVertex.length >= 3, `the room's corners snap to the linework's vertices: ${onVertex.length} of ${r.verts.length}`);
+});
+
+test("a sheet's figures are kept packed and read back as a fresh extraction makes them (#322)", async () => {
+  // The graph build reads every sheet's geometry and no sheet's figures. As
+  // objects, one per drawn figure, they were most of what a large set's build
+  // held once #321 packed the vertices.
+  const s = new Session();
+  await s.loadPlan(PLAN);
+  type Page = { operatorList(): Promise<unknown>; viewport: { transform: number[] } };
+  type State = { geo?: { subpaths?: SubPath[] }; subpathsPacked?: { flags: Uint8Array }; page: Page };
+  const state = (s as unknown as { sheets: Map<string, State> }).sheets.get(KEY)!;
+  await s.sheetInfo(KEY);
+  assert.equal(state.geo!.subpaths, undefined, "no figure objects once the geometry is read");
+  const fresh = extractVectorGeometry(await state.page.operatorList() as Parameters<typeof extractVectorGeometry>[0], state.page.viewport.transform, OPS);
+  assert.ok(fresh.subpaths!.length >= 2, `figures on the sheet: ${fresh.subpaths!.length}`);
+  assert.equal(state.subpathsPacked!.flags.length, fresh.subpaths!.length, "every figure, packed");
+  const read = (s as unknown as { subpathsOf(st: State): SubPath[] }).subpathsOf(state);
+  assert.deepEqual(read, fresh.subpaths, "the stroke classifier reads the figures a fresh extraction makes, in its order");
 });
 
 test("ensureMask: built once, cache identity on the second call", async () => {

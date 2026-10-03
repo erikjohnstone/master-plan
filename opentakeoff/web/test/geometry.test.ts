@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import {
   buildMask, floodRegion, traceRegion, snapVertices, ringArea, rdpClosed,
   extractVectorGeometry, classifyHatchSegs, classifyOffsetAnnotationSegs, classifyDimensionStringSegs, classifyFleckSegs, markPolylineArcs, SEG_CURVE, SEG_CLIP, SEG_FILLONLY, SEG_POLYARC,
-  type SubPath,
+  packSubpaths, unpackSubpaths, type SubPath,
   SENS_STRICT, SENS_BALANCED, SENS_AGGRESSIVE, MASK_CURVE_BIT,
   floodRegionSealed, dilateHardMask, SEAL_RADII, sealRadiiFor, DOOR_SEAL_MAX_FT, SEAL_R_MAX, doorWedgeCapPx,
   splitMergedArcs, doorLeafCells, arcClusterFit,
@@ -744,6 +744,33 @@ test("subpaths: every segment is covered exactly once", () => {
   for (const s of g.subpaths!) for (let i = s.i0; i < s.i1; i++) seen[i]++;
   assert.ok(n > 0);
   for (let i = 0; i < n; i++) assert.equal(seen[i], 1, `segment ${i} covered exactly once`);
+});
+
+test("subpaths packed (#322): unpacking gives back the same figures, in the same order", () => {
+  // pen weights, a fill colour, open and closed figures, off-grid boxes
+  const OPSF = { ...OPSX, setFillRGBColor: 60 };
+  const ops = opsFor([
+    [OPSF.setLineWidth, [2.6]],
+    [OPSF.constructPath, [[OPSF.moveTo, OPSF.lineTo, OPSF.lineTo, OPSF.closePath], [0.25, 0, 10, 0, 10, 10.5]]],
+    [OPSF.stroke, []],
+    [OPSF.setFillRGBColor, [200, 120, 40]],
+    [OPSF.constructPath, [[OPSF.rectangle, OPSF.moveTo, OPSF.lineTo], [50, 50, 20.125, 20, 7, 7, 9, 8.75]]],
+    [OPSF.fill, []],
+  ], OPSF);
+  const g = extractVectorGeometry(ops, IDENT, OPSF);
+  assert.equal(g.subpaths!.length, 3);
+  assert.ok(g.subpaths!.some((s) => s.fillLum > 0) && g.subpaths!.some((s) => s.flags >> 4 > 0), "a fill colour and a pen weight ride on the figures");
+  const packed = packSubpaths(g.subpaths!);
+  assert.ok(packed, "extraction's figures pack");
+  assert.deepEqual(unpackSubpaths(packed!), g.subpaths);
+});
+
+test("subpaths packed (#322): a figure a byte or an Int32 cannot hold does not pack", () => {
+  const sp: SubPath = { i0: 0, i1: 1, x0: 0, y0: 0, x1: 1, y1: 1, closed: false, flags: 0, fillLum: 12 };
+  assert.ok(packSubpaths([sp]));
+  assert.equal(packSubpaths([{ ...sp, fillLum: 12.5 }]), null, "a luminance between bytes");
+  assert.equal(packSubpaths([{ ...sp, flags: 256 }]), null, "a flag past a byte");
+  assert.equal(packSubpaths([{ ...sp, i1: 2 ** 31 }]), null, "an index past Int32");
 });
 
 // ── finish texture (oneclick.ts section 2d) ─────────────────────────────────
