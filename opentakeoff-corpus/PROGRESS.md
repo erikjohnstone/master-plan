@@ -128,6 +128,9 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 - `corpusTakeoffWp1Acceptance` federal BAS (89 vs 26 expected) and 04_NV (19 vs 16): identical at 302cf34 and at
   `4255465`. 04_NV's three extra lines are LV-1/LV-2 (louvers) and WS-1 (water softener), read by family rules newer
   than the key; the key was not changed (rule: never edit a key to pass). 16_NV (62 vs 58) is fixed above.
+  Since 2026-10-03 both keys are re-keyed from the renders (see "Keys and the reviewed-corrections overlay" below):
+  federal-mech's 26 came from the overlay, not the key, and the takeoff reads the key's 158; 04_NV is keyed 20 and
+  reads 19 (HE-1 under a borrowed title).
 - MCP `basServedEquipmentPlanPaint` (all 5 sets) fails its first assertion, the BAS point-row total against
   `bas_points.rows` in the cross-set compile keys (021_XX 109 vs 63, 015_VA 75 vs 39). Those keys were last written
   at 6fabaeb; the row count grew with the later point-list reading work (AS-132..135). Replaying the BAS compile
@@ -145,11 +148,17 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   identically at c637a3d and at HEAD, and the valve totals equal the keys at both (001_NC 163, 015_VA 36,
   062_ID 31, 021_XX 2, 096_IN 24). The file also never exits after its last test (an open handle), so a runner
   waits out its timeout.
-- MCP `crossCorpusWorkflow` "WP1 keyed compile acceptance": federal-mech (BAS 89 vs 26) and 04_NV (19 vs 16) as
-  above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too) and 21_VA
+- MCP `crossCorpusWorkflow` "WP1 keyed compile acceptance": federal-mech (BAS 89 vs 26; 158 vs 26 on 2026-10-03,
+  the overlay's stale count, folded since) and 04_NV (19 vs 16) as above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too) and 21_VA
   (102 vs 100: the documented RF1/RF2 residual from its technology sheet's AV list; c637a3d read 88). The structural
   sweep over every corpus PDF passes. 021_XX (re-keyed 2026-10-03) misses EXPANSION_TANK 0 of 4 and AIR_SEPARATOR 0
-  of 2 (a general TANK SCHEDULE naming each row's kind in REMARKS) and BAS rows 127 of 128.
+  of 2 (a general TANK SCHEDULE naming each row's kind in REMARKS) and BAS rows 127 of 128. In `npm test` the file
+  reports 9 of its 116 sets and fails with no message after 2,428 s (2026-10-03, and the run before): the tenth set,
+  01_NY (a 68 MB PDF), builds its graph in the test process, which then holds about 8 GB, with npm test's other files
+  running on a 16 GB machine with no swap. Run alone (`--test-name-pattern "WP1 keyed"`), the file passes 01_NY's
+  build (706 s, then a WP1 FAIL) and stops after 13 sets: the kernel OOM-killed the Python table sidecar (4.4 GB
+  resident) while the test process held about 7 GB. The graph cache misses after every commit that touches the graph
+  build path, so each such run rebuilds every set's graph in process.
 - MCP `reconcileWorkflow` "Vol2 lab mech 021: HVAC families honest SCHEDULE_ONLY": 11 AHU reconcile rows against
   6. An untitled duct pressure-class table on sheet 9 (rows "AHU-1,2, 4 ＆ 5", AHU-3, AHU-6 under NEGATIVE
   PRESSURES) is read as AHU rows; its full-width ＆ also hides AHU-5. The takeoff's AHU count (6, by mark) is
@@ -157,7 +166,9 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   FAN 19, BOILER 4, GRD 6, all SCHEDULE_ONLY).
 - MCP `reconcileWorkflow` "Vol2 ITD D1 lab 062: plan-drawn HVAC families MATCH": FCU (DFC-1, F-1), LOUVER (L-1,
   L-2), LOUVERED_PENTHOUSE (PH-1) and GRD R-2 sweep to AMBIGUOUS under the same exact-tag rule, and GRD holds 11
-  reconcile rows against the key's 7. Identical at 6a3e08a (graph rebuilt with that code) and at 45e69db.
+  reconcile rows against the key's 7. Identical at 6a3e08a (graph rebuilt with that code) and at 45e69db. The key
+  said 7 wrongly: sheet 13 prints D-1 to D-7 and R-1 to R-4, re-keyed 11 on 2026-10-03, so only the AMBIGUOUS
+  sweeps remain.
 - MCP `reconcileWorkflow` "Vol2 Salinity Lab 023: chiller plant honest SCHEDULE_ONLY" (CH-1 and CH-2 now MATCH;
   BT-1 AMBIGUOUS under the exact-tag rule) and "Vol2 unheated repair 008: UH + louver all MATCH" (L-1 AMBIGUOUS, same
   rule): identical at 6a3e08a and at 45e69db, graphs rebuilt with each.
@@ -283,6 +294,65 @@ have one) listed the sets the takeoff over-reads. Checked by render, each small 
   move those keys too.
 Left as documented: 26_CA and 096_IN (stale partial keys, over-reads are real schedules), 21_VA (RF1/RF2 from a
 technology sheet), 001_NC (BAS 546 for a terse pre-render key of 122; held-out twin of navfac, not opened).
+
+### Keys and the reviewed-corrections overlay; seven keys re-keyed; ratings, luminaires and stacked marks (2026-10-03)
+
+The MCP WP1 test (`crossCorpusWorkflow`) applies `ground_truth/hvac/cross-set-compile-reviewed-corrections.json` over
+the compile keys; the scoreboard tools read the keys alone, and the two had drifted. federal-mech's overlay entry held
+BAS 26 (AI 12, AO 8, BI 4, BO 2, with no evidence line) against the key's 158 read by eye (04d6d4b), so `npm test`
+failed it 158 vs 26 while the scoreboard passed it; 017_MD's entry held totals 28 (key 34, 4c27684) and 087_US's
+totals 1 (key 3 with PCH-1 and PCH-2, f583414); and 094_FL's and 040_IL's keys lacked the units their entries had
+found (AS-63, AS-65), so the scoreboard listed them as over-reads. Every entry's counts now live in its key, re-keyed
+from the renders; the entries keep their evidence and source hash, with no counts, and the test's merge is a no-op.
+
+Re-keyed from the renders (each key's notes cite the sheets):
+- 062_ID and itd-d1-lab (one document, two keys): sheet 13's DIFFUSER SCHEDULE D-1 to D-7 and RETURN & EXHAUST GRILLE
+  SCHEDULE R-1 to R-4: GRD 11 (was 7), totals 97. Both PASS.
+- 094_FL: M-401's humidifiers HF-4, HF-5, HF-6, HF-8 (in their air handlers' cabinets): HUMIDIFIER 4, totals 11; its
+  other eight sheets print no schedule. PASS.
+- 040_IL: M600's transposed AHU-15 and split system SS-1/SSCU-1: AHU 1, FCU 1, CONDENSING_UNIT 1, totals 32 (no graph
+  on disk to score).
+- 04_NV: M-002 holds all its HVAC schedules: pumps 12, cooling towers 4, LV-1, LV-2, WS-1 and the STEAM RECOVERY HEAT
+  EXCHANGER HE-1: totals 20 (was 16; SURGE TANK T-1 has no family). The takeoff reads 19: HE-1's table, titled
+  without the word SCHEDULE, is extracted under the WATER SOFTENER SCHEDULE caption of the table above it
+  (`nearbyScheduleCaption` takes captions ending in SCHEDULE or UNITS/EQUIPMENT, and the region spans both tables).
+  Graph-side; queued with 030_NY's coil keys for a graph batch.
+- 27_WA (a 2026-09-13 pipeline key): PUMP 15 (HWP-1 to 6, BP-1 to 3, CP-1, 2, EP-1 to 4; the BP pumps are one booster
+  package's, BS-1 on E-701, not a sixteenth pump), GRD 5 (1S, 2S, 1R, 2R, 1E), totals 56; BAS rows 49: E-702's I/O
+  LIST prints 52 device rows, 49 ticking an I/O column (BS-1 PNL, WSHP-1 on BACnet and the hatchery's Modbus panel
+  tick none); types not keyed (rows tick several). Not keyed: M-603's CONTROL VALVE SCHEDULE (TCV-105 on HWS, TCV-110A
+  and B on cold aerated potable water, LCV-135 on effluent), process valves; under a title naming no water only CV-
+  marks are read, and reading these would type all four as heating water. The takeoff reads HVAC 57 (BS-1 from E-701
+  as a pump) and BAS 52: the three rows with no tick, and the list's lost INPUT/OUTPUT header tier (types AI 36, BI
+  48, no outputs).
+- 11_CA (these families only): PUMP 11 (page 84's six, the condensate CP-1, page 106's circulating CP-1 and CP-2 and
+  sewage ejectors SE-1 and SE-2), EXPANSION_TANK 3 (page 84's ET-1, ET-2 and page 106's domestic ET-1), WATER_HEATER
+  2 (GWH-1, GWH-2), AIR_COMPRESSOR 2 (AC-1, AC-2): totals 218. The takeoff reads 214: a mark two trades' schedules
+  each give their own unit (CP-1, ET-1) counts once, and the sewage ejector table is not extracted.
+
+Three compile rules (shared path, `corpusTakeoff.mjs`; takeoff and reconcile alike):
+- A unit's rated input or output is no point (`isBasPointsListTable`): an untitled table's I/O words are read after
+  removing INPUT/OUTPUT phrases with a rating unit or a fuel (INPUT KW, INPUT (MBH), MBH OUTPUT, GAS INPUT). 27_WA's
+  untitled heat pump data (TAG WSHP-1, CAPACITY TONS, INPUT KW, INPUT HP) was a two-row points list. Census over the
+  newest cached graph of 38 documents (1,252 tables, 120 read as points lists): 1 flips, that one.
+- An untitled lighting fixture schedule holds no unit (`unvouchedTableHoldsUnits`): a header naming lamps, lumens,
+  luminaires, ballasts or drivers, with no airflow, water or capacity column. 11_CA's untitled LUMINAIRE AND FIXTURE
+  SCHEDULE gave pumps EP1, EP2 (exterior pendants) and fans RF1 to RF6 and SF1. 10 untitled tables flip, all
+  luminaire schedules (008_MO, 009_FL, 011_IL, 01_NY, 031_MO, 089_FL, 11_CA, 21_VA, 24_IA, baker-county-eoc); only
+  11_CA's held marks a family reads.
+- Two marks a cell stacks are two units (`runTogetherMarks`): 11_CA's GWH-1 over GWH-2, AC-1 over AC-2 and CP-1 over
+  CP-2 read their first alone; the run-together reader (CH-1CH-2, AS-86) now allows space between the two marks, each
+  printing the family letters and separator.
+A/B: over 202 to 204 cached graphs the three rules change 11_CA (-9 phantoms, +GWH-2, AC-2, CP-2) and 27_WA's BAS
+(54 -> 52 rows) alone, HVAC, BAS and valves; over the 50 freshly built graphs nothing. Tests: 346 of 346 in the nine
+shared-path web files, tsc and eslint clean; each new case fails on the code before it.
+
+The MCP WP1 file's missing sets: run alone (`--test-name-pattern "WP1 keyed"`) it reported 13 sets in 1,423 s and
+failed with no message; the kernel log shows a memory-cgroup OOM kill of the Python table sidecar (4.4 GB resident)
+while the test process held about 7 GB, building the 14th set's graph (other jobs were running beside it). In
+`npm test` the same happens one set earlier, under 01_NY's build. Uncached graphs (every commit touching the graph
+build path) are built in the test process, so the file needs the graph cache warm, or a machine with more memory,
+to score its 116 sets.
 
 ### A points list's bare TYPE column; 045_FL's BAS re-keyed (2026-10-03)
 

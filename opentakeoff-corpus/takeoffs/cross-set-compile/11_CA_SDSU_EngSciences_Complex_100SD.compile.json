@@ -2,12 +2,12 @@
   "set_id": "11_CA_SDSU_EngSciences_Complex_100SD",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/11_CA_SDSU_EngSciences_Complex_100SD.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk campus lab \u2014 AHU/FCU/VAV+LAB CAV+ECAV exhaust CAV + pumps + VACUUM PUMP V-1 + HX/PHX + duct coils + flash tank + RO + WS + brine BT-1 + EF+TEF/GX + ELECTRIC HUMIDIFIER EH-1 + FILTER F-1 + AS/ET/GRD/SOUND TRAP + FUME HOOD VAV DAMPER ECV-* (58) + STEAM PRV (PRV-1A/1B).",
+  "notes": "Bulk campus lab — AHU/FCU/VAV+LAB CAV+ECAV exhaust CAV + pumps + VACUUM PUMP V-1 + HX/PHX + duct coils + flash tank + RO + WS + brine BT-1 + EF+TEF/GX + ELECTRIC HUMIDIFIER EH-1 + FILTER F-1 + AS/ET/GRD/SOUND TRAP + FUME HOOD VAV DAMPER ECV-* (58) + STEAM PRV (PRV-1A/1B). [RE-KEYED 2026-10-03 from the renders, these families only] Page 84's PUMP SCHEDULE CHWP-1, CHWP-2, SCHWP-1, SCHWP-2, HWP-1, HWP-2 and page 83's CONDENSATE PUMP SCHEDULE CP-1; plumbing page 106: CIRCULATING PUMP SCHEDULE CP-1 and CP-2 (domestic hot water return, stacked in one cell) and SEWAGE EJECTOR PUMP SCHEDULE SE-1 and SE-2 (one on standby): PUMP 11 (was 8). Page 84's EXPANSION TANK SCHEDULE ET-1, ET-2 and page 106's domestic ET-1: EXPANSION_TANK 3 (was 2). Page 106's GAS WATER HEATER SCHEDULE GWH-1 and GWH-2 (stacked, 199 CFH each): WATER_HEATER 2; AIR COMPRESSOR SCHEDULE AC-1 and AC-2 (stacked): AIR_COMPRESSOR 2. Totals 218. The circulating CP-1 and the condensate CP-1, and the domestic and hydronic ET-1, are different units under one mark: the takeoff, which counts a mark once per family, reads one of each pair. The sewage ejector table is not extracted. Page 140's untitled lighting fixture schedule (EP1, EP2, RF1 to RF6, SF1) holds no unit.",
   "categories": {
     "AHU": 3,
     "FCU": 18,
     "VAV": 90,
-    "PUMP": 8,
+    "PUMP": 11,
     "VACUUM_PUMP": 1,
     "WATER_SOFTENER": 1,
     "BRINE_TANK": 1,
@@ -15,7 +15,7 @@
     "HUMIDIFIER": 1,
     "FILTER": 1,
     "AIR_SEPARATOR": 2,
-    "EXPANSION_TANK": 2,
+    "EXPANSION_TANK": 3,
     "FLASH_TANK": 1,
     "HEAT_EXCHANGER": 4,
     "DUCT_MOUNTED_COIL": 2,
@@ -23,10 +23,12 @@
     "GRD": 3,
     "DUCT_SILENCER": 6,
     "FUME_HOOD_DAMPER": 58,
-    "PRESSURE_REDUCING_VALVE": 2
+    "PRESSURE_REDUCING_VALVE": 2,
+    "WATER_HEATER": 2,
+    "AIR_COMPRESSOR": 2
   },
   "totals": {
-    "items": 210
+    "items": 218
   },
   "bas_points": {
     "rows": 0

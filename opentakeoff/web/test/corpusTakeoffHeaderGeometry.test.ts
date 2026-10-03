@@ -69,6 +69,29 @@ describe("tableHeaderBlob + headerShapeMatches", () => {
     assert.equal(isBasPointsListTable(UNTITLED_BAS_TABLE), true);
     assert.equal(isControlValveHeaderShape(UNTITLED_BAS_TABLE), false);
   });
+
+  // 27_WA's untitled heat pump data (TAG WSHP-1, INPUT KW, INPUT HP) was a
+  // points list of two rows: a unit's rated input or output is no point.
+  it("a unit's rated input or output is no points list column", () => {
+    const untitled = (headers: string[]) => ({
+      sheet: "set.pdf#16",
+      kind: "equipment",
+      title: { text: "" },
+      headers,
+      rows: [{ key: "X-1", cells: { [headers[0]]: { text: "X-1" } } }],
+    });
+    for (const headers of [
+      ["TAG", "MFG.", "MODEL", "CAPACITY TONS", "INPUT KW", "INPUT HP", "CHARGE LB.", "TYPE", "CLASS"],
+      ["MARK", "MANUFACTURER", "INPUT (MBH)", "OUTPUT MBH", "EFFICIENCY"],
+      ["TAG", "MODEL", "GAS INPUT", "HEATING OUTPUT", "VOLTS"],
+      ["MARK", "MODEL", "MBH INPUT", "BTUH OUTPUT"],
+    ]) assert.equal(isBasPointsListTable(untitled(headers)), false, headers.join(" | "));
+    for (const headers of [
+      ["TAG", "DESCRIPTION", "DIGITAL INPUT", "ANALOG OUTPUT"],
+      ["POINT", "INPUT", "OUTPUT", "REMARKS"],
+      ["DEVICE", "ANALOG", "DIGITAL", "INPUT KW"],
+    ]) assert.equal(isBasPointsListTable(untitled(headers)), true, headers.join(" | "));
+  });
 });
 
 describe("untitled valve grid compile (013-shaped)", () => {

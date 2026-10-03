@@ -575,6 +575,9 @@ const letteredMark = (s) => /^[A-Z]{2,8}-[A-Z]{1,2}$/.test(markCanon(s));
 /** A type printed as letters alone (21_VA's air devices CD, RGL, EG). */
 const typeMark = (s) => /^[A-Z]{1,4}$/.test(markCanon(s));
 
+const LIGHTING_FIXTURE_HEADER_RE = /\b(?:LAMPS?|LUMENS?|LUMINAIRES?|BALLASTS?|DRIVERS?|FOOTCANDLES?)\b/;
+const HVAC_RATING_HEADER_RE = /\b(?:CFM|GPM|MBH|BTUH|TONS?|BHP|HP|RPM|ESP|EAT|LAT|EWT|LWT|SEER|EER)\b/;
+
 /**
  * A table no title vouches for (untitled, or a general MISCELLANEOUS,
  * EQUIPMENT, SPECIALTY EQUIPMENT or HYDRONIC ACCESSORIES schedule) names a
@@ -589,8 +592,16 @@ const typeMark = (s) => /^[A-Z]{1,4}$/.test(markCanon(s));
  * table is read as its title says, whatever its kind.
  */
 export function unvouchedTableHoldsUnits(table) {
-  return !["reference", "room-finish", "finish"].includes(table?.kind);
+  if (["reference", "room-finish", "finish"].includes(table?.kind)) return false;
+  // A lighting fixture schedule holds fixture types, not units: 11_CA's
+  // untitled LUMINAIRE AND FIXTURE SCHEDULE (TYPE, DESCRIPTION, LAMP QTY. &
+  // TYPE, TOTAL WATTS) made pumps of its EP1 and EP2 pendants and fans of
+  // RF1 to RF6 and SF1. A unit's schedule that names a lamp (an air handler's
+  // UV lamps) prints its airflow, water or capacity beside it.
+  const blob = tableHeaderBlob(table);
+  return !(LIGHTING_FIXTURE_HEADER_RE.test(blob) && !HVAC_RATING_HEADER_RE.test(blob));
 }
+
 
 /**
  * In a table no title vouches for, a mark of letters alone is a word, not a
@@ -1266,11 +1277,13 @@ export function tableRangeEvidence(table, drawn) {
 /** Two marks of one family the extraction's key ran together (AS-86): it
  * keys "CH-1 & CH-2" and "CH-1, CH-2" as CH-1CH-2, "B1, B2" as B1B2. Where
  * no cell prints the row's name (itd-d1-lab's canopy hoods print theirs in
- * the key alone), the key is all there is. The family letters and separator
- * printed twice are two marks; a mark printing them once (B12, AHU-1A) is
- * one. */
+ * the key alone), the key is all there is. Or two marks a cell stacks, one
+ * line each: 11_CA's GWH-1 over GWH-2, AC-1 over AC-2, CP-1 over CP-2, two
+ * units a row each, read as their first alone. The family letters and
+ * separator printed twice are two marks; a mark printing them once (B12,
+ * AHU-1A) is one. */
 function runTogetherMarks(raw) {
-  const m = String(raw || "").trim().match(/^([A-Z]{1,8})([\s-]?)(\d{1,4}[A-Z]?)\1\2(\d{1,4}[A-Z]?)$/i);
+  const m = String(raw || "").trim().match(/^([A-Z]{1,8})([\s-]?)(\d{1,4}[A-Z]?)\s*\1\2(\d{1,4}[A-Z]?)$/i);
   return m ? [`${m[1]}${m[2]}${m[3]}`, `${m[1]}${m[2]}${m[4]}`] : null;
 }
 
@@ -3445,6 +3458,11 @@ export function isBasPointsListTitle(title) {
   return false;
 }
 
+/** An input or output named with its rating's unit, or by what it burns or
+ * delivers (INPUT KW, INPUT (MBH), MBH OUTPUT, GAS INPUT): a unit's rating,
+ * not a controller's point. */
+const RATED_INPUT_OUTPUT_RE = /\b(?:INPUTS?|OUTPUTS?)\s*\(?\s*(?:KW|HP|MBH|BTU\s*\/\s*H|BTUH|BTU|WATTS?|KVA|VA|AMPS?|FLA|MCA|VOLTS?|TONS?|CAPACITY|POWER|RATING)\b|\b(?:KW|HP|MBH|BTUH|BTU|GAS|FUEL|HEATING|COOLING|ELECTRIC(?:AL)?|POWER)\s*\(?\s*(?:INPUTS?|OUTPUTS?)\b/g;
+
 /**
  * L5 geometry: untitled BAS / I/O grids — header shape, not title regex alone.
  * Requires point/I/O column tokens and rejects valve-schedule header shapes.
@@ -3457,10 +3475,12 @@ export function isBasPointsListTable(table) {
   const blob = tableHeaderBlob(table);
   if (!blob) return false;
   if (/\b(?:GPM|\bCV\b)\b/.test(blob) && /\bSERVED\b/.test(blob)) return false;
-  return headerShapeMatches(table, [
-    /\b(?:TAG|MARK|POINT|DESCRIPTION|DEVICE)\b/,
-    /\b(?:AI|AO|BI|BO|ANALOG|DIGITAL|INPUT|OUTPUT|I\s*\/\s*O)\b/,
-  ]);
+  // A unit's rated input or output is no point: 27_WA's untitled heat pump
+  // data (TAG WSHP-1, MFG., MODEL, CAPACITY TONS, INPUT KW, INPUT HP) was
+  // read as a points list of two rows, and out of the families' reach.
+  const io = blob.replace(RATED_INPUT_OUTPUT_RE, " ");
+  return /\b(?:TAG|MARK|POINT|DESCRIPTION|DEVICE)\b/.test(blob)
+    && /\b(?:AI|AO|BI|BO|ANALOG|DIGITAL|INPUT|OUTPUT|I\s*\/\s*O)\b/.test(io);
 }
 
 /** Display title for header-inferred BAS tables (never used as a family regex). */

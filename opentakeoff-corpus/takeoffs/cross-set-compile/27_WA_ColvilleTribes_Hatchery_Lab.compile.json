@@ -2,13 +2,13 @@
   "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
   "kind": "hvac_equipment",
-  "notes": "EQUIPMENT catch-all WSHP/CU/pumps/BS booster; pot feeders; strainer STR-1; FILTER FTR-1 on FILTER & STRAINER (FIN_TUBE titledOnly \u2014 no blank/catch-all FTR); LOUVER LV-*. BAS: I/O LIST WHITE STURGEON PLC \u2192 42 device rows (TAG skipped); ANALOG/DIGITAL cells roll to AI=33 / BI=21.",
+  "notes": "EQUIPMENT catch-all WSHP/CU/pumps/BS booster; pot feeders; strainer STR-1; FILTER FTR-1 on FILTER & STRAINER (FIN_TUBE titledOnly — no blank/catch-all FTR); LOUVER LV-*. BAS: I/O LIST WHITE STURGEON PLC → 42 device rows (TAG skipped); ANALOG/DIGITAL cells roll to AI=33 / BI=21. [RE-KEYED 2026-10-03 from the renders] M-603 (page 15) PUMP SCHEDULE prints 15 pumps: HWP-1 to HWP-6, BP-1 to BP-3 (aerated water boosters), CP-1, CP-2, EP-1 to EP-4: PUMP 15 (was 14). Its note 4 makes BP-1 to BP-3 the pumps of one booster package, the BS-1 that E-701's EQUIPMENT SCHEDULE lists for power; BS-1 is that package, not a sixteenth pump. Page 13's GRILLES, REGISTERS, DIFFUSERS SCHEDULE: 1S, 2S, 1R, 2R, 1E: GRD 5 (the earlier key predates air devices). Totals 56. BAS: E-702's I/O LIST WHITE STURGEON PLC prints 52 device rows under TAG; 49 of them tick an ANALOG or DIGITAL INPUT/OUTPUT column (the counts in the cells, 1 to 4, read as ticks); BS-1 PNL and WSHP-1 (BACNET/IP) and the EXISTING FISH HATCHERY CONTROL PANEL (MODBUS TCP/IP) tick none: rows 49 (was 42, a pipeline count). A row often ticks several types (HWP-1: AO, DI, DO), so types are not keyed. Not keyed: M-603's CONTROL VALVE SCHEDULE TCV-105 (HWS, 3-way mixing), TCV-110A and TCV-110B (cold aerated potable water), LCV-135 (effluent), the hatchery's process valves; the valve takeoff's families are by hydronic water and read only CV- marks under a title naming none.",
   "categories": {
     "FCU": 1,
     "ERV": 1,
     "CONDENSING_UNIT": 1,
     "HEAT_PUMP": 1,
-    "PUMP": 14,
+    "PUMP": 15,
     "WATER_HEATER": 1,
     "FAN": 3,
     "UNIT_HEATER": 7,
@@ -19,13 +19,14 @@
     "HEAT_EXCHANGER": 4,
     "CHEMICAL_POT_FEEDER": 2,
     "STRAINER": 1,
-    "LOUVER": 3
+    "LOUVER": 3,
+    "GRD": 5
   },
   "totals": {
-    "items": 50
+    "items": 56
   },
   "bas_points": {
-    "rows": 42,
+    "rows": 49,
     "alarm": 0,
     "trend": 0,
     "hardwired": 0,

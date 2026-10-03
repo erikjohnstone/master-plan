@@ -426,6 +426,28 @@ describe("AS-66 a table no title vouches for: notes, indexes and lists hold no u
     assert.deepEqual(valves.CHW_CONTROL_VALVE.items.map((i) => i.tag), ["CV-1"]);
   });
 
+  it("reads no unit in an untitled lighting fixture schedule", () => {
+    // 11_CA's untitled LUMINAIRE AND FIXTURE SCHEDULE: its EP1 and EP2
+    // pendants were pumps, RF1 and SF1 fans.
+    const headed = (sheet: string, headers: string[], keys: string[]) => ({
+      kind: "equipment", sheet, title: { text: "" }, headers,
+      rows: keys.map((key) => ({ key, cells: { [headers[0]]: { text: key } } })),
+    });
+    const lights = compile([
+      headed("e.pdf#140", ["TYPE", "DESCRIPTION", "MANUFACTURER & CATALOG #", "LAMP QTY. &TYPE", "TOTAL WATTS", "POWER CONTROL", "REMARKS"], ["EP1", "EP2", "RF1", "SF1"]),
+      headed("e.pdf#27", ["TYPE", "MOUNTING", "DELIVERED LUMENS", "DRIVER", "VOLTAGE"], ["EF-1", "P-1"]),
+    ]);
+    for (const f of ["FAN", "PUMP"]) assert.deepEqual(lights(f), [], f);
+    // A unit's schedule naming a lamp (an air handler's UV lamps) prints its
+    // airflow beside it, and an untitled table naming no lamp keeps its units.
+    const units = compile([
+      headed("m.pdf#5", ["MARK", "SUPPLY CFM", "UV LAMPS", "FILTER"], ["AHU-1"]),
+      headed("m.pdf#6", ["TAG", "SERVICE", "GPM", "HEAD"], ["CP-1"]),
+    ]);
+    assert.deepEqual(units("AHU"), ["AHU-1"]);
+    assert.deepEqual(units("PUMP"), ["CP-1"]);
+  });
+
   it("reads a mark of letters alone as a word where no title vouches for the family", () => {
     // 02_UT's and 19_CA's abbreviation lists print SPF and SFD.
     const tags = compile([table("m.pdf#3", "", ["SPF", "SFD", "EF-3"]), table("m.pdf#4", "MISCELLANEOUS SCHEDULE", ["SPF", "WWHP-A"])]);

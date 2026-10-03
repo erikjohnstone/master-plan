@@ -1,5 +1,16 @@
 # Changelog
 
+- **A unit's rated input is no point; a lighting fixture schedule holds no unit; two marks a cell stacks are two
+  units.** 27_WA's untitled heat pump data table (TAG WSHP-1, MFG., MODEL, CAPACITY TONS, INPUT KW, INPUT HP) was read
+  as a two-row BAS points list, its electrical ratings taken for I/O columns: an untitled table's I/O words are now read
+  after removing an INPUT or OUTPUT named with a rating unit or a fuel (INPUT KW, INPUT (MBH), MBH OUTPUT, GAS INPUT).
+  11_CA's untitled LUMINAIRE AND FIXTURE SCHEDULE (TYPE, LAMP QTY. & TYPE, TOTAL WATTS) made pumps of its exterior
+  pendants EP1 and EP2 and fans of RF1 to RF6 and SF1: an untitled table whose header names lamps, lumens, luminaires,
+  ballasts or drivers, and no airflow, water or capacity, now holds no unit (an air handler's UV lamps still sit beside
+  its airflow). And 11_CA's plumbing schedules stack two units' marks in one cell (GWH-1 over GWH-2, AC-1 over AC-2,
+  CP-1 over CP-2), read as their first alone: two marks of one family, each printing its letters, are now two units
+  with space between them as without. Over 204 cached and 50 freshly built graphs these change 11_CA (nine phantom
+  units gone; GWH-2, AC-2 and CP-2 read) and 27_WA's BAS (54 rows to 52) alone.
 - **A points list's bare TYPE column.** 045_FL's two CONTROL POINTS SCHEDULEs print MARK | TYPE | DESCRIPTION |
   NOTES, the TYPE column holding AO, AI, DO or SPARE, and the type reader took a type only from a POINT TYPE or I/O
   TYPE column, so none of their 15 points was typed. A column headed TYPE alone now types a point where it prints an

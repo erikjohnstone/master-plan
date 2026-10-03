@@ -2116,7 +2116,11 @@ test("a list of one family's marks names each unit, however it is spelled (AS-86
   assert.deepEqual(expandEquipMarks("CH-1CH-2"), ["CH-1", "CH-2"]);
   assert.deepEqual(expandEquipMarks("B1B2"), ["B1", "B2"]);
   assert.deepEqual(expandEquipMarks("UH-1UH-2"), ["UH-1", "UH-2"]);
-  for (const one of ["B12", "EF-12", "AHU-1A", "FOP-8AB", "CV-CHW-BP-A", "SF-P1-12"]) assert.deepEqual(expandEquipMarks(one), [one], one);
+  // Or a cell stacks them, one line each (11_CA's GWH-1 over GWH-2).
+  assert.deepEqual(expandEquipMarks("GWH-1 GWH-2"), ["GWH-1", "GWH-2"]);
+  assert.deepEqual(expandEquipMarks("AC-1  AC-2"), ["AC-1", "AC-2"]);
+  assert.deepEqual(expandEquipMarks("AHU 1 AHU 2"), ["AHU 1", "AHU 2"]);
+  for (const one of ["B12", "EF-12", "AHU-1A", "FOP-8AB", "CV-CHW-BP-A", "SF-P1-12", "AHU-1 A", "EF-1 2", "AHU-1 HP-1", "EF-1 EXHAUST"]) assert.deepEqual(expandEquipMarks(one), [one], one);
   // A printed list of one family's marks is read as printed, not as the key
   // the extraction ran together; two families' still give way to the key.
   assert.equal(rowMarkText("EF-1, EF-2", "EF-1EF-2", false), "EF-1, EF-2");
@@ -2127,7 +2131,7 @@ test("a list of one family's marks names each unit, however it is spelled (AS-86
 test("a row listing two units reads both in the takeoff and the reconcile, keyed as the extraction keys it (AS-86)", () => {
   // Each spelling in the mark cell, the row keyed as the extraction keys that
   // spelling (rowKeyOf: EF-1/EF-2, EF-1EF-2, EF-12...), QTY 2.
-  const spellings = ["EF-1 & 2", "EF-1, 2", "EF-1,2", "EF-1 & EF-2", "EF-1, EF-2", "EF-1/EF-2", "EF-1/2"];
+  const spellings = ["EF-1 & 2", "EF-1, 2", "EF-1,2", "EF-1 & EF-2", "EF-1, EF-2", "EF-1/EF-2", "EF-1/2", "EF-1 EF-2"];
   const listed = (title: string, header: string, text: string) => ({ tables: [as77Table("m.pdf#5", title, [header, "CFM", "QTY"], [
     { __key: rowKeyOf(text, "equipment")!.key, [header]: text, CFM: "400", QTY: "2" },
   ])] });
