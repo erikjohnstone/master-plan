@@ -17,6 +17,8 @@ import {
   pageBoxAgrees,
   viewportScale,
   isFragmentAdjacent,
+  isPointSectionFragment,
+  scheduleTablesFromVectorGridReply,
   stackFragments,
   dropNumberedNotes,
   widenLeadingProse,
@@ -504,3 +506,67 @@ describe("a mark printed in two columns, its letters under ABB. and its number u
     assert.ok(!built?.rows.some((r) => /^EX-\d/.test(r.key)), JSON.stringify(built?.rows.map((r) => r.key)));
   });
 });
+
+describe("a points list whose I/O sections are ruled apart (015_VA's AM703-AM706)", () => {
+  // Each section is its own face: the title band with the header, the header
+  // again with ANALOG INPUT and its points, then BINARY INPUT and BINARY
+  // OUTPUT each with theirs. A face may carry the section above's last point
+  // again at the seam (AM704's fan coil list: AI-1, ANALOG OUTPUT, AO-1).
+  const W = [100, 160, 300, 340, 380];
+  const pointRow = (row: number, y: number, texts: string[]) =>
+    texts.map((text, col) => cell(row, col, text, [W[col], y, W[col + 1], y + 20]));
+  const heading = (row: number, y: number, text: string) => cell(row, 0, text, [100, y, 380, y + 20], 1, 4);
+  const face = (top: number, rows: Array<ReturnType<typeof cell> | ReturnType<typeof cell>[]>): VectorGridTable => {
+    const cells = rows.flat();
+    const bottom = Math.max(...cells.map((c) => c.bbox[3]));
+    return { bbox: [100, top, 380, bottom], rows: rows.length, cols: 4, raster: false, assigned: cells.length, orphan: 0, straddle: 0, cells };
+  };
+  const HEAD = ["MARK", "DESCRIPTION", "ALARM", "TREND"];
+  const TITLE = face(100, [heading(0, 100, "GATEHOUSE SYSTEM POINTS LIST"), pointRow(1, 120, HEAD)]);
+  const ANALOG_IN = face(120, [pointRow(0, 120, HEAD), heading(1, 140, "ANALOG INPUT"),
+    pointRow(2, 160, ["AI-1", "RETURN AIR TEMPERATURE", "YES", "YES"]), pointRow(3, 180, ["AI-2", "RETURN AIR HUMIDITY", "YES", "YES"])]);
+  const BINARY_IN = face(200, [heading(0, 200, "BINARY INPUT"),
+    pointRow(1, 220, ["BI-1", "UNIT FAN STATUS OFF/ON", "NO", "NO"]), pointRow(2, 240, ["BI-2", "EXHAUST FAN START/STOP", "YES", "NO"])]);
+  const BINARY_OUT = face(260, [heading(0, 260, "BINARY OUTPUT"),
+    pointRow(1, 280, ["BO-1", "OUTSIDE AIR DAMPER", "NO", "NO"]), pointRow(2, 300, ["BO-2", "EXHAUST FAN START/STOP", "NO", "NO"]),
+    pointRow(3, 320, ["BO-3", "EXHAUST AIR DAMPER", "NO", "NO"])]);
+  const read = (tables: VectorGridTable[]) => scheduleTablesFromVectorGridReply(tables, 3, ctx(), 3).tables
+    .map((t) => ({ title: t.title?.text ?? "", keys: t.rows.map((r) => r.key) }));
+
+  it("reads every section as the list's own, the first point of each kept", () => {
+    assert.deepEqual(read([TITLE, ANALOG_IN, BINARY_IN, BINARY_OUT]), [{
+      title: "GATEHOUSE SYSTEM POINTS LIST",
+      keys: ["AI-1", "AI-2", "BI-1", "BI-2", "BO-1", "BO-2", "BO-3"],
+    }]);
+  });
+
+  it("drops the point a section's face repeats at its seam", () => {
+    const seamed = face(180, [pointRow(0, 180, ["AI-2", "RETURN AIR HUMIDITY", "YES", "YES"]), heading(1, 200, "ANALOG OUTPUT"),
+      pointRow(2, 220, ["AO-1", "HHW VALVE", "NO", "YES"])]);
+    assert.equal(isPointSectionFragment(seamed), true);
+    assert.deepEqual(read([TITLE, ANALOG_IN, seamed]), [{
+      title: "GATEHOUSE SYSTEM POINTS LIST", keys: ["AI-1", "AI-2", "AO-1"],
+    }]);
+  });
+
+  it("takes no face whose heading is no I/O section, or is followed by no point", () => {
+    assert.equal(isPointSectionFragment(face(200, [heading(0, 200, "SECOND FLOOR"),
+      pointRow(1, 220, ["BI-1", "UNIT FAN STATUS OFF/ON", "NO", "NO"])])), false);
+    assert.equal(isPointSectionFragment(face(200, [heading(0, 200, "BINARY INPUT"),
+      pointRow(1, 220, ["EF-1", "TOILET EXHAUST", "NO", "NO"])])), false);
+    assert.equal(isPointSectionFragment(ANALOG_IN), false);
+  });
+
+  it("stacks a section only onto the list above it, never the one below", () => {
+    // A section's face directly above a list drawn as one face: adjacent,
+    // yet with no list of its own above it.
+    const whole = face(120, [heading(0, 120, "GATEHOUSE SYSTEM POINTS LIST"), pointRow(1, 140, HEAD), heading(2, 160, "ANALOG INPUT"),
+      pointRow(3, 180, ["AI-1", "RETURN AIR TEMPERATURE", "YES", "YES"]), pointRow(4, 200, ["AI-2", "RETURN AIR HUMIDITY", "YES", "YES"])]);
+    const above = face(60, [heading(0, 60, "BINARY INPUT"),
+      pointRow(1, 80, ["BI-1", "UNIT FAN STATUS OFF/ON", "NO", "NO"]), pointRow(2, 100, ["BI-2", "EXHAUST FAN START/STOP", "YES", "NO"])]);
+    assert.ok(isFragmentAdjacent(above, whole));
+    const list = read([above, whole]).find((t) => t.title === "GATEHOUSE SYSTEM POINTS LIST");
+    assert.deepEqual(list?.keys, ["AI-1", "AI-2"]);
+  });
+});
+

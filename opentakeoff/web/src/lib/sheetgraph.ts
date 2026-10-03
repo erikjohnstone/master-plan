@@ -8769,6 +8769,10 @@ export function recoverNearbyScheduleTableTitle(table: ScheduleTable, spans: Gra
   return true;
 }
 
+/** A BAS point list's I/O section heading (ANALOG INPUT, BINARY OUTPUTS),
+ * as printed across a list between its sections. */
+export const BAS_POINT_SECTION_HEADING_RE = /^(?:ANALOG|BINARY|DIGITAL|UNIVERSAL) (?:INPUTS?|OUTPUTS?)$/;
+
 /** Remove printed BAS point-type divider rows from an extracted point list.
  * These are visual section headings (ANALOG INPUT, BINARY OUTPUT, etc.), not
  * point records. The gate requires a point-list title and a row whose sparse
@@ -8779,7 +8783,7 @@ export function stripBasPointSectionHeadingRows(table: ScheduleTable): number {
   const before = table.rows.length;
   table.rows = table.rows.filter((row) => {
     const key = row.key.replace(/\s+/g, " ").trim().toUpperCase();
-    if (!/^(?:ANALOG|BINARY|DIGITAL) (?:INPUT|OUTPUT)$/.test(key)) return true;
+    if (!BAS_POINT_SECTION_HEADING_RE.test(key)) return true;
     const populated = Object.values(row.cells)
       .map((cell) => cell.text.replace(/\s+/g, " ").trim().toUpperCase())
       .filter(Boolean);
@@ -10860,7 +10864,18 @@ function scheduleTableFromODLRead(
       && !/^(?:NONE|N\/?A|NOT\s+(?:USED|APPLICABLE)|[-–—]*)$/i.test(odlCellText(cl).trim()));
     const tallUnitRow = ownsLeadCell && !!lead && !groupsColumns
       && (printsAMark(odlCellText(lead)) || splitMark);
-    const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size) && !tallUnitRow;
+    // A POINT LIST'S I/O SECTION HEADING IS A DIVIDER, NOT A HEADER TIER.
+    // 015_VA's AM703 prints BINARY INPUT across its list right under MARK |
+    // DESCRIPTION | ALARM | TREND, beside an empty column ruled down the
+    // list's side. With that column's cell, half the row's cells span, so it
+    // read as a grouping tier and named each column with it ("TREND BINARY
+    // INPUT"), and the list's alarms and trends went unread. Read as a body
+    // row, it is what stripBasPointSectionHeadingRows removes from the list.
+    const texted = [...ownCells].filter((cl) => odlCellText(cl).trim());
+    const ioSectionHeading = texted.length === 1
+      && BAS_POINT_SECTION_HEADING_RE.test(odlCellText(texted[0]).replace(/\s+/g, " ").trim().toUpperCase());
+    const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size) && !tallUnitRow
+      && !ioSectionHeading;
     return { fullCoverage, grouped };
   };
   const headerVocabHitRate = (ownCells: Set<ODLTableCell>): { texts: string[]; hitRate: number } => {

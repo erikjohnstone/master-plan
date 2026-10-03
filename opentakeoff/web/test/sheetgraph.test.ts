@@ -4677,6 +4677,57 @@ describe("scheduleTableFromODL: header-join loop skips spec-metadata rows (task 
   });
 });
 
+describe("scheduleTableFromODL: a point list's I/O section heading is a divider, not a header tier (015_VA AM703)", () => {
+  const IDENTITY = [1, 0, 0, 1, 0, 0];
+  let nextId = 1;
+  const odlCell = (row: number, col: number, text: string, colSpan = 1, rowSpan = 1): ODLTableCell => ({
+    type: "table cell", id: nextId++, "page number": 1,
+    "bounding box": [col * 50, row * 20, col * 50 + 50 * colSpan, row * 20 + 20 * rowSpan],
+    "row number": row, "column number": col, "row span": rowSpan, "column span": colSpan,
+    kids: text ? [{ type: "text", content: text }] : [],
+  });
+  const point = (row: number, mark: string, description: string, alarm: string, trend: string) => ({
+    type: "table row" as const, "row number": row, id: row,
+    cells: [odlCell(row, 1, mark), odlCell(row, 2, description), odlCell(row, 3, alarm), odlCell(row, 4, trend, 2)],
+  });
+  // The right-hand list on AM703 as ODL reads it: the title and each I/O
+  // section's heading merged across five columns, ALARM merged over two, and
+  // an empty sixth column that one cell spans from the first heading down.
+  // That empty cell is the heading row's second cell, and with it half the
+  // row's cells span, which is the grouping-tier test.
+  const buildList = (firstHeading: string): ODLTable => ({
+    type: "table", id: 1, "page number": 1, "bounding box": [0, 0, 350, 180],
+    "number of rows": 8, "number of columns": 6,
+    rows: [
+      { type: "table row", "row number": 1, id: 0, cells: [odlCell(1, 1, "CONDENSER WATER SYSTEM POINTS LIST", 5), odlCell(1, 6, "", 1, 2)] },
+      { type: "table row", "row number": 2, id: 1, cells: [odlCell(2, 1, "MARK"), odlCell(2, 2, "DESCRIPTION"), odlCell(2, 3, "ALARM", 2), odlCell(2, 5, "TREND")] },
+      { type: "table row", "row number": 3, id: 2, cells: [odlCell(3, 1, firstHeading, 5), odlCell(3, 6, "", 1, 6)] },
+      point(4, "BI-1", "CCC-1 SPRAY PUMP STATUS", "NO", "NO"),
+      point(5, "BI-2", "CCC-2 SPRAY PUMP STATUS", "YES", "NO"),
+      { type: "table row", "row number": 6, id: 5, cells: [odlCell(6, 1, "BINARY OUTPUT", 5)] },
+      point(7, "BO-1", "CCC-1 SHUTOFF VALVE", "NO", "YES"),
+      point(8, "BO-2", "CCC-2 SHUTOFF VALVE", "NO", "YES"),
+    ],
+  });
+
+  it("names no column by the heading and keeps every point, each section heading dropped", () => {
+    const t = scheduleTableFromODL(buildList("BINARY INPUT"), "015_VA_test.pdf#24", IDENTITY, {});
+    assert.ok(t, "the list must build");
+    assert.ok(!t!.headers.some((h) => /BINARY|INPUT/.test(h)),
+      `BINARY INPUT must never join the header as a grouping tier: ${JSON.stringify(t!.headers)}`);
+    assert.ok(t!.headers.includes("ALARM") && t!.headers.includes("TREND"), JSON.stringify(t!.headers));
+    assert.deepEqual(t!.rows.map((r) => r.key), ["BI-1", "BI-2", "BO-1", "BO-2"]);
+    assert.equal(t!.rows[1].cells.ALARM?.text, "YES");
+  });
+
+  it("any other row merged the same way still reads as a header tier", () => {
+    const t = scheduleTableFromODL(buildList("CONDENSER WATER"), "015_VA_test.pdf#24", IDENTITY, {});
+    assert.ok(t, "the list must build");
+    assert.ok(t!.headers.some((h) => /CONDENSER WATER/.test(h)),
+      `a merged row that is no I/O heading groups the columns as before: ${JSON.stringify(t!.headers)}`);
+  });
+});
+
 describe("scheduleTableFromODL: a caption drawn OUTSIDE the ruled grid still names the table (goal VECTORGRID_TABLE_BOXES.md, 2026-09-12)", () => {
   const IDENTITY = [1, 0, 0, 1, 0, 0];
   let nextId = 1;

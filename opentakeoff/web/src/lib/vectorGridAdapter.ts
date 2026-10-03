@@ -44,6 +44,7 @@
  * it, and only shows up once a coordinate leaves.
  */
 import {
+  BAS_POINT_SECTION_HEADING_RE,
   scheduleTableFromODL,
   type Bbox,
   type GraphSpan,
@@ -488,6 +489,44 @@ function stackFragments(a: VectorGridTable, b: VectorGridTable): VectorGridTable
   return stripInteriorDividerRows(concatFragments(a, b));
 }
 
+// A POINT LIST'S LATER I/O SECTION DRAWN AS ITS OWN FACE. 015_VA's points
+// lists (AM703-AM706) rule each section apart: vectorgrid returns the title
+// band, the header with the ANALOG INPUT points, then "ANALOG OUTPUT" and its
+// points, then "BINARY OUTPUT" and its points, each a face of its own, a
+// face sometimes carrying the section above's last point again at the seam.
+// Read alone, such a face is no refusal the rescue above takes: it takes its
+// heading for a title and its first point for a header, so AO-1 and BO-1 were
+// lost and the rest made tables titled ANALOG OUTPUT that no points list
+// claimed (75 of 117 points read). A face whose lone I/O heading is followed
+// by points is stacked onto the same-grid list directly above it, the seam's
+// repeated row dropped and the heading stripped as a divider, as the rescue
+// stacks a section of any schedule.
+/** A point's mark: its type letters and number (AI-1, BO-17, AI1). */
+const POINT_MARK_RE = /^(?:[ABDU][IO]|[AB]V)[\s\-]?\d{1,3}[A-Z]?$/;
+
+function textedCells(t: VectorGridTable, row: number): VectorGridCell[] {
+  return t.cells.filter((c) => c.row === row && (c.text || "").trim());
+}
+
+function isPointSectionHeadingRow(t: VectorGridTable, row: number): boolean {
+  const cells = textedCells(t, row);
+  return cells.length === 1 && (cells[0].colSpan || 1) >= t.cols - 1
+    && BAS_POINT_SECTION_HEADING_RE.test(cells[0].text.replace(/\s+/g, " ").trim().toUpperCase());
+}
+
+function leadsWithPointMark(t: VectorGridTable, row: number): boolean {
+  const lead = t.cells.find((c) => c.row === row && c.col === 0);
+  return Boolean(lead) && POINT_MARK_RE.test((lead!.text || "").replace(/\s+/g, " ").trim().toUpperCase());
+}
+
+// exported for tests
+function isPointSectionFragment(t: VectorGridTable): boolean {
+  if (t.cols < 2) return false;
+  const heading = isPointSectionHeadingRow(t, 0) ? 0
+    : leadsWithPointMark(t, 0) && isPointSectionHeadingRow(t, 1) ? 1 : -1;
+  return heading >= 0 && leadsWithPointMark(t, heading + 1);
+}
+
 /** Run vectorgrid for one sheet. Throws on an engine failure or a coordinate
  * disagreement — never returns an empty list to mean "it did not run". */
 export async function extractScheduleTablesFromVectorGrid(
@@ -508,30 +547,50 @@ export async function extractScheduleTablesFromVectorGrid(
     );
   }
 
+  return { ...scheduleTablesFromVectorGridReply(reply.tables, page, ctx, scale), ms: Date.now() - started };
+}
+
+/** One sheet's vectorgrid tables as schedule tables: each read alone, then
+ * the split fragments of one schedule stacked and read again (the rescue
+ * above). The sidecar's reply in, no process: the grid replay reads saved
+ * replies through it as the pipeline does. */
+export function scheduleTablesFromVectorGridReply(
+  tables: VectorGridTable[],
+  page: number,
+  ctx: Parameters<typeof vectorGridTableToScheduleTable>[2],
+  scale: number,
+): Omit<VectorGridSheetResult, "ms"> {
   interface Attempt { raw: VectorGridTable; built: ScheduleTable | null; why: string }
 
   let rasters = 0;
   const attempts: Attempt[] = [];
-  for (const t of reply.tables) {
+  for (const t of tables) {
     if (t.raster) { rasters++; continue; }
     let why = "raster or empty";
     const built = vectorGridTableToScheduleTable(t, page, ctx, scale, (r) => { why = r; });
     attempts.push({ raw: t, built, why });
   }
 
-  // Repeatedly stack one merge-eligible, still-unbuilt fragment onto a
-  // directly-adjacent neighbour (built or not) until nothing more merges.
-  // Bounded round count guards against any unforeseen cycle; every real
-  // fragment chain found in the corpus so far is 2-3 deep.
-  for (let round = 0; round < 6; round++) {
+  // Repeatedly stack one merge-eligible fragment onto a directly-adjacent
+  // neighbour (built or not) until nothing more merges: a still-unbuilt
+  // fragment the rescue takes, or a point list's I/O section (built alone or
+  // not) onto the list above it. Each merge removes one attempt, so the
+  // round count bounds the work; it guards against any unforeseen cycle.
+  // A point-list page needs one merge per section (015_VA's AM704: ten).
+  const rounds = attempts.length;
+  for (let round = 0; round < rounds; round++) {
     let mergedThisRound = false;
     outer: for (let i = 0; i < attempts.length; i++) {
       const cand = attempts[i];
-      if (cand.built || !isMergeEligibleFragment(cand.raw, cand.why)) continue;
+      const section = isPointSectionFragment(cand.raw);
+      if (!section && (cand.built || !isMergeEligibleFragment(cand.raw, cand.why))) continue;
       for (let j = 0; j < attempts.length; j++) {
         if (j === i) continue;
         const other = attempts[j];
         if (!isFragmentAdjacent(cand.raw, other.raw)) continue;
+        // A section continues the list above it, never one below, nor
+        // another section that has not yet found its list.
+        if (section && (other.raw.bbox[1] >= cand.raw.bbox[1] || isPointSectionFragment(other.raw))) continue;
         const mergedRaw = stackFragments(other.raw, cand.raw);
         const rebuilt = vectorGridTableToScheduleTable(mergedRaw, page, ctx, scale);
         if (rebuilt) {
@@ -554,8 +613,8 @@ export async function extractScheduleTablesFromVectorGrid(
     if (a.built) out.push(a.built);
     else { skipped++; rejects.push(`${a.raw.rows}x${a.raw.cols} at ${a.raw.bbox.map(Math.round).join(",")}: ${a.why}`); }
   }
-  return { tables: out, skipped, rasters, cells, orphanWords, rejects, ms: Date.now() - started };
+  return { tables: out, skipped, rasters, cells, orphanWords, rejects };
 }
 
 export type { Bbox };
-export { isFragmentAdjacent, stackFragments };
+export { isFragmentAdjacent, isPointSectionFragment, stackFragments };

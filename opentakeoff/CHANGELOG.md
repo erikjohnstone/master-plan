@@ -1,5 +1,18 @@
 # Changelog
 
+- **A points list printed in I/O sections reads whole.** 015_VA's AM703–AM706 print nine points lists, each in
+  sections (ANALOG INPUT, ANALOG OUTPUT, BINARY INPUT, BINARY OUTPUT) under MARK | DESCRIPTION | ALARM | TREND. The
+  table engine rules each section off as a face of its own, and only a list's first face carries its title and
+  header: the faces below were refused as untitled fragments or kept as tables headed by their first point
+  (ANALOG OUTPUT [AO-1, BYPASS VALVE, NO, YES]). A face that opens with an I/O section heading (or with the section
+  above's last point repeated at the seam, then the heading) and then a point now stacks onto the list face above
+  it, the repeated point dropped as before; never onto a list below it, nor onto another section's face. Read from
+  ODL, AM703's BINARY INPUT heading, merged across the list beside an empty column ruled the list's height, read as
+  a header tier and named every column with it ("TREND BINARY INPUT"): a row whose one printed cell is an I/O
+  section heading is now a divider, dropped like the list's other headings. 015_VA: 75 points (33 alarms, 52
+  trends) → 117 (38, 83), the count of its renders, and re-keyed from them (the key's 39 points were not). Grid
+  replay over 388 saved pages: only 015_VA's four point-list pages change. Of 18,334 cached ODL tables, only
+  015_VA's and 001_NC's points lists print such a heading row; 001_NC rebuilt is unchanged (91 tables, 546 points).
 - **Split systems by their ductless marks and other titles; unit heater captions; a graph cache keyed by the
   table engine's interpreter.** 015_VA's mini-split schedules key each wall unit DSS-n beside its outdoor unit's
   OUTDOOR UNIT MARK CU-n, and its gatehouse prints SS-1 under SPLIT SYSTEM AIR CONDITIONER HEAT PUMP SCHEDULE;

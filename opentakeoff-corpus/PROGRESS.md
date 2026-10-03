@@ -133,7 +133,11 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   at 6fabaeb; the row count grew with the later point-list reading work (AS-132..135). Replaying the BAS compile
   on saved graphs gives the same totals at c637a3d (before the 2026-10-02 batch) and at c7e48ee (021_XX 109/109,
   015_VA 75/75), so the batch changed nothing here. The key needs re-counting from the drawings' point lists
-  before this test means anything; not edited to pass.
+  before this test means anything; not edited to pass. 015_VA was re-counted from its renders on 2026-10-03 (117
+  points, which the takeoff now reads) and passes the row check, then fails the next: 2 of 35 served targets MATCH
+  (floor 15), 25 AMBIGUOUS by the exact-tag rule below ("matching symbol geometry was not verified"), 8
+  SCHEDULE_ONLY. The sweep is identical at e157911 (75 points; the same 35 targets and tallies). 021_XX is still to
+  re-count.
 - MCP `valvePlanPaint.regression` (6 of 7 sets) fails its MATCH floor: every valve target sweeps to AMBIGUOUS,
   "Exact plan tag text was found, but matching symbol geometry was not verified" (062_ID 31 of 31, need >= 10
   MATCH). That verdict is `classifyBasServedSweepOutcome`'s rule from #94 (13dea24). 062_ID run alone fails
@@ -254,6 +258,39 @@ being saved as a regression check of the mark-prefix change, which touches every
 3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
+
+### Points lists printed in I/O sections; 015_VA's BAS points re-keyed (2026-10-03)
+
+015_VA's key read 39 BAS points and the takeoff 75. AM703–AM706 print nine points lists (the condenser water
+system's, in two columns, the fan coil, generator exhaust fan, exhaust fan, unit heater, medium-pressure air
+compressor relief, domestic water meter, gatehouse and ductless split system), each in I/O sections under MARK |
+DESCRIPTION | ALARM | TREND. Counted from the renders: 117 points (AI 31, AO 10, BI 43, BO 33), 38 alarmed and 83
+trended (AM703 69, 16, 50; AM704 30, 13, 27; AM705 10, 5, 3; AM706 8, 4, 3). Two readers lost the sections below a
+list's first:
+
+- The table engine rules each section off as a face. Only a list's first face carries its title and header; the
+  faces below were refused as untitled fragments or kept as tables headed by their first point (ANALOG OUTPUT [AO-1,
+  BYPASS VALVE, NO, YES]). Some faces open with the section above's last point, repeated at the seam. Rule
+  (vectorGridAdapter.ts, `isPointSectionFragment`): a face whose first row, or second after a repeated point, is an
+  I/O heading across the columns, followed by a point mark, stacks onto the nearest list face above it (never one
+  below, never another section's face); concatFragments drops the repeated row as before.
+- ODL: the right-hand list on AM703 wins adoption with six headers (MARK, DESCRIPTION, ALARM, ALARM 2, TREND, COL6;
+  values read right). Its BINARY INPUT row also owns the empty sixth column's cell (row span 42), so half its cells
+  span and classifyBodyRow read it as a grouping tier, naming every column with it. Rule (sheetgraph.ts): a row whose
+  one printed cell is an I/O section heading is a divider, not a header tier; stripBasPointSectionHeadingRows drops
+  it. The heading pattern is now shared (BAS_POINT_SECTION_HEADING_RE, which also reads plurals and UNIVERSAL).
+
+Measured: grid replay, 2,359 tables, none changed; per reply over 388 saved pages, only 015_VA p24–p27 change
+(rows 12,087 → 12,109). Of 682 cached ODL reads (18,334 tables), rows whose one printed cell is an I/O heading occur
+in 015_VA's and 001_NC's points lists only; both rebuilt at e157911 and with the change: 001_NC identical (91
+tables, 396 units, 546 points), 015_VA 44 → 36 tables (14 section fragments → 6 whole lists), 96 units unchanged,
+points 75 → 117, alarms 33 → 38, trends 52 → 83, every BAS field equal to the re-keyed counts. Tests:
+vectorGridAdapter (section stacking, the seam row, the direction rule; each fails at base) and sheetgraph (the
+divider on AM703's own cell layout, failing at base; any other merged row still groups). Not adopted: a junk-aware
+tableCompleteness (headers named COL n or repeated not counted). It flipped 1 of 1,065 adoption decisions but
+would score 233 of 1,019 vectorgrid winners lower (their spanning duplicates).
+
+015_VA against its key now misses only GRD (9 of 10, below).
 
 ### Split systems by their ductless marks; 015_VA and 035_AR re-keyed; graph cache keyed by interpreter (2026-10-03)
 
