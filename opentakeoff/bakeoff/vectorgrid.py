@@ -57,7 +57,7 @@ and the placement rectangles carry the rest, before a single OCR call.
 from __future__ import annotations
 
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 import pdfplumber
 import pymupdf
@@ -1038,12 +1038,174 @@ def _merge_collinear(segs: list[tuple]) -> list:
     return out + other
 
 
+# A RULE DRAWN DASHED IS A RULE. CAD exports a dashed line as its dashes:
+# 061_IA's M-502 rules five points lists' rows and columns in 4.6 pt dashes
+# 4.4 pt apart (only the title and header bands are solid), and with every gap
+# open no row closes into a cell — the lists formed header-only grids and none
+# of their 180 points was read. A dashed line is many short strokes on one
+# line at a regular gap; its dashes join into the one rule it draws. Only a
+# table's: a plan's hidden and demolition lines are dashed too, so a dashed
+# line joins only where both its ends meet a rule across it (a frame), and
+# rows only in a group of DASH_ROWS_MIN with the same ends whose bands are
+# lettered at their left, as a list names each row's entry in its first column
+# (a hatch's bands hold no text; a framing plan's or an elevation's labels sit
+# anywhere along their lines), and whose rules pass between their letters, not
+# through them (004_MO's reflected ceiling plan lays its fixture tags across a
+# dashed ceiling grid: its rules cross one letter in ten, the lists' none of
+# 8,463); a dashed column joins where it lies within such a group and crosses
+# two of its rows. A pattern that stops a gap short of its frame (061_IA's
+# heat recovery list ends each row 7 pt short of the border) runs on to the
+# frame.
+DASH_LEN_MAX = 12.0   # a dash is no longer than this
+DASH_MIN = 8          # a dashed line has at least this many dashes ...
+DASH_GAP_MAX = 6.0    # ... and its usual gap is no wider than this
+DASH_END_TOL = 1.0    # how far a dashed rule may overrun the frame it ends on
+DASH_ROWS_MIN = 5     # a table rules at least this many rows dashed alike ...
+DASH_TEXT_BANDS = 0.75  # ... and this share of the bands between them hold text
+DASH_TEXT_LEFT = 0.3  # ... in this share of the row's width from its left end
+DASH_CROSSED_MAX = 0.01  # ... and its rules run through no more than this share of its letters
+
+
+def _frame_at(index: dict, lo: float, hi: float, along: float):
+    """The coordinate in [lo, hi] of a rule in `index` that spans `along`,
+    the one nearest the window's middle; None if there is none."""
+    best, mid = None, (lo + hi) / 2
+    for key in range(int(lo) - 1, int(hi) + 2):
+        for c, a, b in index.get(key, ()):
+            if lo <= c <= hi and a - DASH_END_TOL <= along <= b + DASH_END_TOL:
+                if best is None or abs(c - mid) < abs(best - mid):
+                    best = c
+    return best
+
+
+def _bridge_dashed_rules(segs: list[tuple], chars=(), origin: tuple = (0.0, 0.0)) -> list[tuple]:
+    """Each table's dashed rules joined into the rules they draw; every other
+    stroke as it was (see DASH_LEN_MAX above). `chars` are the page's
+    characters, in the page's own coordinates (`origin` is subtracted, as
+    segments_from_page does). A page with no dashed table returns its strokes
+    unchanged."""
+    lines: dict = defaultdict(list)
+    for s in segs:
+        x0, y0, x1, y1, _ = s
+        if y0 == y1:
+            lines[("h", y0)].append(s)
+        elif x0 == x1:
+            lines[("v", x0)].append(s)
+    chains = []   # [axis, at, lo, hi, weight, runs, reach]
+    for (axis, at), ss in lines.items():
+        runs = sorted((((min(s[0], s[2]), max(s[0], s[2])) if axis == "h"
+                        else (min(s[1], s[3]), max(s[1], s[3]))), s[4]) for s in ss)
+        short = [r for r in runs if r[0][1] - r[0][0] <= DASH_LEN_MAX]
+        gaps = [round(b[0][0] - a[0][1], 1) for a, b in zip(short, short[1:])
+                if 0 < b[0][0] - a[0][1] <= DASH_GAP_MAX]
+        if len(short) < DASH_MIN or len(gaps) < DASH_MIN // 2:
+            continue
+        # A cell's dashes restart at each column, so the gap across a crossing
+        # is wider than the pattern's own: twice its usual gap still joins.
+        reach = 2 * Counter(gaps).most_common(1)[0][0]
+        group, hi = [runs[0]], runs[0][0][1]
+        for r in runs[1:] + [((float("inf"), float("inf")), 0.0)]:
+            if r[0][0] - hi <= reach:
+                group.append(r)
+                hi = max(hi, r[0][1])
+                continue
+            if sum(1 for (a, b), _ in group if b - a <= DASH_LEN_MAX) >= DASH_MIN // 2:
+                chains.append([axis, at, group[0][0][0], hi, max(w for _, w in group), group, reach])
+            group, hi = [r], r[0][1]
+    if not chains:
+        return segs
+    # Frames: a rule's strokes merged where they touch (a border drawn a row
+    # at a time is one rule) and longer than a dash; and every dashed chain.
+    frames = {"h": defaultdict(list), "v": defaultdict(list)}
+    for (axis, at), ss in lines.items():
+        runs = sorted(((min(s[0], s[2]), max(s[0], s[2])) if axis == "h"
+                       else (min(s[1], s[3]), max(s[1], s[3]))) for s in ss)
+        lo, hi = runs[0]
+        for a, b in runs[1:] + [(float("inf"), float("inf"))]:
+            if a <= hi + 0.5:
+                hi = max(hi, b)
+                continue
+            if hi - lo > DASH_LEN_MAX:
+                frames[axis][int(at)].append((at, lo, hi))
+            lo, hi = a, b
+    for axis, at, lo, hi, *_ in chains:
+        frames[axis][int(at)].append((at, lo, hi))
+    framed = []
+    for axis, at, lo, hi, w, group, reach in chains:
+        across = frames["v" if axis == "h" else "h"]
+        start = _frame_at(across, lo - reach, lo + DASH_END_TOL, at)
+        end = _frame_at(across, hi - DASH_END_TOL, hi + reach, at)
+        if start is not None and end is not None:
+            framed.append((axis, at, min(lo, start), max(hi, end), w, group))
+    rows: dict = defaultdict(list)
+    for i, (axis, at, lo, hi, *_rest) in enumerate(framed):
+        if axis == "h":
+            rows[(round(lo), round(hi))].append(i)
+    ox, oy = origin
+    # Upright characters only: a dimension lettered up the side of a hatch
+    # (004_MO's elevations) puts a character in every band it passes.
+    centres = sorted((((c["top"] + c["bottom"]) / 2 - oy, (c["x0"] + c["x1"]) / 2 - ox,
+                       (c["bottom"] - c["top"]) / 4) for c in chars if c.get("upright", True)))
+    heights = [y for y, _, _ in centres]
+
+    def lettered(ids) -> bool:
+        left, right = framed[ids[0]][2], framed[ids[0]][3]
+        name_end = left + DASH_TEXT_LEFT * (right - left)
+        ys = sorted(framed[i][1] for i in ids)
+        bands = list(zip(ys, ys[1:]))
+        held = sum(1 for a, b in bands
+                   if any(left < x < name_end for _, x, _ in centres[bisect_left(heights, a):bisect_left(heights, b)]))
+        return held >= DASH_TEXT_BANDS * len(bands)
+
+    def clear(ids) -> bool:
+        # A rule runs through a letter where it crosses the letter's middle half.
+        left, right = framed[ids[0]][2], framed[ids[0]][3]
+        ys = sorted(framed[i][1] for i in ids)
+        letters = crossed = 0
+        for y, x, quarter in centres[bisect_left(heights, ys[0]):bisect_left(heights, ys[-1])]:
+            if not left < x < right:
+                continue
+            letters += 1
+            k = bisect_left(ys, y)
+            crossed += any(abs(ys[j] - y) < quarter for j in (k - 1, k) if 0 <= j < len(ys))
+        return crossed <= DASH_CROSSED_MAX * letters
+
+    tables = [ids for ids in rows.values() if len(ids) >= DASH_ROWS_MIN and lettered(ids) and clear(ids)]
+    joined = {i for ids in tables for i in ids}
+    for i, (axis, at, lo, hi, *_rest) in enumerate(framed):
+        if axis != "v":
+            continue
+        for ids in tables:
+            left, right = framed[ids[0]][2], framed[ids[0]][3]
+            crossed = sum(1 for j in ids if lo - DASH_END_TOL <= framed[j][1] <= hi + DASH_END_TOL)
+            if left + DASH_END_TOL < at < right - DASH_END_TOL and crossed >= 2:
+                joined.add(i)
+                break
+    if not joined:
+        return segs
+    out = [s for s in segs if not (s[1] == s[3] or s[0] == s[2])]
+    taken = set()
+    for i in sorted(joined):
+        axis, at, lo, hi, w, group = framed[i]
+        taken.update((axis, at, a, b) for (a, b), _ in group)
+        out.append((lo, at, hi, at, w) if axis == "h" else (at, lo, at, hi, w))
+    for s in segs:
+        x0, y0, x1, y1, _ = s
+        if y0 == y1 and ("h", y0, min(x0, x1), max(x0, x1)) in taken:
+            continue
+        if x0 == x1 and y0 != y1 and ("v", x0, min(y0, y1), max(y0, y1)) in taken:
+            continue
+        if y0 == y1 or x0 == x1:
+            out.append(s)
+    return out
+
+
 def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     """-> {tables: [{bbox, cells:[bbox], n_cells}], diagnostics: {...}}"""
     with pdfplumber.open(pdf_path) as doc:
         page = doc.pages[page_no - 1]
-        segs = _snap_grid(segments_from_page(page))
         chars = page.chars
+        segs = _bridge_dashed_rules(_snap_grid(segments_from_page(page)), chars, page_origin(page))
         # The renderer's own box, not pdfplumber's `page.width`/`page.height`
         # (which default to the MediaBox regardless of CropBox) — see
         # `_effective_box`'s own comment for why this must agree with

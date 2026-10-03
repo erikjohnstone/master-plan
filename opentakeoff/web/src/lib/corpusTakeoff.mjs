@@ -3736,6 +3736,21 @@ function isBasTotalsRow(tag) {
     .test(String(tag || "").replace(/\s+/g, " ").trim());
 }
 
+/** A row that prints its own table's column labels again, no point: a list
+ * stacked under another with the same columns is read into it, its header
+ * with it (061_IA's HEATING HOT WATER PLANT POINTS LIST under its VAV zone
+ * list: "POINT DESCRIPTION | UNIT | TYPE"). At least two of its cells print
+ * their own column's label. */
+function isBasHeaderEchoRow(row) {
+  const norm = (v) => String(v ?? "").replace(/\s+/g, " ").trim().toUpperCase();
+  let echoes = 0;
+  for (const [header, cell] of Object.entries(row?.cells || {})) {
+    const text = norm(cell?.text ?? cell);
+    if (text && text === norm(header)) echoes += 1;
+  }
+  return echoes >= 2;
+}
+
 /** Column-label rows that are not countable I/O or points marks. */
 function isBasPointsHeaderRow(tag) {
   return !tag || /^(?:TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?|(?:ANALOG|BINARY|DIGITAL)\s+(?:INPUT|OUTPUT))$/i.test(tag);
@@ -3963,7 +3978,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       const tag = basRowTag(row, table);
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       return !isBasPointsHeaderRow(tag) && !isBasSectionLabelRow(row) && !isBasBlankNumberedRow(row)
-        && !isBasTotalsRow(tag) && row !== tickColumns.labelRow;
+        && !isBasTotalsRow(tag) && !isBasHeaderEchoRow(row) && row !== tickColumns.labelRow;
     });
     // A PLC I/O LIST counts each device's I/O under its ANALOG and DIGITAL
     // columns: a device it counts none for is wired to no input or output

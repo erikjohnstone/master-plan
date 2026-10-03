@@ -393,6 +393,33 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.equal(list.rows, 2);
   });
 
+  // 061_IA's M-502 stacks its HEATING HOT WATER PLANT POINTS LIST under its
+  // VAV zone list on the same columns; read as one table, the lower list's
+  // header ("POINT DESCRIPTION | UNIT | TYPE") sits between the two lists'
+  // points (#316).
+  it("does not count a row that prints its own columns' labels as a point", () => {
+    const headers = ["POINT DESCRIPTION", "UNIT", "TYPE DI", "TYPE AI", "TYPE DO", "TYPE AO", "ALARMS"];
+    const row = (cells: string[]) => ({
+      key: cells[0], cells: Object.fromEntries(headers.map((h, i) => [h, { text: cells[i] ?? "" }]).filter(([, c]) => (c as { text: string }).text)),
+    });
+    const list = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#57", number: 57 }],
+      tables: [{
+        kind: "equipment", sheet: "set.pdf#57", title: { text: "TYPICAL VARIABLE AIR VOLUME ZONE POINTS LIST" }, headers,
+        rows: [
+          row(["HEATING PLANT REQUESTS", "-", "X"]),
+          row(["POINT DESCRIPTION", "UNIT", "TYPE", "TYPE", "TYPE", "TYPE", "ALARMS"]),
+          row(["NUMBER OF HEATING REQUESTS", "-", "X"]),
+          row(["STEAM PRESSURE", "PSIG", "", "X", "", "", "IF GREATER THAN 20 PSIG (adj.)"]),
+          // A point whose only echo is its own description is still a point.
+          row(["UNIT", "-", "", "", "X"]),
+        ],
+      }],
+    }).categories.points_lists.lists[0];
+    assert.deepEqual(list.items.map((i: { tag: string }) => i.tag), ["HEATING PLANT REQUESTS", "NUMBER OF HEATING REQUESTS", "STEAM PRESSURE", "UNIT"]);
+    assert.equal(list.rows, 4);
+  });
+
   // 041_IL's 40-AHU-2 POINTS LIST: SUPPLY AIR TEMPERATURE | AI-1 | SA-T, its
   // type columns ticked with drawn dots no text reads.
   it("types a point named in words by its list's point-ID column", () => {

@@ -5,6 +5,19 @@
   them that only an interactive area trace uses. The vertices are now packed outside the JavaScript heap and the snap
   grid is built from them on the first trace that snaps. 01_NY (162 sheets): peak heap 3.0 -> 1.8 GB, peak memory
   3.8 -> 3.3 GB; the graphs are identical and a traced room snaps to the same corners.
+- **A table ruled in dashes reads row by row.** CAD exports a dashed line as its dashes. 061_IA's M-502 rules five
+  points lists' rows and columns in 4.6 pt dashes 4.4 pt apart, only their title and header bands solid; with every
+  gap open no row closed into a cell, so the table extractor found each list's header band alone and none of its 180
+  points was read. A dashed line's dashes now join into the rule they draw where they rule a table: both ends meet a
+  rule across them (a dash pattern that stops a gap short of its border runs on to it), at least five rows share the
+  same ends, three in four of the bands between them are lettered upright in the row's left third (a list names each
+  row's entry first), the rules pass between the letters rather than through them, and a dashed column joins inside
+  such rows. A plan's hidden and demolition lines, hatches, a framing plan's members, an elevation's coursing and a
+  reflected ceiling plan's grid, its fixture tags lettered across it (004_MO), stay as drawn; one cable tray plan's
+  equipment racks, outlined in dashes and lettered at their left (02_UT), join into a grid the takeoff reads nothing
+  from. And a row that prints its own table's column labels again (a second list stacked on the same columns and read
+  into the first) is no point. 061_IA now reads 180 points, AI 63, AO 44, BI 40, BO 26, each list's count and types as
+  printed; its key is keyed from the sheet.
 - **Dehumidification units and heat recovery units read under their own titles.** 063_MT's DEHUMIDIFICATION UNIT
   SCHEDULE lists DU-1; the dehumidifier family read only a DEHUMIDIFIER SCHEDULE and DH-n marks, so the unit went
   uncounted. 061_IA's bid alternate CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE lists HRU-A; the energy recovery

@@ -92,6 +92,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 1f14392 | 12_MT (12 -> 19) and 22_GA (17 -> 51) keys re-keyed from the renders: split systems, VRF units, an ERV and a water heater the keys missed; both WP1 PASS |
 | b78a9e6 | Tests that build a graph close the sidecars the build starts: valvePlanPaint.regression exits after its last test (it never did) |
 | 0c51888 | Control drawings: a hospital's infection control while it is built on (the VA's ICRA matrix, its dust barriers) is another trade's control, no packet (CI-76, finder v8) |
+| 26051e0 | Graph builds keep each sheet's vertices packed and build its snap grid on the first trace: 01_NY peak heap 3,050 -> 1,755 MB, graphs identical (#321) |
 
 ## Known limits (documented, not fixed)
 
@@ -630,6 +631,49 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   linework's vertices; it fails on the code before it. MCP session, tools, labels, overlap, conformance, raster and
   parity: 181 of 183 (the two failures fail identically at HEAD: conformance find_schedule, known; the navfac
   sweep_schedule_row test, added under Known failing tests).
+- Tables ruled in dashes (#316; vectorgrid `_bridge_dashed_rules`, `corpusTakeoff` BAS candidates). 061_IA's M-502
+  POINT LISTS (sheet 57) rules its five points lists' rows and columns in 4.6 pt dashes 4.4 pt apart; only the title
+  and header bands are solid. The PDF draws each dash as its own stroke, so no row closed into a cell: vectorgrid
+  found each list's header band alone (tables of 9 to 19 cells) and none of its points was read. A dashed line's
+  dashes now join into the rule they draw where they rule a table: at least 8 dashes no longer than 12 pt on one line
+  at a usual gap of at most 6 pt (across a column crossing, up to twice that gap); both ends meet a rule across the
+  line, solid or dashed, within that reach (061_IA's heat recovery plant list stops each row 7 pt short of its
+  border); at least 5 such rows share the same ends; three in four of the bands between them hold an upright letter in
+  the row's left 30% (a list names each row's entry in its first column); and the rows run through at most 1% of the
+  letters between them (a rule crosses a letter where it passes through the letter's middle half). A dashed column
+  joins where it lies inside such rows and crosses two of them. 061_IA's two groups (86 and 95 rows): 0 of 3,886 and 0
+  of 4,577 letters crossed. 004_MO's reflected ceiling plan (sheet 44) passed every test but the last in three groups,
+  its dashed ceiling grid under fixture tags (crossing 79 of 766, 4 of 106 and 85 of 856 letters); joined, its grid
+  formed different junk tables (nothing read either way); with the crossing test the page is untouched. Page A/B over
+  every page of every keyed set's PDF (4,770 pages of 114 sets; 001_NC is not opened; no page errors): without the
+  crossing test the rule would fire on 13 pages (004_MO 44; 061_IA 57; 26_CA 18; 01_NY 66, 73 and 74; 04_NV 64; 02_UT
+  101; 5 pages of walled sets), with it on 7. It joins rules on 061_IA's sheet 57; on 04_NV's sheet 64 (184 strokes,
+  and the page's tables stay as they were); on 4 pages of one walled set, whose tables change (its graphs at HEAD and
+  at this batch's code hold as many tables and compile the same; totals only); and on 02_UT's sheet 101, an electrical
+  grounding and cable tray plan whose equipment racks are outlined in dashes lettered MPGP, REAR and FRONT; there the
+  junk grids over the racks (23 and 9 cells) become one (95 cells), and 02_UT's graphs built at HEAD and at this
+  batch's code hold the same 62 tables (that grid is dropped before the graph either way) and compile nothing either
+  way. The pass costs 35 ms on that page and 82 ms on 061_IA's (against 2.0 and 2.6 s to read and snap their strokes),
+  and on 061_IA's it leaves 894 strokes of 23,226 for the grid finder. There 213 rules join and the header-only tables
+  (9, 9 and 19 cells) become four tables of 598, 192, 234 and 279 cells, each point row its own 7 cells. vectorgrid
+  then reads the VAV zone list and the HEATING HOT WATER PLANT POINTS LIST stacked under it (same columns) as one
+  table, the second list's header row read into it: a row that prints two of its own table's column labels is no point
+  (`isBasHeaderEchoRow`). Compile A/B of that rule over the 119 saved graphs: no set's BAS totals change. 061_IA now
+  reads 180 points, AI 63, AO 44, BI 40, BO 26: the text layer's 180 point rows (AHU 85, EF 26, heat recovery plant
+  32, VAV 12, HHW 25), 173 ticked under DI/AI/DO/AO and 7 untyped (three exhaust fans' isolation damper position and
+  command, HRU-A's coil differential pressure). The #315 note's "about 245 points" was an estimate; the key's
+  bas_points is keyed from the text layer and the render. Limit: the HHW list's title row is lost in the merge, so its
+  25 points carry the VAV list's title (4 lists read of 5; counts and types right). Tests: vectorGridDashedRules (the
+  HHW list's own ruling and words redrawn: each point its own row, its tick under its type, STEAM PRESSURE beside
+  PSIG; without its side borders, and with every word lowered half a row so the rules run through its letters, no
+  point row forms) and corpusTakeoffBas (a row echoing its columns' labels is no point); each fails on the code before
+  it. Guard: the vectorgrid sidecar tests 76 of 76, the compile tests 156 of 156, typecheck clean, lint 0 errors (3
+  warnings, as at HEAD); MCP session, tools, labels, overlap, conformance, raster and parity tests with this
+  vectorgrid 181 of 183 (the two fail the same at HEAD). Cost, timed page by page in one process: vectorgrid over
+  22_GA's 84 pages 113.5 s at HEAD's code, 115.1 s with the pass (2.4 s of it the pass itself). A set's first build
+  after this lands re-reads its pictured tables (the picture cache is keyed by the sidecar's source; Known limits):
+  22_GA's first build at the batch's code re-read 63 pictures, its table stage 1,426 s against 89 s at HEAD's with the
+  cache warm (an A/B running beside it).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
