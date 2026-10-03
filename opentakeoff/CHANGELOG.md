@@ -1,5 +1,17 @@
 # Changelog
 
+- **Point types labelled direction first; a type's alarm column beside the point's own type.** 017_MD's three DDC
+  INPUT/OUTPUT POINT SCHEDULEs tick each device under INPUT TO DDC or OUTPUT FROM DDC, then ANALOG or BINARY, then
+  what it measures or commands (TEMPERATURE, STATUS, SPEED, ON / OFF), and 05_MO's four AHU POINTS LISTs under SYSTEM
+  INPUTS or SYSTEM OUTPUTS, then BINARY or ANALOG. The type reader expected the type last (ANALOG INPUTS), so none of
+  their points was typed. A label that names the direction first and the signal next now types its ticks: 05_MO reads
+  AI 52, AO 24, BI 23 and BO 9 of its 111 points, and 017_MD AI 23, AO 7, BI 10 and BO 2 of its 62 rows (its other
+  rows are devices that tick several types, a fan's airflow, status and speed on one row, and stay untyped). Most of
+  05_MO's analog inputs also tick SYSTEM INPUTS BINARY ALARM: on the render each is one point under one tag (T-6
+  LEAVING COIL TEMPERATURE) that raises an alarm, not a binary input beside an analog one. A type's alarm column now
+  yields to the type the row ticks elsewhere and marks the point's alarm; ticked alone (017_MD's SMOKE DETECTOR) it is
+  still a binary alarm input. A compile A/B over 50 freshly built and 194 cached graphs changes only these two sets,
+  and only their types: rows, alarms and trends are as before.
 - **Convectors on their own schedule; a point between two numbers in a printed mark.** 033_MN's CONVECTOR SCHEDULE
   lists 39 wall convectors, CV-2.1 to CV-4D.2, each under its room, and 016_NY's lists one, C-1, under UNIT NO.; no
   family read either. A table titled CONVECTOR (not a points list, DDC or valve table) now reads its units by their

@@ -3515,6 +3515,11 @@ export function isBasPointTypeTable(table) {
  * word (028_TX's AI | AO | DI | DO columns, HARDWARE POINTS DI). */
 const BAS_TYPE_LABEL_RE = /\b(DIGITAL|BINARY|DISCRETE|ANALOG)\s+(INPUT|OUTPUT)S?$/i;
 const BAS_TYPE_ABBR_RE = /(?:^|\s)(AI|AO|BI|BO|DI|DO)$/i;
+/** A point's I/O type named direction first, over the signal and then what
+ * is measured or commanded (017_MD's DDC INPUT/OUTPUT POINT SCHEDULEs:
+ * INPUT TO DDC, ANALOG, TEMPERATURE; 05_MO's AHU POINTS LISTs: SYSTEM
+ * OUTPUTS, BINARY, START / STOP). */
+const BAS_TYPE_DIRECTION_FIRST_RE = /\b(INPUT|OUTPUT)S?\s+(?:(?:TO|FROM)\s+(?:THE\s+)?(?:DDC|BAS|BMS|EMS|PLC|CONTROLLERS?)\s+)?(DIGITAL|BINARY|DISCRETE|ANALOG)\b/i;
 /** A software point's kind named at the end of a column label (BACnet's
  * binary, analog and multistate values are software objects: AV, BV, MV). */
 const BAS_SOFT_LABEL_RE = /\b(?:BINARY|ANALOG|MULTI[\s-]?STATE|MULTISTAGE)\s+(?:VARIABLE|VALUE)S?$|(?:^|\s)(?:AV|BV|MV|MSV)$/i;
@@ -3529,6 +3534,8 @@ function basLabelType(text) {
   const label = String(text || "").replace(/\s+/g, " ").trim();
   const io = label.match(BAS_TYPE_LABEL_RE);
   if (io) return `${/^ANALOG$/i.test(io[1]) ? "A" : "B"}${/^INPUT$/i.test(io[2]) ? "I" : "O"}`;
+  const first = label.match(BAS_TYPE_DIRECTION_FIRST_RE);
+  if (first) return `${/^ANALOG$/i.test(first[2]) ? "A" : "B"}${/^INPUT$/i.test(first[1]) ? "I" : "O"}`;
   const abbr = label.match(BAS_TYPE_ABBR_RE)?.[1].toUpperCase();
   return abbr ? abbr.replace(/^D/, "B") : null;
 }
@@ -3562,10 +3569,16 @@ function basTickColumns(table) {
 
 /** What a row's ticks say: its type when one type column is ticked (two is a
  * conflict) and whether that column's label says it is hard wired, a
- * software point when only a variable column is, and its trend and alarm. */
+ * software point when only a variable column is, and its trend and alarm.
+ * A type's alarm column (05_MO's SYSTEM INPUTS BINARY ALARM) is the alarm a
+ * point raises where the row ticks its type in another column: T-6 LEAVING
+ * COIL TEMPERATURE ticks it beside ANALOG TEMPERATURE, one analog input that
+ * alarms. Ticked alone, it is a binary alarm input. */
 function basTickEvidence(row, columns) {
   const ticked = columns.filter((col) => BAS_TICK_RE.test(String(row.cells?.[col.header]?.text || "").trim()));
-  const typed = ticked.filter((col) => col.type);
+  const typedAny = ticked.filter((col) => col.type);
+  const typedOwn = typedAny.filter((col) => !col.alarm);
+  const typed = typedOwn.length ? typedOwn : typedAny;
   const types = [...new Set(typed.map((col) => col.type))];
   const raw = (col) => (col ? String(row.cells[col.header].text).trim() : null);
   return {
@@ -3945,7 +3958,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). A tick (X) under a column labelled with a type (DIGITAL INPUTS, ANALOG OUTPUTS) types its row; ticks under two types, or one that disagrees with the mark, leave the row untyped, as conflicting authored types do. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present, and ticks under columns labelled TREND, ALARM, a software variable (BINARY / ANALOG / MULTISTAGE VARIABLE: soft) or a type whose label says HARD WIRED (hardwired) (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists and point-type policy tables (rows naming AI, BI or CALC, not points) excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO comes from authored MARK prefixes or exact POINT TYPE / HARDWARE POINT TYPE / I/O TYPE cells (DI/DO normalize to BI/BO while retaining the printed token). A tick (X) under a column labelled with a type (DIGITAL INPUTS, ANALOG OUTPUTS, or direction first: INPUT TO DDC ANALOG, SYSTEM OUTPUTS BINARY) types its row; a type's ALARM column ticked beside another type column marks that point's alarm, not a second type; ticks under two types, or one that disagrees with the mark, leave the row untyped, as conflicting authored types do. On I/O LIST device rows without typed marks/cells, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present, and ticks under columns labelled TREND, ALARM, a software variable (BINARY / ANALOG / MULTISTAGE VARIABLE: soft) or a type whose label says HARD WIRED (hardwired) (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists and point-type policy tables (rows naming AI, BI or CALC, not points) excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,

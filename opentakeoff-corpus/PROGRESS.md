@@ -266,6 +266,31 @@ being saved as a regression check of the mark-prefix change, which touches every
 4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
 5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
 
+### Point types labelled direction first; an alarm column beside the point's own type (2026-10-03)
+
+Rules (shared path: `compileBasTakeoff`, which the UI and MCP both read):
+- `corpusTakeoff.mjs BAS_TYPE_DIRECTION_FIRST_RE` in `basLabelType`: a tick column labelled INPUT(S) or OUTPUT(S),
+  optionally TO / FROM a controller (DDC, BAS, BMS, EMS, PLC, CONTROLLER), then ANALOG, BINARY, DIGITAL or DISCRETE,
+  types its ticks (017_MD's INPUT TO DDC ANALOG TEMPERATURE: AI; 05_MO's SYSTEM OUTPUTS BINARY START / STOP: BO).
+  DDC FEATURES FAILURE HIGH ANALOG names no direction and types nothing.
+- `basTickEvidence`: a typed column whose label names an ALARM yields to the other type columns the row ticks; ticked
+  alone it types the row as before. Checked on the renders: 05_MO p50 reads AI 8, AO 4, BI 2, BO 1, exactly as ticked
+  by eye (T-6, T-5, T-3, T-2, T-1, OAF-1, SAF-1 and PF-1 are analog inputs, seven of them with the BINARY ALARM tick);
+  017_MD p17's SMOKE DETECTOR (BINARY ALARM only) reads BI, its FILTER PRESSURE SENSOR (ANALOG PRESSURE and BINARY
+  ALARM) AI with an alarm, and its fan, damper and humidifier rows, which tick an input and an output, stay untyped.
+- The BAS provenance text says both.
+
+A/B (base 87c3149, compile only): 50 fresh graphs change only 017_MD (AI 23, AO 7, BI 10, BO 2 of 62 rows) and 05_MO;
+194 cached graphs only those two (05_MO's newest: AI 52, AO 24, BI 23, BO 9 of 111). Rows, alarms and trends unchanged
+everywhere. Mutants: no direction-first label, no alarm yield, alarm columns never typing, and no TO / FROM DDC group,
+each killed by the new test. The keys count these lists' rows only (types not keyed), so WP1 is unchanged: 05_MO PASS,
+017_MD FAIL on its documented ACU ceiling (HVAC 28 of 34). 233 takeoff, BAS, harness and reconcile tests pass; web
+typecheck and lint clean.
+
+Not done: 017_MD's three unit label rows (AIR CONDITIONING UNIT (ACU A-1) ...) still count as points (62 for 59). A rule
+dropping a row that prints no tag and ticks no type, alarm or trend would also drop software points elsewhere; left as
+documented.
+
 ### Convectors on their own schedule; a point between two numbers in a printed mark; 033_MN and 016_NY re-keyed (2026-10-03)
 
 Rules (shared path: the compile, which the UI and MCP both read, and the row identity the reconcile shares with it):

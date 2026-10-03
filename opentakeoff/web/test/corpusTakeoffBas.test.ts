@@ -520,6 +520,80 @@ describe("compileBasTakeoff I/O LIST", () => {
     [["1", "AI", "hardwired"], ["2", null, "soft"], ["3", null, null]]);
   });
 
+  it("reads types labelled direction first, and a type's alarm column as the alarm of a point typed beside it (05_MO's AHU POINTS LISTs, 017_MD's DDC INPUT/OUTPUT POINT SCHEDULEs)", () => {
+    const dot = { text: "●" };
+    const X = { text: "X" };
+    const SO = "SYSTEM OUTPUTS", SI = "SYSTEM INPUTS";
+    const TREND = "SYSTEM SOFTWARE / CONTROL APPLICATION / FUNCTION TRENDING";
+    const HIGH = "SYSTEM SOFTWARE / CONTROL ALARM PROCESSING HIGH LIMIT";
+    const vaPoint = (name: string, tag: string, ticks: string[]) => ({
+      key: name,
+      cells: { "EQUIPMENT DESCRIPTION": { text: name }, "CONTROL POINT TAG": { text: tag }, ...Object.fromEntries(ticks.map((h) => [h, dot])) },
+    });
+    const IN = "INPUT TO DDC", OUT = "OUTPUT FROM DDC";
+    const ddcPoint = (name: string, tag: string, ticks: string[]) => ({
+      key: tag,
+      cells: { COL1: { text: name }, TAG: { text: tag }, ...Object.fromEntries(ticks.map((h) => [h, X])) },
+    });
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#50", number: 50 }, { key: "set.pdf#17", number: 17 }],
+      tables: [
+        {
+          sheet: "set.pdf#50",
+          title: { text: "AHU POINTS LIST (APPLIES TO AC-15)", bbox: [0, 0, 10, 10] },
+          headers: ["EQUIPMENT DESCRIPTION", "CONTROL POINT TAG", `${SO} BINARY START / STOP`, `${SO} ANALOG VALVE POSITION`,
+            `${SI} BINARY STATUS`, `${SI} BINARY ALARM`, `${SI} ANALOG TEMPERATURE (TI)`, `${SI} ANALOG FLOW`, HIGH, TREND],
+          rows: [
+            vaPoint("COOLING VALVE V-1", "CLG-V1", [`${SO} ANALOG VALVE POSITION`, TREND]),
+            // A temperature sensor that alarms: one analog input.
+            vaPoint("LEAVING COIL TEMPERATURE", "T-6", [`${SI} BINARY ALARM`, `${SI} ANALOG TEMPERATURE (TI)`, TREND]),
+            vaPoint("OUTSIDE AIR FLOW", "OAF-1", [`${SI} BINARY ALARM`, `${SI} ANALOG FLOW`, HIGH, TREND]),
+            vaPoint("SUPPLY FAN START/STOP", "SF-SST", [`${SO} BINARY START / STOP`, TREND]),
+            vaPoint("SUPPLY FAN STATUS", "SF-STS", [`${SI} BINARY STATUS`, TREND]),
+            // Ticked alone, the alarm column is a binary alarm input.
+            vaPoint("SMOKE DETECTOR", "SD-1", [`${SI} BINARY ALARM`]),
+          ],
+        },
+        {
+          sheet: "set.pdf#17",
+          title: { text: "DDC INPUT/OUTPUT POINTS LIST", bbox: [0, 20, 10, 30] },
+          headers: ["COL1", `${IN} ANALOG TEMPERATURE`, `${IN} ANALOG PRESSURE`, `${IN} BINARY STATUS`, `${IN} BINARY ALARM`,
+            `${OUT} ANALOG SPEED`, `${OUT} BINARY / OFF ON`, "DDC FEATURES FAILURE HIGH ANALOG", "DDC FEATURES FAILURE FAULT", "TAG"],
+          rows: [
+            ddcPoint("MIXED AIR TEMP SENSOR", "T2", [`${IN} ANALOG TEMPERATURE`]),
+            ddcPoint("FILTER PRESSURE SENSOR", "DPS", [`${IN} ANALOG PRESSURE`, `${IN} BINARY ALARM`]),
+            ddcPoint("EXHAUST FAN", "EF", [`${OUT} BINARY / OFF ON`]),
+            // A drive's status, speed and fault on one row: several points, no
+            // one type. A failure feature's ANALOG names no input or output.
+            ddcPoint("SUPPLY FAN STATUS SENSOR", "VFD", [`${IN} BINARY STATUS`, `${OUT} ANALOG SPEED`, "DDC FEATURES FAILURE FAULT"]),
+            ddcPoint("HIGH LIMIT SENSOR", "HL", ["DDC FEATURES FAILURE HIGH ANALOG"]),
+          ],
+        },
+      ],
+    });
+    const [va, ddc] = bas.categories.points_lists.lists;
+    const typed = (list: { items: Array<{ point_type: string | null; point_type_raw: string | null; alarm: string | null }> }) =>
+      list.items.map((item) => [item.point_type, item.point_type_raw, item.alarm]);
+    assert.deepEqual(typed(va), [
+      ["AO", "SYSTEM OUTPUTS ANALOG VALVE POSITION", null],
+      ["AI", "SYSTEM INPUTS ANALOG TEMPERATURE (TI)", "●"],
+      ["AI", "SYSTEM INPUTS ANALOG FLOW", "●"],
+      ["BO", "SYSTEM OUTPUTS BINARY START / STOP", null],
+      ["BI", "SYSTEM INPUTS BINARY STATUS", null],
+      ["BI", "SYSTEM INPUTS BINARY ALARM", "●"],
+    ]);
+    assert.deepEqual(typed(ddc), [
+      ["AI", "INPUT TO DDC ANALOG TEMPERATURE", null],
+      ["AI", "INPUT TO DDC ANALOG PRESSURE", "X"],
+      ["BO", "OUTPUT FROM DDC BINARY / OFF ON", null],
+      [null, null, null],
+      [null, null, null],
+    ]);
+    assert.equal(ddc.items[3].point_type_status, "REFUSED_POINT_TYPE_CONFLICT");
+    const { rows, AI, AO, BI, BO, alarm } = bas.totals;
+    assert.deepEqual({ rows, AI, AO, BI, BO, alarm }, { rows: 11, AI: 4, AO: 1, BI: 2, BO: 2, alarm: 4 });
+  });
+
   it("names a point by its lead cell where a name printed twice keyed its rows with a tick (033_MN's PUMP CONTROL POINTS)", () => {
     // PUMP-12 VFD FAULT is a status point and, under the list's ALARM label,
     // an alarm: no one column tells the rows apart, so the table builder
