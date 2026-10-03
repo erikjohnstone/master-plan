@@ -2,12 +2,21 @@
   "set_id": "04_NV_VA_LasVegas_CentralUtilityPlant",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/04_NV_VA_LasVegas_CentralUtilityPlant.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk VA central utility plant — PUMP SCHEDULE + COOLING TOWER SCHEDULE with comma-grouped EQUIP NO keys (CT-1,2,3,4). Proves CUP-style hydronic titles on upload path.",
+  "notes": "Bulk VA central utility plant — PUMP SCHEDULE + COOLING TOWER SCHEDULE with comma-grouped EQUIP NO keys (CT-1,2,3,4). Proves CUP-style hydronic titles on upload path. [RE-KEYED 2026-10-03 from the render] M-002 (page 32) prints the set's HVAC schedules: PUMP SCHEDULE CWP-1 to 5, CHP-1 to 5, BP-1, IWP-1 (PUMP 12); COOLING TOWER SCHEDULE CT-1,2,3,4 (4); LOUVER SCHEDULE LV-1, LV-2 (outside air, Greenheck ESD-635): LOUVER 2; WATER SOFTENER SCHEDULE WS-1 (domestic water softener, boiler room): WATER_SOFTENER 1; STEAM RECOVERY HEAT EXCHANGER HE-1 (heat recovery, Penn flash separator, shell and tube): HEAT_EXCHANGER 1; totals 20. Not keyed: SURGE TANK SCHEDULE T-1 (a condensate/surge tank, no family). The other mechanical sheets (M-000 legend, M-001 site plan, MD-102/103 demolition, M-100 to M-103 plans) and the schedule-titled electrical and door sheets print no HVAC schedule. The takeoff reads 19: HE-1's table is extracted under the WATER SOFTENER SCHEDULE caption of the table above it (its own title has no SCHEDULE word), so no family reads it.",
   "categories": {
     "PUMP": 12,
-    "COOLING_TOWER": 4
+    "COOLING_TOWER": 4,
+    "LOUVER": 2,
+    "WATER_SOFTENER": 1,
+    "HEAT_EXCHANGER": 1
   },
-  "totals": { "items": 16 },
-  "bas_points": { "rows": 0 },
-  "control_valves": { "items": 0 }
+  "totals": {
+    "items": 20
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
 }

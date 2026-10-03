@@ -2,7 +2,8 @@
   "schema": "opentakeoff.cross_set_compile_correction_overlay.v1",
   "review": {
     "method": "Independent visual review of Poppler-rendered source pages, cross-checked with pdftotext -layout and the authored schedule row labels.",
-    "reason": "The frozen compile keys predate coverage of visibly authored air-device and expansion-tank schedule rows. These additive corrections preserve the original files and change only independently reviewed omissions."
+    "reason": "The frozen compile keys predate coverage of visibly authored air-device and expansion-tank schedule rows. These additive corrections preserve the original files and change only independently reviewed omissions.",
+    "folded": "2026-10-03: every correction below is now carried by its compile key, re-keyed from the renders, so the entries hold no counts. They keep the review's evidence and the source hash crossCorpusWorkflow checks. Two copies of the counts had drifted: federal-mech's BAS (26 here, 158 read by eye), 017_MD's and 087_US's totals."
   },
   "corrections": [
     {
@@ -14,20 +15,7 @@
         "GRILLE, REGISTER, AND DIFFUSER SCHEDULE has 23 authored rows: 12 supply, 8 return, and 3 exhaust devices.",
         "EXPANSION TANK SCHEDULE has two authored equipment rows, ET-1 and ET-2."
       ],
-      "totals": {
-        "items": 128
-      },
-      "categories": {
-        "GRD": 23,
-        "EXPANSION_TANK": 2
-      },
-      "bas_points": {
-        "rows": 26,
-        "AI": 12,
-        "AO": 8,
-        "BI": 4,
-        "BO": 2
-      }
+      "folded": "The key was re-keyed from the render on 2026-10-03 (04d6d4b): it carries GRD 23, ET-1 and ET-2 and totals 128, and its five BMS POINT FUNCTION SCHEDULEs read by eye give 158 points (AI 59, AO 33, DI 41, DO 25, alarm 82, trend 103). This entry's BAS counts (26 rows, AI 12, AO 8, BI 4, BO 2) had no evidence line and predate that reading; they are dropped."
     },
     {
       "set_id": "itd-d1-lab",
@@ -38,12 +26,7 @@
         "DIFFUSER SCHEDULE has seven authored rows, D-1 through D-7.",
         "RETURN & EXHAUST GRILLE SCHEDULE has four authored rows, R-1 through R-4."
       ],
-      "totals": {
-        "items": 97
-      },
-      "categories": {
-        "GRD": 11
-      }
+      "folded": "The key was re-keyed from the render on 2026-10-03: GRD 11, totals 97, as this entry found."
     },
     {
       "set_id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -58,14 +41,7 @@
         "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE has one authored row, SYMBOL SS-1/SSCU-1 (service IT ROOM, 24 MBH cooling, R-410A): the split system's indoor unit SS-1 and its outdoor condensing unit SSCU-1.",
         "AIR HANDLING UNIT SCHEDULE prints its one unit across its column: SYMBOL AHU-15, SERVICE NEW SPS (the sterile processing service the project expands), supply fan 26,000 CFM (21,500 connected) at 3.00 in. ESP, outside air 26,000 CFM design and 21,500 minimum, 480-3, VENTROL CUSTOM. The key's note (UH/FAN/PUMP/GRD/louver + PRV) lists the schedules read before a transposed schedule was read (AS-65)."
       ],
-      "totals": {
-        "items": 32
-      },
-      "categories": {
-        "FCU": 1,
-        "CONDENSING_UNIT": 1,
-        "AHU": 1
-      }
+      "folded": "The key was re-keyed from the render on 2026-10-03: AHU 1, FCU 1, CONDENSING_UNIT 1, totals 32, as this entry found."
     },
     {
       "set_id": "094_FL_Orange_County_Regional_History_Center_HVAC",
@@ -79,12 +55,7 @@
       "evidence": [
         "DISPOSABLE CYLINDER ELECTRIC HUMIDIFIER SCHEDULE has four authored rows, MARK HF-4, HF-5, HF-6 and HF-8 (models NH-EL-050 and NH-EL-030), each installed in its air handler's cabinet (IN AHU-4 CABINET and so on)."
       ],
-      "totals": {
-        "items": 11
-      },
-      "categories": {
-        "HUMIDIFIER": 4
-      }
+      "folded": "The key was re-keyed from the render on 2026-10-03: HUMIDIFIER 4, totals 11, as this entry found."
     },
     {
       "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
@@ -98,12 +69,7 @@
       "evidence": [
         "RETURN FAN SCHEDULE has nine authored rows, MARK E-A-1 through E-A-8 and E-A-13 (return fans for ACU-A-1 to ACU-A-6, wing A toilet exhaust, mechanical room ventilation and sub-basement exhaust). The key's note left them unclaimed because they once extracted with CFM as the row key."
       ],
-      "totals": {
-        "items": 28
-      },
-      "categories": {
-        "FAN": 15
-      }
+      "folded": "The key was re-keyed from the renders on 2026-10-03 (4c27684): FAN 15 as this entry found, and totals 34 with the six ACU air handlers, the humidifier and twelve coils this entry's totals of 28 predate."
     },
     {
       "set_id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
@@ -117,12 +83,7 @@
       "evidence": [
         "BLDG 109 AIR TERMINAL UNIT SCHEDULE (two tables on the sheet) prints 186 terminal units, TU-101C and TU-101H through TU-241C and TU-241H: a C and an H unit per room, each with its room served, air handler, duct inlet, maximum and minimum airflow and control type VAV. The page's text layer holds the same 186 marks. The key's [ZERO] note predates the TU mark rule (AS-62)."
       ],
-      "totals": {
-        "items": 186
-      },
-      "categories": {
-        "VAV": 186
-      }
+      "folded": "The key carries VAV 186, totals 186, as this entry found."
     },
     {
       "set_id": "087_US_Contra_Costa_College_Chiller_Replacement",
@@ -136,12 +97,7 @@
       "evidence": [
         "AIR-COOLED CHILLER SCHEDULE prints one row: TAG ACCH-1, CARRIER 30RB120, location GRADE, service (E) AHU'S, 120.1 nominal tons, 287 GPM entering at 54 F and leaving at 44 F, 460/3. It is the chiller the project replaces. The key's [ZERO] note (no extractable HVAC schedule tables) predates the ACCH rule (AS-64)."
       ],
-      "totals": {
-        "items": 1
-      },
-      "categories": {
-        "AIR_COOLED_CHILLER": 1
-      }
+      "folded": "The key was keyed from the render on 2026-10-02 (f583414): ACCH-1 as this entry found, plus the CHILLED WATER PUMP SCHEDULE's PCH-1 and PCH-2, totals 3 (this entry's totals of 1 predate them)."
     }
   ]
 }

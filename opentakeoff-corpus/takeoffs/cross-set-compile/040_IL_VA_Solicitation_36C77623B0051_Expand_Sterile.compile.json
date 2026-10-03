@@ -2,17 +2,20 @@
   "set_id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 sterile expand \u2014 UH/FAN/PUMP/GRD/louver + PRV schedule.",
+  "notes": "[MEAT] Vol2 sterile expand — UH/FAN/PUMP/GRD/louver + PRV schedule. [RE-KEYED 2026-10-03 from the render] M600 (page 47) also prints the AIR HANDLING UNIT SCHEDULE across its columns, one unit AHU-15 (NEW SPS, 26,000 CFM): AHU 1; and the SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE's one row SS-1/SSCU-1 (IT ROOM, 24 MBH, Mitsubishi PKA-A24KA7/PUZ-A24NHA7), the indoor unit and its outdoor condensing unit: FCU 1, CONDENSING_UNIT 1; totals 32. Not keyed: the TRAP SCHEDULE T-1 to T-8, the UNFIRED CLEAN STEAM GENERATOR HX-1, the CONDENSATE PUMP TRAP PT-1 (no family). Found by the AS-63/AS-65 review recorded in ground_truth/hvac/cross-set-compile-reviewed-corrections.json; the key now carries them.",
   "categories": {
     "PUMP": 2,
     "FAN": 6,
     "UNIT_HEATER": 6,
     "PRESSURE_REDUCING_VALVE": 5,
     "GRD": 8,
-    "LOUVER": 2
+    "LOUVER": 2,
+    "AHU": 1,
+    "FCU": 1,
+    "CONDENSING_UNIT": 1
   },
   "totals": {
-    "items": 29
+    "items": 32
   },
   "bas_points": {
     "rows": 0

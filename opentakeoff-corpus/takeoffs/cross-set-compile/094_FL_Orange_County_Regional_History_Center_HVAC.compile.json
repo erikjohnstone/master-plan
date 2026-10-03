@@ -2,14 +2,15 @@
   "set_id": "094_FL_Orange_County_Regional_History_Center_HVAC",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/094_FL_Orange_County_Regional_History_Center_HVAC.pdf",
   "kind": "hvac_equipment",
-  "notes": "[WEAK] Vol2 Orange County Regional History Center \u2014 AHU + ACC + CT.",
+  "notes": "[WEAK] Vol2 Orange County Regional History Center — AHU + ACC + CT. [RE-KEYED 2026-10-03 from the render] M-401 (page 8) prints the set's only schedules: Air Handling Unit Schedule CHW AHU-04 to AHU-08 (AHU 5), Packaged Air Cooled Water Chiller Schedule CH-2, Cooling Tower Schedule CT-1, and Disposable Cylinder Electric Humidifier Schedule HF-4, HF-5, HF-6, HF-8 (Nortec NH-EL-050/030, each in its AHU's cabinet): HUMIDIFIER 4, totals 11. The other sheets (cover, legend, roof demolition and new work plans, phasing plan, M-201 control diagrams, details, S-500) print no equipment schedule. The humidifiers were found by the AS-63 review recorded in ground_truth/hvac/cross-set-compile-reviewed-corrections.json; the key now carries them.",
   "categories": {
     "AHU": 5,
     "AIR_COOLED_CHILLER": 1,
-    "COOLING_TOWER": 1
+    "COOLING_TOWER": 1,
+    "HUMIDIFIER": 4
   },
   "totals": {
-    "items": 7
+    "items": 11
   },
   "bas_points": {
     "rows": 0

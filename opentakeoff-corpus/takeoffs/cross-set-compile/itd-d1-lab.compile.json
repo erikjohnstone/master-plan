@@ -2,7 +2,7 @@
   "set_id": "itd-d1-lab",
   "source_file": "raw/itd-d1-lab-mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "HHW + bypass BCV-1; reheat HC-*; HUM-1; specialty AS/ET/PF/FM; ductless DFC + outdoor DCU; gas-split F-1 + outdoor CU-1; canopy+snorkel; LAB_AIR_VALVE; AIR_COMPRESSOR AC-1; LOUVER L-*; PENTHOUSE PH-1.",
+  "notes": "HHW + bypass BCV-1; reheat HC-*; HUM-1; specialty AS/ET/PF/FM; ductless DFC + outdoor DCU; gas-split F-1 + outdoor CU-1; canopy+snorkel; LAB_AIR_VALVE; AIR_COMPRESSOR AC-1; LOUVER L-*; PENTHOUSE PH-1. [RE-KEYED 2026-10-03 from the render] Sheet 13 prints a DIFFUSER SCHEDULE of 7 types (D-1 to D-7) and a RETURN & EXHAUST GRILLE SCHEDULE of 4 (R-1 to R-4): GRD 11 (was 7), totals 97. The other families as keyed.",
   "categories": {
     "AHU": 1,
     "FCU": 2,
@@ -21,14 +21,14 @@
     "HHW_CONTROL_VALVE": 9,
     "BYPASS_CONTROL_VALVE": 1,
     "LAB_AIR_VALVE": 21,
-    "GRD": 7,
+    "GRD": 11,
     "RANGE_HOOD": 9,
     "DUCT_SILENCER": 1,
     "LOUVER": 2,
     "LOUVERED_PENTHOUSE": 1
   },
   "totals": {
-    "items": 93
+    "items": 97
   },
   "bas_points": {
     "rows": 0
