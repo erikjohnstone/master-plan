@@ -57,6 +57,23 @@ export interface VectorPipelineHooks {
   sheetHasDrawingIndexTitle?: (sheetKey: string) => boolean;
   /** L4.5 OCR: render region PNG and OCR words (optional — skip when absent). */
   ocrRegion?: (sheetKey: string, region: [number, number, number, number]) => Promise<OcrRegionResult | null>;
+  /** How far the build has got (optional): see GraphProgressEvent. */
+  onProgress?: (event: GraphProgressEvent) => void;
+}
+
+/** A step of a sheet-graph build, for a person or an agent waiting on it: a
+ * cold build of a large set runs for minutes, most of them in the per-sheet
+ * table reads, and said nothing until it finished. `done` sheets of `total`
+ * are finished in `stage`: "sheets" reads every sheet's text and linework,
+ * "tables" reads the tables on each sheet that can hold a schedule (the
+ * pictures and ink-lettered grids on it read by OCR among them). Reported
+ * only; nothing in the build reads it back. */
+export interface GraphProgressEvent {
+  stage: "sheets" | "tables";
+  done: number;
+  total: number;
+  /** The sheet just finished. */
+  sheet?: string;
 }
 
 const OCR_ENV = typeof process !== "undefined" && process.env?.OPENTAKEOFF_PIPELINE_OCR === "1";
@@ -571,8 +588,10 @@ export async function runVectorTakeoffPipeline(
   if (vgMode !== "off" && vectorGridAvailable()) {
     report.layers_run.push(`L1.8:vectorgrid(${vgMode})`);
     await timed("L1.8:vectorgrid", async () => {
-      for (const ctx of contexts0) {
+      hooks.onProgress?.({ stage: "tables", done: 0, total: contexts0.length });
+      for (const [index, ctx] of contexts0.entries()) {
         await runL2VectorGridForSheet(g, ctx, buildings, stats, touched, report, vgMode);
+        hooks.onProgress?.({ stage: "tables", done: index + 1, total: contexts0.length, sheet: ctx.key });
       }
     });
   }

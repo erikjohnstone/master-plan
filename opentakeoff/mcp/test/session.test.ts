@@ -54,6 +54,32 @@ test("loadPlan refuses a PDF it cannot read, naming the file, the cause and the 
   assert.equal(r.sheets[0].sheet_number, "A-101");
 });
 
+test("a graph build reports its steps, and only reports them: the same graph with a listener", async () => {
+  const quiet = new Session();
+  await quiet.loadPlan(PLAN);
+  const heard = new Session();
+  await heard.loadPlan(PLAN);
+  const steps: string[] = [];
+  heard.onGraphProgress = (e) => steps.push(`${e.stage} ${e.done}/${e.total}`);
+  // Timings differ run to run (a note, the pipeline's stage_ms, the vector grid's
+  // ms); everything else must match.
+  const plain = (g: unknown) => JSON.parse(JSON.stringify(g), (k, v) => (
+    k === "stage_ms" || k === "ms" ? undefined : k === "notes" ? v.filter((n: string) => !n.startsWith("timing:")) : v));
+  assert.deepEqual(plain(await heard.graphForPipeline()), plain(await quiet.graphForPipeline()));
+  assert.deepEqual(steps.filter((s) => s.startsWith("sheets")), ["sheets 0/1", "sheets 1/1"]);
+  // Any table stage counts up to its total, after the sheets.
+  const tables = steps.filter((s) => s.startsWith("tables")).map((s) => s.split(" ")[1].split("/").map(Number));
+  for (const [i, [done, total]] of tables.entries()) {
+    assert.equal(done, i, `tables step ${i}`);
+    assert.ok(done <= total);
+  }
+  if (tables.length) assert.equal(tables.at(-1)![0], tables.at(-1)![1]);
+  // A built graph is answered, not rebuilt: no further steps.
+  steps.length = 0;
+  await heard.graphForPipeline();
+  assert.deepEqual(steps, []);
+});
+
 test("sheet lookup: by key, by title-block number, unknown lists loaded keys", async () => {
   const s = new Session();
   await s.loadPlan(PLAN);

@@ -1,5 +1,15 @@
 # Changelog
 
+- **The status bar counts the schedule index as it is built.** A set the server hasn't read before is indexed in
+  two passes: every sheet, then the tables on each sheet that may hold a schedule, which takes minutes on a large set.
+  The status bar said "Indexed · schedules indexing…" the whole time, over a progress bar already full from the text
+  index, so a long index looked stuck. It now counts: **Indexed · sheets 3/47…**, then **Indexed · schedules
+  4/12…**, with the bar following the count, until **Indexed · schedules ready**; hover the chip for the same count in
+  words. A set read before is answered at once, as it was. The MCP server reports the same steps to a client that asks
+  for progress (a `progressToken` on the call that builds the graph): `notifications/progress` whose `progress` counts
+  the sheets read and then the schedule sheets read, and whose `message` says the step. A takeoff run while the index
+  is built shows those steps in the agent log as one line counting up. The graph built is the same, apart from its
+  timings.
 - **A PDF that can't be read is refused at the door, with the reason and the fix.** A password-protected, damaged,
   cut-short or empty PDF used to be stored as it was: it opened as a tab that only ever said pdf.js's "Error: No
   password given" or "Invalid PDF structure.", and the set's automatic takeoff failed with the server's whole error

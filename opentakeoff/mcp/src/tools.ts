@@ -12,6 +12,7 @@ import { inspectBasWorkflow, basWorkflowInspectionDomainSchema, basWorkflowInspe
 import type { McpServer, RegisteredTool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { ok, okImage, fail, UserError, type ToolReply } from "./format.ts";
 import { UNDO_CAP, CONTEXT_MIN_LEN_PX, CONTEXT_MAX_SEGMENTS, CONTEXT_MAX_SEGMENTS_CEIL, type Session } from "./session.ts";
+import type { GraphProgressEvent } from "../../web/src/lib/vectorTakeoffPipeline.ts";
 import { traceToolCall } from "./trace.ts";
 import {
   loadPlanOutput, sheetInfoOutput, setScaleOutput, oneClickOutput, detectRoomsOutput,
@@ -83,14 +84,57 @@ const layersFilterSchema = z.object({
   exclude: z.array(z.string()).optional().describe("Layer names or ids whose ink must not block the flood at all"),
 }).optional().describe("Override the sheet's classified layer roles for THIS call (see sheet_info.layers)");
 
-const run = (tool: string, fn: (args: any, context?: { signal: AbortSignal }) => unknown | Promise<unknown>) =>
-  async (args: any, context?: { signal: AbortSignal }): Promise<ToolReply> => {
+/** What a tool call hands its handler: the SDK's request context, of which
+ * the wrapper reads the progress token a client may send and the channel to
+ * answer it on. */
+type ToolContext = {
+  signal: AbortSignal;
+  _meta?: { progressToken?: string | number };
+  sendNotification?: (notification: { method: "notifications/progress"; params: Record<string, unknown> }) => Promise<void>;
+};
+
+/** Where a Session's graph-build steps go while a tool call that asked for
+ * progress (a progressToken) is running: the first such call holds it. One
+ * per registerTools, as each registration has its own Session. */
+type GraphProgressRoute = { sink: ((event: GraphProgressEvent) => void) | null };
+
+/** MCP progress for a sheet-graph build: `progress` only ever grows (the
+ * spec's rule), counting sheets read and then schedule sheets read; the
+ * message says the step in words. */
+function graphProgressNotifier(context: ToolContext): ((event: GraphProgressEvent) => void) | null {
+  const token = context._meta?.progressToken;
+  if (token === undefined || !context.sendNotification) return null;
+  let sheetsTotal = 0;
+  let last = -1;
+  return (event) => {
+    if (event.stage === "sheets") sheetsTotal = event.total;
+    const progress = (event.stage === "sheets" ? 0 : sheetsTotal) + event.done;
+    if (progress <= last) return;
+    last = progress;
+    const message = event.stage === "sheets"
+      ? `Building the sheet graph: read ${event.done} of ${event.total} sheets`
+      : `Building the sheet graph: read the schedules on ${event.done} of ${event.total} sheets`;
+    void context.sendNotification!({ method: "notifications/progress", params: { progressToken: token, progress, message } })
+      .catch(() => { /* a closed transport loses a progress note, nothing else */ });
+  };
+}
+
+const runTool = (
+  tool: string,
+  fn: (args: any, context?: ToolContext) => unknown | Promise<unknown>,
+  route: GraphProgressRoute,
+) =>
+  async (args: any, context?: ToolContext): Promise<ToolReply> => {
     const startedAt = process.hrtime.bigint();
+    const notifier = context && !route.sink ? graphProgressNotifier(context) : null;
+    if (notifier) route.sink = notifier;
     let reply: ToolReply;
     try {
       reply = ok(await fn(args, context));
     } catch (e) {
       reply = fail(e);
+    } finally {
+      if (notifier && route.sink === notifier) route.sink = null;
     }
     traceToolCall(tool, args, startedAt, reply);
     return reply;
@@ -101,6 +145,9 @@ const run = (tool: string, fn: (args: any, context?: { signal: AbortSignal }) =>
 // below byte-identical: `server` here is a recording facade over the real one.
 export function registerTools(realServer: McpServer, session: Session): Map<string, RegisteredTool> {
   const registered = new Map<string, RegisteredTool>();
+  const route: GraphProgressRoute = { sink: null };
+  session.onGraphProgress = (event) => route.sink?.(event);
+  const run = (tool: string, fn: (args: any, context?: ToolContext) => unknown | Promise<unknown>) => runTool(tool, fn, route);
   const server = {
     registerTool(name: string, meta: unknown, handler: unknown): RegisteredTool {
       const tool = (realServer.registerTool as (n: string, m: unknown, h: unknown) => RegisteredTool)(name, meta, handler);

@@ -18,7 +18,7 @@ import { pageRegions, type PageRegion } from "../../web/src/lib/controlIntent/zo
 import type { AnswerEvent } from "../../web/src/lib/controlIntent/journal.ts";
 import { ASSEMBLIES_STATE_SCHEMA, sanitizeAssembliesState } from "../../web/src/lib/assemblies/projectState.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
-import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
+import { runVectorTakeoffPipeline, type GraphProgressEvent, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
@@ -1079,6 +1079,10 @@ export class Session {
    * agent verdicts mint through markVerdict and nothing else. */
   approvals: Approval[] = [];
   basWorkflow: BasWorkflow | null = null;
+  /** Told each step of a sheet-graph build as it finishes (GraphProgressEvent):
+   * the graph CLI streams them to the canvas, the MCP server to a client that
+   * asked for progress. Reported only; the build never reads it. */
+  onGraphProgress: ((event: GraphProgressEvent) => void) | null = null;
   // Restore delivery state, never input to extraction or the active source set.
   private basRestoreVersion = 0;
   private basPlanLoads = 0;
@@ -7805,6 +7809,8 @@ export class Session {
       // sheet dominates that is the only question worth answering. Off unless
       // OPENTAKEOFF_GRAPH_TRACE is set, so normal runs are unchanged.
       const trace = !!process.env.OPENTAKEOFF_GRAPH_TRACE;
+      let read = 0;
+      this.onGraphProgress?.({ stage: "sheets", done: 0, total: this.sheets.size });
       for (const s of this.sheets.values()) {
         const tSheet = Date.now();
         if (!s.spans) s.spans = textSpans(s.page);
@@ -7823,6 +7829,7 @@ export class Session {
         }
         inputs.push({ key: s.key, sheet_number: s.sheetNumber, spans, ...(segs?.length ? { segs } : {}) });
         if (segs?.length) this.pipelineSegs.set(s.key, segs);
+        this.onGraphProgress?.({ stage: "sheets", done: ++read, total: this.sheets.size, sheet: s.key });
         if (trace) {
           process.stderr.write(
             `GRAPH_TRACE sheet=${s.sheetNumber ?? s.key} spans=${spans.length}`
@@ -7857,6 +7864,7 @@ export class Session {
       sheetHasPointsListTitle: (key) => this.sheetHasPointsListTitle(key),
       sheetHasDrawingIndexTitle: (key) => this.sheetHasDrawingIndexTitle(key),
       ocrRegion: (key, region) => this.ocrScheduleRegion(key, region),
+      onProgress: (event) => this.onGraphProgress?.(event),
     });
     // report.notes was write-only before this: every note pushed onto it
     // (a raster-region disclosure, "L2 vectorgrid did not run") only ever

@@ -123,6 +123,12 @@ const kindLabel = kind === "bas_points" ? "BAS points"
 
 progress("load", `Loading ${pdfs.length} plan PDF${pdfs.length === 1 ? "" : "s"}…`, { pdf_count: pdfs.length });
 const session = new Session();
+// Each step of a cold graph build, as it finishes: minutes on a large set,
+// most of them reading each schedule sheet's tables (graph_step; the "graph"
+// phase's own events, which arm the server's deadline, are unchanged).
+session.onGraphProgress = (event) => progress("graph_step", event.stage === "sheets"
+  ? `Reading sheet ${event.done} of ${event.total}…`
+  : `Reading schedules: ${event.done} of ${event.total} sheet${event.total === 1 ? "" : "s"}…`, event);
 await session.loadPlan(pdfs[0]);
 for (let i = 1; i < pdfs.length; i++) {
   progress("load", `Merging plan ${i + 1} of ${pdfs.length}…`, { pdf_index: i + 1, pdf_count: pdfs.length });

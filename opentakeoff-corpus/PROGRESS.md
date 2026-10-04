@@ -99,6 +99,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | b03fa4e | A list stacked under another is its own table: 061_IA's plant points under their own title, 16_NV's three OUTSIDE AIR CALCULATION tables; every open set it touches compiles the same (#317) |
 | a94a76c, 04c9a35 | The title-band splitter reads letters where the cells are: a page whose box starts away from (0,0) is cut as any other (#319) |
 | 8a8f7ae | A technology sheet's device list holds no HVAC units: 21_VA FAN 12 -> 10 (its key), the only change over 113 keyed sets (#325) |
+| 38d48fb | A PDF that can't be read is refused at upload, `load_plan` and the graph CLI, naming the file, the cause and the fix (#326) |
 
 ## Known limits (documented, not fixed)
 
@@ -849,6 +850,28 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   (the classes, the sentences, the CLI's one OT_ERROR line and the server runner's error for a locked and an empty
   file, the upload-name restore); each fails on the code before it. Session 25, packaging 6, the plugin's route,
   loader and walkthrough tests 3, 2 and 3: all pass; web and MCP typecheck clean, lint as at HEAD.
+- The schedule index counts its steps (#327; shared: `GraphProgressEvent` from `runVectorTakeoffPipeline`'s L1.8 loop
+  and `Session.ensureGraph`'s sheet loop, `Session.onGraphProgress`, read by the graph CLI for the canvas and by the
+  MCP tool wrapper for clients; surface-specific: the chip, the NDJSON graph route, the MCP progress notification). A
+  cold build reads every sheet, then the tables on each schedule-target sheet, minutes on a large set, and the canvas
+  chip said "Indexed · schedules indexing…" throughout over a bar already full from the text index. Now the CLI prints
+  a `graph_step` progress line per sheet and per schedule sheet, the server streams them on `/__ot/sheet-graph` when
+  asked for NDJSON (the graph itself last), and the chip reads "Indexed · sheets N/M…" then "Indexed · schedules
+  N/M…" with the bar on the count. MCP: a call carrying a `progressToken` gets `notifications/progress` (progress
+  grows across both stages; no total). A compile or reconcile run while the graph builds folds the steps into one
+  agent-log line (`web/src/lib/progressLog.js`). Probed in the app (port 5176) on 063_MT uncached: "Indexed ·
+  schedules 0/10…" at 15 s to "10/10…" at 44 s, then "Indexed · schedules ready", no page errors. CLI on the bundled
+  mechanical sample: sheets 0..8 of 8 in 0.7 s, schedules 0..4 of 4 over 4.3 s. Graphs built at 04c9a35 and on the
+  working tree, cache off, are identical apart from timings (stage_ms, the vector grid's ms, the timing note) on the
+  sample and 063_MT. The engine source changed, so cached graphs rebuild once. Tests: session "a graph build reports
+  its steps, and only reports them" (same graph with a listener; no steps from a built graph), tools "a tool call that
+  builds the sheet graph reports its steps to a client that asks for progress", graphProgress (NDJSON reader, the
+  CLI's steps on the sample, the one-line agent log); session 26, tools 123, graphProgress 3, pdfReadable 4,
+  previewRoutes 3, compileProgressWalkthrough 3, vectorTakeoffPipeline 22, pipelineHarness 4: all pass, each file run
+  alone; web and MCP typecheck clean, lint as at HEAD. Found on the way, queued: `Session.ensureGraph` has no
+  in-flight guard, so two concurrent MCP calls on a cold set build twice and a call arriving during the vector stack
+  gets a graph without its tables (#328); a single-kind compile started during the canvas's prewarm builds the graph
+  in a second process (the complete-BAS path already joins the prewarm; #329).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

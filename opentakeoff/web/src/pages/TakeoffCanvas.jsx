@@ -196,6 +196,8 @@ import SweepReviewPanel from "../components/SweepReviewPanel.jsx";
 import Tip from "../components/Tip.jsx";
 import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet, tablesForSourceFiles } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
+import { readNdjsonResult } from "../lib/ndjsonReply.js";
+import { withProgressLine } from "../lib/progressLog.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { activeBasCapture, basWorkflowSchema, latestBasSequenceAiRun, mergeBasWorkflows, resolveBasPage,
   retainBasSequenceAiRun, verifyBasWorkflow } from "../lib/basWorkflow.ts";
@@ -7822,7 +7824,9 @@ export default function TakeoffCanvas() {
     }
   }
 
-  async function fetchProductionSheetGraph() {
+  // onProgress (optional) is told each step of a cold build as the server
+  // finishes it (GraphProgressEvent, as a progress line: stage, done, total).
+  async function fetchProductionSheetGraph(onProgress = null) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) return null;
     const fd = new FormData();
@@ -7840,10 +7844,17 @@ export default function TakeoffCanvas() {
       try { shaToName.set(await sha256Hex(bytes), name); } catch { /* no WebCrypto: keys stay as sent */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
-    const res = await fetch("/__ot/sheet-graph", { method: "POST", body: fd });
+    const res = await fetch("/__ot/sheet-graph", {
+      method: "POST",
+      body: fd,
+      headers: onProgress ? { Accept: "application/x-ndjson" } : undefined,
+    });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || `sheet-graph HTTP ${res.status}`);
+    }
+    if (onProgress && /ndjson/i.test(String(res.headers.get("content-type") || "")) && res.body) {
+      return remapGraphSheetKeys(await readNdjsonResult(res, onProgress, "sheet-graph"), shaToName);
     }
     return remapGraphSheetKeys(await res.json(), shaToName);
   }
@@ -8264,7 +8275,7 @@ export default function TakeoffCanvas() {
   // this closes. A resolved cache hit returns synchronously (well, in a
   // microtask); an in-flight fetch for the SAME sig is awaited, never
   // duplicated; only a genuinely new sig starts a new server round trip.
-  async function getOrFetchProductionGraph(sig) {
+  async function getOrFetchProductionGraph(sig, onProgress = null) {
     if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig) {
       return agentGraphCacheRef.current;
     }
@@ -8272,7 +8283,7 @@ export default function TakeoffCanvas() {
       return agentGraphInFlightRef.current.promise;
     }
     const promise = (async () => {
-      const prod = await fetchProductionSheetGraph();
+      const prod = await fetchProductionSheetGraph(onProgress);
       if (!(prod?.tables || prod?.available)) throw new Error("empty graph");
       prod.__production = true;
       agentGraphCacheRef.current = prod;
@@ -8318,9 +8329,15 @@ export default function TakeoffCanvas() {
     graphPrewarmSigRef.current = sig;
     setGraphPrewarm({ phase: "warming" });
     let cancelled = false;
+    // The step the build has reached, for the status chip: a cold build of a
+    // large set runs for minutes and used to say only "indexing…".
+    const onStep = (p) => {
+      if (cancelled || !Number.isFinite(p?.total) || !Number.isFinite(p?.done)) return;
+      setGraphPrewarm((g) => (g.phase === "warming" ? { ...g, step: { stage: p.stage, done: p.done, total: p.total } } : g));
+    };
     (async () => {
       try {
-        const prod = await getOrFetchProductionGraph(sig);
+        const prod = await getOrFetchProductionGraph(sig, onStep);
         if (cancelled) return;
         setGraphPrewarm({ phase: "ready" });
         // A refused extraction engine is a fact about every table on this
@@ -8772,12 +8789,7 @@ export default function TakeoffCanvas() {
   function reportAgentTakeoffProgress(p) {
     const message = String(p?.message || "Compiling the full takeoff…");
     setAgentStatus(message);
-    setAgentLog((l) => {
-      const next = { kind: "progress", text: message };
-      const last = l[l.length - 1];
-      if (last?.kind === "progress" && last.text === message) return l;
-      return [...l.slice(-199), next];
-    });
+    setAgentLog((l) => withProgressLine(l, message, { step: p?.phase === "graph_step" }));
   }
 
   async function finalizeAgentCompiledTakeoff(compiled, opts = {}) {
@@ -9125,14 +9137,10 @@ export default function TakeoffCanvas() {
       setAgentStatus(message);
       const processed = Number(p?.processed || 0);
       const total = Number(p?.total || 0);
-      const milestone = !processed || processed % 10 === 0 || (total > 0 && processed === total);
+      const step = p?.phase === "graph_step";
+      const milestone = step || !processed || processed % 10 === 0 || (total > 0 && processed === total);
       if (!milestone) return;
-      setAgentLog((log) => {
-        const next = { kind: "progress", text: message };
-        const last = log[log.length - 1];
-        if (last?.kind === "progress" && last.text === message) return log;
-        return [...log.slice(-199), next];
-      });
+      setAgentLog((log) => withProgressLine(log, message, { step }));
     };
     reportProgress({ message: "Reconciling schedule quantities to grounded plan evidence…" });
     const remote = await agentMcpTool("reconcile_schedule_plan", {
@@ -14809,11 +14817,20 @@ export default function TakeoffCanvas() {
           // came back empty. Schedules ARE the product; their failure is not a
           // footnote.
           const schedulesFailed = graphPrewarm.phase === "error";
+          // The schedule pass's own step, once the text index is done: a cold
+          // build of a large set reads its schedule sheets for minutes, and
+          // the bar now moves with it instead of sitting full.
+          const step = !indexing && graphPrewarm.phase === "warming" && graphPrewarm.step?.total ? graphPrewarm.step : null;
+          const barPct = step ? Math.round((100 * step.done) / step.total) : pct;
           const tip = indexing
             ? `Indexing PDF text ${indexProgress.done}/${indexProgress.total} (${pct}%). Agent and schedule workflows may miss pages until this finishes — wait for Indexed before running a full-set takeoff.`
             : schedulesFailed
               ? `Schedule indexing failed${graphPrewarm.message ? `: ${graphPrewarm.message}` : ""}. The PDF text index is fine, so find_text and manual takeoff still work — schedule tables and a full-set takeoff will not until this succeeds.`
-              : `PDF text index ready (${indexProgress.total} page${indexProgress.total === 1 ? "" : "s"}). Agent / schedule workflows can search the whole set.`;
+              : step
+                ? (step.stage === "tables"
+                  ? `Reading the schedules: done ${step.done} of the ${step.total} sheet${step.total === 1 ? "" : "s"} that may hold one. A full-set takeoff waits for the rest; manual takeoff works now.`
+                  : `Reading the set's sheets for schedules: ${step.done} of ${step.total} read.`)
+                : `PDF text index ready (${indexProgress.total} page${indexProgress.total === 1 ? "" : "s"}). Agent / schedule workflows can search the whole set.`;
           // Status bar is dark (--status-bg). Do NOT use --ink / --c-positive
           // (those are for light paper chrome and wash out here).
           const fg = schedulesFailed ? "#FF9E8A" : indexing ? "var(--status-acc)" : "#9AF0C0";
@@ -14848,7 +14865,11 @@ export default function TakeoffCanvas() {
                   : schedulesFailed
                     ? `Indexed · schedules FAILED`
                     : graphPrewarm.phase === "warming"
-                      ? `Indexed · schedules indexing…`
+                      ? (step
+                        ? (step.stage === "tables"
+                          ? `Indexed · schedules ${step.done}/${step.total}…`
+                          : `Indexed · sheets ${step.done}/${step.total}…`)
+                        : `Indexed · schedules indexing…`)
                       : graphPrewarm.phase === "ready"
                         ? `Indexed · schedules ready`
                         : `Indexed 100% · ${indexProgress.total} pages`}
@@ -14856,9 +14877,9 @@ export default function TakeoffCanvas() {
               <span
                 role="progressbar"
                 aria-valuemin={0}
-                aria-valuemax={indexProgress.total}
-                aria-valuenow={indexProgress.done}
-                aria-label="PDF text index progress"
+                aria-valuemax={step ? step.total : indexProgress.total}
+                aria-valuenow={step ? step.done : indexProgress.done}
+                aria-label={step ? "Schedule reading progress" : "PDF text index progress"}
                 style={{
                   width: 72, height: 5, flex: "0 0 auto",
                   background: track,
@@ -14866,8 +14887,8 @@ export default function TakeoffCanvas() {
                 }}
               >
                 <span style={{
-                  display: "block", height: "100%", width: `${pct}%`,
-                  background: fill,
+                  display: "block", height: "100%", width: `${barPct}%`,
+                  background: step ? "var(--status-acc)" : fill,
                   transition: "width 120ms linear",
                 }} />
               </span>

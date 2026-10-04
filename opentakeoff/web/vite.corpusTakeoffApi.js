@@ -455,7 +455,7 @@ function writeNdjson(res, obj) {
 async function handle(req, res, mode) {
   let tmpDir = null;
   let uploads = null;
-  const stream = (mode === "compile" || mode === "complete_bas" || mode === "reconcile") && wantsProgressStream(req);
+  const stream = (mode === "graph" || mode === "compile" || mode === "complete_bas" || mode === "reconcile") && wantsProgressStream(req);
   const abortController = new AbortController();
   req.once?.("aborted", () => abortController.abort());
   res.once?.("close", () => {
@@ -478,6 +478,20 @@ async function handle(req, res, mode) {
     if (mode === "graph") {
       const outPath = join(tmpDir || await mkdtemp(join(tmpdir(), "ot-graph-out-")), "graph.json");
       if (!tmpDir) tmpDir = resolve(outPath, "..");
+      if (stream) {
+        // A cold build runs for minutes: stream each step it finishes, then
+        // the graph itself as the last line (the same JSON the plain reply
+        // sends, written as it was read).
+        beginNdjson(res);
+        await runCli({
+          mode: "graph", pdfPaths, outPath, signal: abortController.signal,
+          onProgress: (p) => writeNdjson(res, { type: "progress", ...p }),
+        });
+        const raw = await readFile(outPath, "utf8");
+        res.write(`{"type":"result","result":${raw}}\n`);
+        res.end();
+        return;
+      }
       await runCli({ mode: "graph", pdfPaths, outPath, signal: abortController.signal });
       const raw = await readFile(outPath, "utf8");
       return sendJson(res, 200, raw);

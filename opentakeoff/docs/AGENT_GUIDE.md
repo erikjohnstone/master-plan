@@ -195,6 +195,9 @@ quantities and the status per line — never just the schedule count — the sam
 report alone" discipline as the standard finish above. `plan_other_cites` links a row to its
 mark's other drawn occurrences (another view, bare tag text, a demolition plan) without counting
 them, and `unscheduled_units` is the short list of drawn units no schedule lists to raise.
+The first call that reads the set builds its sheet graph, which takes minutes on a large set; a
+client that sends a `progressToken` is told each sheet and schedule sheet as it is read, and the
+calls after it answer from the built graph.
 
 **A controls (BAS) estimate of that equipment** continues with `apply_assemblies`. It applies an
 assembly library to every scheduled unit: its controls typical and its mechanical hook-up, with

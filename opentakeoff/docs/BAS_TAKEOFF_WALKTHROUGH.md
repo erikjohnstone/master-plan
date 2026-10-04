@@ -8,7 +8,8 @@ requirements, or certify installed quantities.
 ## Before you begin
 
 1. Open every drawing PDF that belongs to the current bid set.
-2. Wait for **Indexed · schedules ready** in the canvas status bar.
+2. Wait for **Indexed · schedules ready** in the canvas status bar (until then it
+   counts the sheets, then the schedule sheets, it has read).
 3. Open **Takeoff**. The large workspace contains **Point lists**, **Equipment**
    and **Review & changes**; it does not add more canvas rails or permanent tools.
 4. Keep the original PDFs. JSON exports retain evidence identities and decisions,

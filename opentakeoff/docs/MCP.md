@@ -237,6 +237,17 @@ the takeoff reaches them—details in
 [`mcp/README.md`](../mcp/README.md#staged-tool-exposure-opt-in). Needs a
 client that honors `tools/list_changed`; leave it unset otherwise.
 
+**Progress on a long first call.** The first call that needs the sheet graph
+(`sheet_graph`, `find_schedule`, `resolve_tag`, `compile_corpus_takeoff` and
+the others that read the set) builds it, which takes minutes on a large set;
+later calls answer from the built graph. A client that sends a
+`progressToken` with that call gets `notifications/progress` while the graph
+builds: `progress` counts the sheets read, then the schedule sheets read, and
+only grows; `message` says the step in words (`Building the sheet graph: read
+12 of 47 sheets`, then `… read the schedules on 3 of 12 sheets`). There is no
+`total`, since the schedule sheets are known only once every sheet is read. A
+call answered from a built graph sends none.
+
 ## What the agent gets
 
 Sixty-four tools, in the order an agent tends to reach for them:

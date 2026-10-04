@@ -481,6 +481,17 @@ the scheme, so an agent knows to open a stage before it needs one. Requires a
 client that honors `tools/list_changed`; leave the flag unset for one that
 reads the tool list once. ([#230](https://github.com/Kentucky-ai/opentakeoff/issues/230))
 
+**Progress on a long first call.** The first call that needs the sheet graph
+(`sheet_graph`, `find_schedule`, `resolve_tag`, `compile_corpus_takeoff` and
+the others that read the set) builds it, which takes minutes on a large set;
+later calls answer from the built graph. A client that sends a
+`progressToken` with that call gets `notifications/progress` while the graph
+builds: `progress` counts the sheets read, then the schedule sheets read, and
+only grows; `message` says the step in words (`Building the sheet graph: read
+12 of 47 sheets`, then `… read the schedules on 3 of 12 sheets`). There is no
+`total`, since the schedule sheets are known only once every sheet is read. A
+call answered from a built graph sends none.
+
 ## Tools
 
 | Tool | What it does |

@@ -212,6 +212,7 @@ condition properties and project panels; it never resizes the drawing.
 Takeoff retains its exports; the legacy report is under **⋯ → Measurement report**.
 Schedules shows indexed cells from the plan source currently on the canvas beside
 their drawing evidence; **View** opens the digital grid and its grounded region together.
+While a new set is indexed, the status bar counts the sheets, then the schedule sheets, read.
 Agent keeps the conversation, composer and proposal review together. Both
 workspaces resize or expand without changing the underlying takeoff data.
 Dense Agent answers offer Explore results: a full-workspace Table view by

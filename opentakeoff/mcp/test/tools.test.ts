@@ -44,6 +44,24 @@ async function call(client: Client, name: string, args: Record<string, unknown> 
   return { isError: !!res.isError, data: JSON.parse(res.content[0].text) };
 }
 
+test("a tool call that builds the sheet graph reports its steps to a client that asks for progress", async () => {
+  const client = await pair();
+  assert.equal((await call(client, "load_plan", { path: PLAN })).isError, false);
+  const notes: Array<{ progress: number; message?: string }> = [];
+  const res: any = await client.callTool({ name: "sheet_graph", arguments: {} }, undefined, { onprogress: (p) => { notes.push(p); } });
+  assert.ok(!res.isError);
+  assert.ok(notes.length >= 2, `progress notes: ${JSON.stringify(notes)}`);
+  // The spec's rule: progress only grows.
+  for (let i = 1; i < notes.length; i++) assert.ok(notes[i].progress > notes[i - 1].progress, JSON.stringify(notes));
+  assert.equal(notes[0].message, "Building the sheet graph: read 0 of 1 sheets");
+  assert.ok(notes.some((n) => n.message === "Building the sheet graph: read 1 of 1 sheets"));
+  // The graph is built once: a second call answers at once, with no steps;
+  // and a call that asks for no progress is sent none.
+  const again: unknown[] = [];
+  await client.callTool({ name: "sheet_graph", arguments: {} }, undefined, { onprogress: (p) => { again.push(p); } });
+  assert.deepEqual(again, []);
+});
+
 async function captureStderr(fn: () => Promise<void>): Promise<string> {
   const originalWrite = process.stderr.write;
   let output = "";
