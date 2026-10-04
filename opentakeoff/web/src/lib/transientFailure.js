@@ -18,3 +18,15 @@ export const TRANSIENT_RETRIES = 5;
 export function retryDelaySeconds(n) {
   return Math.min(30, 2 ** Math.max(1, n));
 }
+
+/** The sentence for a takeoff that failed: a server that did not answer is
+ * said in words, with when to try again; any other failure quotes its reason.
+ * Either way nothing partial was counted. */
+export function takeoffFailureMessage(what, error) {
+  if (isTransientRequestFailure(error)) {
+    return `The ${what} could not be compiled: the schedule server did not answer (it may be restarting, or the `
+      + "connection dropped). Nothing was counted; run it again in a moment.";
+  }
+  return `The ${what} could not be compiled: ${String(error?.message || error)}. Nothing was counted from a partial `
+    + "reading; run it again once that is resolved.";
+}

@@ -1,5 +1,9 @@
 # Changelog
 
+- **A takeoff the server never answered says so.** Running a takeoff while the schedule server restarted, or over a
+  dropped connection, failed with "The takeoff could not be compiled: Failed to fetch" (and the BAS takeoff with
+  "Production complete BAS compile (shared Session+ODL) failed: …"). It now says the schedule server did not answer
+  and to run it again in a moment; any other failure still quotes its reason.
 - **The schedule index tries again when the server did not answer, and offers Try again when it failed.** A dropped
   connection or a restarting server ended the index in "schedules FAILED", and the Schedules panel's only advice was
   to re-open the plan set. Now a request the server never answered (the connection refused or cut off, or a proxy's

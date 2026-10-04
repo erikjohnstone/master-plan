@@ -2,7 +2,7 @@
 // and only then: a refusal the server explained is its answer.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { isTransientRequestFailure, retryDelaySeconds, TRANSIENT_RETRIES } from "../src/lib/transientFailure.js";
+import { isTransientRequestFailure, retryDelaySeconds, takeoffFailureMessage, TRANSIENT_RETRIES } from "../src/lib/transientFailure.js";
 
 test("a request the server never answered is tried again; one it refused is not", () => {
   // What fetch throws when the server is down or the reply is cut off, per browser.
@@ -29,4 +29,13 @@ test("a request the server never answered is tried again; one it refused is not"
 test("retries wait 2, 4, 8, 16, then 30 s, five times", () => {
   assert.equal(TRANSIENT_RETRIES, 5);
   assert.deepEqual([1, 2, 3, 4, 5, 6].map(retryDelaySeconds), [2, 4, 8, 16, 30, 30]);
+});
+
+test("a takeoff the server never answered says so in words; any other failure quotes its reason", () => {
+  assert.equal(takeoffFailureMessage("takeoff", new TypeError("Failed to fetch")),
+    "The takeoff could not be compiled: the schedule server did not answer (it may be restarting, or the connection "
+    + "dropped). Nothing was counted; run it again in a moment.");
+  assert.equal(takeoffFailureMessage("BAS takeoff", new Error("plan.pdf is empty (0 bytes)")),
+    "The BAS takeoff could not be compiled: plan.pdf is empty (0 bytes). Nothing was counted from a partial reading; "
+    + "run it again once that is resolved.");
 });

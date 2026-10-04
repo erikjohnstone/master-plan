@@ -198,7 +198,7 @@ import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet, tabl
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { readNdjsonResult } from "../lib/ndjsonReply.js";
 import { withProgressLine } from "../lib/progressLog.js";
-import { isTransientRequestFailure, retryDelaySeconds, TRANSIENT_RETRIES } from "../lib/transientFailure.js";
+import { isTransientRequestFailure, retryDelaySeconds, takeoffFailureMessage, TRANSIENT_RETRIES } from "../lib/transientFailure.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { activeBasCapture, basWorkflowSchema, latestBasSequenceAiRun, mergeBasWorkflows, resolveBasPage,
   retainBasSequenceAiRun, verifyBasWorkflow } from "../lib/basWorkflow.ts";
@@ -8942,7 +8942,7 @@ export default function TakeoffCanvas() {
       return {
         // Say what failed and that nothing partial was kept; never fall back to
         // a weaker reading (the UI and MCP read one graph pipeline).
-        error: `The takeoff could not be compiled: ${e?.message || e}. Nothing was counted from a partial reading; run it again once that is resolved.`,
+        error: takeoffFailureMessage("takeoff", e),
       };
     }
     // openPanel: false — merge this compile's own rows into state but do NOT
@@ -9058,8 +9058,7 @@ export default function TakeoffCanvas() {
       });
     } catch (e) {
       return {
-        error: `Production complete BAS compile (shared Session+ODL) failed: ${e?.message || e}. `
-          + "No partial or browser-only quantity fallback was released.",
+        error: takeoffFailureMessage("BAS takeoff", e),
       };
     }
     const compiles = {};

@@ -937,6 +937,9 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   with Playwright route interception on the bundled mechanical sample: first two requests reset, "reconnecting…" at
   4.3 s, third request ran, ready at 19.4 s; a 500 refusal did not retry within 3 s, Try again ran it once lifted.
   Tests: transientFailure (the classes, the delays). Web typecheck clean, lint as at HEAD.
+- A takeoff the server never answered says so in words (#335): `takeoffFailureMessage` replaces "Failed to fetch"
+  and the BAS path's "Production complete BAS compile (shared Session+ODL) failed" with "the schedule server did not
+  answer … run it again in a moment"; other failures quote their reason as before. Test: transientFailure 3.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
