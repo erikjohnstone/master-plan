@@ -493,7 +493,10 @@ only grows; `message` says the step in words (`Building the sheet graph: read
 call answered from a built graph sends none. Calls that arrive while the graph
 is being built wait for that build rather than starting their own, and a
 `load_plan` that changes the set meanwhile fails them with a message to ask
-again.
+again. A client whose request timeout ends the first call before the graph is
+built should call again, not give up: the build keeps running in the server,
+and the next call waits for it instead of starting over. The server's
+instructions say so.
 
 ## Tools
 

@@ -279,6 +279,13 @@ test("initialize: server instructions state the marked-planset finish", async ()
   assert.match(client.getInstructions() || "", /marked-up planset/);
 });
 
+// A large set's first graph build outlasts many clients' request timeout; the
+// build carries on in the server (#328), so the agent's move is to call again.
+test("initialize: server instructions say a timed-out first read is called again, not abandoned", async () => {
+  const client = await pair();
+  assert.match(client.getInstructions() || "", /If such a call times out, call it again: the build keeps running in the server/);
+});
+
 test("export_marked_pdf: refuses an empty session, then writes a real 2-page PDF at the default path", async () => {
   const client = await pair();
   // load from a tmp copy so the default output path lands in the tmp dir,

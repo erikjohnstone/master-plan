@@ -104,6 +104,9 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 554f171 | A client that leaves a streamed reply no longer ends the app server (#332) |
 | 259c372 | One sheet-graph build at a time: concurrent MCP calls share it (#328), a takeoff joins the index's (#329) |
 | 7dfaaef | A cold schedule index survives a page reload and is shared by tabs: one build per set on the server (#331) |
+| daf28cf | The schedule server prunes its disk caches: other engines' graphs after a week, any graph and idle uploads after a month (#333) |
+| 2329bff | The schedule index tries again when the server did not answer; the Schedules panel offers Try again (#334) |
+| 869dae4 | A takeoff the server never answered says so in words (#335) |
 
 ## Known limits (documented, not fixed)
 
@@ -331,7 +334,7 @@ being saved as a regression check of the mark-prefix change, which touches every
 
 ## Active work / next queue
 
-Updated 2026-10-04, after #323, #317 and #319.
+Updated 2026-10-04, after #336.
 
 1. Production sweep r3 (#320), done (2026-10-04): the 28 sets the r2 sweep lost to browser crashes (25 open, 3
    walled), one at a time at 04c9a35. All 28 ran the whole flow (upload, index, graph, compile, panel, review, export)
@@ -342,7 +345,8 @@ Updated 2026-10-04, after #323, #317 and #319.
    as the set is walled.
 3. 058_CA (311 sheets): measure #322's graph-build memory alone on a quiet machine. Its first build is OCR-bound
    (over an hour under contention); since #323 a later table-code change no longer repeats the OCR.
-4. MCP `npm test` and `test:shared-path` at HEAD (the known failing tests are listed above).
+4. MCP `test:shared-path` at HEAD, once the scoreboard rebuild is done. `npm test` ran with #328 (48 files pass;
+   conformance fails only its two known tests).
 5. Re-measure graph build time in the app on 25_WA and klamath with the machine quiet (the sweep's 454 s was
    contention). 089_FL's corpus A/B is still to re-run.
 6. Deferred: a leaner build geometry (the build reads only each sheet's segments and image areas; about 590 MB
@@ -940,6 +944,12 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
 - A takeoff the server never answered says so in words (#335): `takeoffFailureMessage` replaces "Failed to fetch"
   and the BAS path's "Production complete BAS compile (shared Session+ODL) failed" with "the schedule server did not
   answer … run it again in a moment"; other failures quote their reason as before. Test: transientFailure 3.
+- An MCP agent whose first call timed out is told to call again (#336; surface-specific: the MCP server's
+  instructions and docs, describing #328's shared build). The SDK's default request timeout is 60 s and a large set's
+  first graph read takes minutes; the build carries on after the client gives up and a call made again joins it,
+  but the instructions did not say so. Probe (`sheet_graph` on the bundled mechanical sample, client timeout 2 s):
+  the first call timed out at 2,003 ms, the second answered 4,706 ms later, one build. Tests: tools (124 pass, with
+  "server instructions say a timed-out first read is called again"), staging 6; MCP typecheck clean.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

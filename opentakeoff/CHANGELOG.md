@@ -1,5 +1,12 @@
 # Changelog
 
+- **An agent whose first call timed out is told to call again.** A large set's first read of its sheet graph takes
+  minutes, longer than many MCP clients wait for an answer (60 s by default in the TypeScript SDK). The server goes on
+  building after the client gives up, and the same call made again waits for that build rather than starting over,
+  but nothing told the agent so, and one that takes a timeout for a failure reports the set as unreadable. The
+  server's instructions now say: if such a call times out, call it again. Probed on the bundled mechanical sample
+  with a 2 s client timeout: the first call timed out at 2.0 s, the same call made again answered 4.7 s later, from
+  the one build.
 - **A takeoff the server never answered says so.** Running a takeoff while the schedule server restarted, or over a
   dropped connection, failed with "The takeoff could not be compiled: Failed to fetch" (and the BAS takeoff with
   "Production complete BAS compile (shared Session+ODL) failed: …"). It now says the schedule server did not answer
