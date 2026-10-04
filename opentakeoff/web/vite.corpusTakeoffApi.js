@@ -421,6 +421,78 @@ export function restoreUploadedNames(message, pdfPaths = [], fileNames = []) {
   return out;
 }
 
+// ── One graph build per set ────────────────────────────────────────────
+// A cold index of a large set runs for minutes, and it used to belong to the
+// request that asked for it: the request closing killed the build, so a page
+// reloaded mid-index started it again from nothing, and two tabs on one set
+// built it twice. A build now belongs to the set (its paths, which name its
+// bytes): a request for a set being built follows that build from the step it
+// has reached; the build outlives the request; and one nobody has followed
+// for `graceMs` is stopped, so a closed tab does not keep the server busy. A
+// finished build leaves the graph in the sheet-graph cache, where the next
+// request for the set finds it.
+const GRAPH_BUILD_GRACE_MS = 60_000;
+const graphBuilds = new Map();
+
+/**
+ * The build of `pdfPaths`' sheet graph: the one running, or a new one.
+ * `result` is the graph's JSON text; `follow(onProgress)` hands each step to
+ * `onProgress` (the latest at once) and returns the call that stops following.
+ * @param {string[]} pdfPaths
+ * @param {{ graceMs?: number, run?: typeof runCli }} [options]
+ * @returns {{ result: Promise<string>, follow: (onProgress?: ((p: object) => void) | null) => () => void }}
+ */
+export function sharedGraphBuild(pdfPaths, { graceMs = GRAPH_BUILD_GRACE_MS, run = runCli } = {}) {
+  const key = pdfPaths.join("\n");
+  let build = graphBuilds.get(key);
+  if (!build) {
+    const created = { listeners: new Set(), abort: new AbortController(), last: null, idle: null, result: null };
+    created.result = (async () => {
+      const dir = await mkdtemp(join(tmpdir(), "ot-graph-build-"));
+      try {
+        const outPath = join(dir, "graph.json");
+        await run({
+          mode: "graph", pdfPaths, outPath, signal: created.abort.signal,
+          onProgress: (p) => {
+            created.last = p;
+            for (const listener of created.listeners) listener(p);
+          },
+        });
+        return await readFile(outPath, "utf8");
+      } finally {
+        if (graphBuilds.get(key) === created) graphBuilds.delete(key);
+        if (created.idle) clearTimeout(created.idle);
+        await rm(dir, { recursive: true, force: true }).catch(() => {});
+      }
+    })();
+    // Each follower is handed the failure; a build nobody follows any more
+    // fails to no one.
+    created.result.catch(() => {});
+    graphBuilds.set(key, created);
+    build = created;
+  }
+  const follow = (onProgress = null) => {
+    if (build.idle) {
+      clearTimeout(build.idle);
+      build.idle = null;
+    }
+    const listener = onProgress ? (p) => onProgress(p) : () => {};
+    build.listeners.add(listener);
+    if (onProgress && build.last) onProgress(build.last);
+    let following = true;
+    return () => {
+      if (!following) return;
+      following = false;
+      build.listeners.delete(listener);
+      if (build.listeners.size === 0 && graphBuilds.get(key) === build) {
+        build.idle = setTimeout(() => build.abort.abort(), graceMs);
+        build.idle.unref?.();
+      }
+    };
+  };
+  return { result: build.result, follow };
+}
+
 function restoreUploadedSheetKeys(result, pdfPaths, fileNames) {
   if (!result || typeof result !== "object") return result;
   const aliases = new Map(pdfPaths.map((path, index) => [path.split(/[\\/]/).at(-1), fileNames[index] || path.split(/[\\/]/).at(-1)]));
@@ -482,24 +554,29 @@ async function handle(req, res, mode) {
       return sendJson(res, 400, { error: "symbol sweep parameters required" });
     }
     if (mode === "graph") {
-      const outPath = join(tmpDir || await mkdtemp(join(tmpdir(), "ot-graph-out-")), "graph.json");
-      if (!tmpDir) tmpDir = resolve(outPath, "..");
+      // The set's build, not this request's: a reload or a second tab
+      // follows the build already running (sharedGraphBuild). A cold build
+      // runs for minutes, so a streamed reply carries each step it finishes,
+      // then the graph itself as the last line (the plain reply's JSON).
+      const build = sharedGraphBuild(pdfPaths);
+      if (stream) beginNdjson(res);
+      const leave = build.follow(stream ? (p) => writeNdjson(res, { type: "progress", ...p }) : null);
+      const left = new Promise((resolveLeft) => {
+        if (abortController.signal.aborted) resolveLeft(null);
+        else abortController.signal.addEventListener("abort", () => resolveLeft(null), { once: true });
+      });
+      let raw;
+      try {
+        raw = await Promise.race([build.result, left]);
+      } finally {
+        leave();
+      }
+      if (raw == null) return; // the request closed; the build goes on for whoever asks next
       if (stream) {
-        // A cold build runs for minutes: stream each step it finishes, then
-        // the graph itself as the last line (the same JSON the plain reply
-        // sends, written as it was read).
-        beginNdjson(res);
-        await runCli({
-          mode: "graph", pdfPaths, outPath, signal: abortController.signal,
-          onProgress: (p) => writeNdjson(res, { type: "progress", ...p }),
-        });
-        const raw = await readFile(outPath, "utf8");
         res.write(`{"type":"result","result":${raw}}\n`);
         res.end();
         return;
       }
-      await runCli({ mode: "graph", pdfPaths, outPath, signal: abortController.signal });
-      const raw = await readFile(outPath, "utf8");
       return sendJson(res, 200, raw);
     }
     if (mode === "sweep") {

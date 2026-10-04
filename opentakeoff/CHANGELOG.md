@@ -1,5 +1,11 @@
 # Changelog
 
+- **Reloading the page while the schedule index is built picks it up where it was.** The server's index build
+  belonged to the request that asked for it, so a reload (or a closed tab) stopped it, and the reloaded page started
+  it again from the first sheet; two tabs on one set built it twice. A build now belongs to the set: a reloaded page
+  or a second tab follows the build already running, from the step it has reached, and a build nobody follows for a
+  minute is stopped. On 063_MT reloaded at "schedules 3/10": before, the index started over and was ready at 94 s;
+  now the reloaded page shows "schedules 3/10" within 3 s and the index is ready at 71 s, built once.
 - **Reloading the page while a takeoff or the schedule index is running no longer stops the app server.** A reply
   that streams its steps (the schedule index since the last release, and the automatic takeoff, BAS takeoff and
   reconcile before it) met a client that left (a reload, a closed tab, a dropped connection) by trying to answer it
