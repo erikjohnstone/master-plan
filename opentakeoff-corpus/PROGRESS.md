@@ -101,6 +101,9 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 8a8f7ae | A technology sheet's device list holds no HVAC units: 21_VA FAN 12 -> 10 (its key), the only change over 113 keyed sets (#325) |
 | 38d48fb | A PDF that can't be read is refused at upload, `load_plan` and the graph CLI, naming the file, the cause and the fix (#326) |
 | dda6696 | The schedule index counts its steps: the chip reads sheets, then schedules, N of M; MCP clients that ask get progress notifications (#327) |
+| 554f171 | A client that leaves a streamed reply no longer ends the app server (#332) |
+| 259c372 | One sheet-graph build at a time: concurrent MCP calls share it (#328), a takeoff joins the index's (#329) |
+| 7dfaaef | A cold schedule index survives a page reload and is shared by tabs: one build per set on the server (#331) |
 
 ## Known limits (documented, not fixed)
 
@@ -905,6 +908,15 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   serverSurvivesDisconnect (a real HTTP server with the plugin's middleware; a streamed compile of the sample whose
   client leaves after the first line; nothing escapes and the next request is answered 400): fails at dda6696, passes
   now. previewRoutes 3, pdfReadable 4, graphProgress 3, compileProgressWalkthrough 3 pass.
+- One index build per set on the server (#331; surface-specific: the server's index route; the build is the same
+  CLI). The route killed its CLI when its request closed, so a reload mid-index started over and two tabs built
+  twice. `sharedGraphBuild` keys a build by the set's paths (spooled by sha256), lets a request follow a running
+  build from its latest step, and stops a build nobody has followed for 60 s. Probed on 063_MT (cold copies),
+  reloading at "schedules 3/10": the plugin at 259c372 (with #332) killed the build and started again from "sheets
+  1/21", ready at 94.4 s, two graph processes; now the reloaded page shows "schedules 3/10" 2.6 s after the reload,
+  ready at 70.5 s, one process. Tests: sharedGraphBuild (one build for two requests, the late one from the step
+  reached; a build followed again within its grace carries on, one left alone is stopped), serverSurvivesDisconnect,
+  previewRoutes, graphProgress, compileProgressWalkthrough, pdfReadable: all pass; web typecheck clean.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
