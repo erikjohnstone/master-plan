@@ -8298,6 +8298,20 @@ export default function TakeoffCanvas() {
     }
   }
 
+  // A production request that reads the set's graph, posted while the
+  // background index is still fetching it, built the same graph again in a
+  // second server process: twice the CPU and memory on a large set (#329).
+  // It waits for that fetch instead, then reads the graph the server cached.
+  // Only a fetch for the set on screen is joined; a failed one is the
+  // request's own to report.
+  async function joinGraphInFlight(report) {
+    const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
+    const inFlight = agentGraphInFlightRef.current;
+    if (!inFlight || inFlight.sig !== sig) return;
+    report?.({ phase: "graph", message: "Waiting for the schedule index to finish (the status bar counts it)…" });
+    try { await inFlight.promise; } catch { /* the request reports its own failure */ }
+  }
+
   // Background Session+ODL graph prewarm — the blueprint is extracted and
   // indexed AS SOON AS IT IS LOADED, so Agent compile / query_table /
   // reconcile hit a warm graph instead of cold-starting the production
@@ -8895,6 +8909,7 @@ export default function TakeoffCanvas() {
     // does not look frozen ("nothing is working").
     let compiled;
     try {
+      await joinGraphInFlight(reportAgentTakeoffProgress);
       compiled = await fetchProductionCorpusTakeoff(kind, {
         service: opts.service || null,
         bas_math: opts.bas_math,
@@ -9156,6 +9171,7 @@ export default function TakeoffCanvas() {
       return remote;
     }
 
+    await joinGraphInFlight(reportProgress);
     const prod = await fetchProductionReconcileSchedulePlan({ ...opts, onProgress: reportProgress });
     if (prod && !prod.error && Array.isArray(prod.rows)) {
       const csv = reconcileRowsToCsv(prod.rows);

@@ -80,6 +80,37 @@ test("a graph build reports its steps, and only reports them: the same graph wit
   assert.deepEqual(steps, []);
 });
 
+test("calls that arrive while the graph is built share the one build and get it whole (#328)", async () => {
+  // Two tool calls at once on a set not yet read each built the graph, and a
+  // call arriving after the sheet pass was handed the graph before the vector
+  // stack had read its tables.
+  const s = new Session();
+  await s.loadPlan(PLAN);
+  let builds = 0;
+  let late: Promise<unknown> | null = null;
+  s.onGraphProgress = (e) => {
+    if (e.stage === "sheets" && e.done === 0) builds++;
+    if (e.stage === "sheets" && e.done === e.total && !late) late = s.graphForPipeline();
+  };
+  const [a, b] = await Promise.all([s.graphForPipeline(), s.graphForPipeline()]);
+  assert.equal(builds, 1, "one build for both calls");
+  assert.ok(a === b, "both calls get the same graph");
+  assert.ok(late, "a call arrived after the sheet pass");
+  const c = await late! as typeof a;
+  assert.ok(c === a, "the late call waits for the same build");
+  assert.ok(c.notes.some((n) => n.startsWith("timing:")), "and gets it whole");
+  // A set changed under a build fails the build's callers at once (reading
+  // the destroyed documents, it never finished: they waited for good), and
+  // the next call builds the new set.
+  await s.loadPlan(PLAN);
+  const stale = assert.rejects(s.graphForPipeline(), /The plan changed \(load_plan\) while its sheet graph was being built; ask again/);
+  await s.loadPlan(PLAN);
+  await stale;
+  const fresh = await s.graphForPipeline();
+  assert.ok(fresh.notes.some((n) => n.startsWith("timing:")));
+  assert.ok(await s.graphForPipeline() === fresh, "the new set's graph is kept");
+});
+
 test("sheet lookup: by key, by title-block number, unknown lists loaded keys", async () => {
   const s = new Session();
   await s.loadPlan(PLAN);

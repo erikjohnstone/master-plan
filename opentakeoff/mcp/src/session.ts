@@ -1178,7 +1178,7 @@ export class Session {
     } else if (this.docs.has(base)) {
       throw new UserError(`${base} is already loaded — merge adds NEW documents. To reload it, call load_plan without merge (replaces the whole session).`);
     }
-    this.graph = null;   // the sheet graph (#87) indexes the OLD document set
+    this.dropGraph();   // the sheet graph (#87) indexes the OLD document set
     this.tagOccurrenceCache.clear();
     this.vocabularyIds.clear();
     this.roomTagCache.clear();
@@ -7779,80 +7779,141 @@ export class Session {
   // clears it). The engine is pure (web/src/lib/sheetgraph.ts); this is the
   // span plumbing plus the wire shapes.
   private graph: SheetGraph | null = null;
+  /** The graph build under way, which every caller that arrives during it
+   * shares (ensureGraph). */
+  private graphBuild: Promise<SheetGraph> | null = null;
+  /** Fails that build's callers when the set changes under it (dropGraph). */
+  private graphBuildAbandon: ((error: Error) => void) | null = null;
+  /** Counts the changes of the loaded set; a build started before the last
+   * one is not the set's graph. */
+  private graphEpoch = 0;
   /** Vector segments extracted during ensureGraph — fed to L2/L3.5 pipeline passes. */
   private pipelineSegs = new Map<string, number[]>();
 
   private async ensureGraph(): Promise<SheetGraph> {
     if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
-    if (!this.graph) {
-      const inputs: SheetSpans[] = [];
-      // The drawn delta-triangle hunt needs linework — but the hunt is a BONUS
-      // lane and must never take the graph down. On a monster set (a 287-sheet
-      // combined pricing set is real) the hunt's linework is bounded: only
-      // plan/schedule-shaped sheets that carry a bare 1–2 digit span are
-      // hunted, and a global vector budget bounds the whole pass. Sheets past
-      // the budget are NAMED in notes — text markers are still read
-      // everywhere. The linework is the sheet's cached geometry: the vector
-      // stack below reads every sheet's geometry anyway (its sheet contexts),
-      // and a throwaway extraction here read the same segments a second time
-      // and held both copies to the end of the build (012_MO: 27 million
-      // numbers, about 220 MB).
-      let vecBudget = 30_000_000; // segments across the whole hunt
-      let skippedHeavy = 0;
-      // L0/L1 is not free and was never timed. Measured through the UI on a
-      // 31-sheet set: 26 minutes of single-threaded compute before the first
-      // question could be asked, of which the table extractor was 9%. The rest
-      // was here and in the stack below, and had to be inferred from `ps`.
-      const tSpans = Date.now();
-      // Per-sheet, on stderr, as it goes. A total printed at the end says the
-      // build was slow; it does not say WHICH SHEET, and on a set where one
-      // sheet dominates that is the only question worth answering. Off unless
-      // OPENTAKEOFF_GRAPH_TRACE is set, so normal runs are unchanged.
-      const trace = !!process.env.OPENTAKEOFF_GRAPH_TRACE;
-      let read = 0;
-      this.onGraphProgress?.({ stage: "sheets", done: 0, total: this.sheets.size });
-      for (const s of this.sheets.values()) {
-        const tSheet = Date.now();
-        if (!s.spans) s.spans = textSpans(s.page);
-        const spans = s.spans.map((t) => ({ str: t.str, x: t.x0, y: t.y0, w: t.x1 - t.x0, h: t.y1 - t.y0, ...(t.rot ? { rot: t.rot } : {}) }));
-        let segs: number[] | undefined;
-        if (spans.some((t) => /^\d{1,2}$/.test(t.str.trim()))) {
-          // the extraction role (classifySheetRoleBySignals), as for every extractor
-          const role = classifySheetRoleBySignals({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
-          if (role === "plan" || role === "schedule" || role === "demolition" || role === "schematic" || role === "unknown") {
-            if (vecBudget <= 0) skippedHeavy++;
-            else {
-              segs = (await this.ensureGeometry(s)).segs;
-              vecBudget -= segs.length / 4;
-            }
+    if (this.graph) return this.graph;
+    // One build at a time (#328). Two tool calls that arrived together on a
+    // set not yet read each built the graph (twice the time and memory), and
+    // a call that arrived while the vector stack ran was handed the graph
+    // before its tables were read (the bundled mechanical sample: 6 of 10).
+    // Every caller now waits for the one build, and the graph is the set's
+    // only once every pass has run.
+    if (!this.graphBuild) {
+      const epoch = this.graphEpoch;
+      const build = new Promise<SheetGraph>((resolve, reject) => {
+        this.graphBuildAbandon = reject;
+        // Started once it is registered: its first steps are reported
+        // synchronously, and a listener may call back in.
+        Promise.resolve().then(() => this.buildGraph(epoch)).then(resolve, reject);
+      }).then((graph) => {
+        // Kept only if the set has not changed since (a change can land
+        // between the build's end and this line).
+        if (epoch === this.graphEpoch) this.graph = graph;
+        return graph;
+      });
+      this.graphBuild = build;
+      // Settled either way, the next call builds afresh if it must (a failed
+      // build is tried again; its callers get the failure).
+      const settled = () => {
+        if (this.graphBuild !== build) return;
+        this.graphBuild = null;
+        this.graphBuildAbandon = null;
+      };
+      build.then(settled, settled);
+    }
+    return this.graphBuild;
+  }
+
+  /** The loaded set changed: its graph goes, and a build of the old set
+   * fails its callers now. Replacing the set destroys the old documents, and
+   * a build reading them never finished: its callers waited for good. */
+  private dropGraph(): void {
+    this.graph = null;
+    this.graphEpoch++;
+    this.graphBuildAbandon?.(new UserError(
+      "The plan changed (load_plan) while its sheet graph was being built; ask again to read the new set.",
+    ));
+    this.graphBuild = null;
+    this.graphBuildAbandon = null;
+  }
+
+  /** The loaded set's sheet graph, built: every sheet's text and linework,
+   * the graph over them, then the vector stack. Only ensureGraph calls it;
+   * `epoch` is the set it was asked for, and it stops once that set is gone. */
+  private async buildGraph(epoch: number): Promise<SheetGraph> {
+    const superseded = () => {
+      if (epoch !== this.graphEpoch) throw new UserError("The plan changed while its sheet graph was being built.");
+    };
+    const inputs: SheetSpans[] = [];
+    // The drawn delta-triangle hunt needs linework — but the hunt is a BONUS
+    // lane and must never take the graph down. On a monster set (a 287-sheet
+    // combined pricing set is real) the hunt's linework is bounded: only
+    // plan/schedule-shaped sheets that carry a bare 1–2 digit span are
+    // hunted, and a global vector budget bounds the whole pass. Sheets past
+    // the budget are NAMED in notes — text markers are still read
+    // everywhere. The linework is the sheet's cached geometry: the vector
+    // stack below reads every sheet's geometry anyway (its sheet contexts),
+    // and a throwaway extraction here read the same segments a second time
+    // and held both copies to the end of the build (012_MO: 27 million
+    // numbers, about 220 MB).
+    let vecBudget = 30_000_000; // segments across the whole hunt
+    let skippedHeavy = 0;
+    // L0/L1 is not free and was never timed. Measured through the UI on a
+    // 31-sheet set: 26 minutes of single-threaded compute before the first
+    // question could be asked, of which the table extractor was 9%. The rest
+    // was here and in the stack below, and had to be inferred from `ps`.
+    const tSpans = Date.now();
+    // Per-sheet, on stderr, as it goes. A total printed at the end says the
+    // build was slow; it does not say WHICH SHEET, and on a set where one
+    // sheet dominates that is the only question worth answering. Off unless
+    // OPENTAKEOFF_GRAPH_TRACE is set, so normal runs are unchanged.
+    const trace = !!process.env.OPENTAKEOFF_GRAPH_TRACE;
+    let read = 0;
+    this.onGraphProgress?.({ stage: "sheets", done: 0, total: this.sheets.size });
+    for (const s of this.sheets.values()) {
+      superseded();
+      const tSheet = Date.now();
+      if (!s.spans) s.spans = textSpans(s.page);
+      const spans = s.spans.map((t) => ({ str: t.str, x: t.x0, y: t.y0, w: t.x1 - t.x0, h: t.y1 - t.y0, ...(t.rot ? { rot: t.rot } : {}) }));
+      let segs: number[] | undefined;
+      if (spans.some((t) => /^\d{1,2}$/.test(t.str.trim()))) {
+        // the extraction role (classifySheetRoleBySignals), as for every extractor
+        const role = classifySheetRoleBySignals({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
+        if (role === "plan" || role === "schedule" || role === "demolition" || role === "schematic" || role === "unknown") {
+          if (vecBudget <= 0) skippedHeavy++;
+          else {
+            segs = (await this.ensureGeometry(s)).segs;
+            vecBudget -= segs.length / 4;
           }
         }
-        inputs.push({ key: s.key, sheet_number: s.sheetNumber, spans, ...(segs?.length ? { segs } : {}) });
-        if (segs?.length) this.pipelineSegs.set(s.key, segs);
-        this.onGraphProgress?.({ stage: "sheets", done: ++read, total: this.sheets.size, sheet: s.key });
-        if (trace) {
-          process.stderr.write(
-            `GRAPH_TRACE sheet=${s.sheetNumber ?? s.key} spans=${spans.length}`
-            + ` segs=${segs ? segs.length / 4 : 0} ms=${Date.now() - tSheet}\n`,
-          );
-        }
       }
-      const spansMs = Date.now() - tSpans;
-      if (trace) process.stderr.write(`GRAPH_TRACE spans+segments total ms=${spansMs}\n`);
-      const tBuild = Date.now();
-      this.graph = buildSheetGraph(inputs);
-      const buildMs = Date.now() - tBuild;
-      if (trace) process.stderr.write(`GRAPH_TRACE buildSheetGraph ms=${buildMs}\n`);
-      if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
-      const tStack = Date.now();
-      await this.runVectorTakeoffStack(this.graph);
-      this.applyDrawingGroups(this.graph);
-      this.graph.notes.push(
-        `timing: L0/L1 spans+segments ${spansMs}ms over ${inputs.length} sheet(s)`
-        + ` · L2 buildSheetGraph ${buildMs}ms · L1.8-L5 stack ${Date.now() - tStack}ms`,
-      );
+      inputs.push({ key: s.key, sheet_number: s.sheetNumber, spans, ...(segs?.length ? { segs } : {}) });
+      if (segs?.length) this.pipelineSegs.set(s.key, segs);
+      this.onGraphProgress?.({ stage: "sheets", done: ++read, total: this.sheets.size, sheet: s.key });
+      if (trace) {
+        process.stderr.write(
+          `GRAPH_TRACE sheet=${s.sheetNumber ?? s.key} spans=${spans.length}`
+          + ` segs=${segs ? segs.length / 4 : 0} ms=${Date.now() - tSheet}\n`,
+        );
+      }
     }
-    return this.graph;
+    const spansMs = Date.now() - tSpans;
+    if (trace) process.stderr.write(`GRAPH_TRACE spans+segments total ms=${spansMs}\n`);
+    const tBuild = Date.now();
+    const graph = buildSheetGraph(inputs);
+    const buildMs = Date.now() - tBuild;
+    if (trace) process.stderr.write(`GRAPH_TRACE buildSheetGraph ms=${buildMs}\n`);
+    if (skippedHeavy) graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
+    superseded();
+    const tStack = Date.now();
+    await this.runVectorTakeoffStack(graph);
+    this.applyDrawingGroups(graph);
+    graph.notes.push(
+      `timing: L0/L1 spans+segments ${spansMs}ms over ${inputs.length} sheet(s)`
+      + ` · L2 buildSheetGraph ${buildMs}ms · L1.8-L5 stack ${Date.now() - tStack}ms`,
+    );
+    return graph;
   }
 
   /** Full L0–L5 vector takeoff stack on the shared Session path (geometry-first;
@@ -8775,6 +8836,7 @@ export class Session {
    */
   seedPipelineGraph(graph: SheetGraph): void {
     if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    this.dropGraph();
     this.graph = graph;
     this.applyDrawingGroups(this.graph);
   }

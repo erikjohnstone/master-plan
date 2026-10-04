@@ -1628,7 +1628,7 @@ The panel docks on the right, beside the drawing rather than over it, because th
 
 **When it has nothing to show**, it says which of the three reasons applies: the set is not indexed yet, the pass is still running, or the pass finished and recognised no tables — most often a scanned set with no text layer. A failed pass gets a full sentence here rather than one word in the status bar.
 
-**While the pass runs**, the status bar counts it. It first reads every sheet (**Indexed · sheets 3/47…**), then the schedules on each sheet that may hold one (**Indexed · schedules 4/12…**), the part that takes minutes on a large set, and the bar under it moves with the count; **Indexed · schedules ready** means it is done. Hover the chip for the same count in words. A set the server has read before is answered at once, with no count.
+**While the pass runs**, the status bar counts it. It first reads every sheet (**Indexed · sheets 3/47…**), then the schedules on each sheet that may hold one (**Indexed · schedules 4/12…**), the part that takes minutes on a large set, and the bar under it moves with the count; **Indexed · schedules ready** means it is done. Hover the chip for the same count in words. A set the server has read before is answered at once, with no count. A takeoff you start while it counts waits for it (the agent says so), then runs on the index it built.
 
 ## 13. The Agent panel
 

@@ -100,6 +100,7 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | a94a76c, 04c9a35 | The title-band splitter reads letters where the cells are: a page whose box starts away from (0,0) is cut as any other (#319) |
 | 8a8f7ae | A technology sheet's device list holds no HVAC units: 21_VA FAN 12 -> 10 (its key), the only change over 113 keyed sets (#325) |
 | 38d48fb | A PDF that can't be read is refused at upload, `load_plan` and the graph CLI, naming the file, the cause and the fix (#326) |
+| dda6696 | The schedule index counts its steps: the chip reads sheets, then schedules, N of M; MCP clients that ask get progress notifications (#327) |
 
 ## Known limits (documented, not fixed)
 
@@ -872,6 +873,27 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   in-flight guard, so two concurrent MCP calls on a cold set build twice and a call arriving during the vector stack
   gets a graph without its tables (#328); a single-kind compile started during the canvas's prewarm builds the graph
   in a second process (the complete-BAS path already joins the prewarm; #329).
+- One sheet-graph build at a time (#328, shared: `Session.ensureGraph`; #329, surface-specific: the canvas's
+  compile and reconcile requests). MCP: `ensureGraph` had no in-flight guard. Probed on the bundled mechanical sample
+  with the cache off: two `graphForPipeline` calls at once built the graph twice (11.2 s), and a third call made when
+  the table stage began got the graph before the vector stack had read its tables (6 of 10). Now every caller shares
+  one build, registered before any of it runs (a progress listener that calls back in started 1,910 builds on the
+  old code), and the graph is kept only when every pass has run: one build, 5.9 s, the late call gets all 10. A
+  `load_plan` during a build bumps the set's epoch and fails the build's callers at once ("The plan changed
+  (load_plan) while its sheet graph was being built; ask again"); on the old code (04c9a35) such a call was still
+  pending after 30 s, since replacing the set destroys the documents the build reads. The build stops at the next
+  sheet once superseded. Graphs built on the fix, cache off, are identical to dda6696's apart from timings (sample,
+  063_MT). Test: session "calls that arrive while the graph is built share the one build and get it whole (#328)"
+  (fails on the old code: 1,910 builds). Canvas: a single-kind compile or a reconcile posted while the background
+  index's graph request ran started a second CLI that built the same graph. Probed on 063_MT (two copies with bytes
+  appended after %%EOF, so each build is cold), a compile started a second after upload: before, `compile` and
+  `graph` processes built side by side from 1.8 s to 85.2 s and the takeoff returned at 95 s; after, the compile
+  waits for the index (one process at a time), starts at 69.9 s, reads the cached graph in 4 s, and returns at
+  83.7 s. Stage timings over 56 rebuilt graphs: the per-sheet table reads that report progress are nearly all the
+  build (median 37 s, p90 229 s, max 470 s); ODL fallback, OCR assist and control schematics are at most 14 s.
+  MCP default suite on the fix, each file alone (49 files; crossCorpusWorkflow left out, as it rebuilds every keyed
+  set's graph in one process): 48 pass; conformance fails only its two known tests (the material-schedule chain,
+  and navfac's sweep, whose cold in-process build outlasts the client's 60 s request timeout).
 - A client that leaves a streamed reply no longer ends the app server (#332; surface-specific: the server's
   routes). Found reloading the canvas during a cold index of 063_MT at dda6696: the server log ended in
   `ERR_HTTP_HEADERS_SENT` from `sendJson`, called by `handle()`'s error path after the request's abort had stopped

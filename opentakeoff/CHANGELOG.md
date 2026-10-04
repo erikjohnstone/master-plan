@@ -7,6 +7,21 @@
   process ended, taking every open session's work with it. A reply already begun now ends with its error line if
   anyone is still reading, and nothing if not; and whatever one request throws is answered as that request's error,
   never the server's. Found by reloading the page during a cold schedule index of 063_MT.
+- **A takeoff started while the schedule index is built waits for it instead of building it again.** Asking for an
+  HVAC, BAS or valve takeoff (or a schedule-to-plan reconcile) while the status bar was still counting the index
+  started a second server process that built the same sheet graph beside the index's own, twice the CPU and memory on
+  a large set. The takeoff now says it is waiting for the schedule index, then runs on the graph the index cached. On
+  063_MT, a takeoff asked for a second after upload: the graph was built twice at once for 83 s and the takeoff
+  returned at 95 s; now it is built once and the takeoff returns at 84 s. The complete BAS takeoff already waited.
+- **Calls that arrive together share one sheet-graph build.** The MCP server built the sheet graph once per call
+  that found none: two tool calls sent at once on a set not yet read (an agent's parallel `sheet_graph` and
+  `find_schedule`, say) built it twice, in twice the time and memory, and a call that arrived while the build was
+  reading its schedule tables was handed the graph before those tables were in it (on the bundled mechanical
+  sample, 6 of its 10 tables). Every call now waits for the one build and gets the whole graph: on that sample, two
+  calls at once take 5.9 s instead of 11.2 s, and a third arriving mid-build gets all 10 tables. A `load_plan` that
+  changes the set while a build runs now fails that build's calls at once, saying the plan changed and to ask again;
+  before, a call reading documents the new `load_plan` had closed never returned. The graph a set builds is the
+  same as before.
 - **The status bar counts the schedule index as it is built.** A set the server hasn't read before is indexed in
   two passes: every sheet, then the tables on each sheet that may hold a schedule, which takes minutes on a large set.
   The status bar said "Indexed · schedules indexing…" the whole time, over a progress bar already full from the text

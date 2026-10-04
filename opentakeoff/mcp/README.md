@@ -490,7 +490,10 @@ builds: `progress` counts the sheets read, then the schedule sheets read, and
 only grows; `message` says the step in words (`Building the sheet graph: read
 12 of 47 sheets`, then `… read the schedules on 3 of 12 sheets`). There is no
 `total`, since the schedule sheets are known only once every sheet is read. A
-call answered from a built graph sends none.
+call answered from a built graph sends none. Calls that arrive while the graph
+is being built wait for that build rather than starting their own, and a
+`load_plan` that changes the set meanwhile fails them with a message to ask
+again.
 
 ## Tools
 
