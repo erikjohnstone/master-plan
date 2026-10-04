@@ -50,7 +50,7 @@ function ScheduleGrid({ table, onPaint }) {
 }
 
 export default function SchedulesPanel({
-  tables = [], prewarm = {phase:"idle"}, indexing = false, sheetLabel, onPaint, onClose,
+  tables = [], prewarm = {phase:"idle"}, indexing = false, sheetLabel, onPaint, onClose, onRetry,
 }) {
   const [q,setQ] = useState("");
   const [sheet,setSheet] = useState("");
@@ -120,7 +120,7 @@ export default function SchedulesPanel({
           {(q||sheet||kind) && <button type="button" onClick={clear}>Clear filters</button>}
         </div>
       </div>}
-      {phase === "error" ? <div className="workspace-empty" role="alert"><h3>Schedule indexing failed</h3><p>{prewarm.message || "The index could not be built."}</p><p>The PDF text index is unaffected. Re-open the plan set to try again.</p></div>
+      {phase === "error" ? <div className="workspace-empty" role="alert"><h3>Schedule indexing failed</h3><p>{prewarm.message || "The index could not be built."}</p><p>The PDF text index is unaffected.</p>{onRetry ? <button type="button" data-schedules-retry onClick={onRetry}>Try again</button> : <p>Re-open the plan set to try again.</p>}</div>
         : loading && !tables.length ? <div className="workspace-empty" role="status"><h3>Reading the schedules…</h3><p>Checking every sheet for tables. Results appear here when indexing finishes.</p></div>
         : !tables.length ? <div className="workspace-empty"><h3>{phase === "idle" ? "Your schedule workspace" : "No schedules found"}</h3><p>{phase === "idle" ? "Open a plan set. Its indexed schedules will appear here, linked to their drawing evidence." : "This set has no recognised schedule tables. You can still browse its drawings and text."}</p></div>
         : !shown.length ? <div className="workspace-empty"><h3>No matching schedules</h3><p>{totals.tables} schedules indexed. Try another title, tag, sheet or kind.</p><button type="button" onClick={clear}>Clear filters</button></div>

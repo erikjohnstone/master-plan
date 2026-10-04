@@ -198,6 +198,7 @@ import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet, tabl
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { readNdjsonResult } from "../lib/ndjsonReply.js";
 import { withProgressLine } from "../lib/progressLog.js";
+import { isTransientRequestFailure, retryDelaySeconds, TRANSIENT_RETRIES } from "../lib/transientFailure.js";
 import { basResultForCanvas } from "../lib/basBrowserResult.js";
 import { activeBasCapture, basWorkflowSchema, latestBasSequenceAiRun, mergeBasWorkflows, resolveBasPage,
   retainBasSequenceAiRun, verifyBasWorkflow } from "../lib/basWorkflow.ts";
@@ -1007,6 +1008,11 @@ export default function TakeoffCanvas() {
   // finishes — a control that materialises is a control nobody learns.
   const graphPrewarmSigRef = useRef("");
   const graphPrewarmBusyRef = useRef(false);
+  // A prewarm that failed transiently (the server restarting, a dropped
+  // connection) tries again on its own: the attempt bumps the effect below,
+  // and the retries count since the last success or the last set change.
+  const [prewarmAttempt, setPrewarmAttempt] = useState(0);
+  const prewarmRetriesRef = useRef({ sig: "", count: 0 });
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
   // tone is optional and always wins over the inference in canvasUtil — pass it
   // where the call site knows better than a string prefix ever could.
@@ -8332,6 +8338,8 @@ export default function TakeoffCanvas() {
       return;
     }
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
+    if (prewarmRetriesRef.current.sig !== sig) prewarmRetriesRef.current = { sig, count: 0 };
+    let retryTimer = null;
     if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig
       && agentGraphCacheRef.current.__production) {
       graphPrewarmSigRef.current = sig;
@@ -8353,6 +8361,7 @@ export default function TakeoffCanvas() {
       try {
         const prod = await getOrFetchProductionGraph(sig, onStep);
         if (cancelled) return;
+        prewarmRetriesRef.current = { sig, count: 0 };
         setGraphPrewarm({ phase: "ready" });
         // A refused extraction engine is a fact about every table on this
         // set, not a debug footnote — `g.notes` already carries it (see
@@ -8385,14 +8394,27 @@ export default function TakeoffCanvas() {
         }
       } catch (e) {
         if (!cancelled) {
-          setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
+          const retries = prewarmRetriesRef.current;
+          if (isTransientRequestFailure(e) && retries.count < TRANSIENT_RETRIES) {
+            // The server did not answer: say so and ask again, rather than
+            // telling the estimator to re-open the set after a restart.
+            retries.count += 1;
+            const wait = retryDelaySeconds(retries.count);
+            setGraphPrewarm({ phase: "warming", reconnecting: { inSeconds: wait, attempt: retries.count } });
+            retryTimer = setTimeout(() => setPrewarmAttempt((n) => n + 1), wait * 1000);
+          } else {
+            setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
+          }
         }
       } finally {
         graphPrewarmBusyRef.current = false;
       }
     })();
-    return () => { cancelled = true; };
-  }, [sheets]);
+    return () => {
+      cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
+    };
+  }, [sheets, prewarmAttempt]);
 
   // Feed the Schedules panel from the SAME cache. Deliberately not its own
   // fetch: two readers of one index that could disagree is exactly the class of
@@ -14279,6 +14301,7 @@ export default function TakeoffCanvas() {
             key={scheduleScopeKey}
             tables={currentGraphTables}
             prewarm={graphPrewarm}
+            onRetry={() => { prewarmRetriesRef.current = { sig: "", count: 0 }; setPrewarmAttempt((n) => n + 1); }}
             indexing={indexProgress.phase === "text"}
             sheetLabel={tabLabel}
             onClose={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); }}
@@ -14842,6 +14865,8 @@ export default function TakeoffCanvas() {
             ? `Indexing PDF text ${indexProgress.done}/${indexProgress.total} (${pct}%). Agent and schedule workflows may miss pages until this finishes — wait for Indexed before running a full-set takeoff.`
             : schedulesFailed
               ? `Schedule indexing failed${graphPrewarm.message ? `: ${graphPrewarm.message}` : ""}. The PDF text index is fine, so find_text and manual takeoff still work — schedule tables and a full-set takeoff will not until this succeeds.`
+              : graphPrewarm.reconnecting
+                ? `The schedule server did not answer (a restart or a dropped connection). Trying again in ${graphPrewarm.reconnecting.inSeconds} s (attempt ${graphPrewarm.reconnecting.attempt} of ${TRANSIENT_RETRIES}).`
               : step
                 ? (step.stage === "tables"
                   ? `Reading the schedules: done ${step.done} of the ${step.total} sheet${step.total === 1 ? "" : "s"} that may hold one. A full-set takeoff waits for the rest; manual takeoff works now.`
@@ -14885,7 +14910,9 @@ export default function TakeoffCanvas() {
                         ? (step.stage === "tables"
                           ? `Indexed · schedules ${step.done}/${step.total}…`
                           : `Indexed · sheets ${step.done}/${step.total}…`)
-                        : `Indexed · schedules indexing…`)
+                        : graphPrewarm.reconnecting
+                          ? `Indexed · schedules reconnecting…`
+                          : `Indexed · schedules indexing…`)
                       : graphPrewarm.phase === "ready"
                         ? `Indexed · schedules ready`
                         : `Indexed 100% · ${indexProgress.total} pages`}

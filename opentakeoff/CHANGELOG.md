@@ -1,5 +1,13 @@
 # Changelog
 
+- **The schedule index tries again when the server did not answer, and offers Try again when it failed.** A dropped
+  connection or a restarting server ended the index in "schedules FAILED", and the Schedules panel's only advice was
+  to re-open the plan set. Now a request the server never answered (the connection refused or cut off, or a proxy's
+  502/503/504) is tried again on its own after 2, 4, 8, 16 and 30 s, the status bar reading **Indexed · schedules
+  reconnecting…** meanwhile; a refusal the server explained (a password-protected PDF, a read that failed) is shown at
+  once, as before, and the panel now has a **Try again** button. Probed in the app: with the first two index requests
+  cut off, the chip said reconnecting, the third request ran and the index was ready at 19 s; with the server
+  refusing, nothing retried on its own and Try again ran it once the refusal was lifted.
 - **The schedule server no longer fills its disk.** It kept every uploaded PDF and every sheet graph it ever built,
   and a graph is keyed by the engine that built it, so each engine update left all earlier graphs behind for good
   (1.3 GB of graphs and 304 MB of uploads on the corpus machine within two days). The server now drops, a minute

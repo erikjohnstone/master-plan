@@ -929,6 +929,14 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   serverSurvivesDisconnect, sharedGraphBuild: all pass. sheetGraphCache's name test wrote fixed bytes into the real
   cache, so a second run under one engine was served the first run's graphs and failed (merged 0, expected 2); its
   bytes are now the run's own.
+- The index tries again when the server did not answer, and the panel offers Try again (#334; surface-specific: the
+  canvas's index request and its chip/panel). A dropped connection or a restarting server ended the index in
+  "schedules FAILED" with "re-open the plan set" as the only remedy. `isTransientRequestFailure` (fetch's network
+  TypeErrors, a proxy's 502/503/504; not the server's explained refusals, not our own TypeErrors) retries after 2,
+  4, 8, 16, 30 s with the chip reading "reconnecting…"; any failure shows Try again in the Schedules panel. Probed
+  with Playwright route interception on the bundled mechanical sample: first two requests reset, "reconnecting…" at
+  4.3 s, third request ran, ready at 19.4 s; a 500 refusal did not retry within 3 s, Try again ran it once lifted.
+  Tests: transientFailure (the classes, the delays). Web typecheck clean, lint as at HEAD.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
