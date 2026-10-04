@@ -202,8 +202,8 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
   so a runner waited out its timeout. Fixed in b78a9e6: the helper closes the sidecars after each file, as
   loadFixtureGraph does (a one-page check exits in 3 s with it, and is still running at 90 s without).
 - MCP `crossCorpusWorkflow` "WP1 keyed compile acceptance": federal-mech (BAS 89 vs 26; 158 vs 26 on 2026-10-03,
-  the overlay's stale count, folded since) and 04_NV (19 vs 16) as above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too) and 21_VA
-  (102 vs 100: the documented RF1/RF2 residual from its technology sheet's AV list; c637a3d read 88). The structural
+  the overlay's stale count, folded since) and 04_NV (19 vs 16) as above, plus 26_CA (HVAC 291 vs 10: its key is one of the stale partial keys below; 291 at c637a3d too). 21_VA (102 vs
+  100, RF1 and RF2 from its technology sheet's AV list; c637a3d read 88) reads its key's 100 since #325. The structural
   sweep over every corpus PDF passes. 021_XX (re-keyed 2026-10-03) misses EXPANSION_TANK 0 of 4 and AIR_SEPARATOR 0
   of 2 (a general TANK SCHEDULE naming each row's kind in REMARKS) and BAS rows 127 of 128. In `npm test` the file
   reports 9 of its 116 sets and fails with no message after 2,428 s (2026-10-03, and the run before): the tenth set,
@@ -801,6 +801,27 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   respelling or prefixed variant of a counted unit), parse as letters and a number, and carry another prefix than the
   category's 5, which are numbered 1 to 5. Whether they are units the key does not list or a misread is not
   adjudicated, and no rule is tuned on it. The #319-only walled set compiles the same (one sheet 10 -> 2 tables).
+- A technology sheet's device list holds no HVAC units (#325; corpusTakeoff `unvouchedTableHoldsUnits`,
+  `TECHNOLOGY_DEVICE_HEADER_RE`). 21_VA read FAN 12 against a key of 10: RF1 and RF2 came from an untitled table on
+  page 117 headed DEVICE NAME, DESCRIPTION, POWER, DATA, BOX SIZE, HEIGHT, NOTES, whose 12 rows are an audio-visual
+  device list (CA1 a camera plate, FB1 and FB2 floor boxes, FP1 and FP2 flat panel displays, JB1 and JB2 junction
+  boxes, RF1 and RF2 the ceiling plates and boxes for the wireless microphone and assisted listening antennas, S a
+  ceiling speaker, TP1 a touch panel, WP1 a wall plate). A table no title vouches for is read by its rows' marks, and
+  FAN's untitled rule reads RF-numbered marks. The sheet's discipline would say it (a T-sheet holds no HVAC
+  schedule), but the graphs carry no sheet numbers, and gating on the share of HVAC marks was rejected on 2026-10-02
+  (below). The table names itself instead: a column headed DATA or VOICE alone asks whether a device takes a data or
+  voice connection; a unit's schedule groups ELECTRICAL DATA or FAN DATA over its ratings and never prints the word
+  as a column of its own. Such a table holds no units, as lamps and lumens already mark a lighting fixture schedule,
+  unless it prints an HVAC rating (CFM, GPM, MBH and the rest), which keeps it read. Censuses over the newest graphs
+  (fresh rebuild or cache at the current graph code, 36 sets): units read from tables no title vouches for, 36, of
+  which 24 print no rating (26_CA's per-floor AHU tables 17, itd-d1-lab's specialty equipment 4, 049_IL's CP-1,
+  21_VA's RF1 and RF2), so a rule asking every such table for a rating would lose real units; tables with a DATA or
+  VOICE column, one (21_VA's). A/B of the compile over every keyed set's newest graph (113 sets: 19 rebuilt at HEAD,
+  37 cached at the current graph code, 57 older), HVAC, valves and BAS: only 21_VA changes, FAN RF1 and RF2 gone (FAN
+  10, HVAC 100, its key's counts); no walled set changes. Test: corpusTakeoffVol2Families "reads no unit in an
+  untitled technology device schedule" (21_VA's header and a VOICE / DATA outlet list hold none; a table grouping
+  ELECTRICAL DATA, and one asking DATA beside CFM, keep theirs); it fails on the code before it. Compile tests 157
+  (each file run alone): all pass.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
@@ -1407,7 +1428,8 @@ share of its rows any HVAC family reads did not separate it (the families' mark
 rules are broad: FP, T, S all read), and it dropped six 26_CA AHU rows
 (AHU 50-2 … 58-2) unverified. Reverted. The discriminating signal is the
 sheet's discipline (a T-sheet holds no HVAC schedule), a larger change kept
-for later.
+for later. Since #325 the list is read by what it names itself: a column
+headed DATA alone (2026-10-04, above).
 
 ### 07_MO pictured schedules: tanks, glycol, pot feeder (2026-10-02)
 

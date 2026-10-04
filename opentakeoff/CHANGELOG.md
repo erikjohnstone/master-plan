@@ -1,5 +1,13 @@
 # Changelog
 
+- **A technology sheet's device list no longer counts return fans.** A table no title vouches for is read by the
+  marks its rows print, and a mark like RF1 reads as a return fan. 21_VA's audio-visual device list (DEVICE NAME,
+  DESCRIPTION, POWER, DATA, BOX SIZE, HEIGHT) prints RF1 and RF2 for the ceiling plates and boxes of its wireless
+  microphone and assisted listening antennas, beside cameras, floor boxes and displays, and the takeoff counted both
+  as fans (12 against the 10 the set schedules). A column headed DATA or VOICE alone, asking whether a device takes a
+  data or voice connection, now marks such a table as another trade's device list, as lamps and lumens already mark a
+  lighting fixture schedule; one that prints an airflow, a flow or a capacity is still read for its units. Over every
+  keyed set's graph (113 sets) only 21_VA changes: FAN 12 -> 10, its key's count.
 - **A table on a page whose box does not start at the corner is cut as it would be anywhere else.** A PDF page's box
   can start away from (0,0) (197 pages of 12 keyed sets do), and pdfplumber reports such a page's letters in the PDF's
   own space while the table extractor builds cells in the page's. The title-band splitter compared the two unshifted,

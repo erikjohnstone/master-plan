@@ -531,6 +531,28 @@ describe("AS-66 a table no title vouches for: notes, indexes and lists hold no u
     assert.deepEqual(units("PUMP"), ["CP-1"]);
   });
 
+  it("reads no unit in an untitled technology device schedule", () => {
+    // 21_VA's untitled AV device schedule: RF1 and RF2, the ceiling plates
+    // and boxes for its wireless microphone and assisted listening antennas,
+    // were return fans.
+    const headed = (sheet: string, headers: string[], keys: string[]) => ({
+      kind: "equipment", sheet, title: { text: "" }, headers,
+      rows: keys.map((key) => ({ key, cells: { [headers[0]]: { text: key } } })),
+    });
+    const devices = compile([
+      headed("t.pdf#117", ["DEVICE NAME", "DESCRIPTION", "POWER", "DATA", "BOX SIZE", "HEIGHT", "NOTES"], ["CA1", "FB1", "RF1", "RF2"]),
+      headed("t.pdf#118", ["OUTLET", "VOICE / DATA", "MOUNTING"], ["SF1", "P-1"]),
+    ]);
+    for (const f of ["FAN", "PUMP"]) assert.deepEqual(devices(f), [], f);
+    // A unit's schedule groups its ELECTRICAL DATA over its ratings, and one
+    // asking DATA beside its airflow keeps its units.
+    const units = compile([
+      headed("m.pdf#7", ["MARK", "SERVICE", "ELECTRICAL DATA", "MANUFACTURER"], ["EF-1"]),
+      headed("m.pdf#8", ["TAG", "CFM", "DATA", "LOCATION"], ["RF-1"]),
+    ]);
+    assert.deepEqual(units("FAN"), ["EF-1", "RF-1"]);
+  });
+
   it("reads a mark of letters alone as a word where no title vouches for the family", () => {
     // 02_UT's and 19_CA's abbreviation lists print SPF and SFD.
     const tags = compile([table("m.pdf#3", "", ["SPF", "SFD", "EF-3"]), table("m.pdf#4", "MISCELLANEOUS SCHEDULE", ["SPF", "WWHP-A"])]);

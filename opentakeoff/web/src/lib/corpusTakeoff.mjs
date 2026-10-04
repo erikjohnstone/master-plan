@@ -577,6 +577,10 @@ const typeMark = (s) => /^[A-Z]{1,4}$/.test(markCanon(s));
 
 const LIGHTING_FIXTURE_HEADER_RE = /\b(?:LAMPS?|LUMENS?|LUMINAIRES?|BALLASTS?|DRIVERS?|FOOTCANDLES?)\b/;
 const HVAC_RATING_HEADER_RE = /\b(?:CFM|GPM|MBH|BTUH|TONS?|BHP|HP|RPM|ESP|EAT|LAT|EWT|LWT|SEER|EER)\b/;
+/** A column asking whether a device takes a data or voice connection. A
+ * unit's schedule groups ELECTRICAL DATA or FAN DATA over its ratings, never a
+ * column of the word alone. */
+const TECHNOLOGY_DEVICE_HEADER_RE = /^(?:DATA|VOICE|VOICE\s*\/\s*DATA|DATA\s*\/\s*VOICE)$/;
 
 /**
  * A table no title vouches for (untitled, or a general MISCELLANEOUS,
@@ -599,7 +603,14 @@ export function unvouchedTableHoldsUnits(table) {
   // RF1 to RF6 and SF1. A unit's schedule that names a lamp (an air handler's
   // UV lamps) prints its airflow, water or capacity beside it.
   const blob = tableHeaderBlob(table);
-  return !(LIGHTING_FIXTURE_HEADER_RE.test(blob) && !HVAC_RATING_HEADER_RE.test(blob));
+  if (HVAC_RATING_HEADER_RE.test(blob)) return true;
+  if (LIGHTING_FIXTURE_HEADER_RE.test(blob)) return false;
+  // A technology device schedule holds outlets, boxes and displays, not
+  // units: 21_VA's untitled DEVICE NAME / DESCRIPTION / POWER / DATA / BOX
+  // SIZE / HEIGHT table made return fans of RF1 and RF2, the ceiling plates
+  // and boxes for its wireless microphone and assisted listening antennas.
+  const headers = [...(table?.headers || []), ...Object.keys(table?.rows?.[0]?.cells || {})];
+  return !headers.some((h) => TECHNOLOGY_DEVICE_HEADER_RE.test(String(h || "").replace(/\s+/g, " ").trim().toUpperCase()));
 }
 
 
