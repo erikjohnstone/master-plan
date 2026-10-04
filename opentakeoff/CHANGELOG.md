@@ -1,5 +1,10 @@
 # Changelog
 
+- **The schedule server no longer fills its disk.** It kept every uploaded PDF and every sheet graph it ever built,
+  and a graph is keyed by the engine that built it, so each engine update left all earlier graphs behind for good
+  (1.3 GB of graphs and 304 MB of uploads on the corpus machine within two days). The server now drops, a minute
+  after it starts and daily, graphs of another engine a week old, any graph a month old, and uploads nobody has sent
+  for a month; a set opened again is rebuilt. `OPENTAKEOFF_CACHE_PRUNE=0` keeps everything (docs/SELF_HOSTING.md).
 - **Reloading the page while the schedule index is built picks it up where it was.** The server's index build
   belonged to the request that asked for it, so a reload (or a closed tab) stopped it, and the reloaded page started
   it again from the first sheet; two tabs on one set built it twice. A build now belongs to the set: a reloaded page

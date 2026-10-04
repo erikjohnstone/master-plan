@@ -917,6 +917,18 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   ready at 70.5 s, one process. Tests: sharedGraphBuild (one build for two requests, the late one from the step
   reached; a build followed again within its grace carries on, one left alone is stopped), serverSurvivesDisconnect,
   previewRoutes, graphProgress, compileProgressWalkthrough, pdfReadable: all pass; web typecheck clean.
+- The schedule server prunes its disk caches (#333; surface-specific: the server's upkeep; `pruneSheetGraphCache`
+  sits beside the cache it prunes). Graphs are keyed by the engine digest, so every engine change left all earlier
+  graphs unservable, and the upload spool kept every PDF: 363 graphs (1,284 MB, oldest 1.5 days) and 34 uploads
+  (304 MB) on this machine. Each cached graph now records its engine; a minute after the server starts, and daily,
+  it drops graphs of another engine a week old, any graph a month old (then cacache frees their content), and
+  uploads nobody has sent for a month (a send refreshes one). `OPENTAKEOFF_CACHE_PRUNE=0` or a test process skips
+  it. The first prune here removes nothing (every entry is under a week old). Tests: sheetGraphCache (a prune in a
+  temp cache: nothing within the week, another engine's and unstamped graphs after it with their content freed, the
+  current engine's after a month; a written graph carries its engine), cachePrune (the spool), previewRoutes,
+  serverSurvivesDisconnect, sharedGraphBuild: all pass. sheetGraphCache's name test wrote fixed bytes into the real
+  cache, so a second run under one engine was served the first run's graphs and failed (merged 0, expected 2); its
+  bytes are now the run's own.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

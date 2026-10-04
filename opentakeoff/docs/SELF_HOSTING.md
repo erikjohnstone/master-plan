@@ -38,6 +38,19 @@ location ~* \.mjs$ {
 Confirmed against a real self-hosted deployment (Docker + nginx + Tailscale)—not
 hypothetical.
 
+## The schedule server's disk
+
+The schedule index, automatic takeoffs and sweeps run on the server that serves
+`/__ot/*` (`npm run dev` or `vite preview` in `web/`), not in a static build.
+That server keeps two folders under `$XDG_CACHE_HOME` (else `~/.cache`):
+`opentakeoff-uploads`, each uploaded PDF named by its bytes, and
+`opentakeoff-sheet-graph`, each set's sheet graph keyed by the engine that
+built it. A minute after it starts, and daily after that, the server drops a
+graph built by another engine once it is a week old (an update to the engine
+leaves every earlier graph unused), any graph a month old, and any upload
+nobody has sent for a month; a set opened again is rebuilt. Set
+`OPENTAKEOFF_CACHE_PRUNE=0` to keep everything.
+
 ## Microsoft 365 annotation sync (experimental — issue #315)
 
 Sync the local workspace's annotations through a SharePoint document library

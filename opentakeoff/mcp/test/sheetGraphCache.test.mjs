@@ -45,7 +45,9 @@ test("SAME BYTES UNDER A DIFFERENT NAME GET THEIR OWN GRAPH", async () => {
   delete process.env.OPENTAKEOFF_GRAPH_NO_CACHE;
   const dir = await mkdtemp(join(tmpdir(), "ot-graph-cache-name-"));
   try {
-    const bytes = "%PDF-same-bytes-two-names";
+    // Bytes of this run's own: the cache is the real one, and an earlier
+    // run's entries would answer this one's and hide a miss.
+    const bytes = `%PDF-same-bytes-two-names-${process.pid}-${Date.now()}`;
     const sha = createHash("sha256").update(bytes).digest("hex");
     const a = join(dir, "05__vol2__009.pdf");
     const b = join(dir, "009_FL_USDA_APHIS.pdf");
@@ -129,6 +131,65 @@ test("A GRAPH BUILT WHERE THE TABLE ENGINE COULD NOT RUN NEVER ANSWERS A RUN WHE
     restore("OPENTAKEOFF_GRAPH_NO_CACHE", saved.noCache);
     restore("OPENTAKEOFF_VECTORGRID_PYTHON", saved.vg);
     restore("OPENTAKEOFF_TABLE_SIDECAR_PYTHON", saved.side);
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test("a prune drops graphs of another engine after a week and any graph after a month (#333)", async () => {
+  // A graph's key holds the digest of the engine that built it, so after an
+  // engine change every earlier graph can never be served again; nothing
+  // removed them (1.3 GB on the corpus machine after a few days).
+  const { default: cacache } = await import("cacache");
+  const { pruneSheetGraphCache } = await import("../scripts/sheetGraphCache.mjs");
+  const dir = await mkdtemp(join(tmpdir(), "ot-graph-prune-"));
+  const day = 86_400_000;
+  try {
+    const graph = (n) => JSON.stringify({ tables: [], n, pad: "x".repeat(1000) });
+    await cacache.put(dir, "this-engine", graph(1), { metadata: { engine: "current" } });
+    await cacache.put(dir, "older-engine", graph(2), { metadata: { engine: "before" } });
+    await cacache.put(dir, "no-engine-recorded", graph(3));
+    const keys = async () => Object.keys(await cacache.ls(dir)).sort();
+
+    // Within the week every graph stays: a second checkout may still use one.
+    assert.deepEqual(await pruneSheetGraphCache({ dir, engine: "current", now: Date.now() + 6 * day }),
+      { removed: 0, kept: 3, freedBytes: 0 });
+    // After it, graphs of another engine, or of none recorded, go.
+    const week = await pruneSheetGraphCache({ dir, engine: "current", now: Date.now() + 8 * day });
+    assert.equal(week.removed, 2);
+    assert.ok(week.freedBytes > 2000, `their content is freed (${week.freedBytes} bytes)`);
+    assert.deepEqual(await keys(), ["this-engine"]);
+    assert.equal(JSON.parse((await cacache.get(dir, "this-engine")).data.toString()).n, 1);
+    // A month on, the current engine's graph goes too: the set is rebuilt if opened.
+    assert.equal((await pruneSheetGraphCache({ dir, engine: "current", now: Date.now() + 31 * day })).removed, 1);
+    assert.deepEqual(await keys(), []);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test("a cached graph records the engine that built it, which a prune keeps", async () => {
+  const prev = process.env.OPENTAKEOFF_GRAPH_NO_CACHE;
+  delete process.env.OPENTAKEOFF_GRAPH_NO_CACHE;
+  const { default: cacache } = await import("cacache");
+  const { pruneSheetGraphCache, sheetGraphCacheDir } = await import("../scripts/sheetGraphCache.mjs");
+  const dir = await mkdtemp(join(tmpdir(), "ot-graph-engine-"));
+  try {
+    const pdf = join(dir, "engine-stamp.pdf");
+    const bytes = `%PDF-engine-stamp-${process.pid}-${Date.now()}`;
+    await writeFile(pdf, bytes);
+    const sha = createHash("sha256").update(bytes).digest("hex");
+    await cachedSheetGraph(pdf, { expectedSha256: sha, compute: async () => ({ tables: [] }) });
+    const entries = Object.values(await cacache.ls(sheetGraphCacheDir()));
+    const mine = entries.filter((e) => e.metadata?.engine && Date.now() - e.time < 60_000);
+    assert.ok(mine.length >= 1, "the entry just written carries its engine");
+    // The real cache, judged a week on: nothing this engine wrote is dropped.
+    const ours = new Set(mine.map((e) => e.key));
+    const keptBefore = Object.keys(await cacache.ls(sheetGraphCacheDir())).filter((k) => ours.has(k)).length;
+    assert.equal(keptBefore, ours.size);
+    void pruneSheetGraphCache; // the real cache is not pruned by a test
+  } finally {
+    if (prev === undefined) delete process.env.OPENTAKEOFF_GRAPH_NO_CACHE;
+    else process.env.OPENTAKEOFF_GRAPH_NO_CACHE = prev;
     await rm(dir, { recursive: true, force: true });
   }
 });

@@ -13,7 +13,7 @@
  * Same MCP Session.graphForPipeline() path every blueprint uses — not a
  * takeoff-only fork. Body: JSON { pdfPath } or multipart file(s) + kind.
  */
-import { mkdtemp, mkdir, writeFile, rm, readFile } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, rm, readFile, readdir, stat, utimes } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { homedir, tmpdir } from "node:os";
@@ -21,6 +21,7 @@ import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { pruneSheetGraphCache } from "../mcp/scripts/sheetGraphCache.mjs";
 import { basAssignmentMiddleware, basAssemblyMiddleware, basEngineeringMiddleware, basWorkflowReplayMiddleware, basRevisionMiddleware } from './vite.basAssignmentApi.js';
 
 const webRoot = resolve(fileURLToPath(new URL(".", import.meta.url)));
@@ -279,6 +280,60 @@ function sendJson(res, status, obj) {
   res.end(body);
 }
 
+/** Where uploads are kept, named by their bytes (resolvePdfs). */
+function uploadSpoolDir() {
+  return join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "opentakeoff-uploads");
+}
+
+const DAY_MS = 86_400_000;
+
+/**
+ * Drop spooled uploads nobody has sent for `maxDays`: the spool kept every
+ * PDF ever uploaded (304 MB, 34 files on the corpus machine). A request that
+ * sends one again writes it back, and each send keeps it fresh, so a build
+ * reading one is never short of its file.
+ * @param {{ dir?: string, now?: number, maxDays?: number }} [options]
+ * @returns {Promise<{ removed: number, freedBytes: number }>}
+ */
+export async function pruneUploadSpool({ dir = uploadSpoolDir(), now = Date.now(), maxDays = 30 } = {}) {
+  let removed = 0;
+  let freedBytes = 0;
+  for (const name of await readdir(dir).catch(() => [])) {
+    if (!/^[0-9a-f]{64}\.pdf$/.test(name)) continue;
+    const path = join(dir, name);
+    const info = await stat(path).catch(() => null);
+    if (!info || now - info.mtimeMs <= maxDays * DAY_MS) continue;
+    await rm(path, { force: true }).catch(() => {});
+    removed++;
+    freedBytes += info.size;
+  }
+  return { removed, freedBytes };
+}
+
+/** The server's disk caches, pruned a minute after it starts and daily after
+ * (OPENTAKEOFF_CACHE_PRUNE=0 turns it off; a test process never prunes). */
+let cachePruning = null;
+function startCachePruning() {
+  if (cachePruning || process.env.OPENTAKEOFF_CACHE_PRUNE === "0" || process.env.NODE_TEST_CONTEXT) return;
+  const prune = async () => {
+    try {
+      const graphs = await pruneSheetGraphCache();
+      const uploads = await pruneUploadSpool();
+      if (graphs.removed || uploads.removed) {
+        const mb = Math.round((graphs.freedBytes + uploads.freedBytes) / 1048576);
+        console.info(`[opentakeoff] pruned ${graphs.removed} cached sheet graph(s) and ${uploads.removed} upload(s), ${mb} MB`);
+      }
+    } catch (error) {
+      console.warn("[opentakeoff] cache prune failed:", error?.message || error);
+    }
+  };
+  cachePruning = setTimeout(() => {
+    void prune();
+    setInterval(() => { void prune(); }, DAY_MS).unref?.();
+  }, 60_000);
+  cachePruning.unref?.();
+}
+
 async function resolvePdfs(req) {
   const ctype = req.headers["content-type"] || "";
   let kind;
@@ -336,12 +391,14 @@ async function resolvePdfs(req) {
     // forever, written once, and never deleted with the request that brought
     // it. `tmpDir` stays null for this branch precisely so the cleanup below
     // leaves the spool alone.
-    const spool = join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "opentakeoff-uploads");
+    const spool = uploadSpoolDir();
     await mkdir(spool, { recursive: true });
     for (const f of mp.files) {
       const sha = createHash("sha256").update(f.bytes).digest("hex");
       const pdfPath = join(spool, `${sha}.pdf`);
       if (!existsSync(pdfPath)) await writeFile(pdfPath, f.bytes);
+      // Sent again: not one for pruneUploadSpool to drop.
+      else await utimes(pdfPath, new Date(), new Date()).catch(() => {});
       pdfPaths.push(pdfPath);
       fileNames.push(f.filename || "plan.pdf");
     }
@@ -753,6 +810,7 @@ export function corpusTakeoffApiPlugin() {
     name: "opentakeoff-production-graph-api",
     configureServer(server) {
       server.middlewares.use(otMiddleware);
+      startCachePruning();
     },
     // PREVIEW IS THE REHEARSAL, SO IT HAS TO HAVE THE STAGE. This plugin used
     // to register configureServer ONLY, so `vite preview` — the built bundle,
@@ -763,6 +821,7 @@ export function corpusTakeoffApiPlugin() {
     // (/cerebras-api was already proxied in both; this closes the other half.)
     configurePreviewServer(server) {
       server.middlewares.use(otMiddleware);
+      startCachePruning();
     },
   };
 }

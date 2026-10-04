@@ -171,7 +171,10 @@ export async function cachedSheetGraph(pdfPath, opts) {
   }
   const result = await compute();
   if (!engineFailedOnSomeSheet(result)) {
-    await cacache.put(CACHE_DIR, key, JSON.stringify(result)).catch(() => {});
+    // The engine that built it, so a prune can tell a graph no key will ask
+    // for again (pruneSheetGraphCache).
+    const metadata = { engine: await sourceDigest() };
+    await cacache.put(CACHE_DIR, key, JSON.stringify(result), { metadata }).catch(() => {});
   }
   return result;
 }
@@ -201,4 +204,47 @@ export function engineFailedOnSomeSheet(graph, env = process.env) {
 
 export function sheetGraphCacheDir() {
   return CACHE_DIR;
+}
+
+const DAY_MS = 86_400_000;
+
+/**
+ * Drop the graphs no request will be served again. A graph's key holds the
+ * digest of the engine that built it, so once the engine changes every graph
+ * before it is dead weight, and nothing removed them: 1.3 GB on the corpus
+ * machine after a few days. A graph of another engine goes once it is
+ * `otherEngineDays` old (two checkouts, or a server mid-deploy, can share one
+ * cache meanwhile), any graph once it is `anyDays` old (a set not opened in a
+ * month is rebuilt when it is); then cacache frees the content no entry holds.
+ * @param {{ dir?: string, now?: number, engine?: string, otherEngineDays?: number, anyDays?: number }} [options]
+ * @returns {Promise<{ removed: number, kept: number, freedBytes: number }>}
+ */
+export async function pruneSheetGraphCache({
+  dir = CACHE_DIR, now = Date.now(), engine, otherEngineDays = 7, anyDays = 30,
+} = {}) {
+  const current = engine ?? await sourceDigest();
+  let entries;
+  try {
+    entries = await cacache.ls(dir);
+  } catch {
+    return { removed: 0, kept: 0, freedBytes: 0 };
+  }
+  let removed = 0;
+  let kept = 0;
+  for (const entry of Object.values(entries)) {
+    const age = now - Number(entry.time || 0);
+    const stale = age > anyDays * DAY_MS || (entry.metadata?.engine !== current && age > otherEngineDays * DAY_MS);
+    if (!stale) {
+      kept++;
+      continue;
+    }
+    await cacache.rm.entry(dir, entry.key, { removeFully: true }).catch(() => {});
+    removed++;
+  }
+  let freedBytes = 0;
+  if (removed) {
+    const stats = await cacache.verify(dir).catch(() => null);
+    freedBytes = Number(stats?.reclaimedSize || 0);
+  }
+  return { removed, kept, freedBytes };
 }
