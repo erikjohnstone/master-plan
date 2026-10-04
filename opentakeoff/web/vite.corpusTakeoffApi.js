@@ -266,6 +266,12 @@ async function readMultipart(req) {
 }
 
 function sendJson(res, status, obj) {
+  // A reply already begun (a stream) or a client gone takes no second one:
+  // setting a header then threw, and the throw ended the server (#332).
+  if (res.headersSent || res.destroyed) {
+    if (!res.writableEnded && !res.destroyed) res.end();
+    return;
+  }
   const body = typeof obj === "string" ? obj : JSON.stringify(obj);
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -599,9 +605,15 @@ async function handle(req, res, mode) {
   } catch (err) {
     console.error(`[production-graph-api ${mode}]`, err);
     const error = restoreUploadedNames(String(err?.message || err), uploads?.pdfPaths, uploads?.fileNames);
-    if (stream && res.headersSent && !res.writableEnded && !res.destroyed) {
-      writeNdjson(res, { type: "error", error });
-      res.end();
+    if (res.headersSent) {
+      // A streamed reply has begun: its error is its last line, for a client
+      // still reading. A client that left (a reload, a closed tab) gets
+      // nothing; answering it with sendJson threw ERR_HTTP_HEADERS_SENT, and
+      // that ended the whole server (#332).
+      if (!res.writableEnded && !res.destroyed) {
+        writeNdjson(res, { type: "error", error });
+        res.end();
+      }
       return;
     }
     sendJson(res, err.status || 500, { error });
@@ -646,7 +658,15 @@ function otMiddleware(req, res, next) {
   for (const [prefix, kind] of OT_ROUTES) {
     if (!req.url?.startsWith(prefix)) continue;
     if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
-    return handle(req, res, kind);
+    // Whatever one request throws is that request's error, never the
+    // server's: an unhandled rejection here ends the process, and every
+    // other estimator's work with it (#332).
+    return handle(req, res, kind).catch((error) => {
+      console.error(`[production-graph-api ${kind}] unhandled`, error);
+      try {
+        sendJson(res, 500, { error: String(error?.message || error) });
+      } catch { /* the reply is past saving; the server is not */ }
+    });
   }
   return next();
 }

@@ -872,6 +872,17 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   in-flight guard, so two concurrent MCP calls on a cold set build twice and a call arriving during the vector stack
   gets a graph without its tables (#328); a single-kind compile started during the canvas's prewarm builds the graph
   in a second process (the complete-BAS path already joins the prewarm; #329).
+- A client that leaves a streamed reply no longer ends the app server (#332; surface-specific: the server's
+  routes). Found reloading the canvas during a cold index of 063_MT at dda6696: the server log ended in
+  `ERR_HTTP_HEADERS_SENT` from `sendJson`, called by `handle()`'s error path after the request's abort had stopped
+  its CLI: the stream branch is skipped once the response is destroyed, and the JSON branch then set headers on a
+  response the stream had already begun. `handle()` is async and nobody awaited it, so the rejection ended the Vite
+  process. #327 made the index route stream, so any reload during indexing did it; the compile, complete-BAS and
+  reconcile streams had the same path before. Now a begun reply gets its error line only if the client is still
+  there, `sendJson` never sets headers twice, and the dispatcher catches anything a handler throws. Test:
+  serverSurvivesDisconnect (a real HTTP server with the plugin's middleware; a streamed compile of the sample whose
+  client leaves after the first line; nothing escapes and the next request is answered 400): fails at dda6696, passes
+  now. previewRoutes 3, pdfReadable 4, graphProgress 3, compileProgressWalkthrough 3 pass.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

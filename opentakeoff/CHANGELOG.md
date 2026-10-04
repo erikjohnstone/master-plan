@@ -1,5 +1,12 @@
 # Changelog
 
+- **Reloading the page while a takeoff or the schedule index is running no longer stops the app server.** A reply
+  that streams its steps (the schedule index since the last release, and the automatic takeoff, BAS takeoff and
+  reconcile before it) met a client that left (a reload, a closed tab, a dropped connection) by trying to answer it
+  with a fresh error reply on top of the one already begun. That threw, nothing caught it, and the whole server
+  process ended, taking every open session's work with it. A reply already begun now ends with its error line if
+  anyone is still reading, and nothing if not; and whatever one request throws is answered as that request's error,
+  never the server's. Found by reloading the page during a cold schedule index of 063_MT.
 - **The status bar counts the schedule index as it is built.** A set the server hasn't read before is indexed in
   two passes: every sheet, then the tables on each sheet that may hold a schedule, which takes minutes on a large set.
   The status bar said "Indexed · schedules indexing…" the whole time, over a progress bar already full from the text
