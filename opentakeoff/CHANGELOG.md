@@ -16,8 +16,10 @@
   longer joined to the table above, and a piece is not joined across the lower piece's own title band where that band
   is drawn as a box of its own (12_MT stacks three legends that way, 15 pt apart); a piece that carries the list on
   with no title of its own still joins. Over every page of 115 keyed sets the tables change on 91 pages, 16_NV's three
-  OUTSIDE AIR CALCULATION tables among them (read as one before); every set where they change compiles the same, unit
-  for unit, but for 061_IA's points, now in five lists.
+  OUTSIDE AIR CALCULATION tables among them (read as one before); every open set where they change compiles the same,
+  unit for unit, but for 061_IA's points, now in five lists; one held-out set reads 2 units its key does not list,
+  from a small table titled on its own that is now parted from the one above (not adjudicated: held-out sets are not
+  read by row).
 - **A change to the table code no longer reads every pictured schedule again from scratch.** A schedule pasted as a
   picture is read by OCR, and its tables are kept so the next build of the same set takes them from the cache. That
   cache is keyed by the source of every module that turns a picture into tables, the table finder's included, so any

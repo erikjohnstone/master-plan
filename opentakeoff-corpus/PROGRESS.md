@@ -100,6 +100,14 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 
 ## Known limits (documented, not fixed)
 
+- A set's first read of its pictured schedules is OCR-bound (profiled 2026-10-04 on 07_MO's sheet 21, picture cache
+  off, every RapidOCR call timed in the picture reader's child process): 63 calls take 232 of the page's 242 s.
+  Recognition is 136 s for 1,349 text boxes (about 0.1 s a box), detection 88 s, the angle classifier 6 s; the 49
+  face crops under 20,000 px (`_read_box`) take 51 s between them, about 1 s each. Since #323 a change to the table
+  code no longer repeats these reads, but a set's first build still pays them (058_CA's ran over an hour under
+  contention). Not tuned: each lever (detection's size limit, recognition's batch, the classifier) changes what OCR
+  reads, so each would need the full picture A/B.
+
 - `sweep_schedule_row` on a tag ranked by claims (compound luminaire labels, air-device tables) tries every
   same-sheet occurrence as the anchor × 3 pads, with two region-restricted `matchSymbol` calls each. On
   baker-county-eoc R1 (23 luminaires on a 61k-segment lighting plan) that is 69 + 69 calls, 1-26 s each: one sweep
@@ -316,11 +324,19 @@ being saved as a regression check of the mark-prefix change, which touches every
 
 ## Active work / next queue
 
-1. ~~Corpus A/B~~ done (above). baker-county-eoc re-run alone: same as base (see Known limits). 089_FL still to re-run.
-2. ~~Browser proof of Review all + auto-opened plan~~ — 18/18 on itd-d1-lab (2026-10-02).
-3. MCP `npm test` and `test:shared-path` (includes #246: reconcileWorkflow's stale expectations).
-4. Re-sweep the 29 OOM-lost sets one at a time, machine otherwise idle.
-5. Re-measure graph build in the app on 25_WA / klamath with the machine quiet (sweep's 454 s was contention).
+Updated 2026-10-04, after #323, #317 and #319.
+
+1. Production sweep r3 (#320): the 24 sets the r2 sweep lost to browser crashes, one at a time on an otherwise
+   quiet browser, at 04c9a35. Running.
+2. #317's walled set that reads 2 more units than its key (#317's walled compares, above): left unadjudicated,
+   as the set is walled.
+3. 058_CA (311 sheets): measure #322's graph-build memory alone on a quiet machine. Its first build is OCR-bound
+   (over an hour under contention); since #323 a later table-code change no longer repeats the OCR.
+4. MCP `npm test` and `test:shared-path` at HEAD (the known failing tests are listed above).
+5. Re-measure graph build time in the app on 25_WA and klamath with the machine quiet (the sweep's 454 s was
+   contention). 089_FL's corpus A/B is still to re-run.
+6. Deferred: a leaner build geometry (the build reads only each sheet's segments and image areas; about 590 MB
+   more is held on 01_NY for the interactive tools).
 
 ### The scoreboard on the current graph code; 068_US and 18_OR re-keyed; one mark on two rows (2026-10-03)
 
@@ -751,13 +767,13 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   sets: 40 pages of 11 sets change (totals only). Graphs built at daafc4e and at this batch's code (#316, this, #319)
   for every open set whose tables change: each compiles the same (HVAC, BAS, valves), apart from 061_IA's BAS lists
   (#316's 180 points, now in five lists); table counts change on 061_IA's sheet 57, 16_NV's sheet 2 and 073_MT's
-  sheets 21 and 22 (above) and two walled sheets (2 -> 1 and 7 -> 11). Walled sets, totals only: 6 of the 11 whose
-  tables this changes are compared so far, each compiling the same; the other 5 are queued and recorded here when
-  built. The compare checks each category's units (tag and quantity); at #316 it compared totals, and this re-run
-  confirms #316's sets unit for unit. Test: vectorGridStackedTitles (two lists drawn as M-502 draws them, each its own
-  table; an untitled continuation still joins; three legends stacked as 12_MT's sheet 38 stacks them, none joined to
-  the next); the first fails on #316's code (one table), the third on the refusal without the guard. Sidecar tests 80
-  (with these three), compile 156: all pass; typecheck clean, lint as at HEAD.
+  sheets 21 and 22 (above) and two walled sheets (2 -> 1 and 7 -> 11). Walled sets, totals only: all 11 whose tables
+  this changes are compared; see #317's walled compares below. The compare checks each category's units (tag and
+  quantity); at #316 it compared totals, and this re-run confirms #316's sets unit for unit. Test:
+  vectorGridStackedTitles (two lists drawn as M-502 draws them, each its own table; an untitled continuation still
+  joins; three legends stacked as 12_MT's sheet 38 stacks them, none joined to the next); the first fails on #316's
+  code (one table), the third on the refusal without the guard. Sidecar tests 80 (with these three), compile 156: all
+  pass; typecheck clean, lint as at HEAD.
 - The title-band splitter reads characters where the cells are (#319; vectorgrid `_split_at_title_bands`). A PDF
   page's box can start away from (0,0): 197 pages of 12 keyed sets do (009_FL's sheets sit at (-1512, 1080), 004_MO's
   at (-1296, 864)). pdfplumber reports such a page's characters in the PDF's own space, while vectorgrid builds its
@@ -777,6 +793,14 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   header over a band two rows deep that labels the rows under it, read on a page at (0,0) and on the same page placed
   at (-1512, 1080): the same tables); it fails on the code before it. Sidecar tests 81 (with this one), compile 156:
   all pass; typecheck clean, lint as at HEAD.
+- #317's walled compares, all built (2026-10-04): graphs at daafc4e and at the batch's code for all 11 walled sets
+  whose tables #317 changes, compared on totals only. Ten compile the same (HVAC, BAS and valves, unit for unit by
+  count). One reads 2 more HVAC units (41 -> 43; its key 41): in a category the key and the old code both count 5 of,
+  from a table of 7 cells titled on its own that #317 now parts from the 50-cell table above it on the same columns.
+  Counts-only diagnosis (the set is walled: no row read, no render): the 2 marks are new to the set's takeoff (no
+  respelling or prefixed variant of a counted unit), parse as letters and a number, and carry another prefix than the
+  category's 5, which are numbered 1 to 5. Whether they are units the key does not list or a misread is not
+  adjudicated, and no rule is tuned on it. The #319-only walled set compiles the same (one sheet 10 -> 2 tables).
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 
