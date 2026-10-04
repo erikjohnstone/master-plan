@@ -97,6 +97,8 @@ Upload → index → sheet graph (shared Session path, UI and MCP) → compile �
 | 102dcbc | Graph builds keep each sheet's figures packed: 01_NY heap held after the build 1,640 -> 641 MB, peak RSS 3,205 -> 2,390 MB, graphs identical (#322) |
 | 391400c | OCR readings outlive a change to the table code: ten pictured pages read again in 109 s against 1,617 s, the same tables (#323) |
 | b03fa4e | A list stacked under another is its own table: 061_IA's plant points under their own title, 16_NV's three OUTSIDE AIR CALCULATION tables; every open set it touches compiles the same (#317) |
+| a94a76c, 04c9a35 | The title-band splitter reads letters where the cells are: a page whose box starts away from (0,0) is cut as any other (#319) |
+| 8a8f7ae | A technology sheet's device list holds no HVAC units: 21_VA FAN 12 -> 10 (its key), the only change over 113 keyed sets (#325) |
 
 ## Known limits (documented, not fixed)
 
@@ -326,8 +328,11 @@ being saved as a regression check of the mark-prefix change, which touches every
 
 Updated 2026-10-04, after #323, #317 and #319.
 
-1. Production sweep r3 (#320): the 24 sets the r2 sweep lost to browser crashes, one at a time on an otherwise
-   quiet browser, at 04c9a35. Running.
+1. Production sweep r3 (#320), done (2026-10-04): the 28 sets the r2 sweep lost to browser crashes (25 open, 3
+   walled), one at a time at 04c9a35. All 28 ran the whole flow (upload, index, graph, compile, panel, review, export)
+   with no crash and no page error; the only flagged problem is an empty takeoff on five sets (006_US, 052_IL, 057_US,
+   084_SC, 20_TX), each a set whose key is zero (no HVAC schedule printed). Graph time ranged 19-649 s (020_MO's 17
+   ink-lettered schedules the longest), on a machine shared with a graph rebuild.
 2. #317's walled set that reads 2 more units than its key (#317's walled compares, above): left unadjudicated,
    as the set is walled.
 3. 058_CA (311 sheets): measure #322's graph-build memory alone on a quiet machine. Its first build is OCR-bound
@@ -822,6 +827,28 @@ held-out drafters' and reconcile-check documents) are scored on totals only.
   untitled technology device schedule" (21_VA's header and a VOICE / DATA outlet list hold none; a table grouping
   ELECTRICAL DATA, and one asking DATA beside CFM, keep theirs); it fails on the code before it. Compile tests 157
   (each file run alone): all pass.
+- A PDF that can't be read is refused at the door (#326; shared `web/src/lib/pdfReadable.ts`, used by the canvas's
+  upload and sheet loads, `mcp/src/pdf.ts` `openPdf` and so `load_plan`, and the graph CLI). Probed in the app at
+  04c9a35 with four files made from the bundled mechanical sample (password-protected with AES-256, cut to 40% of its
+  bytes, a text file renamed .pdf, an empty file): each was stored and opened as a tab whose canvas said only pdf.js's
+  "Error: No password given", "Error: Invalid PDF structure." or "Error: The PDF file is empty, i.e. its size is zero
+  bytes."; the set's automatic takeoff failed with the CLI's whole stderr (pdf.js's "Please use the legacy build"
+  warnings, a stack trace, the file's temporary <sha256>.pdf name); and the upload's own "Couldn't open" line, when
+  there was one, was overwritten at once by "Opened 1 sheet.". `load_plan` threw the same raw pdf.js messages. Now the
+  upload opens each PDF with pdf.js before storing it and refuses one that will not open, naming it, the cause and the
+  fix (password-protected: save or print a copy without security; damaged, cut short or not a PDF: download or export
+  it again; empty: the upload or download did not finish); the message is red and stays until the next action, and the
+  plan screen shows it too (the empty start screen had no message bar: a refused lone file left no trace). The rest of
+  a batch opens. A stored file from before is named the same way on the canvas. `load_plan` and the CLI refuse with
+  the same sentence; the CLI prints one `OT_ERROR` line that the canvas's server shows alone, under the name the file
+  was uploaded as. An owner-password-only PDF (permissions only) and one with junk after %%EOF open as before. Probed
+  again on the working tree (port 5176): all four refused with their sentence, the start screen shows it, a mixed batch
+  (sample + locked file) opens the sample and names the refusal, and the graph error for a locked file stored before
+  the fix reads "legacy-locked.pdf is password-protected…". Tests: session.test.ts "loadPlan refuses a PDF it cannot
+  read" (fixtures password-protected.pdf and owner-locked.pdf, 1.4 KB each, from demo/sample-plan.pdf), pdfReadable
+  (the classes, the sentences, the CLI's one OT_ERROR line and the server runner's error for a locked and an empty
+  file, the upload-name restore); each fails on the code before it. Session 25, packaging 6, the plugin's route,
+  loader and walkthrough tests 3, 2 and 3: all pass; web and MCP typecheck clean, lint as at HEAD.
 
 ### Over-reads against the keys, checked on the renders (2026-10-03)
 

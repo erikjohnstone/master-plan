@@ -51,6 +51,16 @@ function progress(phase, message, extra = {}) {
   process.stderr.write(`OT_PROGRESS\t${payload}\n`);
 }
 
+/** A failure the run cannot recover from (an unreadable PDF, say) leaves one
+ * line the UI middleware shows as the error, OT_ERROR\t{"message":"…"}, in
+ * place of all of stderr: pdf.js's warnings and a stack trace. */
+function fail(error) {
+  process.stderr.write(`OT_ERROR\t${JSON.stringify({ message: String(error?.message || error) })}\n`);
+  process.exit(1);
+}
+process.on("uncaughtException", fail);
+process.on("unhandledRejection", fail);
+
 const mode = arg(process.argv, "--mode") || "graph";
 const kind = arg(process.argv, "--kind");
 const service = arg(process.argv, "--service");

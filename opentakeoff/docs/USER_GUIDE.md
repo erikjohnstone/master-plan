@@ -954,6 +954,17 @@ Drag onto the canvas (or click the **Open your plans** target on the empty scree
 
 Nothing uploads anywhere. The file is read locally, rendered locally, and stored locally.
 
+A PDF the app can't read is refused before it joins the set, and the message bar says which file and why, in red,
+until your next action:
+
+- **Password-protected**: open it with its password in a PDF viewer, save or print a copy without security, and add
+  that copy. A PDF locked only against editing or printing (an owner password) opens normally.
+- **Damaged or not a PDF**: an incomplete download, or another kind of file renamed `.pdf`. Download or export it
+  again.
+- **Empty (0 bytes)**: the upload or download didn't finish. Get the file again.
+
+The rest of a batch still opens. The MCP server's `load_plan` refuses the same files with the same sentence.
+
 ### The sheet gallery (`G`)
 
 Press `G` (or click **Sheets** in the toolbar) for the visual gallery: one card per sheet, with its title-block sheet number, a thumbnail, and status badges—a level chip, **open** if it's already a tab, a shape count, and a scale status (**scale ✓** green, **plan: 1/4″ = 1′-0″** amber when a scale note was detected but not yet adopted, **no scale** red).

@@ -9,6 +9,7 @@ import * as pdfjs from "pdfjs-dist";
 import type { OpList, OpsTable } from "../../web/src/lib/oneclick.ts";
 import { RENDER_SCALE } from "../../web/src/lib/sheets.ts";
 import { joinHyphenatedTags } from "../../web/src/lib/equiptags.ts";
+import { unreadablePdfMessage } from "../../web/src/lib/pdfReadable.ts";
 
 const requireHere = createRequire(import.meta.url);
 const PDFJS_ROOT = path.dirname(requireHere.resolve("pdfjs-dist/package.json"));
@@ -104,7 +105,13 @@ export interface DocHandle {
 
 export async function openPdf(filePath: string): Promise<DocHandle> {
   const bytes = await readFile(filePath);
-  return openOwnedPdfBytes(bytes);
+  try {
+    return await openOwnedPdfBytes(bytes);
+  } catch (error) {
+    // pdf.js's own refusals ("No password given", "Invalid PDF structure.")
+    // name no file, cause or fix; say all three (pdfReadable.ts).
+    throw new Error(unreadablePdfMessage(path.basename(filePath), error), { cause: error });
+  }
 }
 
 /** Isolated original-source review; never registers a document with Session. */

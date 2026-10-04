@@ -32,6 +32,7 @@ import { imagePlacedBox, captureRectToImageGeom, resizeImageFromCorner, aspectFr
 import { rectMidpoint, pendingSourceOutcome, isTraceable, traceLabel } from "../lib/sourceTrace";
 import { relativeAge, absoluteUtc } from "../lib/reltime";
 import { ingestFiles } from "../lib/ingest.js";
+import { unreadablePdfKind, unreadablePdfMessage } from "../lib/pdfReadable.ts";
 import { parseTakeoffImport, mergeTakeoffImport } from "../lib/importTakeoff.js";
 import { buildProjectArchive, parseProjectArchive, isProjectArchive, downloadArchive } from "../lib/projectArchive.js";
 import { buildProfile, parseProfile, applyProfile, resetProfileDefaults, isProfileFile } from "../lib/profile.js";
@@ -1866,8 +1867,19 @@ export default function TakeoffCanvas() {
         : "No supported files found. Drop a PDF, an image, or a .zip plan set.");
       return;
     }
-    const results = [];
-    for (const f of pdfs) { try { results.push(await store.addPdf(f)); } catch (e) { setCommitMsg(`Couldn't open ${f.name}: ${e.message || e}`); } }
+    // A file pdf.js cannot open (password-protected, damaged, empty, not a PDF)
+    // is refused here, named with its cause and fix, and never stored: stored,
+    // it became a tab that only ever showed pdf.js's own "No password given".
+    const results = [], failed = [];
+    for (const f of pdfs) {
+      const why = await unreadableUpload(f);
+      if (why) { failed.push(why); continue; }
+      try { results.push(await store.addPdf(f)); } catch (e) { failed.push(`Couldn't open ${f.name}: ${e.message || e}.`); }
+    }
+    const refused = failed.length ? ` ${failed.join(" ")}` : "";
+    // a refused file is a failure: it stays until the next message, in red
+    const tone = failed.length ? "danger" : undefined;
+    if (!results.length) { setCommitMsg(failed.join(" "), tone); return; }
     await refreshSheets();
     // CO-1: a re-drop whose bytes CHANGED is a plan revision, not a re-open.
     // The store archived the old bytes; here the stale pdf.js docs must go
@@ -1881,7 +1893,7 @@ export default function TakeoffCanvas() {
       forgetPages(revised.map((r) => r.name));
       setDocEpoch((e) => e + 1);
     }
-    const names = pdfs.map((f) => f.name);
+    const names = results.map((r) => r.name);
     const tail = skipped.length ? ` · ${skipped.length} skipped` : "";
     if (names.length === 1) {
       setOpenTabs((t) => (t.includes(names[0]) ? t : [...t, names[0]]));
@@ -1897,11 +1909,25 @@ export default function TakeoffCanvas() {
         || markups.some((m) => m.sheet_id === n || m.sheet_id.startsWith(n + "#"));
       const hot = revised.filter((r) => inked(r.name));
       const label = (r) => `${r.name} → rev ${r.rev}`;
-      setCommitMsg(hot.length
+      setCommitMsg((hot.length
         ? `Sheet changed under your markups: ${hot.map(label).join(", ")} — earlier revision kept; re-check the affected takeoff.`
-        : `Sheet updated: ${revised.map(label).join(", ")} — earlier revision kept.`);
+        : `Sheet updated: ${revised.map(label).join(", ")} — earlier revision kept.`) + refused, tone);
     } else {
-      setCommitMsg(`Opened ${names.length} sheet${names.length === 1 ? "" : "s"}${tail}.`);
+      setCommitMsg(`Opened ${names.length} sheet${names.length === 1 ? "" : "s"}${tail}.${refused}`, tone);
+    }
+  }
+  // Open a file's bytes with pdf.js before they are stored: null when it
+  // opens, else the sentence the upload shows (pdfReadable.ts).
+  async function unreadableUpload(file) {
+    let task = null;
+    try {
+      task = pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) });
+      await task.promise;
+      return null;
+    } catch (e) {
+      return unreadablePdfMessage(file.name, e);
+    } finally {
+      task?.destroy().catch(() => {});
     }
   }
   // The empty-project landing view (the Drive picker for an empty cloud project,
@@ -2305,7 +2331,12 @@ export default function TakeoffCanvas() {
       t.catch(() => { if (pdfDocsRef.current.get(file) === t) pdfDocsRef.current.delete(file); });
       pdfDocsRef.current.set(file, t);
     }
-    return t.then((task) => task.promise);
+    // pdf.js's own refusal of a stored file (one saved before uploads were
+    // checked) says what is wrong and what to do (pdfReadable.ts); any other
+    // failure passes through as it was.
+    return t.then((task) => task.promise.catch((e) => {
+      throw unreadablePdfKind(e) === "other" ? e : new Error(unreadablePdfMessage(file, e));
+    }));
   }, []);
 
   // ── whole-set text index (maturity plan Phase 1, #HVAC-wholeset) ───────────
@@ -14347,6 +14378,7 @@ export default function TakeoffCanvas() {
           openTabs={openTabs} onOpen={openSheets}
           stitches={stitches} onStitch={createStitch} onOpenStitch={openStitch} onDeleteStitch={deleteStitch}
           onAddFiles={handleFiles}
+          notice={commitMsg} noticeTone={commitTone}
           levels={sheetLevels}
           onAssignLevel={(keys, label) => setSheetLevels((m) => {
             const next = { ...m };

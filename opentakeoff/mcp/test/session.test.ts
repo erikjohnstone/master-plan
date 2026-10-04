@@ -3,6 +3,9 @@
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { Session, ANN_SCHEMA, collapseEquivalentPrimaryTables } from "../src/session.ts";
 import { OPS } from "../src/pdf.ts";
 import { extractVectorGeometry, type SubPath } from "../../web/src/lib/oneclick.ts";
@@ -27,6 +30,28 @@ test("loadPlan: pages, dims (pt and px), detected scale, sheet number", async ()
   assert.equal(sh.height_px, 1584);
   assert.equal(sh.detected_scale, '1/4" = 1\'-0"');
   assert.equal(sh.sheet_number, "A-101");
+});
+
+test("loadPlan refuses a PDF it cannot read, naming the file, the cause and the fix", async () => {
+  // pdf.js's own refusals ("No password given", "Invalid PDF structure.")
+  // named no file, cause or fix.
+  const dir = mkdtempSync(join(tmpdir(), "ot-unreadable-"));
+  const write = (name: string, data: Uint8Array) => { const p = join(dir, name); writeFileSync(p, data); return p; };
+  const fixture = (name: string) => fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url));
+  const bytes = readFileSync(PLAN);
+  const cases: Array<[string, RegExp]> = [
+    [fixture("password-protected.pdf"), /^password-protected\.pdf is password-protected, so it can't be read\. .*without security/],
+    [write("cut-short.pdf", bytes.subarray(0, Math.floor(bytes.length / 2))), /^cut-short\.pdf isn't a readable PDF: it is damaged, cut short, or not a PDF at all/],
+    [write("renamed.pdf", Buffer.from("Meeting notes, saved as text.\n")), /^renamed\.pdf isn't a readable PDF/],
+    [write("empty.pdf", new Uint8Array(0)), /^empty\.pdf is empty \(0 bytes\)/],
+  ];
+  for (const [file, message] of cases) {
+    await assert.rejects(() => new Session().loadPlan(file), (e: Error) => { assert.match(e.message, message); return true; });
+  }
+  // A PDF locked by an owner password alone (its permissions) opens as any other.
+  const r = await new Session().loadPlan(fixture("owner-locked.pdf"));
+  assert.equal(r.page_count, 1);
+  assert.equal(r.sheets[0].sheet_number, "A-101");
 });
 
 test("sheet lookup: by key, by title-block number, unknown lists loaded keys", async () => {

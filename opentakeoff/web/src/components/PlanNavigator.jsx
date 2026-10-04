@@ -71,6 +71,10 @@ export default function PlanNavigator({
   stitches = [], onStitch, onOpenStitch, onDeleteStitch,
   // browse (Drive) data
   listFolder, addSheets, onAdded,
+  // the canvas's message bar, which this surface covers: what an upload made
+  // of the files dropped here (a refused PDF and why) must show where they
+  // were dropped. tone: "ok" | "refusal" | "danger"
+  notice = "", noticeTone = "ok",
 }) {
   const navigate = useNavigate();
   const { user, signIn } = useGoogleAuth();
@@ -1007,6 +1011,13 @@ export default function PlanNavigator({
         ? { position: "relative", width: "min(1100px, 92vw)", height: "85vh", display: "flex", flexDirection: "column", background: "var(--paper-cream)", boxShadow: "var(--shadow-2)", overflow: "hidden" }
         : { position: "absolute", inset: 0, display: "flex", flexDirection: "column", background: "var(--paper-cream)" }}>
       {header}
+      {notice && (
+        <div role="status" data-plan-notice={noticeTone}
+          style={{ padding: "8px 18px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", fontSize: 12.5,
+            color: noticeTone === "danger" ? "var(--c-danger)" : noticeTone === "refusal" ? "var(--c-warning)" : "var(--c-positive)" }}>
+          {notice}
+        </div>
+      )}
       {mode === "browse" ? browseBody : mode === "manage" ? manageBody : planBody}
       {confirmDialog}
       {bulkDialog}

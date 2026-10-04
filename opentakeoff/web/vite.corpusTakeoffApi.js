@@ -83,7 +83,7 @@ export function optionalFlag(value) {
   return undefined;
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol, onProgress, signal, postGraphTimeoutMs }) {
+export function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol, onProgress, signal, postGraphTimeoutMs }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -198,6 +198,13 @@ function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, m
         return;
       }
       if (code !== 0) {
+        // The CLI's own account of the failure, when it gave one (OT_ERROR).
+        const failure = stderr.split("\n").filter((l) => l.startsWith("OT_ERROR\t")).at(-1);
+        if (failure) {
+          let message = "";
+          try { message = String(JSON.parse(failure.slice("OT_ERROR\t".length)).message || ""); } catch { /* fall through */ }
+          if (message) { reject(new Error(message)); return; }
+        }
         // Strip progress lines from the error surface so the real failure shows.
         const errText = stderr
           .split("\n")
@@ -396,6 +403,18 @@ export function onePathPerDocument(pdfPaths, fileNames, symbol = null) {
   return { pdfPaths: paths, fileNames: names, symbol: { ...symbol, pdfIndex: index[swept] } };
 }
 
+/** An error names an uploaded PDF by the temporary file the CLI read
+ * (<sha256>.pdf); say the name it was uploaded under. */
+export function restoreUploadedNames(message, pdfPaths = [], fileNames = []) {
+  let out = String(message ?? "");
+  pdfPaths.forEach((path, index) => {
+    const base = String(path).split(/[\\/]/).at(-1);
+    const name = fileNames[index];
+    if (base && name && base !== name) out = out.split(base).join(name);
+  });
+  return out;
+}
+
 function restoreUploadedSheetKeys(result, pdfPaths, fileNames) {
   if (!result || typeof result !== "object") return result;
   const aliases = new Map(pdfPaths.map((path, index) => [path.split(/[\\/]/).at(-1), fileNames[index] || path.split(/[\\/]/).at(-1)]));
@@ -435,6 +454,7 @@ function writeNdjson(res, obj) {
 
 async function handle(req, res, mode) {
   let tmpDir = null;
+  let uploads = null;
   const stream = (mode === "compile" || mode === "complete_bas" || mode === "reconcile") && wantsProgressStream(req);
   const abortController = new AbortController();
   req.once?.("aborted", () => abortController.abort());
@@ -445,6 +465,7 @@ async function handle(req, res, mode) {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
     const { kind, service, basMathOptions, pdfPaths, fileNames, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol } = resolved;
+    uploads = { pdfPaths, fileNames };
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
     }
@@ -563,12 +584,13 @@ async function handle(req, res, mode) {
     sendJson(res, 200, result);
   } catch (err) {
     console.error(`[production-graph-api ${mode}]`, err);
+    const error = restoreUploadedNames(String(err?.message || err), uploads?.pdfPaths, uploads?.fileNames);
     if (stream && res.headersSent && !res.writableEnded && !res.destroyed) {
-      writeNdjson(res, { type: "error", error: String(err?.message || err) });
+      writeNdjson(res, { type: "error", error });
       res.end();
       return;
     }
-    sendJson(res, err.status || 500, { error: String(err?.message || err) });
+    sendJson(res, err.status || 500, { error });
   } finally {
     if (tmpDir) await rm(tmpDir, { recursive: true, force: true }).catch(() => {});
   }

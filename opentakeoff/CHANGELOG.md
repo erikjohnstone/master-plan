@@ -1,5 +1,16 @@
 # Changelog
 
+- **A PDF that can't be read is refused at the door, with the reason and the fix.** A password-protected, damaged,
+  cut-short or empty PDF used to be stored as it was: it opened as a tab that only ever said pdf.js's "Error: No
+  password given" or "Invalid PDF structure.", and the set's automatic takeoff failed with the server's whole error
+  output (Node warnings, a stack trace, and the file's temporary name). The upload now opens each PDF before storing
+  it; one that can't be opened is not stored, and the message bar (on the empty start screen too, where there was
+  none) names it and says why, in red, until the next action: password-protected (save a copy without security),
+  damaged or not a PDF (download or export it again), or empty (the upload or download didn't finish). The rest of the
+  batch opens. A PDF locked only by an owner password opens as before. The MCP server's `load_plan` and the graph CLI
+  behind the canvas's automatic takeoff refuse with the same sentence, and the server reports it under the name the
+  file was uploaded as. Before, a refusal message was also overwritten at once by "Opened 1 sheet.", and a tab opened
+  for the refused file.
 - **A technology sheet's device list no longer counts return fans.** A table no title vouches for is read by the
   marks its rows print, and a mark like RF1 reads as a return fan. 21_VA's audio-visual device list (DEVICE NAME,
   DESCRIPTION, POWER, DATA, BOX SIZE, HEIGHT) prints RF1 and RF2 for the ceiling plates and boxes of its wireless
